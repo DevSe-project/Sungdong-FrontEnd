@@ -1,0 +1,15 @@
+.CategoryBar-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.Category {
+  flex: 1;
+  text-align: center;
+  padding: 1em;
+  background-color: #CC0000;
+  color: white;
+  font-size: large;
+}
