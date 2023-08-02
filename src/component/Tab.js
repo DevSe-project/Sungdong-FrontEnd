@@ -5,7 +5,6 @@ export function Tab(props){
   const [activeTab, setActiveTab] = useState(1); // 현재 활성화된 탭을 추적하는 상태
   const handleTabClick = (tabIndex) => {
     setActiveTab(tabIndex);
-    props.navigate(`/detail/#${tabIndex}`);
   };
 
   const tabItems = [
@@ -18,13 +17,14 @@ export function Tab(props){
     <div>
       <div className={styles.tabnav}>
         {tabItems.map((item) => (
-          <div
+          <a
+            href={`#${item.id}`}
             key={item.id}
             className={`tab-item ${activeTab === item.id ? 'active' : ''}`}
             onClick={() => {handleTabClick(item.id)}}
           >
             {item.title}
-          </div>
+          </a>
         ))}
       </div>
     </div>
