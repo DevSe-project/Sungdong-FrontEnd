@@ -1,0 +1,118 @@
+.main{
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+.head{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid gray;
+  margin: 1em;
+}
+.headTop{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+  gap: 1em;
+}
+.headLeft{
+  box-sizing: border-box;
+  background-color: beige;
+  width: 25em;
+  height: 435px;
+  border: 1px solid lightgray;
+}
+.headRight{
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 25em;
+  height: 435px;
+  justify-content: start;
+  text-align: start;
+  border: 1px solid lightgray;
+  gap: 1em;
+  padding: 1em;
+}
+
+.textBox{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: lightgray;
+  padding: 1.5em;
+}
+
+.textButton{
+  display: flex;
+  flex-direction: column;
+}
+.sideTextButton{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.mainButton{
+  font-size: 1em;
+  font-weight: bold;
+  padding: 10px 20px;
+  color: white;
+  background-color: var(--background-color-set);
+  border-radius: 5dvw;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 0.5em;
+  margin-right: 0.3em;
+  margin-left: 0.3em;
+}
+.sideButton{
+  width: 100%;
+  font-size: 1em;
+  font-weight: bold;
+  padding: 10px 20px;
+  color: #000;
+  background-color: #ccc;
+  border-radius: 5dvw;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 0.5em;
+  margin-right: 0.3em;
+  margin-left: 0.3em;
+}
+
+.headBestReview{
+  display: flex;
+  flex-direction: column;
+  width: clamp(25em, 51em, 75%);
+  box-sizing: border-box;
+  padding: 1.5em;
+  border: 1px solid lightgray;
+  margin-bottom: 1em;
+}
+.rowBestReview{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+  gap: 1em;
+}
+.colBestReview{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.tab{
+  width: clamp(25em, 51em, 75%);
+}

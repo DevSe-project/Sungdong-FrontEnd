@@ -1,0 +1,10 @@
+/* 기본 탭 네비게이션 스타일 */
+.tabnav {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: 1em;
+}
