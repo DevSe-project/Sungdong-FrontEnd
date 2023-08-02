@@ -4,19 +4,27 @@ import { Detail } from './component/Detail';
 import { useState } from 'react';
 import { DataObj } from './component/DataObj'
 import { List } from './component/List';
+import MainPage from './MainPage';
 function App() {
   const navigate = useNavigate();
   const [data, setData] = useState(DataObj);
   return (
     <div className="App">
-      <List data={data}/>
+
+
       <Routes>
+        <Route path='/' element={
+          <>
+            <MainPage />
+            <List data={data} />
+          </>
+        } />
         <Route path="/list" element={
-          <List data={data} navigate={navigate}/>
-        }/>
+          <List data={data} navigate={navigate} />
+        } />
         <Route path="/detail/:id" element={
-          <Detail data={data} navigate={navigate}/>
-        }/>
+          <Detail data={data} navigate={navigate} />
+        } />
       </Routes>
     </div>
   );

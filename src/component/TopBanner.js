@@ -21,7 +21,7 @@ export default function () {
       {/* 오늘의 소식 */}
       <nav className='top_nav' href="">
         <div>
-          <a className='link'>오늘의 소식</a>
+          <a className='link' href="">오늘의 소식</a>
         </div>
       </nav>
       {/* 이달의 이벤트 */}
