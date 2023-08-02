@@ -14,7 +14,8 @@
   justify-content: center;
   align-items: center;
   border-bottom: 1px solid gray;
-  margin: 1em;
+  margin-top: 1em;
+  margin-bottom: 1em;
 }
 .headTop{
   display: flex;
@@ -28,16 +29,17 @@
   box-sizing: border-box;
   background-color: beige;
   width: 25em;
-  height: 435px;
+  height: 31em;
   overflow: hidden;
   border: 1px solid lightgray;
+  object-fit: cover;
 }
 .headRight{
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
   width: 25em;
-  height: 435px;
+  height: 31em;
   justify-content: start;
   text-align: start;
   border: 1px solid lightgray;
@@ -67,7 +69,7 @@
 .mainButton{
   font-size: 1em;
   font-weight: bold;
-  padding: 10px 20px;
+  padding: 1rem 2rem;
   color: white;
   background-color: var(--background-color-set);
   border-radius: 5dvw;
@@ -82,7 +84,7 @@
   width: 100%;
   font-size: 1em;
   font-weight: bold;
-  padding: 10px 20px;
+  padding: 1rem 2rem;
   color: #000;
   background-color: #ccc;
   border-radius: 5dvw;
@@ -129,4 +131,12 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.headBottom{
+  width: 140%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }

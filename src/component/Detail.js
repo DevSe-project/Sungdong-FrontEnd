@@ -43,7 +43,7 @@ export function Detail(props) {
                   <input type='checkbox'/>
                 </label>
               </div>
-              <h4>최종 결제 금액 : {detaildata.price * count}</h4>
+              <h4>최종 결제 금액 : {detaildata.price * count} 원</h4>
               <div className={styles.textButton}>
                 <button className={styles.mainButton}>결제하기</button>
                 <div className={styles.sideTextButton}>
@@ -52,6 +52,8 @@ export function Detail(props) {
                 </div>
               </div>
             </div>
+          </div>
+          <div className={styles.headBottom}>
             <div className={styles.headBestReview}>
               <h2>베스트 리뷰</h2><br/>
               <div className={styles.rowBestReview}>
@@ -78,13 +80,6 @@ export function Detail(props) {
             <div className={styles.headBestReview}>
               <h2>관련 상품</h2><br/>
               <div className={styles.rowBestReview}>
-                <div className={styles.colBestReview}>
-                  <div className={styles.frame}>
-                    <img className={styles.thumnail} src="http://pop7.co.kr/web/product/big/201806/344_shop1_15289487355825.jpg" width="100px"/>
-                  </div>
-                  <h5>상품 이름</h5>
-                  <p>내용</p>
-                </div>
                 <div className={styles.colBestReview}>
                   <div className={styles.frame}>
                     <img className={styles.thumnail} src="http://pop7.co.kr/web/product/big/201806/344_shop1_15289487355825.jpg" width="100px"/>
