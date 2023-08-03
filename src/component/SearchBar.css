@@ -3,6 +3,7 @@
   display: flex;
   align-items: center;
   width: 100%; 
+  margin-bottom: 1em;
 }
 
 /* Input 창 컨테이너 스타일 */

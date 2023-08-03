@@ -1,29 +1,47 @@
+import { useState } from 'react';
 import '../App.css'
 import './TopBanner.css';
-
-export default function () {
-
-
+export function TopBanner () {
+  const menuData = [
+    {
+      title: '메뉴1',
+      subMenuItems: ['서브메뉴1', '서브메뉴2', '서브메뉴3'],
+    },
+    {
+      title: '메뉴2',
+      subMenuItems: ['서브메뉴4', '서브메뉴5', '서브메뉴6'],
+    },
+    // 추가 메뉴들
+  ];
+  const [isSubMenuOpen, setSubMenuOpen] = useState(false);
+    const handleMouseEnter = () => {
+      setSubMenuOpen(true);
+    };
+  
+    const handleMouseLeave = () => {
+      setSubMenuOpen(false);
+    };
   return (
-    <div className='top_container'>
-      {/* 회사소개 */}
-      <nav className='top_nav'>
-        <div>
-          <a className='link' href="">회사소개</a>
-        </div>
-      </nav>
-      {/* 오시는 길 */}
-      <nav className='top_nav'>
-        <div>
-          <a className='link' href="">오시는 길</a>
-        </div>
-      </nav>
+  <div className='top_nav'>
+    {menuData.map((item,index)=>(
+    <li
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      className={`main-menu-item ${isSubMenuOpen ? 'open' : ''}`}
+    >
+      <a className='link' href="#">{item.title}</a>
+      {isSubMenuOpen && (
+        <ul className="sub-menu">
+          {item.subMenuItems.map((item, index) => (
+            <li key={index}>
+              <a href="#">{item}</a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </li>
+    ))}
       {/* 오늘의 소식 */}
-      <nav className='top_nav' href="">
-        <div>
-          <a className='link' href="">오늘의 소식</a>
-        </div>
-      </nav>
       {/* 이달의 이벤트 */}
       <nav className='top_nav'>
         <div>

@@ -13,6 +13,8 @@
   justify-content: center; /* 가로 가운데 정렬 */
   align-items: center; /* 세로 가운데 정렬 */
   margin-top: 1em;
+  list-style-type: none;
+  gap: 5em;
 }
 
 /* 네비게이션 내부 링크 스타일링 (옵션) */
@@ -21,6 +23,7 @@
   color: dimgray;
   font-size: 1.2em;
   font-weight: 550;
+  cursor: pointer;
 }
 
 .link_signIn  {
@@ -31,4 +34,24 @@
   padding: 0.4em;
   padding-left: 0.7rem;
   padding-right: 0.7rem;
+}
+
+.menu-item {
+  padding: 10px;
+  position: relative;
+  cursor: pointer;
+}
+
+.menu-item .sub-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #333;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  width: 150px;
+}
+
+.menu-item.open .sub-menu {
+  display: block;
 }

@@ -3,13 +3,17 @@ import { ComponentHeader } from './ComponentHeader'
 import styles from '../Detail.module.css'
 import { useParams } from 'react-router-dom'
 import { useState } from 'react'
+import CategoryBar from './CategoryBar'
 export function Detail(props) {
   const [count, setCount] = useState("");
+  //주소창 입력된 id값 받아오기
   let {id} = useParams();
+  //입력된 id과 data내부의 id값 일치하는 값 찾아 변수 선언
   const detaildata = props.data.find((item)=>item.id==id);
   if (!detaildata) {
     return <div>상품을 찾을 수 없습니다.</div>;
   }
+  //수량 최대입력 글자(제한 길이 변수)
   function maxLengthCheck(e) { 
     const target = e.target; 
     //target.value.length = input에서 받은 value의 길이 
@@ -22,12 +26,15 @@ export function Detail(props) {
   return(
     <div>
       <ComponentHeader/>
+      <CategoryBar/>
       <main className={styles.main}>
         <section className={styles.head}>
           <div className={styles.headTop}>
+            {/* 상품 이미지 부분 */}
             <div className={styles.headLeft}>
               <img src="http://pop7.co.kr/web/product/big/201806/344_shop1_15289487355825.jpg" className={styles.thumnail} width="600px"/>
             </div>
+            {/* 상품 정보 부분 */}
             <div className={styles.headRight}>
               <div className={styles.textBox}>
                 <h2>{detaildata.title}</h2>
@@ -53,6 +60,7 @@ export function Detail(props) {
               </div>
             </div>
           </div>
+          {/* 베스트 리뷰와 관련 상품 */}
           <div className={styles.headBottom}>
             <div className={styles.headBestReview}>
               <h2>베스트 리뷰</h2><br/>
@@ -112,6 +120,7 @@ export function Detail(props) {
             </div>  
           </div> 
         </section>
+        {/* 탭 부분 */}
         <div className={styles.tab}>
           <Tab navigate={props.navigate}/>
         </div>
