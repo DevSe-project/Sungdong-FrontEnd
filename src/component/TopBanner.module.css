@@ -1,14 +1,14 @@
 /* -------------------- TopBanner -------------------- */
 
 /* 화면 넓이에 꽉 맞도록 설정 */
-.top_container {
+.topContainer {
   width: 100%;
   display: flex;
   margin: 0;
   align-items: center;
 }
 
-.top_nav {
+.topNav {
   flex: 1; /* 네비게이션 영역을 균등 영역으로 나누도록 설정 */
   display: flex;
   justify-content: center; /* 가로 가운데 정렬 */
@@ -32,7 +32,7 @@
   cursor: pointer;
 }
 
-.link_signIn  {
+.linkSignIn  {
   background-color: #CC0000;
   color: white;
   font-size: 1.2em;
@@ -43,3 +43,25 @@
   border: 0;
 }
 
+<<<<<<< HEAD:src/component/TopBanner.module.css
+=======
+.menuItem {
+  padding: 10px;
+  position: relative;
+  cursor: pointer;
+}
+
+.menuItem .subMenu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #333;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  width: 150px;
+}
+
+.menuItem.open .subMenu {
+  display: block;
+}
+>>>>>>> 4399c62891cc561e44e6c99857ab3b043d59653e:src/component/TopBanner.css
