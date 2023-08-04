@@ -17,7 +17,7 @@ export function TopBanner () {
     {
       title: '마이페이지',
       subMenuItems: ['장바구니 목록', '내가 찜한 목록', '주문 / 배송 현황'],
-    },
+    }, 
   ];
   const navigate = useNavigate();
   //서브메뉴 열림창 변수 초기화
@@ -64,8 +64,7 @@ export function TopBanner () {
             )}
           </li>
         ))}
-        {/* 로그인 버튼 */}
-        <button className={styles.link_signIn}>로그인</button>
+        <button className={styles.link_signIn} onClick={()=>{navigate("/login")}}>로그인</button>
       </div>
     </div>
   );
