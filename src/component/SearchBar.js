@@ -11,10 +11,6 @@ export default function() {
         <input className={styles.searchInput} type='text'/>
         <i class="fas fa-search"/>
       </div>
-      {/* 검색Link */}
-      <nav className={styles.searchLinkContainer}>
-          <a className={styles.searchLink} href="">검색</a>
-      </nav>
     </div>
   )
 }

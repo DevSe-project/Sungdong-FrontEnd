@@ -12,6 +12,8 @@
   display: flex;
   margin: 0;
   align-items: center;
+  align-content: center;
+  justify-content: center;
   border-bottom: 2px solid var(--background-color-set);
 }
 

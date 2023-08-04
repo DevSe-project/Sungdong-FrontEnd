@@ -8,11 +8,11 @@ export default function MainPage() {
   return (
     <div>
       <TopBanner />
-      
-      <SlideImg/>
-      
+    
       <CategoryBar />
 
+      <SlideImg/>
+      <hr/>
     </div>
   )
 }
