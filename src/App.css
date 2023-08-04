@@ -95,3 +95,25 @@ button{
   color: #ddd;
   background-color: var(--background-color-clicked);
 }
+
+/* 최 상단 메뉴 바 */
+.menu-item {
+  padding: 10px;
+  position: relative;
+  cursor: pointer;
+}
+
+.menu-item .sub-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  width: 10em;
+  height: 10em;
+}
+
+.menu-item.open .sub-menu {
+  display: block;
+}

@@ -1,9 +1,9 @@
 import { Tab } from './Tab'
-import { ComponentHeader } from './ComponentHeader'
 import styles from '../Detail.module.css'
 import { useParams } from 'react-router-dom'
 import { useState } from 'react'
 import CategoryBar from './CategoryBar'
+import { TopBanner } from './TopBanner'
 export function Detail(props) {
   const [count, setCount] = useState("");
   //주소창 입력된 id값 받아오기
@@ -25,7 +25,7 @@ export function Detail(props) {
 } 
   return(
     <div>
-      <ComponentHeader/>
+      <TopBanner/>
       <CategoryBar/>
       <main className={styles.main}>
         <section className={styles.head}>
