@@ -4,6 +4,7 @@ import { Detail } from './component/Detail';
 import { useState } from 'react';
 import { DataObj } from './component/DataObj'
 import { List } from './component/List';
+import { Login } from './component/Login';
 import MainPage from './MainPage';
 function App() {
   const navigate = useNavigate();
@@ -24,6 +25,9 @@ function App() {
         } />
         <Route path="/detail/:id" element={
           <Detail data={data} navigate={navigate} />
+        } />
+        <Route path='/login' element={
+          <Login />
         } />
       </Routes>
     </div>

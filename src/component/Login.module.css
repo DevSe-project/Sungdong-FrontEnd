@@ -1,0 +1,55 @@
+.loginPageContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo {
+    cursor : pointer;
+}
+
+.loginContainer {
+    display: flex;
+}
+
+.goLogin {
+    border: solid none;
+    background-color: paleturquoise;
+    cursor : pointer;
+}
+
+.inputId{
+    padding: 0.5em;
+}
+
+.inputPW{
+    padding: 0.5em;
+
+}
+
+.autoLogin {
+    color: grey;
+    font-size: 0.5em;   
+    text-align: left; 
+}
+
+.find_join{
+    display: flex;
+    margin: 0.3em;
+    font-size: 0.5em;
+    justify-content: center;
+    color:gray;
+}
+
+.findId{
+    cursor : pointer;
+}
+
+.findPW{
+    cursor : pointer;
+}
+
+.join{
+    padding-left: 1em;
+    cursor : pointer;
+}
