@@ -62,15 +62,18 @@ hr {
 button{
   cursor: pointer;
 }
+input:focus {
+  outline: none;
+}
 /* ==== 반복 함수 생성 ==== */
 :root {
   --body-margin : 0.5em;
   --font-size-md: clamp(1.5rem, 1.5vw, 2.5rem);
   --font-size-sm: clamp(1rem, 1.2vw, 2rem);
   --font-size-ssm: clamp(0.5em, 1vw, 1.5em);
-  --background-color-set: rgb(224, 36, 36);
-  --background-color-active : rgb(154, 58, 58);
-  --background-color-clicked: rgb(162, 54, 54);
+  --background-color-set: #CC0000;
+  --background-color-active : rgb(180, 8, 8);
+  --background-color-clicked: rgb(165, 10, 10);
 }
 
 /* 탭 아이템 스타일 */
@@ -96,24 +99,103 @@ button{
   background-color: var(--background-color-clicked);
 }
 
-/* 최 상단 메뉴 바 */
+/* 상단 메뉴 바 */
 .menu-item {
   padding: 10px;
   position: relative;
   cursor: pointer;
 }
+.menu-item::after{
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background-color: var(--background-color-set);
+  transition: all 350ms;
+}
+.menu-item:hover::after {
+  left: 0;
+  width: 100%;
+  height: 3px;
+}
 
 .menu-item .sub-menu {
   display: none;
   position: absolute;
-  top: 100%;
-  left: 0;
+  top: 110%;
+  left: -0.5em;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  width: 10em;
-  height: 10em;
+  width: 13em;
+  z-index: 999;
 }
 
 .menu-item.open .sub-menu {
   display: block;
+  opacity: 1;
+  transform: ease 0.3s;
+}
+/* ==== 검색 아이콘 ==== */
+i.fas.fa-search {
+  background-color: white;
+  font-size: 20px;
+  color: var(--background-color-set);
+  margin-right: 5px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+/* 카테고리 메뉴 바 */
+
+.categorymenu-item {
+  padding: 0.8em;
+  position: relative;
+  cursor: pointer;
+}
+
+.categorymenu-item::after{
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background-color: white;
+  transition: all 350ms;
+}
+.categorymenu-item:hover::after {
+  left: 0;
+  width: 100%;
+  height: 3px;
+}
+
+.categorymenu-item .sub-menu {
+  display: none;
+  position: absolute;
+  top: 110%;
+  left: -0.5em;
+  background-color: var(--background-color-set);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  width: 13em;
+  z-index: 999;
+}
+
+.categorymenu-item.open .sub-menu {
+  display: block;
+}
+
+.categorytab-item {
+  padding: 1em;
+  cursor: pointer;
+  color: #ddd;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* 활성화된 탭 아이템 스타일 */
+.categorytab-item.active {
+  color: #ddd;
+  background-color: var(--background-color-clicked);
 }

@@ -1,8 +1,8 @@
 import { Tab } from './Tab'
-import styles from '../Detail.module.css'
+import styles from './Detail.module.css'
 import { useParams } from 'react-router-dom'
 import { useState } from 'react'
-import CategoryBar from './CategoryBar'
+import { CategoryBar } from './CategoryBar'
 import { TopBanner } from './TopBanner'
 export function Detail(props) {
   const [count, setCount] = useState("");

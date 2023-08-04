@@ -4,14 +4,12 @@ import styles from './SearchBar.module.css';
 export default function() {
 
   return (
-    <div className={styles.searchContainer}>
-
-      {/* 돋보기 아이콘 들어갈 예정 */}
-      
+    <div>
       {/* Input창 */}
       <div className={styles.searchInputContainer}>
+        {/* 돋보기 아이콘 */}
         <input className={styles.searchInput} type='text'/>
-        <i class="fas fa-search"></i>
+        <i class="fas fa-search"/>
       </div>
     </div>
   )

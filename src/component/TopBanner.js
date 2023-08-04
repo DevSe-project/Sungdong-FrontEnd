@@ -3,6 +3,7 @@ import logo from '../image/logo.jpeg'
 import { useNavigate } from 'react-router-dom'
 import styles from './TopBanner.module.css';
 import SearchBar from './SearchBar';
+//상단 메뉴 리스트 
 export function TopBanner () {
   const menuData = [
     {
@@ -19,6 +20,7 @@ export function TopBanner () {
     },
   ];
   const navigate = useNavigate();
+  //서브메뉴 열림창 변수 초기화
   const [subMenuStates, setSubMenuStates] = useState(menuData.map(() => false));
 
   const handleMouseEnter = (index) => {
@@ -38,8 +40,11 @@ export function TopBanner () {
   return (
     <div className={styles.top_container}>
       <div className={styles.top_nav}>
+        {/* 로고 */}
         <img className={styles.image} onClick={()=>navigate("/")} src={logo} height='80px'/>
+        {/* 서치바 */}
         <SearchBar/>
+        {/* 메뉴 loop */}
         {menuData.map((item, index) => (
           <li
             key={index}
@@ -49,7 +54,7 @@ export function TopBanner () {
           >
             <a className={styles.link} href="#">{item.title}</a>
             {subMenuStates[index] && (
-              <ul className="sub-menu">
+              <ul onMouseLeave={() => handleMouseLeave(index)} className="sub-menu">
                 {item.subMenuItems.map((item, index) => (
                   <li className={styles.sub_item} key={index}>
                     <a href="#">{item}</a>
@@ -59,6 +64,7 @@ export function TopBanner () {
             )}
           </li>
         ))}
+        {/* 로그인 버튼 */}
         <button className={styles.link_signIn}>로그인</button>
       </div>
     </div>

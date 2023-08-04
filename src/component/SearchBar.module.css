@@ -1,17 +1,15 @@
-/* 검색Bar Container */
-.searchContainer {
-  display: flex;
-  align-items: center;
-  width: 400px;
-}
-
 /* Input 창 컨테이너 스타일 */
 .searchInputContainer {
-  flex: 8;
-  height: 2em;
   display: flex;
+  width: 300px;
+  height: 2em;
   align-items: center;
   justify-content: center;
+  border: 0.2em solid #CC0000;
+  border-radius: 10dvw;
+  padding: 0.4em;
+  margin: 0;
+  justify-content: space-between;
 }
 
 /* Input 창 스타일 */
@@ -19,36 +17,9 @@
   width: 100%;
   height: 100%;
   border-radius: 10dvw;
-  font-size: 1.5em;
-  border: 0.1em solid #CC0000;
-  margin-right: 0.3em;
-  padding: 0.1em;
-}
-  
-/* 검색 링크 컨테이너 스타일 */
-.search-link-container {
-  flex: 1;
-  width: 20em;
-  height: 2em; 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #CC0000;
-  border: 2px solid #CC0000;
-}
-
-/* 검색 링크 스타일 */
-.searchLink {
-  display: block;
-  text-align: center;
-  color: white;
-  font-size: large;
-}
-
-i.fas.fa-search {
-  font-size: 18px;
-  color: #555;
-  margin-right: 5px;
-  position: relative;
-  cursor: pointer;
+  font-size: 1em;
+  border: none;
+  margin: 0;
+  padding: 0.3em;
+  padding-left: 0.5em;
 }

@@ -2,10 +2,17 @@
 
 /* 화면 넓이에 꽉 맞도록 설정 */
 .top_container {
+  /* 상단바 고정 작업 */
+  background-color: white;
+  position: sticky;
+  z-index: 998;
+  top: 0;
+  height: 100px;
   width: 100%;
   display: flex;
   margin: 0;
   align-items: center;
+  border-bottom: 2px solid var(--background-color-set);
 }
 
 .top_nav {
@@ -15,7 +22,7 @@
   align-items: center; /* 세로 가운데 정렬 */
   margin-top: 1em;
   list-style-type: none;
-  gap: 5em;
+  gap: 3em;
   white-space: nowrap;
 }
 
@@ -41,4 +48,10 @@
   padding-left: 0.7rem;
   padding-right: 0.7rem;
   border: 0;
+}
+
+.sub_item{
+  padding: 1em;
+  font-size: large;
+  word-wrap: wrap;
 }

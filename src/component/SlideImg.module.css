@@ -1,0 +1,17 @@
+.headDiv{
+  width: 300vw;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.div{
+  padding: 3em;
+  width: 100vw;
+  float: left;
+}
+
+.over{
+  overflow: hidden;
+}
