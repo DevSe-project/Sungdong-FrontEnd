@@ -1,13 +1,13 @@
 /* -------------------- TopBanner -------------------- */
 
 /* 화면 넓이에 꽉 맞도록 설정 */
-.top_container {
+.topContainer {
   width: 100%;
   display: flex;
   margin: 0;
 }
 
-.top_nav {
+.topNav {
   flex: 1; /* 네비게이션 영역을 균등 영역으로 나누도록 설정 */
   display: flex;
   justify-content: center; /* 가로 가운데 정렬 */
@@ -26,7 +26,7 @@
   cursor: pointer;
 }
 
-.link_signIn  {
+.linkSignIn  {
   background-color: #CC0000;
   color: white;
   font-size: 1.2em;
@@ -36,13 +36,13 @@
   padding-right: 0.7rem;
 }
 
-.menu-item {
+.menuItem {
   padding: 10px;
   position: relative;
   cursor: pointer;
 }
 
-.menu-item .sub-menu {
+.menuItem .subMenu {
   display: none;
   position: absolute;
   top: 100%;
@@ -52,6 +52,6 @@
   width: 150px;
 }
 
-.menu-item.open .sub-menu {
+.menuItem.open .subMenu {
   display: block;
 }

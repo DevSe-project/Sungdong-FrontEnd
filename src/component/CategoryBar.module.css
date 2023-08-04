@@ -1,10 +1,10 @@
-.CategoryBar-container {
+.categoryBarContainer {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.Category {
+.category {
   flex: 1;
   text-align: center;
   padding: 1em;

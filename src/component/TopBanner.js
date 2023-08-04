@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import '../App.css'
-import './TopBanner.css';
+import styles from './TopBanner.module.css';
 export function TopBanner () {
   const menuData = [
     {
@@ -22,16 +22,16 @@ export function TopBanner () {
       setSubMenuOpen(false);
     };
   return (
-  <div className='top_nav'>
+  <div className={styles.topNav}>
     {menuData.map((item,index)=>(
     <li
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className={`main-menu-item ${isSubMenuOpen ? 'open' : ''}`}
     >
-      <a className='link' href="#">{item.title}</a>
+      <a className={styles.link} ref="#">{item.title}</a>
       {isSubMenuOpen && (
-        <ul className="sub-menu">
+        <ul className={styles.subMenu}>
           {item.subMenuItems.map((item, index) => (
             <li key={index}>
               <a href="#">{item}</a>
@@ -43,21 +43,21 @@ export function TopBanner () {
     ))}
       {/* 오늘의 소식 */}
       {/* 이달의 이벤트 */}
-      <nav className='top_nav'>
+      <nav className={styles.topNav}>
         <div>
-          <a className='link' href="">이달의 이벤트</a>
+          <a className={styles.link} href="">이달의 이벤트</a>
         </div>
       </nav>
       {/* 문의하기 */}
-      <nav className='top_nav'>
+      <nav className={styles.topNav}>
         <div>
-          <a className='link'  href="">문의하기</a>
+          <a className={styles.link}  href="">문의하기</a>
         </div>
       </nav>
       {/* 로그인 */}
-      <nav className='top_nav'>
-        <div className='top_div'>
-          <a className='link_signIn' href="">로그인</a>
+      <nav className={styles.topNav}>
+        <div className={styles.topDiv}>
+          <a className={styles.linkSignIn} href="">로그인</a>
         </div>
       </nav>
     </div>
