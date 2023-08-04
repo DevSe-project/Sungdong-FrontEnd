@@ -3,7 +3,10 @@ import logo from '../image/logo.jpeg'
 import { useNavigate } from 'react-router-dom'
 import styles from './TopBanner.module.css';
 import SearchBar from './SearchBar';
+<<<<<<< HEAD
 
+=======
+>>>>>>> 77d1456894daff12628971584b224178aa0e5977
 export function TopBanner () {
   const menuData = [
     {
@@ -17,7 +20,11 @@ export function TopBanner () {
     {
       title: '마이페이지',
       subMenuItems: ['장바구니 목록', '내가 찜한 목록', '주문 / 배송 현황'],
+<<<<<<< HEAD
     }, 
+=======
+    },
+>>>>>>> 77d1456894daff12628971584b224178aa0e5977
   ];
   const navigate = useNavigate();
   const [subMenuStates, setSubMenuStates] = useState(menuData.map(() => false));

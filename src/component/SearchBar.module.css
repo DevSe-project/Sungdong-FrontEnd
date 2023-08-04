@@ -26,8 +26,14 @@
 }
   
 /* 검색 링크 컨테이너 스타일 */
+<<<<<<< HEAD
 .searchLinkContainer {
   flex: 1; 
+=======
+.search-link-container {
+  flex: 1;
+  width: 20em;
+>>>>>>> 77d1456894daff12628971584b224178aa0e5977
   height: 2em; 
   display: flex;
   align-items: center;
