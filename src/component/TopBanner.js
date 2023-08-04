@@ -8,7 +8,7 @@ export function TopBanner () {
   const menuData = [
     {
       title: '회사 소개',
-      subMenuItems: ['오시는 길', '오늘의 소식', '서브메뉴3'],
+      subMenuItems: ['오시는 길', '오늘의 소식', '이벤트'],
     },
     {
       title: '문의하기',

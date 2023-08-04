@@ -11,9 +11,8 @@
 
 .col{
   padding: 1em;
-  height: 20em;
-  border: 1px solid gray;
-  background-color: lightgray;
+  height: 24em;
+  border: none;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -22,8 +21,8 @@
   cursor: pointer;
 }
 .frame{
-  width: 200px;
-  height: 200px;
+  width: 20em;
+  height: 20em;
   overflow: hidden;
 }
 .thumnail{
@@ -39,4 +38,27 @@
 }
 .price{
   text-align: end;
+  font-weight: 550;
+}
+
+.headerTag{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1.1em;
+  font-weight: 650;
+}
+
+.newItem{
+  font-size: 1.7em;
+  font-weight: 650;
+  border-bottom: 3px solid var(--background-color-clicked);
+  padding: 0.5em;
+  margin-left: 0.5em;
+}
+
+.moreItem{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

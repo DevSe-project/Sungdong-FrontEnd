@@ -37,20 +37,22 @@ export function Detail(props) {
             {/* 상품 정보 부분 */}
             <div className={styles.headRight}>
               <div className={styles.textBox}>
-                <h2>{detaildata.title}</h2>
+                {detaildata.title}
               </div>
-              <h2>가격 : {detaildata.price}원</h2>
+              <h4 className={styles.h4}>{detaildata.price}원</h4>
               <div className={styles.textBox}>
                 <label>
-                수량 : <input onChange={(e)=>maxLengthCheck(e)} minLength={1} maxLength={3} min={0} max={999} type='number' placeholder='숫자만 입력'/>
+                수량 : <input className={styles.input} onChange={(e)=>maxLengthCheck(e)} minLength={1} maxLength={3} min={0} max={999} type='number' placeholder='숫자만 입력'/> 개
                 </label>
                 <br/>
                 <label>
-                  옵션 : 
+                  선택 옵션 : 
                   <input type='checkbox'/>
                 </label>
               </div>
-              <h4>최종 결제 금액 : {detaildata.price * count} 원</h4>
+              총 수량 {count}개 |
+              <h4 className={styles.finalprice}>
+                최종 결제 금액 : {detaildata.price * count} 원</h4>
               <div className={styles.textButton}>
                 <button className={styles.mainButton}>결제하기</button>
                 <div className={styles.sideTextButton}>

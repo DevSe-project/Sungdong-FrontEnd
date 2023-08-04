@@ -2,7 +2,6 @@ import { CategoryBar } from './component/CategoryBar'
 import { SlideImg } from './component/SlideImg'
 import { TopBanner } from './component/TopBanner'
 
-
 export default function MainPage() {
 
   return (
@@ -11,8 +10,10 @@ export default function MainPage() {
     
       <CategoryBar />
 
-      <SlideImg/>
-      <hr/>
+      <SlideImg />
+
+      <hr/><br/>
+
     </div>
   )
 }

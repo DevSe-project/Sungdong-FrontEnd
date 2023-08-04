@@ -1,32 +1,33 @@
-import image from '../image/page_ready.png'
-import logo from '../image/logo.jpeg'
+import { useEffect, useState } from 'react';
 import styles from './SlideImg.module.css'
+import readyimage from '../image/page_ready.png'
 export function SlideImg() {
+    const images = [
+      readyimage,
+      readyimage,
+      readyimage,
+    ]
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    useEffect(() => {
+      const slideTimer = setInterval(() => {
+        // 이미지 인덱스를 변경하여 다음 이미지로 슬라이드
+        setCurrentImageIndex((indexZero) => ((indexZero + 1) % images.length)); //%(나머지)이므로 1%3 => 1반환, 2%3 => 2반환, 3%3 => 0반환
+      }, 3000);
+  
+      // 컴포넌트가 언마운트되면 타이머를 해제하여 메모리 누수 방지
+      return () => clearInterval(slideTimer);
+    }, [images, 3000]);
+  
   return(
-    <div className={styles.over}> 
-      <div className={styles.headDiv}>
-        <div className={styles.div}>
-          <img src={image} alt='이미지'/>
-        </div>
-        <div className={styles.div}>
-          <img src={logo} alt='이미지'/>
-        </div>
-        <div className={styles.div}>
-          <img src={image} alt='이미지'/>
-        </div>
+    <div className={styles.sliderContainer}>
+      {/* transform : translateX(-100%,-200%,-300%) -> x축방향으로 이동 */}
+      <div className={styles.sliderTrack} style={{ transform: `translateX(-${currentImageIndex * 100}%)` }}>
+        {/* 이미지들을 옆으로 이동시키기 위해 slider-track */}
+        {images.map((url, index) => (
+          <img key={index} src={url} alt={`슬라이드 화면 ${index}번`} className={styles.slide} />
+        ))}
       </div>
-      <ul>
-          <li 
-          className='movingleft'
-          >
-            왼쪽으로 이동
-          </li>
-          <li
-          className='movingright'
-          >
-            오른쪽으로 이동
-          </li>
-        </ul>
     </div>
-  )
-}
+  );
+};

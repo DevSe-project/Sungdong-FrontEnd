@@ -5,10 +5,9 @@ export default function() {
 
   return (
     <div>
-      {/* Input창 */}
       <div className={styles.searchInputContainer}>
-        {/* 돋보기 아이콘 */}
         <input className={styles.searchInput} type='text'/>
+        {/* 돋보기 아이콘 */}
         <i class="fas fa-search"/>
       </div>
     </div>

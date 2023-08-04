@@ -101,7 +101,7 @@ input:focus {
 
 /* 상단 메뉴 바 */
 .menu-item {
-  padding: 10px;
+  padding: 1em;
   position: relative;
   cursor: pointer;
 }
@@ -124,11 +124,11 @@ input:focus {
 .menu-item .sub-menu {
   display: none;
   position: absolute;
-  top: 110%;
-  left: -0.5em;
+  top: 104%;
+  left: -2.8em;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  width: 13em;
+  width: 12em;
   z-index: 999;
 }
 
@@ -145,6 +145,15 @@ i.fas.fa-search {
   margin-right: 5px;
   padding: 5px;
   cursor: pointer;
+}
+/* 플러스 아이콘 */
+i.fas.fa-angle-right{
+  background-color: white;
+  font-size: 1.5em;
+  color: black;
+  padding: 5px;
+  cursor: pointer;
+  margin-right: 1em;
 }
 
 /* 카테고리 메뉴 바 */
@@ -174,11 +183,11 @@ i.fas.fa-search {
 .categorymenu-item .sub-menu {
   display: none;
   position: absolute;
-  top: 110%;
-  left: -0.5em;
+  top: 104%;
+  left: -2.5em;
   background-color: var(--background-color-set);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  width: 13em;
+  width: 12em;
   z-index: 999;
 }
 
