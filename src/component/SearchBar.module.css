@@ -26,14 +26,9 @@
 }
   
 /* 검색 링크 컨테이너 스타일 */
-<<<<<<< HEAD:src/component/SearchBar.css
 .search-link-container {
   flex: 1;
   width: 20em;
-=======
-.searchLinkContainer {
-  flex: 1; 
->>>>>>> 4399c62891cc561e44e6c99857ab3b043d59653e:src/component/SearchBar.module.css
   height: 2em; 
   display: flex;
   align-items: center;

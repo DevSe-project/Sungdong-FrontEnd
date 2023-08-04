@@ -1,13 +1,8 @@
 import { useState } from 'react';
-<<<<<<< HEAD
 import logo from '../image/logo.jpeg'
 import { useNavigate } from 'react-router-dom'
 import styles from './TopBanner.module.css';
 import SearchBar from './SearchBar';
-=======
-import '../App.css'
-import styles from './TopBanner.module.css';
->>>>>>> 4399c62891cc561e44e6c99857ab3b043d59653e
 export function TopBanner () {
   const menuData = [
     {
@@ -17,6 +12,10 @@ export function TopBanner () {
     {
       title: '문의하기',
       subMenuItems: ['질문 게시판', '1:1 상담', '실시간 채팅 게시판'],
+    },
+    {
+      title: '마이페이지',
+      subMenuItems: ['장바구니 목록', '내가 찜한 목록', '주문 / 배송 현황'],
     },
   ];
   const navigate = useNavigate();
@@ -37,7 +36,6 @@ export function TopBanner () {
   };
 
   return (
-<<<<<<< HEAD
     <div className={styles.top_container}>
       <div className={styles.top_nav}>
         <img className={styles.image} onClick={()=>navigate("/")} src={logo} height='80px'/>
@@ -63,46 +61,6 @@ export function TopBanner () {
         ))}
         <button className={styles.link_signIn}>로그인</button>
       </div>
-=======
-  <div className={styles.topNav}>
-    {menuData.map((item,index)=>(
-    <li
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      className={`main-menu-item ${isSubMenuOpen ? 'open' : ''}`}
-    >
-      <a className={styles.link} ref="#">{item.title}</a>
-      {isSubMenuOpen && (
-        <ul className={styles.subMenu}>
-          {item.subMenuItems.map((item, index) => (
-            <li key={index}>
-              <a href="#">{item}</a>
-            </li>
-          ))}
-        </ul>
-      )}
-    </li>
-    ))}
-      {/* 오늘의 소식 */}
-      {/* 이달의 이벤트 */}
-      <nav className={styles.topNav}>
-        <div>
-          <a className={styles.link} href="">이달의 이벤트</a>
-        </div>
-      </nav>
-      {/* 문의하기 */}
-      <nav className={styles.topNav}>
-        <div>
-          <a className={styles.link}  href="">문의하기</a>
-        </div>
-      </nav>
-      {/* 로그인 */}
-      <nav className={styles.topNav}>
-        <div className={styles.topDiv}>
-          <a className={styles.linkSignIn} href="">로그인</a>
-        </div>
-      </nav>
->>>>>>> 4399c62891cc561e44e6c99857ab3b043d59653e
     </div>
   );
 }
