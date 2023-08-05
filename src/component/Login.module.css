@@ -2,14 +2,24 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
 
 .logo {
     cursor : pointer;
 }
+.container{
+    display: flex;
+    flex-direction: column;
+}
 
 .loginContainer {
     display: flex;
+    flex-direction: row;
+}
+.inputContainer{
+    display: flex;
+    flex-direction: column;
 }
 
 .goLogin {
@@ -31,6 +41,8 @@
     color: grey;
     font-size: 0.5em;   
     text-align: left; 
+    align-items: center;
+    justify-content: center;
 }
 
 .find_join{
@@ -39,6 +51,8 @@
     font-size: 0.5em;
     justify-content: center;
     color:gray;
+    gap: 1em;
+    align-items: center;
 }
 
 .findId{
@@ -50,6 +64,10 @@
 }
 
 .join{
-    padding-left: 1em;
     cursor : pointer;
+}
+
+.findDiv{
+    display: flex;
+    gap: 0.5em;
 }

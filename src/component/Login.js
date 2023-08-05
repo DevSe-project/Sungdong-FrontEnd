@@ -18,31 +18,34 @@ export function Login(props) {
           />
         </div>
 {/* 뭐하지 */}
-        <div className={styles.loginContainer}>
+        <div className={styles.Container}>
           {/* loginContainer */}
           <div className={styles.loginContainer}>
             <div className={styles.inputContainer}>
               {/* ID */}
               <div>
-                <input className={styles.inputId} value={"아이디를 입력하세요"} />
+                <input className={styles.inputId} placeholder={"아이디를 입력하세요"} />
               </div>
               {/* PW */}
               <div>
-                <input className={styles.inputPW} value={"패스워드를 입력하세요"} />
+                <input className={styles.inputPW} placeholder={"패스워드를 입력하세요"} />
               </div>
             </div>
-            {/* Login Button */}
+          {/* Login Button */}
             <div className={styles.goLogin}>
               로그인
             </div>
           </div>
           {/* Find Id&PW Button | join Button */}
           <div className={styles.autoLogin}>
-            <input type='checkbox' value={"자동 로그인"} />자동로그인
+
           </div>
           <div className={styles.find_join}>
-            <div className={styles.findId}>아이디</div>
-            <div className={styles.findPW}>/비밀번호 찾기</div>
+            <input type='checkbox' placeholder={"자동 로그인"} />자동로그인
+            <div className={styles.findDiv}>
+              <div className={styles.findId}>아이디</div>
+              <div className={styles.findPW}>/ 비밀번호 찾기</div>
+            </div>
             <div className={styles.join}>회원가입</div>
           </div>
         </div>
