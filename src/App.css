@@ -65,6 +65,16 @@ button{
 input:focus {
   outline: none;
 }
+
+thead{
+  width: 100%;
+  height: 3em;
+  background-color: rgb(237, 229, 229);
+}
+td{
+  height: 5em;
+  border-bottom: 1px solid lightgray;
+}
 /* ==== 반복 함수 생성 ==== */
 :root {
   --body-margin : 0.5em;
@@ -124,7 +134,7 @@ input:focus {
 .menu-item .sub-menu {
   display: none;
   position: absolute;
-  top: 104%;
+  top: 100%;
   left: -2.8em;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -183,7 +193,7 @@ i.fas.fa-angle-right{
 .categorymenu-item .sub-menu {
   display: none;
   position: absolute;
-  top: 104%;
+  top: 100%;
   left: -2.5em;
   background-color: var(--background-color-set);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);

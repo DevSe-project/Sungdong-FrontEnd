@@ -77,7 +77,8 @@ export function Detail(props) {
                 <button className={styles.mainButton}>결제하기</button>
                 <div className={styles.sideTextButton}>
                   <button className={styles.sideButton}>장바구니</button>
-                  <button className={styles.sideButton}>찜하기</button>
+                  <button className={styles.sideButton}>
+                  <i class="fa-regular fa-heart"/> 찜하기</button>
                 </div>
               </div>
             </div>

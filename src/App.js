@@ -7,6 +7,7 @@ import { List } from './component/List';
 import { Login } from './component/Login';
 import MainPage from './MainPage';
 import { Basket } from './component/Basket';
+import { LikeItem } from './component/LikeItem';
 function App() {
   const navigate = useNavigate();
   const [data, setData] = useState();
@@ -36,6 +37,9 @@ function App() {
         } />
         <Route path='/basket' element={
           <Basket />
+        } />
+        <Route path='/likeitem' element={
+          <LikeItem />
         } />
       </Routes>
     </div>
