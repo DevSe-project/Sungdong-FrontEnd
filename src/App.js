@@ -8,6 +8,7 @@ import { Login } from './component/Login';
 import MainPage from './MainPage';
 import { Basket } from './component/Basket';
 import { LikeItem } from './component/LikeItem';
+import Join from './component/Join';
 function App() {
   const navigate = useNavigate();
   const [data, setData] = useState();
@@ -35,6 +36,9 @@ function App() {
         <Route path='/login' element={
           <Login />
         } />
+        <Route path='/join' element={
+          <Join />
+        }/>
         <Route path='/basket' element={
           <Basket />
         } />

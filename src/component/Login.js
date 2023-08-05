@@ -24,11 +24,11 @@ export function Login(props) {
             <div className={styles.inputContainer}>
               {/* ID */}
               <div>
-                <input className={styles.inputId} placeholder={"아이디를 입력하세요"} />
+                <input type='text' className={styles.inputId} placeholder={"아이디를 입력하세요"} />
               </div>
               {/* PW */}
               <div>
-                <input className={styles.inputPW} placeholder={"패스워드를 입력하세요"} />
+                <input type='password' className={styles.inputPW} placeholder={"패스워드를 입력하세요"} />
               </div>
               <div className={styles.autoLoginCheckBox}>
                 <input type='checkbox' />로그인 상태 유지
@@ -48,7 +48,7 @@ export function Login(props) {
               <div>|</div>
               <div className={styles.findPW}>비밀번호 찾기</div>
               <div>|</div>
-              <div className={styles.join}>회원가입</div>
+              <div className={styles.join} onClick={ () => {navigate('/join')} }>회원가입</div>
             </div>
         </div>
       </div>
