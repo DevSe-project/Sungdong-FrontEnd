@@ -1,18 +1,23 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import { Detail } from './component/Detail';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DataObj } from './component/DataObj'
 import { List } from './component/List';
 import { Login } from './component/Login';
 import MainPage from './MainPage';
+import { Basket } from './component/Basket';
 function App() {
   const navigate = useNavigate();
-  const [data, setData] = useState(DataObj);
+  const [data, setData] = useState();
+  useEffect(()=>{
+    const dataload = setTimeout(()=>{
+      setData(DataObj);
+      return clearTimeout(dataload)
+    },3000)
+  },[])
   return (
     <div className="App">
-
-
       <Routes>
         <Route path='/' element={
           <>
@@ -28,6 +33,9 @@ function App() {
         } />
         <Route path='/login' element={
           <Login />
+        } />
+        <Route path='/basket' element={
+          <Basket />
         } />
       </Routes>
     </div>

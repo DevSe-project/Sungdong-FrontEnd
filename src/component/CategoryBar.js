@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import '../App.css'
 import styles from './CategoryBar.module.css'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export function CategoryBar() {
   const menuData = [
@@ -33,8 +33,9 @@ export function CategoryBar() {
   ];
   const navigate = useNavigate();
   //서브메뉴 열림창 변수 초기화
-  const [subMenuStates, setSubMenuStates] = useState(menuData.map(() => false));
+  const [subMenuStates, setSubMenuStates] = useState(menuData.map(()=>false));
   const [activeTab, setActiveTab] = useState(1); // 현재 활성화된 탭을 추적하는 상태
+
   const handleTabClick = (tabIndex) => {
     setActiveTab(tabIndex);
   };

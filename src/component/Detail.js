@@ -1,18 +1,24 @@
 import { Tab } from './Tab'
 import styles from './Detail.module.css'
 import { useParams } from 'react-router-dom'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { CategoryBar } from './CategoryBar'
 import { TopBanner } from './TopBanner'
 export function Detail(props) {
   const [count, setCount] = useState("");
   //주소창 입력된 id값 받아오기
   let {id} = useParams();
-  //입력된 id과 data내부의 id값 일치하는 값 찾아 변수 선언
-  const detaildata = props.data.find((item)=>item.id==id);
-  if (!detaildata) {
-    return <div>상품을 찾을 수 없습니다.</div>;
+  const loadData = ()=> {
+    if(props.data){
+      //입력된 id과 data내부의 id값 일치하는 값 찾아 변수 선언
+      const data = props.data.find((item)=>item.id==id);
+      return data;
+    } else {
+      return <div>데이터를 불러오는 중이거나 상품을 찾을 수 없습니다.</div>;
+    }
   }
+  //로딩된 데이터 불러오기
+  const detailData = loadData();
   //수량 최대입력 글자(제한 길이 변수)
   function maxLengthCheck(e) { 
     const target = e.target; 
@@ -37,10 +43,18 @@ export function Detail(props) {
             {/* 상품 정보 부분 */}
             <div className={styles.headRight}>
               <div className={styles.textBox}>
-                {detaildata.title}
+                {props.data 
+                ? detailData.title
+                : <div className={styles.skeleton}>&nbsp;</div>}
               </div>
-              <h4 className={styles.h4}>{detaildata.price}원</h4>
+              <h4 className={styles.h4}>
+                {props.data 
+                ? `${detailData.price} 원`
+                : <div className={styles.skeleton}>&nbsp;</div>}
+              </h4>
               <div className={styles.textBox}>
+              {props.data ? 
+              <>
                 <label>
                 수량 : <input className={styles.input} onChange={(e)=>maxLengthCheck(e)} minLength={1} maxLength={3} min={0} max={999} type='number' placeholder='숫자만 입력'/> 개
                 </label>
@@ -49,10 +63,16 @@ export function Detail(props) {
                   선택 옵션 : 
                   <input type='checkbox'/>
                 </label>
+                </>
+              : <div className={styles.skeleton}>&nbsp;</div>}
               </div>
-              총 수량 {count}개 |
-              <h4 className={styles.finalprice}>
-                최종 결제 금액 : {detaildata.price * count} 원</h4>
+              {props.data ?
+                <>
+                총 수량 {count ? count : 0}개 |
+                <h4 className={styles.finalprice}>
+                최종 결제 금액 : {detailData.price * count}원 </h4></>
+                : <div className={styles.skeleton}>&nbsp;</div>
+              }
               <div className={styles.textButton}>
                 <button className={styles.mainButton}>결제하기</button>
                 <div className={styles.sideTextButton}>

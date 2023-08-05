@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import logo from '../image/logo.jpeg'
 import { useNavigate } from 'react-router-dom'
 import styles from './TopBanner.module.css';
@@ -16,7 +16,11 @@ export function TopBanner () {
     },
     {
       title: '마이페이지',
-      subMenuItems: ['장바구니 목록', '내가 찜한 목록', '주문 / 배송 현황'],
+      subMenuItems: [
+        '장바구니 목록', 
+        '내가 찜한 목록',
+        '주문 / 배송 현황'
+      ],
     }, 
   ];
   const navigate = useNavigate();

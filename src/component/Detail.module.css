@@ -158,3 +158,12 @@
   width: 4em;
   height: 2em;
 }
+
+.skeleton{
+  display: flex;
+  background-color: lightgray;
+  width: 100%;
+  height: 100%;
+  justify-content: end;
+  border-radius: 10dvw;
+}
