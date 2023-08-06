@@ -28,7 +28,7 @@ export function TopBanner () {
         link : '/question',
         },
         {
-        item : '1:1 상담',
+        item : '1:1 고객센터',
         link : '/oneandone',
         },
         {

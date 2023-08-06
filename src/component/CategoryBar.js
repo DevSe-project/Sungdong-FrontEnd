@@ -9,80 +9,84 @@ export function CategoryBar() {
       id : 1,
       title: '생활/건강',
       subMenuItems: [{
-        item : '질문 게시판',
-        link : '/question',
+        item : '공구',
+        link : '/tool',
         },
         {
-        item : '1:1 상담',
-        link : '/oneandone',
+        item : '건강관리 용품',
+        link : '/healthcareTool',
         },
         {
-        item : '실시간 채팅 게시판',
-        link : '/chat',
+        item : '주방 용품',
+        link : '/kitchenTool',
+      },
+      {
+        item : '생활 용품',
+        link : '/lifeTool',
+      },
+      {
+        item : '정원/원예용품',
+        link : '/grassTool',
+      },
+      {
+        item : '문구/사무용품',
+        link : '/officeTool',
       }],
     },
     {
       id : 2,
       title: '디지털/가전',
       subMenuItems: [{
-        item : '질문 게시판',
-        link : '/question',
+        item : 'PC 액세서리',
+        link : '/pc',
         },
         {
-        item : '1:1 상담',
-        link : '/oneandone',
-        },
-        {
-        item : '실시간 채팅 게시판',
-        link : '/chat',
-      }],
+        item : '계절가전',
+        link : '/weathermachine',
+        }],
     },
     {
       id : 3,
       title: '스포츠/레저',
       subMenuItems: [{
-        item : '질문 게시판',
-        link : '/question',
+        item : '골프',
+        link : '/golf',
         },
         {
-        item : '1:1 상담',
-        link : '/oneandone',
+        item : '캠핑',
+        link : '/camping',
         },
         {
-        item : '실시간 채팅 게시판',
-        link : '/chat',
+        item : '스포츠액세서리',
+        link : '/sport',
       }],
     },
     {
       id : 4,
       title: '패션의류',
       subMenuItems: [{
-        item : '질문 게시판',
-        link : '/question',
+        item : '남성의류',
+        link : '/manclothes',
         },
         {
-        item : '1:1 상담',
-        link : '/oneandone',
-        },
-        {
-        item : '실시간 채팅 게시판',
-        link : '/chat',
-      }],
+        item : '여성의류',
+        link : '/womanclothes',
+        }],
     },
     {
       id : 5,
       title: '패션잡화',
       subMenuItems: [{
-        item : '질문 게시판',
-        link : '/question',
+        item : '남성신발',
+        link : '/manshoes',
         },
         {
-        item : '1:1 상담',
-        link : '/oneandone',
+        item : '신발용품',
+        link : '/shoes',
         },
         {
-        item : '실시간 채팅 게시판',
-        link : '/chat',
+        item : '장갑',
+        link : '/glove',
       }],
     },
   ];
