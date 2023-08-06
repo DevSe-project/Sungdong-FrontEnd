@@ -40,14 +40,17 @@ export function Detail(props) {
 
   // 찜하기
   function likethis(product){
-    //중복 확인
+    //중복 확인 (.some 함수 : wishlist의 item.id 중 product.id와 같은 중복인 아이템이 있으면 true 반환 | !some이니 false면..== 중복이 아니면..)
     if (!props.wishlist.some((item) => item.id === product.id)){
-      const likelist = [...props.wishlist, product];//props.wishlist 배열과 product를 합쳐서 새로운 배열 likelist를 생성
+      const likelist = [...props.wishlist, product];//props.wishlist 배열들과 배열 product를 합쳐서 새로운 배열 likelist를 생성
       props.setWishlist(likelist); //State에 새로운 배열 삽입
       localStorage.setItem('likelist', JSON.stringify(likelist)); //새로고침해도 찜 목록 유지
-      alert("찜 목록에 해당 상품이 추가되었습니다.");
+      alert("해당 상품이 관심 상품 목록에 추가되었습니다.")
     } else {
-      alert("이미 찜 목록에 포함되어 있는 상품입니다.")
+      //wishlist 아이템들 중에서 item.id와 product.id와 같지 않은 것들로 필터링하여 unlikelist에 저장
+      const unlikelist = props.wishlist.filter((item)=> item.id !== product.id);
+      props.setWishlist(unlikelist); // state에 새로운 list 삽입
+      localStorage.setItem('likelist', JSON.stringify(unlikelist)); //새로고침하면 필터링 된 목록 표시
     }
   }
   return(
@@ -99,7 +102,10 @@ export function Detail(props) {
                 <div className={styles.sideTextButton}>
                   <button className={styles.sideButton}>장바구니</button>
                   <button onClick={()=>{likethis(detailData)}} className={styles.sideButton}>
-                  <i class="fa-regular fa-heart"/> 찜하기</button>
+                  {props.wishlist.some((item) => item.id === detailData.id) ? <i class="fa-solid fa-heart"/> 
+                  : <i class="fa-regular fa-heart"/>}
+                  &nbsp;찜하기
+                  </button>
                 </div>
               </div>
             </div>

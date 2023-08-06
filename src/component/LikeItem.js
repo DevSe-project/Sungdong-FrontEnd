@@ -34,7 +34,7 @@ export function LikeItem(props){
 
   // 선택된 항목들을 삭제하는 함수
   const DeletedList = () => {
-    //props.wishlist 배열에서 selectedItems에 포함된 항목들이 아닌 것들로 새로운 배열을 생성
+    //props.wishlist 배열에서 selectedItems에 포함된(체크박스 선택된) 항목들이 아닌 것들로 새로운 배열을 생성
     const updatedWishlist = props.wishlist.filter((item) => !selectedItems.includes(item.id)); 
     props.setWishlist(updatedWishlist);
 
@@ -43,6 +43,9 @@ export function LikeItem(props){
 
     // 선택된 항목들 초기화
     setSelectedItems([]);
+    
+    //알림
+    alert("찜 리스트에서 해당 품목이 성공적으로 삭제되었습니다.")
   };
   return(
     <div>
