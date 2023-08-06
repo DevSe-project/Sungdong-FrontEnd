@@ -5,7 +5,7 @@ import logo from '../image/logo.jpeg'
 export default function Join() {
     let navigate = useNavigate();
     return (
-        <div>
+        <div className={styles.body}>
             {/* 로고 */}
             <div className={styles.logo}>
                 <img

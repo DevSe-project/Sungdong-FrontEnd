@@ -1,4 +1,5 @@
 .categoryBarContainer {
+  width: 100%;
   background-color: #CC0000;
   color: white;
   display: flex;

@@ -1,34 +1,89 @@
 import { useNavigate } from 'react-router-dom';
 import '../App.css'
 import styles from './CategoryBar.module.css'
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export function CategoryBar() {
   const menuData = [
     {
       id : 1,
       title: '생활/건강',
-      subMenuItems: ['오시는 길', '오늘의 소식', '서브메뉴3'],
+      subMenuItems: [{
+        item : '질문 게시판',
+        link : '/question',
+        },
+        {
+        item : '1:1 상담',
+        link : '/oneandone',
+        },
+        {
+        item : '실시간 채팅 게시판',
+        link : '/chat',
+      }],
     },
     {
       id : 2,
       title: '디지털/가전',
-      subMenuItems: ['질문 게시판', '1:1 상담', '실시간 채팅 게시판'],
+      subMenuItems: [{
+        item : '질문 게시판',
+        link : '/question',
+        },
+        {
+        item : '1:1 상담',
+        link : '/oneandone',
+        },
+        {
+        item : '실시간 채팅 게시판',
+        link : '/chat',
+      }],
     },
     {
       id : 3,
       title: '스포츠/레저',
-      subMenuItems: ['질문 게시판', '1:1 상담', '실시간 채팅 게시판'],
+      subMenuItems: [{
+        item : '질문 게시판',
+        link : '/question',
+        },
+        {
+        item : '1:1 상담',
+        link : '/oneandone',
+        },
+        {
+        item : '실시간 채팅 게시판',
+        link : '/chat',
+      }],
     },
     {
       id : 4,
       title: '패션의류',
-      subMenuItems: ['장바구니 목록', '내가 찜한 목록', '주문 / 배송 현황'],
+      subMenuItems: [{
+        item : '질문 게시판',
+        link : '/question',
+        },
+        {
+        item : '1:1 상담',
+        link : '/oneandone',
+        },
+        {
+        item : '실시간 채팅 게시판',
+        link : '/chat',
+      }],
     },
     {
       id : 5,
       title: '패션잡화',
-      subMenuItems: ['장바구니 목록', '내가 찜한 목록', '주문 / 배송 현황'],
+      subMenuItems: [{
+        item : '질문 게시판',
+        link : '/question',
+        },
+        {
+        item : '1:1 상담',
+        link : '/oneandone',
+        },
+        {
+        item : '실시간 채팅 게시판',
+        link : '/chat',
+      }],
     },
   ];
   const navigate = useNavigate();
@@ -67,12 +122,12 @@ export function CategoryBar() {
             className={`categorymenu-item ${subMenuStates[index] && 'open'} + categorytab-item ${activeTab === item.id ? 'active' : ''}`}
             onClick={() => {handleTabClick(item.id)}}
           >
-            <a className={styles.link} href="#">{item.title}</a>
+            <span className={styles.link} href="#">{item.title}</span>
             {subMenuStates[index] && (
               <ul onMouseLeave={() => handleMouseLeave(index)} className="sub-menu">
                 {item.subMenuItems.map((item, index) => (
-                  <li className={styles.category} key={index}>
-                    <a href="#">{item}</a>
+                  <li onClick={()=>navigate(`${item.link}`)} className={styles.category} key={index}>
+                    {item.item}
                   </li>
                 ))}
               </ul>

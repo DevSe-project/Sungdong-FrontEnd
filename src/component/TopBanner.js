@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import logo from '../image/logo.jpeg'
 import { useNavigate } from 'react-router-dom'
 import styles from './TopBanner.module.css';
@@ -8,19 +8,48 @@ export function TopBanner () {
   const menuData = [
     {
       title: '회사 소개',
-      subMenuItems: ['오시는 길', '오늘의 소식', '이벤트'],
+      subMenuItems: [{
+        item : '오시는 길',
+        link : '/comeway',
+        },
+        {
+        item : '오늘의 뉴스',
+        link : '/todaytopic',
+        },
+        {
+        item : '진행 중인 이벤트',
+        link : '/event',
+      }],
     },
     {
       title: '문의하기',
-      subMenuItems: ['질문 게시판', '1:1 상담', '실시간 채팅 게시판'],
+      subMenuItems: [{
+        item : '질문 게시판',
+        link : '/question',
+        },
+        {
+        item : '1:1 상담',
+        link : '/oneandone',
+        },
+        {
+        item : '실시간 채팅 게시판',
+        link : '/chat',
+      }],
     },
     {
       title: '마이페이지',
-      subMenuItems: [
-        '장바구니 목록', 
-        '내가 찜한 목록',
-        '주문 / 배송 현황'
-      ],
+      subMenuItems: [{
+        item : '장바구니 목록',
+        link : '/basket',
+        },
+        {
+        item : '내가 찜한 목록',
+        link : '/likeitem',
+        },
+        {
+        item : '주문 / 배송 게시판',
+        link : '/order',
+      }],
     }, 
   ];
   const navigate = useNavigate();
@@ -45,7 +74,7 @@ export function TopBanner () {
     <div className={styles.top_container}>
       <div className={styles.top_nav}>
         {/* 로고 */}
-        <img className={styles.image} onClick={()=>navigate("/")} src={logo} height='80px'/>
+        <img className={styles.image} onClick={()=>navigate("/")} src={logo} alt="로고" height='80px'/>
         {/* 서치바 */}
         <SearchBar/>
         {/* 메뉴 loop */}
@@ -56,12 +85,12 @@ export function TopBanner () {
             onMouseLeave={() => handleMouseLeave(index)}
             className={`menu-item ${subMenuStates[index] && 'open'}`}
           >
-            <a className={styles.link} href="#">{item.title}</a>
+            <span className={styles.link}>{item.title}</span>
             {subMenuStates[index] && (
               <ul onMouseLeave={() => handleMouseLeave(index)} className="sub-menu">
-                {item.subMenuItems.map((item, index) => (
-                  <li className={styles.sub_item} key={index}>
-                    <a href="#">{item}</a>
+                {item.subMenuItems.map((subMenuItem, subMenuItemindex) => (
+                  <li onClick={() => navigate(`${subMenuItem.link}`)} className={styles.sub_item} key={subMenuItemindex}>
+                    {subMenuItem.item}
                   </li>
                 ))}
               </ul>

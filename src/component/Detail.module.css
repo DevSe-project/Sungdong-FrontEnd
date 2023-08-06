@@ -40,7 +40,6 @@
   box-sizing: border-box;
   width: 25em;
   height: 34em;
-  justify-content: start;
   text-align: end;
   border: 1px solid lightgray;
   gap: 1em;
@@ -164,6 +163,6 @@
   background-color: lightgray;
   width: 100%;
   height: 100%;
-  justify-content: end;
+  justify-content: flex-end;
   border-radius: 10dvw;
 }

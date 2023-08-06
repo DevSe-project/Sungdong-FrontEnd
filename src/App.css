@@ -69,8 +69,10 @@ input:focus {
 thead{
   width: 100%;
   height: 3em;
-  background-color: rgb(237, 229, 229);
+  background-color: #b63d3d;
+  color: white;
 }
+
 td{
   height: 5em;
   border-bottom: 1px solid lightgray;
@@ -165,6 +167,16 @@ i.fas.fa-angle-right{
   cursor: pointer;
   margin-right: 1em;
 }
+/* 빈 하트 아이콘 */
+i.fa-regular.fa-heart{
+  color: var(--background-color-set);
+}
+
+/* 가득 찬 하트 아이콘 */
+i.fa-solid.fa-heart{
+  color: var(--background-color-set);
+}
+
 
 /* 카테고리 메뉴 바 */
 

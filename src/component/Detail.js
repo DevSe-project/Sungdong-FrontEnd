@@ -1,11 +1,15 @@
 import { Tab } from './Tab'
 import styles from './Detail.module.css'
-import { useParams } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useState } from 'react'
 import { CategoryBar } from './CategoryBar'
 import { TopBanner } from './TopBanner'
 export function Detail(props) {
+  //수량 개수 state
   const [count, setCount] = useState("");
+
+  const navigate = useNavigate();
+
   //주소창 입력된 id값 받아오기
   let {id} = useParams();
   const loadData = ()=> {
@@ -17,8 +21,11 @@ export function Detail(props) {
       return <div>데이터를 불러오는 중이거나 상품을 찾을 수 없습니다.</div>;
     }
   }
+
   //로딩된 데이터 불러오기
   const detailData = loadData();
+
+
   //수량 최대입력 글자(제한 길이 변수)
   function maxLengthCheck(e) { 
     const target = e.target; 
@@ -29,6 +36,20 @@ export function Detail(props) {
         target.value = target.value.slice(0, target.maxLength); 
     } 
 } 
+
+
+  // 찜하기
+  function likethis(product){
+    //중복 확인
+    if (!props.wishlist.some((item) => item.id === product.id)){
+      const likelist = [...props.wishlist, product];//props.wishlist 배열과 product를 합쳐서 새로운 배열 likelist를 생성
+      props.setWishlist(likelist); //State에 새로운 배열 삽입
+      localStorage.setItem('likelist', JSON.stringify(likelist)); //새로고침해도 찜 목록 유지
+      alert("찜 목록에 해당 상품이 추가되었습니다.");
+    } else {
+      alert("이미 찜 목록에 포함되어 있는 상품입니다.")
+    }
+  }
   return(
     <div>
       <TopBanner/>
@@ -77,7 +98,7 @@ export function Detail(props) {
                 <button className={styles.mainButton}>결제하기</button>
                 <div className={styles.sideTextButton}>
                   <button className={styles.sideButton}>장바구니</button>
-                  <button className={styles.sideButton}>
+                  <button onClick={()=>{likethis(detailData)}} className={styles.sideButton}>
                   <i class="fa-regular fa-heart"/> 찜하기</button>
                 </div>
               </div>

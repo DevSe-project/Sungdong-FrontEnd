@@ -1,5 +1,4 @@
-import { Navigate, useNavigate } from 'react-router-dom'
-import App from '../App.js'
+import { useNavigate } from 'react-router-dom'
 import styles from './Login.module.css'
 
 export function Login(props) {
