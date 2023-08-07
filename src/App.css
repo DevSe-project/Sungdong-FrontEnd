@@ -230,3 +230,11 @@ i.fa-solid.fa-heart{
   color: #ddd;
   background-color: var(--background-color-clicked);
 }
+
+/* 체크박스 크기 조정(노인공경) */
+input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  cursor: pointer;
+}
