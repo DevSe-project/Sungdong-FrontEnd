@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 export function LikeItem(props){
   const navigate = useNavigate();
+
   // 체크박스를 통해 선택한 상품들을 저장할 상태 변수
   const [selectedItems, setSelectedItems] = useState([]);
 
@@ -33,19 +34,23 @@ export function LikeItem(props){
   };
 
   // 선택된 항목들을 삭제하는 함수
-  const DeletedList = () => {
-    //props.wishlist 배열에서 selectedItems에 포함된(체크박스 선택된) 항목들이 아닌 것들로 새로운 배열을 생성
-    const updatedWishlist = props.wishlist.filter((item) => !selectedItems.includes(item.id)); 
-    props.setWishlist(updatedWishlist);
+  const deletedList = () => {
+    if(selectedItems !== null && selectedItems.length > 0){
+      //props.wishlist 배열에서 selectedItems에 포함된(체크박스 선택된) 항목들이 아닌 것들로 새로운 배열을 생성
+      const updatedWishlist = props.wishlist.filter((item) => !selectedItems.includes(item.id)); 
+      props.setWishlist(updatedWishlist);
 
-    // LocalStorage에 업데이트된 찜 목록 저장
-    localStorage.setItem('likelist', JSON.stringify(updatedWishlist));
+      // LocalStorage에 업데이트된 찜 목록 저장
+      localStorage.setItem('likelist', JSON.stringify(updatedWishlist));
 
-    // 선택된 항목들 초기화
-    setSelectedItems([]);
-    
-    //알림
-    alert("찜 리스트에서 해당 품목이 성공적으로 삭제되었습니다.")
+      // 선택된 항목들 초기화
+      setSelectedItems([]);
+      
+      //알림
+      alert("찜 리스트에서 해당 품목이 성공적으로 삭제되었습니다.")
+    } else {
+      alert("1개 이상의 목록을 선택해주세요")
+    }
   };
   return(
     <div>
@@ -87,10 +92,9 @@ export function LikeItem(props){
           </table>
           <div className={styles.buttonDiv}>
             <button 
-            onClick={()=>DeletedList()}
+            onClick={()=>deletedList()}
             className={styles.deletebutton}
-            >제거</button>
-            <button className={styles.button}>장바구니에 추가</button>
+            >선택 제거</button>
           </div>
         </div>
       </div>

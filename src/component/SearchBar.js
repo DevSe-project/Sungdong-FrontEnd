@@ -1,8 +1,7 @@
 import '../App.css';
 import styles from './SearchBar.module.css';
 
-export default function() {
-
+export function SearchBar() {
   return (
     <div>
       <div className={styles.searchInputContainer}>

@@ -1,0 +1,91 @@
+.body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.logo {
+    cursor : pointer;
+    justify-content: left;
+    align-items: center;
+    width: 50%;
+}
+
+.checkAll {
+    display: flex;
+    margin-top: 2em;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.checkboxContainer{
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid gray;
+    border-bottom: 1px solid gray;
+    border-radius: 5dvb;
+    margin-top: 1em;
+    width: 50dvb;
+    font-size: 1.5em;
+}
+
+.policyList {
+    display: flex;
+    flex-direction: column;
+    margin: 2em;
+}
+
+.policyObj {
+    justify-content: space-between;
+    display: flex;
+}
+
+.arrow {
+    cursor: pointer;
+}
+
+.policyDetail {
+    margin-top: 1em;
+    padding: 0.7em;
+    border: 1.5px solid #404040;
+    border-radius: 1dvb;
+    max-height: 10vh;
+    overflow-y:scroll; /* 스크롤 생성 */
+}
+
+.moveContainer {
+    display: flex;
+    margin: 2em;
+}
+
+.back {
+    cursor: pointer;
+    margin-right: 1em;
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: 0.7em;
+    padding-bottom: 0.7em;
+    border-left: 3px solid gray;
+    border-right: 3px solid gray;
+    border-radius: 1dvh;
+    width: max-content;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.sign_up {
+    cursor: pointer;
+    margin-right: 1em;
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: 0.7em;
+    padding-bottom: 0.7em;
+    border-left: 3px solid #FF3333;
+    border-right: 3px solid #FF3333;
+    border-radius: 1dvh;
+    width: max-content;
+    font-size: 1.5em;
+    font-weight: bold;
+}

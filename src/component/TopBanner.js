@@ -2,7 +2,7 @@ import { useState } from 'react';
 import logo from '../image/logo.jpeg'
 import { useNavigate } from 'react-router-dom'
 import styles from './TopBanner.module.css';
-import SearchBar from './SearchBar';
+import {SearchBar} from './SearchBar';
 //상단 메뉴 리스트 
 export function TopBanner () {
   const menuData = [

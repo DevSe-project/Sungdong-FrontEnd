@@ -6,7 +6,7 @@ import { CategoryBar } from './CategoryBar'
 import { TopBanner } from './TopBanner'
 export function Detail(props) {
   //수량 개수 state
-  const [count, setCount] = useState("");
+  const [count, setCount] = useState("1");
 
   const navigate = useNavigate();
 
@@ -27,15 +27,35 @@ export function Detail(props) {
 
 
   //수량 최대입력 글자(제한 길이 변수)
-  function maxLengthCheck(e) { 
-    const target = e.target; 
+  const maxLengthCheck = (e) => { 
+    const lengthTarget = e.target.value; 
     //target.value.length = input에서 받은 value의 길이 
-    //target.maxLength = 제한 길이 
-    setCount(target.value);
-    if (target.value.length > target.maxLength) { 
-        target.value = target.value.slice(0, target.maxLength); 
+    //target.maxLength = 제한 길이
+
+    if ( lengthTarget >= 0 && lengthTarget.length <= 3) { 
+        setCount(lengthTarget); 
     } 
-} 
+}
+
+function basketThis(product, count){
+  if(count>0){
+  //중복 확인 (.some 함수 : wishlist의 item.id 중 product.id와 같은 중복인 아이템이 있으면 true 반환 | !some이니 false면..== 중복이 아니면..)
+    if (!props.orderList.some((item) => item.id === product.id)){
+      const newBasketProduct = {
+        ...product,
+        cnt : count,
+        finprice : (product.price * count),
+      }
+      const basketList = [...props.orderList, newBasketProduct];//props.wishlist 배열들과 배열 product를 합쳐서 새로운 배열 likelist를 생성
+      props.setOrderList(basketList); //State에 새로운 배열 삽입
+      alert("해당 상품이 장바구니에 추가되었습니다.")
+    } else {
+      alert("이미 장바구니에 추가된 상품입니다.")
+    }
+  } else {
+    alert("수량은 0보다 커야합니다.")
+  }
+}
 
 
   // 찜하기
@@ -62,7 +82,7 @@ export function Detail(props) {
           <div className={styles.headTop}>
             {/* 상품 이미지 부분 */}
             <div className={styles.headLeft}>
-              <img src="http://pop7.co.kr/web/product/big/201806/344_shop1_15289487355825.jpg" className={styles.thumnail} width="600px"/>
+              <img src="http://pop7.co.kr/web/product/big/201806/344_shop1_15289487355825.jpg" alt="이미지" className={styles.thumnail} width="600px"/>
             </div>
             {/* 상품 정보 부분 */}
             <div className={styles.headRight}>
@@ -80,7 +100,7 @@ export function Detail(props) {
               {props.data ? 
               <>
                 <label>
-                수량 : <input className={styles.input} onChange={(e)=>maxLengthCheck(e)} minLength={1} maxLength={3} min={0} max={999} type='number' placeholder='숫자만 입력'/> 개
+                수량 : <input value={count} className={styles.input} onChange={maxLengthCheck} type='number' placeholder='숫자만 입력'/> 개
                 </label>
                 <br/>
                 <label>
@@ -92,7 +112,7 @@ export function Detail(props) {
               </div>
               {props.data ?
                 <>
-                총 수량 {count ? count : 0}개 |
+                총 수량 {count ? count : 1}개 |
                 <h4 className={styles.finalprice}>
                 최종 결제 금액 : {detailData.price * count}원 </h4></>
                 : <div className={styles.skeleton}>&nbsp;</div>
@@ -100,7 +120,7 @@ export function Detail(props) {
               <div className={styles.textButton}>
                 <button className={styles.mainButton}>결제하기</button>
                 <div className={styles.sideTextButton}>
-                  <button className={styles.sideButton}>장바구니</button>
+                  <button onClick={()=>{basketThis(detailData, count)}} className={styles.sideButton}>장바구니</button>
                   <button onClick={()=>{likethis(detailData)}} className={styles.sideButton}>
                   {props.wishlist.some((item) => item.id === detailData.id) ? <i class="fa-solid fa-heart"/> 
                   : <i class="fa-regular fa-heart"/>}
@@ -140,28 +160,28 @@ export function Detail(props) {
               <div className={styles.rowBestReview}>
                 <div className={styles.colBestReview}>
                   <div className={styles.frame}>
-                    <img className={styles.thumnail} src="http://pop7.co.kr/web/product/big/201806/344_shop1_15289487355825.jpg" width="100px"/>
+                    <img className={styles.thumnail} src="http://pop7.co.kr/web/product/big/201806/344_shop1_15289487355825.jpg" alt="관련 이미지" width="100px"/>
                   </div>
                   <h5>상품 이름</h5>
                   <p>내용</p>
                 </div>
                 <div className={styles.colBestReview}>
                   <div className={styles.frame}>
-                    <img className={styles.thumnail} src="http://pop7.co.kr/web/product/big/201806/344_shop1_15289487355825.jpg" width="100px"/>
+                    <img className={styles.thumnail} src="http://pop7.co.kr/web/product/big/201806/344_shop1_15289487355825.jpg" alt="관련 이미지" width="100px"/>
                   </div>
                   <h5>상품 이름</h5>
                   <p>내용</p>
                 </div>
                 <div className={styles.colBestReview}>
                   <div className={styles.frame}>
-                    <img className={styles.thumnail} src="http://pop7.co.kr/web/product/big/201806/344_shop1_15289487355825.jpg" width="100px"/>
+                    <img className={styles.thumnail} src="http://pop7.co.kr/web/product/big/201806/344_shop1_15289487355825.jpg" alt="관련 이미지" width="100px"/>
                   </div>
                   <h5>상품 이름</h5>
                   <p>내용</p>
                 </div>
                 <div className={styles.colBestReview}>
                   <div className={styles.frame}>
-                    <img className={styles.thumnail} src="http://pop7.co.kr/web/product/big/201806/344_shop1_15289487355825.jpg" width="100px"/>
+                    <img className={styles.thumnail} src="http://pop7.co.kr/web/product/big/201806/344_shop1_15289487355825.jpg" alt="관련 이미지" width="100px"/>
                   </div>
                   <h5>상품 이름</h5>
                   <p>내용</p>

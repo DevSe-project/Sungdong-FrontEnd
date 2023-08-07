@@ -1,10 +1,10 @@
 import './App.css';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, Router } from 'react-router-dom';
 import { Detail } from './component/Detail';
 import { useEffect, useState } from 'react';
 import { DataObj } from './component/Data/DataObj'
 import { List } from './component/List';
-import { Login } from './component/Login';
+import { Login } from './component/AboutLogin/Login';
 import MainPage from './MainPage';
 import { Basket } from './component/Basket';
 import { LikeItem } from './component/LikeItem';
@@ -13,6 +13,7 @@ import JoinInputInformation from './component/JoinInputInformation';
 function App() {
   const navigate = useNavigate();
   const [data, setData] = useState();
+  const [orderList, setOrderList] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   useEffect(() => {
     //localStorage에서 likelist를 파싱 
@@ -39,7 +40,7 @@ function App() {
           <List data={data} navigate={navigate} />
         } />
         <Route path="/detail/:id" element={
-          <Detail data={data} navigate={navigate} wishlist={wishlist} setWishlist={setWishlist} />
+          <Detail data={data} navigate={navigate} wishlist={wishlist} setWishlist={setWishlist} orderList={orderList} setOrderList={setOrderList} />
         } />
         <Route path='/login' element={
           <Login />
@@ -51,7 +52,10 @@ function App() {
           <Basket />
         } />
         <Route path='/likeitem' element={
-          <LikeItem setWishlist={setWishlist} wishlist={wishlist} />
+          <LikeItem orderList={orderList} setOrderList={setOrderList} setWishlist={setWishlist} wishlist={wishlist} />
+        } />
+        <Route path='/basket' element={
+          <Basket orderList={orderList} setOrderList={setOrderList}/>
         } />
       </Routes>
     </div>
