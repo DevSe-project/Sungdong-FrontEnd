@@ -21,6 +21,7 @@ export function Product(props){
         </div>
       ))
       : <>
+        {/* 스켈레톤 레이아웃 */}
         <div className={styles.colskeleton}>
           <div className={styles.frameskeleton}>
           &nbsp;

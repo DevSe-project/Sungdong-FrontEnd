@@ -42,6 +42,7 @@
   width: 50%;
 }
 .button{
+  font-size: 1.2em;
   border: none;
   border-radius: 10em;
   background-color: #ff3333;
@@ -51,10 +52,11 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin: 10px;
-  padding: 10px;
+  margin: 1em;
+  padding: 1em;
 }
 .deletebutton{
+  font-size: 1.2em;
   border: none;
   border-radius: 10em;
   background-color: lightgray;
@@ -64,8 +66,8 @@
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin: 10px;
-  padding: 10px;
+  margin: 1em;
+  padding: 1em;
 }
 
 .editButton{
@@ -92,16 +94,77 @@
   color: gray;
 }
 
+.iconlocation{
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  font-size: 2em;
+  color: lightgray;
+}
+
+.stepBlock{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
 .stepBar{
+  width: 80%;
   margin-top: 1em;
-  padding-bottom: 2em;
-  background-color: rgb(244, 231, 231);
+  background-color: white;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   justify-content: center;
-  gap: 5em;
+  gap: 5%;
+}
+.step{
+  border-top: 2px solid lightgray;
+  border-bottom: 2px solid lightgray;
+  border-radius: 1dvb;
+  color: lightgray;
+  display: flex;
+  font-weight: 650;
+  flex-direction: column;
+  padding: 2em;
+  padding-bottom: 4em;
+  margin: 1em;
+  white-space: nowrap;
+}
+
+.stepOn{
+  border-top: 2px solid #b63d3d;
+  border-bottom: 2px solid #b63d3d;
+  border-radius: 1dvb;
+  color: #000;
+  font-weight: 650;
+  padding: 2em;
+  padding-bottom: 4em;
+  margin: 1em;
+  white-space: nowrap;
 }
 
 .price{
   font-weight: 800;
+}
+
+.finalContainer{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10%;
+}
+
+.finalBox{
+  display: flex;
+  flex-direction: column;
+  white-space: nowrap;
+  align-items: center;
+  gap: 1em;
+  padding: 1em;
+  border-top: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
 }

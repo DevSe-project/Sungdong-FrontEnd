@@ -27,17 +27,18 @@ export function Detail(props) {
 
 
   //수량 최대입력 글자(제한 길이 변수)
-  function maxLengthCheck(e) { 
-    const target = e.target; 
+  const maxLengthCheck = (e) => { 
+    const lengthTarget = e.target.value; 
     //target.value.length = input에서 받은 value의 길이 
-    //target.maxLength = 제한 길이 
-    setCount(target.value);
-    if (target.value.length > target.maxLength) { 
-        target.value = target.value.slice(0, target.maxLength); 
+    //target.maxLength = 제한 길이
+
+    if ( lengthTarget >= 0 && lengthTarget.length <= 3) { 
+        setCount(lengthTarget); 
     } 
-} 
+}
 
 function basketThis(product, count){
+  if(count>0){
   //중복 확인 (.some 함수 : wishlist의 item.id 중 product.id와 같은 중복인 아이템이 있으면 true 반환 | !some이니 false면..== 중복이 아니면..)
     if (!props.orderList.some((item) => item.id === product.id)){
       const newBasketProduct = {
@@ -51,6 +52,9 @@ function basketThis(product, count){
     } else {
       alert("이미 장바구니에 추가된 상품입니다.")
     }
+  } else {
+    alert("수량은 0보다 커야합니다.")
+  }
 }
 
 
@@ -96,7 +100,7 @@ function basketThis(product, count){
               {props.data ? 
               <>
                 <label>
-                수량 : <input value={count} className={styles.input} onChange={(e)=>maxLengthCheck(e)} minLength={1} maxLength={3} min={0} max={999} type='number' placeholder='숫자만 입력'/> 개
+                수량 : <input value={count} className={styles.input} onChange={maxLengthCheck} type='number' placeholder='숫자만 입력'/> 개
                 </label>
                 <br/>
                 <label>

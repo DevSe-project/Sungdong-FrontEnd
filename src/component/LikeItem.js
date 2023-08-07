@@ -35,18 +35,22 @@ export function LikeItem(props){
 
   // 선택된 항목들을 삭제하는 함수
   const deletedList = () => {
-    //props.wishlist 배열에서 selectedItems에 포함된(체크박스 선택된) 항목들이 아닌 것들로 새로운 배열을 생성
-    const updatedWishlist = props.wishlist.filter((item) => !selectedItems.includes(item.id)); 
-    props.setWishlist(updatedWishlist);
+    if(selectedItems !== null && selectedItems.length > 0){
+      //props.wishlist 배열에서 selectedItems에 포함된(체크박스 선택된) 항목들이 아닌 것들로 새로운 배열을 생성
+      const updatedWishlist = props.wishlist.filter((item) => !selectedItems.includes(item.id)); 
+      props.setWishlist(updatedWishlist);
 
-    // LocalStorage에 업데이트된 찜 목록 저장
-    localStorage.setItem('likelist', JSON.stringify(updatedWishlist));
+      // LocalStorage에 업데이트된 찜 목록 저장
+      localStorage.setItem('likelist', JSON.stringify(updatedWishlist));
 
-    // 선택된 항목들 초기화
-    setSelectedItems([]);
-    
-    //알림
-    alert("찜 리스트에서 해당 품목이 성공적으로 삭제되었습니다.")
+      // 선택된 항목들 초기화
+      setSelectedItems([]);
+      
+      //알림
+      alert("찜 리스트에서 해당 품목이 성공적으로 삭제되었습니다.")
+    } else {
+      alert("1개 이상의 목록을 선택해주세요")
+    }
   };
   return(
     <div>
