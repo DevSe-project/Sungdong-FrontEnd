@@ -1,21 +1,14 @@
 import '../App.css';
 import styles from './SearchBar.module.css';
 
-export default function() {
-
+export function SearchBar() {
   return (
-    <div className={styles.searchContainer}>
-
-      {/* 돋보기 아이콘 들어갈 예정 */}
-      
-      {/* Input창 */}
+    <div>
       <div className={styles.searchInputContainer}>
         <input className={styles.searchInput} type='text'/>
+        {/* 돋보기 아이콘 */}
+        <i class="fas fa-search"/>
       </div>
-      {/* 검색Link */}
-      <nav className={styles.searchLinkContainer}>
-          <a className={styles.searchLink} href="">검색</a>
-      </nav>
     </div>
   )
 }

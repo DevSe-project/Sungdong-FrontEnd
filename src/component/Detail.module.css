@@ -29,7 +29,7 @@
   box-sizing: border-box;
   background-color: beige;
   width: 25em;
-  height: 31em;
+  height: 34em;
   overflow: hidden;
   border: 1px solid lightgray;
   object-fit: cover;
@@ -39,9 +39,8 @@
   flex-direction: column;
   box-sizing: border-box;
   width: 25em;
-  height: 31em;
-  justify-content: start;
-  text-align: start;
+  height: 34em;
+  text-align: end;
   border: 1px solid lightgray;
   gap: 1em;
   padding: 1em;
@@ -52,8 +51,10 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: lightgray;
   padding: 1.5em;
+  font-size: 1.2em;
+  border-top: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
 }
 
 .textButton{
@@ -139,4 +140,29 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.h4{
+  font-size: 1.2em;
+  font-weight: 950;
+  color: red;
+}
+.finalprice{
+  font-size: 1.2em;
+  font-weight: 650;
+}
+
+.input{
+  font-size: 1em;
+  width: 4em;
+  height: 2em;
+}
+
+.skeleton{
+  display: flex;
+  background-color: lightgray;
+  width: 100%;
+  height: 100%;
+  justify-content: flex-end;
+  border-radius: 10dvw;
 }

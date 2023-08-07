@@ -1,0 +1,77 @@
+.body{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+  overflow-x: hidden;
+  align-items: flex-start;
+  padding-top: 3em;
+  overflow: hidden;
+}
+
+.head{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  padding: 0.5em;
+  margin-left: 3em;
+  align-items: flex-start;
+  border-bottom: 3px solid var(--background-color-clicked);
+}
+
+.tablebody{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+  overflow-x: hidden;
+  align-items: center;
+}
+
+.table{
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  border-top: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
+}
+
+.name{
+  width: 50%;
+}
+.button{
+  border: none;
+  border-radius: 10em;
+  background-color: #ff3333;
+  color: white;
+  font-weight: 550;
+  cursor : pointer;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 10px;
+  padding: 10px;
+}
+.deletebutton{
+  border: none;
+  border-radius: 10em;
+  background-color: lightgray;
+  color: black;
+  font-weight: 550;
+  cursor : pointer;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 10px;
+  padding: 10px;
+}
+
+.link{
+  cursor: pointer;
+}
+
+.link:hover{
+  color: gray;
+}

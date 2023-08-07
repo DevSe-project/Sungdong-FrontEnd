@@ -1,22 +1,18 @@
-import './MainPage.css'
-import CategoryBar from './component/CategoryBar'
+import { CategoryBar } from './component/CategoryBar'
+import { SlideImg } from './component/SlideImg'
 import { TopBanner } from './component/TopBanner'
-import MainLogo from './component/MainLogo'
-import SearchBar from './component/SearchBar'
 
-
-export default function MainPage() {
+export default function MainPage(props) {
 
   return (
     <div>
-
-      <TopBanner />
-      
-      <MainLogo />
-
-      <SearchBar />
-      
+      <TopBanner/>
+    
       <CategoryBar />
+
+      <SlideImg />
+
+      <hr/><br/>
 
     </div>
   )

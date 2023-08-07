@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styles from '../Tab.module.css'
+import styles from './Tab.module.css'
 export function Tab(props){
   // 탭 부분
   const [activeTab, setActiveTab] = useState(1); // 현재 활성화된 탭을 추적하는 상태

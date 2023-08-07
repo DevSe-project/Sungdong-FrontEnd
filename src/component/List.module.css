@@ -1,0 +1,21 @@
+.headerTag{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1.1em;
+  font-weight: 650;
+}
+
+.newItem{
+  font-size: 1.7em;
+  font-weight: 650;
+  border-bottom: 3px solid var(--background-color-clicked);
+  padding: 0.5em;
+  margin-left: 0.5em;
+}
+
+.moreItem{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

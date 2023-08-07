@@ -1,0 +1,96 @@
+.body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+}
+
+.loginPageContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.logo {
+    cursor : pointer;
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+}
+
+.loginContainer {
+    display: flex;
+    flex-direction: row;
+    border: 0.1em solid p;
+    border-radius: 2dvw;
+    padding: 10px;
+}
+
+.inputContainer{
+    display: flex;
+    flex-direction: column;
+}
+
+.goLogin {
+    border: solid none;
+    border-radius: 1dvb;
+    background-color: #FF3333;
+    color: white;
+    cursor : pointer;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: 10px;
+    padding: 10px;
+}
+
+.inputId{
+    margin: 0.8em;
+    padding: 1em;
+    border: 0.1em solid gainsboro;
+    border-radius: 1dvb;
+    width: 25em;
+}
+
+.inputPW{
+    margin: 0.7em;
+    padding: 1em;
+    border: 0.1em solid gainsboro;
+    border-radius: 1dvb;
+    width: 25em;
+}
+
+.autoLoginCheckBox {
+    color: grey;
+    font-size: 0.8em;   
+    text-align: left; 
+    padding-left: 1em;
+    display: flex;
+    align-items: center;
+}
+
+.findId{
+    cursor : pointer;
+}
+
+.findPW{
+    cursor : pointer;
+}
+
+.join{
+    cursor : pointer;
+}
+
+.findDiv{
+    display: flex;
+    margin: 0.3em;
+    font-size: 0.6em;
+    justify-content: center;
+    color:gray;
+    align-items: center;
+    display: flex;
+    gap: 1em;
+}

@@ -1,21 +1,37 @@
 import './App.css';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import { Detail } from './component/Detail';
-import { useState } from 'react';
-import { DataObj } from './component/DataObj'
+import { useEffect, useState } from 'react';
+import { DataObj } from './component/Data/DataObj'
 import { List } from './component/List';
+import { Login } from './component/Login';
 import MainPage from './MainPage';
+import { Basket } from './component/Basket';
+import { LikeItem } from './component/LikeItem';
+import Join from './component/Join';
 function App() {
   const navigate = useNavigate();
-  const [data, setData] = useState(DataObj);
+  const [data, setData] = useState();
+  const [orderList, setOrderList] = useState([]);
+  const [wishlist, setWishlist] = useState([]);
+  useEffect(() => {
+    //localStorage에서 likelist를 파싱 
+    const savedWishlist = JSON.parse(localStorage.getItem('likelist')) || []; //localStorage의 likelist가 없으면 공백 배열로 변수 저장
+    setWishlist(savedWishlist); //setWishlist라는 State에 저장
+  }, []);
+  useEffect(()=>{
+    const dataload = setTimeout(()=>{
+      setData(DataObj);
+      return clearTimeout(dataload)
+    },3000)
+  },[])
+
   return (
     <div className="App">
-
-
       <Routes>
         <Route path='/' element={
           <>
-            <MainPage />
+            <MainPage/>
             <List data={data} />
           </>
         } />
@@ -23,7 +39,19 @@ function App() {
           <List data={data} navigate={navigate} />
         } />
         <Route path="/detail/:id" element={
-          <Detail data={data} navigate={navigate} />
+          <Detail data={data} navigate={navigate} wishlist={wishlist} setWishlist={setWishlist} orderList={orderList} setOrderList={setOrderList} />
+        } />
+        <Route path='/login' element={
+          <Login />
+        } />
+        <Route path='/join' element={
+          <Join />
+        }/>
+        <Route path='/likeitem' element={
+          <LikeItem orderList={orderList} setOrderList={setOrderList} setWishlist={setWishlist} wishlist={wishlist} />
+        } />
+        <Route path='/basket' element={
+          <Basket orderList={orderList} setOrderList={setOrderList}/>
         } />
       </Routes>
     </div>

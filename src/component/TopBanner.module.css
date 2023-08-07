@@ -1,20 +1,35 @@
 /* -------------------- TopBanner -------------------- */
 
 /* 화면 넓이에 꽉 맞도록 설정 */
-.topContainer {
+.top_container {
+  /* 상단바 고정 작업 */
+  background-color: white;
+  position: sticky;
+  z-index: 998;
+  top: 0;
+  height: 100px;
   width: 100%;
   display: flex;
   margin: 0;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  border-bottom: 2px solid var(--background-color-set);
 }
 
-.topNav {
+.top_nav {
   flex: 1; /* 네비게이션 영역을 균등 영역으로 나누도록 설정 */
   display: flex;
   justify-content: center; /* 가로 가운데 정렬 */
   align-items: center; /* 세로 가운데 정렬 */
   margin-top: 1em;
   list-style-type: none;
-  gap: 5em;
+  gap: 3em;
+  white-space: nowrap;
+}
+
+.image{
+  cursor: pointer;
 }
 
 /* 네비게이션 내부 링크 스타일링 (옵션) */
@@ -26,32 +41,22 @@
   cursor: pointer;
 }
 
-.linkSignIn  {
-  background-color: #CC0000;
+.link_signIn  {
+  background-color: #ff3333;
   color: white;
   font-size: 1.2em;
   font-weight: 550;
   padding: 0.4em;
   padding-left: 0.7rem;
   padding-right: 0.7rem;
+  border: 0;
 }
 
-.menuItem {
-  padding: 10px;
-  position: relative;
-  cursor: pointer;
+.sub_item{
+  padding: 1em;
+  font-size: large;
+  word-wrap: wrap;
 }
-
-.menuItem .subMenu {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: #333;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  width: 150px;
-}
-
-.menuItem.open .subMenu {
-  display: block;
+.sub_item:hover{
+  background-color: lightgray;
 }

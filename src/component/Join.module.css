@@ -1,0 +1,23 @@
+.body{
+    padding-left: 10em ;
+    padding-right: 10em;
+    background-color: gray;
+}
+
+.logo {
+    cursor : pointer;
+    justify-content: left;
+    align-items: center;
+    width: 50%;
+}
+
+.checkboxContainer{
+    justify-content: center;
+    align-items: center;
+}
+
+.checkbox {
+    text-align: left;
+    display: flex;
+    margin: 2em;
+}
