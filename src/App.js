@@ -12,6 +12,7 @@ import Join from './component/Join';
 function App() {
   const navigate = useNavigate();
   const [data, setData] = useState();
+  const [orderList, setOrderList] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   useEffect(() => {
     //localStorage에서 likelist를 파싱 
@@ -38,7 +39,7 @@ function App() {
           <List data={data} navigate={navigate} />
         } />
         <Route path="/detail/:id" element={
-          <Detail data={data} navigate={navigate} wishlist={wishlist} setWishlist={setWishlist} />
+          <Detail data={data} navigate={navigate} wishlist={wishlist} setWishlist={setWishlist} orderList={orderList} setOrderList={setOrderList} />
         } />
         <Route path='/login' element={
           <Login />
@@ -46,11 +47,11 @@ function App() {
         <Route path='/join' element={
           <Join />
         }/>
-        <Route path='/basket' element={
-          <Basket />
-        } />
         <Route path='/likeitem' element={
-          <LikeItem setWishlist={setWishlist} wishlist={wishlist} />
+          <LikeItem orderList={orderList} setOrderList={setOrderList} setWishlist={setWishlist} wishlist={wishlist} />
+        } />
+        <Route path='/basket' element={
+          <Basket orderList={orderList} setOrderList={setOrderList}/>
         } />
       </Routes>
     </div>

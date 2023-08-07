@@ -8,7 +8,7 @@ export function Product(props){
       {props.data ? props.data.map((item,index)=>(
         <div onClick={()=>{navigate(`/detail/${item.id}`)}} key={index} className={styles.col}>            
           <div className={styles.frame}>
-            <img className={styles.thumnail} src="http://pop7.co.kr/web/product/big/201806/344_shop1_15289487355825.jpg" width="200px"/>
+            <img className={styles.thumnail} src="http://pop7.co.kr/web/product/big/201806/344_shop1_15289487355825.jpg" alt="상품 이미지" width="200px"/>
           </div>
           <div className={styles.product}>
             <p>{item.title}</p>

@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 export function LikeItem(props){
   const navigate = useNavigate();
+
   // 체크박스를 통해 선택한 상품들을 저장할 상태 변수
   const [selectedItems, setSelectedItems] = useState([]);
 
@@ -33,7 +34,7 @@ export function LikeItem(props){
   };
 
   // 선택된 항목들을 삭제하는 함수
-  const DeletedList = () => {
+  const deletedList = () => {
     //props.wishlist 배열에서 selectedItems에 포함된(체크박스 선택된) 항목들이 아닌 것들로 새로운 배열을 생성
     const updatedWishlist = props.wishlist.filter((item) => !selectedItems.includes(item.id)); 
     props.setWishlist(updatedWishlist);
@@ -87,10 +88,9 @@ export function LikeItem(props){
           </table>
           <div className={styles.buttonDiv}>
             <button 
-            onClick={()=>DeletedList()}
+            onClick={()=>deletedList()}
             className={styles.deletebutton}
-            >제거</button>
-            <button className={styles.button}>장바구니에 추가</button>
+            >선택 제거</button>
           </div>
         </div>
       </div>

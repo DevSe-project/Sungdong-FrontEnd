@@ -1,12 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import styles from './SlideImg.module.css'
 import readyimage from '../image/page_ready.png'
 export function SlideImg() {
-    const images = [
+  //의존성 배열 Warning 메세지 해결 -
+  // useMemo사용 - 의존성이 변경될 때만 다시 계산
+    const images = useMemo(() => [
       readyimage,
       readyimage,
       readyimage,
-    ]
+    ], []);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     useEffect(() => {
@@ -17,7 +19,7 @@ export function SlideImg() {
   
       // 컴포넌트가 언마운트되면 타이머를 해제하여 메모리 누수 방지
       return () => clearInterval(slideTimer);
-    }, [images, 3000]);
+    }, [images]);
   
   return(
     <div className={styles.sliderContainer}>
