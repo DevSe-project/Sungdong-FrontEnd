@@ -1,23 +1,62 @@
-.body{
-    padding-left: 10em ;
-    padding-right: 10em;
-    background-color: gray;
+hr {
+  border: none; /* 기본 테두리 제거 */
+  height: 2px; /* 선의 높이 조절 */
+  background-color: #ccc; /* 선의 배경색 설정 */
+  margin: 1.5em 0; /* 위아래 여백 설정 */
 }
 
-.logo {
-    cursor : pointer;
-    justify-content: left;
-    align-items: center;
-    width: 50%;
-}
 
-.checkboxContainer{
-    justify-content: center;
-    align-items: center;
-}
-
-.checkbox {
-    text-align: left;
+.body {
     display: flex;
-    margin: 2em;
-}
+    flex-direction: column; /*내부 요소들을 세로배치*/
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  .logo {
+    margin-bottom: 20px;
+  }
+  
+  .checkboxContainer {
+    text-align: left;
+    border-top: 1px solid gray;
+    border-bottom: 1px solid gray;
+    border-radius: 1cm;
+    padding: 1em;
+  }
+  
+  .checkbox {
+    display: flex;
+    align-items: center;
+    margin: 1em;
+  }
+  
+  .detail {
+    margin-left: 20px;
+    font-size: 12px;
+    color: #999;
+  }
+
+  .moveContainer {
+    display: flex;
+    margin: 1em;
+  }
+
+  .noJoin {
+    cursor: pointer;
+    border: 1px solid gray;
+    border-radius: 0.5dvb;
+    padding: 1em;
+    margin-right: 2em; /*next와 거리를 둠*/
+  }
+  
+  .next {
+    cursor: pointer;
+    border: 1px solid gray;
+    border-radius: 0.5dvb;
+    padding: 1em;
+    margin-right: 2em;
+    background-color: #FF3333;
+    color: white;
+  }

@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import styles from './Join.module.css';
 import logo from '../image/logo.jpeg'
 
@@ -20,6 +20,7 @@ export default function Join() {
                 <div className={styles.checkbox}>
                     <input type="checkbox"/>전체 동의하기
                 </div>
+                <hr/>
                 {/* [필수] 이용약관 */}
                 <div className={styles.checkbox}>
                     <input type="checkbox"/>[필수]성동물산 이용약관
@@ -42,6 +43,19 @@ export default function Join() {
                     </div>
                 </div>
             </div>
+            {/* 이동 버튼 */}
+            <div className={styles.moveContainer}>
+                {/* 가입 안 할래요 */}
+                <div className={styles.noJoin} onClick={ () => {navigate(-1)}}>
+                    가입 안 할래요..
+                </div>
+                {/* 다음 */}
+                <div className={styles.next} onClick={ () => {navigate('/inputInformation')}}>
+                    다음
+                </div>
+            </div>
+            {/* Input Information */}
+            <Outlet></Outlet>
         </div>
     )
 }
