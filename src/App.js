@@ -1,14 +1,15 @@
 import './App.css';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, Router } from 'react-router-dom';
 import { Detail } from './component/Detail';
 import { useEffect, useState } from 'react';
 import { DataObj } from './component/Data/DataObj'
 import { List } from './component/List';
-import { Login } from './component/Login';
+import { Login } from './component/AboutLogin/Login';
 import MainPage from './MainPage';
 import { Basket } from './component/Basket';
 import { LikeItem } from './component/LikeItem';
-import Join from './component/Join';
+import Join from './component/AboutLogin/Join';
+import JoinInformationInput from './component/AboutLogin/JoinInformationInput';
 function App() {
   const navigate = useNavigate();
   const [data, setData] = useState();
@@ -44,9 +45,9 @@ function App() {
         <Route path='/login' element={
           <Login />
         } />
-        <Route path='/join' element={
-          <Join />
-        }/>
+        <Route path='/join' element={ <Join />}>
+          <Route path='inputInformation' element={ <JoinInformationInput/> }/>
+        </Route>
         <Route path='/likeitem' element={
           <LikeItem orderList={orderList} setOrderList={setOrderList} setWishlist={setWishlist} wishlist={wishlist} />
         } />

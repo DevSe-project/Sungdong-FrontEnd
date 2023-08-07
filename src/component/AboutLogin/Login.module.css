@@ -34,6 +34,25 @@
     flex-direction: column;
 }
 
+
+.inputId{
+    margin: 0.8em;
+    padding: 1em;
+    border: 0.1em solid gainsboro;
+    border-radius: 1dvb;
+    width: 30em;
+    font-size: 1.5em;
+}
+
+.inputPW{
+    margin: 0.8em;
+    padding: 1em;
+    border: 0.1em solid gainsboro;
+    border-radius: 1dvb;
+    width: 30em;
+    font-size: 1.5em;
+}
+
 .goLogin {
     border: solid none;
     border-radius: 1dvb;
@@ -43,34 +62,26 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    margin: 10px;
-    padding: 10px;
-}
-
-.inputId{
+    width: 30em;
     margin: 0.8em;
     padding: 1em;
-    border: 0.1em solid gainsboro;
-    border-radius: 1dvb;
-    width: 25em;
-}
-
-.inputPW{
-    margin: 0.7em;
-    padding: 1em;
-    border: 0.1em solid gainsboro;
-    border-radius: 1dvb;
-    width: 25em;
+    font-size: 1.5em;
 }
 
 .autoLoginCheckBox {
     color: grey;
-    font-size: 0.8em;   
+    font-size: 1.5em;   
     text-align: left; 
     padding-left: 1em;
     display: flex;
     align-items: center;
 }
+
+input[type="checkbox"] {
+    width: 2.5em; /* 체크박스의 가로 크기 */
+    height: 2.5em; /* 체크박스의 세로 크기 */
+    margin-right: 8px; /* 체크박스와 텍스트 사이 여백 조절 */
+  }
 
 .findId{
     cursor : pointer;
@@ -87,7 +98,7 @@
 .findDiv{
     display: flex;
     margin: 0.3em;
-    font-size: 0.6em;
+    font-size: 1.5em;
     justify-content: center;
     color:gray;
     align-items: center;
