@@ -233,8 +233,8 @@ i.fa-solid.fa-heart{
 
 /* 체크박스 크기 조정(노인공경) */
 input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
+  width: 1.8em;
+  height: 1.8em;
   margin-right: 8px;
   cursor: pointer;
 }

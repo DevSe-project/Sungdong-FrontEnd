@@ -1,18 +1,31 @@
 import { useEffect, useState } from 'react';
 import styles from './Basket.module.css'
-import { useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { TopBanner } from './TopBanner';
 import { CategoryBar } from './CategoryBar';
 export function Basket(props){
   const navigate = useNavigate();
+  //총 상품 금액
   const [sum, setSum] = useState(0);
+
+  const delivery = 3000;
+  const [discount, setDiscount] = useState(0);
+
+  //최종 주문 금액
+  const [resultOrderPrice, setOrderPrice] = useState(0);
+
+  //수량
   const [count, setCount] = useState("");
+
+  //수정하기 state
   const [editStatus, setEditStatus] = useState(props.orderList.map(()=>false));
+
   // 체크박스를 통해 선택한 상품들을 저장할 상태 변수
   const [selectedItems, setSelectedItems] = useState([]);
 
   // 전체 선택 체크박스 상태를 저장할 상태 변수
   const [selectAll, setSelectAll] = useState(false);
+
 
   //selectedItems의 변화가 일어날 때마다 totalPrice(selectedItems)를 작동함 (전체 합계 계산)
   useEffect(() => {
@@ -41,7 +54,7 @@ export function Basket(props){
     }
   };
 
-
+  //상품 목록 삭제 함수
   const deletedList = () => {
   if(selectedItems !== null && selectedItems.length > 0){
     //props.wishlist 배열에서 selectedItems에 포함된(체크박스 선택된) 항목들이 아닌 것들로 새로운 배열을 생성
@@ -97,38 +110,45 @@ export function Basket(props){
       }
     });
     setSum(sum);
+    sum = (sum + delivery);
+    setOrderPrice(sum);
   }
+  // 탭 부분
+  const [activeTab, setActiveTab] = useState(1); // 현재 활성화된 탭을 추적하는 상태
+  //
+  function gotoReceipe(){
+    setActiveTab(2);
+    navigate("/basket/receipe");
+  }
+    const stepItems = [
+      { id: 1, title: '장바구니' },
+      { id: 2, title: '주문서 작성' },
+      { id: 3, title: '결제하기' },
+      { id: 4, title: '주문 완료' },
+    ];
   return(
     <div>
       <TopBanner/>
       <CategoryBar/>
       <div className={styles.stepBlock}>
         <div className={styles.stepBar}>
-          <div className={styles.stepOn}>
-            <p>STEP 01</p>
-            <h5>장바구니</h5>
-          </div>
-          <div className={styles.iconlocation}>
-            <i class="fal fa-chevron-right"></i>
-          </div>
-          <div className={styles.step}>
-            <p>STEP 02</p>
-            <h5>주문서 작성</h5>
-          </div>
-          <div className={styles.iconlocation}>
-            <i class="fal fa-chevron-right"></i>
-          </div>
-          <div className={styles.step}>
-            <p>STEP 03</p>
-            <h5>결제하기</h5>
-          </div>
-          <div className={styles.iconlocation}>
-            <i class="fal fa-chevron-right"></i>
-          </div>
-          <div className={styles.step}>
-            <p>STEP 04</p>
-            <h5>주문 완료</h5>
-          </div>
+          {stepItems.map((item)=> (
+          <>
+            {item.id === activeTab ? 
+            <div className={styles.stepOn}> 
+              <p>Step 0{item.id}</p>
+              <h5>{item.title}</h5>
+            </div>
+            : <div className={styles.step}>
+              <p>Step 0{item.id}</p>
+              <h5>{item.title}</h5>
+            </div>
+            }
+            {item.id < 4 && <div className={styles.iconlocation}>
+              <i class="fal fa-chevron-right"></i>
+            </div>}
+          </>
+          ))}
         </div>
         <div className={styles.body}>
           <table className={styles.table}>
@@ -179,9 +199,10 @@ export function Basket(props){
             : null}
             </tbody>
           </table>
+          <Outlet></Outlet>
           <div className={styles.finalContainer}>
               <div className={styles.finalBox}>
-                <h2>최종 상품 금액</h2>
+                <h2>총 상품 금액</h2>
                 <div className={styles.price}>
                   <h5>\{sum}</h5>
                 </div>
@@ -190,27 +211,29 @@ export function Basket(props){
               <div className={styles.finalBox}>
                 <h2>배송비</h2>
                 <div className={styles.price}>
-                  <h5>\{sum ? 3000 : 0}</h5>
+                  <h5>\{sum ? delivery : 0}</h5>
                 </div>
               </div>
               <i class="fal fa-minus"></i>
               <div className={styles.finalBox}>
                 <h2>할인 금액</h2>
                 <div className={styles.price}>
-                  <h5>\0</h5>
+                  <h5>\{discount}</h5>
                 </div>
               </div>
               <i class="fal fa-equals"></i>
               <div className={styles.finalBox}>
-                <h2>주문 금액</h2>
+                <h2>최종 주문 금액</h2>
                 <div className={styles.price}>
-                  <h5>\{sum ? `${sum}` - 3000 : 0}</h5>
+                  <h5>\{sum ? resultOrderPrice : 0}</h5>
                 </div>
               </div>
           </div>
           <div>
             <button className={styles.deletebutton} onClick={()=>deletedList()}>삭제</button>
-            <button className={styles.button}>{selectedItems ? `${selectedItems.length}건` : `0건`} 주문하기</button>
+            {selectedItems.length !==0 && activeTab === 2 ?
+            <button onClick={selectedItems.length >0 && activeTab === 2 ? ()=>{navigate("/pay")} : null} className={styles.button}>{selectedItems ? `${selectedItems.length}건` : `0건`} 주문하기</button> 
+            : <button onClick={selectedItems.length >0 && activeTab === 1 ? ()=>{gotoReceipe();} : null} className={styles.button}>{selectedItems ? `${selectedItems.length}건` : `0건`} 주문하기</button>}
           </div>
         </div>
       </div>

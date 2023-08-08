@@ -53,7 +53,9 @@ function App() {
         } />
         <Route path='/basket' element={
           <Basket orderList={orderList} setOrderList={setOrderList}/>
-        } />
+        }>
+          <Route path='receipe' element={<div><div>asdasd</div></div>}/>
+        </Route>
       </Routes>
     </div>
   );

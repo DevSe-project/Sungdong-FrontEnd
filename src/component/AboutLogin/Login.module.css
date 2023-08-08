@@ -77,12 +77,6 @@
     align-items: center;
 }
 
-input[type="checkbox"] {
-    width: 2.5em; /* 체크박스의 가로 크기 */
-    height: 2.5em; /* 체크박스의 세로 크기 */
-    margin-right: 8px; /* 체크박스와 텍스트 사이 여백 조절 */
-  }
-
 .findId{
     cursor : pointer;
 }
