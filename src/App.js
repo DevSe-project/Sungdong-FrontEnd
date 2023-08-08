@@ -8,8 +8,8 @@ import { Login } from './component/AboutLogin/Login';
 import MainPage from './MainPage';
 import { Basket } from './component/Basket';
 import { LikeItem } from './component/LikeItem';
-import Join from './component/Join';
-import JoinInputInformation from './component/JoinInputInformation';
+import Join from './component/AboutLogin/Join';
+import JoinInformationInput from './component/AboutLogin/JoinInformationInput';
 function App() {
   const navigate = useNavigate();
   const [data, setData] = useState();
@@ -46,7 +46,7 @@ function App() {
           <Login />
         } />
         <Route path='/join' element={<Join />}>
-          <Route path='inputInformation' element={<JoinInputInformation/>}/>
+          <Route path='inputInformation' element={<JoinInformationInput/>}/>
         </Route>
         <Route path='/likeitem' element={
           <LikeItem orderList={orderList} setOrderList={setOrderList} setWishlist={setWishlist} wishlist={wishlist} />
