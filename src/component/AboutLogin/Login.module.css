@@ -62,43 +62,15 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-<<<<<<< HEAD:src/component/Login.module.css
-    margin: 10px;
-    padding: 0.8em;
-    font-size: larger;
-}
-
-.inputId{
-    margin: 0.8em;
-    padding: 1.3em;
-    border: 0.1em solid gainsboro;
-    border-radius: 1dvb;
-    width: 30em;
-    font-size: 16px;
-}
-
-.inputPW{
-    margin: 0.7em;
-    padding: 1.3em;
-    border: 0.1em solid gainsboro;
-    border-radius: 1dvb;
-    width: 30em;
-    font-size: 16px;
-=======
     width: 30em;
     margin: 0.8em;
     padding: 1em;
     font-size: 1.5em;
->>>>>>> 9b9acb3538cc3db2c899a993a7e4bc33390ebb0b:src/component/AboutLogin/Login.module.css
 }
 
 .autoLoginCheckBox {
     color: grey;
-<<<<<<< HEAD:src/component/Login.module.css
-    font-size: 1em;   
-=======
     font-size: 1.5em;   
->>>>>>> 9b9acb3538cc3db2c899a993a7e4bc33390ebb0b:src/component/AboutLogin/Login.module.css
     text-align: left; 
     padding-left: 1em;
     display: flex;
@@ -120,11 +92,7 @@
 .findDiv{
     display: flex;
     margin: 0.3em;
-<<<<<<< HEAD:src/component/Login.module.css
-    font-size: 1em;
-=======
     font-size: 1.5em;
->>>>>>> 9b9acb3538cc3db2c899a993a7e4bc33390ebb0b:src/component/AboutLogin/Login.module.css
     justify-content: center;
     color:gray;
     align-items: center;

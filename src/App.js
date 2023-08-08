@@ -48,9 +48,6 @@ function App() {
         <Route path='/join' element={<Join />}>
           <Route path='inputInformation' element={<JoinInputInformation/>}/>
         </Route>
-        <Route path='/basket' element={
-          <Basket />
-        } />
         <Route path='/likeitem' element={
           <LikeItem orderList={orderList} setOrderList={setOrderList} setWishlist={setWishlist} wishlist={wishlist} />
         } />
