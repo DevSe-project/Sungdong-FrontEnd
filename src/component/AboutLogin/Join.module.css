@@ -4,6 +4,30 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
+    overflow-y: scroll;
+}
+
+.memberInformationContainer {
+    width: 800px;
+}
+
+.setIdContainer {
+    display: flex;
+
+}
+
+.noti {
+    font-size: 1.5em;
+    font-weight: bold;  
+}
+
+.set{
+    margin: 0.8em;
+    padding: 1em;
+    border: 0.1em solid gainsboro;
+    border-radius: 1dvb;
+    width: 30em;
+    font-size: 1.5em;
 }
 
 .logo {
@@ -27,7 +51,7 @@
     border-bottom: 1px solid gray;
     border-radius: 5dvb;
     margin-top: 1em;
-    width: 70dvb;
+    width: 800px;
     font-size: 1.5em;
 }
 
