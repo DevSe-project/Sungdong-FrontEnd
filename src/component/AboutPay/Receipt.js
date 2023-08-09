@@ -1,5 +1,10 @@
+import { useState } from 'react';
 import styles from './Receipt.module.css'
+import DaumPostcode from 'react-daum-postcode'
+import { json } from 'react-router-dom';
 export function Receipt(){
+  const [address, setAddress] = useState("");
+  const [inaddress, setInAddress] = useState("");
   return(
     <div>
       <div className={styles.container}>
@@ -10,7 +15,7 @@ export function Receipt(){
               <label>성함</label>
             </div>
             <div className={styles.input}>
-              <input required type="text" className={styles.inputSize} placeholder="성함을 입력하세요"/>
+              <input type="text" className={styles.inputSize} placeholder="성함을 입력하세요"/>
             </div>
           </div>
           <div className={styles.formInner}>
@@ -18,7 +23,7 @@ export function Receipt(){
               <label>전화번호</label>
             </div>
             <div className={styles.input}>
-              <input required type="tel" className={styles.inputSize} placeholder="전화번호를 입력하세요"/>
+              <input type="tel" className={styles.inputSize} placeholder="전화번호를 입력하세요"/>
             </div>
           </div>
           <div className={styles.formInner}>
@@ -26,7 +31,7 @@ export function Receipt(){
               <label>이메일</label>
             </div>
             <div className={styles.input}>
-              <input required type="email" className={styles.inputSize} placeholder="이메일을 입력하세요"/>
+              <input type="email" className={styles.inputSize} placeholder="이메일을 입력하세요"/>
             </div>
           </div>
           <div className={styles.formInner}>
@@ -34,7 +39,26 @@ export function Receipt(){
               <label>주소</label>
             </div>
             <div className={styles.input}>
-              <input required type="address" className={styles.inputSize} placeholder="주소를 입력하세요(API)"/>
+              <input className={styles.inputSize} type='text' value={address && JSON.stringify(address.zonecode)}/>
+              <button 
+                onClick={()=> {
+                  setAddress("");
+                }}
+                className={styles.button}
+                >우편번호 찾기</button>
+              <input 
+              className={styles.inputSize} 
+              type='text' 
+              value={address && JSON.stringify(`${address.address} (${address.addressEnglish})`)} 
+              />
+              <input className={styles.inputSize} type='text' placeholder='상세주소를 입력하세요'/>            
+              <DaumPostcode
+                style={{ width: 550, height: 500 }}
+                errorMessage={error => console.log(error)}  //에러시 콘솔 출력
+                onComplete={(item) => {
+                  setAddress(item);  //검색완료시 실행 
+                }}
+                />
             </div>
           </div>
         </form>
@@ -46,7 +70,7 @@ export function Receipt(){
               <label>성함</label>
             </div>
             <div className={styles.input}>
-              <input required type="text" className={styles.inputSize} placeholder="성함을 입력하세요"/>
+              <input type="text" className={styles.inputSize} placeholder="성함을 입력하세요"/>
             </div>
           </div>
           <div className={styles.formInner}>
@@ -54,7 +78,7 @@ export function Receipt(){
               <label>전화번호</label>
             </div>
             <div className={styles.input}>
-              <input required type="tel" className={styles.inputSize} placeholder="전화번호를 입력하세요"/>
+              <input type="tel" className={styles.inputSize} placeholder="전화번호를 입력하세요"/>
             </div>
           </div>
           <div className={styles.formInner}>
@@ -62,7 +86,26 @@ export function Receipt(){
               <label>주소</label>
             </div>
             <div className={styles.input}>  
-              <input required type="address" className={styles.inputSize} placeholder="주소를 입력하세요(API)"/>
+              <input className={styles.inputSize} type='text' value={inaddress && JSON.stringify(inaddress.zonecode)}/>
+              <button 
+                onClick={()=> {
+                  setInAddress("");
+                }}
+                className={styles.button}
+                >우편번호 찾기</button>
+              <input 
+              className={styles.inputSize} 
+              type='text' 
+              value={inaddress && JSON.stringify(`${inaddress.address} (${inaddress.addressEnglish})`)} 
+              />
+              <input className={styles.inputSize} type='text' placeholder='상세주소를 입력하세요'/>            
+              <DaumPostcode
+                style={{ width: 550, height: 500 }}
+                errorMessage={error => console.log(error)}  //에러시 콘솔 출력
+                onComplete={(item) => {
+                  setInAddress(item);  //검색완료시 실행 
+                }}
+                />
             </div>
           </div>
           <div className={styles.formInner}>

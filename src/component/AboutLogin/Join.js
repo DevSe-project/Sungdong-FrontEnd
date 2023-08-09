@@ -17,7 +17,7 @@ export default function Join() {
     // 모든 체크박스의 상태를 체크되지 않은 상태, false로 설정
     let [checkboxState, setCheckboxState] = useState(() => PolicyObj.map(() => false));
     //onCheck속성으로 모두 동의하기를 체크하면 전체가 체크되도록
-    function checkedAll(index) {
+    function checkedAll() {
         const allChecked = checkboxState.every(state => state); // 모든 체크박스가 true인지 확인
         const newCheckboxState = checkboxState.map(() => !allChecked); //반대값으로 변경
         setCheckboxState(newCheckboxState); //CheckboxState에 적용
