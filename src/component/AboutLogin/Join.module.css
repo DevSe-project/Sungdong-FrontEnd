@@ -3,44 +3,34 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    overflow-y: scroll;
-}
-
-.memberInformationContainer {
-    width: 800px;
-}
-
-.setIdContainer {
-    display: flex;
-
+    min-height: 100vh;
 }
 
 .noti {
-    font-size: 1.5em;
+    font-size: 20px;
     font-weight: bold;  
 }
 
 .set{
-    margin: 0.8em;
+    margin: 0.5em;
     padding: 1em;
     border: 0.1em solid gainsboro;
     border-radius: 1dvb;
-    width: 30em;
-    font-size: 1.5em;
+    width: 500px;
+    height: 25px;
+    font-size: 16px;
 }
 
 .logo {
     cursor : pointer;
     justify-content: left;
     align-items: center;
-    width: 50%;
 }
 
 .checkAll {
     display: flex;
     margin-top: 2em;
-    font-size: 1.5em;
+    font-size: 20px;
     font-weight: bold;
 }
 
@@ -51,19 +41,25 @@
     border-bottom: 1px solid gray;
     border-radius: 5dvb;
     margin-top: 1em;
-    width: 800px;
-    font-size: 1.5em;
+    width: 500px;
 }
 
-.policyList {
+.policyContainer {
     display: flex;
     flex-direction: column;
     margin: 2em;
 }
 
-.policyObj {
+.policyList {
     justify-content: space-between;
     display: flex;
+    flex-direction: row;
+    font-size: 20px
+}
+
+.temp {
+    display: flex;
+    align-items: center;
 }
 
 .arrow {

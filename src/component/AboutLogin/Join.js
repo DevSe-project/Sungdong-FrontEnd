@@ -7,7 +7,7 @@ import PolicyObj from "../Data/PolicyObj";
 export default function Join() {
     let navigate = useNavigate();
 
-    // 가입하기
+    // 가입하기 버튼 클릭 시, 
     let [joinState, setJoinState] = useState(false);
     let signUp = () => {
         setJoinState(!joinState);
@@ -77,14 +77,6 @@ export default function Join() {
                 <div className={styles.requestSecurityNumberContainer}>
 
                 </div>
-                {/* 취소 */}
-                <div className={styles.back}>
-
-                </div>
-                {/* 확인 */}
-                <div className={styles.complete}>
-
-                </div>
             </div>
 
             {/* 전체 동의하기 */}
@@ -101,9 +93,9 @@ export default function Join() {
                 {/* 이용약관 */}
                 {PolicyObj.map((policy, index) => {
                     // 각 정책List
-                    return <div className={styles.policyList}>
-                        <div className={styles.policyObj}>
-                            <div>
+                    return <div className={styles.policyContainer}>
+                        <div className={styles.policyList}>
+                            <div className={styles.temp}>
                                 {/* 체크박스 */}
                                 <input
                                     type="checkbox"
@@ -133,9 +125,6 @@ export default function Join() {
                         </div>
                     </div>
                 })}
-
-                {/* 가입정보 입력란 */}
-                {joinState ? <Outlet /> : null}
 
             </div>
             {/* moveContainer */}
