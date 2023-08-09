@@ -7,7 +7,7 @@ import PolicyObj from "../Data/PolicyObj";
 export default function Join() {
     let navigate = useNavigate();
 
-    // 가입하기
+    // 가입하기 버튼 클릭 시, 
     let [joinState, setJoinState] = useState(false);
     let signUp = () => {
         setJoinState(!joinState);
@@ -125,9 +125,6 @@ export default function Join() {
                         </div>
                     </div>
                 })}
-
-                {/* 가입정보 입력란 */}
-                {joinState ? <Outlet /> : null}
 
             </div>
             {/* moveContainer */}
