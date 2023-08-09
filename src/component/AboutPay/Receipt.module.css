@@ -38,17 +38,17 @@
 }
 
 .label{
-  width: 30%;
+  width: 20%;
   font-weight: 550;
   font-size: 1.1em;
 }
 
 .input{
-  width: 70%;
+  width: 80%;
   display: flex;
   white-space: nowrap;
   flex-wrap: wrap;
-  gap: 1em;
+  gap: 0.7em;
   align-items: center;
 }
 
@@ -58,6 +58,11 @@
   background-color: rgb(230, 225, 225);
   height: 1.2em;
   padding: 1em;
+}
+
+.inputSize:focus{
+  background-color: white;
+  border: 0.1em solid gray;
 }
 
 .button{

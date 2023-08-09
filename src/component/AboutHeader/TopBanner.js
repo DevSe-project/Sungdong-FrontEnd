@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import logo from '../image/logo.jpeg'
+import logo from '../../image/logo.jpeg'
 import { useNavigate } from 'react-router-dom'
 import styles from './TopBanner.module.css';
 import {SearchBar} from './SearchBar';
@@ -48,7 +48,7 @@ export function TopBanner () {
         },
         {
         item : '주문 / 배송 게시판',
-        link : '/order',
+        link : '/delivery',
       }],
     }, 
   ];

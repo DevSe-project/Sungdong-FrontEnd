@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import '../App.css'
 import styles from './CategoryBar.module.css'
 import { useState } from 'react';
 
