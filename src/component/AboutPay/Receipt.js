@@ -40,12 +40,12 @@ export function Receipt(){
             </div>
             <div className={styles.input}>
               <input className={styles.inputSize} type='text' value={address && JSON.stringify(address.zonecode)}/>
-              <button 
+              <div 
                 onClick={()=> {
                   setAddress("");
                 }}
                 className={styles.button}
-                >우편번호 찾기</button>
+                >우편번호 찾기</div>
               <input 
               className={styles.inputSize} 
               type='text' 
@@ -56,7 +56,7 @@ export function Receipt(){
                 style={{ width: 550, height: 500 }}
                 errorMessage={error => console.log(error)}  //에러시 콘솔 출력
                 onComplete={(item) => {
-                  setAddress(item);  //검색완료시 실행 
+                  setAddress(item);  //검색완료시 실행
                 }}
                 />
             </div>
@@ -87,19 +87,19 @@ export function Receipt(){
             </div>
             <div className={styles.input}>  
               <input className={styles.inputSize} type='text' value={inaddress && JSON.stringify(inaddress.zonecode)}/>
-              <button 
+              <div 
                 onClick={()=> {
                   setInAddress("");
                 }}
                 className={styles.button}
-                >우편번호 찾기</button>
+                >우편번호 찾기</div>
               <input 
               className={styles.inputSize} 
               type='text' 
               value={inaddress && JSON.stringify(`${inaddress.address} (${inaddress.addressEnglish})`)} 
               />
               <input className={styles.inputSize} type='text' placeholder='상세주소를 입력하세요'/>            
-              <DaumPostcode
+                <DaumPostcode
                 style={{ width: 550, height: 500 }}
                 errorMessage={error => console.log(error)}  //에러시 콘솔 출력
                 onComplete={(item) => {
