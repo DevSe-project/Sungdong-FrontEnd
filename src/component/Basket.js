@@ -109,17 +109,21 @@ export function Basket(props){
         sum += calculate.finprice;
       }
     });
+    //변수 저장식
     setSum(sum);
-    sum = (sum + delivery);
+    setDiscount((sum/100)*10);
+    sum = (sum + delivery - ((sum/100)*10));
     setOrderPrice(sum);
   }
-  // 탭 부분
-  const [activeTab, setActiveTab] = useState(1); // 현재 활성화된 탭을 추적하는 상태
-  //
+  // 스탭 부분
+  const [activeTab, setActiveTab] = useState(1); // 현재 활성화된 스탭을 추적하는 상태
+
+  //주문서 작성 페이지 넘어갈 때
   function gotoReceipe(){
-    setActiveTab(2);
-    navigate("/basket/receipe");
+      setActiveTab(2);
+      navigate("/basket/receipt");
   }
+  //스탭 메뉴
     const stepItems = [
       { id: 1, title: '장바구니' },
       { id: 2, title: '주문서 작성' },
@@ -130,6 +134,7 @@ export function Basket(props){
     <div>
       <TopBanner/>
       <CategoryBar/>
+      {/* 스탭 모듈 */}
       <div className={styles.stepBlock}>
         <div className={styles.stepBar}>
           {stepItems.map((item)=> (
@@ -150,14 +155,18 @@ export function Basket(props){
           </>
           ))}
         </div>
+
+        {/* 본문 시작 */}
         <div className={styles.body}>
+          {/* 주문 정보 테이블 */}
           <table className={styles.table}>
             <thead>
               <tr>
-                <th><input 
+                {/* 장바구니 목록에서만 체크 가능 */}
+                {activeTab===1 ? <th><input 
                 type='checkbox'
                 checked={selectAll}
-                onChange={()=>handleSelectAllChange()}/></th>
+                onChange={()=>handleSelectAllChange()}/></th> : null}
                 <th>상품 이미지</th>
                 <th className={styles.name}>상품 정보</th>
                 <th>수량</th>
@@ -165,14 +174,15 @@ export function Basket(props){
               </tr>
             </thead>
             <tbody>
-            {props.orderList ? props.orderList.map((item, index)=>(
+              {/* 장바구니 탭일 때는 장바구니 목록만 */}
+              {activeTab===1 && props.orderList ? props.orderList.map((item, index)=>(
               <tr>
                 <td>
                   <input 
                   checked={selectedItems.includes(item)}
                   onChange={() => checkedBox(item)}
                   type='checkbox'
-                  />
+                  /> 
                 </td>
                 <td><img src='../image/logo.jpeg' alt='이미지'/></td>
                 <td>
@@ -197,38 +207,58 @@ export function Basket(props){
               </tr>
               ))
             : null}
+            {/* 주문서 작성 탭으로 넘어가면 체크된 목록들만 나열함(수정 불가) */}
+            {activeTab===2 && selectedItems.map((item)=> (
+              <tr>
+                <td><img src='../image/logo.jpeg' alt='이미지'/></td>
+                <td>
+                  <h5 className={styles.link} onClick={()=>navigate(`/detail/${item.id}`)}>{item.title}</h5>
+                  <div>
+                  옵션 : 옵션정보
+                  <p>상품 금액 : <span className={styles.price}>\{item.price}</span></p>
+                  </div>
+                </td>
+                <td>{item.cnt}</td>
+                <td className={styles.price}>\{item.finprice}</td>
+              </tr>
+            ))}
             </tbody>
           </table>
+          {/* Outlet부분 (스탭 2) */}
           <Outlet></Outlet>
-          <div className={styles.finalContainer}>
-              <div className={styles.finalBox}>
-                <h2>총 상품 금액</h2>
-                <div className={styles.price}>
-                  <h5>\{sum}</h5>
+          {/* 총 계산서 */}
+          <div className={styles.finalCalculate}>
+            <div className={styles.finalContainer}>
+                <div className={styles.finalBox}>
+                  <h2>총 상품 금액</h2>
+                  <div className={styles.price}>
+                    <h5>\{sum}</h5>
+                  </div>
                 </div>
-              </div>
-              <i class="fal fa-plus"></i>
-              <div className={styles.finalBox}>
-                <h2>배송비</h2>
-                <div className={styles.price}>
-                  <h5>\{sum ? delivery : 0}</h5>
+                <i class="fal fa-plus"></i>
+                <div className={styles.finalBox}>
+                  <h2>배송비</h2>
+                  <div className={styles.price}>
+                    <h5>\{sum ? delivery : 0}</h5>
+                  </div>
                 </div>
-              </div>
-              <i class="fal fa-minus"></i>
-              <div className={styles.finalBox}>
-                <h2>할인 금액</h2>
-                <div className={styles.price}>
-                  <h5>\{discount}</h5>
+                <i class="fal fa-minus"></i>
+                <div className={styles.finalBox}>
+                  <h2>할인 금액</h2>
+                  <div className={styles.price}>
+                    <h5>\{discount}</h5>
+                  </div>
                 </div>
-              </div>
-              <i class="fal fa-equals"></i>
-              <div className={styles.finalBox}>
-                <h2>최종 주문 금액</h2>
-                <div className={styles.price}>
-                  <h5>\{sum ? resultOrderPrice : 0}</h5>
+                <i class="fal fa-equals"></i>
+                <div className={styles.finalBox}>
+                  <h2>최종 주문 금액</h2>
+                  <div className={styles.price}>
+                    <h5>\{sum ? resultOrderPrice : 0}</h5>
+                  </div>
                 </div>
-              </div>
+            </div>
           </div>
+          {/* 상황에 따른 버튼 */}
           <div>
             <button className={styles.deletebutton} onClick={()=>deletedList()}>삭제</button>
             {selectedItems.length !==0 && activeTab === 2 ?

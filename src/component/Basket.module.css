@@ -150,12 +150,17 @@
   font-weight: 800;
 }
 
+.finalCalculate{
+  width: 100%;
+}
+
 .finalContainer{
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: 10%;
+  flex-wrap: wrap;
+  gap: 3%;
 }
 
 .finalBox{

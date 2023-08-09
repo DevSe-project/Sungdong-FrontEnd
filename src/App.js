@@ -1,5 +1,5 @@
 import './App.css';
-import { Routes, Route, useNavigate, Router } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import { Detail } from './component/Detail';
 import { useEffect, useState } from 'react';
 import { DataObj } from './component/Data/DataObj'
@@ -9,7 +9,6 @@ import MainPage from './MainPage';
 import { Basket } from './component/Basket';
 import { LikeItem } from './component/LikeItem';
 import Join from './component/AboutLogin/Join';
-
 function App() {
   const navigate = useNavigate();
   const [data, setData] = useState();
@@ -53,7 +52,9 @@ function App() {
         <Route path='/basket' element={
           <Basket orderList={orderList} setOrderList={setOrderList}/>
         }>
-          <Route path='receipe' element={<div><div>asdasd</div></div>}/>
+          <Route path='receipt' element={
+            <Receipt/>
+          }/>
         </Route>
       </Routes>
     </div>
