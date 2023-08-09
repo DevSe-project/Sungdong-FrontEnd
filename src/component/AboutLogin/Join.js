@@ -77,14 +77,6 @@ export default function Join() {
                 <div className={styles.requestSecurityNumberContainer}>
 
                 </div>
-                {/* 취소 */}
-                <div className={styles.back}>
-
-                </div>
-                {/* 확인 */}
-                <div className={styles.complete}>
-
-                </div>
             </div>
 
             {/* 전체 동의하기 */}
@@ -101,9 +93,9 @@ export default function Join() {
                 {/* 이용약관 */}
                 {PolicyObj.map((policy, index) => {
                     // 각 정책List
-                    return <div className={styles.policyList}>
-                        <div className={styles.policyObj}>
-                            <div>
+                    return <div className={styles.policyContainer}>
+                        <div className={styles.policyList}>
+                            <div className={styles.temp}>
                                 {/* 체크박스 */}
                                 <input
                                     type="checkbox"
