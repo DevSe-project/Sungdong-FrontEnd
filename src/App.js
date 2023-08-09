@@ -1,14 +1,22 @@
 import './App.css';
-import { Routes, Route, useNavigate } from 'react-router-dom';
-import { Detail } from './component/Detail';
 import { useEffect, useState } from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import { DataObj } from './component/Data/DataObj'
-import { List } from './component/List';
-import { Login } from './component/AboutLogin/Login';
 import MainPage from './MainPage';
-import { Basket } from './component/Basket';
-import { LikeItem } from './component/LikeItem';
 import Join from './component/AboutLogin/Join';
+import { Login } from './component/AboutLogin/Login';
+
+import { Detail } from './component/AboutDetail/Detail';
+import { Basket } from './component/AboutDetail/Basket';
+import { LikeItem } from './component/AboutDetail/LikeItem';
+
+import { List } from './component/AboutHome/List';
+
+import { Pay } from './component/AboutPay/Pay';
+import { Order } from './component/AboutPay/Order';
+import { Receipt } from './component/AboutPay/Receipt';
+
+
 function App() {
   const navigate = useNavigate();
   const [data, setData] = useState();
@@ -54,6 +62,12 @@ function App() {
         }>
           <Route path='receipt' element={
             <Receipt/>
+          }/>
+          <Route path='pay' element={
+            <Pay/>
+          }/>
+          <Route path='order' element={
+            <Order/>
           }/>
         </Route>
       </Routes>
