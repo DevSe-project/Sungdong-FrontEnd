@@ -1,4 +1,3 @@
-import '../App.css';
 import styles from './SearchBar.module.css';
 
 export function SearchBar() {

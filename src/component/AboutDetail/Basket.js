@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import styles from './Basket.module.css'
 import { Outlet, useNavigate } from 'react-router-dom';
-import { TopBanner } from './TopBanner';
-import { CategoryBar } from './CategoryBar';
+import { TopBanner } from '../AboutHeader/TopBanner';
+import { CategoryBar } from '../AboutHeader/CategoryBar';
 export function Basket(props){
   const navigate = useNavigate();
   //총 상품 금액
@@ -118,10 +118,21 @@ export function Basket(props){
   // 스탭 부분
   const [activeTab, setActiveTab] = useState(1); // 현재 활성화된 스탭을 추적하는 상태
 
-  //주문서 작성 페이지 넘어갈 때
-  function gotoReceipe(){
+  // 링크 함수
+  function gotoLink(){
+    if(activeTab===1) {
       setActiveTab(2);
       navigate("/basket/receipt");
+    } else if(activeTab===2){
+      setActiveTab(3);
+      navigate("/basket/pay");
+    } else if(activeTab===3){
+      setActiveTab(4);
+      navigate("/basket/order");
+    } else if(activeTab===4){
+      navigate("/");
+      setActiveTab(1);
+    }
   }
   //스탭 메뉴
     const stepItems = [
@@ -158,6 +169,8 @@ export function Basket(props){
 
         {/* 본문 시작 */}
         <div className={styles.body}>
+          {activeTab===3 ? <h3>고객님께서 결제하실 상품정보입니다.</h3>
+          : activeTab===4 && <h3>다음 상품을 준비하여 고객님께 보내드리겠습니다.</h3>}
           {/* 주문 정보 테이블 */}
           <table className={styles.table}>
             <thead>
@@ -175,7 +188,8 @@ export function Basket(props){
             </thead>
             <tbody>
               {/* 장바구니 탭일 때는 장바구니 목록만 */}
-              {activeTab===1 && props.orderList ? props.orderList.map((item, index)=>(
+              {activeTab===1 &&
+              props.orderList ? props.orderList.map((item, index)=>(
               <tr>
                 <td>
                   <input 
@@ -207,8 +221,10 @@ export function Basket(props){
               </tr>
               ))
             : null}
+
             {/* 주문서 작성 탭으로 넘어가면 체크된 목록들만 나열함(수정 불가) */}
-            {activeTab===2 && selectedItems.map((item)=> (
+            {activeTab > 1 &&
+            selectedItems.map((item)=> (
               <tr>
                 <td><img src='../image/logo.jpeg' alt='이미지'/></td>
                 <td>
@@ -224,8 +240,7 @@ export function Basket(props){
             ))}
             </tbody>
           </table>
-          {/* Outlet부분 (스탭 2) */}
-          <Outlet></Outlet>
+
           {/* 총 계산서 */}
           <div className={styles.finalCalculate}>
             <div className={styles.finalContainer}>
@@ -251,19 +266,31 @@ export function Basket(props){
                 </div>
                 <i class="fal fa-equals"></i>
                 <div className={styles.finalBox}>
-                  <h2>최종 주문 금액</h2>
+                  <h2>최종 결제 금액</h2>
                   <div className={styles.price}>
                     <h5>\{sum ? resultOrderPrice : 0}</h5>
                   </div>
                 </div>
             </div>
           </div>
+
+          {/* Outlet부분 (스탭 2,3,4) */}
+          <Outlet></Outlet>
+
           {/* 상황에 따른 버튼 */}
           <div>
+
+            {/* STEP 2 ~ 4까지의 버튼 표기 변경 */}
+            {activeTab!==1 &&
+            <button onClick={selectedItems.length > 0 && activeTab >= 2 ? ()=>{gotoLink();} : null} className={styles.button}> {activeTab===2 ? `결제하기` : activeTab===3 ? `결제 / 주문 완료` : activeTab===4 && `홈으로 가기` }</button>}
+
+            {/* 장바구니 (STEP 01) */}
+            {activeTab===1 && 
+            <>
             <button className={styles.deletebutton} onClick={()=>deletedList()}>삭제</button>
-            {selectedItems.length !==0 && activeTab === 2 ?
-            <button onClick={selectedItems.length >0 && activeTab === 2 ? ()=>{navigate("/pay")} : null} className={styles.button}>{selectedItems ? `${selectedItems.length}건` : `0건`} 주문하기</button> 
-            : <button onClick={selectedItems.length >0 && activeTab === 1 ? ()=>{gotoReceipe();} : null} className={styles.button}>{selectedItems ? `${selectedItems.length}건` : `0건`} 주문하기</button>}
+            <button onClick={selectedItems.length > 0 && activeTab === 1 ? ()=>{gotoLink();} : null} className={styles.button}>{selectedItems ? `${selectedItems.length}건` : `0건`} 주문하기</button>
+            </>}
+
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
-import { CategoryBar } from './component/CategoryBar'
-import { SlideImg } from './component/SlideImg'
-import { TopBanner } from './component/TopBanner'
+import { CategoryBar } from './component/AboutHeader/CategoryBar'
+import { SlideImg } from './component/AboutHeader/SlideImg'
+import { TopBanner } from './component/AboutHeader/TopBanner'
 
 export default function MainPage(props) {
 

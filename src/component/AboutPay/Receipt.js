@@ -10,7 +10,7 @@ export function Receipt(){
               <label>성함</label>
             </div>
             <div className={styles.input}>
-              <input type="text" className={styles.inputSize} placeholder="성함을 입력하세요"/>
+              <input required type="text" className={styles.inputSize} placeholder="성함을 입력하세요"/>
             </div>
           </div>
           <div className={styles.formInner}>
@@ -18,7 +18,7 @@ export function Receipt(){
               <label>전화번호</label>
             </div>
             <div className={styles.input}>
-              <input type="tel" className={styles.inputSize} placeholder="전화번호를 입력하세요"/>
+              <input required type="tel" className={styles.inputSize} placeholder="전화번호를 입력하세요"/>
             </div>
           </div>
           <div className={styles.formInner}>
@@ -26,7 +26,7 @@ export function Receipt(){
               <label>이메일</label>
             </div>
             <div className={styles.input}>
-              <input type="email" className={styles.inputSize} placeholder="이메일을 입력하세요"/>
+              <input required type="email" className={styles.inputSize} placeholder="이메일을 입력하세요"/>
             </div>
           </div>
           <div className={styles.formInner}>
@@ -34,7 +34,7 @@ export function Receipt(){
               <label>주소</label>
             </div>
             <div className={styles.input}>
-              <input type="address" className={styles.inputSize} placeholder="주소를 입력하세요(API)"/>
+              <input required type="address" className={styles.inputSize} placeholder="주소를 입력하세요(API)"/>
             </div>
           </div>
         </form>
@@ -46,7 +46,7 @@ export function Receipt(){
               <label>성함</label>
             </div>
             <div className={styles.input}>
-              <input type="text" className={styles.inputSize} placeholder="성함을 입력하세요"/>
+              <input required type="text" className={styles.inputSize} placeholder="성함을 입력하세요"/>
             </div>
           </div>
           <div className={styles.formInner}>
@@ -54,7 +54,7 @@ export function Receipt(){
               <label>전화번호</label>
             </div>
             <div className={styles.input}>
-              <input type="tel" className={styles.inputSize} placeholder="전화번호를 입력하세요"/>
+              <input required type="tel" className={styles.inputSize} placeholder="전화번호를 입력하세요"/>
             </div>
           </div>
           <div className={styles.formInner}>
@@ -62,7 +62,7 @@ export function Receipt(){
               <label>주소</label>
             </div>
             <div className={styles.input}>  
-              <input type="address" className={styles.inputSize} placeholder="주소를 입력하세요(API)"/>
+              <input required type="address" className={styles.inputSize} placeholder="주소를 입력하세요(API)"/>
             </div>
           </div>
           <div className={styles.formInner}>
@@ -70,13 +70,13 @@ export function Receipt(){
               <label>배송 방식</label>
             </div>
             <div className={styles.input}>
-              <input type="radio"/>일반 택배(선불)
-              <input type="radio"/>일반 택배(착불)
-              <input type="radio"/>화물(선불)
-              <input type="radio"/>화물(착불)
-              <input type="radio"/>화물 택배(선불)
-              <input type="radio"/>화물 택배(착불)
-              <input type="radio"/>직접 픽업
+              <input name='delivery' type="radio"/>일반 택배(선불)
+              <input name='delivery' type="radio"/>일반 택배(착불)
+              <input name='delivery' type="radio"/>화물(선불)
+              <input name='delivery' type="radio"/>화물(착불)
+              <input name='delivery' type="radio"/>화물 택배(선불)
+              <input name='delivery' type="radio"/>화물 택배(착불)
+              <input name='delivery' type="radio"/>직접 픽업
             </div>
           </div>
           <div className={styles.formInner}>
@@ -112,12 +112,12 @@ export function Receipt(){
               <label>결제 방법</label>
             </div>
             <div className={styles.input}>
-              <input type="radio"/> 신용카드
-              <input type="radio"/> 무통장입금
-              <input type="radio"/> 가상계좌
-              <input type="radio"/> 계좌이체
-              <input type="radio"/> 카카오페이
-              <input type="radio"/> 삼성페이
+              <input name='payroute' type="radio"/> 신용카드
+              <input name='payroute' type="radio"/> 무통장입금
+              <input name='payroute' type="radio"/> 가상계좌
+              <input name='payroute' type="radio"/> 계좌이체
+              <input name='payroute' type="radio"/> 카카오페이
+              <input name='payroute' type="radio"/> 삼성페이
             </div>
           </div>
           <div className={styles.formInner}>
@@ -125,14 +125,14 @@ export function Receipt(){
               <label>증빙서류 발급</label>
             </div>
             <div className={styles.input}>
-              <input type="radio"/> 발행안함
-              <input type="radio"/> 현금영수증
-              <input type="radio"/> 세금계산서
+              <input name='moneyreceipt' type="radio"/> 발행안함
+              <input name='moneyreceipt' type="radio"/> 현금영수증
+              <input name='moneyreceipt' type="radio"/> 세금계산서
             </div>
           </div>
         </form>
         <div className={styles.formInner}>
-        <input type="checkbox"/> 구매동의 및 결제대행서비스 이용약관 등에 모두 동의합니다.
+        <input required type="checkbox"/> 구매동의 및 결제대행서비스 이용약관 등에 모두 동의합니다.
         <button className={styles.button}>약관보기</button>
         </div>
       </div>

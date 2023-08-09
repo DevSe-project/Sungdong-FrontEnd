@@ -2,8 +2,8 @@ import { Tab } from './Tab'
 import styles from './Detail.module.css'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useState } from 'react'
-import { CategoryBar } from './CategoryBar'
-import { TopBanner } from './TopBanner'
+import { CategoryBar } from '../AboutHeader/CategoryBar'
+import { TopBanner } from '../AboutHeader/TopBanner'
 export function Detail(props) {
   //수량 개수 state
   const [count, setCount] = useState("1");

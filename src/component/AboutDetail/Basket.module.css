@@ -151,7 +151,9 @@
 }
 
 .finalCalculate{
-  width: 100%;
+  width: 80%;
+  border-bottom: 1px solid lightgray;
+  padding-bottom: 2em;
 }
 
 .finalContainer{
