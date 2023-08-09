@@ -10,8 +10,8 @@ export default function Join() {
     // 가입하기 버튼 클릭 시, 
     let [joinState, setJoinState] = useState(false);
     let signUp = () => {
-        setJoinState(!joinState);
-        navigate('/join/inputInformation');
+        navigate('/');
+        alert("가입이 완료됐습니다. 환영합니다!");
     }
 
     // 모든 체크박스의 상태를 체크되지 않은 상태, false로 설정
@@ -134,10 +134,7 @@ export default function Join() {
                     가입할 마음이 사라졌소 .
                 </div>
                 {/* next */}
-                <div className={styles.sign_up} onClick={() => {
-                    navigate('/');
-                    alert("가입이 완료됐습니다. 환영합니다!");
-                }}>
+                <div className={styles.sign_up} onClick={signUp}>
                     가입하기
                 </div>
             </div>
