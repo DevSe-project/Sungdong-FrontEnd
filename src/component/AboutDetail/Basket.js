@@ -44,13 +44,16 @@ export function Basket(props){
     }
   };
 
-
   // 체크박스 클릭 시 호출되는 함수
   function checkedBox(productId) {
     if (selectedItems.includes(productId)) { //productID가 중복이면 true == 이미 체크박스가 클릭되어 있으면
       setSelectedItems(selectedItems.filter((item) => item !== productId)); //체크박스를 해제함 == 선택한 상품 저장 변수에서 제외
+      setSelectAll(false);
     } else {
       setSelectedItems([...selectedItems, productId]); //selectedItems의 배열과 productID 배열을 합쳐 다시 selectedItems에 저장
+      if(selectedItems.length + 1 === props.orderList.length){
+        setSelectAll(true);
+      }
     }
   };
 
