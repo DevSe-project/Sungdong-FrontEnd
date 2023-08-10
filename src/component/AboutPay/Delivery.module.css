@@ -1,0 +1,121 @@
+.container{
+  margin-top: 2em;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  gap: 1em;
+}
+
+/* Input 창 컨테이너 스타일 */
+.searchInputContainer {
+  display: flex;
+  width: 30em;
+  height: 1.2em;
+  align-items: center;
+  justify-content: center;
+  border: 0.2em solid #CC0000;
+  border-radius: 10dvw;
+  padding: 0.4em;
+  margin: 0;
+  justify-content: space-between;
+}
+
+/* Input 창 스타일 */
+.searchInput {
+  width: 100%;
+  height: 100%;
+  border-radius: 10dvw;
+  font-size: 1em;
+  border: none;
+  margin: 0;
+  padding: 0.3em;
+  padding-left: 0.5em;
+}
+.deliveryList{
+  width: 50em;
+  border: 1px solid var(--background-color-active);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  padding: 2em;
+  text-align: left;
+  border-radius: 1em;
+  font-weight: 350;
+}
+.orderDay{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  font-size: 1em;
+}
+.orderDayDiv{
+  display: flex;
+  gap: 0.5em;
+}
+
+.deliveryStyle{
+  display: flex;
+  flex-direction: row;
+}
+
+.deliveryNow{
+  margin-top: 0.5em;
+  width: 80%;
+  border: 1px solid lightgray;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 0.6em;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  padding: 1em;
+}
+
+.deliveryNowItem{
+  display: flex;
+  flex-direction: row;
+  align-items: self-start;
+  padding: 1em;
+  gap: 2em;
+}
+
+.deliveryNowMenu{
+  display: flex;
+  justify-content: space-between;
+}
+
+.img{
+  width: 7em;
+  height: 7em;
+}
+
+.deliveryNowInformation{
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+.deliveryMenu{
+  margin-top: 0.5em;
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid lightgray;
+  box-shadow: 0 2px 1px rgba(0, 0, 0, 0.2);
+  border-left: none;
+  border-radius: 0.6em;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  padding: 1em;
+  gap: 1em;
+  justify-content: center;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.button{
+  color: black;
+  padding: 0.6em;
+  background-color: white;
+  border: 1px solid gray;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 2em;
+}

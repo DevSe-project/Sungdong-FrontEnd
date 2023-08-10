@@ -151,8 +151,8 @@ export function Basket(props){
       {/* 스탭 모듈 */}
       <div className={styles.stepBlock}>
         <div className={styles.stepBar}>
-          {stepItems.map((item, index)=> (
-          <div key={index}>
+        {stepItems.map((item, index)=> (
+          <>
             {item.id === activeTab ?
             <div key={index} className={styles.stepOn}> 
               <p>Step 0{item.id}</p>
@@ -163,12 +163,15 @@ export function Basket(props){
               <h5>{item.title}</h5>
             </div>
             }
-            {item.id < 4 && <div className={styles.iconlocation}>
+            {item.id < 4 && 
+            <div className={styles.iconlocation}>
               <i className="fal fa-chevron-right"></i>
-            </div>}
-          </div>
+            </div>
+            }
+          </>
           ))}
         </div>
+      </div>
 
         {/* 본문 시작 */}
         <div className={styles.body}>
@@ -297,6 +300,5 @@ export function Basket(props){
           </div>
         </div>
       </div>
-    </div>
   )
 }

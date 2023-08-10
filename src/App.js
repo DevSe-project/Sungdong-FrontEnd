@@ -15,7 +15,7 @@ import { List } from './component/AboutHome/List';
 import { Pay } from './component/AboutPay/Pay';
 import { Order } from './component/AboutPay/Order';
 import { Receipt } from './component/AboutPay/Receipt';
-
+import { Delivery } from './component/AboutPay/Delivery';
 
 function App() {
   const navigate = useNavigate();
@@ -70,6 +70,9 @@ function App() {
             <Order/>
           }/>
         </Route>
+        <Route path='/delivery' element={
+          <Delivery/>
+        }/>
       </Routes>
     </div>
   );
