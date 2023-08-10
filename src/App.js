@@ -15,7 +15,7 @@ import { List } from './component/AboutHome/List';
 import { Pay } from './component/AboutPay/Pay';
 import { Order } from './component/AboutPay/Order';
 import { Receipt } from './component/AboutPay/Receipt';
-import { Delivery } from './component/AboutPay/Delivery';
+import { DeliveryMain } from './component/AboutPay/DeliveryMain';
 
 function App() {
   const navigate = useNavigate();
@@ -71,7 +71,7 @@ function App() {
           }/>
         </Route>
         <Route path='/delivery' element={
-          <Delivery/>
+          <DeliveryMain/>
         }/>
       </Routes>
     </div>

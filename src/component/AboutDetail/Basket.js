@@ -119,7 +119,7 @@ export function Basket(props){
     setOrderPrice(sum);
   }
   // 스탭 부분
-  const [activeTab, setActiveTab] = useState(1); // 현재 활성화된 스탭을 추적하는 상태
+  const [activeTab, setActiveTab] = useState(1); // 현재 활성화된 스탭을 추적하는 State -> State를 캐쉬처리 해야함
 
   // 링크 함수
   function gotoLink(){

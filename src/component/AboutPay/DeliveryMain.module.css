@@ -1,0 +1,36 @@
+/* 큰 컨테이너 */
+.container{
+  margin-top: 2em;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  gap: 1em;
+}
+
+/* Input 창 컨테이너 스타일 */
+.searchInputContainer {
+  display: flex;
+  width: 30em;
+  height: 1.2em;
+  align-items: center;
+  justify-content: center;
+  border: 0.2em solid #CC0000;
+  border-radius: 10dvw;
+  padding: 0.4em;
+  margin: 0;
+  justify-content: space-between;
+}
+
+/* Input 창 스타일 */
+.searchInput {
+  width: 100%;
+  height: 100%;
+  border-radius: 10dvw;
+  font-size: 1em;
+  border: none;
+  margin: 0;
+  padding: 0.3em;
+  padding-left: 0.5em;
+}

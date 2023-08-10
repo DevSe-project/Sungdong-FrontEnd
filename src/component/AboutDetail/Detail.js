@@ -36,18 +36,20 @@ export function Detail(props) {
         setCount(lengthTarget); 
     } 
 }
-
+// 장바구니 담기 함수
 function basketThis(product, count){
-  if(count>0){
-  //중복 확인 (.some 함수 : wishlist의 item.id 중 product.id와 같은 중복인 아이템이 있으면 true 반환 | !some이니 false면..== 중복이 아니면..)
+  // 수량 0을 장바구니에 저장하는 것 방지, ** 백엔드 : login 캐쉬값이 저장되어 있는 것이 확인이 되면 허용
+  if(count > 0){
+    //중복 확인 (.some 함수 : orderList item.id 중 product.id와 같은 중복인 아이템이 있으면 true 반환 | !some이니 false면..== 중복이 아니면..)
     if (!props.orderList.some((item) => item.id === product.id)){
       const newBasketProduct = {
         ...product,
         cnt : count,
-        finprice : (product.price * count),
+        finprice : (product.price * count), //총 계산액
       }
-      const basketList = [...props.orderList, newBasketProduct];//props.wishlist 배열들과 배열 product를 합쳐서 새로운 배열 likelist를 생성
-      props.setOrderList(basketList); //State에 새로운 배열 삽입
+      //props.orderlist의 원래 배열들과 배열 product를 합쳐서 새로운 배열을 생성하여 State에 삽입
+      props.setOrderList([...props.orderList, newBasketProduct]); 
+      // *중요 orderList의 배열들을 백엔드 서버로 전송하여 저장하기, Username의 db -> 장바구니 db에 아이템 저장해놓기 //
       alert("해당 상품이 장바구니에 추가되었습니다.")
     } else {
       alert("이미 장바구니에 추가된 상품입니다.")

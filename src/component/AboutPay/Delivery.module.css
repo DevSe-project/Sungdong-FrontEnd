@@ -1,3 +1,4 @@
+/* 메인 컨테이너 */
 .container{
   margin-top: 2em;
   width: 100%;
@@ -8,31 +9,7 @@
   gap: 1em;
 }
 
-/* Input 창 컨테이너 스타일 */
-.searchInputContainer {
-  display: flex;
-  width: 30em;
-  height: 1.2em;
-  align-items: center;
-  justify-content: center;
-  border: 0.2em solid #CC0000;
-  border-radius: 10dvw;
-  padding: 0.4em;
-  margin: 0;
-  justify-content: space-between;
-}
-
-/* Input 창 스타일 */
-.searchInput {
-  width: 100%;
-  height: 100%;
-  border-radius: 10dvw;
-  font-size: 1em;
-  border: none;
-  margin: 0;
-  padding: 0.3em;
-  padding-left: 0.5em;
-}
+/* 큰 박스 틀 */
 .deliveryList{
   width: 50em;
   border: 1px solid var(--background-color-active);
@@ -42,6 +19,8 @@
   border-radius: 1em;
   font-weight: 350;
 }
+
+/* 주문 날짜 및 상세보기 */
 .orderDay{
   display: flex;
   flex-direction: row;
@@ -59,6 +38,7 @@
   flex-direction: row;
 }
 
+/* 아이템 주문 상태 및 내역 창 */
 .deliveryNow{
   margin-top: 0.5em;
   width: 80%;
@@ -69,6 +49,7 @@
   border-bottom-right-radius: 0;
   padding: 1em;
 }
+
 
 .deliveryNowItem{
   display: flex;
@@ -88,11 +69,14 @@
   height: 7em;
 }
 
+/* 아이템들 이름 수량 등 정보*/
 .deliveryNowInformation{
   display: flex;
   flex-direction: column;
   gap: 1em;
 }
+
+/* 배송조회 등 버튼 아이템 */
 .deliveryMenu{
   margin-top: 0.5em;
   width: 20%;
@@ -111,6 +95,7 @@
   white-space: nowrap;
 }
 
+/* 버튼 CSS */
 .button{
   color: black;
   padding: 0.6em;
