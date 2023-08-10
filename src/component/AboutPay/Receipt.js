@@ -51,17 +51,41 @@ export function Receipt(){
             <div className={styles.label}>
               <label>주소</label>
             </div>
-            <div className={styles.input}>
-              <input className={styles.inputSize} type="text" value={address1 && address1.zonecode} placeholder="우편번호"/>
-              <input className={styles.button} type="button" 
-                onClick={()=>{
-                setAddress1("");
-                openPopup(setAddress1);
-                }}
-                value="우편번호 찾기"/>
-              <input className={styles.inputSize} type="text" value={address1 && address1.roadAddress ? address1.roadAddress : address1.jibunAddress ?address1.jibunAddress : null} placeholder="주소"/>
-              <input className={styles.inputSize} type="text" placeholder="상세주소"/>
-              <input className={styles.inputSize} type="text" value={address1 && `(${address1.bname}, ${address1.buildingName})`} placeholder="참고항목"/> 
+            <div className={styles.searchResult}>
+              <div className={styles.searchAddress}>
+                <input 
+                  className={styles.inputSize} 
+                  type="text" value={address1 && address1.zonecode} 
+                  placeholder="우편번호"
+                  readOnly
+                />
+                <input 
+                  className={styles.button} 
+                  type="button" 
+                  onClick={()=>{
+                    openPopup(setAddress1);
+                  }}
+                  value="우편번호 찾기"
+                />
+              </div>
+              <input 
+                className={styles.inputSize} 
+                type="text" 
+                value={address1 && address1.roadAddress}
+                placeholder="도로명 주소"
+                readOnly
+              />
+              <input 
+                className={styles.inputSize}
+                type="text" 
+                value={address1 && address1.buildingName ? `(${address1.bname}, ${address1.buildingName})` : address1 && `(${address1.bname}, ${address1.jibunAddress})`}  placeholder="건물 이름 또는 지번 주소"
+                readOnly
+              />
+              <input 
+                className={styles.inputSize} 
+                type="text" 
+                placeholder="상세주소를 입력해주세요."
+              />
             </div>
           </div>
         </form>
@@ -88,31 +112,41 @@ export function Receipt(){
             <div className={styles.label}>
               <label>주소</label>
             </div>
-            <div className={styles.input}>  
+            <div className={styles.searchResult}>
+              <div className={styles.searchAddress}>
+                <input 
+                  className={styles.inputSize} 
+                  type="text" value={address2 && address2.zonecode} 
+                  placeholder="우편번호"
+                  readOnly
+                />
+                <input 
+                  className={styles.button} 
+                  type="button" 
+                  onClick={()=>{
+                    openPopup(setAddress2);
+                  }}
+                  value="우편번호 찾기"
+                />
+              </div>
               <input 
-              className={styles.inputSize} type="text" 
-              value={address2 && address2.zonecode} 
-              placeholder="우편번호"
+                className={styles.inputSize} 
+                type="text" 
+                value={address2 && address2.roadAddress}
+                placeholder="도로명 주소"
+                readOnly
               />
               <input 
-              className={styles.button} 
-              type="button" 
-              onClick={()=>{
-                setAddress1("");
-                openPopup(setAddress2);
-              }}
-              value="우편번호 찾기"/>
-              <input 
-              className={styles.inputSize} type="text" 
-              value={address2 && address2.roadAddress ? address2.roadAddress : address2.jibunAddress ? address2.jibunAddress : null} 
-              placeholder="주소"
+                className={styles.inputSize}
+                type="text" 
+                value={address2 && address2.buildingName ? `(${address2.bname}, ${address2.buildingName})` : address2 && `(${address2.bname}, ${address2.jibunAddress})`}  placeholder="건물 이름 또는 지번 주소"
+                readOnly
               />
-              <input className={styles.inputSize} type="text" placeholder="상세주소"/>
               <input 
-              className={styles.inputSize} type="text" 
-              value={address2 && `(${address2.bname}, ${address2.buildingName})`} 
-              placeholder="참고항목"
-              />         
+                className={styles.inputSize} 
+                type="text" 
+                placeholder="상세주소를 입력해주세요."
+              />
             </div>
           </div>
           <div className={styles.formInner}>
@@ -133,7 +167,7 @@ export function Receipt(){
             <div className={styles.label}>
               <label>배송 메세지</label>
             </div>
-            <div className={styles.input}>
+            <div className={styles.searchResult}>
               <input className={styles.inputSize} type="text"/>
             </div>
           </div>

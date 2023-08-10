@@ -58,7 +58,7 @@ export function LikeItem(props){
       <CategoryBar/>
       <div className={styles.body}>
         <div className={styles.head}>
-          <h1><i class="fa-solid fa-heart"/> 찜 리스트</h1>
+          <h1><i className="fa-solid fa-heart"/> 찜 리스트</h1>
         </div>
         <div className={styles.tablebody}>
           <table className={styles.table}>
@@ -74,8 +74,8 @@ export function LikeItem(props){
               </tr>
             </thead>
             <tbody>
-            {props.wishlist.map((item)=>(
-              <tr>
+            {props.wishlist.map((item, key)=>(
+              <tr key={key}>
                 <td>
                   <input 
                   checked={selectedItems.includes(item.id)}

@@ -151,10 +151,10 @@ export function Basket(props){
       {/* 스탭 모듈 */}
       <div className={styles.stepBlock}>
         <div className={styles.stepBar}>
-          {stepItems.map((item)=> (
-          <>
-            {item.id === activeTab ? 
-            <div className={styles.stepOn}> 
+          {stepItems.map((item, index)=> (
+          <div key={index}>
+            {item.id === activeTab ?
+            <div key={index} className={styles.stepOn}> 
               <p>Step 0{item.id}</p>
               <h5>{item.title}</h5>
             </div>
@@ -164,9 +164,9 @@ export function Basket(props){
             </div>
             }
             {item.id < 4 && <div className={styles.iconlocation}>
-              <i class="fal fa-chevron-right"></i>
+              <i className="fal fa-chevron-right"></i>
             </div>}
-          </>
+          </div>
           ))}
         </div>
 
@@ -193,7 +193,7 @@ export function Basket(props){
               {/* 장바구니 탭일 때는 장바구니 목록만 */}
               {activeTab===1 &&
               props.orderList ? props.orderList.map((item, index)=>(
-              <tr>
+              <tr key={index}>
                 <td>
                   <input 
                   checked={selectedItems.includes(item)}
@@ -227,8 +227,8 @@ export function Basket(props){
 
             {/* 주문서 작성 탭으로 넘어가면 체크된 목록들만 나열함(수정 불가) */}
             {activeTab > 1 &&
-            selectedItems.map((item)=> (
-              <tr>
+            selectedItems.map((item, key)=> (
+              <tr key={key}>
                 <td><img src='../image/logo.jpeg' alt='이미지'/></td>
                 <td>
                   <h5 className={styles.link} onClick={()=>navigate(`/detail/${item.id}`)}>{item.title}</h5>
@@ -253,21 +253,21 @@ export function Basket(props){
                     <h5>\{sum}</h5>
                   </div>
                 </div>
-                <i class="fal fa-plus"></i>
+                <i className="fal fa-plus"></i>
                 <div className={styles.finalBox}>
                   <h2>배송비</h2>
                   <div className={styles.price}>
                     <h5>\{sum ? delivery : 0}</h5>
                   </div>
                 </div>
-                <i class="fal fa-minus"></i>
+                <i className="fal fa-minus"></i>
                 <div className={styles.finalBox}>
                   <h2>할인 금액</h2>
                   <div className={styles.price}>
                     <h5>\{discount}</h5>
                   </div>
                 </div>
-                <i class="fal fa-equals"></i>
+                <i className="fal fa-equals"></i>
                 <div className={styles.finalBox}>
                   <h2>최종 결제 금액</h2>
                   <div className={styles.price}>

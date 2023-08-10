@@ -122,8 +122,8 @@ function basketThis(product, count){
                 <div className={styles.sideTextButton}>
                   <button onClick={()=>{basketThis(detailData, count)}} className={styles.sideButton}>장바구니</button>
                   <button onClick={()=>{likethis(detailData)}} className={styles.sideButton}>
-                  {props.wishlist.some((item) => item.id === detailData.id) ? <i class="fa-solid fa-heart"/> 
-                  : <i class="fa-regular fa-heart"/>}
+                  {props.wishlist.some((item) => item.id === detailData.id) ? <i className="fa-solid fa-heart"/> 
+                  : <i className="fa-regular fa-heart"/>}
                   &nbsp;찜하기
                   </button>
                 </div>
