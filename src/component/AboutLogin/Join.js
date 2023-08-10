@@ -32,9 +32,15 @@ export default function Join() {
     };
 
     // [필수]항목들이 체크되면 '가입하기'버튼이 활성화되도록.
-    function ifJoin() {
-
+    const [disabled, setDisabled] = useState(false); //css를 동작할 stats.
+    // [필수]항목들이 모두 체크되었는지 확인하는 함수
+    function areAllRequiredChecked() {
+        return checkboxState.every((state, index) => PolicyObj[index].need ? state : true);
+        //.every(callback): 배열의 모든 요소가 주어진 콜백 함수를 만족하면 true를 반환하는 배열 메서드. 
+        // 이 메서드는 state 배열의 모든 요소가 특정 조건을 만족하는지를 확인합니다.
+        // 앞으로 해야할 것. .every값이 true면 [필수]항목이 모두 체크 상태 -> 
     }
+
 
     return (
         <div className={styles.body}>
@@ -101,9 +107,9 @@ export default function Join() {
                                     type="checkbox"
                                     checked={checkboxState[index]}
                                     onChange={() => {
-                                        const newCheckboxState = [...checkboxState];
-                                        newCheckboxState[index] = !newCheckboxState[index];
-                                        setCheckboxState(newCheckboxState);
+                                        const newCheckboxState = [...checkboxState]; // 초기 전체 false인 상태를 카피
+                                        newCheckboxState[index] = !newCheckboxState[index]; //클릭하면 해당인덱스의 state값을 반전
+                                        setCheckboxState(newCheckboxState); //적용
                                     }} />
                                 {/* 정책need : 필요정책인지에 따라 다르게(선택,필수) */}
                                 <span>
@@ -134,7 +140,10 @@ export default function Join() {
                     가입할 마음이 사라졌소 .
                 </div>
                 {/* next */}
-                <div className={styles.sign_up} onClick={signUp}>
+                <div 
+                className={styles.sign_up} 
+                onClick={signUp}
+                >
                     가입하기
                 </div>
             </div>

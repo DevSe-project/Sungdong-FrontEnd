@@ -87,11 +87,11 @@
     padding-right: 1em;
     padding-top: 0.7em;
     padding-bottom: 0.7em;
-    border-left: 3px solid gray;
-    border-right: 3px solid gray;
-    border-radius: 1dvh;
+    border-left: 2px solid gray;
+    border-right: 2px solid gray;
+    border-radius: 1.2dvh;
     width: max-content;
-    font-size: 1.5em;
+    font-size: 20px;
     font-weight: bold;
 }
 
@@ -102,10 +102,10 @@
     padding-right: 1em;
     padding-top: 0.7em;
     padding-bottom: 0.7em;
-    border-left: 3px solid #FF3333;
-    border-right: 3px solid #FF3333;
+    border-left: 2px solid #FF3333;
+    border-right: 2px solid #FF3333;
     border-radius: 1dvh;
     width: max-content;
-    font-size: 1.5em;
+    font-size: 20px;
     font-weight: bold;
 }
