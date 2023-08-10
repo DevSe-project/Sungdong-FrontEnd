@@ -1,10 +1,23 @@
 import { useState } from 'react';
 import styles from './Receipt.module.css'
-import DaumPostcode from 'react-daum-postcode'
-import { json } from 'react-router-dom';
+
 export function Receipt(){
-  const [address, setAddress] = useState("");
-  const [inaddress, setInAddress] = useState("");
+  const [address1, setAddress1] = useState("");
+  const [address2, setAddress2] = useState("");
+
+  const openPopup = (setAddress) => {
+      const script = document.createElement('script');
+      script.src = 'https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
+      script.onload = () => {
+        new window.daum.Postcode({
+          oncomplete: (data) => {
+            setAddress(data);
+          }
+      }).open();
+  }
+  document.body.appendChild(script);
+}
+
   return(
     <div>
       <div className={styles.container}>
@@ -39,26 +52,16 @@ export function Receipt(){
               <label>주소</label>
             </div>
             <div className={styles.input}>
-              <input className={styles.inputSize} type='text' value={address && JSON.stringify(address.zonecode)}/>
-              <div 
-                onClick={()=> {
-                  setAddress("");
+              <input className={styles.inputSize} type="text" value={address1 && address1.zonecode} placeholder="우편번호"/>
+              <input className={styles.button} type="button" 
+                onClick={()=>{
+                setAddress1("");
+                openPopup(setAddress1);
                 }}
-                className={styles.button}
-                >우편번호 찾기</div>
-              <input 
-              className={styles.inputSize} 
-              type='text' 
-              value={address && JSON.stringify(`${address.address} (${address.addressEnglish})`)} 
-              />
-              <input className={styles.inputSize} type='text' placeholder='상세주소를 입력하세요'/>            
-              <DaumPostcode
-                style={{ width: 550, height: 500 }}
-                errorMessage={error => console.log(error)}  //에러시 콘솔 출력
-                onComplete={(item) => {
-                  setAddress(item);  //검색완료시 실행
-                }}
-                />
+                value="우편번호 찾기"/>
+              <input className={styles.inputSize} type="text" value={address1 && address1.roadAddress ? address1.roadAddress : address1.jibunAddress ?address1.jibunAddress : null} placeholder="주소"/>
+              <input className={styles.inputSize} type="text" placeholder="상세주소"/>
+              <input className={styles.inputSize} type="text" value={address1 && `(${address1.bname}, ${address1.buildingName})`} placeholder="참고항목"/> 
             </div>
           </div>
         </form>
@@ -86,26 +89,30 @@ export function Receipt(){
               <label>주소</label>
             </div>
             <div className={styles.input}>  
-              <input className={styles.inputSize} type='text' value={inaddress && JSON.stringify(inaddress.zonecode)}/>
-              <div 
-                onClick={()=> {
-                  setInAddress("");
-                }}
-                className={styles.button}
-                >우편번호 찾기</div>
               <input 
-              className={styles.inputSize} 
-              type='text' 
-              value={inaddress && JSON.stringify(`${inaddress.address} (${inaddress.addressEnglish})`)} 
+              className={styles.inputSize} type="text" 
+              value={address2 && address2.zonecode} 
+              placeholder="우편번호"
               />
-              <input className={styles.inputSize} type='text' placeholder='상세주소를 입력하세요'/>            
-                <DaumPostcode
-                style={{ width: 550, height: 500 }}
-                errorMessage={error => console.log(error)}  //에러시 콘솔 출력
-                onComplete={(item) => {
-                  setInAddress(item);  //검색완료시 실행 
-                }}
-                />
+              <input 
+              className={styles.button} 
+              type="button" 
+              onClick={()=>{
+                setAddress1("");
+                openPopup(setAddress2);
+              }}
+              value="우편번호 찾기"/>
+              <input 
+              className={styles.inputSize} type="text" 
+              value={address2 && address2.roadAddress ? address2.roadAddress : address2.jibunAddress ? address2.jibunAddress : null} 
+              placeholder="주소"
+              />
+              <input className={styles.inputSize} type="text" placeholder="상세주소"/>
+              <input 
+              className={styles.inputSize} type="text" 
+              value={address2 && `(${address2.bname}, ${address2.buildingName})`} 
+              placeholder="참고항목"
+              />         
             </div>
           </div>
           <div className={styles.formInner}>
