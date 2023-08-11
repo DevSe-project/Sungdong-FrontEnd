@@ -21,14 +21,14 @@
 }
 
 /* 주문 날짜 및 상세보기 */
-.orderDay{
+.orderDate{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-end;
   font-size: 1em;
 }
-.orderDayDiv{
+.orderDetail{
   display: flex;
   gap: 0.5em;
 }

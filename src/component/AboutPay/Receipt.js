@@ -168,7 +168,7 @@ export function Receipt(){
               <label>배송 메세지</label>
             </div>
             <div className={styles.searchResult}>
-              <input className={styles.inputSize} type="text"/>
+              <input className={styles.inputSize} type="text" placeholder='택배 기사님께 남길 메세지를 적어주세요'/>
             </div>
           </div>
         </form>

@@ -3,9 +3,9 @@ export function Delivery(){
   return(
     <div className={styles.container}>
       <div className={styles.deliveryList}>
-        <div className={styles.orderDay}>
+        <div className={styles.orderDate}>
           <h4>23. 02. 08. 주문</h4>
-          <div className={styles.orderDayDiv}>
+          <div className={styles.orderDetail}>
             <span>주문 상세보기</span>
             <i className="far fa-chevron-right"></i>
           </div>
@@ -20,7 +20,7 @@ export function Delivery(){
               <img className={styles.img} src='../../image/logo.jpeg' alt="주문상품"/>
               <div className={styles.deliveryNowInformation}>
                 <span>상품이름, n개</span>
-                <span>n원, n개</span>
+                <span>n원</span>
               </div>
             </div>
           </div>

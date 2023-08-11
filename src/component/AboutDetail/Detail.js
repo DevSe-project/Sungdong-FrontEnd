@@ -4,10 +4,24 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useState } from 'react'
 import { CategoryBar } from '../AboutHeader/CategoryBar'
 import { TopBanner } from '../AboutHeader/TopBanner'
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+
+const data = [
+  { rating: 5, 리뷰: 10 },
+  { rating: 4, 리뷰: 5 },
+  { rating: 3, 리뷰: 1 },
+  { rating: 2, 리뷰: 1 },
+  { rating: 1, 리뷰: 0 },
+];
+
 export function Detail(props) {
   //수량 개수 state
   const [count, setCount] = useState("1");
-
+  const textReviewPoint = 50;
+  const photoReviewPoint = 150;
+  const totalReviewScore = 5; 
+  let currentReviewScore = 4.5;
+  let totalReviewCount = 20;
   const navigate = useNavigate();
 
   //주소창 입력된 id값 받아오기
@@ -40,16 +54,16 @@ export function Detail(props) {
 function basketThis(product, count){
   // 수량 0을 장바구니에 저장하는 것 방지, ** 백엔드 : login 캐쉬값이 저장되어 있는 것이 확인이 되면 허용
   if(count > 0){
-    //중복 확인 (.some 함수 : orderList item.id 중 product.id와 같은 중복인 아이템이 있으면 true 반환 | !some이니 false면..== 중복이 아니면..)
-    if (!props.orderList.some((item) => item.id === product.id)){
+    //중복 확인 (.some 함수 : basketList item.id 중 product.id와 같은 중복인 아이템이 있으면 true 반환 | !some이니 false면..== 중복이 아니면..)
+    if (!props.basketList.some((item) => item.id === product.id)){
       const newBasketProduct = {
         ...product,
         cnt : count,
         finprice : (product.price * count), //총 계산액
       }
-      //props.orderlist의 원래 배열들과 배열 product를 합쳐서 새로운 배열을 생성하여 State에 삽입
-      props.setOrderList([...props.orderList, newBasketProduct]); 
-      // *중요 orderList의 배열들을 백엔드 서버로 전송하여 저장하기, Username의 db -> 장바구니 db에 아이템 저장해놓기 //
+      //props.basketList의 원래 배열들과 배열 product를 합쳐서 새로운 배열을 생성하여 State에 삽입
+      props.setBasketList([...props.basketList, newBasketProduct]); 
+      // *중요 basketList의 배열들을 백엔드 서버로 전송하여 저장하기, Username의 db -> 장바구니 db에 아이템 저장해놓기 //
       alert("해당 상품이 장바구니에 추가되었습니다.")
     } else {
       alert("이미 장바구니에 추가된 상품입니다.")
@@ -84,9 +98,10 @@ function basketThis(product, count){
           <div className={styles.headTop}>
             {/* 상품 이미지 부분 */}
             <div className={styles.headLeft}>
-              <img src="http://pop7.co.kr/web/product/big/201806/344_shop1_15289487355825.jpg" alt="이미지" className={styles.thumnail} width="600px"/>
+              <img src="http://pop7.co.kr/web/product/big/201806/344_shop1_15289487355825.jpg" alt="이미지" 
+              className={styles.thumnail} width="600px"/>
             </div>
-            {/* 상품 정보 부분 */}
+            {/* 상품 정보(상품 이름, 가격) 부분 (삼항연산자 : 스켈레톤 처리) */}
             <div className={styles.headRight}>
               <div className={styles.textBox}>
                 {props.data 
@@ -99,6 +114,7 @@ function basketThis(product, count){
                 : <div className={styles.skeleton}>&nbsp;</div>}
               </h4>
               <div className={styles.textBox}>
+                {/* 상품 수량 및 옵션, 최종 결제금액 */}
               {props.data ? 
               <>
                 <label>
@@ -119,12 +135,16 @@ function basketThis(product, count){
                 최종 결제 금액 : {detailData.price * count}원 </h4></>
                 : <div className={styles.skeleton}>&nbsp;</div>
               }
+              {/* 버튼 부분들 (결제하기, 장바구니, 찜하기) */}
               <div className={styles.textButton}>
                 <button className={styles.mainButton}>결제하기</button>
                 <div className={styles.sideTextButton}>
-                  <button onClick={()=>{basketThis(detailData, count)}} className={styles.sideButton}>장바구니</button>
-                  <button onClick={()=>{likethis(detailData)}} className={styles.sideButton}>
-                  {props.wishlist.some((item) => item.id === detailData.id) ? <i className="fa-solid fa-heart"/> 
+                  <button onClick={()=>{basketThis(detailData, count)}}
+                  className={styles.sideButton}>장바구니</button>
+                  <button onClick={()=>{likethis(detailData)}} 
+                  className={styles.sideButton}>
+                  {props.wishlist.some((item) => item.id === detailData.id)
+                  ? <i className="fa-solid fa-heart"/> 
                   : <i className="fa-regular fa-heart"/>}
                   &nbsp;찜하기
                   </button>
@@ -132,7 +152,7 @@ function basketThis(product, count){
               </div>
             </div>
           </div>
-          {/* 베스트 리뷰와 관련 상품 */}
+          {/* 베스트 리뷰 */}
           <div className={styles.headBottom}>
             <div className={styles.headBestReview}>
               <h2>베스트 리뷰</h2><br/>
@@ -143,44 +163,12 @@ function basketThis(product, count){
                     리뷰 : 너무 좋아요
                   </p>
                 </div>
-                <div className={styles.colBestReview}>
-                  <h5>ID : 123</h5>
-                  <p>
-                    리뷰 : 너무 좋아요
-                  </p>
-                </div>
-                <div className={styles.colBestReview}>
-                  <h5>ID : 123</h5>
-                  <p>
-                    리뷰 : 너무 좋아요
-                  </p>
-                </div>
               </div>
             </div>
+            {/* 관련 상품 */}
             <div className={styles.headBestReview}>
               <h2>관련 상품</h2><br/>
               <div className={styles.rowBestReview}>
-                <div className={styles.colBestReview}>
-                  <div className={styles.frame}>
-                    <img className={styles.thumnail} src="http://pop7.co.kr/web/product/big/201806/344_shop1_15289487355825.jpg" alt="관련 이미지" width="100px"/>
-                  </div>
-                  <h5>상품 이름</h5>
-                  <p>내용</p>
-                </div>
-                <div className={styles.colBestReview}>
-                  <div className={styles.frame}>
-                    <img className={styles.thumnail} src="http://pop7.co.kr/web/product/big/201806/344_shop1_15289487355825.jpg" alt="관련 이미지" width="100px"/>
-                  </div>
-                  <h5>상품 이름</h5>
-                  <p>내용</p>
-                </div>
-                <div className={styles.colBestReview}>
-                  <div className={styles.frame}>
-                    <img className={styles.thumnail} src="http://pop7.co.kr/web/product/big/201806/344_shop1_15289487355825.jpg" alt="관련 이미지" width="100px"/>
-                  </div>
-                  <h5>상품 이름</h5>
-                  <p>내용</p>
-                </div>
                 <div className={styles.colBestReview}>
                   <div className={styles.frame}>
                     <img className={styles.thumnail} src="http://pop7.co.kr/web/product/big/201806/344_shop1_15289487355825.jpg" alt="관련 이미지" width="100px"/>
@@ -197,16 +185,52 @@ function basketThis(product, count){
           <Tab navigate={props.navigate}/>
         </div>
         <div id='1'>
-          상세 정보임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-          asdasdasdasdasdasddasda<br></br><br></br><br></br><br></br><br></br><br></br></div>
+          <div className={styles.reviewHeader}>
+            <h5>상품 정보</h5>
+          </div>
+          <div>
+            내용~~
+          </div>
+        </div>
         <div id='2'>
-          리뷰임<br></br><br></br><br></br><br></br><br></br><br></br>
-          asdasdasdasdasdasdasda<br></br><br></br><br></br><br></br><br></br>
+          <div className={styles.reviewHeader}>
+            <h5>상품 리뷰</h5>
+            <p>상품을 구매하신 분들이 작성하신 리뷰입니다. 리뷰 작성 시 아래 금액만큼 포인트가 적립 됩니다.</p>
+            <p>텍스트 리뷰 : {textReviewPoint}원 | 포토, 동영상 리뷰 : {photoReviewPoint}원</p>
+          </div>
+          <div className={styles.reviewViewToggle}>
+            <div className={styles.reviewToggleInner}>
+              <h5>사용자 총 평점</h5>
+              <div>
+              <i className="fal fa-star"/><i className="fas fa-star"/>
+              </div>
+              <h3>{currentReviewScore} / {totalReviewScore}</h3>
+            </div>
+            <div className={styles.reviewToggleInner}>
+              <h5>전체 리뷰 수</h5>
+              <h3>{totalReviewCount}</h3>
+            </div>
+            <div className={styles.reviewToggleInner}>
+              <h5>평점 비율</h5>
+              <ResponsiveContainer className={styles.graph} width="100%" height={100}>
+                <BarChart
+                  data={data}
+                  margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+                >
+                  <XAxis dataKey="rating" label={{ value: '평점', position: 'insideBottom', offset: -10 }} />
+                  <Tooltip />
+                  <Bar dataKey="리뷰" fill="#cc0000" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
         </div>
         <div id='3'>
-        큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-        asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
-        asdasdsad
+          큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+          asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
+          asdasdsad
+        </div>
+        <div id='4'>
         </div>
       </main>
     </div>

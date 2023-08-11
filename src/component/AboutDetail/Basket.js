@@ -18,7 +18,7 @@ export function Basket(props){
   const [count, setCount] = useState("");
 
   //수정하기 state
-  const [editStatus, setEditStatus] = useState(props.orderList.map(()=>false));
+  const [editStatus, setEditStatus] = useState(props.basketList.map(()=>false));
 
   // 체크박스를 통해 선택한 상품들을 저장할 상태 변수
   const [selectedItems, setSelectedItems] = useState([]);
@@ -37,7 +37,7 @@ export function Basket(props){
     setSelectAll(!selectAll);
 
     if (!selectAll) {
-      const allId = props.orderList.map((item) => item);
+      const allId = props.basketList.map((item) => item);
       setSelectedItems(allId); 
     } else {
       setSelectedItems([]);
@@ -51,7 +51,7 @@ export function Basket(props){
       setSelectAll(false);
     } else {
       setSelectedItems([...selectedItems, productId]); //selectedItems의 배열과 productID 배열을 합쳐 다시 selectedItems에 저장
-      if(selectedItems.length + 1 === props.orderList.length){
+      if(selectedItems.length + 1 === props.basketList.length){
         setSelectAll(true);
       }
     }
@@ -61,8 +61,8 @@ export function Basket(props){
   const deletedList = () => {
   if(selectedItems !== null && selectedItems.length > 0){
     //props.wishlist 배열에서 selectedItems에 포함된(체크박스 선택된) 항목들이 아닌 것들로 새로운 배열을 생성
-    const updatedWishlist = props.orderList.filter((item) => !selectedItems.includes(item)); 
-    props.setOrderList(updatedWishlist);
+    const updatedWishlist = props.basketList.filter((item) => !selectedItems.includes(item)); 
+    props.setBasketList(updatedWishlist);
 
     // 선택된 항목들 초기화
     setSelectedItems([]);
@@ -88,13 +88,13 @@ export function Basket(props){
     const newEditStatus = [...editStatus]; 
     newEditStatus[index] = true;
     setEditStatus(newEditStatus);
-    setCount(props.orderList[index].cnt); 
+    setCount(props.basketList[index].cnt); 
   }
   //수정완료 버튼 눌렀을 때 함수 작동(개수 저장 함수)
   function updatedItem(index){
     if(count > 0) {
-      props.orderList[index].cnt = count;
-      props.orderList[index].finprice = props.orderList[index].price * count;
+      props.basketList[index].cnt = count;
+      props.basketList[index].finprice = props.basketList[index].price * count;
       const newEditStatus = [...editStatus]; 
       newEditStatus[index] = false;
       setEditStatus(newEditStatus);
@@ -107,7 +107,7 @@ export function Basket(props){
   function totalPrice(item){
     let sum = 0;
     item.forEach(itemId => {
-      const calculate = props.orderList.find((item)=>item.id === itemId.id);
+      const calculate = props.basketList.find((item)=>item.id === itemId.id);
       if(calculate){
         sum += calculate.finprice;
       }
@@ -195,7 +195,7 @@ export function Basket(props){
             <tbody>
               {/* 장바구니 탭일 때는 장바구니 목록만 */}
               {activeTab===1 &&
-              props.orderList ? props.orderList.map((item, index)=>(
+              props.basketList ? props.basketList.map((item, index)=>(
               <tr key={index}>
                 <td>
                   <input 

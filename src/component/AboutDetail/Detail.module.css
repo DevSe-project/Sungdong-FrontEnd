@@ -166,3 +166,29 @@
   justify-content: flex-end;
   border-radius: 10dvw;
 }
+
+.reviewHeader{
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+}
+
+.reviewViewToggle{
+  display: flex;
+  flex-direction: row;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  align-items: center;
+  justify-content: center;
+  padding: 1em;
+}
+
+.reviewToggleInner{
+  width: 33%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.graph{
+  font-size: small;
+}

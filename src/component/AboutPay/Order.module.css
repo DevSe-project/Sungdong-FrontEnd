@@ -4,7 +4,7 @@
   flex-direction: column;
   gap : 1.5em;
 }
-.headTag{
+.getInformation{
   text-align: left;
   border-bottom: 2px solid var(--background-color-clicked);
   padding: 0.5em;

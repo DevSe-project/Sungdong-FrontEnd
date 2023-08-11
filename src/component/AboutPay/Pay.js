@@ -23,7 +23,7 @@ export function Pay(){
           <label>입금자명</label>
         </div>
         <div className={styles.input}>
-          <input required type="text" className={styles.inputSize} />
+          <input required type="text" placeholder='입금자명을 입력해주세요' className={styles.inputSize} />
         </div>
       </div>
     </div>
