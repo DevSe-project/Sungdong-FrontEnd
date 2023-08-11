@@ -5,9 +5,10 @@ import { useState } from "react";
 import PolicyObj from "../Data/PolicyObj";
 
 export default function Join() {
+    // link
     let navigate = useNavigate();
 
-    // 가입하기 버튼 클릭 시, 
+    // 가입하기 버튼 클릭 시, console & link
     let [joinState, setJoinState] = useState(false);
     let signUp = () => {
         navigate('/');
@@ -24,11 +25,11 @@ export default function Join() {
     }
 
     // 화살표, 그리고 개별동작하도록
-    const [arrowState, setArrowState] = useState(() => PolicyObj.map(() => false));
-    function arrow(index) {
-        const newArrow = [...arrowState];
-        newArrow[index] = !arrowState[index];
-        setArrowState(newArrow);
+    const [clauseState, setClauseState] = useState(() => PolicyObj.map(() => false));
+    function clause(index) {
+        const newClause = [...clauseState];
+        newClause[index] = !clauseState[index];
+        setClauseState(newClause);
     };
 
     // [필수]항목들이 체크되면 '가입하기'버튼이 활성화되도록.
@@ -53,37 +54,37 @@ export default function Join() {
                 />
             </div>
             {/* 회원정보 입력란 */}
-            <div className={styles.memberInformationContainer}>
-                <div className={styles.noti}>회원정보를 입력해주세요!</div>
+            <ul className={styles.inputWrap}>
+                <li className={styles.noti}>회원정보를 입력해주세요!</li>
                 {/* 아이디 */}
-                <div className={styles.setIdContainer}>
+                <li className={styles.setIdContainer}>
                     <input className={styles.set} type='text' placeholder={'아이디'} />
-                </div>
+                </li>
                 {/* 비밀번호 */}
-                <div className={styles.setPWContainer}>
+                <li className={styles.setPWContainer}>
                     <input className={styles.set} type='text' placeholder={'비밀번호'} />
-                </div>
+                </li>
                 {/* 비밀번호 확인 */}
-                <div className={styles.setPWContainer}>
+                <li className={styles.setPWContainer}>
                     <input className={styles.set} type='text' placeholder={'비밀번호 재입력(일치 확인)'} />
-                </div>
+                </li>
                 {/* 이메일 */}
-                <div className={styles.setEmailContainer}>
+                <li className={styles.setEmailContainer}>
                     <input className={styles.set} type='text' placeholder={'이메일'} />
-                </div>
+                </li>
                 {/* 이름 */}
-                <div className={styles.setNameContainer}>
+                <li className={styles.setNameContainer}>
                     <input className={styles.set} type='text' placeholder={'이름'} />
-                </div>
+                </li>
                 {/* 전화번호 */}
-                <div className={styles.setNumberContainer}>
+                <li className={styles.setNumberContainer}>
                     <input className={styles.set} type='text' placeholder={'전화번호'} />
-                </div>
+                </li>
                 {/* 인증 요청- 누르면 하단에 인증번호 입력란이 나타나고 타이머 표시 */}
-                <div className={styles.requestSecurityNumberContainer}>
+                <li className={styles.requestSecurityNumberContainer}>
 
-                </div>
-            </div>
+                </li>
+            </ul>
 
             {/* 전체 동의하기 */}
             <div className={styles.checkAll}>
@@ -95,13 +96,14 @@ export default function Join() {
             </div>
 
             {/* 이용약관 체크박스 컨테이너 */}
-            <div className={styles.checkboxContainer}>
+            <ul className={styles.ul_policy}>
                 {/* 이용약관 */}
                 {PolicyObj.map((policy, index) => {
-                    // 각 정책List
-                    return <div className={styles.policyContainer}>
-                        <div className={styles.policyList}>
-                            <div className={styles.temp}>
+                    {/* 약관 Container */ }
+                    return <li className={styles.li_policy}>
+                        <div className={styles.eachContent}>
+                            {/* 왼쪽 Content*/}
+                            <div className={styles.leftContent}>
                                 {/* 체크박스 */}
                                 <input
                                     type="checkbox"
@@ -111,28 +113,29 @@ export default function Join() {
                                         newCheckboxState[index] = !newCheckboxState[index]; //클릭하면 해당인덱스의 state값을 반전
                                         setCheckboxState(newCheckboxState); //적용
                                     }} />
-                                {/* 정책need : 필요정책인지에 따라 다르게(선택,필수) */}
+                                {/* policyNeed : need의 boolean값에 따라 색상을 다르게(선택,필수) */}
                                 <span>
                                     {policy.need ? <em style={{ color: "#FF3333" }}>[필수]</em> : <em style={{ color: "gray" }}>[선택]</em>}
                                 </span>
-                                {/* 정책이름 */}
-                                <span>
-                                    {policy.policyName}
-                                </span>
+                                {/* policyName */}
+                                <span> {policy.policyName} </span>
                             </div>
-                            {/* 이용약관 상세보기 */}
-                            <div className={styles.arrow} onClick={() => arrow(index)}>
-                                {arrowState[index] ? "▼보기" : "▶보기"}
+                            {/* 오른쪽 Content */}
+                            <div className={styles.rightContent}>
+                                {/* 이용약관 상세보기 */}
+                                <div className={styles.clause} onClick={() => clause(index)}>
+                                    {clauseState[index] ? "▼보기" : "▶보기"}
+                                </div>
                             </div>
                         </div>
-                        {/* 보기를 클랙했을 때 나타나는 이용약관 */}
+                        {/* 보기를 클릭했을 때 나타나는 이용약관 */}
                         <div>
-                            {arrowState[index] ? <div className={styles.policyDetail}>{policy.policyDetail}</div> : null}
+                            {clauseState[index] ? <div className={styles.policyDetail}>{policy.policyDetail}</div> : <div className={styles.policyDetail_null}/>}
                         </div>
-                    </div>
+                    </li>
                 })}
 
-            </div>
+            </ul>
             {/* moveContainer */}
             <div className={styles.moveContainer}>
                 {/* back */}
@@ -140,9 +143,10 @@ export default function Join() {
                     가입할 마음이 사라졌소 .
                 </div>
                 {/* next */}
-                <div 
-                className={styles.sign_up} 
-                onClick={signUp}
+                <div
+                    className={styles.sign_up}
+                    onClick={signUp}
+
                 >
                     가입하기
                 </div>

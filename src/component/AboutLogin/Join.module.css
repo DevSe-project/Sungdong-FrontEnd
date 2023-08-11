@@ -6,6 +6,11 @@
     min-height: 100vh;
 }
 
+.inputWrap {
+    display: flex;
+    flex-direction: column;
+}
+
 .noti {
     font-size: 20px;
     font-weight: bold;  
@@ -34,7 +39,7 @@
     font-weight: bold;
 }
 
-.checkboxContainer{
+.ul_policy{
     justify-content: center;
     align-items: center;
     border-top: 1px solid gray;
@@ -42,27 +47,35 @@
     border-radius: 5dvb;
     margin-top: 1em;
     width: 500px;
-}
-
-.policyContainer {
     display: flex;
     flex-direction: column;
-    margin: 2em;
+    padding: 0;
 }
 
-.policyList {
-    justify-content: space-between;
+.li_policy {
     display: flex;
-    flex-direction: row;
-    font-size: 20px
+    flex-direction: column;
+    margin: 20px;
 }
 
-.temp {
+.eachContent {
+    display: flex;
+    justify-content: space-between;
+}
+
+.leftContent {
     display: flex;
     align-items: center;
+    font-size: 20px;
 }
 
-.arrow {
+.rightContent {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+}
+
+.clause {
     cursor: pointer;
 }
 
@@ -71,8 +84,13 @@
     padding: 0.7em;
     border: 1.5px solid #404040;
     border-radius: 1dvb;
+    width: 400px;
     max-height: 10vh;
     overflow-y:scroll; /* 스크롤 생성 */
+}
+
+.policyDetail_null {
+    width: 428px;
 }
 
 .moveContainer {
