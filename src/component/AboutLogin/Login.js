@@ -43,9 +43,9 @@ export function Login(props) {
 
           {/* Find Id&PW Button | join Button */}
             <div className={styles.findDiv}>
-              <div className={styles.findId}>아이디 찾기</div>
+              <div className={styles.findId} onClick={ () => {navigate('/findID')} }>아이디 찾기</div>
               <div>|</div>
-              <div className={styles.findPW}>비밀번호 찾기</div>
+              <div className={styles.findPW} onClick={ () => {navigate('/findPW')} }>비밀번호 찾기</div>
               <div>|</div>
               <div className={styles.join} onClick={ () => {navigate('/join')} }>회원가입</div>
             </div>
