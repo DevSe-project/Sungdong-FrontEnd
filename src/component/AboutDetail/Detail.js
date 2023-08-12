@@ -6,6 +6,7 @@ import { CategoryBar } from '../AboutHeader/CategoryBar'
 import { TopBanner } from '../AboutHeader/TopBanner'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
+// 리뷰 그래프 data
 const data = [
   { rating: 5, 리뷰: 10 },
   { rating: 4, 리뷰: 5 },
@@ -144,8 +145,8 @@ function basketThis(product, count){
                   <button onClick={()=>{likethis(detailData)}} 
                   className={styles.sideButton}>
                   {props.wishlist.some((item) => item.id === detailData.id)
-                  ? <i className="fa-solid fa-heart"/> 
-                  : <i className="fa-regular fa-heart"/>}
+                  ? <i className="fa-solid fa-heart"/> //꽉 찬 하트와 빈 하트 아이콘
+                  : <i className="fa-regular fa-heart"/>} 
                   &nbsp;찜하기
                   </button>
                 </div>
@@ -184,53 +185,97 @@ function basketThis(product, count){
         <div className={styles.tab}>
           <Tab navigate={props.navigate}/>
         </div>
-        <div id='1'>
-          <div className={styles.reviewHeader}>
-            <h5>상품 정보</h5>
+        <div className={styles.tabInnerHeader}>
+          <div id='1'>
+            <div className={styles.reviewHeader}>
+              <h5>상품 정보</h5>
+              <p>
+                asdasdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+              </p>
+            </div>
           </div>
-          <div>
-            내용~~
-          </div>
-        </div>
-        <div id='2'>
-          <div className={styles.reviewHeader}>
-            <h5>상품 리뷰</h5>
-            <p>상품을 구매하신 분들이 작성하신 리뷰입니다. 리뷰 작성 시 아래 금액만큼 포인트가 적립 됩니다.</p>
-            <p>텍스트 리뷰 : {textReviewPoint}원 | 포토, 동영상 리뷰 : {photoReviewPoint}원</p>
-          </div>
-          <div className={styles.reviewViewToggle}>
-            <div className={styles.reviewToggleInner}>
-              <h5>사용자 총 평점</h5>
-              <div>
-              <i className="fal fa-star"/><i className="fas fa-star"/>
+          <div id='2'>
+            <div className={styles.reviewHeader}>
+              <h5>상품 리뷰</h5>
+              <p>상품을 구매하신 분들이 작성하신 리뷰입니다. 리뷰 작성 시 아래 금액만큼 포인트가 적립 됩니다.</p>
+              <p>텍스트 리뷰 : {textReviewPoint}원 | 포토, 동영상 리뷰 : {photoReviewPoint}원</p>
+            </div>
+            <div className={styles.reviewViewToggle}>
+              <div className={styles.reviewToggleInner}>
+                <h5>사용자 총 평점</h5>
+                <div>
+                <i className="fal fa-star"/><i className="fas fa-star"/>
+                </div>
+                <h3>{currentReviewScore} / {totalReviewScore}</h3>
               </div>
-              <h3>{currentReviewScore} / {totalReviewScore}</h3>
+              <div className={styles.reviewToggleInner}>
+                <h5>전체 리뷰 수</h5>
+                <h3>{totalReviewCount}</h3>
+              </div>
+              <div className={styles.reviewToggleInner}>
+                <h5>평점 비율</h5>
+                <ResponsiveContainer className={styles.graph} width="100%" height={100}>
+                  <BarChart
+                    data={data}
+                    margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+                  >
+                    <XAxis dataKey="rating" label={{ value: '평점', position: 'insideBottom', offset: -10 }} />
+                    <Tooltip />
+                    <Bar dataKey="리뷰" fill="#cc0000" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
             </div>
-            <div className={styles.reviewToggleInner}>
-              <h5>전체 리뷰 수</h5>
-              <h3>{totalReviewCount}</h3>
+            <div className={styles.reviewTab}>
+              <div className={styles.reviewTabFilter}>
+                <div>
+                  베스트 순
+                </div>
+                <div className={styles.reviewTabFront}>
+                  최신 순
+                </div>
+              </div>
+              <div className={styles.reviewTabRatingView}>
+                별점 별 평가 보기 
+                <div>
+                  {totalReviewCount}
+                </div>
+              </div>
             </div>
-            <div className={styles.reviewToggleInner}>
-              <h5>평점 비율</h5>
-              <ResponsiveContainer className={styles.graph} width="100%" height={100}>
-                <BarChart
-                  data={data}
-                  margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
-                >
-                  <XAxis dataKey="rating" label={{ value: '평점', position: 'insideBottom', offset: -10 }} />
-                  <Tooltip />
-                  <Bar dataKey="리뷰" fill="#cc0000" />
-                </BarChart>
-              </ResponsiveContainer>
+            <div className={styles.review}>
+              <div className={styles.reviewList}>
+                <div className={styles.reviewListProfileImg}>
+                  <img src='../../image/logo.jpeg' alt='프로필이미지' width={20}/>
+                </div>
+                <div className={styles.reviewListProfile}>
+                  <h4>profileName</h4>
+                  <span><i className="fal fa-star"/><i className="fal fa-star"/><i className="fal fa-star"/><i className="fal fa-star"/><i className="fal fa-star"/></span>
+                  <p>날짜</p>
+                </div>
+              </div>
+              <div className={styles.reviewListProduct}>
+                상품명
+              </div>
+              <div className={styles.reviewImg}>
+                사진 있으면 표시 없으면 미표시
+              </div>
+              <div className={styles.reviewListTitle}>
+                <h4>리뷰 제목</h4>
+              </div>
+              <div className={styles.reviewListBody}>
+                <p>
+                  리뷰내용입니다         asdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-        <div id='3'>
-          큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-          asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
-          asdasdsad
-        </div>
-        <div id='4'>
+          <div id='3'>
+            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdsad
+          </div>
+          <div id='4'>
+          </div>
         </div>
       </main>
     </div>

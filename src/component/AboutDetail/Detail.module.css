@@ -166,6 +166,17 @@
   justify-content: flex-end;
   border-radius: 10dvw;
 }
+.tabInnerHeader{
+  width: clamp(40em, 50%, 50em);
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  border-bottom: 1px solid lightgray;
+  justify-content: center;
+  word-wrap: break-word;
+}
+
 
 .reviewHeader{
   text-align: left;
@@ -179,6 +190,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   align-items: center;
   justify-content: center;
+  text-align: center;
   padding: 1em;
 }
 
@@ -191,4 +203,82 @@
 
 .graph{
   font-size: small;
+}
+
+.reviewTab{
+  display: flex;
+  flex-direction: row;
+  background-color: grey;
+  color: lightgray;
+  padding: 0.5em;
+  justify-content: space-between;
+}
+
+.reviewTabFilter{
+  display: flex;
+  flex-direction: row;
+  gap: 0.3em;
+  align-items: center;
+  cursor: pointer;
+}
+
+.reviewTabFront::before{
+  content: '| ';
+  color: lightgray;
+}
+
+.reviewTabRatingView{
+  width: 30%;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid black;
+  padding: 0.5em;
+  align-items: center;
+}
+
+.review{
+  margin-top: 2em;
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+  border: 1px solid lightgray;
+  gap: 1em;
+  margin-bottom: 5em;
+  border-bottom: 6px solid lightgray;
+}
+
+.reviewList{
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+}
+
+.reviewListProfile{
+  display: flex;
+  flex-direction: column;
+  gap: 0.7em;
+}
+
+.reviewListProfileImg{
+  width: 3em;
+  height: 3em;
+  border: 1px solid lightgray;
+  border-radius: 40em;
+  overflow: hidden;
+}
+
+.reviewListProduct{
+  color: gray;
+}
+
+.reviewImg{
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  background-color: lightgray;
+  padding: 1em;
+}
+
+.reviewListTitle{
+  font-weight: 650;
 }
