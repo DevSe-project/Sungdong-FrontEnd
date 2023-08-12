@@ -3,10 +3,69 @@ import styles from './Join.module.css';
 import logo from '../../image/logo.jpeg'
 import { useState } from "react";
 import PolicyObj from "../Data/PolicyObj";
+import { UserData } from "../Data/UserData";
 
 export default function Join() {
     // link
     let navigate = useNavigate();
+
+    // 입력받을 회원 정보 객체배열 state
+    let [inputData, setInputData] = useState([
+        {
+            id: null,
+            password: null,
+            confirmPassword: null,
+            email: null,
+            name: null,
+            phoneNumber: null,
+        },
+    ])
+    // 입력된 정보 삽입
+    let handleId = (e) => { //아이디
+        const newId = e.target.value;
+        setInputData(prevData => ({
+            ...prevData,
+            id: newId
+        }));
+    };
+    let handlePassword = (e) => { //비밀번호
+        const newPassword = e.target.value;
+        setInputData(prevData => ({
+            ...prevData,
+            password: newPassword
+        }));
+    };
+    let handleConfirmPassword = (e) => { //비밀번호 재확인
+        const newConfirmPassword = e.target.value;
+        setInputData(prevData => ({
+            ...prevData,
+            confirmPassword: newConfirmPassword
+        }));
+    };
+    let handleEmail = (e) => { //이메일
+        const newEmail = e.target.value;
+        setInputData(prevData => ({
+            ...prevData,
+            email : newEmail
+        }));
+    };
+    let handleName = (e) => { //이름
+        const newName = e.target.value;
+        setInputData(prevData => ({
+            ...prevData,
+            name : newName
+        }));
+    };
+    let handlePhoneNumber = (e) => { //전화번호
+        const newPhoneNumber = e.target.value;
+        setInputData(prevData => ({
+            ...prevData,
+            phoneNumber : newPhoneNumber
+        }));
+    };
+
+    let confirmPassword = inputData.password === inputData.confirmPassword; //data 일치유무 체크
+
 
     // 가입하기 버튼 클릭 시, console & link
     let [joinState, setJoinState] = useState(false);
@@ -24,7 +83,7 @@ export default function Join() {
         setCheckboxState(newCheckboxState); //CheckboxState에 적용
     }
 
-    // 화살표, 그리고 개별동작하도록
+    // 약관상세보기, 개별동작하도록
     const [clauseState, setClauseState] = useState(() => PolicyObj.map(() => false));
     function clause(index) {
         const newClause = [...clauseState];
@@ -55,34 +114,75 @@ export default function Join() {
             </div>
             {/* 회원정보 입력란 */}
             <ul className={styles.inputWrap}>
+                {/* 회원정보를 입력해주세요! */}
                 <li className={styles.noti}>회원정보를 입력해주세요!</li>
                 {/* 아이디 */}
                 <li className={styles.setIdContainer}>
-                    <input className={styles.set} type='text' placeholder={'아이디'} />
+                    <input
+                        className={styles.set}
+                        type='text'
+                        placeholder={'아이디'}
+                        value={inputData.id} 
+                        onChange={ handleId }
+                        />
                 </li>
+                <div className={styles.warnningMessage}>
+                </div>
                 {/* 비밀번호 */}
                 <li className={styles.setPWContainer}>
-                    <input className={styles.set} type='text' placeholder={'비밀번호'} />
+                    <input
+                        className={styles.set}
+                        type='text'
+                        placeholder={'비밀번호'}
+                        value={inputData.password}
+                        onChange={ handlePassword }
+                    />
                 </li>
                 {/* 비밀번호 확인 */}
                 <li className={styles.setPWContainer}>
-                    <input className={styles.set} type='text' placeholder={'비밀번호 재입력(일치 확인)'} />
+                    <input
+                        className={styles.set}
+                        type='text'
+                        placeholder={'비밀번호 재입력(일치 확인)'}
+                        value={inputData.confirmPassword} 
+                        onChange={ handleConfirmPassword }
+                        />
                 </li>
+                {confirmPassword ? null : <div className={styles.errorMessage}>
+                    비밀번호가 일치하지 않습니다!
+                </div>}
                 {/* 이메일 */}
                 <li className={styles.setEmailContainer}>
-                    <input className={styles.set} type='text' placeholder={'이메일'} />
+                    <input
+                        className={styles.set}
+                        type='text'
+                        placeholder={'이메일'}
+                        onChange={ handleEmail }
+                    />
                 </li>
                 {/* 이름 */}
                 <li className={styles.setNameContainer}>
-                    <input className={styles.set} type='text' placeholder={'이름'} />
+                    <input
+                        className={styles.set}
+                        type='text'
+                        placeholder={'이름'} 
+                        onChange={ handleName }
+                    />
                 </li>
                 {/* 전화번호 */}
                 <li className={styles.setNumberContainer}>
-                    <input className={styles.set} type='text' placeholder={'전화번호'} />
+                    <input
+                        className={styles.set}
+                        type='text'
+                        placeholder={'전화번호'} 
+                        value={inputData.phoneNumber}
+                        onChange={ handlePhoneNumber }
+                    />
                 </li>
                 {/* 인증 요청- 누르면 하단에 인증번호 입력란이 나타나고 타이머 표시 */}
-                <li className={styles.requestSecurityNumberContainer}>
-
+                <li
+                    className={styles.requestSecurityNumberContainer}>
+                    <div></div>
                 </li>
             </ul>
 
@@ -124,13 +224,13 @@ export default function Join() {
                             <div className={styles.rightContent}>
                                 {/* 이용약관 상세보기 */}
                                 <div className={styles.clause} onClick={() => clause(index)}>
-                                    {clauseState[index] ? "▼보기" : "▶보기"}
+                                    {clauseState[index] ? "▼약관 상세보기" : "▶약관 상세보기"}
                                 </div>
                             </div>
                         </div>
                         {/* 보기를 클릭했을 때 나타나는 이용약관 */}
                         <div>
-                            {clauseState[index] ? <div className={styles.policyDetail}>{policy.policyDetail}</div> : <div className={styles.policyDetail_null}/>}
+                            {clauseState[index] ? <div className={styles.policyDetail}>{policy.policyDetail}</div> : <div className={styles.policyDetail_null} />}
                         </div>
                     </li>
                 })}

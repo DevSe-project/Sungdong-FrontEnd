@@ -26,6 +26,10 @@
     font-size: 16px;
 }
 
+.errorMessage {
+    color: #FF3333;
+}
+
 .logo {
     cursor : pointer;
     justify-content: left;
@@ -87,6 +91,7 @@
     width: 400px;
     max-height: 10vh;
     overflow-y:scroll; /* 스크롤 생성 */
+    background-color:lightgray;
 }
 
 .policyDetail_null {
