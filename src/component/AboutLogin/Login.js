@@ -1,5 +1,6 @@
-import { useNavigate } from 'react-router-dom'
-import styles from './Login.module.css'
+import { useNavigate } from 'react-router-dom';
+import styles from './Login.module.css';
+import MainLogo from '../../image/MainLogo.jpeg';
 
 export function Login(props) {
   const navigate = useNavigate();
@@ -8,11 +9,11 @@ export function Login(props) {
       {/* loginPageContainer */}
       <div className={styles.loginPageContainer}>
         {/* Logo */}
-        <div className={styles.logo}>
+        <div className="hello">
           <img
-            src="/img/MainLogo.jpeg"
-            alt="쇼핑몰 로고"
-            className="logo-image"
+            src={MainLogo}
+            alt="로고"
+            className={styles.logo}
             onClick={() => { navigate("/") }}
           />
         </div>
