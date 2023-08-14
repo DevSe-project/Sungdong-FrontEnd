@@ -6,23 +6,12 @@ import { CategoryBar } from '../AboutHeader/CategoryBar'
 import { TopBanner } from '../AboutHeader/TopBanner'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-// 리뷰 그래프 data
-const data = [
-  { rating: 5, 리뷰: 10 },
-  { rating: 4, 리뷰: 5 },
-  { rating: 3, 리뷰: 1 },
-  { rating: 2, 리뷰: 1 },
-  { rating: 1, 리뷰: 0 },
-];
-
 export function Detail(props) {
   //수량 개수 state
   const [count, setCount] = useState("1");
   const textReviewPoint = 50;
   const photoReviewPoint = 150;
   const totalReviewScore = 5; 
-  let currentReviewScore = 4.5;
-  let totalReviewCount = 20;
   const navigate = useNavigate();
 
   //주소창 입력된 id값 받아오기
@@ -90,6 +79,44 @@ function basketThis(product, count){
       localStorage.setItem('likelist', JSON.stringify(unlikelist)); //새로고침하면 필터링 된 목록 표시
     }
   }
+
+  //리뷰 평점 합계 계산
+  function sumValues(obj, key) {
+    let total = 0;
+  
+    for (const item of Object.values(obj)) {
+      if (item[key] !== undefined) {
+        total += item[key];
+      }
+    }
+  
+    return total;
+  }
+
+  //리뷰 평점에 따른 별 표시
+
+  function ratingToStar(rating) {
+    const totalStars = [];
+  
+    for (let i = 0; i < Number(rating); i++) {
+      totalStars.push(<i style={{color: '#CC0000'}} className="fas fa-star" />);
+    }
+  
+    for (let i = 0; i < 5 - Number(rating); i++) {
+      totalStars.push(<i style={{color: '#CC0000'}} className="fal fa-star" />);
+    }
+  
+    return <>{totalStars}</>;
+  }
+
+  const reviewData = [
+    { rating: 5, 리뷰: detailData.review ? detailData.review.filter((item) => item.rating === 5).length : 0 },
+    { rating: 4, 리뷰: detailData.review ? detailData.review.filter((item) => item.rating === 4).length : 0 },
+    { rating: 3, 리뷰: detailData.review ? detailData.review.filter((item) => item.rating === 3).length : 0 },
+    { rating: 2, 리뷰: detailData.review ? detailData.review.filter((item) => item.rating === 2).length : 0 },
+    { rating: 1, 리뷰: detailData.review ? detailData.review.filter((item) => item.rating === 1).length : 0 },
+  ];
+  
   return(
     <div>
       <TopBanner/>
@@ -188,15 +215,15 @@ function basketThis(product, count){
         <div className={styles.tabInnerHeader}>
           <div id='1'>
             <div className={styles.reviewHeader}>
-              <h5>상품 정보</h5>
+              <h3>상품 정보</h3>
               <p>
-                asdasdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+                대충 제품 정보 내용
               </p>
             </div>
           </div>
           <div id='2'>
             <div className={styles.reviewHeader}>
-              <h5>상품 리뷰</h5>
+              <h3>상품 리뷰</h3>
               <p>상품을 구매하신 분들이 작성하신 리뷰입니다. 리뷰 작성 시 아래 금액만큼 포인트가 적립 됩니다.</p>
               <p>텍스트 리뷰 : {textReviewPoint}원 | 포토, 동영상 리뷰 : {photoReviewPoint}원</p>
             </div>
@@ -204,19 +231,33 @@ function basketThis(product, count){
               <div className={styles.reviewToggleInner}>
                 <h5>사용자 총 평점</h5>
                 <div>
-                <i className="fal fa-star"/><i className="fas fa-star"/>
+                {props.data && detailData.review ?
+                  ratingToStar(sumValues(detailData.review, 'rating')/detailData.review.length)
+                : <>
+                  <i style={{color: '#CC0000'}} className="fal fa-star" />
+                  <i style={{color: '#CC0000'}} className="fal fa-star" />
+                  <i style={{color: '#CC0000'}} className="fal fa-star" />
+                  <i style={{color: '#CC0000'}} className="fal fa-star" />
+                  <i style={{color: '#CC0000'}} className="fal fa-star" />
+                  </>
+                }
                 </div>
-                <h3>{currentReviewScore} / {totalReviewScore}</h3>
+                <h3>
+                  {props.data && detailData.review ?
+                    sumValues(detailData.review, 'rating')/detailData.review.length 
+                    : 0} 
+                    / {totalReviewScore}
+                </h3>
               </div>
               <div className={styles.reviewToggleInner}>
                 <h5>전체 리뷰 수</h5>
-                <h3>{totalReviewCount}</h3>
+                <h3>{props.data && detailData.review ? detailData.review.length : 0}</h3>
               </div>
               <div className={styles.reviewToggleInner}>
                 <h5>평점 비율</h5>
                 <ResponsiveContainer className={styles.graph} width="100%" height={100}>
                   <BarChart
-                    data={data}
+                    data={reviewData}
                     margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
                   >
                     <XAxis dataKey="rating" label={{ value: '평점', position: 'insideBottom', offset: -10 }} />
@@ -238,36 +279,42 @@ function basketThis(product, count){
               <div className={styles.reviewTabRatingView}>
                 별점 별 평가 보기 
                 <div>
-                  {totalReviewCount}
+                  {props.data && detailData.review ? detailData.review.length : 0}
                 </div>
               </div>
             </div>
+            {props.data && detailData.review ?
+            detailData.review.map((item, index) => 
             <div className={styles.review}>
               <div className={styles.reviewList}>
                 <div className={styles.reviewListProfileImg}>
                   <img src='../../image/logo.jpeg' alt='프로필이미지' width={20}/>
                 </div>
                 <div className={styles.reviewListProfile}>
-                  <h4>profileName</h4>
-                  <span><i className="fal fa-star"/><i className="fal fa-star"/><i className="fal fa-star"/><i className="fal fa-star"/><i className="fal fa-star"/></span>
-                  <p>날짜</p>
+                  <h4>{item.profile}</h4>
+                  <span>{ratingToStar(item.rating)}</span>
+                  <p>{item.date}</p>
                 </div>
               </div>
               <div className={styles.reviewListProduct}>
-                상품명
+                {detailData.title}
               </div>
+              {item.image &&
               <div className={styles.reviewImg}>
-                사진 있으면 표시 없으면 미표시
+                {item.image}
               </div>
-              <div className={styles.reviewListTitle}>
-                <h4>리뷰 제목</h4>
-              </div>
+              }
               <div className={styles.reviewListBody}>
                 <p>
-                  리뷰내용입니다         asdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+                  {item.content}
                 </p>
               </div>
             </div>
+          )
+          : <div className={styles.review}>
+              작성된 리뷰가 없습니다..
+            </div>
+          }
           </div>
           <div id='3'>
             큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
