@@ -1,9 +1,10 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import styles from './Join.module.css';
 import logo from '../../image/logo.jpeg'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PolicyObj from "../Data/PolicyObj";
 import { UserData } from "../Data/UserData";
+import JoinPopUpMessage from "./JoinPopUpMessage.js"
 
 export default function Join() {
     // link
@@ -91,14 +92,20 @@ export default function Join() {
     }
 
     // 가입성공시 event
+    const [showPopUp, setShowPopUp] = useState(false);
+    const [popUpMessage, setPopUpMessage] = useState('');
     let signUp_checkCondition = () => {
         if (!areAllRequiredChecked()) {
-                alert('가입절차가 모두 완료되지 않았습니다.');
+            setPopUpMessage('아직 완료되지 않은 가입절차가 있습니다. 확인 후 다시 시도해주세요!')
         }
-        else{
+        else {
             navigate('/');
-            alert('환영합니다. 성동물산 가입해주셔서 감사합니다!');
+            setPopUpMessage('환영합니다! 가입 절차를 모두 끝마쳤습니다. 성동물산에 방문해주셔서 감사합니다!')
         }
+        setShowPopUp(true);
+        setTimeout( () => {
+            setShowPopUp(false);
+        }, 2500 );
     }
 
     return (
@@ -141,7 +148,7 @@ export default function Join() {
                 <li className={styles.setPWContainer}>
                     <input
                         className={styles.set}
-                        type='text'
+                        type='password'
                         placeholder={'비밀번호 재입력(일치 확인)'}
                         value={inputData.confirmPassword}
                         onChange={handleConfirmPassword}
@@ -235,6 +242,10 @@ export default function Join() {
                 })}
 
             </ul>
+
+            {/* popUpMessage */}
+            {showPopUp ? <JoinPopUpMessage popUpMessage={popUpMessage} popUpClose={ () => setShowPopUp(false) }/> : null }
+
             {/* moveContainer */}
             <div className={styles.moveContainer}>
                 {/* no signUp */}

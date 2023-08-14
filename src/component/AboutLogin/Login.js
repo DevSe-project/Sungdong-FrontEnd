@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import styles from './Login.module.css';
 import MainLogo from '../../image/MainLogo.jpeg';
+import JoinPopUpMessage from './JoinPopUpMessage';
 
 export function Login(props) {
   const navigate = useNavigate();
