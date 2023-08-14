@@ -217,7 +217,7 @@ export function Receipt(){
         </form>
         <div className={styles.formInner}>
         <input required type="checkbox"/> 구매동의 및 결제대행서비스 이용약관 등에 모두 동의합니다.
-        <button className={styles.button}>약관보기</button>
+        <button type='submit' className={styles.button}>약관보기</button>
         </div>
       </div>
     </div>
