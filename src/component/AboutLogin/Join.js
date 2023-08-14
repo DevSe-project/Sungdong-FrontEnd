@@ -46,33 +46,25 @@ export default function Join() {
         const newEmail = e.target.value;
         setInputData(prevData => ({
             ...prevData,
-            email : newEmail
+            email: newEmail
         }));
     };
     let handleName = (e) => { //이름
         const newName = e.target.value;
         setInputData(prevData => ({
             ...prevData,
-            name : newName
+            name: newName
         }));
     };
     let handlePhoneNumber = (e) => { //전화번호
         const newPhoneNumber = e.target.value;
         setInputData(prevData => ({
             ...prevData,
-            phoneNumber : newPhoneNumber
+            phoneNumber: newPhoneNumber
         }));
     };
 
     let confirmPassword = inputData.password === inputData.confirmPassword; //data 일치유무 체크
-
-
-    // 가입하기 버튼 클릭 시, console & link
-    let [joinState, setJoinState] = useState(false);
-    let signUp = () => {
-        navigate('/');
-        alert("가입이 완료됐습니다. 환영합니다!");
-    }
 
     // 모든 체크박스의 상태를 체크되지 않은 상태, false로 설정
     let [checkboxState, setCheckboxState] = useState(() => PolicyObj.map(() => false));
@@ -84,23 +76,30 @@ export default function Join() {
     }
 
     // 약관상세보기, 개별동작하도록
-    const [clauseState, setClauseState] = useState(() => PolicyObj.map(() => false));
+    const [clauseState, setClauseState] = useState(() => PolicyObj.map(() => false)); //false로 초기값 통일
     function clause(index) {
         const newClause = [...clauseState];
         newClause[index] = !clauseState[index];
         setClauseState(newClause);
     };
 
-    // [필수]항목들이 체크되면 '가입하기'버튼이 활성화되도록.
-    const [disabled, setDisabled] = useState(false); //css를 동작할 stats.
     // [필수]항목들이 모두 체크되었는지 확인하는 함수
     function areAllRequiredChecked() {
-        return checkboxState.every((state, index) => PolicyObj[index].need ? state : true);
+        return checkboxState.every((state, index) => !PolicyObj[index].need || state);
         //.every(callback): 배열의 모든 요소가 주어진 콜백 함수를 만족하면 true를 반환하는 배열 메서드. 
-        // 이 메서드는 state 배열의 모든 요소가 특정 조건을 만족하는지를 확인합니다.
-        // 앞으로 해야할 것. .every값이 true면 [필수]항목이 모두 체크 상태 -> 
+        // every 메서드는 state 배열의 모든 요소가 특정 조건을 만족하는지 확인.
     }
 
+    // 가입성공시 event
+    let signUp_checkCondition = () => {
+        if (!areAllRequiredChecked()) {
+                alert('가입절차가 모두 완료되지 않았습니다.');
+        }
+        else{
+            navigate('/');
+            alert('환영합니다. 성동물산 가입해주셔서 감사합니다!');
+        }
+    }
 
     return (
         <div className={styles.body}>
@@ -122,9 +121,9 @@ export default function Join() {
                         className={styles.set}
                         type='text'
                         placeholder={'아이디'}
-                        value={inputData.id} 
-                        onChange={ handleId }
-                        />
+                        value={inputData.id}
+                        onChange={handleId}
+                    />
                 </li>
                 <div className={styles.warnningMessage}>
                 </div>
@@ -132,10 +131,10 @@ export default function Join() {
                 <li className={styles.setPWContainer}>
                     <input
                         className={styles.set}
-                        type='text'
+                        type='password'
                         placeholder={'비밀번호'}
                         value={inputData.password}
-                        onChange={ handlePassword }
+                        onChange={handlePassword}
                     />
                 </li>
                 {/* 비밀번호 확인 */}
@@ -144,9 +143,9 @@ export default function Join() {
                         className={styles.set}
                         type='text'
                         placeholder={'비밀번호 재입력(일치 확인)'}
-                        value={inputData.confirmPassword} 
-                        onChange={ handleConfirmPassword }
-                        />
+                        value={inputData.confirmPassword}
+                        onChange={handleConfirmPassword}
+                    />
                 </li>
                 {confirmPassword ? null : <div className={styles.errorMessage}>
                     비밀번호가 일치하지 않습니다!
@@ -157,7 +156,7 @@ export default function Join() {
                         className={styles.set}
                         type='text'
                         placeholder={'이메일'}
-                        onChange={ handleEmail }
+                        onChange={handleEmail}
                     />
                 </li>
                 {/* 이름 */}
@@ -165,8 +164,8 @@ export default function Join() {
                     <input
                         className={styles.set}
                         type='text'
-                        placeholder={'이름'} 
-                        onChange={ handleName }
+                        placeholder={'이름'}
+                        onChange={handleName}
                     />
                 </li>
                 {/* 전화번호 */}
@@ -174,9 +173,9 @@ export default function Join() {
                     <input
                         className={styles.set}
                         type='text'
-                        placeholder={'전화번호'} 
+                        placeholder={'전화번호'}
                         value={inputData.phoneNumber}
-                        onChange={ handlePhoneNumber }
+                        onChange={handlePhoneNumber}
                     />
                 </li>
                 {/* 인증 요청- 누르면 하단에 인증번호 입력란이 나타나고 타이머 표시 */}
@@ -238,15 +237,14 @@ export default function Join() {
             </ul>
             {/* moveContainer */}
             <div className={styles.moveContainer}>
-                {/* back */}
+                {/* no signUp */}
                 <div className={styles.back} onClick={() => { navigate('/login') }}>
-                    가입할 마음이 사라졌소 .
+                    취소
                 </div>
-                {/* next */}
+                {/* signUp */}
                 <div
-                    className={styles.sign_up}
-                    onClick={signUp}
-
+                    className={`${styles.sign_up} ${!areAllRequiredChecked() && styles.disabled}`}
+                    onClick={signUp_checkCondition}
                 >
                     가입하기
                 </div>
