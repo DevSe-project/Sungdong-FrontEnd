@@ -1,71 +1,14 @@
-import { Outlet, useNavigate } from "react-router-dom";
-import styles from './Join.module.css';
+import { useNavigate } from "react-router-dom";
+import styles from './RelativeJoin.module.css';
 import logo from '../../image/logo.jpeg'
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import PolicyObj from "../Data/PolicyObj";
-import { UserData } from "../Data/UserData";
 import JoinPopUpMessage from "./JoinPopUpMessage.js"
+import IndivisualMembers from "./IndivisualMembers";
 
 export default function Join() {
-    // link
+    // link_navigate
     let navigate = useNavigate();
-
-    // 입력받을 회원 정보 객체배열 state
-    let [inputData, setInputData] = useState([
-        {
-            id: null,
-            password: null,
-            confirmPassword: null,
-            email: null,
-            name: null,
-            phoneNumber: null,
-        },
-    ])
-    // 입력된 정보 삽입
-    let handleId = (e) => { //아이디
-        const newId = e.target.value;
-        setInputData(prevData => ({
-            ...prevData,
-            id: newId
-        }));
-    };
-    let handlePassword = (e) => { //비밀번호
-        const newPassword = e.target.value;
-        setInputData(prevData => ({
-            ...prevData,
-            password: newPassword
-        }));
-    };
-    let handleConfirmPassword = (e) => { //비밀번호 재확인
-        const newConfirmPassword = e.target.value;
-        setInputData(prevData => ({
-            ...prevData,
-            confirmPassword: newConfirmPassword
-        }));
-    };
-    let handleEmail = (e) => { //이메일
-        const newEmail = e.target.value;
-        setInputData(prevData => ({
-            ...prevData,
-            email: newEmail
-        }));
-    };
-    let handleName = (e) => { //이름
-        const newName = e.target.value;
-        setInputData(prevData => ({
-            ...prevData,
-            name: newName
-        }));
-    };
-    let handlePhoneNumber = (e) => { //전화번호
-        const newPhoneNumber = e.target.value;
-        setInputData(prevData => ({
-            ...prevData,
-            phoneNumber: newPhoneNumber
-        }));
-    };
-
-    let confirmPassword = inputData.password === inputData.confirmPassword; //data 일치유무 체크
 
     // 모든 체크박스의 상태를 체크되지 않은 상태, false로 설정
     let [checkboxState, setCheckboxState] = useState(() => PolicyObj.map(() => false));
@@ -103,9 +46,9 @@ export default function Join() {
             setPopUpMessage('환영합니다! 가입 절차를 모두 끝마쳤습니다. 성동물산에 방문해주셔서 감사합니다!')
         }
         setShowPopUp(true);
-        setTimeout( () => {
+        setTimeout(() => {
             setShowPopUp(false);
-        }, 2500 );
+        }, 2500);
     }
 
     return (
@@ -118,79 +61,9 @@ export default function Join() {
                     onClick={() => { navigate("/") }}
                 />
             </div>
-            {/* 회원정보 입력란 */}
-            <ul className={styles.inputWrap}>
-                {/* 회원정보를 입력해주세요! */}
-                <li className={styles.noti}>회원정보를 입력해주세요!</li>
-                {/* 아이디 */}
-                <li className={styles.setIdContainer}>
-                    <input
-                        className={styles.set}
-                        type='text'
-                        placeholder={'아이디'}
-                        value={inputData.id}
-                        onChange={handleId}
-                    />
-                </li>
-                <div className={styles.warnningMessage}>
-                </div>
-                {/* 비밀번호 */}
-                <li className={styles.setPWContainer}>
-                    <input
-                        className={styles.set}
-                        type='password'
-                        placeholder={'비밀번호'}
-                        value={inputData.password}
-                        onChange={handlePassword}
-                    />
-                </li>
-                {/* 비밀번호 확인 */}
-                <li className={styles.setPWContainer}>
-                    <input
-                        className={styles.set}
-                        type='password'
-                        placeholder={'비밀번호 재입력(일치 확인)'}
-                        value={inputData.confirmPassword}
-                        onChange={handleConfirmPassword}
-                    />
-                </li>
-                {confirmPassword ? null : <div className={styles.errorMessage}>
-                    비밀번호가 일치하지 않습니다!
-                </div>}
-                {/* 이메일 */}
-                <li className={styles.setEmailContainer}>
-                    <input
-                        className={styles.set}
-                        type='text'
-                        placeholder={'이메일'}
-                        onChange={handleEmail}
-                    />
-                </li>
-                {/* 이름 */}
-                <li className={styles.setNameContainer}>
-                    <input
-                        className={styles.set}
-                        type='text'
-                        placeholder={'이름'}
-                        onChange={handleName}
-                    />
-                </li>
-                {/* 전화번호 */}
-                <li className={styles.setNumberContainer}>
-                    <input
-                        className={styles.set}
-                        type='text'
-                        placeholder={'전화번호'}
-                        value={inputData.phoneNumber}
-                        onChange={handlePhoneNumber}
-                    />
-                </li>
-                {/* 인증 요청- 누르면 하단에 인증번호 입력란이 나타나고 타이머 표시 */}
-                <li
-                    className={styles.requestSecurityNumberContainer}>
-                    <div></div>
-                </li>
-            </ul>
+
+            {/* IndivisualMembers Form */}
+            <IndivisualMembers />
 
             {/* 전체 동의하기 */}
             <div className={styles.checkAll}>
@@ -244,7 +117,7 @@ export default function Join() {
             </ul>
 
             {/* popUpMessage */}
-            {showPopUp ? <JoinPopUpMessage popUpMessage={popUpMessage} popUpClose={ () => setShowPopUp(false) }/> : null }
+            {showPopUp ? <JoinPopUpMessage popUpMessage={popUpMessage} popUpClose={() => setShowPopUp(false)} /> : null}
 
             {/* moveContainer */}
             <div className={styles.moveContainer}>

@@ -4,6 +4,7 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    min-width: fit-content;
 }
 
 .inputWrap {
@@ -16,17 +17,81 @@
     font-weight: bold;  
 }
 
+.indivisualMembers {
+    border-bottom: 0.2em solid darkgray;
+    padding: 10px;
+    text-align: left;
+    font-weight: bold;
+    font-size: 18px;
+}
 
+.typeMember {
+    display: flex;
+    align-items: center;
+    color: black;
+}
 
-.set{
+.inputContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    border-bottom: 1px solid lightgray;
+    padding: 5px;
+    width: 1000px;
+}
+
+.left {
     margin: 0.5em;
     padding: 1em;
-    border: 0.1em solid gainsboro;
+    border-bottom: none;
+    flex: 1;
+    height: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: left;
+    align-items: center;
+}
+
+.right {
+    display: flex;
+    flex: 9;
+}
+
+.isInput {
+    display: flex;
+    align-items: center;
+    margin: 0.5em;
+    padding: 1em;
+    border: none;
     border-radius: 1dvb;
-    width: 500px;
+    background-color: #F3F3F3;
     height: 25px;
     font-size: 16px;
 }
+
+.notification {
+    width: fit-content;
+    text-align: left;
+    display: flex;
+    align-items: center;
+}
+
+.YesNo {
+    text-align: left;
+    display: flex;
+    align-items: center;
+}
+
+.phoneNum {
+    border: none;
+    border-radius: 0.5dvb;
+    background-color: #F3F3F3;
+    margin: 0.5em;
+    margin-right: 4px;
+    padding: 1em;
+}
+
 
 .errorMessage {
     color: #FF3333;
@@ -52,7 +117,7 @@
     border-bottom: 1px solid gray;
     border-radius: 4dvh;
     margin-top: 1em;
-    width: 500px;
+    width: 550px;
     display: flex;
     flex-direction: column;
     padding: 0;
@@ -83,6 +148,7 @@
 
 .clause {
     cursor: pointer;
+    font-size: 16px;
 }
 
 .policyDetail {
@@ -90,14 +156,14 @@
     padding: 0.7em;
     border: 1.5px solid #404040;
     border-radius: 1dvb;
-    width: 400px;
+    width: 470px;
     max-height: 10vh;
     overflow-y:scroll; /* 스크롤 생성 */
     background-color:lightgray;
 }
 
 .policyDetail_null {
-    width: 428px;
+    width: 480px;
 }
 
 .moveContainer {
