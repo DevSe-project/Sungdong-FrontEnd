@@ -156,7 +156,7 @@ export default function IndivisualMembers() {
                         <div className={styles.notification}>
                             <strong>이메일 서비스를 받으시겠습니까?</strong>
                             <div className={styles.YesNo}>
-                                <input  type="radio" name="email" id="email_Y" /><label for="email_Y">예</label>
+                                <input type="radio" name="email" id="email_Y" /><label for="email_Y">예</label>
                                 </div>
                             <div className={styles.YesNo}>
                                 <input type="radio" name="email" id="email_N" /><label for="email_N">아니오</label>
@@ -207,10 +207,10 @@ export default function IndivisualMembers() {
                         <div className={styles.notification}>
                             <strong>문자(SMS) 서비스를 받으시겠습니까?</strong>
                             <div className={styles.YesNo}>
-                                <input  type="radio" name="SMS_Y" id="SMS_Y" /><label for="SMS_Y">예</label>
+                                <input type="radio" name="SMS" id="SMS_Y" /><label for="SMS_Y">예</label>
                                 </div>
                             <div className={styles.YesNo}>
-                                <input type="radio" name="SMS_N" id="SMS_N"/><label for="SMS_N">아니오</label>
+                                <input type="radio" name="SMS" id="SMS_N"/><label for="SMS_N">아니오</label>
                             </div>
                         </div>
                     </div>
