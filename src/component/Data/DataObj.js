@@ -15,7 +15,7 @@ export let DataObj = [{
     {
       id : 1,
       userId : 'asdxxasdx100',
-      profile : '누런양말',
+      profileName : '누런양말',
       rating : 1,
       content : '다소 아쉬운....',
       date : '22/11/22',

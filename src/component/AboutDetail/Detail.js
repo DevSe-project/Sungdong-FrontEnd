@@ -1,18 +1,52 @@
 import { Tab } from './Tab'
 import styles from './Detail.module.css'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import { CategoryBar } from '../AboutHeader/CategoryBar'
 import { TopBanner } from '../AboutHeader/TopBanner'
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 export function Detail(props) {
   //수량 개수 state
   const [count, setCount] = useState("1");
+
+
+  // 리뷰 포인트 & 스코어
   const textReviewPoint = 50;
   const photoReviewPoint = 150;
   const totalReviewScore = 5; 
-  const navigate = useNavigate();
+
+  //추천 상품 STATE 변수
+  const [recommendedItem, setRecommendedItem] = useState([]);
+
+  //최근 리뷰 STATE 변수
+  const [newReview, setNewReview] = useState([]); 
+
+
+  useEffect(() => {
+
+    // 추천 상품 렌더링시 띄우기
+    const getRandomItem = () => {
+      if(props.data){
+      const shuffledArray = props.data.sort(() => 0.5 - Math.random());
+      return shuffledArray.slice(0, 4);
+      }
+    };
+    setRecommendedItem(getRandomItem);
+
+    // 최근 리뷰 렌더링 시 띄우기
+    const sliceReview = () => {
+      if (detailData.review) { // detailData.review가 정의되었을 때만 처리
+        const newData = [...detailData.review]; // 복사해서 정렬하도록 수정
+        newData.sort((a, b) => {
+          return new Date(a.date) - new Date(b.date);
+        });
+        return newData.slice(0, 4);
+      } return []
+    };
+    setNewReview(sliceReview);
+  }, [props.data])
+
 
   //주소창 입력된 id값 받아오기
   let {id} = useParams();
@@ -26,8 +60,11 @@ export function Detail(props) {
     }
   }
 
+
   //로딩된 데이터 불러오기
   const detailData = loadData();
+
+
 
 
   //수량 최대입력 글자(제한 길이 변수)
@@ -40,6 +77,8 @@ export function Detail(props) {
         setCount(lengthTarget); 
     } 
 }
+
+
 // 장바구니 담기 함수
 function basketThis(product, count){
   // 수량 0을 장바구니에 저장하는 것 방지, ** 백엔드 : login 캐쉬값이 저장되어 있는 것이 확인이 되면 허용
@@ -68,7 +107,7 @@ function basketThis(product, count){
   function likethis(product){
     //중복 확인 (.some 함수 : wishlist의 item.id 중 product.id와 같은 중복인 아이템이 있으면 true 반환 | !some이니 false면..== 중복이 아니면..)
     if (!props.wishlist.some((item) => item.id === product.id)){
-      const likelist = [...props.wishlist, product];//props.wishlist 배열들과 배열 product를 합쳐서 새로운 배열 likelist를 생성
+      const likelist = [...props.wishlist, product]; //props.wishlist 배열들과 배열 product를 합쳐서 새로운 배열 likelist를 생성
       props.setWishlist(likelist); //State에 새로운 배열 삽입
       localStorage.setItem('likelist', JSON.stringify(likelist)); //새로고침해도 찜 목록 유지
       alert("해당 상품이 관심 상품 목록에 추가되었습니다.")
@@ -109,6 +148,7 @@ function basketThis(product, count){
     return <>{totalStars}</>;
   }
 
+  // 리뷰 그래프 데이터
   const reviewData = [
     { rating: 5, 리뷰: detailData.review ? detailData.review.filter((item) => item.rating === 5).length : 0 },
     { rating: 4, 리뷰: detailData.review ? detailData.review.filter((item) => item.rating === 4).length : 0 },
@@ -116,7 +156,8 @@ function basketThis(product, count){
     { rating: 2, 리뷰: detailData.review ? detailData.review.filter((item) => item.rating === 2).length : 0 },
     { rating: 1, 리뷰: detailData.review ? detailData.review.filter((item) => item.rating === 1).length : 0 },
   ];
-  
+
+
   return(
     <div>
       <TopBanner/>
@@ -124,11 +165,16 @@ function basketThis(product, count){
       <main className={styles.main}>
         <section className={styles.head}>
           <div className={styles.headTop}>
+
+
             {/* 상품 이미지 부분 */}
             <div className={styles.headLeft}>
               <img src="http://pop7.co.kr/web/product/big/201806/344_shop1_15289487355825.jpg" alt="이미지" 
               className={styles.thumnail} width="600px"/>
             </div>
+
+
+
             {/* 상품 정보(상품 이름, 가격) 부분 (삼항연산자 : 스켈레톤 처리) */}
             <div className={styles.headRight}>
               <div className={styles.textBox}>
@@ -142,6 +188,9 @@ function basketThis(product, count){
                 : <div className={styles.skeleton}>&nbsp;</div>}
               </h4>
               <div className={styles.textBox}>
+
+
+
                 {/* 상품 수량 및 옵션, 최종 결제금액 */}
               {props.data ? 
               <>
@@ -163,6 +212,8 @@ function basketThis(product, count){
                 최종 결제 금액 : {detailData.price * count}원 </h4></>
                 : <div className={styles.skeleton}>&nbsp;</div>
               }
+
+
               {/* 버튼 부분들 (결제하기, 장바구니, 찜하기) */}
               <div className={styles.textButton}>
                 <button className={styles.mainButton}>결제하기</button>
@@ -180,39 +231,89 @@ function basketThis(product, count){
               </div>
             </div>
           </div>
-          {/* 베스트 리뷰 */}
+
+
+          {/* 최근 리뷰 */}
           <div className={styles.headBottom}>
-            <div className={styles.headBestReview}>
-              <h2>베스트 리뷰</h2><br/>
-              <div className={styles.rowBestReview}>
-                <div className={styles.colBestReview}>
-                  <h5>ID : 123</h5>
-                  <p>
-                    리뷰 : 너무 좋아요
+            <div className={styles.headAtcTab}>
+              <h2>최근 리뷰</h2><br/>
+              <div className={styles.rowAtcTab}>
+                {props.data && detailData && newReview 
+                ? detailData.review == null 
+                ? <p>리뷰가 없습니다!</p>
+                :
+                newReview.map((item, index) =>
+                <div key={index} className={styles.colAtcTab}>
+                  <span>{ratingToStar(item.rating)}</span>
+                  <p className={styles.spanTag}>{item.profileName} 님</p>
+                  <span className={styles.spanTag}>{item.date}</span>
+                  <p className={styles.spanTag}>
+                    {item.content}
                   </p>
                 </div>
+                )
+                :
+                <div className={styles.colskeleton}>
+                  <div className={styles.frameskeleton}>
+                  &nbsp;
+                  </div>
+                  <div className={styles.nameskeleton}>
+                    &nbsp;
+                  </div>
+                  <div className={styles.priceskeleton}>
+                  &nbsp;
+                  </div>
+                </div>
+                }
               </div>
             </div>
-            {/* 관련 상품 */}
-            <div className={styles.headBestReview}>
-              <h2>관련 상품</h2><br/>
-              <div className={styles.rowBestReview}>
-                <div className={styles.colBestReview}>
+
+
+            {/* 추천 상품 */}
+            <div className={styles.headAtcTab}>
+              <h2>추천 상품</h2><br/>
+              <div className={styles.rowAtcTab}>
+                {recommendedItem ? recommendedItem.map((item, index) => 
+                <div key={index} className={styles.colAtcTab}>
                   <div className={styles.frame}>
-                    <img className={styles.thumnail} src="http://pop7.co.kr/web/product/big/201806/344_shop1_15289487355825.jpg" alt="관련 이미지" width="100px"/>
+                    <img className={styles.thumnail} src="http://pop7.co.kr/web/product/big/201806/344_shop1_15289487355825.jpg" alt="추천 이미지" width="100px"/>
                   </div>
-                  <h5>상품 이름</h5>
-                  <p>내용</p>
+                  <div className={styles.recommendTitle}>
+                    <span className={styles.spanTag}>{item.title}</span>
+                  </div>
+                  <div className={styles.recommendPrice}>
+                    <p>{`\\${item.price}`}</p>
+                  </div>
                 </div>
+                ):
+                // 스켈레톤 처리
+                <div className={styles.colskeleton}>
+                  <div className={styles.frameskeleton}>
+                  &nbsp;
+                  </div>
+                  <div className={styles.nameskeleton}>
+                    &nbsp;
+                  </div>
+                  <div className={styles.priceskeleton}>
+                    &nbsp;
+                  </div>
+                </div>
+                }
               </div>
             </div>  
           </div> 
         </section>
+
+
+
         {/* 탭 부분 */}
         <div className={styles.tab}>
           <Tab navigate={props.navigate}/>
         </div>
         <div className={styles.tabInnerHeader}>
+
+
+          {/* 탭 상품 정보 */}
           <div id='1'>
             <div className={styles.reviewHeader}>
               <h3>상품 정보</h3>
@@ -221,12 +322,17 @@ function basketThis(product, count){
               </p>
             </div>
           </div>
+
+
+          {/* 탭 리뷰 */}
           <div id='2'>
             <div className={styles.reviewHeader}>
               <h3>상품 리뷰</h3>
               <p>상품을 구매하신 분들이 작성하신 리뷰입니다. 리뷰 작성 시 아래 금액만큼 포인트가 적립 됩니다.</p>
               <p>텍스트 리뷰 : {textReviewPoint}원 | 포토, 동영상 리뷰 : {photoReviewPoint}원</p>
             </div>
+
+            {/* 리뷰 정보 토글 */}
             <div className={styles.reviewViewToggle}>
               <div className={styles.reviewToggleInner}>
                 <h5>사용자 총 평점</h5>
@@ -267,6 +373,8 @@ function basketThis(product, count){
                 </ResponsiveContainer>
               </div>
             </div>
+
+            {/* 리뷰 정렬 탭 */}
             <div className={styles.reviewTab}>
               <div className={styles.reviewTabFilter}>
                 <div>
@@ -283,15 +391,17 @@ function basketThis(product, count){
                 </div>
               </div>
             </div>
+
+            {/* 리뷰 리스트 생성 */}
             {props.data && detailData.review ?
             detailData.review.map((item, index) => 
-            <div className={styles.review}>
+            <div key={index} className={styles.review}>
               <div className={styles.reviewList}>
                 <div className={styles.reviewListProfileImg}>
-                  <img src='../../image/logo.jpeg' alt='프로필이미지' width={20}/>
+                  <img className={styles.thumnail} src='../../image/logo.jpeg' alt='프로필이미지' width={20}/>
                 </div>
                 <div className={styles.reviewListProfile}>
-                  <h4>{item.profile}</h4>
+                  <h4>{item.profileName}</h4>
                   <span>{ratingToStar(item.rating)}</span>
                   <p>{item.date}</p>
                 </div>
@@ -316,11 +426,17 @@ function basketThis(product, count){
             </div>
           }
           </div>
+
+
+          {/* 탭 Q & A */}
           <div id='3'>
             큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
             asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
             asdasdsad
           </div>
+
+
+          {/* 반품 / 교환 정보 */}
           <div id='4'>
           </div>
         </div>

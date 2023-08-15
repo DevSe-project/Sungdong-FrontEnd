@@ -57,10 +57,12 @@
   border-bottom: 1px solid lightgray;
 }
 
+/* 버튼 CSS */
 .textButton{
   display: flex;
   flex-direction: column;
 }
+
 .sideTextButton{
   display: flex;
   flex-direction: row;
@@ -97,7 +99,8 @@
   margin-left: 0.3em;
 }
 
-.headBestReview{
+/* 베스트 리뷰, 추천 상품 */
+.headAtcTab{
   display: flex;
   flex-direction: column;
   width: clamp(25em, 51em, 75%);
@@ -106,26 +109,47 @@
   border: 1px solid lightgray;
   margin-bottom: 1em;
 }
-.rowBestReview{
+.rowAtcTab{
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: center;
+  align-items: center;
   gap: 1em;
 }
-.colBestReview{
+.colAtcTab{
+  width: 8em;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   padding: 1em;
-  border: 1px solid gray;
+  border-bottom: 1px solid gray;
 }
+
+.recommendTitle{
+  display: flex;
+  flex-direction: row;
+}
+
+.recommendPrice{
+  display: flex;
+  flex-direction: row;
+  font-weight: 750;
+}
+
+/* 탭 사이즈 */
 .tab{
   width: clamp(25em, 51em, 75%);
 }
+
+
+/* 이미지 CSS */
 .frame{
-  width: 100px;
+  width: 150px;
   overflow: hidden;
+  border: 1px solid lightgray;
+  margin-bottom: 1em;
 }
 
 .thumnail{
@@ -142,11 +166,17 @@
   align-items: center;
 }
 
+/* 글자 CSS */
 .h4{
   font-size: 1.2em;
   font-weight: 950;
   color: red;
 }
+
+.spanTag{
+  font-size: 0.5em;
+}
+
 .finalprice{
   font-size: 1.2em;
   font-weight: 650;
@@ -158,14 +188,8 @@
   height: 2em;
 }
 
-.skeleton{
-  display: flex;
-  background-color: lightgray;
-  width: 100%;
-  height: 100%;
-  justify-content: flex-end;
-  border-radius: 10dvw;
-}
+
+/* 탭 내부 사항 */
 .tabInnerHeader{
   width: clamp(40em, 50%, 50em);
   padding: 1em;
@@ -178,6 +202,7 @@
 }
 
 
+/* 리뷰 CSS */
 .reviewHeader{
   text-align: left;
   display: flex;
@@ -281,4 +306,47 @@
   gap: 1em;
   background-color: lightgray;
   padding: 1em;
+}
+
+/* 스켈레톤 부분 */
+.skeleton{
+  display: flex;
+  background-color: lightgray;
+  width: 100%;
+  height: 100%;
+  justify-content: flex-end;
+  border-radius: 10dvw;
+}
+.colskeleton{
+  padding: 1em;
+  height: 10em;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  white-space: nowrap;
+  gap: 1em;
+  cursor: pointer;
+}
+.frameskeleton{
+  background-color: lightgray;
+  width: 10em;
+  height: 5em;
+  overflow: hidden;
+}
+.nameskeleton{
+  width: 100%;
+  height: 2em;
+  background-color: lightgray;
+  text-align: start;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  border-radius: 0.8dvw;
+}
+.priceskeleton{
+  height: 1em;
+  background-color: lightgray;
+  text-align: end;
+  border-radius: 0.8dvw;
 }
