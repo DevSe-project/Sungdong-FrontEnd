@@ -39,11 +39,11 @@ export default function Join() {
     const [popUpMessage, setPopUpMessage] = useState('');
     let signUp_checkCondition = () => {
         if (!areAllRequiredChecked()) {
-            setPopUpMessage('아직 완료되지 않은 가입절차가 있습니다. 확인 후 다시 시도해주세요!')
+            setPopUpMessage('아직 완료되지 않은 가입절차가 있습니다. 확인 후 다시 시도해주세요!');
         }
         else {
-            navigate('/');
-            setPopUpMessage('환영합니다! 가입 절차를 모두 끝마쳤습니다. 성동물산에 방문해주셔서 감사합니다!')
+            navigate('/login');
+            alert('환영합니다! 가입 절차를 모두 끝마쳤습니다. 성동물산에 방문해주셔서 감사합니다!');
         }
         setShowPopUp(true);
         setTimeout(() => {

@@ -10,6 +10,7 @@
   height: 100px;
   width: 100%;
   display: flex;
+  padding-bottom: 0.7em;
   margin: 0;
   align-items: center;
   align-content: center;
@@ -35,7 +36,7 @@
 /* 네비게이션 내부 링크 스타일링 (옵션) */
 .link {
   text-decoration: none;
-  color: dimgray;
+  color: black;
   font-size: 1.2em;
   font-weight: 550;
   cursor: pointer;
@@ -43,12 +44,12 @@
 
 .link_signIn  {
   background-color: var(--background-color-set);
-  color: white;
+  color: #FFF;
   font-size: 1.2em;
-  font-weight: 550;
-  padding: 0.4em;
-  padding-left: 0.7rem;
-  padding-right: 0.7rem;
+  font-weight: bold;
+  padding: 0.3em;
+  padding-left: 0.9rem;
+  padding-right: 0.9rem;
   border: 0;
   border-radius: 1dvb;
 }

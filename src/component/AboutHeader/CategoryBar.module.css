@@ -1,7 +1,7 @@
 .categoryBarContainer {
   width: 100%;
-  background-color: #CC0000;
-  color: white;
+  background-color: #FFF;
+  color: black;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -17,15 +17,18 @@
   white-space: wrap;
   word-wrap: wrap;
   text-align: center;
+  color: black;
 }
 
 .category:hover{
   background-color: var(--background-color-clicked);
+  color: #FFF;
+  border-radius: 1dvb;
 }
 
 .link {
   text-decoration: none;
-  color: white;
+  color: black;
   font-size: 1.2em;
   font-weight: 550;
   cursor: pointer;

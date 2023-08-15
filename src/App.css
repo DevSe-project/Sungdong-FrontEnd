@@ -206,7 +206,8 @@ i.fa-solid.fa-heart{
   position: absolute;
   top: 100%;
   left: -2.5em;
-  background-color: var(--background-color-set);
+  border-radius: 1dvb;
+  background-color: /*기존 : var(--background-color-set);*/ lightgray;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   width: 12em;
   z-index: 999;
@@ -232,8 +233,8 @@ i.fa-solid.fa-heart{
 
 /* 체크박스 크기 조정(노인공경) */
 input[type="checkbox"] {
-  width: 1.8em;
-  height: 1.8em;
+  width: 1.5em;
+  height: 1.5em;
   margin-right: 8px;
   cursor: pointer;
 }

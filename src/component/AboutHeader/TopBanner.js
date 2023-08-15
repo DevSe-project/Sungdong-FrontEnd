@@ -53,6 +53,7 @@ export function TopBanner () {
     }, 
   ];
   const navigate = useNavigate();
+
   //서브메뉴 열림창 변수 초기화
   const [subMenuStates, setSubMenuStates] = useState(menuData.map(() => false));
 
@@ -74,7 +75,7 @@ export function TopBanner () {
     <div className={styles.top_container}>
       <div className={styles.top_nav}>
         {/* 로고 */}
-        <img className={styles.image} onClick={()=>navigate("/")} src={logo} alt="로고" height='80px'/>
+        <img className={styles.image} onClick={() => window.location.reload()} src={logo} alt="로고" height='80px'/>
         {/* 서치바 */}
         <SearchBar/>
         {/* 메뉴 loop */}
