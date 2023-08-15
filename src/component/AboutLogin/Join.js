@@ -12,7 +12,7 @@ export default function Join() {
     // 모든 체크박스의 상태를 체크되지 않은 상태, false로 설정
     let [checkboxState, setCheckboxState] = useState(() => PolicyObj.map(() => false));
 
-    //onCheck속성으로 모두 동의하기를 체크하면 전체가 체크되도록
+    //모두 동의하기를 체크하면 이용약관 전체가 checked
     function checkedAll() {
         const allChecked = checkboxState.every(state => state); // 모든 체크박스가 true인지 확인
         const newCheckboxState = checkboxState.map(() => !allChecked); //반대값으로 변경
@@ -91,7 +91,7 @@ export default function Join() {
                                 {/* 체크박스 */}
                                 <input
                                     type="checkbox"
-                                    id="policyCheckbox"
+                                    id={`policyCheckbox_${index}`}
                                     checked={checkboxState[index]}
                                     onChange={() => {
                                         const newCheckboxState = [...checkboxState]; // 초기 전체 false인 상태를 카피
@@ -103,7 +103,7 @@ export default function Join() {
                                     {policy.need ? <em style={{ color: "#FF3333" }}>[필수]</em> : <em style={{ color: "gray" }}>[선택]</em>}
                                 </label>
                                 {/* policyName */}
-                                <label for="policyCheckbox"> {policy.policyName} </label>
+                                <label for={`policyCheckbox_${index}`}> {policy.policyName} </label>
                             </div>
                             {/* 오른쪽 Content */}
                             <div className={styles.rightContent}>
