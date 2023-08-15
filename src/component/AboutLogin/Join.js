@@ -202,7 +202,7 @@ export default function Join() {
             </div>
 
             {/* 이용약관 체크박스 컨테이너 */}
-            <ul className={styles.ul_policy}>
+            <ul className={styles.policyContainer}>
                 {/* 이용약관 */}
                 {PolicyObj.map((policy, index) => {
                     {/* 약관 Container */ }
