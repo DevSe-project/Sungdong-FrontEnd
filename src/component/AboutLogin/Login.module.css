@@ -64,7 +64,7 @@
 .goLogin {
     border: solid none;
     border-radius: 1dvb;
-    background-color: #FF3333;
+    background-color: var(--background-color-set);
     color: white;
     cursor : pointer;
     justify-content: center;

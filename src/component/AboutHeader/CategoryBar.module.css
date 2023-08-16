@@ -1,7 +1,6 @@
 .categoryBarContainer {
   width: 100%;
   background-color: #FFF;
-  color: black;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -9,6 +8,7 @@
   white-space: nowrap;
   list-style-type: none;
   gap: 5em;
+  border-bottom: 1px solid lightgray;
 }
 
 .category {
@@ -21,15 +21,7 @@
 }
 
 .category:hover{
-  background-color: var(--background-color-clicked);
+  background-color: var(--background-color-set);
   color: #FFF;
   border-radius: 1dvb;
-}
-
-.link {
-  text-decoration: none;
-  color: black;
-  font-size: 1.2em;
-  font-weight: 550;
-  cursor: pointer;
 }
