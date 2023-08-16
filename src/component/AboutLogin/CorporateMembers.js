@@ -75,24 +75,12 @@ export default function CorporateMember() {
                         <div className={styles.notification}>
                             <strong>문자(SMS) 서비스를 받으시겠습니까?</strong>
                             <div className={styles.YesNo}>
-                                <input type="checkbox" name="SMS_Y" /><label for="SMS_Y">예</label>
+                                <input type="radio" name="CEO_SMS" id="CEO_SMS_Y"/><label for="CEO_SMS_Y">예</label>
                             </div>
                             <div className={styles.YesNo}>
-                                <input type="checkbox" name="SMS_N" /><label for="SMS_N">아니오</label>
+                                <input type="radio" name="CEO_SMS" id="CEO_SMS_N"/><label for="CEO_SMS_N">아니오</label>
                             </div>
                         </div>
-                    </div>
-                </li>
-
-                {/* 사업체주소 */}
-                <li className={styles.inputContainer}>
-                    <div className={styles.left}>사업체주소</div>
-                    <div className={styles.right}>
-                        <input
-                            className={styles.isInput}
-                            type='text'
-                            placeholder={'ㅎㅇ'}
-                        />
                     </div>
                 </li>
 
@@ -103,7 +91,7 @@ export default function CorporateMember() {
                         <input
                             className={styles.isInput}
                             type='text'
-                            placeholder={'ㅎㅇ'}
+                            placeholder={''}
                         />
                     </div>
                 </li>

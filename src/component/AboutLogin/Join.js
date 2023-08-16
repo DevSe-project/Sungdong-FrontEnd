@@ -1,9 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import styles from './RelativeJoin.module.css';
 import logo from '../../image/logo.jpeg'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PolicyObj from "../Data/PolicyObj";
-import JoinPopUpMessage from "./JoinPopUpMessage.js"
 import IndivisualMembers from "./IndivisualMembers";
 
 export default function Join() {
@@ -12,7 +11,8 @@ export default function Join() {
 
     // 모든 체크박스의 상태를 체크되지 않은 상태, false로 설정
     let [checkboxState, setCheckboxState] = useState(() => PolicyObj.map(() => false));
-    //onCheck속성으로 모두 동의하기를 체크하면 전체가 체크되도록
+
+    //모두 동의하기를 체크하면 이용약관 전체가 checked
     function checkedAll() {
         const allChecked = checkboxState.every(state => state); // 모든 체크박스가 true인지 확인
         const newCheckboxState = checkboxState.map(() => !allChecked); //반대값으로 변경
@@ -34,21 +34,23 @@ export default function Join() {
         // every 메서드는 state 배열의 모든 요소가 특정 조건을 만족하는지 확인.
     }
 
-    // 가입성공시 event
-    const [showPopUp, setShowPopUp] = useState(false);
-    const [popUpMessage, setPopUpMessage] = useState('');
+    //경고문구 : 초기값(닫힌상태) - 아래의 삼항연산자를 움직일 State
+    const [warningMsg, setWarningMsg] = useState(false)
+    // [필수]항목들이 모두 체크됐는지 유무에 따라 warningMsg state를 조정하는 함수
+    useEffect( () => {
+        if (areAllRequiredChecked() === false) {
+            setWarningMsg(true);
+        } else setWarningMsg(false);
+    })
+
     let signUp_checkCondition = () => {
-        if (!areAllRequiredChecked()) {
-            setPopUpMessage('아직 완료되지 않은 가입절차가 있습니다. 확인 후 다시 시도해주세요!')
+        if (areAllRequiredChecked() === false) {
+            setWarningMsg(false);
         }
         else {
-            navigate('/');
-            setPopUpMessage('환영합니다! 가입 절차를 모두 끝마쳤습니다. 성동물산에 방문해주셔서 감사합니다!')
+            navigate('/login');
+            alert('성동물산에 오신 걸 환영합니다! 이제 로그인을 진행할 수 있습니다.')
         }
-        setShowPopUp(true);
-        setTimeout(() => {
-            setShowPopUp(false);
-        }, 2500);
     }
 
     return (
@@ -69,9 +71,12 @@ export default function Join() {
             <div className={styles.checkAll}>
                 <input
                     type="checkbox"
+                    id="allCheck"
                     checked={checkboxState.every(state => state)}
-                    onChange={checkedAll} />
-                <div>모두 동의하기</div>
+                    onChange={() => {
+                        checkedAll();
+                    }} />
+                <label for="allCheck">모두 동의하기</label>
             </div>
 
             {/* 이용약관 체크박스 컨테이너 */}
@@ -86,6 +91,7 @@ export default function Join() {
                                 {/* 체크박스 */}
                                 <input
                                     type="checkbox"
+                                    id={`policyCheckbox_${index}`}
                                     checked={checkboxState[index]}
                                     onChange={() => {
                                         const newCheckboxState = [...checkboxState]; // 초기 전체 false인 상태를 카피
@@ -93,11 +99,11 @@ export default function Join() {
                                         setCheckboxState(newCheckboxState); //적용
                                     }} />
                                 {/* policyNeed : need의 boolean값에 따라 색상을 다르게(선택,필수) */}
-                                <span>
+                                <label for="policyCheckbox">
                                     {policy.need ? <em style={{ color: "#FF3333" }}>[필수]</em> : <em style={{ color: "gray" }}>[선택]</em>}
-                                </span>
+                                </label>
                                 {/* policyName */}
-                                <span> {policy.policyName} </span>
+                                <label for={`policyCheckbox_${index}`}> {policy.policyName} </label>
                             </div>
                             {/* 오른쪽 Content */}
                             <div className={styles.rightContent}>
@@ -116,8 +122,8 @@ export default function Join() {
 
             </ul>
 
-            {/* popUpMessage */}
-            {showPopUp ? <JoinPopUpMessage popUpMessage={popUpMessage} popUpClose={() => setShowPopUp(false)} /> : null}
+            {/* 가입절차가 완료되지 않았을 때 경고문구 출력 */}
+            {warningMsg ? <div className={styles.warningMsg}>아직 가입절차가 모두 진행되지 않았습니다.</div> : null}
 
             {/* moveContainer */}
             <div className={styles.moveContainer}>

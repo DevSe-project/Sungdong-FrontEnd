@@ -7,6 +7,10 @@
     min-width: fit-content;
 }
 
+label {
+    cursor: pointer;
+}
+
 .inputWrap {
     display: flex;
     flex-direction: column;
@@ -164,6 +168,12 @@
 
 .policyDetail_null {
     width: 480px;
+}
+
+.warningMsg {
+    margin-top: 1em;
+    color: #CC0000;
+    font-size: 18px;
 }
 
 .moveContainer {

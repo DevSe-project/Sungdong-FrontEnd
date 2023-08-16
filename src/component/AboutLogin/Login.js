@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import styles from './Login.module.css';
 import MainLogo from '../../image/MainLogo.jpeg';
-import JoinPopUpMessage from './JoinPopUpMessage';
 
 export function Login(props) {
   const navigate = useNavigate();
@@ -32,7 +31,7 @@ export function Login(props) {
                 <input type='password' className={styles.inputPW} placeholder={"패스워드를 입력하세요"} />
               </div>
               <div className={styles.autoLoginCheckBox}>
-                <input type='checkbox' />로그인 상태 유지
+                <input type='checkbox' id='autoCheckbox'/><label for="autoCheckbox">로그인 상태 유지</label>
               </div>
               {/* Login Button */}
               <div className={styles.goLogin}>
