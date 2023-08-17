@@ -1,53 +1,139 @@
 /* FindModal.module.css */
 
+/* Base */
 .modalOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999; /* 모달을 위로 떠오르게 설정 */
-  }
-  
-  .modalContainer {
-    background-color: black;
-    color: white;
-    border: 1.5px solid grey;
-    border-radius: 0.5dvb;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-    position: relative;
-    width: 500px;
-    height: 500px;
-  }
-  
-  .modalContent {
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  /* 모달을 위로 떠오르게 설정 */
+}
 
-  .title {
-    border: 0px;
-    border-radius: 1px;
-    font-size: 20px;
-    font-weight: bold;
-    padding: 10px 10px;
-  }
+.modalContainer {
+  display: flex;
+  flex-direction: column;
+  background-color: whitesmoke;
+  color: black;
+  border: 1.5px solid grey;
+  border-radius: 1dvb;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  position: relative;
+  width: 400px;
+  height: 300px;
+}
 
-  .title:hover {
-    color: #CC0000;
-    text-decoration: underline;
-    text-underline-offset: 7px;
-    cursor: pointer;
-  }
-  
-  .closeButton {
-    border: 1px solid black;
-    border-radius: 0.5dvb;
-    position: relative;
-    width: 50px;
-  }
+/* ------------공통 className------------ */
+.inputContainer {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  border-collapse: collapse; /*셀 경계를 합치고 간격 조절*/
+} 
+
+.exitButton { /*❌버튼 */
+  padding: 0.5em;
+  padding-top: 0.3em;
+  padding-bottom: 0;
+  color: rgb(51, 51, 51);
+  font-weight: 1000;
+  font-size: 1.6em;
+
+}
+
+.modalContent {
+  padding: 20px;
+  padding-top: 0;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin-top: 0;
+}
+
+.exitButton {
+  display: flex;
+  justify-content: flex-end;
+  cursor: pointer;
+}
+
+.titleBox {
+  display: flex;
+  justify-content: center;
+}
+
+.title {
+  border: 0px;
+  border-radius: 1px;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 10px 10px;
+}
+
+.title:hover {
+  color: #CC0000;
+  cursor: pointer;
+}
+
+
+
+
+/* ------------find_id modal CSS------------ */
+.select_api {
+  display: flex;
+  margin-top: 1em;
+}
+
+.input {
+  justify-content: center;
+  padding: 10px;
+  width: 200px;
+  font-size: 16px;
+}
+
+
+
+/* ------------find_pw modal CSS------------ */
+.inputContainer td {
+  border: none; /*셀 사이의 경계 제거*/
+} .inputContainer tr {
+  height: 50px;
+}
+
+.label {
+  width: 50px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+
+
+
+/* ------------하단 컨트롤박스------------ */
+.controlContents {
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  position: absolute;
+}
+
+.findButton {
+  border: 1px solid none;
+  border-radius: 0.5dvb;
+  background-color: #CC0000;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  padding: 10px;
+  margin: 25px;
+  width: 250px;
+  cursor: pointer;
+}
+.findButton:hover {
+  background-color: #fe4b4b;
+}

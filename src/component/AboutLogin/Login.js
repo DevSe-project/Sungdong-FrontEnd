@@ -4,7 +4,7 @@ import MainLogo from '../../image/MainLogo.jpeg';
 import { useState } from 'react';
 import FindModal from './FindModal';
 
-export function Login(props) {
+export function Login() {
 
   const navigate = useNavigate();
 
@@ -66,7 +66,7 @@ export function Login(props) {
         </div>
 
         { modalType && (
-          <FindModal type={modalType} onClose={closeModal} />
+          <FindModal type={modalType} onClose={closeModal} openModal={openModal}/>
         )}
       </div>
 
