@@ -88,6 +88,18 @@
     cursor : pointer;
 }
 
+.findId:hover {
+    color: #CC0000;
+}
+
+.findPW:hover {
+    color: #CC0000;
+}
+
+.join:hover {
+    color: #CC0000;
+}
+
 .findDiv{
     display: flex;
     margin: 0.3em;

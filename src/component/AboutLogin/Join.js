@@ -3,7 +3,7 @@ import styles from './RelativeJoin.module.css';
 import logo from '../../image/logo.jpeg'
 import { useEffect, useState } from "react";
 import PolicyObj from "../Data/PolicyObj";
-import IndivisualMembers from "./IndivisualMembers";
+import JoinForm from "./JoinForm";
 
 export default function Join() {
     // link_navigate
@@ -65,7 +65,7 @@ export default function Join() {
             </div>
 
             {/* IndivisualMembers Form */}
-            <IndivisualMembers />
+            <JoinForm />
 
             {/* 전체 동의하기 */}
             <div className={styles.checkAll}>

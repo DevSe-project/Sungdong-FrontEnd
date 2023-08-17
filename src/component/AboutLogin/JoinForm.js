@@ -3,7 +3,7 @@ import styles from './RelativeJoin.module.css';
 import CorporateMember from "./CorporateMembers";
 
 
-export default function IndivisualMembers() {
+export default function JoinForm() {
 
     // 입력받을 회원 정보 객체배열 state
     let [inputData, setInputData] = useState([

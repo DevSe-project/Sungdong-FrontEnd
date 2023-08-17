@@ -1,0 +1,53 @@
+/* FindModal.module.css */
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* 모달을 위로 떠오르게 설정 */
+  }
+  
+  .modalContainer {
+    background-color: black;
+    color: white;
+    border: 1.5px solid grey;
+    border-radius: 0.5dvb;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+    width: 500px;
+    height: 500px;
+  }
+  
+  .modalContent {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .title {
+    border: 0px;
+    border-radius: 1px;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 10px 10px;
+  }
+
+  .title:hover {
+    color: #CC0000;
+    text-decoration: underline;
+    text-underline-offset: 7px;
+    cursor: pointer;
+  }
+  
+  .closeButton {
+    border: 1px solid black;
+    border-radius: 0.5dvb;
+    position: relative;
+    width: 50px;
+  }
