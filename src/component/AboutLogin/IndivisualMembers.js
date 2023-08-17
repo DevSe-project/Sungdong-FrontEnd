@@ -13,7 +13,9 @@ export default function IndivisualMembers() {
             confirmPassword: null,
             email: null,
             name: null,
-            phoneNumber: null,
+            phoneNumber1: null,
+            phoneNumber2: null,
+            phoneNumber3: null,
             deliveryAddress: { postnum: null, address: null },
         },
     ])
@@ -57,14 +59,43 @@ export default function IndivisualMembers() {
             name: newName
         }));
     };
-    let handlePhoneNumber = (e) => { //전화번호
+    let handlePhoneNumber1 = (e) => { //전화번호
         const newPhoneNumber = e.target.value;
         setInputData(prevData => ({
             ...prevData,
-            phoneNumber: newPhoneNumber
+            phoneNumber1: newPhoneNumber
         }));
     };
-    // 배달주소가 들어가야 함
+    let handlePhoneNumber2 = (e) => { //전화번호
+        const newPhoneNumber = e.target.value;
+        setInputData(prevData => ({
+            ...prevData,
+            phoneNumber2: newPhoneNumber
+        }));
+    };
+    let handlePhoneNumber3 = (e) => { //전화번호
+        const newPhoneNumber = e.target.value;
+        setInputData(prevData => ({
+            ...prevData,
+            phoneNumber3: newPhoneNumber
+        }));
+    };
+
+    // 주소입력 API
+    const [address1, setAddress1] = useState("");
+
+    const openPopup = (setAddress) => {
+        const script = document.createElement('script');
+        script.src = 'https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
+        script.onload = () => {
+            new window.daum.Postcode({
+                oncomplete: (data) => {
+                    setAddress(data);
+                }
+            }).open();
+        }
+        document.body.appendChild(script);
+    }
 
     let confirmPassword = inputData.password === inputData.confirmPassword; //data 일치유무 체크
 
@@ -157,7 +188,7 @@ export default function IndivisualMembers() {
                             <strong>이메일 서비스를 받으시겠습니까?</strong>
                             <div className={styles.YesNo}>
                                 <input type="radio" name="email" id="email_Y" /><label for="email_Y">예</label>
-                                </div>
+                            </div>
                             <div className={styles.YesNo}>
                                 <input type="radio" name="email" id="email_N" /><label for="email_N">아니오</label>
                             </div>
@@ -189,6 +220,7 @@ export default function IndivisualMembers() {
                             placeholder={'ex) 010'}
                             maxLength="3"
                             size="6"
+                            onChange={handlePhoneNumber1}
                         />
                         <input
                             className={styles.phoneNum}
@@ -196,6 +228,7 @@ export default function IndivisualMembers() {
                             placeholder={'ex) 0101'}
                             maxLength="4"
                             size="8"
+                            onChange={handlePhoneNumber2}
                         />
                         <input
                             className={styles.phoneNum}
@@ -203,28 +236,72 @@ export default function IndivisualMembers() {
                             placeholder={'ex) 1010'}
                             maxLength="4"
                             size="8"
+                            onChange={handlePhoneNumber3}
                         />
                         <div className={styles.notification}>
+                            {/* 추후  */}
                             <strong>문자(SMS) 서비스를 받으시겠습니까?</strong>
                             <div className={styles.YesNo}>
                                 <input type="radio" name="SMS" id="SMS_Y" /><label for="SMS_Y">예</label>
-                                </div>
+                            </div>
                             <div className={styles.YesNo}>
-                                <input type="radio" name="SMS" id="SMS_N"/><label for="SMS_N">아니오</label>
+                                <input type="radio" name="SMS" id="SMS_N" /><label for="SMS_N">아니오</label>
                             </div>
                         </div>
                     </div>
                 </li>
-
-                {/* 인증 요청- 누르면 하단에 인증번호 입력란이 나타나고 타이머 표시 */}
-                <li
-                    className={styles.requestSecurityNumberContainer}>
-                    <div></div>
-                </li>
+                {/* 우편번호 찾기 - 개인회원일 때만 보이도록 */}
+                {memberType ? null :
+                    <li> {/* 개인회원일 떄 보이는 우편번호찾기API */}
+                        <div className={styles.inputContainer}>
+                            <div className={styles.left}>주소</div>
+                            <div className={styles.right}>
+                                <div className={styles.rightInnerContainer}>
+                                    <div className={styles.searchAddress}>
+                                        <input
+                                            className={styles.isInput}
+                                            type="text" value={address1 && address1.zonecode}
+                                            placeholder="우편번호"
+                                            readOnly
+                                        />
+                                        <input
+                                            className={styles.searchButton}
+                                            type="button"
+                                            onClick={() => {
+                                                openPopup(setAddress1);
+                                            }}
+                                            value="우편번호 찾기"
+                                        />
+                                    </div>
+                                    <div className={styles.inputAddress}>
+                                        <input
+                                            className={styles.loadname}
+                                            type="text"
+                                            value={address1 && address1.roadAddress}
+                                            placeholder="도로명 주소"
+                                            readOnly
+                                        />
+                                        <input
+                                            className={styles.buildingname}
+                                            type="text"
+                                            value={address1 && address1.buildingName ? `(${address1.bname}, ${address1.buildingName})` : address1 && `(${address1.bname}, ${address1.jibunAddress})`} placeholder="건물 이름 또는 지번 주소"
+                                            readOnly
+                                        />
+                                        <input
+                                            className={styles.detailAddress}
+                                            type="text"
+                                            placeholder="상세주소를 입력해주세요."
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    }
             </ul>
             <br /> <br />
             {/* 회원구분 체크에 따라 기업회원 가입정보창을 보여줄지 말지 */}
-            {memberType ? <CorporateMember /> : null}
+            {memberType ? <CorporateMember inputData={inputData} setInputData={setInputData} address1={address1} setAddress1={setAddress1} openPopup={openPopup} /> : null}
         </div>
     )
 }

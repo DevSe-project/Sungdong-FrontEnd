@@ -127,11 +127,11 @@ export default function Join() {
 
             {/* moveContainer */}
             <div className={styles.moveContainer}>
-                {/* no signUp */}
+                {/* 취소 */}
                 <div className={styles.back} onClick={() => { navigate('/login') }}>
                     취소
                 </div>
-                {/* signUp */}
+                {/* 가입하기 */}
                 <div
                     className={`${styles.sign_up} ${!areAllRequiredChecked() && styles.disabled}`}
                     onClick={signUp_checkCondition}

@@ -29,6 +29,12 @@ label {
     font-size: 18px;
 }
 
+.info {
+    font-size: 15px;
+    color: green;
+    padding-left: 10px;
+}
+
 .typeMember {
     display: flex;
     align-items: center;
@@ -59,7 +65,8 @@ label {
 
 .right {
     display: flex;
-    flex: 9;
+    flex-direction: row;
+    flex: 5;
 }
 
 .isInput {
@@ -70,7 +77,7 @@ label {
     border: none;
     border-radius: 1dvb;
     background-color: #F3F3F3;
-    height: 25px;
+    height: 20px;
     font-size: 16px;
 }
 
@@ -79,11 +86,13 @@ label {
     text-align: left;
     display: flex;
     align-items: center;
+    flex: 4;
 }
 
 .YesNo {
     text-align: left;
     display: flex;
+    flex-direction: col;
     align-items: center;
 }
 
@@ -96,6 +105,42 @@ label {
     padding: 1em;
 }
 
+.searchAddressContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+}
+
+.searchAddress {
+    display: flex;
+    align-items: center;
+}
+
+.searchButton {
+    width: 100px;
+    height: 40px;
+    border: 1px solid gainsboro;
+    border-radius: 1dvb;
+    cursor: pointer;
+}
+
+.inputAddress {
+    display: flex;
+    flex-direction: column;
+}
+
+.loadname,
+.buildingname,
+.detailAddress {
+    display: flex;
+    align-items: center;
+    margin: 0.5em;
+    padding: 1em;
+    border: none;
+    border-radius: 1dvb;
+    background-color: #F3F3F3;
+    height: 20px;
+}
 
 .errorMessage {
     color: #FF3333;
