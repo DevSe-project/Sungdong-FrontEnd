@@ -16,7 +16,7 @@
     cursor : pointer;
 }
 
-.container{
+.loginContentsContainer{
     display: flex;
     flex-direction: column;
 }
@@ -91,7 +91,7 @@
 .findDiv{
     display: flex;
     margin: 0.3em;
-    font-size: 16px;
+    font-size: 18px;
     justify-content: center;
     color:gray;
     align-items: center;

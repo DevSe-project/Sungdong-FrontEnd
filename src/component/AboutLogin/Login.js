@@ -3,8 +3,11 @@ import styles from './Login.module.css';
 import MainLogo from '../../image/MainLogo.jpeg';
 
 export function Login(props) {
+
   const navigate = useNavigate();
+
   return (
+    // 화면 정렬을 위해 전체div에 style부여
     <div className={styles.body}>
       {/* loginPageContainer */}
       <div className={styles.loginPageContainer}>
@@ -17,8 +20,8 @@ export function Login(props) {
             onClick={() => { navigate("/") }}
           />
         </div>
-        {/* 뭐하지 */}
-        <div className={styles.container}>
+        {/* LoginContentsContainer */}
+        <div className={styles.loginContentsContainer}>
           {/* loginContainer */}
           <div className={styles.loginContainer}>
             <div className={styles.inputContainer}>
