@@ -7,6 +7,7 @@ export function CategoryBar() {
     {
       id : 1,
       title: '생활/건강',
+      link: '/lifeHealth',
       subMenuItems: [{
         item : '공구',
         link : '/tool',
@@ -35,6 +36,7 @@ export function CategoryBar() {
     {
       id : 2,
       title: '디지털/가전',
+      link: '/digiter',
       subMenuItems: [{
         item : 'PC 액세서리',
         link : '/pc',
@@ -47,6 +49,7 @@ export function CategoryBar() {
     {
       id : 3,
       title: '스포츠/레저',
+      link: 'sports',
       subMenuItems: [{
         item : '골프',
         link : '/golf',
@@ -57,12 +60,13 @@ export function CategoryBar() {
         },
         {
         item : '스포츠액세서리',
-        link : '/sport',
+        link : '/sportAtc',
       }],
     },
     {
       id : 4,
       title: '패션의류',
+      link : 'fashion',
       subMenuItems: [{
         item : '남성의류',
         link : '/manclothes',
@@ -75,6 +79,7 @@ export function CategoryBar() {
     {
       id : 5,
       title: '패션잡화',
+      link: '/fashionAtc',
       subMenuItems: [{
         item : '남성신발',
         link : '/manshoes',
@@ -94,8 +99,8 @@ export function CategoryBar() {
   const [subMenuStates, setSubMenuStates] = useState(menuData.map(()=>false));
   const [activeTab, setActiveTab] = useState(1); // 현재 활성화된 탭을 추적하는 상태
 
-  const handleTabClick = (tabIndex) => {
-    setActiveTab(tabIndex);
+  const handleTabClick = (tabItem) => {
+    setActiveTab(tabItem.id);
   };
 
   const handleMouseEnter = (index) => {
@@ -123,9 +128,9 @@ export function CategoryBar() {
             onMouseEnter={() => handleMouseEnter(index)}
             onMouseLeave={() => handleMouseLeave(index)}
             className={`categorymenu-item ${subMenuStates[index] && 'open'} + categorytab-item ${activeTab === item.id ? 'active' : ''}`}
-            onClick={() => {handleTabClick(item.id)}}
+            onClick={() => {handleTabClick(item)}}
           >
-            <span className={styles.link} href="#">{item.title}</span>
+            <span onClick={()=> navigate(item.link)}>{item.title}</span>
             {subMenuStates[index] && (
               <ul onMouseLeave={() => handleMouseLeave(index)} className="sub-menu">
                 {item.subMenuItems.map((item, index) => (

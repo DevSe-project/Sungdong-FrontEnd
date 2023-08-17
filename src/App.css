@@ -82,9 +82,10 @@ td{
   --font-size-md: clamp(1.5rem, 1vw, 1.4rem);
   --font-size-sm: clamp(1rem, 1vw, 1.2em);
   --font-size-ssm: clamp(0.7em, 0.9vw, 1em);
-  --background-color-set: #CC0000;
-  --background-color-active : rgb(180, 8, 8);
+  --background-color-set: rgb(207, 27, 27);
   --background-color-clicked: rgb(165, 10, 10);
+  --background-color-active : rgb(180, 8, 8);
+
 }
 
 /* 탭 아이템 스타일 */
@@ -107,7 +108,7 @@ td{
 /* 활성화된 탭 아이템 스타일 */
 .tab-item.active {
   color: #ddd;
-  background-color: var(--background-color-clicked);
+  background-color: var(--background-color-set);
 }
 
 /* 상단 메뉴 바 */
@@ -192,7 +193,7 @@ i.fa-solid.fa-heart{
   left: 50%;
   width: 0;
   height: 0;
-  background-color: white;
+  background-color: var(--background-color-set);
   transition: all 350ms;
 }
 .categorymenu-item:hover::after {
@@ -205,12 +206,15 @@ i.fa-solid.fa-heart{
   display: none;
   position: absolute;
   top: 100%;
-  left: -2.5em;
   border-radius: 1dvb;
-  background-color: /*기존 : var(--background-color-set);*/ lightgray;
+  background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  width: 12em;
-  z-index: 999;
+  width: 10em;
+  z-index: 990;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  left: -3.5dvb;
 }
 
 .categorymenu-item.open .sub-menu {
@@ -220,15 +224,20 @@ i.fa-solid.fa-heart{
 .categorytab-item {
   padding: 1em;
   cursor: pointer;
-  color: #ddd;
+  color: #000;
   text-align: center;
   white-space: nowrap;
+  font-size: 1.2em;
+  font-weight: 550;
+  cursor: pointer;
 }
 
 /* 활성화된 탭 아이템 스타일 */
 .categorytab-item.active {
-  color: #ddd;
-  background-color: var(--background-color-clicked);
+  background-color: var(--background-color-set);
+  color: white;
+  border-top-left-radius: 0.5em;
+  border-top-right-radius: 0.5em;
 }
 
 /* 체크박스 크기 조정(노인공경) */

@@ -166,7 +166,7 @@
   align-items: center;
 }
 
-/* 글자 CSS */
+/* 글자(폰트) CSS */
 .h4{
   font-size: 1.2em;
   font-weight: 950;
@@ -174,7 +174,10 @@
 }
 
 .spanTag{
-  font-size: 0.5em;
+  height: 2em;
+  font-size: clamp(0.5em, 0.7vw, 1em); 
+  word-break: keep-all;
+  text-overflow: ellipsis;
 }
 
 .finalprice{
