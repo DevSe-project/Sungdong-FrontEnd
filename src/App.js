@@ -49,10 +49,8 @@ function App() {
         <Route path="/detail/:id" element={
           <Detail data={data} navigate={navigate} wishlist={wishlist} setWishlist={setWishlist} basketList={basketList} setBasketList={setBasketList} />
         } />
-        <Route path='/login' element={
-          <Login />
-        } />
-        <Route path='/join' element={<Join />}>
+        <Route path='/login' element={ <Login /> } />
+        <Route path='/join' element={ <Join /> }>
         </Route>
         <Route path='/likeitem' element={
           <LikeItem basketList={basketList} setBasketList={setBasketList} setWishlist={setWishlist} wishlist={wishlist} />
@@ -60,19 +58,11 @@ function App() {
         <Route path='/basket' element={
           <Basket basketList={basketList} setBasketList={setBasketList}/>
         }>
-          <Route path='receipt' element={
-            <Receipt/>
-          }/>
-          <Route path='pay' element={
-            <Pay/>
-          }/>
-          <Route path='order' element={
-            <Order/>
-          }/>
+          <Route path='receipt' element={ <Receipt/> }/>
+          <Route path='pay' element={ <Pay/> }/>
+          <Route path='order' element={ <Order/> }/>
         </Route>
-        <Route path='/delivery' element={
-          <DeliveryMain/>
-        }/>
+        <Route path='/delivery' element={ <DeliveryMain/> }/>
       </Routes>
     </div>
   );
