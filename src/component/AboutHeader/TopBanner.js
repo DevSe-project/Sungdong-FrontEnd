@@ -76,7 +76,6 @@ export function TopBanner () {
       <div className={styles.top_nav}>
         {/* 로고 */}
         <img className={styles.image} onClick={() => navigate("/")} src={logo} alt="로고" height='80px'/>
-        <img className={styles.image} onClick={() => navigate('/')} src={logo} alt="로고" height='80px'/>
         {/* 서치바 */}
         <SearchBar/>
         {/* 메뉴 loop */}
