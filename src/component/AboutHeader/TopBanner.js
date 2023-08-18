@@ -35,7 +35,7 @@ export function TopBanner () {
         },
         {
         item : '1:1 고객센터',
-        link : '/oneandone',
+        link : '/oneonone',
         },
         {
         item : '실시간 채팅 게시판',
