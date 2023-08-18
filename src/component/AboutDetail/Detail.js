@@ -1,15 +1,19 @@
 import { Tab } from './Tab'
 import styles from './Detail.module.css'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { CategoryBar } from '../AboutHeader/CategoryBar'
 import { TopBanner } from '../AboutHeader/TopBanner'
 import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 export function Detail(props) {
-  //수량 개수 state
+  
+  const navigate = useNavigate();
+ //수량 개수 state
   const [count, setCount] = useState("1");
 
+  const [filterModal, setFilterModal] = useState(false);
+  const [filterStar, setFilterStar] = useState([]);
 
   // 리뷰 포인트 & 스코어
   const textReviewPoint = 50;
@@ -148,6 +152,18 @@ function basketThis(product, count){
     return <>{totalStars}</>;
   }
 
+  function funcFilterStar(id){
+    if(filterModal){
+      const filter = detailData.review.filter((item) => item.rating === id);
+      setFilterStar(filter);
+    }
+  }
+
+  function resetFuncFilterStar(){
+    setFilterStar(null);
+  }
+
+
   // 리뷰 그래프 데이터
   const reviewData = [
     { rating: 5, 리뷰: detailData.review ? detailData.review.filter((item) => item.rating === 5).length : 0 },
@@ -274,7 +290,7 @@ function basketThis(product, count){
               <h2>추천 상품</h2><br/>
               <div className={styles.rowAtcTab}>
                 {recommendedItem ? recommendedItem.map((item, index) => 
-                <div key={index} className={styles.colAtcTab}>
+                <div onClick={()=> navigate(`/detail/${item.id}`)} key={index} className={styles.colAtcTab}>
                   <div className={styles.frame}>
                     <img className={styles.thumnail} src="http://pop7.co.kr/web/product/big/201806/344_shop1_15289487355825.jpg" alt="추천 이미지" width="100px"/>
                   </div>
@@ -384,17 +400,33 @@ function basketThis(product, count){
                   최신 순
                 </div>
               </div>
-              <div className={styles.reviewTabRatingView}>
-                별점 별 평가 보기 
+              <div onClick={()=>setFilterModal(!filterModal)} className={styles.reviewTabRatingView}>
+                별점 별 평가 필터
                 <div>
                   {props.data && detailData.review ? detailData.review.length : 0}
                 </div>
+                {filterModal === true &&
+                  <div className={styles.filterUI}>
+                    <ul className={styles.filterStar}>
+                      <li className={styles.filterInner} onClick={()=>resetFuncFilterStar()}> 전체 리뷰 보기 </li>
+                      { reviewData.map((item, key) => (
+                      <li className={styles.filterInner} onClick={()=>funcFilterStar(item.rating)}>
+                        {`${item.rating}점의 리뷰만 보기`}
+                        <div>
+                          {`${item.리뷰}`}
+                        </div>
+                      </li>
+                      ))}
+                    </ul>
+                  </div>
+                }
               </div>
             </div>
 
             {/* 리뷰 리스트 생성 */}
             {props.data && detailData.review ?
-            detailData.review.map((item, index) => 
+            filterStar != null
+            ? filterStar.map((item,index) => 
             <div key={index} className={styles.review}>
               <div className={styles.reviewList}>
                 <div className={styles.reviewListProfileImg}>
@@ -421,11 +453,39 @@ function basketThis(product, count){
               </div>
             </div>
           )
-          : <div className={styles.review}>
-              작성된 리뷰가 없습니다..
+          : detailData.review.map((item, index) =>
+          <div key={index} className={styles.review}>
+          <div className={styles.reviewList}>
+            <div className={styles.reviewListProfileImg}>
+              <img className={styles.thumnail} src='../../image/logo.jpeg' alt='프로필이미지' width={20}/>
             </div>
-          }
+            <div className={styles.reviewListProfile}>
+              <h4>{item.profileName}</h4>
+              <span>{ratingToStar(item.rating)}</span>
+              <p>{item.date}</p>
+            </div>
           </div>
+          <div className={styles.reviewListProduct}>
+            {detailData.title}
+          </div>
+          {item.image &&
+          <div className={styles.reviewImg}>
+            {item.image}
+          </div>
+          }
+          <div className={styles.reviewListBody}>
+            <p>
+              {item.content}
+            </p>
+          </div>
+        </div>
+        ) 
+        : 
+        <div className={styles.review}>
+              작성된 리뷰가 없습니다..
+        </div>
+        }
+        </div>
 
 
           {/* 탭 Q & A */}
