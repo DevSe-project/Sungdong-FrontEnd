@@ -16,6 +16,7 @@ import { Pay } from './component/AboutPay/Pay';
 import { Order } from './component/AboutPay/Order';
 import { Receipt } from './component/AboutPay/Receipt';
 import { DeliveryMain } from './component/AboutPay/DeliveryMain';
+import AskHome from './component/AboutAsk/AskHome';
 
 function App() {
   const navigate = useNavigate();
@@ -27,19 +28,19 @@ function App() {
     const savedWishlist = JSON.parse(localStorage.getItem('likelist')) || []; //localStorage의 likelist가 없으면 공백 배열로 변수 저장
     setWishlist(savedWishlist); //setWishlist라는 State에 저장
   }, []);
-  useEffect(()=>{
-    const dataload = setTimeout(()=>{
+  useEffect(() => {
+    const dataload = setTimeout(() => {
       setData(DataObj);
       return clearTimeout(dataload)
-    },3000)
-  },[])
+    }, 3000)
+  }, [])
 
   return (
     <div className="App">
       <Routes>
         <Route path='/' element={
           <>
-            <MainPage/>
+            <MainPage />
             <List data={data} />
           </>
         } />
@@ -49,20 +50,24 @@ function App() {
         <Route path="/detail/:id" element={
           <Detail data={data} navigate={navigate} wishlist={wishlist} setWishlist={setWishlist} basketList={basketList} setBasketList={setBasketList} />
         } />
-        <Route path='/login' element={ <Login /> } />
-        <Route path='/join' element={ <Join /> }>
-        </Route>
         <Route path='/likeitem' element={
           <LikeItem basketList={basketList} setBasketList={setBasketList} setWishlist={setWishlist} wishlist={wishlist} />
         } />
         <Route path='/basket' element={
-          <Basket basketList={basketList} setBasketList={setBasketList}/>
+          <Basket basketList={basketList} setBasketList={setBasketList} />
         }>
-          <Route path='receipt' element={ <Receipt/> }/>
-          <Route path='pay' element={ <Pay/> }/>
-          <Route path='order' element={ <Order/> }/>
+          <Route path='receipt' element={<Receipt />} />
+          <Route path='pay' element={<Pay />} />
+          <Route path='order' element={<Order />} />
         </Route>
-        <Route path='/delivery' element={ <DeliveryMain/> }/>
+        <Route path='/delivery' element={<DeliveryMain />} />
+        
+        {/* 로그인 */}
+        <Route path='/login' element={<Login />} />
+        <Route path='/join' element={<Join />} />
+
+        {/* 문의하기 */}
+        <Route path='/askhome' element={<AskHome />} />
       </Routes>
     </div>
   );

@@ -7,7 +7,10 @@ import {SearchBar} from './SearchBar';
 export function TopBanner () {
   const menuData = [
     {
-      title: '회사 소개',
+      title: {
+        item : '회사소개',
+        link : '/introduceCompany'
+      },
       subMenuItems: [{
         item : '오시는 길',
         link : '/comeway',
@@ -22,7 +25,10 @@ export function TopBanner () {
       }],
     },
     {
-      title: '문의하기',
+      title: {
+        item : '문의하기',
+        link : '/askhome'
+      },
       subMenuItems: [{
         item : '질문 게시판',
         link : '/question',
@@ -37,7 +43,10 @@ export function TopBanner () {
       }],
     },
     {
-      title: '마이페이지',
+      title: {
+        item : '마이페이지',
+        link : '/mypages'
+      },
       subMenuItems: [{
         item : '장바구니 목록',
         link : '/basket',
@@ -86,7 +95,7 @@ export function TopBanner () {
             onMouseLeave={() => handleMouseLeave(index)}
             className={`menu-item ${subMenuStates[index] && 'open'}`}
           >
-            <span className={styles.link}>{item.title}</span>
+            <span className={styles.link} onClick={()=>{navigate(`${item.title.link}`)}}>{item.title.item}</span>
             {subMenuStates[index] && (
               <ul onMouseLeave={() => handleMouseLeave(index)} className="sub-menu">
                 {item.subMenuItems.map((subMenuItem, subMenuItemindex) => (

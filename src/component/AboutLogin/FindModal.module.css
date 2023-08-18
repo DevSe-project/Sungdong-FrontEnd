@@ -25,7 +25,7 @@
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
   position: relative;
   width: 400px;
-  height: 300px;
+  height: 250px;
 }
 
 /* ------------공통 className------------ */
@@ -86,14 +86,64 @@
 /* ------------find_id modal CSS------------ */
 .select_api {
   display: flex;
-  margin-top: 1em;
+  margin-top: 0.5em;
 }
 
-.input {
+.sms_layout {
+  display: flex;
+  flex-direction: row;
+  width: 350px;
+  align-items: center;
+}
+
+.sms_left {
+  height: 100px;
+  width: 300px;
+}
+
+.sms_right {
+  border: none;
+  border-radius: 1dvw;
+  background-color: #CC0000;
+  color: white;
+  width: 70px;
+  height: 90px;
+  display: flex;
   justify-content: center;
-  padding: 10px;
-  width: 200px;
+  align-items: center;
+  cursor: pointer;
+} .sms_right:hover {
+  background-color: #fe4b4b;
+}
+
+.smsInput_table{
+  display: flex;
+  flex-direction: column;
+}
+.smsInput_table tr {
+  display: flex;
+  align-items: center;
+}
+
+.sms_label_td {
+  width: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 16px;
+  font-weight: bold;
+}
+
+.sms_input_td {
+  width: 14em;
+  display: flex;
+  align-items: center;
+}
+
+.sms_input {
+  display: flex;
+  padding: 10px;
+  width: 15em;
 }
 
 
@@ -106,11 +156,10 @@
 }
 
 .label {
-  width: 50px;
+  width: 70px;
   font-size: 16px;
   font-weight: bold;
 }
-
 
 
 
@@ -130,7 +179,7 @@
   font-weight: bold;
   font-size: 18px;
   padding: 10px;
-  margin: 25px;
+  margin: 2em;
   width: 250px;
   cursor: pointer;
 }
