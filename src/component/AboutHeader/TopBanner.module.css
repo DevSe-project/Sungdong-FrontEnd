@@ -4,7 +4,7 @@
 .top_container {
   /* 상단바 고정 작업 */
   background-color: white;
-  position: sticky;
+  position: fixed;
   z-index: 998;
   top: 0;
   height: 100px;
@@ -50,7 +50,7 @@
   padding: 0.3em;
   padding-left: 0.9rem;
   padding-right: 0.9rem;
-  border: 0;
+  border: none;
   border-radius: 1dvb;
 }
 
