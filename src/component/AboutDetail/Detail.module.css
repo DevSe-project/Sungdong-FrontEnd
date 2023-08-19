@@ -362,7 +362,7 @@
   position: absolute;
   top: 110%;
   z-index: 99;
-  left: 13%;
+  right: 0%;
 }
 
 .filterStar{

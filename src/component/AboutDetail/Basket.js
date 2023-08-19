@@ -8,6 +8,7 @@ export function Basket(props){
   //총 상품 금액
   const [sum, setSum] = useState(0);
 
+  // 배송가, 할인가
   const delivery = 3000;
   const [discount, setDiscount] = useState(0);
 
@@ -26,6 +27,23 @@ export function Basket(props){
   // 전체 선택 체크박스 상태를 저장할 상태 변수
   const [selectAll, setSelectAll] = useState(false);
 
+
+  // 장바구니 탭 - 결제 탭에서 뒤로가기 시 뒤로가기 방지 후 장바구니 탭으로 이동
+  useEffect(() => {
+    const handleBack = (e) => {
+      e.preventDefault();
+      alert("주문서 작성, 결제 중 뒤로가기 시 결제 정보가 초기화 됩니다.")
+      props.setActiveTab(1);
+      navigate('/basket');
+    };
+
+    window.history.pushState(null, null, window.location.href);
+    window.addEventListener('popstate', handleBack);
+
+    return () => {
+      window.removeEventListener('popstate', handleBack);
+    };
+  }, [navigate]);
 
   //selectedItems의 변화가 일어날 때마다 totalPrice(selectedItems)를 작동함 (전체 합계 계산)
   useEffect(() => {
@@ -118,23 +136,12 @@ export function Basket(props){
     sum = (sum + delivery - ((sum/100)*10));
     setOrderPrice(sum);
   }
-  // 스탭 부분
-  const [activeTab, setActiveTab] = useState(1); // 현재 활성화된 스탭을 추적하는 State -> State를 캐쉬처리 해야함
 
   // 링크 함수
   function gotoLink(){
-    if(activeTab===1) {
-      setActiveTab(2);
+    if(props.activeTab===1) {
+      props.setActiveTab(2);
       navigate("/basket/receipt");
-    } else if(activeTab===2){
-      setActiveTab(3);
-      navigate("/basket/pay");
-    } else if(activeTab===3){
-      setActiveTab(4);
-      navigate("/basket/order");
-    } else if(activeTab===4){
-      navigate("/");
-      setActiveTab(1);
     }
   }
   //스탭 메뉴
@@ -153,7 +160,7 @@ export function Basket(props){
         <div className={styles.stepBar}>
         {stepItems.map((item, index)=> (
           <>
-            {item.id === activeTab ?
+            {item.id === props.activeTab ?
             <div key={index} className={styles.stepOn}> 
               <p>Step 0{item.id}</p>
               <h5>{item.title}</h5>
@@ -175,14 +182,14 @@ export function Basket(props){
 
         {/* 본문 시작 */}
         <div className={styles.body}>
-          {activeTab===3 ? <h3>고객님께서 결제하실 상품정보입니다.</h3>
-          : activeTab===4 && <h3>다음 상품을 준비하여 고객님께 보내드리겠습니다.</h3>}
+          {props.activeTab===3 ? <h3>고객님께서 결제하실 상품정보입니다.</h3>
+          : props.activeTab===4 && <h3>다음 상품을 준비하여 고객님께 보내드리겠습니다.</h3>}
           {/* 주문 정보 테이블 */}
           <table className={styles.table}>
             <thead>
               <tr>
                 {/* 장바구니 목록에서만 체크 가능 */}
-                {activeTab===1 ? <th><input 
+                {props.activeTab===1 ? <th><input 
                 type='checkbox'
                 checked={selectAll}
                 onChange={()=>handleSelectAllChange()}/></th> : null}
@@ -194,7 +201,7 @@ export function Basket(props){
             </thead>
             <tbody>
               {/* 장바구니 탭일 때는 장바구니 목록만 */}
-              {activeTab===1 &&
+              {props.activeTab===1 &&
               props.basketList ? props.basketList.map((item, index)=>(
               <tr key={index}>
                 <td>
@@ -229,7 +236,7 @@ export function Basket(props){
             : null}
 
             {/* 주문서 작성 탭으로 넘어가면 체크된 목록들만 나열함(수정 불가) */}
-            {activeTab > 1 &&
+            {props.activeTab > 1 &&
             selectedItems.map((item, key)=> (
               <tr key={key}>
                 <td><img src='../image/logo.jpeg' alt='이미지'/></td>
@@ -283,21 +290,16 @@ export function Basket(props){
           {/* Outlet부분 (스탭 2,3,4) */}
           <Outlet></Outlet>
 
-          {/* 상황에 따른 버튼 */}
+          {/* 다음 단계 버튼 */}
           <div>
-
-            {/* STEP 2 ~ 4까지의 버튼 표기 변경 */}
-            {activeTab!==1 &&
-            <button onClick={selectedItems.length > 0 && activeTab >= 2 ? ()=>{gotoLink();} : null} className={styles.button}> {activeTab===2 ? `결제하기` : activeTab===3 ? `결제 / 주문 완료` : activeTab===4 && `홈으로 가기` }</button>}
-
             {/* 장바구니 (STEP 01) */}
-            {activeTab===1 && 
+            {props.activeTab===1 && 
             <>
             <button className={styles.deletebutton} onClick={()=>deletedList()}>삭제</button>
-            <button onClick={selectedItems.length > 0 && activeTab === 1 ? ()=>{gotoLink();} : null} className={styles.button}>{selectedItems ? `${selectedItems.length}건` : `0건`} 주문하기</button>
+            <button onClick={selectedItems.length > 0 && props.activeTab === 1 ? ()=>{gotoLink();} : null} className={styles.button}>{selectedItems ? `${selectedItems.length}건` : `0건`} 주문하기</button>
             </>}
-
           </div>
+
         </div>
       </div>
   )

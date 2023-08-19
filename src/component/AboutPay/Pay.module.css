@@ -47,3 +47,17 @@
   border: 0.1em solid gray;
 }
 
+.button{
+  font-size: 1.2em;
+  border: none;
+  border-radius: 10em;
+  background-color: #ff3333;
+  color: white;
+  font-weight: 550;
+  cursor : pointer;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 1em;
+  padding: 1em;
+}

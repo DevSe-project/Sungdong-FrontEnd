@@ -17,10 +17,14 @@ import { Order } from './component/AboutPay/Order';
 import { Receipt } from './component/AboutPay/Receipt';
 import { DeliveryMain } from './component/AboutPay/DeliveryMain';
 import AskHome from './component/AboutAsk/AskHome';
+import { OrderObj } from './component/Data/OrderObj';
 
 function App() {
   const navigate = useNavigate();
+  // 주문 스탭 부분
+  const [activeTab, setActiveTab] = useState(1); // 현재 활성화된 스탭을 추적하는 State 
   const [data, setData] = useState();
+  const [orderData, setOrderData] = useState();
   const [basketList, setBasketList] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   useEffect(() => {
@@ -31,6 +35,7 @@ function App() {
   useEffect(() => {
     const dataload = setTimeout(() => {
       setData(DataObj);
+      setOrderData(OrderObj);
       return clearTimeout(dataload)
     }, 3000)
   }, [])
@@ -54,11 +59,11 @@ function App() {
           <LikeItem basketList={basketList} setBasketList={setBasketList} setWishlist={setWishlist} wishlist={wishlist} />
         } />
         <Route path='/basket' element={
-          <Basket basketList={basketList} setBasketList={setBasketList} />
+          <Basket activeTab={activeTab} setActiveTab={setActiveTab} basketList={basketList} setBasketList={setBasketList} />
         }>
-          <Route path='receipt' element={<Receipt />} />
-          <Route path='pay' element={<Pay />} />
-          <Route path='order' element={<Order />} />
+          <Route path='receipt' element={<Receipt activeTab={activeTab} setActiveTab={setActiveTab} orderData={orderData} setOrderData={setOrderData} />} />
+          <Route path='pay' element={<Pay activeTab={activeTab} setActiveTab={setActiveTab} orderData={orderData} setOrderData={setOrderData}/>} />
+          <Route path='order' element={<Order activeTab={activeTab} setActiveTab={setActiveTab} orderData={orderData} setOrderData={setOrderData}/>} />
         </Route>
         <Route path='/delivery' element={<DeliveryMain />} />
         

@@ -7,13 +7,15 @@ import { TopBanner } from '../AboutHeader/TopBanner'
 import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 export function Detail(props) {
-  
+  // Usenavigate
   const navigate = useNavigate();
+
  //수량 개수 state
   const [count, setCount] = useState("1");
 
+  // 별점 필터 & 모달 창 state
   const [filterModal, setFilterModal] = useState(false);
-  const [filterStar, setFilterStar] = useState([]);
+  const [filterStar, setFilterStar] = useState(null);
 
   // 리뷰 포인트 & 스코어
   const textReviewPoint = 50;
@@ -405,7 +407,7 @@ function basketThis(product, count){
                 <div>
                   {props.data && detailData.review ? detailData.review.length : 0}
                 </div>
-                {filterModal === true &&
+                {detailData.review && filterModal === true &&
                   <div className={styles.filterUI}>
                     <ul className={styles.filterStar}>
                       <li className={styles.filterInner} onClick={()=>resetFuncFilterStar()}> 전체 리뷰 보기 </li>
@@ -425,7 +427,7 @@ function basketThis(product, count){
 
             {/* 리뷰 리스트 생성 */}
             {props.data && detailData.review ?
-            filterStar != null
+            filterStar !== null
             ? filterStar.map((item,index) => 
             <div key={index} className={styles.review}>
               <div className={styles.reviewList}>
