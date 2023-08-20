@@ -1,0 +1,20 @@
+.searchContainer {
+  width: 100%;
+  padding: 1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(246, 246, 246);
+}
+
+.label_input {
+  font-size: 1.4em;
+  margin-right: 1em;
+}
+
+.search_input {
+  border: none;
+  border-radius: 1dvh;
+  padding: 1rem
+  
+}

@@ -26,20 +26,20 @@ export function TopBanner () {
     },
     {
       title: {
-        item : '문의하기',
-        link : '/askhome'
+        item : '고객센터',
+        link : '/userservice'
       },
       subMenuItems: [{
         item : '질문 게시판',
-        link : '/question',
+        link : '/userservice/questions',
         },
         {
         item : '1:1 고객센터',
-        link : '/oneonone',
+        link : '/userservice/eachservice',
         },
         {
         item : '실시간 채팅 게시판',
-        link : '/chat',
+        link : '/userservice/livechat',
       }],
     },
     {

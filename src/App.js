@@ -16,8 +16,13 @@ import { Pay } from './component/AboutPay/Pay';
 import { Order } from './component/AboutPay/Order';
 import { Receipt } from './component/AboutPay/Receipt';
 import { DeliveryMain } from './component/AboutPay/DeliveryMain';
-import AskHome from './component/AboutAsk/AskHome';
+import AskHome from './component/AboutAsk/UserService';
 import { OrderObj } from './component/Data/OrderObj';
+// 고객서비스 관련
+import UserService from './component/AboutAsk/UserService';
+import Questions from './component/AboutAsk/Questions';
+import EachService from './component/AboutAsk/EachService';
+import LiveChat from './component/AboutAsk/LiveChat';
 
 function App() {
   const navigate = useNavigate();
@@ -72,7 +77,11 @@ function App() {
         <Route path='/join' element={<Join />} />
 
         {/* 문의하기 */}
-        <Route path='/askhome' element={<AskHome />} />
+        <Route path='/userservice' element={<UserService/>}>
+          <Route path='questions' element={<Questions/>}/>
+          <Route path='eachservice' element={<EachService/>}/>
+          <Route path='livechat' element={<LiveChat/>}/>
+          </Route>
       </Routes>
     </div>
   );
