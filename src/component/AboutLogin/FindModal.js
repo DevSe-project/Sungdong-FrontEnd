@@ -3,6 +3,7 @@ import styles from './FindModal.module.css';
 
 export default function FindModal({ type, onClose, openModal }) {
 
+
     // esc키를 누르면 모달창 닫기.
     useEffect(() => {
         const exit_esc = (event) => {
@@ -46,13 +47,13 @@ export default function FindModal({ type, onClose, openModal }) {
 }
 
 // 아이디찾기 모달창
-function Find_IdModal() {
+function Find_IdModal(props) {
     // 인증할 API를 선택할 State (처음 화면은 pass를 통한 아이디찾기가 보이도록 초기값을 pass로 지정)
     const [api, setApi] = useState('pass');
 
     const PassApi = () => {
         return (
-            <div className={styles.findButton}>
+            <div className={styles.goPassButton}>
                 본인명의 휴대폰으로 찾기
             </div>
         )
@@ -61,21 +62,21 @@ function Find_IdModal() {
     const SmsApi = () => {
         return (
             <div className={styles.sms_layout}>
-                <div className={styles.sms_left}>
-                    <table className={styles.smsInput_table}>
-                        <tr>
-                            <td className={styles.sms_label_td}>이름</td>
-                            <td className={styles.sms_input_td}><input type='text' placeholder='가입자 성함' className={styles.sms_input} /></td>
-                        </tr>
-                        <tr>
-                            <td className={styles.sms_label_td}>전화번호</td>
-                            <td className={styles.sms_input_td}>
-                                <input type='text' placeholder='전화번호' className={styles.sms_input} />
-                            </td>
-                        </tr>
-                    </table>
+                <div className={styles.smsContainer}>
+                    <div className={styles.smsInput_Container}>
+                        <div className={styles.nameContainer}>
+                            <div className={styles.label}>이름</div>
+                            <div className={styles.input}><input type='text' placeholder='가입자 성함' className={styles.input} /></div>
+                        </div>
+                        <div className={styles.phoneNumContainer}>
+                            <div className={styles.label}>전화번호</div>
+                            <div className={styles.input}>
+                                <input type='text' placeholder='전화번호' className={styles.input} />
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div className={styles.sms_right}>
+                <div className={styles.reqNum} onClick={() => { }}>
                     인증번호<br />
                     요청
                 </div>
@@ -88,7 +89,7 @@ function Find_IdModal() {
             <div className={styles.inputContainer}>
                 <div className={styles.select_api}>
                     {/* 2번이상 클릭하면 체크박스 작동 안 하는 에러발생상태 */}
-                    <div>
+                    <div className={styles.passCheckbox}>
                         <input
                             type='radio'
                             value='pass'
@@ -102,7 +103,7 @@ function Find_IdModal() {
                             }} />
                         <label for="PASS_api">PASS인증 통해 찾기</label>
                     </div>
-                    <div>
+                    <div className={styles.smsCheckbox}>
                         <input
                             type='radio'
                             value='sms'
@@ -133,31 +134,27 @@ function Find_IdModal() {
 }
 
 // 비밀번호찾기 모달창
-function Find_PasswordModal() {
+function Find_PasswordModal(props) {
 
     return (
-        <div>
-            <div className={styles.inputContainer}>
-                <div className={styles.sms_layout}>
-                    <div className={styles.sms_left}>
-                        <table className={styles.smsInput_table}>
-                            <tr>
-                                <td className={styles.sms_label_td}>아이디</td>
-                                <td className={styles.sms_input_td}><input type='text' placeholder='가입 아이디' className={styles.sms_input} /></td>
-                            </tr>
-                            <tr>
-                                <td className={styles.sms_label_td}>전화번호</td>
-                                <td className={styles.sms_input_td}>
-                                    <input type='text' placeholder='전화번호' className={styles.sms_input} />
-                                </td>
-                            </tr>
-                        </table>
+        <div className={styles.sms_layout}>
+            <div className={styles.smsContainer}>
+                <div className={styles.smsInput_Container}>
+                    <div className={styles.nameContainer}>
+                        <div className={styles.label}>아이디</div>
+                        <div className={styles.input}><input type='text' placeholder='아이디' className={styles.input} /></div>
                     </div>
-                    <div className={styles.sms_right}>
-                        비밀번호 <br />
-                        재설정하기
+                    <div className={styles.phoneNumContainer}>
+                        <div className={styles.label}>전화번호</div>
+                        <div className={styles.input}>
+                            <input type='text' placeholder='전화번호' className={styles.input} />
+                        </div>
                     </div>
                 </div>
+            </div>
+            <div className={styles.reqNum} onClick={() => { }}>
+                인증번호<br />
+                요청
             </div>
         </div>
     )
