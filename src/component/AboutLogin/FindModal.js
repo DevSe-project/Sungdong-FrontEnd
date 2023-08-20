@@ -30,10 +30,10 @@ export default function FindModal({ type, onClose, openModal }) {
                 </div>
                 <div className={styles.modalContent}>
                     <div className={styles.titleBox}>
-                        <div className={styles.title} onClick={() => { openModal('id') }}>
+                        <div className={`${styles.title} ${ type == 'id' ? styles.selected_title : ``}`}onClick={() => { openModal('id') }}>
                             아이디 찾기
                         </div>
-                        <div className={styles.title} onClick={() => { openModal('pw') }}>
+                        <div className={`${styles.title} ${ type == 'pw' ? styles.selected_title : ``}`} onClick={() => { openModal('pw') }}>
                             비밀번호 찾기
                         </div>
                     </div>
@@ -47,7 +47,7 @@ export default function FindModal({ type, onClose, openModal }) {
 }
 
 // 아이디찾기 모달창
-function Find_IdModal(props) {
+function Find_IdModal() {
     // 인증할 API를 선택할 State (처음 화면은 pass를 통한 아이디찾기가 보이도록 초기값을 pass로 지정)
     const [api, setApi] = useState('pass');
 
@@ -134,10 +134,10 @@ function Find_IdModal(props) {
 }
 
 // 비밀번호찾기 모달창
-function Find_PasswordModal(props) {
+function Find_PasswordModal() {
 
     return (
-        <div className={styles.sms_layout}>
+        <div className={styles.pw_layout}>
             <div className={styles.smsContainer}>
                 <div className={styles.smsInput_Container}>
                     <div className={styles.nameContainer}>
@@ -152,7 +152,7 @@ function Find_PasswordModal(props) {
                     </div>
                 </div>
             </div>
-            <div className={styles.reqNum} onClick={() => { }}>
+            <div className={styles.goResetPassword} onClick={() => { }}>
                 인증번호<br />
                 요청
             </div>

@@ -119,7 +119,6 @@ export function CategoryBar() {
 
 // 전체 레이아웃 완성 후 state로 category name을 가변적으로 할 예정
   return(
-    <div>
       <div className={styles.categoryBarContainer}>
         {/* 메뉴 loop */}
         {menuData.map((item, index) => (
@@ -143,6 +142,5 @@ export function CategoryBar() {
           </li>
         ))}
       </div>
-    </div>
   )
 }

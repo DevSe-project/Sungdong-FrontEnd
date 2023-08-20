@@ -4,13 +4,13 @@
 .top_container {
   /* 상단바 고정 작업 */
   background-color: white;
-  position: fixed;
+  position:sticky;
   z-index: 998;
   top: 0;
   height: 100px;
   width: 100%;
   display: flex;
-  padding-bottom: 0.7em;
+  padding-bottom: 0.5em;
   margin: 0;
   align-items: center;
   align-content: center;

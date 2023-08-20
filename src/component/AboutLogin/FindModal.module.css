@@ -80,8 +80,24 @@
   cursor: pointer;
 }
 
+.selected_title {
+  position: relative;
+  cursor: pointer;
+}
+.selected_title::after {
+  content: '';
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%; /* 밑줄의 초기 길이 조절 */
+  height: 2.5px; /* 밑줄의 두께 조절 */
+  background-color: red; /*밑줄 색상*/
+  border-radius: 2dvb; /* 양쪽 부드러운 모서리를 위한 값 */
+}
+
 .label {
-  width: 50px;
+  width: 80px;
   height: 75px;
   display: flex;
   justify-content: center;
@@ -92,7 +108,7 @@
 }
 
 .input {
-  width: 240px;
+  width: 280px;
   height: 50px;
   font-size: 1.2rem;
   padding: 0.2rem;
@@ -134,8 +150,7 @@
 
 .smsContainer {
   height: 150px;
-  width: 270px;
-  margin-right: 40px;
+  width: 400px;
 }
 
 .reqNum {
@@ -159,7 +174,7 @@
 .smsInput_Container {
   display: flex;
   flex-direction: column;
-  width: 300px;
+  width: 400px;
 }
 
 .nameContainer {
@@ -200,23 +215,31 @@
 
 
 /* ------------find_pw modal CSS------------ */
-.inputContainer td {
-  border: none;
-  /*셀 사이의 경계 제거*/
-}
+.pw_layout {
+  margin: 2.5em;
+  display: flex;
+  flex-direction: row;
+  width: 500px;
+  align-items: center;
+  justify-content: center;
 
-.inputContainer tr {
-  height: 50px;
-}
-
-.label {
-  width: 70px;
-  font-size: 16px;
-  font-weight: bold;
 }
 
 .goResetPassword {
-  
+  border: none;
+  border-radius: 1dvw;
+  background-color: #CC0000;
+  color: white;
+  height: 130px;
+  width: 90px;
+  font-size: 1.3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+} 
+.goResetPassword:hover {
+  background-color: #fe4b4b;
 }
 
 
