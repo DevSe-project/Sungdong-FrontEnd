@@ -23,33 +23,65 @@ export function ReviewPage(props){
       <TopBanner/>  
       <CategoryBar/>
       <div className={styles.container}>
-        <div>
-          <i>아이콘</i>
-          <h1>상품 리뷰</h1>
-          <div>
+        <div className={styles.titleLocation}>
+          <div className={styles.titleTag}>
+            <h1><i className="fas fa-pen-square"/></h1>
+            <h1>상품 리뷰</h1>
+          </div>
+          <div className={styles.titleTagContent}>
             <p>이 상품에 대한 리뷰를 남겨주세요!</p>
           </div>
         </div>
-        <div>
-          <img src='../../image/logo.jpeg' alt="이미지"/>
-          <div>
-            <h4>{props.data && reviewData.title}</h4>  
-            <h4>별점</h4>
-          </div>
-          <div>
-            <h4>상세리뷰</h4>
-            <textarea/>
-          </div>
-          <div>
-            <h4>사진첨부</h4>
-          </div>
-          <div>
-            <h4>한줄요약</h4>
-            <input></input>
+        <div className={styles.main}>
+          <div className={styles.productContainer}>
+            <img src='../../image/logo.jpeg' alt="이미지"/>
+            <div className={styles.productReview}>
+              <h4>{props.data && reviewData.title}</h4>  
+              <h1>
+                <i style={{color: '#CC0000'}} className="fal fa-star" />
+                <i style={{color: '#CC0000'}} className="fal fa-star" />
+                <i style={{color: '#CC0000'}} className="fal fa-star" />
+                <i style={{color: '#CC0000'}} className="fal fa-star" />
+                <i style={{color: '#CC0000'}} className="fal fa-star" />
+              </h1>
+            </div>
           </div>
         </div>
-        <button>취소</button>
-        <button>등록하기</button>
+        <div className={styles.main}>
+          <div className={styles.reviewContainer}>
+            <div className={styles.reviewInner}>
+              <div className={styles.reviewInnerTitle}>
+                상세리뷰
+              </div>
+              <div className={styles.reviewInnerInput}>
+                <textarea className={styles.reviewDetail}/>
+              </div>
+            </div>
+            <div className={styles.reviewInner}>
+              <div className={styles.reviewInnerTitle}>
+                사진첨부
+              </div>
+              <div className={styles.reviewInnerInput}>
+                <input 
+                className={styles.reviewPhoto} 
+                type='file'
+                />
+              </div>
+            </div>
+            <div className={styles.reviewInner}>
+              <div className={styles.reviewInnerTitle}>
+                한줄요약
+              </div>
+              <div className={styles.reviewInnerInput}>
+                <input className={styles.reviewTitle}/>
+              </div>
+            </div>
+          </div>
+          <div className={styles.buttonContainer}>
+              <button className={styles.cancelButton}>취소</button>
+              <button className={styles.addButton}>등록하기</button>
+          </div>
+        </div>
       </div>
     </div>
   )
