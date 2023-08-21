@@ -25,8 +25,10 @@ export function Order(props){
       value : 
       props.orderData.delivery.address.address 
       ?
-      `${props.orderData.delivery.address.address.roadAddress} (${props.orderData.delivery.address.address.bname}, ${props.orderData.delivery.address.address.buildingName 
-      ? props.orderData.delivery.address.address.buildingName 
+      `${props.orderData.delivery.address.address.roadAddress} 
+      (${props.orderData.delivery.address.address.bname}, 
+        ${props.orderData.delivery.address.address.buildingName 
+      ? props.orderData.delivery.address.address.buildingName
       : props.orderData.delivery.address.address.jibunAddress})
       ${props.orderData.delivery.address.addressDetail}` 
       : props.orderData.delivery.address.addressDetail,

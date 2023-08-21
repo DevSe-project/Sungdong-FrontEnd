@@ -2,9 +2,12 @@ import { useState } from 'react';
 import styles from './Receipt.module.css'
 import { useNavigate } from 'react-router-dom';
 
-export function Receipt({orderData, setOrderData, activeTab, setActiveTab}){
+export function Receipt({setOrderData, activeTab, setActiveTab}){
   const navigate = useNavigate();
   const [address, setAddress] = useState("");
+  // 유효성검사 State
+  const [isFormValid, setIsFormValid] = useState(false);
+    
   // 다음(카카오) 주소찾기 API 기능
   const openPopup = (setAddress) => {
       const script = document.createElement('script');
@@ -26,14 +29,17 @@ export function Receipt({orderData, setOrderData, activeTab, setActiveTab}){
   }
   document.body.appendChild(script);
 }
-  const [orderInformation, setOrderInformation] = useState([{
+
+// 데이터 항목 저장
+  const [orderInformation, setOrderInformation] = useState({
     name : "",
     tel : "",
     email : "",
     payRoute : "",
     moneyReceipt : "",
-  }])
-  const [deliveryInformation, setDeliveryInformation] = useState([{
+    checked : false,
+  })
+  const [deliveryInformation, setDeliveryInformation] = useState({
     name : "",
     tel : "",
     address : {
@@ -42,10 +48,41 @@ export function Receipt({orderData, setOrderData, activeTab, setActiveTab}){
     },
     deliveryType : "",
     deliveryMessage : "",
-  }])
+  })
+
+  // Input란 유효성 검사
+  const validateForm = () => {
+    const isOrderInformationValid =
+      orderInformation.name !== "" &&
+      orderInformation.tel !== "" &&
+      orderInformation.email !== "" &&
+      orderInformation.payRoute !== "" &&
+      orderInformation.moneyReceipt !== "";
+  
+    const isDeliveryInformationValid =
+      deliveryInformation.name !== "" &&
+      deliveryInformation.tel !== "" &&
+      deliveryInformation.address.address !== "" &&
+      deliveryInformation.address.addressDetail !== "" &&
+      deliveryInformation.deliveryType !== "" &&
+      deliveryInformation.deliveryMessage !== "";
+
+  
+    const isCheckboxChecked = orderInformation.checked === true;
+
+    setIsFormValid(isOrderInformationValid && isDeliveryInformationValid && isCheckboxChecked);
+
+    if (!isOrderInformationValid || !isDeliveryInformationValid || !isCheckboxChecked){
+      alert("작성이 되지 않은 란이 있습니다. 다시 확인해주세요!");
+  }
+  };
+
+
+
   // submit 버튼
   function gotoLink(){
-    if(activeTab===2) {
+    validateForm();
+    if(activeTab===2 && isFormValid) {
       setOrderData(prevdata => ({
         ...prevdata,
         order : orderInformation,
@@ -70,13 +107,17 @@ export function Receipt({orderData, setOrderData, activeTab, setActiveTab}){
               type="text" 
               className={styles.inputSize}
               placeholder="성함을 입력하세요"
-              value={orderInformation.name} 
-              onChange={(e)=>setOrderInformation(
+              value={orderInformation.name}
+              required 
+              onChange={(e)=>{
+                setOrderInformation(
                 prevdata=> ({
                   ...prevdata,
                   name : e.target.value,
                 })
-              )}
+              )
+            }
+            }
               />
             </div>
           </div>
@@ -89,7 +130,8 @@ export function Receipt({orderData, setOrderData, activeTab, setActiveTab}){
               type="tel" 
               className={styles.inputSize} 
               placeholder="전화번호를 입력하세요"
-              value={orderInformation.tel} 
+              value={orderInformation.tel}
+              required 
               onChange={(e)=>setOrderInformation(
                 prevdata=> ({
                   ...prevdata,
@@ -108,7 +150,8 @@ export function Receipt({orderData, setOrderData, activeTab, setActiveTab}){
               type="email" 
               className={styles.inputSize} 
               placeholder="이메일을 입력하세요"
-              value={orderInformation.email} 
+              value={orderInformation.email}
+              required 
               onChange={(e)=>setOrderInformation(
                 prevdata=> ({
                   ...prevdata,
@@ -131,7 +174,8 @@ export function Receipt({orderData, setOrderData, activeTab, setActiveTab}){
               type="text" 
               className={styles.inputSize} 
               placeholder="성함을 입력하세요"
-              value={deliveryInformation.name} 
+              value={deliveryInformation.name}
+              required 
               onChange={(e)=>setDeliveryInformation(
                 prevdata=> ({
                   ...prevdata,
@@ -150,7 +194,8 @@ export function Receipt({orderData, setOrderData, activeTab, setActiveTab}){
               type="tel"
               className={styles.inputSize} 
               placeholder="전화번호를 입력하세요"
-              value={deliveryInformation.tel} 
+              value={deliveryInformation.tel}
+              required 
               onChange={(e)=>setDeliveryInformation(
                 prevdata=> ({
                   ...prevdata,
@@ -170,6 +215,7 @@ export function Receipt({orderData, setOrderData, activeTab, setActiveTab}){
                   className={styles.inputSize} 
                   type="text" value={address && address.zonecode} 
                   placeholder="우편번호"
+                  required
                   readOnly
                 />
                 <input 
@@ -186,6 +232,7 @@ export function Receipt({orderData, setOrderData, activeTab, setActiveTab}){
                 type="text" 
                 value={address && address.roadAddress}
                 placeholder="도로명 주소"
+                required
                 readOnly
               />
               <input 
@@ -193,6 +240,7 @@ export function Receipt({orderData, setOrderData, activeTab, setActiveTab}){
                 type="text" 
                 value={address && address.buildingName ? `(${address.bname}, ${address.buildingName})` : address && `(${address.bname}, ${address.jibunAddress})`}  
                 placeholder="건물 이름 또는 지번 주소"
+                required
                 readOnly
               />
               <input 
@@ -200,6 +248,7 @@ export function Receipt({orderData, setOrderData, activeTab, setActiveTab}){
               type="text" 
               placeholder="상세주소를 입력해주세요."
               value={deliveryInformation.addressDetail} 
+              required
               onChange={(e)=>setDeliveryInformation(
                 prevdata=> ({
                   ...prevdata,
@@ -503,11 +552,24 @@ export function Receipt({orderData, setOrderData, activeTab, setActiveTab}){
           </div>
         </form>
         <div className={styles.formInner}>
-          <input required type="checkbox"/> 구매동의 및 결제대행서비스 이용약관 등에 모두 동의합니다.
+          <input 
+          checked={orderInformation.checked} 
+          onChange={() => setOrderInformation(prevdata => ({
+          ...prevdata,
+          checked : !prevdata.checked
+          }))} 
+          type="checkbox"
+          />
+            구매동의 및 결제대행서비스 이용약관 등에 모두 동의합니다.
           <button className={styles.button}>약관보기</button>
         </div>
         <div>
-          <button onClick={()=>gotoLink()} className={styles.submitButton}>결제하기</button>
+          <button  
+          onClick={()=>gotoLink()} 
+          className={styles.submitButton}
+          >
+            결제하기
+          </button>
         </div>
       </div>
     </div>
