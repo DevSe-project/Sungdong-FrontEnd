@@ -21,8 +21,7 @@ import { OrderObj } from './component/Data/OrderObj';
 // 고객서비스 관련
 import UserService from './component/AboutAsk/UserService';
 import Questions from './component/AboutAsk/Questions';
-import EachService from './component/AboutAsk/EachService';
-import LiveChat from './component/AboutAsk/LiveChat';
+import EachChat from './component/AboutAsk/EachChat';
 
 function App() {
   const navigate = useNavigate();
@@ -79,8 +78,7 @@ function App() {
         {/* 문의하기 */}
         <Route path='/userservice' element={<UserService/>}>
           <Route path='questions' element={<Questions/>}/>
-          <Route path='eachservice' element={<EachService/>}/>
-          <Route path='livechat' element={<LiveChat/>}/>
+          <Route path='eachchat' element={<EachChat/>}/>
           </Route>
       </Routes>
     </div>
