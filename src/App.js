@@ -26,7 +26,6 @@ import { DeliveryMain } from './component/AboutPay/DeliveryMain';
 import { ReviewPage } from './component/AboutPay/ReviewPage';
 
 // 고객서비스 관련
-import AskHome from './component/AboutAsk/UserService';
 import UserService from './component/AboutAsk/UserService';
 import Questions from './component/AboutAsk/Questions';
 import EachService from './component/AboutAsk/EachService';
@@ -102,7 +101,7 @@ function App() {
         </Route>
 
         {/* 리뷰 작성하기 */}
-        <Route path='/review/:id' element={<ReviewPage data={data} />}/>
+        <Route path='/review/:id' element={<ReviewPage data={data} setData={setData} />}/>
       </Routes>
     </div>
   );

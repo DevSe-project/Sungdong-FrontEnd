@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom'
-import { DataObj } from '../Data/DataObj'
 import { OrderObj } from '../Data/OrderObj'
 import styles from './Delivery.module.css'
 export function Delivery(){

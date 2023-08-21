@@ -266,7 +266,7 @@ function basketThis(product, count){
                   <p className={styles.spanTag}>{item.profileName} 님</p>
                   <span className={styles.spanTag}>{item.date}</span>
                   <p className={styles.spanTag}>
-                    {item.content}
+                    {item.title}
                   </p>
                 </div>
                 )
@@ -356,7 +356,7 @@ function basketThis(product, count){
                 <h5>사용자 총 평점</h5>
                 <div>
                 {props.data && detailData.review ?
-                  ratingToStar(sumValues(detailData.review, 'rating')/detailData.review.length)
+                  ratingToStar(Number(sumValues(detailData.review, 'rating')/detailData.review.length).toFixed(0))
                 : <>
                   <i style={{color: '#CC0000'}} className="fal fa-star" />
                   <i style={{color: '#CC0000'}} className="fal fa-star" />
@@ -368,9 +368,10 @@ function basketThis(product, count){
                 </div>
                 <h3>
                   {props.data && detailData.review ?
-                    sumValues(detailData.review, 'rating')/detailData.review.length 
+                    // 소수점 1자리까지 표현
+                    Number(sumValues(detailData.review, 'rating')/detailData.review.length).toFixed(1) 
                     : 0} 
-                    / {totalReviewScore}
+                    &nbsp;/ {totalReviewScore}
                 </h3>
               </div>
               <div className={styles.reviewToggleInner}>
@@ -449,6 +450,9 @@ function basketThis(product, count){
               </div>
               }
               <div className={styles.reviewListBody}>
+                <h5>
+                  {item.title}
+                </h5>
                 <p>
                   {item.content}
                 </p>
@@ -476,6 +480,9 @@ function basketThis(product, count){
           </div>
           }
           <div className={styles.reviewListBody}>
+            <h5>
+              {item.title}
+            </h5>
             <p>
               {item.content}
             </p>
