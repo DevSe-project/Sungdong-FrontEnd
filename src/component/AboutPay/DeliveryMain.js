@@ -2,7 +2,7 @@ import { CategoryBar } from '../AboutHeader/CategoryBar'
 import { TopBanner } from '../AboutHeader/TopBanner'
 import { Delivery } from './Delivery'
 import styles from './DeliveryMain.module.css'
-export function DeliveryMain(){
+export function DeliveryMain(props){
   return(
     <div>
       <TopBanner/>  
@@ -18,7 +18,7 @@ export function DeliveryMain(){
           </div>
         </div>
       </div>
-      <Delivery/>
+      <Delivery orderData={props.orderData}/>
     </div>
   )
 }

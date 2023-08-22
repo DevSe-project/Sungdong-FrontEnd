@@ -24,12 +24,14 @@ import { Order } from './component/AboutPay/Order';
 import { Receipt } from './component/AboutPay/Receipt';
 import { DeliveryMain } from './component/AboutPay/DeliveryMain';
 import { ReviewPage } from './component/AboutPay/ReviewPage';
+import { OrderDetail } from './component/AboutPay/OrderDetail';
 
 // 고객서비스 관련
 import UserService from './component/AboutAsk/UserService';
 import Questions from './component/AboutAsk/Questions';
 import EachService from './component/AboutAsk/EachService';
 import LiveChat from './component/AboutAsk/LiveChat';
+import { orderDetail } from './component/AboutPay/OrderDetail';
 
 function App() {
   const navigate = useNavigate();
@@ -82,13 +84,13 @@ function App() {
         <Route path='/basket' element={
           <Basket activeTab={activeTab} setActiveTab={setActiveTab} basketList={basketList} setBasketList={setBasketList} />
         }>
-          <Route path='receipt' element={<Receipt activeTab={activeTab} setActiveTab={setActiveTab} orderData={orderData} setOrderData={setOrderData} />} />
+          <Route path='receipt' element={<Receipt data={data} activeTab={activeTab} setActiveTab={setActiveTab} orderData={orderData} setOrderData={setOrderData} />} />
           <Route path='pay' element={<Pay activeTab={activeTab} setActiveTab={setActiveTab} orderData={orderData} setOrderData={setOrderData}/>} />
           <Route path='order' element={<Order activeTab={activeTab} setActiveTab={setActiveTab} orderData={orderData} setOrderData={setOrderData}/>} />
         </Route>
         {/* 주문 조회 */}
-        <Route path='/delivery' element={<DeliveryMain />} />
-        
+        <Route path='/delivery' element={<DeliveryMain orderData={orderData} setOrderData={setOrderData}/>} />
+        <Route path='/orderDetail' element={<OrderDetail/>}/>
         {/* 로그인 */}
         <Route path='/login' element={<Login />} />
         <Route path='/join' element={<Join />} />

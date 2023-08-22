@@ -1,16 +1,14 @@
 import { useNavigate } from 'react-router-dom';
-import styles from './Order.module.css'
-export function Order(props){
+import styles from './OrderDetail.module.css'
+import { CategoryBar } from '../AboutHeader/CategoryBar'
+import { TopBanner } from '../AboutHeader/TopBanner'
+export function OrderDetail(props){
   const navigate = useNavigate();
   function gotoLink(){
-    if(props.activeTab===4) {
-      props.setActiveTab(1);
-      localStorage.removeItem('newOrderData');
-      navigate("/");
-    }
+    localStorage.removeItem('newOrderData');
+    navigate("/");
   }
-  const parsingData = JSON.parse(localStorage.getItem('newOrderData'))
-  const orderData = parsingData[0] 
+  const orderData = JSON.parse(localStorage.getItem('newOrderData'))
   const orderInputValue = [
     { 
       id : 0, 
@@ -60,6 +58,9 @@ export function Order(props){
     },
   ]
   return(
+    <div>
+    <TopBanner/>
+    <CategoryBar/>
     <div className={styles.container}>
       <h1 className={styles.getInformation}>받으시는 분 정보</h1>
       <form className={styles.form}>
@@ -121,5 +122,6 @@ export function Order(props){
         <button onClick={()=>gotoLink()} className={styles.button}>홈으로 가기</button>
       </div>
     </div>
+  </div>
   )
 }

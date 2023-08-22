@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styles from './Receipt.module.css'
 import { useNavigate } from 'react-router-dom';
 
-export function Receipt({setOrderData, activeTab, setActiveTab}){
+export function Receipt(props){
   const navigate = useNavigate();
   const [address, setAddress] = useState("");
   // 유효성검사 State
@@ -82,14 +82,25 @@ export function Receipt({setOrderData, activeTab, setActiveTab}){
   // submit 버튼
   function gotoLink(){
     validateForm();
-    if(activeTab===2 && isFormValid) {
-      setOrderData(prevdata => ({
-        ...prevdata,
-        order : orderInformation,
-        delivery : deliveryInformation,
-      }))
-      setActiveTab(3);
-      navigate("/basket/pay");
+    if(props.activeTab===2 && isFormValid) {
+      const newOrderId = props.orderData.length + 1;
+      const editedData = JSON.parse(localStorage.getItem('orderData'))
+      const newOrderData = editedData.map((item) => ({
+        ...item,
+        orderId: newOrderId,
+        order: orderInformation,
+        delivery: deliveryInformation,
+        date: '2020-08-22',
+        orderState: 0, //0 => 결제대기, 1 => 결제완료 2 => 배송준비중 3 => 배송중 4 => 배송완료 
+      }));
+      // 데이터 삽입
+        const copyData = [...props.orderData];
+        copyData.push(...newOrderData);
+        props.setOrderData(copyData);
+        localStorage.removeItem('orderData');
+        localStorage.setItem('newOrderData', JSON.stringify(newOrderData))
+        props.setActiveTab(3);
+        navigate("/basket/pay");
     }
   }
 

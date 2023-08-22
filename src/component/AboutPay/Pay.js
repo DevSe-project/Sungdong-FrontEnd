@@ -38,7 +38,7 @@ export function Pay(props){
         </div>
       </div>
       <div>
-        <button onClick={()=>gotoLink()} className={styles.button}>결제완료</button>
+        <button onClick={()=>gotoLink()} className={styles.button}>주문완료</button>
       </div>
     </>
   )

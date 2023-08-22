@@ -139,9 +139,21 @@ export function Basket(props){
 
   // 링크 함수
   function gotoLink(){
-    if(props.activeTab===1) {
-      props.setActiveTab(2);
+    if(props.activeTab===1 && selectedItems !== null || selectedItems.length > 0) {
+      const editedData = selectedItems.map((item) => ({
+        productId : item.id,
+        userId: "asdfx100", 
+        productName : item.title,
+        cnt : Number(item.cnt), 
+        price: item.price,
+        finprice: item.finprice,
+      }));
+      // editedData 객체를 JSON 형식의 문자열로 변환
+      const editedDataString = JSON.stringify(editedData);
+      // localStorage에 저장
+      localStorage.setItem('orderData', editedDataString);
       navigate("/basket/receipt");
+      props.setActiveTab(2);
     }
   }
   //스탭 메뉴

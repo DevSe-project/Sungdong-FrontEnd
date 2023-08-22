@@ -28,11 +28,11 @@ export function ReviewPage(props){
   
   // 리뷰 별 초기값
   const [star, setStar] = useState([
-  <i style={{color: '#CC0000'}} className="fal fa-star" />,
-  <i style={{color: '#CC0000'}} className="fal fa-star" />,
-  <i style={{color: '#CC0000'}} className="fal fa-star" />,
-  <i style={{color: '#CC0000'}} className="fal fa-star" />,
-  <i style={{color: '#CC0000'}} className="fal fa-star" />,
+  <i style={{color: '#CC0000', cursor: 'pointer'}} className="fal fa-star" />,
+  <i style={{color: '#CC0000', cursor: 'pointer'}} className="fal fa-star" />,
+  <i style={{color: '#CC0000', cursor: 'pointer'}} className="fal fa-star" />,
+  <i style={{color: '#CC0000', cursor: 'pointer'}} className="fal fa-star" />,
+  <i style={{color: '#CC0000', cursor: 'pointer'}} className="fal fa-star" />,
   ])
 
   // 리뷰 점수 함수
@@ -41,12 +41,12 @@ export function ReviewPage(props){
 
     if(editedStar[index].props.className === "fal fa-star"){
       for(let i = 0; i<=index; i++){
-        editedStar[i] = <i style={{color: '#CC0000'}} className="fas fa-star" />
+        editedStar[i] = <i style={{color: '#CC0000', cursor: 'pointer'}} className="fas fa-star" />
       }
     } 
     if(editedStar[index].props.className === "fas fa-star"){
       for(let i = 4; i>index; i--){
-        editedStar[i] = <i style={{color: '#CC0000'}} className="fal fa-star" />
+        editedStar[i] = <i style={{color: '#CC0000', cursor: 'pointer'}} className="fal fa-star" />
       }
     }
     setStar(editedStar);
@@ -79,9 +79,9 @@ export function ReviewPage(props){
     validateForm();
     if(isValid){
       const find = props.data.find((item) => item.id == id); // Use == for comparison
-      const newReviewId = find.review.length + 1;
+      const reviewLength = find.review ? find.review.length : 0;
       const editedData = {
-        id: newReviewId,
+        id: reviewLength ? reviewLength + 1 : 0,
         userId: 'asdasdx100',
         profileName: '주황색깔양말',
         rating: ratingStar.length,
@@ -95,7 +95,7 @@ export function ReviewPage(props){
         if (item.id === find.id) {
           return {
             ...item,
-            review: [...item.review, editedData], // data - review객체에 새로운 review 객체 추가
+            review: item.review ? [...item.review, editedData] : [editedData], // data - review객체에 새로운 review 객체 추가
           };
         }
         return item;
