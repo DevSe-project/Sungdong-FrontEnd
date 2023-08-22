@@ -139,7 +139,7 @@ export function Basket(props){
 
   // 링크 함수
   function gotoLink(){
-    if(props.activeTab===1 && selectedItems !== null || selectedItems.length > 0) {
+    if(props.activeTab===1 && (selectedItems !== null || selectedItems.length > 0)) {
       const editedData = selectedItems.map((item) => ({
         productId : item.id,
         userId: "asdfx100", 

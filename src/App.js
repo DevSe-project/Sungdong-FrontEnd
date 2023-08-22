@@ -31,6 +31,7 @@ import UserService from './component/AboutAsk/UserService';
 import Questions from './component/AboutAsk/Questions';
 import EachChat from './component/AboutAsk/EachChat';
 import { orderDetail } from './component/AboutPay/OrderDetail';
+import { Comeway } from './component/AboutCompany/Comeway';
 
 function App() {
   const navigate = useNavigate();
@@ -89,7 +90,9 @@ function App() {
         </Route>
         {/* 주문 조회 */}
         <Route path='/delivery' element={<DeliveryMain orderData={orderData} setOrderData={setOrderData}/>} />
+        {/* 배송 조회 */}
         <Route path='/orderDetail' element={<OrderDetail/>}/>
+
         {/* 로그인 */}
         <Route path='/login' element={<Login />} />
         <Route path='/join' element={<Join />} />
@@ -101,6 +104,8 @@ function App() {
           </Route>
         {/* 리뷰 작성하기 */}
         <Route path='/review/:id' element={<ReviewPage data={data} setData={setData} />}/>
+        {/* 회사 관련 */}
+        <Route path='/comeway' element={<Comeway/>}/>
       </Routes>
     </div>
   );
