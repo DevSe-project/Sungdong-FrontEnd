@@ -91,11 +91,13 @@ export default function WriteModal(props) {
           </div>
         </div>
         {/* 등록 */}
-        <div
-          className={styles.addButton}
-          onClick={addInput}
-        >
-          등록
+        <div className={styles.addButtonContainer}>
+          <div
+            className={styles.addButton}
+            onClick={addInput}
+          >
+            등 록
+          </div>
         </div>
       </div>
     </div>

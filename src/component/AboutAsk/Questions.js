@@ -13,7 +13,7 @@ export default function Questions() {
         {
             title: '성동물산 왜 이렇게 빨간가요...?',
             content: '성동물산 프로젝트... 아직도 API가 구현을 못하겠다 싯팔 그냥 백앤드도 공부해야겠다는 생각이 든다. 어떤 식으로 하면 좋을까요 성동 씨?',
-            date: 202030822,
+            date: `2023. 8. 22. 오후 8:23:55`,
             writer: '엄지석',
             viewer: 0,
         },
@@ -49,21 +49,21 @@ export default function Questions() {
             {/* 문의글 List(10개씩) */}
             <table className={styles.table}>
                 <tr className={styles.tableHeader}>
-                    <td>제목</td>
-                    <td>작성자</td>
-                    <td>작성일</td>
-                    <td>조회수</td>
+                    <td className={styles.topTitle_td}>제목</td>
+                    <td className={styles.topWriter_td}>작성자</td>
+                    <td className={styles.topdate_td}>작성일</td>
+                    <td className={styles.topViewer_td}>조회수</td>
                 </tr>
                 {writeList.map((item, index) => {
                     return <tr key={index}>
                         {/* 제목 - 최대 50글자로 정하기*/}
-                        <td>{item.title}</td>
+                        <td className={styles.td}>{item.title}</td>
                         {/* 작성자 */}
-                        <td>{item.writer}</td>
+                        <td className={styles.td}>{item.writer}</td>
                         {/* 작성일 */}
-                        <td>{item.date}</td>
+                        <td className={styles.td}>{item.date}</td>
                         {/* 조회수 */}
-                        <td>{item.viewer}회</td>
+                        <td className={styles.td}>{item.viewer}회</td>
                     </tr>
                 })}
             </table>

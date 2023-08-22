@@ -20,10 +20,8 @@
   border: 1.5px solid grey;
   border-radius: 1dvb;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  position: relative;
   width: 40em;
-  height: 30em;
-  
+  height: 35.1em;
 }
 
 .exit {
@@ -35,13 +33,14 @@
   font-weight: bold;
   padding-top: 0.15em;
   padding-right: 0.3em;
+  padding-bottom: 0;
   cursor: pointer;
 }
 
 .post {
   display: flex;
   justify-content: left;
-  padding: 1em;
+  padding: 0.8em;
   padding-bottom: 0;
   padding-top: 0;
   font-size: 1.8em;
@@ -76,7 +75,8 @@
   font-weight: bold;
   width: 10%;
   text-align: left;
-  padding-left: 0.1em;
+  padding-left: 0.4em;
+  margin-bottom: 0.2em;
   
 }
 
@@ -93,19 +93,31 @@
 
 .content_input {
   width: 100%;
-  height: 16em;
+  height: 20em;
   border: 1.5px solid gray;
   border-right: 2px solid gray;
   border-bottom: 2.5px solid gray;
   border-radius: 1.5dvh;
 }
 
-.addButton {
+.addButtonContainer {
   display: flex;
-  border: 1px solid gray;
-  width: 3em;
+  justify-content: center;
+}
+
+.addButton {
+  cursor: pointer;
+  width: 6em;
   height: 2em;
+  display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
+  border: none;
+  border-radius: 1dvb;
+  background-color: #CC0000;
+  color: white;
+  font-size: 1.5em;
+  font-weight: bold;
+}.addButton:hover {
+  background-color: #fe4b4b;
 }
