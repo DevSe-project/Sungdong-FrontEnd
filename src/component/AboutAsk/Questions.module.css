@@ -43,7 +43,7 @@
   border-top: 2px solid gray;
   border-bottom: 2px solid gray;
   padding: 1em;
-
+  margin: 1em  0em;
 }
 /* 글목록 제목 */
 .wrtingsList_title {
@@ -53,33 +53,41 @@
 /* 글쓰기 버튼 */
 .go_write {
   border: none;
-  border-radius: 2dvh;
-  background-color: black;
+  border-radius: 1dvh;
+  background-color: #CC0000;
   color: white;
-  padding: 0.4em;
+  padding: 0.4em 0.6em;
   font-size: 1.2em;
   cursor: pointer;
 } .go_write:hover {
-  background-color: #CC0000;
+  background-color: #fe4b4b;
   color: white;
 }
 /* 게시글 리스트 디자인 */
-.writing_ul {
+/* .table {
   margin-top: 2em;
   margin-bottom: 2em;
-}
+  display: flex;
+  flex-direction: column;
+} */
 /* 각각의 글이 어떻게 나타나는지 */
-.writing_li {
+/* .table tr {
   display: flex;
   width: 100%;
   justify-content: space-between;
   align-items: center;
+  cursor: pointer;
+  margin: 10px;
+} */
+
+.table {
+  width: 100%;
+  border-top: 1px solid lightgray;
 }
-/* 글제목 */
-.writing_title {
-  font-weight: bold;
-  font-size: 1.1em;
+.tableHeader {
+  background-color:floralwhite;
+  color: black;
 }
-/* 작성자 */
-.writer {
+.tableHeader td {
+  height: 1cm;
 }

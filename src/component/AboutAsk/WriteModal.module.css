@@ -101,9 +101,11 @@
 }
 
 .addButton {
+  display: flex;
   border: 1px solid gray;
   width: 3em;
   height: 2em;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }

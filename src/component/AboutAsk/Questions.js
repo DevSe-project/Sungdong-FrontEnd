@@ -7,9 +7,17 @@ import WriteModal from './WriteModal';
 
 export default function Questions() {
     // 문의하기 글쓰는 창을 나타내기 위한 state
-    const [writeState, setWriteState] = useState(1);
+    const [writeState, setWriteState] = useState(0);
 
-    const [writeList, setWriteList] = useState(WritingsObj);
+    const [writeList, setWriteList] = useState([
+        {
+            title: '성동물산 왜 이렇게 빨간가요...?',
+            content: '성동물산 프로젝트... 아직도 API가 구현을 못하겠다 싯팔 그냥 백앤드도 공부해야겠다는 생각이 든다. 어떤 식으로 하면 좋을까요 성동 씨?',
+            date: 202030822,
+            writer: '엄지석',
+            viewer: 0,
+        },
+    ]);
 
     // 글 list에 글을 넣는 작업
 
@@ -18,26 +26,58 @@ export default function Questions() {
         <div className={styles.body}>
             {/* 문의글 검색 input */}
             <div className={styles.searchContainer}>
-                <label for='search_input' className={styles.label_input}>검색</label>
-                <input type='text' id='search_input' className={styles.search_input} />
+                <label
+                    for='search_input'
+                    className={styles.label_input}>검색</label>
+                <input
+                    type='text'
+                    id='search_input'
+                    className={styles.search_input} />
                 {/* <i className="fas fa-search" /> */}
             </div>
             {/* 글 목록 | 글쓰기 버튼 */}
             <div className={styles.postContainer}>
-                <div className={styles.wrtingsList_title}>글 목록</div>
-                <div className={styles.go_write} onClick={() => { setWriteState(!writeState) }}>문의하기</div>
+                <div className={styles.wrtingsList_title}>
+                    글 목록
+                </div>
+                <div
+                    className={styles.go_write}
+                    onClick={() => { setWriteState(!writeState) }}>
+                    글쓰기
+                </div>
             </div>
             {/* 문의글 List(10개씩) */}
-            <ul className={styles.writing_ul}>
+            <table className={styles.table}>
+                <tr className={styles.tableHeader}>
+                    <td>제목</td>
+                    <td>작성자</td>
+                    <td>작성일</td>
+                    <td>조회수</td>
+                </tr>
                 {writeList.map((item, index) => {
-                    return <li key={index} className={styles.writing_li}>
-                        <div className={styles.writing_title}>{item.title}</div>
-                        <div className={styles.writer}>작성자 - {item.writer}</div>
-                    </li>
+                    return <tr key={index}>
+                        {/* 제목 - 최대 50글자로 정하기*/}
+                        <td>{item.title}</td>
+                        {/* 작성자 */}
+                        <td>{item.writer}</td>
+                        {/* 작성일 */}
+                        <td>{item.date}</td>
+                        {/* 조회수 */}
+                        <td>{item.viewer}회</td>
+                    </tr>
                 })}
-            </ul>
+            </table>
             {/* write 모달창 */}
-            {writeState ? null : <WriteModal writeState={writeState} setWriteState={setWriteState}/>}
+            {writeState
+                ?
+                <WriteModal
+                    writeState={writeState}
+                    setWriteState={setWriteState}
+                    writeList={writeList}
+                    setWriteList={setWriteList}
+                />
+                :
+                null}
             {/* 페이지 번호() */}
         </div>
     )
