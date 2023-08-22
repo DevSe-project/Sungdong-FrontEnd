@@ -8,10 +8,14 @@ export function DeliveryMain(){
       <TopBanner/>  
       <CategoryBar/>
       <div className={styles.container}>
-        <h1>주문 목록</h1>
-        <div className={styles.searchInputContainer}>
-          <input className={styles.searchInput} type='text' placeholder='주문한 상품 검색하기'/>
-          <i className="fas fa-search"/>
+        <div className={styles.title}>
+          <h1>주문 목록</h1>
+        </div>
+        <div className={styles.searchContainer}>
+          <div className={styles.searchInputContainer}>
+            <input className={styles.searchInput} type='text' placeholder='주문한 상품 검색하기'/>
+            <i className="fas fa-search"/>
+          </div>
         </div>
       </div>
       <Delivery/>

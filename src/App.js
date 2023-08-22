@@ -1,23 +1,30 @@
 import './App.css';
 import { useEffect, useState } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
+// Data 객체들 불러오기
+import { OrderObj } from './component/Data/OrderObj';
 import { DataObj } from './component/Data/DataObj'
+
+// 메인페이지
 import MainPage from './MainPage';
+import { List } from './component/AboutHome/List';
+
+// 로그인
 import Join from './component/AboutLogin/Join';
 import { Login } from './component/AboutLogin/Login';
 
+// 상세보기, 장바구니, 찜하기
 import { Detail } from './component/AboutDetail/Detail';
 import { Basket } from './component/AboutDetail/Basket';
 import { LikeItem } from './component/AboutDetail/LikeItem';
 
-import { List } from './component/AboutHome/List';
-
+// 주문, 결제, 주문서 작성
 import { Pay } from './component/AboutPay/Pay';
 import { Order } from './component/AboutPay/Order';
 import { Receipt } from './component/AboutPay/Receipt';
 import { DeliveryMain } from './component/AboutPay/DeliveryMain';
-import AskHome from './component/AboutAsk/UserService';
-import { OrderObj } from './component/Data/OrderObj';
+import { ReviewPage } from './component/AboutPay/ReviewPage';
+
 // 고객서비스 관련
 import UserService from './component/AboutAsk/UserService';
 import Questions from './component/AboutAsk/Questions';
@@ -25,17 +32,23 @@ import EachChat from './component/AboutAsk/EachChat';
 
 function App() {
   const navigate = useNavigate();
-  // 주문 스탭 부분
+  // 주문 스탭 부분 State
   const [activeTab, setActiveTab] = useState(1); // 현재 활성화된 스탭을 추적하는 State 
+
+  // 데이터 State
   const [data, setData] = useState();
   const [orderData, setOrderData] = useState();
   const [basketList, setBasketList] = useState([]);
   const [wishlist, setWishlist] = useState([]);
+
+  // 찜 데이터(캐쉬) 불러오기
   useEffect(() => {
     //localStorage에서 likelist를 파싱 
     const savedWishlist = JSON.parse(localStorage.getItem('likelist')) || []; //localStorage의 likelist가 없으면 공백 배열로 변수 저장
     setWishlist(savedWishlist); //setWishlist라는 State에 저장
   }, []);
+
+  // 데이터 불러오기
   useEffect(() => {
     const dataload = setTimeout(() => {
       setData(DataObj);
@@ -53,15 +66,18 @@ function App() {
             <List data={data} />
           </>
         } />
-        <Route path="/list" element={
-          <List data={data} navigate={navigate} />
-        } />
+
+        {/* 상세 페이지 */}
         <Route path="/detail/:id" element={
           <Detail data={data} navigate={navigate} wishlist={wishlist} setWishlist={setWishlist} basketList={basketList} setBasketList={setBasketList} />
         } />
+        
+        {/* 찜 목록 */}
         <Route path='/likeitem' element={
           <LikeItem basketList={basketList} setBasketList={setBasketList} setWishlist={setWishlist} wishlist={wishlist} />
         } />
+
+        {/* 장바구니 ~ 주문 */}
         <Route path='/basket' element={
           <Basket activeTab={activeTab} setActiveTab={setActiveTab} basketList={basketList} setBasketList={setBasketList} />
         }>
@@ -69,6 +85,7 @@ function App() {
           <Route path='pay' element={<Pay activeTab={activeTab} setActiveTab={setActiveTab} orderData={orderData} setOrderData={setOrderData}/>} />
           <Route path='order' element={<Order activeTab={activeTab} setActiveTab={setActiveTab} orderData={orderData} setOrderData={setOrderData}/>} />
         </Route>
+        {/* 주문 조회 */}
         <Route path='/delivery' element={<DeliveryMain />} />
         
         {/* 로그인 */}
@@ -78,8 +95,17 @@ function App() {
         {/* 문의하기 */}
         <Route path='/userservice' element={<UserService/>}>
           <Route path='questions' element={<Questions/>}/>
+<<<<<<< HEAD
           <Route path='eachchat' element={<EachChat/>}/>
           </Route>
+=======
+          <Route path='eachservice' element={<EachService/>}/>
+          <Route path='livechat' element={<LiveChat/>}/>
+        </Route>
+
+        {/* 리뷰 작성하기 */}
+        <Route path='/review/:id' element={<ReviewPage data={data} setData={setData} />}/>
+>>>>>>> f783cbd03eecc0d4b0075eb8618d9e2e803bbb3e
       </Routes>
     </div>
   );
