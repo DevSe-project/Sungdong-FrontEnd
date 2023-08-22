@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 export default function WriteModal(props) {
 
+  
+
   const navigate = useNavigate();
 
   return (
@@ -30,6 +32,10 @@ export default function WriteModal(props) {
             <label className={styles.content_label} for="contentInput">내용</label>
             <input className={styles.content_input} id='contentInput' />
           </div>
+        </div>
+        {/* 등록 */}
+        <div className={styles.addButton}>
+          등록
         </div>
       </div>
     </div>
