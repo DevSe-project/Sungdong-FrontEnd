@@ -153,8 +153,8 @@ function Find_PasswordModal() {
                 </div>
             </div>
             <div className={styles.goResetPassword} onClick={() => { }}>
-                인증번호<br />
-                요청
+                비밀번호<br />
+                찾기
             </div>
         </div>
     )

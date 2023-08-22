@@ -1,0 +1,95 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  /* 모달을 위로 떠오르게 설정 */
+}
+
+.modalWindow {
+  display: flex;
+  flex-direction: column;
+  background-color: whitesmoke;
+  color: black;
+  border: 1.5px solid grey;
+  border-radius: 1dvb;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  position: relative;
+  width: 40em;
+  height: 30em;
+  
+}
+
+.exit {
+  display: flex;
+  justify-content: flex-end;
+  border: none;
+  border-radius: 2dvh;
+  font-size: 2.5em;
+  font-weight: bold;
+  padding-top: 0.15em;
+  padding-right: 0.3em;
+  cursor: pointer;
+}
+
+.post {
+  display: flex;
+  justify-content: left;
+  padding: 1em;
+  padding-top: 0;
+  font-size: 1.8em;
+  font-weight: bold;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.title {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  padding: 1em;
+  font-size: 1.3em;
+  margin-bottom: 1em;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  padding: 1em;
+  font-size: 1.3em;
+}
+
+.title_label,
+.content_label {
+  font-weight: bold;
+  width: 20%;
+}
+
+.title_input {
+  width: 100%;
+  height: 3em;
+  border: 2px solid lightgray;
+  border-bottom: 2.5px solid lightgray;
+  border-right: 3px solid lightgray;
+  border-radius: 1.5dvh;
+}
+
+.content_input {
+  width: 100%;
+  height: 10em;
+  border: 2px solid lightgray;
+  border-bottom: 4px solid lightgray;
+  border-right: 3px solid lightgray;
+  border-radius: 1.5dvh;
+}

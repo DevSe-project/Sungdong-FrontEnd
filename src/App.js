@@ -29,8 +29,7 @@ import { OrderDetail } from './component/AboutPay/OrderDetail';
 // 고객서비스 관련
 import UserService from './component/AboutAsk/UserService';
 import Questions from './component/AboutAsk/Questions';
-import EachService from './component/AboutAsk/EachService';
-import LiveChat from './component/AboutAsk/LiveChat';
+import EachChat from './component/AboutAsk/EachChat';
 import { orderDetail } from './component/AboutPay/OrderDetail';
 
 function App() {
@@ -98,10 +97,8 @@ function App() {
         {/* 문의하기 */}
         <Route path='/userservice' element={<UserService/>}>
           <Route path='questions' element={<Questions/>}/>
-          <Route path='eachservice' element={<EachService/>}/>
-          <Route path='livechat' element={<LiveChat/>}/>
-        </Route>
-
+          <Route path='eachchat' element={<EachChat/>}/>
+          </Route>
         {/* 리뷰 작성하기 */}
         <Route path='/review/:id' element={<ReviewPage data={data} setData={setData} />}/>
       </Routes>

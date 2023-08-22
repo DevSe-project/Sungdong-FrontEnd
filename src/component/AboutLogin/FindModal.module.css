@@ -20,12 +20,11 @@
   flex-direction: column;
   background-color: whitesmoke;
   color: black;
-  border: 1.5px solid grey;
+  border: 1.5px solid #808080;
   border-radius: 1dvb;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  position: relative;
-  width: 600px;
-  height: 400px;
+  width: 35em;
+  height: 23em;
 }
 
 /* ------------공통 className------------ */
@@ -40,9 +39,8 @@
 
 .exitButton {
   /*❌버튼 */
-  padding: 1em;
   padding-top: 0.3em;
-  padding-bottom: 0;
+  padding-right: 0.4em;
   color: rgb(51, 51, 51);
   font-weight: bold;
   font-size: 2em;
@@ -143,14 +141,14 @@
   margin: 1em;
   display: flex;
   flex-direction: row;
-  width: 500px;
+  width: 35em;
   align-items: center;
   justify-content: center;
 }
 
 .smsContainer {
   height: 150px;
-  width: 400px;
+  width: 25em;
 }
 
 .reqNum {
@@ -174,7 +172,7 @@
 .smsInput_Container {
   display: flex;
   flex-direction: column;
-  width: 400px;
+  width: 25em;
 }
 
 .nameContainer {
@@ -216,12 +214,13 @@
 
 /* ------------find_pw modal CSS------------ */
 .pw_layout {
-  margin: 2.5em;
   display: flex;
+  margin-top: 2em;
   flex-direction: row;
-  width: 500px;
+  width: 32em;
   align-items: center;
   justify-content: center;
+  align-items: center;
 
 }
 
@@ -233,6 +232,7 @@
   height: 130px;
   width: 90px;
   font-size: 1.3rem;
+  font-weight: bold;
   display: flex;
   justify-content: center;
   align-items: center;
