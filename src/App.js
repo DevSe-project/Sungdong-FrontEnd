@@ -95,17 +95,10 @@ function App() {
         {/* 문의하기 */}
         <Route path='/userservice' element={<UserService/>}>
           <Route path='questions' element={<Questions/>}/>
-<<<<<<< HEAD
           <Route path='eachchat' element={<EachChat/>}/>
           </Route>
-=======
-          <Route path='eachservice' element={<EachService/>}/>
-          <Route path='livechat' element={<LiveChat/>}/>
-        </Route>
-
         {/* 리뷰 작성하기 */}
         <Route path='/review/:id' element={<ReviewPage data={data} setData={setData} />}/>
->>>>>>> f783cbd03eecc0d4b0075eb8618d9e2e803bbb3e
       </Routes>
     </div>
   );
