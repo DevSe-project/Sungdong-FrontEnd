@@ -12,9 +12,9 @@
   justify-content: center;
   align-items: center;
   padding: 1em 0;
-  border-top: 2px solid black;
-  border-bottom: 2px solid black;
-  border-radius: 1dvh;
+  border-top: 2px solid lightgray;
+  border-bottom: 2px solid lightgray;
+  border-radius: 5dvh;
 }
 
 .label_input {
@@ -28,13 +28,22 @@
   height: 1.2em;
   padding: 10px;
   font-size: 1.2em;
+  border: 0.5px solid lightgray;
+  border-right: 2px solid lightgray;
+  border-bottom: 2.5px solid lightgray;
   border-radius: 1dvh;
+  background-color: rgb(233, 233, 233);
 }
 /* 글목록 POST */
 .postContainer {
   display: flex; 
   justify-content:space-between;
+  align-items: center;
   font-weight: bold;
+  border-top: 2px solid gray;
+  border-bottom: 2px solid gray;
+  padding: 1em;
+
 }
 /* 글목록 제목 */
 .wrtingsList_title {
