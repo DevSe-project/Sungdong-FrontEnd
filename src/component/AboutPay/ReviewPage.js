@@ -80,6 +80,8 @@ export function ReviewPage(props){
     if(isValid){
       const find = props.data.find((item) => item.id == id); // Use == for comparison
       const reviewLength = find.review ? find.review.length : 0;
+      const currentDate =  new Date();
+      const formattedDate = currentDate.toLocaleString();
       const editedData = {
         id: reviewLength ? reviewLength + 1 : 0,
         userId: 'asdasdx100',
@@ -88,7 +90,7 @@ export function ReviewPage(props){
         title: reviewTitle,              
         content: reviewDetail,
         image: '(사진)',
-        date: '22/01/29',
+        date: formattedDate,
       };
       // 데이터 찾기
       const copyData = props.data.map((item) => {

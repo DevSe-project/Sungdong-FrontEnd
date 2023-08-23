@@ -1,0 +1,94 @@
+.title{
+  margin: 2em;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: left;
+  width: 6em;
+  margin-left: 5em;
+  border-bottom: 3px solid #cc0000;
+}
+
+.mapLocation{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mapInfo{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.mapToggle{
+  margin-top: 3em;
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mapTitle{
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  gap: 1em;
+  word-wrap: break-word;
+}
+
+.mapButton{
+  display: flex;
+  flex-direction: row;
+  gap: 0.5em;
+  flex-wrap: wrap;
+}
+
+.mapLink{
+  color: white;
+  display: flex;
+  padding: 1em;
+  background-color: #cc0000;
+  white-space: nowrap;
+  gap: 0.5em;
+}
+
+.companyInfo{
+  margin: 3em;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  border-top: 2px solid #ccc;
+  border-bottom: 2px solid #ccc;
+}
+
+.companyInner{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 6em;
+  border-bottom: 1px solid lightgray;
+  word-wrap: break-word;
+  white-space: nowrap;
+}
+
+
+.companyContent{
+  width: 70%;
+  text-align: left;
+  white-space: wrap;
+}
+
+.contentInner{
+  display: flex;
+  flex-direction: column;
+}
+
+.col{
+  display: flex;
+  flex-direction: row;
+  gap: 2em;
+}
