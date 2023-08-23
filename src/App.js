@@ -30,8 +30,8 @@ import { OrderDetail } from './component/AboutPay/OrderDetail';
 import UserService from './component/AboutAsk/UserService';
 import Questions from './component/AboutAsk/Questions';
 import EachChat from './component/AboutAsk/EachChat';
-import { orderDetail } from './component/AboutPay/OrderDetail';
 import { Comeway } from './component/AboutCompany/Comeway';
+import { TodayNews } from './component/AboutCompany/TodayNews';
 
 function App() {
   const navigate = useNavigate();
@@ -101,11 +101,12 @@ function App() {
         <Route path='/userservice' element={<UserService/>}>
           <Route path='questions' element={<Questions/>}/>
           <Route path='eachchat' element={<EachChat/>}/>
-          </Route>
+        </Route>
         {/* 리뷰 작성하기 */}
         <Route path='/review/:id' element={<ReviewPage data={data} setData={setData} />}/>
         {/* 회사 관련 */}
         <Route path='/comeway' element={<Comeway/>}/>
+        <Route path='/todayTopic' element={<TodayNews/>}/>
       </Routes>
     </div>
   );
