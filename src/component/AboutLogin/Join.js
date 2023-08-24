@@ -55,7 +55,22 @@ export default function Join(props) {
             // } else {
             //     console.log('사용가능한 아이디입니다.');
             // }
-            props.setUserData.push(props.inputData.id);
+            props.setUserData(prevData => ({ //userData(UserData객체배열을 담은 state에 input받은 회원정보를 추가)
+                ...prevData,
+                id: props.inputData.id,
+                password: props.inputData.pw,
+                email: props.inputData.email,
+                name: props.inputData.name,
+                phoneNumber: {
+                    num1: props.inputData.num1,
+                    num2: props.inputData.num2,
+                    num3: props.inputData.num3,
+                },
+                deliveryAddress: {
+                    postnum: props.inputData.postnum,
+                    address: props.inputData.address
+                },
+            }))
             setWarningMsg(false); // 경고 메시지를 지우고
             navigate('/login');
             alert('성동물산에 오신 걸 환영합니다! 이제 로그인을 진행할 수 있습니다.');
@@ -77,7 +92,7 @@ export default function Join(props) {
             </div>
 
             {/* IndivisualMembers Form */}
-            <JoinForm userData={props.userData} setUserData={props.setUserData}/>
+            <JoinForm userData={props.userData} setUserData={props.setUserData} />
 
             {/* 전체 동의하기 */}
             <div className={styles.checkAll}>

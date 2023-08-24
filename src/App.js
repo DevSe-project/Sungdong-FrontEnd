@@ -101,7 +101,7 @@ function App() {
         <Route path='/orderDetail' element={<OrderDetail/>}/>
 
         {/* 로그인 */}
-        <Route path='/login' element={<Login />} />
+        <Route path='/login' element={<Login userData={userData} setUserData={setUserData} />} />
         <Route path='/join' element={<Join userData={userData} setUserData={setUserData}/>} />
 
         {/* 문의하기 */}
