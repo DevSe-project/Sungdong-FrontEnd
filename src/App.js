@@ -32,12 +32,9 @@ import UserService from './component/AboutAsk/UserService';
 import Questions from './component/AboutAsk/Questions';
 import EachChat from './component/AboutAsk/EachChat';
 import { Comeway } from './component/AboutCompany/Comeway';
-<<<<<<< HEAD
 import { UserData } from './component/Data/UserData';
-=======
 import { TodayNews } from './component/AboutCompany/TodayNews';
 import { TodayNewsInner } from './component/AboutCompany/TodayNewsInner';
->>>>>>> 531ceeadbb118d66b74fb198df3f67029243d1f4
 
 function App() {
   const navigate = useNavigate();
@@ -49,11 +46,8 @@ function App() {
   const [orderData, setOrderData] = useState();
   const [basketList, setBasketList] = useState([]);
   const [wishlist, setWishlist] = useState([]);
-<<<<<<< HEAD
   const [userData, setUserData] = useState();
-=======
   const [todayTopicData, setTodayTopicData] = useState();
->>>>>>> 531ceeadbb118d66b74fb198df3f67029243d1f4
 
   // 찜 데이터(캐쉬) 불러오기
   useEffect(() => {
@@ -68,8 +62,6 @@ function App() {
       setData(DataObj);
       setOrderData(OrderObj);
       setUserData(UserData);
-      return clearTimeout(dataload)
-    }, 2000)
       setTodayTopicData(TodayTopicPostObj);
       return clearTimeout(dataload)
     }, 1500)
