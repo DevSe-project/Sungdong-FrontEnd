@@ -85,6 +85,30 @@ export function Detail(props) {
 }
 
 
+// 즉시구매 함수
+function buyThis(product, count){
+  // 수량 0을 장바구니에 저장하는 것 방지, ** 백엔드 : login 캐쉬값이 저장되어 있는 것이 확인이 되면 허용
+  if(count > 0){
+    const editedData = [{
+      productId : product.id,
+      userId: "asdfx100", 
+      productName : product.title,
+      cnt : Number(count), 
+      price: product.price,
+      finprice : (product.price * count), //총 계산액
+    }]
+      // editedData 객체를 JSON 형식의 문자열로 변환
+      const editedDataString = JSON.stringify(editedData);
+      // localStorage에 저장
+      localStorage.setItem('orderData', editedDataString);
+      props.setOrderList(editedData);
+      navigate("/basket/receipt");
+      props.setActiveTab(2);
+  } else {
+    alert("수량은 0보다 커야합니다.")
+  }
+}
+
 // 장바구니 담기 함수
 function basketThis(product, count){
   // 수량 0을 장바구니에 저장하는 것 방지, ** 백엔드 : login 캐쉬값이 저장되어 있는 것이 확인이 되면 허용
@@ -234,11 +258,16 @@ function basketThis(product, count){
 
               {/* 버튼 부분들 (결제하기, 장바구니, 찜하기) */}
               <div className={styles.textButton}>
-                <button className={styles.mainButton}>결제하기</button>
+                <button 
+                className={styles.mainButton}
+                onClick={()=> buyThis(detailData, count)}
+                >결제하기</button>
                 <div className={styles.sideTextButton}>
-                  <button onClick={()=>{basketThis(detailData, count)}}
+                  <button 
+                  onClick={()=>{basketThis(detailData, count)}}
                   className={styles.sideButton}>장바구니</button>
-                  <button onClick={()=>{likethis(detailData)}} 
+                  <button 
+                  onClick={()=>{likethis(detailData)}} 
                   className={styles.sideButton}>
                   {props.wishlist.some((item) => item.id === detailData.id)
                   ? <i className="fa-solid fa-heart"/> //꽉 찬 하트와 빈 하트 아이콘

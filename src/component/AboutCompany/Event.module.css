@@ -1,0 +1,19 @@
+.body{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.title{
+  width: 80%;
+  margin: 2em;
+  margin-left: 0;
+  margin-right: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: left;
+  border-bottom: 3px solid #cc0000;
+  padding-bottom: 1em;
+}

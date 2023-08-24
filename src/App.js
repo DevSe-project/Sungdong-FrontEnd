@@ -5,6 +5,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import { OrderObj } from './component/Data/OrderObj';
 import { DataObj } from './component/Data/DataObj'
 import { TodayTopicPostObj } from './component/Data/TodayTopicPostObj';
+import { UserData } from './component/Data/UserData';
 
 // 메인페이지
 import MainPage from './MainPage';
@@ -31,10 +32,12 @@ import { OrderDetail } from './component/AboutPay/OrderDetail';
 import UserService from './component/AboutAsk/UserService';
 import Questions from './component/AboutAsk/Questions';
 import EachChat from './component/AboutAsk/EachChat';
+
+// 회사 이벤트 관련
 import { Comeway } from './component/AboutCompany/Comeway';
-import { UserData } from './component/Data/UserData';
 import { TodayNews } from './component/AboutCompany/TodayNews';
 import { TodayNewsInner } from './component/AboutCompany/TodayNewsInner';
+import { Event } from './component/AboutCompany/Event';
 
 function App() {
   const navigate = useNavigate();
@@ -46,6 +49,7 @@ function App() {
   const [orderData, setOrderData] = useState();
   const [basketList, setBasketList] = useState([]);
   const [wishlist, setWishlist] = useState([]);
+  const [orderList, setOrderList] = useState([]);
   const [userData, setUserData] = useState();
   const [todayTopicData, setTodayTopicData] = useState();
 
@@ -79,7 +83,8 @@ function App() {
 
         {/* 상세 페이지 */}
         <Route path="/detail/:id" element={
-          <Detail data={data} navigate={navigate} wishlist={wishlist} setWishlist={setWishlist} basketList={basketList} setBasketList={setBasketList} />
+          <Detail data={data} navigate={navigate} wishlist={wishlist} setWishlist={setWishlist} basketList={basketList} setBasketList={setBasketList} setActiveTab={setActiveTab} activeTab={activeTab} 
+          orderList={orderList} setOrderList={setOrderList} />
         } />
         
         {/* 찜 목록 */}
@@ -89,7 +94,7 @@ function App() {
 
         {/* 장바구니 ~ 주문 */}
         <Route path='/basket' element={
-          <Basket activeTab={activeTab} setActiveTab={setActiveTab} basketList={basketList} setBasketList={setBasketList} />
+          <Basket activeTab={activeTab} setActiveTab={setActiveTab} basketList={basketList} setBasketList={setBasketList} orderList={orderList} setOrderList={setOrderList} />
         }>
           <Route path='receipt' element={<Receipt data={data} activeTab={activeTab} setActiveTab={setActiveTab} orderData={orderData} setOrderData={setOrderData} />} />
           <Route path='pay' element={<Pay activeTab={activeTab} setActiveTab={setActiveTab} orderData={orderData} setOrderData={setOrderData}/>} />
@@ -115,7 +120,9 @@ function App() {
         <Route path='/comeway' element={<Comeway/>}/>
         <Route path='/todayTopic/:page' element={
           <TodayNews todayTopicData={todayTopicData} setTodayTopicData={setTodayTopicData} />}/>
-        <Route path='/todayTopicPost/:id' element={<TodayNewsInner todayTopicData={todayTopicData} setTodayTopicData={setTodayTopicData} />}/>
+        <Route path='/todayTopicPost/:id' 
+        element={<TodayNewsInner todayTopicData={todayTopicData} setTodayTopicData={setTodayTopicData} />}/>
+        <Route path='/event' element={<Event/>}/>
       </Routes>
     </div>
   );

@@ -152,6 +152,7 @@ export function Basket(props){
       const editedDataString = JSON.stringify(editedData);
       // localStorage에 저장
       localStorage.setItem('orderData', editedDataString);
+      props.setOrderList(selectedItems);
       navigate("/basket/receipt");
       props.setActiveTab(2);
     }
@@ -248,12 +249,14 @@ export function Basket(props){
             : null}
 
             {/* 주문서 작성 탭으로 넘어가면 체크된 목록들만 나열함(수정 불가) */}
-            {props.activeTab > 1 &&
-            selectedItems.map((item, key)=> (
+            {props.activeTab > 1 && props.orderList &&
+            props.orderList.map((item, key)=> (
               <tr key={key}>
                 <td><img src='../image/logo.jpeg' alt='이미지'/></td>
                 <td>
-                  <h5 className={styles.link} onClick={()=>navigate(`/detail/${item.id}`)}>{item.title}</h5>
+                  <h5 className={styles.link} onClick={()=>navigate(`/detail/${item.id}`)}>{item.title 
+                  ? item.title : item.productName
+                  ? item.productName : null}</h5>
                   <div>
                   옵션 : 옵션정보
                   <p>상품 금액 : <span className={styles.price}>\{item.price}</span></p>
@@ -272,14 +275,15 @@ export function Basket(props){
                 <div className={styles.finalBox}>
                   <h2>총 상품 금액</h2>
                   <div className={styles.price}>
-                    <h5>\{sum}</h5>
+                    <h5>{sum ? `\\${sum}` : props.orderList 
+                    ? props.orderList.map((item)=> `\\${item.finprice}`) : 0} </h5>
                   </div>
                 </div>
                 <i className="fal fa-plus"></i>
                 <div className={styles.finalBox}>
                   <h2>배송비</h2>
                   <div className={styles.price}>
-                    <h5>\{sum ? delivery : 0}</h5>
+                    <h5>\{delivery ? delivery : 0}</h5>
                   </div>
                 </div>
                 <i className="fal fa-minus"></i>
@@ -293,7 +297,8 @@ export function Basket(props){
                 <div className={styles.finalBox}>
                   <h2>최종 결제 금액</h2>
                   <div className={styles.price}>
-                    <h5>\{sum ? resultOrderPrice : 0}</h5>
+                    <h5>\{sum ? resultOrderPrice : props.orderList 
+                    ? props.orderList.map((item)=> item.finprice + delivery - discount) : 0}</h5>
                   </div>
                 </div>
             </div>
