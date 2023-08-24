@@ -67,15 +67,12 @@ function App() {
     const dataload = setTimeout(() => {
       setData(DataObj);
       setOrderData(OrderObj);
-<<<<<<< HEAD
       setUserData(UserData);
       return clearTimeout(dataload)
     }, 2000)
-=======
       setTodayTopicData(TodayTopicPostObj);
       return clearTimeout(dataload)
     }, 1500)
->>>>>>> 531ceeadbb118d66b74fb198df3f67029243d1f4
   }, [])
 
   return (
