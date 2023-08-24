@@ -1,11 +1,15 @@
 export let UserData = [
     {
-        id : "54vaipxec30",
-        password : "12341234",
-        confirmPassword : "12341234",
-        email : "jsum01@gmail.com",
-        name : "엄지석",
-        phoneNumber : "01023355430",
+        id : "test",
+        password : "test123",
+        confirmPassword : "test123",
+        email : "test@gmail.com",
+        name : "테스트",
+        phoneNumber : {
+            num1 : '',
+            num2 : '',
+            num3 : '',
+        },
         coupon : "",
         bonusMoney : "",
         basket : [],

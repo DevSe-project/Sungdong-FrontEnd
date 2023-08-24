@@ -32,6 +32,7 @@ import Questions from './component/AboutAsk/Questions';
 import EachChat from './component/AboutAsk/EachChat';
 import { orderDetail } from './component/AboutPay/OrderDetail';
 import { Comeway } from './component/AboutCompany/Comeway';
+import { UserData } from './component/Data/UserData';
 
 function App() {
   const navigate = useNavigate();
@@ -43,6 +44,7 @@ function App() {
   const [orderData, setOrderData] = useState();
   const [basketList, setBasketList] = useState([]);
   const [wishlist, setWishlist] = useState([]);
+  const [userData, setUserData] = useState();
 
   // 찜 데이터(캐쉬) 불러오기
   useEffect(() => {
@@ -56,8 +58,9 @@ function App() {
     const dataload = setTimeout(() => {
       setData(DataObj);
       setOrderData(OrderObj);
+      setUserData(UserData);
       return clearTimeout(dataload)
-    }, 3000)
+    }, 2000)
   }, [])
 
   return (
@@ -95,7 +98,7 @@ function App() {
 
         {/* 로그인 */}
         <Route path='/login' element={<Login />} />
-        <Route path='/join' element={<Join />} />
+        <Route path='/join' element={<Join userData={userData} setUserData={setUserData}/>} />
 
         {/* 문의하기 */}
         <Route path='/userservice' element={<UserService/>}>

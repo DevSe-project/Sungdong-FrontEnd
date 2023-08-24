@@ -4,8 +4,9 @@ import logo from '../../image/logo.jpeg'
 import { useEffect, useState } from "react";
 import PolicyObj from "../Data/PolicyObj";
 import JoinForm from "./JoinForm";
+import { UserData } from "../Data/UserData";
 
-export default function Join() {
+export default function Join(props) {
     // link_navigate
     let navigate = useNavigate();
 
@@ -36,20 +37,31 @@ export default function Join() {
 
     //경고문구 : 초기값(닫힌상태) - 아래의 삼항연산자를 움직일 State
     const [warningMsg, setWarningMsg] = useState(false)
+
     // [필수]항목들이 모두 체크됐는지 유무에 따라 warningMsg state를 조정하는 함수
-    useEffect( () => {
+    useEffect(() => {
         if (areAllRequiredChecked() === false) {
             setWarningMsg(true);
         } else setWarningMsg(false);
     })
 
+    // 가입하기 버튼 클릭 event(가입s조건 모두 충족됐는지)
     let signUp_checkCondition = () => {
-        if (areAllRequiredChecked() === false) {
-            setWarningMsg(false);
+        // [필수]항목 체크확인
+        if (areAllRequiredChecked()) {
+            // 가입하기 버튼을 눌렀을 때, input받은 정보를 userData state에 저장하기 전 유효성 검사 실시.
+            // if(props.inputData && UserData.find(item => item.id === props.inputData.id)) {
+            //     console.log('중복된 아이디입니다.');
+            // } else {
+            //     console.log('사용가능한 아이디입니다.');
+            // }
+            props.setUserData.push(props.inputData.id);
+            setWarningMsg(false); // 경고 메시지를 지우고
+            navigate('/login');
+            alert('성동물산에 오신 걸 환영합니다! 이제 로그인을 진행할 수 있습니다.');
         }
         else {
-            navigate('/login');
-            alert('성동물산에 오신 걸 환영합니다! 이제 로그인을 진행할 수 있습니다.')
+            setWarningMsg(false);
         }
     }
 
@@ -65,7 +77,7 @@ export default function Join() {
             </div>
 
             {/* IndivisualMembers Form */}
-            <JoinForm />
+            <JoinForm userData={props.userData} setUserData={props.setUserData}/>
 
             {/* 전체 동의하기 */}
             <div className={styles.checkAll}>

@@ -1,22 +1,24 @@
-import { useState } from "react";
+import { useInsertionEffect, useState } from "react";
 import styles from './RelativeJoin.module.css';
 import CorporateMember from "./CorporateMembers";
 
 
-export default function JoinForm() {
+export default function JoinForm(props) {
 
     // 입력받을 회원 정보 객체배열 state
     let [inputData, setInputData] = useState([
         {
-            id: null,
-            password: null,
-            confirmPassword: null,
-            email: null,
-            name: null,
-            phoneNumber1: null,
-            phoneNumber2: null,
-            phoneNumber3: null,
-            deliveryAddress: { postnum: null, address: null },
+            id: '',
+            password: '',
+            confirmPassword: '',
+            email: '',
+            name: '',
+            phoneNumber: {
+                num1: '',
+                num2: '',
+                num3: '',
+            },
+            deliveryAddress: { postnum: '', address: '' },
         },
     ])
 
@@ -63,27 +65,26 @@ export default function JoinForm() {
         const newPhoneNumber = e.target.value;
         setInputData(prevData => ({
             ...prevData,
-            phoneNumber1: newPhoneNumber
+            num1: newPhoneNumber
         }));
     };
     let handlePhoneNumber2 = (e) => { //전화번호
         const newPhoneNumber = e.target.value;
         setInputData(prevData => ({
             ...prevData,
-            phoneNumber2: newPhoneNumber
+            num2: newPhoneNumber
         }));
     };
     let handlePhoneNumber3 = (e) => { //전화번호
         const newPhoneNumber = e.target.value;
         setInputData(prevData => ({
             ...prevData,
-            phoneNumber3: newPhoneNumber
+            num3: newPhoneNumber
         }));
     };
 
     // 주소입력 API
     const [address1, setAddress1] = useState("");
-
     const openPopup = (setAddress) => {
         const script = document.createElement('script');
         script.src = 'https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
@@ -97,7 +98,8 @@ export default function JoinForm() {
         document.body.appendChild(script);
     }
 
-    let confirmPassword = inputData.password === inputData.confirmPassword; //data 일치유무 체크
+    //data 일치유무 체크
+    let confirmPassword = inputData.password === inputData.confirmPassword;
 
     return (
         <div>
@@ -297,7 +299,7 @@ export default function JoinForm() {
                             </div>
                         </div>
                     </li>
-                    }
+                }
             </ul>
             <br /> <br />
             {/* 회원구분 체크에 따라 기업회원 가입정보창을 보여줄지 말지 */}
