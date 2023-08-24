@@ -21,7 +21,7 @@ export function TopBanner () {
         },
         {
         item : '오늘의 뉴스',
-        link : '/todaytopic',
+        link : '/todaytopic/1',
         },
         {
         item : '진행 중인 이벤트',

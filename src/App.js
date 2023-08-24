@@ -4,6 +4,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 // Data 객체들 불러오기
 import { OrderObj } from './component/Data/OrderObj';
 import { DataObj } from './component/Data/DataObj'
+import { TodayTopicPostObj } from './component/Data/TodayTopicPostObj';
 
 // 메인페이지
 import MainPage from './MainPage';
@@ -32,6 +33,7 @@ import Questions from './component/AboutAsk/Questions';
 import EachChat from './component/AboutAsk/EachChat';
 import { Comeway } from './component/AboutCompany/Comeway';
 import { TodayNews } from './component/AboutCompany/TodayNews';
+import { TodayNewsInner } from './component/AboutCompany/TodayNewsInner';
 
 function App() {
   const navigate = useNavigate();
@@ -43,6 +45,7 @@ function App() {
   const [orderData, setOrderData] = useState();
   const [basketList, setBasketList] = useState([]);
   const [wishlist, setWishlist] = useState([]);
+  const [todayTopicData, setTodayTopicData] = useState();
 
   // 찜 데이터(캐쉬) 불러오기
   useEffect(() => {
@@ -56,8 +59,9 @@ function App() {
     const dataload = setTimeout(() => {
       setData(DataObj);
       setOrderData(OrderObj);
+      setTodayTopicData(TodayTopicPostObj);
       return clearTimeout(dataload)
-    }, 3000)
+    }, 1500)
   }, [])
 
   return (
@@ -106,7 +110,9 @@ function App() {
         <Route path='/review/:id' element={<ReviewPage data={data} setData={setData} />}/>
         {/* 회사 관련 */}
         <Route path='/comeway' element={<Comeway/>}/>
-        <Route path='/todayTopic' element={<TodayNews/>}/>
+        <Route path='/todayTopic/:page' element={
+          <TodayNews todayTopicData={todayTopicData} setTodayTopicData={setTodayTopicData} />}/>
+        <Route path='/todayTopicPost/:id' element={<TodayNewsInner todayTopicData={todayTopicData} setTodayTopicData={setTodayTopicData} />}/>
       </Routes>
     </div>
   );
