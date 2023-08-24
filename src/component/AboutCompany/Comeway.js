@@ -75,7 +75,7 @@ export function Comeway(){
     <div>
       <TopBanner/>
       <CategoryBar/>
-      <main>
+      <main className={styles.body}>
         <div className={styles.title}>
           <h1>오시는 길</h1>
         </div>

@@ -1,0 +1,68 @@
+.body{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.title{
+  width: 80%;
+  margin: 2em;
+  margin-left: 0;
+  margin-right: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: left;
+  border-bottom: 3px solid #cc0000;
+  padding-bottom: 0.7em;
+}
+
+.contentsHead{
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+  align-items: center;
+  padding-bottom: 2em;
+  border-bottom: 1px solid lightgray;
+}
+
+.contentsBody{
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  border-bottom: 1px solid lightgray;
+  padding-top: 2em;
+  padding-bottom: 4em;
+}
+
+
+.contentsFoot{
+  width: 80%;
+  font-size: 1.2em;
+  margin-top: 1em;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 0.5em;
+}
+
+.button{
+  border: 1px solid lightgray;
+  background-color: white;
+  padding: 1.5em;
+  padding-left: 1.5em;
+  padding-right: 1.5em;
+}
+
+.listButton{
+  border: 1px solid lightgray;
+  background-color: white;
+  padding: 0.9em;
+  padding-left: 1.5em;
+  padding-right: 1.5em;
+  cursor: pointer;
+}

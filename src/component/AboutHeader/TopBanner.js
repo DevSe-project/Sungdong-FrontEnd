@@ -12,12 +12,16 @@ export function TopBanner () {
         link : '/introduceCompany'
       },
       subMenuItems: [{
+        item : '회사소개',
+        link : '/introduceCompany'
+        },
+        {
         item : '오시는 길',
         link : '/comeway',
         },
         {
         item : '오늘의 뉴스',
-        link : '/todaytopic',
+        link : '/todaytopic/1',
         },
         {
         item : '진행 중인 이벤트',
@@ -29,7 +33,8 @@ export function TopBanner () {
         item : '고객센터',
         link : '/userservice'
       },
-      subMenuItems: [{
+      subMenuItems: [
+        {
         item : '질문 게시판',
         link : '/userservice/questions',
         },
@@ -48,6 +53,10 @@ export function TopBanner () {
         link : '/mypages'
       },
       subMenuItems: [{
+        item : '내정보 관리',
+        link : '/mypages'
+        },
+        {
         item : '장바구니 목록',
         link : '/basket',
         },
