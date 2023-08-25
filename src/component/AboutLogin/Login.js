@@ -5,7 +5,7 @@ import { useState } from 'react';
 import FindModal from './FindModal';
 import { UserData } from '../Data/UserData';
 
-export function Login() {
+export function Login(props) {
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
 
@@ -24,16 +24,18 @@ export function Login() {
 
   // 로그인 함수
   const goLogin = () => {
-    const confirmUser = UserData.find( userData => userData.id === id && userData.password === pw); //UserData의 id,password와 input받은 id,pw값이 일치하는 것을 꺼내옴
+    const confirmUser = props.userData.find( userData => userData.id === id && userData.password === pw); //UserData의 id,password와 input받은 id,pw값이 일치하는 것을 꺼내옴
     if (confirmUser && confirmUser.id === id && confirmUser.password === pw) { //꺼내 온 id,pw가 일치한다면 
       setId(null); //입력된 id,
       setPw(null); //pw를 지우고
-      console.log(confirmUser); //확인된 유저데이터에 뭐가 들었는지 console로 확인
+      console.log(props.userData); //확인된 유저데이터에 뭐가 들었는지 console로 확인
       navigate('/'); //메인페이지로 이동하면서
       alert('성동물산에 오신 걸 환영합니다!'); //환영문구 출력
+      console.log(props.userData);
     } else { //일치하지 않다면
       console.log(id === UserData.id)
       alert('아이디 혹은 비밀번호를 확인주세요.'); //경고문구 출력
+      console.log(props.userData.address);
     }
   }
 

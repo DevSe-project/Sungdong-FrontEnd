@@ -1,80 +1,23 @@
-import { useInsertionEffect, useState } from "react";
+import { useState } from "react";
 import styles from './RelativeJoin.module.css';
 import CorporateMember from "./CorporateMembers";
 
 
-export default function JoinForm(inputData, setInputData) {
-
-    // 개인&기업 회원 체크box
-    let [memberType, setMemberType] = useState(false); //false면 개인, true면 기업
-
-    // 입력된 정보 삽입
-    let handleId = (e) => { //아이디
-        const newId = e.target.value;
-        setInputData(prevData => ({
-            ...prevData,
-            id: newId
-        }));
-    };
-    let handlePassword = (e) => { //비밀번호
-        const newPassword = e.target.value;
-        setInputData(prevData => ({
-            ...prevData,
-            password: newPassword
-        }));
-    };
-    let handleConfirmPassword = (e) => { //비밀번호 재확인
-        const newConfirmPassword = e.target.value;
-        setInputData(prevData => ({
-            ...prevData,
-            confirmPassword: newConfirmPassword
-        }));
-    };
-    let handleEmail = (e) => { //이메일
-        const newEmail = e.target.value;
-        setInputData(prevData => ({
-            ...prevData,
-            email: newEmail
-        }));
-    };
-    let handleName = (e) => { //이름
-        const newName = e.target.value;
-        setInputData(prevData => ({
-            ...prevData,
-            name: newName
-        }));
-    };
-    let handlePhoneNumber1 = (e) => { //전화번호
-        const newPhoneNumber = e.target.value;
-        setInputData(prevData => ({
-            ...prevData,
-            num1: newPhoneNumber
-        }));
-    };
-    let handlePhoneNumber2 = (e) => { //전화번호
-        const newPhoneNumber = e.target.value;
-        setInputData(prevData => ({
-            ...prevData,
-            num2: newPhoneNumber
-        }));
-    };
-    let handlePhoneNumber3 = (e) => { //전화번호
-        const newPhoneNumber = e.target.value;
-        setInputData(prevData => ({
-            ...prevData,
-            num3: newPhoneNumber
-        }));
-    };
+export default function JoinForm(props) {
 
     // 주소입력 API
-    const [address1, setAddress1] = useState("");
+    const [address, setAddress] = useState("");
     const openPopup = (setAddress) => {
         const script = document.createElement('script');
         script.src = 'https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
         script.onload = () => {
             new window.daum.Postcode({
                 oncomplete: (data) => {
-                    setAddress(data);
+                    setAddress(data); //표시용
+                    props.setInputData((prevData) => ({
+                        ...prevData,
+                        address: data
+                    }))
                 }
             }).open();
         }
@@ -82,7 +25,7 @@ export default function JoinForm(inputData, setInputData) {
     }
 
     //data 일치유무 체크
-    let confirmPassword = inputData.password === inputData.confirmPassword;
+    let confirmPassword = props.inputData.password === props.inputData.confirmPassword;
 
     return (
         <div>
@@ -99,10 +42,34 @@ export default function JoinForm(inputData, setInputData) {
                     <div className={styles.right}>
                         <div className={styles.isInput}>
                             <div className={styles.typeMember}>
-                                <input type="radio" name="memberType" id="indivisualMember" onChange={() => setMemberType(false)} /><label htmlFor="indivisualMember">개인회원</label>
+                                <input
+                                    type="radio"
+                                    id="indivisualMember"
+                                    name="userType"
+                                    value={props.inputData.userType}
+                                    checked={props.inputData.userType === "indivisual"}
+                                    onChange={(e) => {
+                                        props.setInputData(
+                                            (prevData) => ({ ...prevData, userType: 'indivisual' })
+                                        )
+                                    }}
+                                />
+                                <label htmlFor="indivisualMember">개인회원</label>
                             </div>
                             <div className={styles.typeMember}>
-                                <input type="radio" name="memberType" id="corporateMember" onChange={() => setMemberType(true)} /><label htmlFor="corporateMember">기업회원</label>
+                                <input
+                                    type="radio"
+                                    id="corporateMember"
+                                    name="userType"
+                                    value={props.inputData.userType}
+                                    checked={props.inputData.userType === "corporation"}
+                                    onChange={(e) => {
+                                        props.setInputData(
+                                            (prevData) => ({ ...prevData, userType: 'corporation' })
+                                        )
+                                    }}
+                                />
+                                <label htmlFor="corporateMember">기업회원</label>
                             </div>
                         </div>
                         <div className={styles.notification}>기업회원은 아래에 추가 정보입력 란이 있습니다.</div>
@@ -117,8 +84,13 @@ export default function JoinForm(inputData, setInputData) {
                             className={styles.isInput}
                             type='text'
                             placeholder={'아이디'}
-                            value={inputData.id}
-                            onChange={handleId}
+                            name="id"
+                            value={props.inputData.id}
+                            onChange={(e) => {
+                                props.setInputData(
+                                    (prevData) => ({ ...prevData, id: e.target.value })
+                                )
+                            }}
                         />
                         <div className={styles.notification}> ?~??자리의 영문,숫자를 입력해주십시오.</div>
                     </div>
@@ -134,8 +106,13 @@ export default function JoinForm(inputData, setInputData) {
                             className={styles.isInput}
                             type='password'
                             placeholder={'비밀번호'}
-                            value={inputData.password}
-                            onChange={handlePassword}
+                            name="password"
+                            value={props.inputData.password}
+                            onChange={(e) => {
+                                props.setInputData(
+                                    (prevData) => ({ ...prevData, password: e.target.value })
+                                )
+                            }}
                         />
                         <div className={styles.notification}>영문 및 특수문자, 숫자 조합의 8자리 이상 입력해주시기 바랍니다.</div>
                     </div>
@@ -149,8 +126,13 @@ export default function JoinForm(inputData, setInputData) {
                             className={styles.isInput}
                             type='password'
                             placeholder={'비밀번호 재입력(일치 확인)'}
-                            value={inputData.confirmPassword}
-                            onChange={handleConfirmPassword}
+                            name="confirmPassword"
+                            value={props.inputData.confirmPassword}
+                            onChange={(e) => {
+                                props.setInputData(
+                                    (prevData) => ({ ...prevData, confirmPassword: e.target.value })
+                                )
+                            }}
                         />
                         <div className={styles.notification}>비밀번호 확인을 위해 다시 한 번 입력해주십시오.</div>
                     </div>
@@ -166,17 +148,46 @@ export default function JoinForm(inputData, setInputData) {
                         <input
                             className={styles.isInput}
                             type='text'
-                            value={inputData.email}
                             placeholder={'이메일'}
-                            onChange={handleEmail}
+                            name="email"
+                            value={props.inputData.email}
+                            onChange={(e) => {
+                                props.setInputData(
+                                    (prevData) => ({ ...prevData, email: e.target.value })
+                                )
+                            }}
                         />
                         <div className={styles.notification}>
                             <strong>이메일 서비스를 받으시겠습니까?</strong>
                             <div className={styles.YesNo}>
-                                <input type="radio" name="email" id="email_Y" /><label htmlFor="email_Y">예</label>
+                                <input
+                                    type="radio"
+                                    id="email_Y"
+                                    name="emailService"
+                                    value="yes"
+                                    checked={props.inputData.emailService === "yes"}
+                                    onChange={(e) => {
+                                        props.setInputData(
+                                            (prevData) => ({ ...prevData, emailService: 'yes' })
+                                        )
+                                    }}
+                                />
+                                <label htmlFor="email_Y">예</label>
                             </div>
                             <div className={styles.YesNo}>
-                                <input type="radio" name="email" id="email_N" /><label htmlFor="email_N">아니오</label>
+                                <input
+                                    type="radio"
+                                    id="email_N"
+                                    name="emailService"
+                                    value="no"
+                                    checked={props.inputData.emailService === "no"}
+                                    onChange={(e) => {
+                                        props.setInputData(
+                                            (prevData) => ({ ...prevData, emailService: 'no' })
+                                        )
+                                    }}
+                                />
+                                <label htmlFor="email_N">아니오</label>
                             </div>
                         </div>
                     </div>
@@ -189,9 +200,14 @@ export default function JoinForm(inputData, setInputData) {
                         <input
                             className={styles.isInput}
                             type='text'
-                            value={inputData.name}
                             placeholder={'이름'}
-                            onChange={handleName}
+                            name="name"
+                            value={props.inputData.name}
+                            onChange={(e) => {
+                                props.setInputData(
+                                    (prevData) => ({ ...prevData, name: e.target.value })
+                                )
+                            }}
                         />
                         <div className={styles.notification}>실명을 입력해주세요</div>
                     </div>
@@ -204,61 +220,107 @@ export default function JoinForm(inputData, setInputData) {
                         <input
                             className={styles.phoneNum}
                             type='text'
-                            value={inputData.num1}
                             placeholder={'ex) 010'}
                             maxLength="3"
                             size="6"
-                            onChange={handlePhoneNumber1}
+                            name="num1"
+                            value={props.inputData.num1}
+                            onChange={(e) => {
+                                props.setInputData(
+                                    (prevData) => ({ ...prevData, num1: e.target.value })
+                                )
+                            }}
                         />
                         <input
                             className={styles.phoneNum}
                             type='text'
-                            value={inputData.num2}
                             placeholder={'ex) 0101'}
                             maxLength="4"
                             size="8"
-                            onChange={handlePhoneNumber2}
+                            name="num2"
+                            value={props.inputData.num2}
+                            onChange={(e) => {
+                                props.setInputData(
+                                    (prevData) => ({ ...prevData, num2: e.target.value })
+                                )
+                            }}
                         />
                         <input
                             className={styles.phoneNum}
                             type='text'
-                            value={inputData.num3}
                             placeholder={'ex) 1010'}
                             maxLength="4"
                             size="8"
-                            onChange={handlePhoneNumber3}
+                            name="num3"
+                            value={props.inputData.num3}
+                            onChange={(e) => {
+                                props.setInputData(
+                                    (prevData) => ({ ...prevData, smsService: 'yes' })
+                                )
+                            }}
                         />
                         <div className={styles.notification}>
                             {/* 추후  */}
                             <strong>문자(SMS) 서비스를 받으시겠습니까?</strong>
                             <div className={styles.YesNo}>
-                                <input type="radio" name="SMS" id="SMS_Y" /><label htmlFor="SMS_Y">예</label>
+                                <input
+                                    type="radio"
+                                    name="smsService"
+                                    id="SMS_Y"
+                                    value="yes"
+                                    checked={props.inputData.smsService === "yes"}
+                                    onChange={(e) => {
+                                        props.setInputData(
+                                            (prevData) => ({ ...prevData, smsService: 'yes' })
+                                        )
+                                    }}
+                                />
+                                <label htmlFor="SMS_Y">예</label>
                             </div>
                             <div className={styles.YesNo}>
-                                <input type="radio" name="SMS" id="SMS_N" /><label htmlFor="SMS_N">아니오</label>
+                                <input
+                                    type="radio"
+                                    name="smsService"
+                                    id="SMS_N"
+                                    value="no"
+                                    checked={props.inputData.smsService === "no"}
+                                    onChange={(e) => {
+                                        props.setInputData(
+                                            (prevData) => ({ ...prevData, smsService: 'no' })
+                                        )
+                                    }}
+                                />
+                                <label htmlFor="SMS_N">아니오</label>
                             </div>
                         </div>
                     </div>
                 </li>
                 {/* 우편번호 찾기 - 개인회원일 때만 보이도록 */}
-                {memberType ? null :
+                {props.inputData.userType === 'corporation' ? null :
                     <li> {/* 개인회원일 떄 보이는 우편번호찾기API */}
                         <div className={styles.inputContainer}>
-                            <div className={styles.left}>주소</div>
+                            <div className={styles.left}>배송주소</div>
                             <div className={styles.right}>
                                 <div className={styles.rightInnerContainer}>
                                     <div className={styles.searchAddress}>
                                         <input
                                             className={styles.isInput}
-                                            type="text" value={address1 && address1.zonecode}
+                                            type="text"
                                             placeholder="우편번호"
                                             readOnly
+                                            name="address"
+                                            value={address && address.zonecode}
+                                            onChange={(e) => {
+                                                props.setInputData(
+                                                    (prevData) => ({ ...prevData, address: e.target.value })
+                                                )
+                                            }}
                                         />
                                         <input
                                             className={styles.searchButton}
                                             type="button"
                                             onClick={() => {
-                                                openPopup(setAddress1);
+                                                openPopup(setAddress);
                                             }}
                                             value="우편번호 찾기"
                                         />
@@ -267,20 +329,34 @@ export default function JoinForm(inputData, setInputData) {
                                         <input
                                             className={styles.loadname}
                                             type="text"
-                                            value={address1 && address1.roadAddress}
+                                            value={address && address.roadAddress}
                                             placeholder="도로명 주소"
                                             readOnly
                                         />
                                         <input
                                             className={styles.buildingname}
                                             type="text"
-                                            value={address1 && address1.buildingName ? `(${address1.bname}, ${address1.buildingName})` : address1 && `(${address1.bname}, ${address1.jibunAddress})`} placeholder="건물 이름 또는 지번 주소"
+                                            value={
+                                                address && address.buildingName
+                                                    ?
+                                                    `(${address.bname}, ${address.buildingName})`
+                                                    :
+                                                    address && `(${address.bname}, ${address.jibunAddress})`
+                                            }
+                                            placeholder="건물 이름 또는 지번 주소"
                                             readOnly
                                         />
                                         <input
                                             className={styles.detailAddress}
                                             type="text"
                                             placeholder="상세주소를 입력해주세요."
+                                            name="detailAddress"
+                                            value={props.inputData.detailAddress}
+                                            onChange={(e) => {
+                                                props.setInputData(
+                                                    (prevData) => ({ ...prevData, detailAddress: e.target.value })
+                                                )
+                                            }}
                                         />
                                     </div>
                                 </div>
@@ -291,7 +367,7 @@ export default function JoinForm(inputData, setInputData) {
             </ul>
             <br /> <br />
             {/* 회원구분 체크에 따라 기업회원 가입정보창을 보여줄지 말지 */}
-            {memberType ? <CorporateMember inputData={inputData} setInputData={setInputData} address1={address1} setAddress1={setAddress1} openPopup={openPopup} /> : null}
+            {props.inputData.userType === "corporation" ? <CorporateMember inputData={props.inputData} setInputData={props.setInputData} address={address} setAddress={setAddress} openPopup={openPopup} /> : null}
         </div>
     )
 }

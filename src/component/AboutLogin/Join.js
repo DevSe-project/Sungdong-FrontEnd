@@ -4,28 +4,43 @@ import logo from '../../image/logo.jpeg'
 import { useEffect, useState } from "react";
 import PolicyObj from "../Data/PolicyObj";
 import JoinForm from "./JoinForm";
-import { UserData } from "../Data/UserData";
 
 export default function Join(props) {
     // link_navigate
     let navigate = useNavigate();
 
-    // 입력받을 회원 정보 객체배열 state
-    let [inputData, setInputData] = useState([
+    // 입력받을 1회성 회원 정보 객체배열 state
+    let [inputData, setInputData] = useState(
         {
+            userType: '',
             id: '',
             password: '',
             confirmPassword: '',
             email: '',
+            emailService: '',
             name: '',
-            phoneNumber: {
-                num1: '',
-                num2: '',
-                num3: '',
+            num1: '',
+            num2: '',
+            num3: '',
+            corporationData : {
+                ceoName : '',
+                companyName : '',
+                companyNum : {
+                    num1 : '',
+                    num2 : '',
+                    num3 : '',
+                },
+                businessNum : '',
             },
-            deliveryAddress: { postnum: '', address: '' },
+            smsService: '', 
+            address: '', 
+            detailAddress: '',
+            coupon: "",
+            bonusMoney: "",
+            basket: [],
+            order: [],
         },
-    ])
+    )
 
     // 모든 체크박스의 상태를 체크되지 않은 상태, false로 설정
     let [checkboxState, setCheckboxState] = useState(() => PolicyObj.map(() => false));
@@ -72,23 +87,36 @@ export default function Join(props) {
             // } else {
             //     console.log('사용가능한 아이디입니다.');
             // }
-            props.setUserData(prevData => ({ //userData(UserData객체배열을 담은 state에 input받은 회원정보를 추가)
-                ...prevData,
-                id: props.inputData.id,
-                password: props.inputData.pw,
-                email: props.inputData.email,
-                name: props.inputData.name,
-                phoneNumber: {
-                    num1: props.inputData.num1,
-                    num2: props.inputData.num2,
-                    num3: props.inputData.num3,
+            const newUserData = {
+                userType: inputData.userType,
+                id: inputData.id,
+                password: inputData.password,
+                confirmPassword: inputData.confirmPassword,
+                email: inputData.email,
+                emailService: inputData.emailService,
+                name: inputData.name,
+                num1: inputData.num1,
+                num2: inputData.num2,
+                num3: inputData.num3,
+                corporationData : {
+                    ceoName : inputData.corporationData.ceoName,
+                    companyName : inputData.corporationData.companyName,
+                    companyNum : {
+                        num1 : inputData.corporationData.companyNum.num1,
+                        num2 : inputData.corporationData.companyNum.num2,
+                        num3 : inputData.corporationData.companyNum.num3,
+                    },
+                    businessNum : inputData.corporationData.businessNum,
                 },
-                deliveryAddress: {
-                    postnum: props.inputData.postnum,
-                    address: props.inputData.address
-                },
-            }))
-            console.log(props.userData);
+                smsService: inputData.smsService,
+                address: inputData.address, 
+                detailAddress: inputData.detailAddress,
+                coupon: "",
+                bonusMoney: "",
+                basket: [],
+                order: [],
+            }
+            props.setUserData(prevUserData => [...prevUserData, newUserData])
             setWarningMsg(false); // 경고 메시지를 지우고
             navigate('/login');
             alert('성동물산에 오신 걸 환영합니다! 이제 로그인을 진행할 수 있습니다.');
@@ -110,7 +138,7 @@ export default function Join(props) {
             </div>
 
             {/* IndivisualMembers Form */}
-            <JoinForm inputData={inputData} setInputData={setInputData} userData={props.userData} setUserData={props.setUserData} />
+            <JoinForm inputData={inputData} setInputData={setInputData} />
 
             {/* 전체 동의하기 */}
             <div className={styles.checkAll}>
