@@ -10,6 +10,23 @@ export default function Join(props) {
     // link_navigate
     let navigate = useNavigate();
 
+    // 입력받을 회원 정보 객체배열 state
+    let [inputData, setInputData] = useState([
+        {
+            id: '',
+            password: '',
+            confirmPassword: '',
+            email: '',
+            name: '',
+            phoneNumber: {
+                num1: '',
+                num2: '',
+                num3: '',
+            },
+            deliveryAddress: { postnum: '', address: '' },
+        },
+    ])
+
     // 모든 체크박스의 상태를 체크되지 않은 상태, false로 설정
     let [checkboxState, setCheckboxState] = useState(() => PolicyObj.map(() => false));
 
@@ -71,6 +88,7 @@ export default function Join(props) {
                     address: props.inputData.address
                 },
             }))
+            console.log(props.userData);
             setWarningMsg(false); // 경고 메시지를 지우고
             navigate('/login');
             alert('성동물산에 오신 걸 환영합니다! 이제 로그인을 진행할 수 있습니다.');
@@ -92,7 +110,7 @@ export default function Join(props) {
             </div>
 
             {/* IndivisualMembers Form */}
-            <JoinForm userData={props.userData} setUserData={props.setUserData} />
+            <JoinForm inputData={inputData} setInputData={setInputData} userData={props.userData} setUserData={props.setUserData} />
 
             {/* 전체 동의하기 */}
             <div className={styles.checkAll}>
@@ -103,7 +121,7 @@ export default function Join(props) {
                     onChange={() => {
                         checkedAll();
                     }} />
-                <label for="allCheck">모두 동의하기</label>
+                <label htmlFor="allCheck">모두 동의하기</label>
             </div>
 
             {/* 이용약관 체크박스 컨테이너 */}
@@ -111,7 +129,7 @@ export default function Join(props) {
                 {/* 이용약관 */}
                 {PolicyObj.map((policy, index) => {
                     {/* 약관 Container */ }
-                    return <li className={styles.li_policy}>
+                    return <li key={index} className={styles.li_policy}>
                         <div className={styles.eachContent}>
                             {/* 왼쪽 Content*/}
                             <div className={styles.leftContent}>
@@ -126,11 +144,11 @@ export default function Join(props) {
                                         setCheckboxState(newCheckboxState); //적용
                                     }} />
                                 {/* policyNeed : need의 boolean값에 따라 색상을 다르게(선택,필수) */}
-                                <label for="policyCheckbox">
+                                <label htmlFor="policyCheckbox">
                                     {policy.need ? <em style={{ color: "#FF3333" }}>[필수]</em> : <em style={{ color: "gray" }}>[선택]</em>}
                                 </label>
                                 {/* policyName */}
-                                <label for={`policyCheckbox_${index}`}> {policy.policyName} </label>
+                                <label htmlFor={`policyCheckbox_${index}`}> {policy.policyName} </label>
                             </div>
                             {/* 오른쪽 Content */}
                             <div className={styles.rightContent}>

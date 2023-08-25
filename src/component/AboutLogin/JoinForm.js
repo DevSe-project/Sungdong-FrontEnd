@@ -3,24 +3,7 @@ import styles from './RelativeJoin.module.css';
 import CorporateMember from "./CorporateMembers";
 
 
-export default function JoinForm(props) {
-
-    // 입력받을 회원 정보 객체배열 state
-    let [inputData, setInputData] = useState([
-        {
-            id: '',
-            password: '',
-            confirmPassword: '',
-            email: '',
-            name: '',
-            phoneNumber: {
-                num1: '',
-                num2: '',
-                num3: '',
-            },
-            deliveryAddress: { postnum: '', address: '' },
-        },
-    ])
+export default function JoinForm(inputData, setInputData) {
 
     // 개인&기업 회원 체크box
     let [memberType, setMemberType] = useState(false); //false면 개인, true면 기업
@@ -116,10 +99,10 @@ export default function JoinForm(props) {
                     <div className={styles.right}>
                         <div className={styles.isInput}>
                             <div className={styles.typeMember}>
-                                <input type="radio" name="memberType" id="indivisualMember" onChange={() => setMemberType(false)} /><label for="indivisualMember">개인회원</label>
+                                <input type="radio" name="memberType" id="indivisualMember" onChange={() => setMemberType(false)} /><label htmlFor="indivisualMember">개인회원</label>
                             </div>
                             <div className={styles.typeMember}>
-                                <input type="radio" name="memberType" id="corporateMember" onChange={() => setMemberType(true)} /><label for="corporateMember">기업회원</label>
+                                <input type="radio" name="memberType" id="corporateMember" onChange={() => setMemberType(true)} /><label htmlFor="corporateMember">기업회원</label>
                             </div>
                         </div>
                         <div className={styles.notification}>기업회원은 아래에 추가 정보입력 란이 있습니다.</div>
@@ -190,10 +173,10 @@ export default function JoinForm(props) {
                         <div className={styles.notification}>
                             <strong>이메일 서비스를 받으시겠습니까?</strong>
                             <div className={styles.YesNo}>
-                                <input type="radio" name="email" id="email_Y" /><label for="email_Y">예</label>
+                                <input type="radio" name="email" id="email_Y" /><label htmlFor="email_Y">예</label>
                             </div>
                             <div className={styles.YesNo}>
-                                <input type="radio" name="email" id="email_N" /><label for="email_N">아니오</label>
+                                <input type="radio" name="email" id="email_N" /><label htmlFor="email_N">아니오</label>
                             </div>
                         </div>
                     </div>
@@ -249,10 +232,10 @@ export default function JoinForm(props) {
                             {/* 추후  */}
                             <strong>문자(SMS) 서비스를 받으시겠습니까?</strong>
                             <div className={styles.YesNo}>
-                                <input type="radio" name="SMS" id="SMS_Y" /><label for="SMS_Y">예</label>
+                                <input type="radio" name="SMS" id="SMS_Y" /><label htmlFor="SMS_Y">예</label>
                             </div>
                             <div className={styles.YesNo}>
-                                <input type="radio" name="SMS" id="SMS_N" /><label for="SMS_N">아니오</label>
+                                <input type="radio" name="SMS" id="SMS_N" /><label htmlFor="SMS_N">아니오</label>
                             </div>
                         </div>
                     </div>

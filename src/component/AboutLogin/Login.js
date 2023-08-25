@@ -70,7 +70,7 @@ export function Login() {
                 <input type='password' className={styles.inputPW} placeholder={"패스워드를 입력하세요"} value={pw} onChange={e => setPw(e.target.value)} onKeyDown={handleKeyDown} />
               </div>
               <div className={styles.autoLoginCheckBox}>
-                <input type='checkbox' id='autoCheckbox' /><label for="autoCheckbox">로그인 상태 유지</label>
+                <input type='checkbox' id='autoCheckbox' /><label htmlFor="autoCheckbox">로그인 상태 유지</label>
               </div>
               {/* Login Button */}
               <div className={styles.goLogin}
