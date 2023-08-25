@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import styles from './Pay.module.css'
+import { useEffect } from 'react';
 export function Pay(props){
   const navigate = useNavigate();
   // submit 버튼
@@ -9,6 +10,15 @@ export function Pay(props){
       navigate("/basket/order");
     }
   }
+  // 주소창으로 접근 등 잘못된 접근 시 경고창 표시 후 홈으로 이동 
+  useEffect(()=>{
+    if (props.activeTab !== 3) {
+      alert("잘못된 접근입니다.")
+      props.setActiveTab(1);
+      navigate("/");
+    }
+  }, [navigate, props])
+
   return(
     <>
       <div className={styles.container}>

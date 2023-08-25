@@ -1,11 +1,18 @@
+.main{
+  display: flex;
+  justify-content: center;
+}
+
 .container{
   margin-top: 1em;
+  width: 80%;
 }
 .row{
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: center;
+  align-items: center;
   gap: 1em;
 }
 

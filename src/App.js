@@ -5,6 +5,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import { OrderObj } from './component/Data/OrderObj';
 import { DataObj } from './component/Data/DataObj'
 import { TodayTopicPostObj } from './component/Data/TodayTopicPostObj';
+import { UserData } from './component/Data/UserData';
 
 // 메인페이지
 import MainPage from './MainPage';
@@ -31,10 +32,15 @@ import { OrderDetail } from './component/AboutPay/OrderDetail';
 import UserService from './component/AboutAsk/UserService';
 import Questions from './component/AboutAsk/Questions';
 import EachChat from './component/AboutAsk/EachChat';
+
+// 회사 이벤트 관련
 import { Comeway } from './component/AboutCompany/Comeway';
+<<<<<<< HEAD
 import { UserData } from './component/Data/UserData';
+=======
 import { TodayNews } from './component/AboutCompany/TodayNews';
 import { TodayNewsInner } from './component/AboutCompany/TodayNewsInner';
+>>>>>>> 531ceeadbb118d66b74fb198df3f67029243d1f4
 
 function App() {
   const navigate = useNavigate();
@@ -46,6 +52,7 @@ function App() {
   const [orderData, setOrderData] = useState();
   const [basketList, setBasketList] = useState([]);
   const [wishlist, setWishlist] = useState([]);
+<<<<<<< HEAD
   const [userData, setUserData] = useState();
   const [todayTopicData, setTodayTopicData] = useState();
 
@@ -64,9 +71,12 @@ function App() {
       setUserData(UserData);
       return clearTimeout(dataload)
     }, 2000)
+=======
       setTodayTopicData(TodayTopicPostObj);
       return clearTimeout(dataload)
     }, 1500)
+>>>>>>> 531ceeadbb118d66b74fb198df3f67029243d1f4
+  }, [])
 
   return (
     <div className="App">
@@ -74,13 +84,18 @@ function App() {
         <Route path='/' element={
           <>
             <MainPage />
-            <List data={data} />
+            <List data={data}/>
+            <TodayTopicList todayTopicData={todayTopicData} setTodayTopicData={setTodayTopicData} />
+            <ComewayList/>
           </>
         } />
-
+        
+        {/* 상품 */}
+        <Route path='/product' element={<Product data={data}/>}/>
         {/* 상세 페이지 */}
         <Route path="/detail/:id" element={
-          <Detail data={data} navigate={navigate} wishlist={wishlist} setWishlist={setWishlist} basketList={basketList} setBasketList={setBasketList} />
+          <Detail data={data} navigate={navigate} wishlist={wishlist} setWishlist={setWishlist} basketList={basketList} setBasketList={setBasketList} setActiveTab={setActiveTab} activeTab={activeTab} 
+          orderList={orderList} setOrderList={setOrderList} />
         } />
         
         {/* 찜 목록 */}
@@ -90,7 +105,7 @@ function App() {
 
         {/* 장바구니 ~ 주문 */}
         <Route path='/basket' element={
-          <Basket activeTab={activeTab} setActiveTab={setActiveTab} basketList={basketList} setBasketList={setBasketList} />
+          <Basket activeTab={activeTab} setActiveTab={setActiveTab} basketList={basketList} setBasketList={setBasketList} orderList={orderList} setOrderList={setOrderList} />
         }>
           <Route path='receipt' element={<Receipt data={data} activeTab={activeTab} setActiveTab={setActiveTab} orderData={orderData} setOrderData={setOrderData} />} />
           <Route path='pay' element={<Pay activeTab={activeTab} setActiveTab={setActiveTab} orderData={orderData} setOrderData={setOrderData}/>} />
@@ -102,7 +117,7 @@ function App() {
         <Route path='/orderDetail' element={<OrderDetail/>}/>
 
         {/* 로그인 */}
-        <Route path='/login' element={<Login />} />
+        <Route path='/login' element={<Login userData={userData} setUserData={setUserData} />} />
         <Route path='/join' element={<Join userData={userData} setUserData={setUserData}/>} />
 
         {/* 문의하기 */}
@@ -112,11 +127,14 @@ function App() {
         </Route>
         {/* 리뷰 작성하기 */}
         <Route path='/review/:id' element={<ReviewPage data={data} setData={setData} />}/>
+
         {/* 회사 관련 */}
         <Route path='/comeway' element={<Comeway/>}/>
         <Route path='/todayTopic/:page' element={
           <TodayNews todayTopicData={todayTopicData} setTodayTopicData={setTodayTopicData} />}/>
-        <Route path='/todayTopicPost/:id' element={<TodayNewsInner todayTopicData={todayTopicData} setTodayTopicData={setTodayTopicData} />}/>
+        <Route path='/todayTopicPost/:id' 
+        element={<TodayNewsInner todayTopicData={todayTopicData} setTodayTopicData={setTodayTopicData} />}/>
+        <Route path='/event' element={<Event/>}/>
       </Routes>
     </div>
   );

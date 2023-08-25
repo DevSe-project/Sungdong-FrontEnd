@@ -3,7 +3,6 @@ import { SlideImg } from './component/AboutHeader/SlideImg'
 import { TopBanner } from './component/AboutHeader/TopBanner'
 
 export default function MainPage(props) {
-
   return (
     <div>
       <TopBanner/>
@@ -11,9 +10,7 @@ export default function MainPage(props) {
       <CategoryBar />
 
       <SlideImg />
-
-      <hr/><br/>
-
+      
     </div>
   )
 }

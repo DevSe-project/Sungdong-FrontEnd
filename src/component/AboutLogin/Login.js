@@ -5,7 +5,7 @@ import { useState } from 'react';
 import FindModal from './FindModal';
 import { UserData } from '../Data/UserData';
 
-export function Login() {
+export function Login(props) {
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
 
@@ -22,24 +22,26 @@ export function Login() {
     setModalType(null); //초기화 시켜서 모달창을 닫음
   }
 
+  // 로그인 함수
   const goLogin = () => {
-    const confirmUser = UserData.find( userData => userData.id === id && userData.password === pw);
-    if (confirmUser && confirmUser.id === id && confirmUser.password === pw) {
-      setId(null);
-      setPw(null);
-      console.log(confirmUser); //확인된 유저데이터에 뭐가 들었는지 console로 확인
-      navigate('/');
-      alert('성동물산에 오신 걸 환영합니다!')
-    } else {
-
+    const confirmUser = props.userData.find( userData => userData.id === id && userData.password === pw); //UserData의 id,password와 input받은 id,pw값이 일치하는 것을 꺼내옴
+    if (confirmUser && confirmUser.id === id && confirmUser.password === pw) { //꺼내 온 id,pw가 일치한다면 
+      setId(null); //입력된 id,
+      setPw(null); //pw를 지우고
+      console.log(props.userData); //확인된 유저데이터에 뭐가 들었는지 console로 확인
+      navigate('/'); //메인페이지로 이동하면서
+      alert('성동물산에 오신 걸 환영합니다!'); //환영문구 출력
+      console.log(props.userData);
+    } else { //일치하지 않다면
       console.log(id === UserData.id)
-      alert('아이디 혹은 비밀번호를 확인주세요.')
+      alert('아이디 혹은 비밀번호를 확인주세요.'); //경고문구 출력
+      console.log(props.userData.address);
     }
   }
 
   const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      goLogin();
+    if (event.key === 'Enter') { //누른 키가 Enter라면
+      goLogin(); //goLogin함수 실행
     }
   }
   return (
@@ -70,7 +72,7 @@ export function Login() {
                 <input type='password' className={styles.inputPW} placeholder={"패스워드를 입력하세요"} value={pw} onChange={e => setPw(e.target.value)} onKeyDown={handleKeyDown} />
               </div>
               <div className={styles.autoLoginCheckBox}>
-                <input type='checkbox' id='autoCheckbox' /><label for="autoCheckbox">로그인 상태 유지</label>
+                <input type='checkbox' id='autoCheckbox' /><label htmlFor="autoCheckbox">로그인 상태 유지</label>
               </div>
               {/* Login Button */}
               <div className={styles.goLogin}

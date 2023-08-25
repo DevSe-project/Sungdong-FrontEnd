@@ -12,7 +12,7 @@ export function TopBanner () {
         link : '/introduceCompany'
       },
       subMenuItems: [{
-        item : '회사소개',
+        item : '기업 소개',
         link : '/introduceCompany'
         },
         {

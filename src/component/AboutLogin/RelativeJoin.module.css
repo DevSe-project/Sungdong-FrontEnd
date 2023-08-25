@@ -140,6 +140,7 @@ label {
     border-radius: 1dvb;
     background-color: #F3F3F3;
     height: 20px;
+    font-size: 16px;
 }
 
 .errorMessage {
