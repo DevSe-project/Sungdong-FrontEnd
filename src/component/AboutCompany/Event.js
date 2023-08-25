@@ -6,9 +6,14 @@ export function Event(){
     <div>
       <TopBanner/>
       <CategoryBar/>
-      <main className={styles.body}>
+      <main className={styles.head}>
         <div className={styles.title}>
           <h1>진행중인 이벤트</h1>
+        </div>
+        <div className={styles.body}>
+          <div className={styles.content}>
+            1
+          </div>
         </div>
       </main>
     </div>
