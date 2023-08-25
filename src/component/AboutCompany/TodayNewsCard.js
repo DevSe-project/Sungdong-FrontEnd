@@ -17,7 +17,7 @@ export function TodayNewsCard(props){
       <div className={styles.contentsContainer}>
         {props.todayTopicData ? getCurrentPagePosts().map((item, index)=> (
         <div onClick={()=>navigate(`/todayTopicPost/${item.id}`)} key={index} className={styles.contentsBox}>
-          <img src={image} alt='이미지' width='370px' height='400px'/>
+          <img src={image} alt='이미지'/>
           <div style={{
             marginTop:'2em',
             height: '3em'

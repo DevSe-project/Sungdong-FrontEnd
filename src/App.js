@@ -38,6 +38,9 @@ import { Comeway } from './component/AboutCompany/Comeway';
 import { TodayNews } from './component/AboutCompany/TodayNews';
 import { TodayNewsInner } from './component/AboutCompany/TodayNewsInner';
 import { Event } from './component/AboutCompany/Event';
+import { TodayTopicList } from './component/AboutHome/TodayTopicList';
+import { ComewayList } from './component/AboutHome/ComewayList';
+import { Product } from './component/AboutHome/Product';
 
 function App() {
   const navigate = useNavigate();
@@ -70,17 +73,21 @@ function App() {
       return clearTimeout(dataload)
     }, 1500)
   }, [])
-
+  
   return (
     <div className="App">
       <Routes>
         <Route path='/' element={
           <>
             <MainPage />
-            <List data={data} />
+            <List data={data}/>
+            <TodayTopicList todayTopicData={todayTopicData} setTodayTopicData={setTodayTopicData} />
+            <ComewayList/>
           </>
         } />
-
+        
+        {/* 상품 */}
+        <Route path='/product' element={<Product data={data}/>}/>
         {/* 상세 페이지 */}
         <Route path="/detail/:id" element={
           <Detail data={data} navigate={navigate} wishlist={wishlist} setWishlist={setWishlist} basketList={basketList} setBasketList={setBasketList} setActiveTab={setActiveTab} activeTab={activeTab} 
@@ -116,6 +123,7 @@ function App() {
         </Route>
         {/* 리뷰 작성하기 */}
         <Route path='/review/:id' element={<ReviewPage data={data} setData={setData} />}/>
+
         {/* 회사 관련 */}
         <Route path='/comeway' element={<Comeway/>}/>
         <Route path='/todayTopic/:page' element={
