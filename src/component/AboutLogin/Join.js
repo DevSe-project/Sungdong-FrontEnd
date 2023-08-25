@@ -129,7 +129,7 @@ export default function Join(props) {
                 {/* 이용약관 */}
                 {PolicyObj.map((policy, index) => {
                     {/* 약관 Container */ }
-                    return <li className={styles.li_policy}>
+                    return <li key={index} className={styles.li_policy}>
                         <div className={styles.eachContent}>
                             {/* 왼쪽 Content*/}
                             <div className={styles.leftContent}>

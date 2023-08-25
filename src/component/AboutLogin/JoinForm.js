@@ -99,10 +99,10 @@ export default function JoinForm(inputData, setInputData) {
                     <div className={styles.right}>
                         <div className={styles.isInput}>
                             <div className={styles.typeMember}>
-                                <input type="radio" name="memberType" id="indivisualMember" onChange={() => setMemberType(false)} /><label htmlfor="indivisualMember">개인회원</label>
+                                <input type="radio" name="memberType" id="indivisualMember" onChange={() => setMemberType(false)} /><label htmlFor="indivisualMember">개인회원</label>
                             </div>
                             <div className={styles.typeMember}>
-                                <input type="radio" name="memberType" id="corporateMember" onChange={() => setMemberType(true)} /><label htmlfor="corporateMember">기업회원</label>
+                                <input type="radio" name="memberType" id="corporateMember" onChange={() => setMemberType(true)} /><label htmlFor="corporateMember">기업회원</label>
                             </div>
                         </div>
                         <div className={styles.notification}>기업회원은 아래에 추가 정보입력 란이 있습니다.</div>
