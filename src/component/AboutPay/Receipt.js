@@ -1,13 +1,23 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './Receipt.module.css'
 import { useNavigate } from 'react-router-dom';
 
 export function Receipt(props){
   const navigate = useNavigate();
   const [address, setAddress] = useState("");
+
   // 유효성검사 State
-  const [isFormValid, setIsFormValid] = useState(false);
-    
+  const [isFormValid, setIsFormValid] = useState(false);  
+
+  // 주소창으로 접근 등 잘못된 접근 시 경고창 표시 후 홈으로 이동 
+  useEffect(()=>{ 
+    if (props.activeTab !== 2) {
+      alert("잘못된 접근입니다.")
+      props.setActiveTab(1);
+      navigate("/");
+    }
+  }, [props, navigate])
+
   // 다음(카카오) 주소찾기 API 기능
   const openPopup = (setAddress) => {
       const script = document.createElement('script');

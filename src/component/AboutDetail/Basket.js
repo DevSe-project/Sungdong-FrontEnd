@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import styles from './Basket.module.css'
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { TopBanner } from '../AboutHeader/TopBanner';
 import { CategoryBar } from '../AboutHeader/CategoryBar';
 export function Basket(props){
@@ -27,6 +27,7 @@ export function Basket(props){
   // 전체 선택 체크박스 상태를 저장할 상태 변수
   const [selectAll, setSelectAll] = useState(false);
 
+  const location = useLocation();
 
   // 장바구니 탭 - 결제 탭에서 뒤로가기 시 뒤로가기 방지 후 장바구니 탭으로 이동
   useEffect(() => {
@@ -34,16 +35,35 @@ export function Basket(props){
       e.preventDefault();
       alert("주문서 작성, 결제 중 뒤로가기 시 결제 정보가 초기화 됩니다.")
       props.setActiveTab(1);
+      setSum(0);
+      setDiscount(0);
+      setOrderPrice(0);
       navigate('/basket');
     };
-
     window.history.pushState(null, null, window.location.href);
     window.addEventListener('popstate', handleBack);
 
     return () => {
       window.removeEventListener('popstate', handleBack);
     };
-  }, [navigate]);
+  }, [props, navigate]);
+
+  useEffect(() => {
+    if (
+      location.pathname !== '/basket/order' &&
+      location.pathname !== '/basket/receipt' &&
+      location.pathname !== '/basket/pay'
+    ) {
+      // 필요한 상태 초기화 로직을 여기에 추가
+      setSum(0);
+      setDiscount(0);
+      setOrderPrice(0);
+      props.setActiveTab(1);
+      props.setOrderList([]);
+      localStorage.removeItem('orderData');
+      localStorage.removeItem('newOrderData')
+    }
+  }, [location]);
 
   //selectedItems의 변화가 일어날 때마다 totalPrice(selectedItems)를 작동함 (전체 합계 계산)
   useEffect(() => {
@@ -56,7 +76,7 @@ export function Basket(props){
 
     if (!selectAll) {
       const allId = props.basketList.map((item) => item);
-      setSelectedItems(allId); 
+      setSelectedItems(allId);
     } else {
       setSelectedItems([]);
     }
@@ -124,17 +144,24 @@ export function Basket(props){
   //때마다 selectedItems를 불러와서 총 계산을 계산하는 함수
   function totalPrice(item){
     let sum = 0;
+    let totalDiscount = 0;
     item.forEach(itemId => {
       const calculate = props.basketList.find((item)=>item.id === itemId.id);
       if(calculate){
         sum += calculate.finprice;
+        if (typeof calculate.discount === 'number') {
+        totalDiscount += Number((calculate.finprice / 100) * calculate.discount);
+        }
       }
     });
     //변수 저장식
     setSum(sum);
-    setDiscount((sum/100)*10);
-    sum = (sum + delivery - ((sum/100)*10));
-    setOrderPrice(sum);
+    setDiscount(totalDiscount);
+    // 할인 금액이 총 가격을 넘지 않도록 보정
+    totalDiscount = Math.min(totalDiscount, sum);
+  
+    const orderSum = sum + delivery - totalDiscount;
+    setOrderPrice(orderSum);
   }
 
   // 링크 함수
@@ -254,7 +281,7 @@ export function Basket(props){
               <tr key={key}>
                 <td><img src='../image/logo.jpeg' alt='이미지'/></td>
                 <td>
-                  <h5 className={styles.link} onClick={()=>navigate(`/detail/${item.id}`)}>{item.title 
+                  <h5 className={styles.link} onClick={()=>navigate(`/detail/${item.id ? item.id : item.productId}`)}>{item.title 
                   ? item.title : item.productName
                   ? item.productName : null}</h5>
                   <div>
@@ -275,8 +302,8 @@ export function Basket(props){
                 <div className={styles.finalBox}>
                   <h2>총 상품 금액</h2>
                   <div className={styles.price}>
-                    <h5>{sum ? `\\${sum}` : props.orderList 
-                    ? props.orderList.map((item)=> `\\${item.finprice}`) : 0} </h5>
+                    <h5>\{sum ? sum : props.orderList!== null || []
+                    ? props.orderList.map((item)=> item.finprice) : 0} </h5>
                   </div>
                 </div>
                 <i className="fal fa-plus"></i>
@@ -290,15 +317,17 @@ export function Basket(props){
                 <div className={styles.finalBox}>
                   <h2>할인 금액</h2>
                   <div className={styles.price}>
-                    <h5>\{discount}</h5>
+                    <h5>\{sum ? discount : props.orderList !== null || [] ? props.orderList.map(item => 
+                      item.discount) : 0}</h5>
                   </div>
                 </div>
                 <i className="fal fa-equals"></i>
                 <div className={styles.finalBox}>
                   <h2>최종 결제 금액</h2>
                   <div className={styles.price}>
-                    <h5>\{sum ? resultOrderPrice : props.orderList 
-                    ? props.orderList.map((item)=> item.finprice + delivery - discount) : 0}</h5>
+                    <h5>\{sum ? resultOrderPrice : props.orderList !== null || []
+                    ? props.orderList.map((item) =>
+                    item.finprice + delivery - item.discount) : 0}</h5>
                   </div>
                 </div>
             </div>

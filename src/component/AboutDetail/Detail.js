@@ -41,16 +41,19 @@ export function Detail(props) {
     setRecommendedItem(getRandomItem);
 
     // 최근 리뷰 렌더링 시 띄우기
-    const sliceReview = () => {
-      if (detailData.review) { // detailData.review가 정의되었을 때만 처리
-        const newData = [...detailData.review]; // 복사해서 정렬하도록 수정
-        newData.sort((a, b) => {
-          return new Date(a.date) - new Date(b.date);
-        });
-        return newData.slice(0, 4);
-      } return []
-    };
-    setNewReview(sliceReview);
+    if(detailData){
+      const sliceReview = () => {
+        if (detailData.review) { // detailData.review가 정의되었을 때만 처리
+          const newData = [...detailData.review]; // 복사해서 정렬하도록 수정
+          newData.sort((a, b) => {
+            return new Date(a.date) - new Date(b.date);
+          });
+          return newData.slice(0, 4);
+        } return [];
+      };
+      const newReviewData = sliceReview();
+      setNewReview(newReviewData);
+    }
   }, [props.data])
 
 
@@ -96,6 +99,7 @@ function buyThis(product, count){
       cnt : Number(count), 
       price: product.price,
       finprice : (product.price * count), //총 계산액
+      discount : product.discount ? ((product.price/100) * product.discount) * count : 0
     }]
       // editedData 객체를 JSON 형식의 문자열로 변환
       const editedDataString = JSON.stringify(editedData);
