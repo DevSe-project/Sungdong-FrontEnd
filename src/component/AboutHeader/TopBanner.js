@@ -41,11 +41,8 @@ export function TopBanner () {
         {
         item : '1:1 고객센터',
         link : '/userservice/eachservice',
-        },
-        {
-        item : '실시간 채팅 게시판',
-        link : '/userservice/livechat',
-      }],
+        }
+      ],
     },
     {
       title: {
@@ -53,7 +50,7 @@ export function TopBanner () {
         link : '/mypages'
       },
       subMenuItems: [{
-        item : '내정보 관리',
+        item : '내 정보 관리',
         link : '/mypages'
         },
         {

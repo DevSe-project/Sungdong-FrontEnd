@@ -5,7 +5,7 @@
   /* 상단바 고정 작업 */
   background-color: white;
   position:sticky;
-  z-index: 998;
+  z-index: 990;
   top: 0;
   height: 100px;
   width: 100%;

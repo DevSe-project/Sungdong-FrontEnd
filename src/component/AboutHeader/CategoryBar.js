@@ -97,7 +97,7 @@ export function CategoryBar() {
   const navigate = useNavigate();
   //서브메뉴 열림창 변수 초기화
   const [subMenuStates, setSubMenuStates] = useState(menuData.map(()=>false));
-  const [activeTab, setActiveTab] = useState(1); // 현재 활성화된 탭을 추적하는 상태
+  const [activeTab, setActiveTab] = useState(0); // 현재 활성화된 탭을 추적하는 상태
 
   const handleTabClick = (tabItem) => {
     setActiveTab(tabItem.id);
@@ -117,7 +117,6 @@ export function CategoryBar() {
     setSubMenuStates(newSubMenuStates);
   };
 
-// 전체 레이아웃 완성 후 state로 category name을 가변적으로 할 예정
   return(
       <div className={styles.categoryBarContainer}>
         {/* 메뉴 loop */}

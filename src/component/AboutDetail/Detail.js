@@ -358,25 +358,78 @@ function basketThis(product, count){
 
 
         {/* 탭 부분 */}
-        <div className={styles.tab}>
+        <div className={styles.sticky} >
           <Tab navigate={props.navigate}/>
         </div>
+
+
         <div className={styles.tabInnerHeader}>
-
-
-          {/* 탭 상품 정보 */}
-          <div id='1'>
+          {/* 탭 상품 정보 */} 
+          <div id='1' className="tab-content">
             <div className={styles.reviewHeader}>
               <h3>상품 정보</h3>
               <p>
-                대충 제품 정보 내용
+              큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdsad
+            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
+            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdsad
+            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
+            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdsad
+            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
+            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdsad
+            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>           
+            asdasdsad
+            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
+            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdsad
+            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
+            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdsad
+            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
+            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdsad
+            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>             
+            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
+            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdsad
+            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
+            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdsad
+            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
+            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdsad
+            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br> 
               </p>
             </div>
           </div>
 
-
           {/* 탭 리뷰 */}
-          <div id='2'>
+          <div id='2' className="tab-content">
             <div className={styles.reviewHeader}>
               <h3>상품 리뷰</h3>
               <p>상품을 구매하신 분들이 작성하신 리뷰입니다. 리뷰 작성 시 아래 금액만큼 포인트가 적립 됩니다.</p>
@@ -529,17 +582,28 @@ function basketThis(product, count){
         }
         </div>
 
-
           {/* 탭 Q & A */}
-          <div id='3'>
+          <div id='3' className="tab-content">
             큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
             asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
             asdasdsad
+            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
+            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdsad
+            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
           </div>
 
-
           {/* 반품 / 교환 정보 */}
-          <div id='4'>
+          <div id='4' className="tab-content">
+          반품 교환 정보임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdsad           반품 교환 정보임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
+            반품 교환 정보임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
           </div>
         </div>
       </main>

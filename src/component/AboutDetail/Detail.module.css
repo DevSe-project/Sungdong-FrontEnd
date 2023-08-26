@@ -101,9 +101,10 @@
 
 /* 베스트 리뷰, 추천 상품 */
 .headAtcTab{
+  margin-top: 1em;
   display: flex;
   flex-direction: column;
-  width: clamp(25em, 51em, 75%);
+  width: clamp(30em, 100%, 50em);
   box-sizing: border-box;
   padding: 1.5em;
   border: 1px solid lightgray;
@@ -138,12 +139,6 @@
   flex-direction: row;
   font-weight: 750;
 }
-
-/* 탭 사이즈 */
-.tab{
-  width: clamp(25em, 51em, 75%);
-}
-
 
 /* 이미지 CSS */
 .frame{
@@ -195,7 +190,7 @@
 
 /* 탭 내부 사항 */
 .tabInnerHeader{
-  width: clamp(40em, 50%, 50em);
+  width: clamp(30em, 50%, 50em);
   padding: 1em;
   display: flex;
   flex-direction: column;
@@ -386,4 +381,13 @@
   justify-content: space-between;
   cursor: pointer;
   color: black;
+}
+
+/* tab Sticky */
+.sticky{
+  top: 110px;
+  position: sticky;
+  z-index: 989;
+  height: 40px;
+  width: clamp(30em, 50%, 50em);
 }

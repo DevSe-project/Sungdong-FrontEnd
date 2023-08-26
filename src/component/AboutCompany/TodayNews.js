@@ -24,7 +24,7 @@ export function TodayNews(props){
         <div className={styles.searchContainer}>
           <div onClick={()=>setFilterModal(!filterModal)} className={styles.searchFilter}>
             <div><span>{filterSearch}</span></div>
-            <div><i style={{color:'gray'}} className="fas fa-angle-down"/></div>
+            <div><i style={{color:'gray'}} className={filterModal ? 'fas fa-angle-up' : 'fas fa-angle-down'}/></div>
             {props.todayTopicData && filterModal &&
             <div className={styles.filterUI}>
               <ul className={styles.filter}>

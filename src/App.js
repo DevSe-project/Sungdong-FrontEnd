@@ -10,6 +10,9 @@ import { UserData } from './component/Data/UserData';
 // 메인페이지
 import MainPage from './MainPage';
 import { List } from './component/AboutHome/List';
+import { Product } from './component/AboutHome/Product';
+import { TodayTopicList } from './component/AboutHome/TodayTopicList';
+import { ComewayList } from './component/AboutHome/ComewayList';
 
 // 로그인
 import Join from './component/AboutLogin/Join';
@@ -35,9 +38,9 @@ import EachChat from './component/AboutAsk/EachChat';
 
 // 회사 이벤트 관련
 import { Comeway } from './component/AboutCompany/Comeway';
-import { UserData } from './component/Data/UserData';
 import { TodayNews } from './component/AboutCompany/TodayNews';
 import { TodayNewsInner } from './component/AboutCompany/TodayNewsInner';
+import { Event } from './component/AboutCompany/Event'
 
 function App() {
   const navigate = useNavigate();
@@ -49,6 +52,7 @@ function App() {
   const [orderData, setOrderData] = useState();
   const [basketList, setBasketList] = useState([]);
   const [wishlist, setWishlist] = useState([]);
+  const [orderList, setOrderList] = useState([]);
   const [userData, setUserData] = useState();
   const [todayTopicData, setTodayTopicData] = useState();
 
@@ -69,6 +73,12 @@ function App() {
       return clearTimeout(dataload)
     }, 1500)
   }, [])
+
+  useEffect(() => {
+    // 페이지 이동시 항상 스크롤을 최상단으로 이동
+    window.scrollTo(0 ,0);
+  }, [navigate]); // navigate가 변경될 때마다 실행
+
 
   return (
     <div className="App">

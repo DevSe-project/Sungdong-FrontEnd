@@ -108,7 +108,7 @@ td{
 /* 활성화된 탭 아이템 스타일 */
 .tab-item.active {
   color: #ddd;
-  background-color: var(--background-color-set);
+  background-color: var(--background-color-clicked);
 }
 
 /* 상단 메뉴 바 */
