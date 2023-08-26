@@ -9,10 +9,13 @@ export default function Join(props) {
     // link_navigate
     let navigate = useNavigate();
 
+    // 발행코드 일치한지
+
     // 입력받을 1회성 회원 정보 객체배열 state
     let [inputData, setInputData] = useState(
         {
             userType: '',
+            code: '',
             id: '',
             password: '',
             confirmPassword: '',
@@ -89,6 +92,7 @@ export default function Join(props) {
             // }
             const newUserData = {
                 userType: inputData.userType,
+                code: inputData.code,
                 id: inputData.id,
                 password: inputData.password,
                 confirmPassword: inputData.confirmPassword,
@@ -128,6 +132,7 @@ export default function Join(props) {
 
     return (
         <div className={styles.body}>
+            
             {/* 로고 */}
             <div className={styles.logo}>
                 <img

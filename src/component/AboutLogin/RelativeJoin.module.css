@@ -209,7 +209,7 @@ label {
     width: 470px;
     max-height: 10vh;
     overflow-y:scroll; /* 스크롤 생성 */
-    background-color:lightgray;
+    background-color:F3F3F3;
 }
 
 .policyDetail_null {

@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from 'react';
-import styles from './FindModal.module.css';
+import styles from './Modal.module.css';
 
 export default function FindModal({ type, onClose, openModal }) {
 

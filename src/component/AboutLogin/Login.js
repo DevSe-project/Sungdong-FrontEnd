@@ -4,6 +4,7 @@ import MainLogo from '../../image/MainLogo.jpeg';
 import { useState } from 'react';
 import FindModal from './FindModal';
 import { UserData } from '../Data/UserData';
+import CodeInputModal from './CodeInputModal';
 
 export function Login(props) {
   const [id, setId] = useState('');
@@ -89,13 +90,14 @@ export function Login(props) {
             <div>|</div>
             <div className={styles.findPW} onClick={() => { openModal('pw') }}>비밀번호 찾기</div>
             <div>|</div>
-            <div className={styles.join} onClick={() => { navigate('/join') }}>회원가입</div>
+            <div className={styles.join} onClick={() => { openModal('code') }}>회원가입</div>
           </div>
         </div>
 
         {modalType && (
           <FindModal type={modalType} onClose={closeModal} openModal={openModal} />
         )}
+        {modalType === 'code' ? <CodeInputModal onClose={closeModal} /> : null }
       </div>
 
     </div>
