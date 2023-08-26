@@ -255,7 +255,7 @@ export default function JoinForm(props) {
                             value={props.inputData.num3}
                             onChange={(e) => {
                                 props.setInputData(
-                                    (prevData) => ({ ...prevData, smsService: 'yes' })
+                                    (prevData) => ({ ...prevData, num3: e.target.value })
                                 )
                             }}
                         />
