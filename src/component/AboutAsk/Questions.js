@@ -25,15 +25,8 @@ export default function Questions() {
     return (
         <div className={styles.body}>
             {/* 문의글 검색 input */}
-            <div className={styles.searchContainer}>
-                <label
-                    for='search_input'
-                    className={styles.label_input}>검색</label>
-                <input
-                    type='text'
-                    id='search_input'
-                    className={styles.search_input} />
-                {/* <i className="fas fa-search" /> */}
+            <div className={styles.mainPost}>
+                성동물산 고객센터 질문게시판
             </div>
             {/* 글 목록 | 글쓰기 버튼 */}
             <div className={styles.postContainer}>
@@ -55,7 +48,7 @@ export default function Questions() {
                     <td className={styles.topViewer_td}>조회수</td>
                 </tr>
                 {writeList.map((item, index) => {
-                    return <tr key={index}>
+                    return <tr key={index} className={styles.list}>
                         {/* 제목 - 최대 50글자로 정하기*/}
                         <td className={styles.td}>{item.title}</td>
                         {/* 작성자 */}

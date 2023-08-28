@@ -6,6 +6,7 @@ import { OrderObj } from './component/Data/OrderObj';
 import { DataObj } from './component/Data/DataObj'
 import { TodayTopicPostObj } from './component/Data/TodayTopicPostObj';
 import { UserData } from './component/Data/UserData';
+import { IssuanceCode } from './component/Data/IssuanceCode'
 
 // 메인페이지
 import MainPage from './MainPage';
@@ -54,6 +55,7 @@ function App() {
   const [wishlist, setWishlist] = useState([]);
   const [orderList, setOrderList] = useState([]);
   const [userData, setUserData] = useState();
+  const [codeState, setCodeState] = useState();
   const [todayTopicData, setTodayTopicData] = useState();
 
   // 찜 데이터(캐쉬) 불러오기
@@ -70,6 +72,7 @@ function App() {
       setOrderData(OrderObj);
       setUserData(UserData);
       setTodayTopicData(TodayTopicPostObj);
+      setCodeState(IssuanceCode);
       return clearTimeout(dataload)
     }, 1500)
   }, [])
@@ -119,7 +122,7 @@ function App() {
         <Route path='/orderDetail' element={<OrderDetail/>}/>
 
         {/* 로그인 */}
-        <Route path='/login' element={<Login userData={userData} setUserData={setUserData} />} />
+        <Route path='/login' element={<Login userData={userData} setUserData={setUserData} codeState={codeState} setCodeState={setCodeState}/>} />
         <Route path='/join' element={<Join userData={userData} setUserData={setUserData}/>} />
 
         {/* 문의하기 */}
@@ -129,7 +132,7 @@ function App() {
         </Route>
         {/* 리뷰 작성하기 */}
         <Route path='/review/:id' element={<ReviewPage data={data} setData={setData} />}/>
-
+e
         {/* 회사 관련 */}
         <Route path='/comeway' element={<Comeway/>}/>
         <Route path='/todayTopic/:page' element={

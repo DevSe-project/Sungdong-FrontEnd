@@ -76,8 +76,6 @@
   width: 10%;
   text-align: left;
   padding-left: 0.4em;
-  margin-bottom: 0.2em;
-  
 }
 
 .title_input {
@@ -87,17 +85,20 @@
   border-left: 1px solid gray;
   border-right: 2px solid gray;
   border-bottom: 2.7px solid gray;
-  border: 1px 2px 3px 4px solid gray;
   border-radius: 1.5dvh;
+  resize: none;
 }
 
 .content_input {
-  width: 100%;
+  width: 98%;
   height: 20em;
-  border: 1.5px solid gray;
+  padding: 0.5em;
+  border-top: 1px solid gray;
+  border-left: 1px solid gray;
   border-right: 2px solid gray;
-  border-bottom: 2.5px solid gray;
+  border-bottom: 2.7px solid gray;
   border-radius: 1.5dvh;
+  resize: none;
 }
 
 .addButtonContainer {
@@ -108,7 +109,7 @@
 .addButton {
   cursor: pointer;
   width: 6em;
-  height: 2em;
+  height: 1.7em;
   display: flex;
   justify-content: center;
   align-items: center;

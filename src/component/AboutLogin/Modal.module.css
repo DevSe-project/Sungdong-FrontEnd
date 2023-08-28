@@ -244,10 +244,39 @@
 
 
 
-/* ------------하단 컨트롤박스------------ */
-.controlContents {
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  position: absolute;
+
+/* CodeInputModal */
+
+.codeContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.codeInputContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1.3em;
+}
+.goProve {
+  border: 1px solid none;
+  border-radius: 1dvb;
+  background-color: #CC0000;
+  color: white;
+  font-weight: bold;
+  font-size: 1.3rem;
+  width: 350px;
+  height: 20px;
+  display: flex;
+  padding: 0.7em;
+  margin-top: 2em;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.goProve:hover {
+  background-color: #fe4b4b;
 }

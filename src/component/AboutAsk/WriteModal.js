@@ -72,7 +72,8 @@ export default function WriteModal(props) {
           {/* 제목 */}
           <div className={styles.title}>
             <label className={styles.title_label} for="titleInput">제목 </label>
-            <input
+            <textarea
+              type='text'
               className={styles.title_input}
               id='titleInput'
               value={tempInput.title}
@@ -82,7 +83,8 @@ export default function WriteModal(props) {
           {/* 내용 */}
           <div className={styles.content}>
             <label className={styles.content_label} for="contentInput">내용</label>
-            <input
+            <textarea
+              type='text'
               className={styles.content_input}
               id='contentInput'
               value={tempInput.content}

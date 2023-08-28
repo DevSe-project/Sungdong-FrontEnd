@@ -97,7 +97,7 @@ export function Login(props) {
         {modalType && (
           <FindModal type={modalType} onClose={closeModal} openModal={openModal} />
         )}
-        {modalType === 'code' ? <CodeInputModal onClose={closeModal} /> : null }
+        {modalType === 'code' ? <CodeInputModal onClose={closeModal} codeState={props.codeState} setCode={props.setCodeState}/> : null }
       </div>
 
     </div>
