@@ -1,7 +1,6 @@
 export let UserData = [
     {
         userType: 'corporation',
-        code: '2023SD0826ISSUANCE',
         id: 'bigdev2023',
         password: 'bigdev2023!',
         confirmPassword: 'bigdev2023!',

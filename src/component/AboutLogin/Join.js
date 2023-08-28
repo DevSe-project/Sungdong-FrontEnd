@@ -15,7 +15,6 @@ export default function Join(props) {
     let [inputData, setInputData] = useState(
         {
             userType: '',
-            code: '',
             id: '',
             password: '',
             confirmPassword: '',
@@ -92,7 +91,6 @@ export default function Join(props) {
             // }
             const newUserData = {
                 userType: inputData.userType,
-                code: inputData.code,
                 id: inputData.id,
                 password: inputData.password,
                 confirmPassword: inputData.confirmPassword,
