@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './Tab.module.css'
 export function Tab(){
   const [tabActive, setTabActive] = useState(0); // 초기값은 0
@@ -9,7 +9,9 @@ export function Tab(){
     const Page__updateOffsetTop = () => {
       const pageOffsets = [];
       const pages = document.querySelectorAll('.tab-content');
+      // 각 tab-content의 시작점을 지정하는 구문
       pages.forEach((page) => {
+        //tabOffsets = pageOffsets = offsetTop = page.dataset.offsetTop = page.offsetTop
         const offsetTop = page.offsetTop;
         page.dataset.offsetTop = offsetTop;
         pageOffsets.push(offsetTop);
@@ -20,7 +22,7 @@ export function Tab(){
     // 스크롤이 발생할 때 인디케이터 상태 갱신
     const handleScroll = () => {
       const scrollTop = window.scrollY;
-
+      // tab-content의 시작점은 4개 = length : 4
       for (let i = tabOffsets.length - 1; i >= 0; i--) {
         const offsetTop = tabOffsets[i];
         if (scrollTop >= offsetTop) {
@@ -60,6 +62,7 @@ export function Tab(){
           <a
             key={item.id}
             className={`tab-item ${tabActive === index ? 'active' : ''}`}
+            // 부드럽게 스크롤 전환
             onClick={() => window.scrollTo({ top: tabOffsets[index], behavior: 'smooth' })}
           >
             {item.title}

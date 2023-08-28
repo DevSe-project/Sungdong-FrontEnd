@@ -12,7 +12,7 @@ export function Delivery(props){
       <div className={styles.deliveryList}>
         <div className={styles.orderDate}>
           <h4>{item.date} 주문</h4>
-          <div onClick={()=>detailOrder(item)}className={styles.orderDetail}>
+          <div onClick={()=>detailOrder(item)} className={styles.orderDetail}>
             <span>주문 상세보기</span>
             <i className="far fa-chevron-right"></i>
           </div>

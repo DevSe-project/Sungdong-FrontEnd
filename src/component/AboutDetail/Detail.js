@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { CategoryBar } from '../AboutHeader/CategoryBar'
 import { TopBanner } from '../AboutHeader/TopBanner'
-import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { TabInfo } from './TabInfo'
 
 export function Detail(props) {
   // Usenavigate
@@ -12,15 +12,6 @@ export function Detail(props) {
 
  //수량 개수 state
   const [count, setCount] = useState("1");
-
-  // 별점 필터 & 모달 창 state
-  const [filterModal, setFilterModal] = useState(false);
-  const [filterStar, setFilterStar] = useState(null);
-
-  // 리뷰 포인트 & 스코어
-  const textReviewPoint = 50;
-  const photoReviewPoint = 150;
-  const totalReviewScore = 5; 
 
   //추천 상품 STATE 변수
   const [recommendedItem, setRecommendedItem] = useState([]);
@@ -102,9 +93,9 @@ function buyThis(product, count){
       discount : product.discount ? ((product.price/100) * product.discount) * count : 0
     }]
       // editedData 객체를 JSON 형식의 문자열로 변환
-      const editedDataString = JSON.stringify(editedData);
+      const buyData = JSON.stringify(editedData);
       // localStorage에 저장
-      localStorage.setItem('orderData', editedDataString);
+      localStorage.setItem('orderData', buyData);
       props.setOrderList(editedData);
       navigate("/basket/receipt");
       props.setActiveTab(2);
@@ -153,20 +144,7 @@ function basketThis(product, count){
     }
   }
 
-  //리뷰 평점 합계 계산
-  function sumValues(obj, key) {
-    let total = 0;
-  
-    for (const item of Object.values(obj)) {
-      if (item[key] !== undefined) {
-        total += item[key];
-      }
-    }
-  
-    return total;
-  }
-
-  //리뷰 평점에 따른 별 표시
+  //[최근 리뷰] 리뷰 평점에 따른 별 표시
 
   function ratingToStar(rating) {
     const totalStars = [];
@@ -181,28 +159,6 @@ function basketThis(product, count){
   
     return <>{totalStars}</>;
   }
-
-  function funcFilterStar(id){
-    if(filterModal){
-      const filter = detailData.review.filter((item) => item.rating === id);
-      setFilterStar(filter);
-    }
-  }
-
-  function resetFuncFilterStar(){
-    setFilterStar(null);
-  }
-
-
-  // 리뷰 그래프 데이터
-  const reviewData = [
-    { rating: 5, 리뷰: detailData.review ? detailData.review.filter((item) => item.rating === 5).length : 0 },
-    { rating: 4, 리뷰: detailData.review ? detailData.review.filter((item) => item.rating === 4).length : 0 },
-    { rating: 3, 리뷰: detailData.review ? detailData.review.filter((item) => item.rating === 3).length : 0 },
-    { rating: 2, 리뷰: detailData.review ? detailData.review.filter((item) => item.rating === 2).length : 0 },
-    { rating: 1, 리뷰: detailData.review ? detailData.review.filter((item) => item.rating === 1).length : 0 },
-  ];
-
 
   return(
     <div>
@@ -361,251 +317,7 @@ function basketThis(product, count){
         <div className={styles.sticky} >
           <Tab navigate={props.navigate}/>
         </div>
-
-
-        <div className={styles.tabInnerHeader}>
-          {/* 탭 상품 정보 */} 
-          <div id='1' className="tab-content">
-            <div className={styles.reviewHeader}>
-              <h3>상품 정보</h3>
-              <p>
-              큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdsad
-            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
-            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdsad
-            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
-            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdsad
-            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
-            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdsad
-            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>           
-            asdasdsad
-            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
-            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdsad
-            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
-            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdsad
-            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
-            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdsad
-            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>             
-            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
-            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdsad
-            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
-            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdsad
-            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
-            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdsad
-            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br> 
-              </p>
-            </div>
-          </div>
-
-          {/* 탭 리뷰 */}
-          <div id='2' className="tab-content">
-            <div className={styles.reviewHeader}>
-              <h3>상품 리뷰</h3>
-              <p>상품을 구매하신 분들이 작성하신 리뷰입니다. 리뷰 작성 시 아래 금액만큼 포인트가 적립 됩니다.</p>
-              <p>텍스트 리뷰 : {textReviewPoint}원 | 포토, 동영상 리뷰 : {photoReviewPoint}원</p>
-            </div>
-
-            {/* 리뷰 정보 토글 */}
-            <div className={styles.reviewViewToggle}>
-              <div className={styles.reviewToggleInner}>
-                <h5>사용자 총 평점</h5>
-                <div>
-                {props.data && detailData.review ?
-                  ratingToStar(Number(sumValues(detailData.review, 'rating')/detailData.review.length).toFixed(0))
-                : <>
-                  <i style={{color: '#CC0000'}} className="fal fa-star" />
-                  <i style={{color: '#CC0000'}} className="fal fa-star" />
-                  <i style={{color: '#CC0000'}} className="fal fa-star" />
-                  <i style={{color: '#CC0000'}} className="fal fa-star" />
-                  <i style={{color: '#CC0000'}} className="fal fa-star" />
-                  </>
-                }
-                </div>
-                <h3>
-                  {props.data && detailData.review ?
-                    // 소수점 1자리까지 표현
-                    Number(sumValues(detailData.review, 'rating')/detailData.review.length).toFixed(1) 
-                    : 0} 
-                    &nbsp;/ {totalReviewScore}
-                </h3>
-              </div>
-              <div className={styles.reviewToggleInner}>
-                <h5>전체 리뷰 수</h5>
-                <h3>{props.data && detailData.review ? detailData.review.length : 0}</h3>
-              </div>
-              <div className={styles.reviewToggleInner}>
-                <h5>평점 비율</h5>
-                <ResponsiveContainer className={styles.graph} width="100%" height={100}>
-                  <BarChart
-                    data={reviewData}
-                    margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
-                  >
-                    <XAxis dataKey="rating" label={{ value: '평점', position: 'insideBottom', offset: -10 }} />
-                    <Tooltip />
-                    <Bar dataKey="리뷰" fill="#cc0000" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-
-            {/* 리뷰 정렬 탭 */}
-            <div className={styles.reviewTab}>
-              <div className={styles.reviewTabFilter}>
-                <div>
-                  베스트 순
-                </div>
-                <div className={styles.reviewTabFront}>
-                  최신 순
-                </div>
-              </div>
-              <div onClick={()=>setFilterModal(!filterModal)} className={styles.reviewTabRatingView}>
-                별점 별 평가 필터
-                <div>
-                  {props.data && detailData.review ? detailData.review.length : 0}
-                </div>
-                {detailData.review && filterModal === true &&
-                  <div className={styles.filterUI}>
-                    <ul className={styles.filterStar}>
-                      <li className={styles.filterInner} onClick={()=>resetFuncFilterStar()}> 전체 리뷰 보기 </li>
-                      { reviewData.map((item, key) => (
-                      <li className={styles.filterInner} onClick={()=>funcFilterStar(item.rating)}>
-                        {`${item.rating}점의 리뷰만 보기`}
-                        <div>
-                          {`${item.리뷰}`}
-                        </div>
-                      </li>
-                      ))}
-                    </ul>
-                  </div>
-                }
-              </div>
-            </div>
-
-            {/* 리뷰 리스트 생성 */}
-            {props.data && detailData.review ?
-            filterStar !== null
-            ? filterStar.map((item,index) => 
-            <div key={index} className={styles.review}>
-              <div className={styles.reviewList}>
-                <div className={styles.reviewListProfileImg}>
-                  <img className={styles.thumnail} src='../../image/logo.jpeg' alt='프로필이미지' width={20}/>
-                </div>
-                <div className={styles.reviewListProfile}>
-                  <h4>{item.profileName}</h4>
-                  <span>{ratingToStar(item.rating)}</span>
-                  <p>{item.date}</p>
-                </div>
-              </div>
-              <div className={styles.reviewListProduct}>
-                {detailData.title}
-              </div>
-              {item.image &&
-              <div className={styles.reviewImg}>
-                {item.image}
-              </div>
-              }
-              <div className={styles.reviewListBody}>
-                <h5>
-                  {item.title}
-                </h5>
-                <p>
-                  {item.content}
-                </p>
-              </div>
-            </div>
-          )
-          : detailData.review.map((item, index) =>
-          <div key={index} className={styles.review}>
-          <div className={styles.reviewList}>
-            <div className={styles.reviewListProfileImg}>
-              <img className={styles.thumnail} src='../../image/logo.jpeg' alt='프로필이미지' width={20}/>
-            </div>
-            <div className={styles.reviewListProfile}>
-              <h4>{item.profileName}</h4>
-              <span>{ratingToStar(item.rating)}</span>
-              <p>{item.date}</p>
-            </div>
-          </div>
-          <div className={styles.reviewListProduct}>
-            {detailData.title}
-          </div>
-          {item.image &&
-          <div className={styles.reviewImg}>
-            {item.image}
-          </div>
-          }
-          <div className={styles.reviewListBody}>
-            <h5>
-              {item.title}
-            </h5>
-            <p>
-              {item.content}
-            </p>
-          </div>
-        </div>
-        ) 
-        : 
-        <div className={styles.review}>
-              작성된 리뷰가 없습니다..
-        </div>
-        }
-        </div>
-
-          {/* 탭 Q & A */}
-          <div id='3' className="tab-content">
-            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdsad
-            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
-            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdsad
-            큐앤에이임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
-          </div>
-
-          {/* 반품 / 교환 정보 */}
-          <div id='4' className="tab-content">
-          반품 교환 정보임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdsad           반품 교환 정보임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
-            반품 교환 정보임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
-            asdasdasdasdasdasd<br></br><br></br><br></br><br></br><br></br><br></br>
-          </div>
-        </div>
+        <TabInfo setData={props.setData} data={props.data} qnAData={props.qnAData} setQnAData={props.setQnAData} detailData={detailData}/>       
       </main>
     </div>
   )

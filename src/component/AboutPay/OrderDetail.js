@@ -23,16 +23,17 @@ export function OrderDetail(props){
     { 
       id : 2, 
       title : '주소', 
-      value : 
-      orderData.delivery.address.address 
-      ?
-      `${orderData.delivery.address.address.roadAddress} 
+      value :
+      orderData.delivery.address 
+      ? orderData.delivery.address.address 
+      ? `${orderData.delivery.address.address.roadAddress} 
       (${orderData.delivery.address.address.bname}, 
         ${orderData.delivery.address.address.buildingName 
       ? orderData.delivery.address.address.buildingName
       : orderData.delivery.address.address.jibunAddress})
       ${orderData.delivery.address.addressDetail}` 
-      : orderData.delivery.address.addressDetail,
+      : orderData.delivery.address.addressDetail
+      : null
     },
     { 
       id : 3, 

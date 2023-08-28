@@ -76,6 +76,10 @@ td{
   height: 5em;
   border-bottom: 1px solid lightgray;
 }
+
+textarea{
+  resize: none;
+}
 /* ==== 반복 함수 생성 ==== */
 :root {
   --body-margin : 0.5em;
@@ -246,4 +250,9 @@ input[type="checkbox"] {
   height: 1.5em;
   margin-right: 8px;
   cursor: pointer;
+}
+
+/* 상세페이지 - 탭 콘텐츠의 마진 조절 */
+.tab-content{
+  padding-top : 10em;
 }

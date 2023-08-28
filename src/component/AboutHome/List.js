@@ -6,7 +6,7 @@ export function List(props){
   return(
     <div className={styles.head}>
       <div className={styles.headerTag}>
-        <h2 className={styles.newItem}>신 상품</h2>
+        <h2 className={styles.newItem}>추천 상품</h2>
         <div onClick={()=> navigate("/product")} className={styles.moreItem}>
           더보기&nbsp;<i className="far fa-chevron-right"/>
         </div>
