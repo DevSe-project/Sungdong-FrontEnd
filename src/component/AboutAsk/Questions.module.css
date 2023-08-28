@@ -3,17 +3,19 @@
   padding: 1em;
 }
 
-.searchContainer {
-  margin-bottom: 2em;
+.mainPost {
+  margin-bottom: 1em;
   width: 100%;
   height: 3.5em;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 1em 0;
-  border-top: 2px solid lightgray;
-  border-bottom: 2px solid lightgray;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
   border-radius: 5dvh;
+  font-size: 30px;
+  font-weight: bold;
 }
 
 .label_input {
@@ -39,8 +41,8 @@
   justify-content:space-between;
   align-items: center;
   font-weight: bold;
-  border-top: 2px solid gray;
-  border-bottom: 2px solid gray;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
   padding: 1em;
   margin: 1em  0em;
 }
@@ -53,7 +55,7 @@
 .go_write {
   border: none;
   border-radius: 1dvh;
-  background-color: black;
+  background-color: #CC0000;
   color: white;
   padding: 0.4em 0.6em;
   font-size: 1.2em;
@@ -81,15 +83,19 @@
 
 .table {
   width: 100%;
-  border-top: 1px solid lightgray;
+  border-top: 3px solid lightgray;
+  border-bottom: 3px solid lightgray;
+  border-radius: 0.5dvb;
 }
 .tableHeader {
-  background-color: gray;
+  background-color: none;
+  box-shadow: 0 1px 2px lightgray;
   border-radius: 1px;
-  color: white;
+  color: black;
+  font-weight: bold;
 }
 .tableHeader td {
-  height: 1cm;
+  height: 3em;
   padding: 0 0.5em;
 }
 
@@ -104,4 +110,12 @@
 }
 .topViewer_td {
   width: 7%;
+}
+
+.td{
+  font-weight: bold;
+}
+
+.list:hover {
+  background-color: #e0e0e0;
 }
