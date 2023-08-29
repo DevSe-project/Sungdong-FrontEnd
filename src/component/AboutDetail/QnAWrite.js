@@ -32,7 +32,7 @@ export function QnAWrite(props) {
 
       // 새로운 글 객체 생성
       const newPost = {
-        id: props.detailData.qna.length + 1, //현재 글 개수를 id로 사용
+        id: props.detailData.qna ? props.detailData.qna.length + 1 : 1, //현재 글 개수를 id로 사용
         userId: 'asdfx100',
         nickName: '노란 곰돌',
         title: tempInput.title,
@@ -77,12 +77,12 @@ export function QnAWrite(props) {
           </span>
         </div>
         {/* POST : 창 이름 */}
-        <div className={styles.post}>작성하기</div>
+        <div className={styles.post}>Q & A</div>
         {/* 작성컨테이너 */}
         <div className={styles.inputContainer}>
           {/* 제목 */}
           <div className={styles.title}>
-            <label className={styles.title_label} for="titleInput">제목 </label>
+            <label className={styles.title_label} for="titleInput">제목</label>
             <input
               className={styles.title_input}
               id='titleInput'

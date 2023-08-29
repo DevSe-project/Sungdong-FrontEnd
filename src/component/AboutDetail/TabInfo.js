@@ -49,16 +49,27 @@ export function TabInfo(props){
     return <>{totalStars}</>;
   }
 
-  function funcFilterStar(id){
+  function funcFilterSter(id){
     if(filterModal){
+      const startIndex = (reviewCurrentPage - 1) * 5; // 한 페이지에 5개씩 표시
       const filter = props.detailData.review.filter((item) => item.rating === id);
-      setFilterStar(filter);
-    }
+      const sliceData = filter.slice(startIndex, startIndex + 5);
+      setFilterStar(sliceData);
+    } 
   }
 
   function resetFuncFilterStar(){
     setFilterStar(null);
   }
+
+    // 게시물 데이터와 페이지 번호 상태 관리    
+    const [reviewCurrentPage, setReviewCurrentPage] = useState(1);
+  
+    // 현재 페이지에 해당하는 게시물 목록 가져오기
+    const getReviewCurrentPagePosts = () => {
+      const startIndex = (reviewCurrentPage - 1) * 5; // 한 페이지에 5개씩 표시
+      return props.detailData.review.slice(startIndex, startIndex + 5);
+    };
 
 
   // 리뷰 그래프 데이터
@@ -96,6 +107,14 @@ export function TabInfo(props){
       setSelectedQnA(itemId);
     }
   };
+
+  const returnInfo = [
+    {label: '택배사', value: 'CJ대한통운'},
+    {label: '반품 배송비', value: '편도 3,000원(최초 배송비 무료인 경우 6,000원 부과)'},
+    {label: '보내실 곳', value: '울산광역시 남구 산업로440번길 8 (주)성동물산  (우 : 44781)'},
+    {label: '반품/교환 요청 가능 기간', value: '구매자 단순 변심은 상품 구매 후 7일 이내(구매자 반품 배송비 부담)'},
+    {label: '반품/교환 불가능 사유', value: '1. 반품요청기간이 지난 경우'},
+  ]
 
   return(
     <div className={styles.tabInnerHeader}>
@@ -164,14 +183,24 @@ export function TabInfo(props){
         </div>
         <div className={styles.reviewToggleInner}>
           <h5>평점 비율</h5>
-          <ResponsiveContainer className={styles.graph} width="100%" height={100}>
+          <ResponsiveContainer 
+            className={styles.graph} 
+            width="100%" 
+            height={100}
+          >
             <BarChart
               data={reviewData}
               margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
             >
-              <XAxis dataKey="rating" label={{ value: '평점', position: 'insideBottom', offset: -10 }} />
+              <XAxis 
+                dataKey="rating" 
+                label={{ value: '평점', position: 'insideBottom', offset: -10 }} 
+              />
               <Tooltip />
-              <Bar dataKey="리뷰" fill="#cc0000" />
+              <Bar 
+                dataKey="리뷰" 
+                fill="#cc0000" 
+              />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -187,17 +216,29 @@ export function TabInfo(props){
             최신 순
           </div>
         </div>
-        <div onClick={()=>setFilterModal(!filterModal)} className={styles.reviewTabRatingView}>
-          별점 별 평가 필터
+        <div 
+          onClick={()=>setFilterModal(!filterModal)} 
+          className={styles.reviewTabRatingView}
+          > 별점 별 평가 필터
           <div>
-            {props.data && props.detailData.review ? props.detailData.review.length : 0}
+            {props.data && props.detailData.review 
+            ? props.detailData.review.length 
+            : 0}
           </div>
-          {props.detailData.review && filterModal === true &&
+          {props.detailData.review 
+          && filterModal === true &&
             <div className={styles.filterUI}>
               <ul className={styles.filterStar}>
-                <li className={styles.filterInner} onClick={()=>resetFuncFilterStar()}> 전체 리뷰 보기 </li>
+                <li 
+                  className={styles.filterInner}
+                  onClick={()=>resetFuncFilterStar()}
+                > 전체 리뷰 보기 </li>
+
                 { reviewData.map((item, key) => (
-                <li className={styles.filterInner} onClick={()=>funcFilterStar(item.rating)}>
+                <li 
+                  className={styles.filterInner} 
+                  onClick={()=>funcFilterSter(item.rating)}
+                >
                   {`${item.rating}점의 리뷰만 보기`}
                   <div>
                     {`${item.리뷰}`}
@@ -211,8 +252,8 @@ export function TabInfo(props){
       </div>
 
       {/* 리뷰 리스트 생성 */}
-      {props.data && props.detailData.review ?
-      filterStar !== null
+      {props.data && props.detailData.review 
+      ? filterStar 
       ? filterStar.map((item,index) => 
       <div key={index} className={styles.review}>
         <div className={styles.reviewList}>
@@ -243,7 +284,7 @@ export function TabInfo(props){
         </div>
       </div>
     )
-    : props.detailData.review.map((item, index) =>
+    : getReviewCurrentPagePosts().map((item,index) => 
     <div key={index} className={styles.review}>
     <div className={styles.reviewList}>
       <div className={styles.reviewListProfileImg}>
@@ -272,12 +313,44 @@ export function TabInfo(props){
       </p>
     </div>
   </div>
-  ) 
+    )
   : 
   <div className={styles.review}>
         작성된 리뷰가 없습니다..
   </div>
   }
+      <div className={styles.buttonContainer}>
+        {/* 이전 페이지 */}
+        <button
+        className={styles.button} 
+        onClick={()=> {
+          if(reviewCurrentPage !== 1){
+            setReviewCurrentPage(reviewCurrentPage - 1)
+          } else {
+            alert("해당 페이지가 가장 첫 페이지 입니다.")
+          }}}>
+            <i className="far fa-angle-left"/>
+        </button>
+        <div className={styles.button}>
+          {reviewCurrentPage}
+        </div>
+        {/* 다음 페이지 */}
+        <button
+        className={styles.button}
+        onClick={()=> {
+          if(
+            props.detailData.review 
+            && props.detailData.review.length > 5
+            )
+          {
+            setReviewCurrentPage(reviewCurrentPage + 1)
+          } 
+          else {
+            alert("다음 페이지가 없습니다.")
+          }}}>
+            <i className="far fa-angle-right"/>
+        </button>
+      </div>
   </div>
 
     {/* 탭 Q & A */}
@@ -287,13 +360,21 @@ export function TabInfo(props){
         <div className={styles.qnATop}>
           <p>구매하실 상품에 대해 궁금한 점이 있으면 질문해주세요.</p>
           <div className={styles.buttonBox}>
-            <button className={styles.button}>내가 작성한 Q & A 보기</button>
-            <button className={styles.button} onClick={()=>setWriteState(!writeState)}>Q & A 작성하기</button>
+            <button className={styles.button}>
+              내가 작성한 Q & A 보기
+            </button>
+            <button 
+              className={styles.button} 
+              onClick={()=>setWriteState(!writeState)}>
+              Q & A 작성하기
+            </button>
           </div>
         </div>
       </div>
       <table className={styles.table}>
-        <thead style={{backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)'}}>
+        <thead 
+        style={{backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)'}}
+        >
           <tr>
             <th>답변상태</th>
             <th className={styles.title}>글 제목</th>
@@ -378,7 +459,22 @@ export function TabInfo(props){
 
     {/* 반품 / 교환 정보 */}
     <div id='4' className="tab-content">
-    반품 교환 정보임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+      <div className={styles.reviewHeader}>
+        <h3 style={{borderBottom: '3px solid #cc0000', marginBottom: '1em'}}>반품 / 교환정보</h3>
+        <p>반품 시 반품사유, 택배사, 배송비, 반품지 주소를 협의 후 반품상품 발송 바랍니다.</p>
+      </div>
+      <div className={styles.form}>
+        {returnInfo.map((item, key) => 
+        <div key={key} className={styles.formInner}>
+          <div className={styles.label}>
+            <p>{item.label}</p>
+          </div>
+          <div className={styles.content}>
+            <p>{item.value}</p>
+          </div>
+        </div>
+        )}
+      </div>
     </div>
   </div>
   )

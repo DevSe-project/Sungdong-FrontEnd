@@ -256,7 +256,7 @@ export function Basket(props){
                   <h5 className={styles.link} onClick={()=>navigate(`/detail/${item.id}`)}>{item.title}</h5>
                   <div>
                   옵션 : 옵션정보
-                  <p>상품 금액 : <span className={styles.price}>\{item.price}</span></p>
+                  <p>상품 정가 : <span className={styles.price}>\{item.price}</span></p>
                   </div>
                 </td>
                 <td>{editStatus[index]===false 
@@ -270,7 +270,15 @@ export function Basket(props){
                 >주문 수정</button> 
                 : <button className={styles.editButton} onClick={()=>updatedItem(index)}>수정 완료</button>}
                 </td>
-                <td className={styles.price}>\{item.finprice}</td>
+                <td className={styles.price}>
+                  {item.discount
+                  ? 
+                  <>
+                    <p style={{textDecoration: "line-through", color: "lightgray"}}>\{item.finprice}</p> 
+                    \{ item.finprice - (((item.price/100)*item.discount)*item.cnt)}
+                  </>
+                  : `\\${item.finprice}`}
+                </td>
               </tr>
               ))
             : null}
@@ -286,11 +294,21 @@ export function Basket(props){
                   ? item.productName : null}</h5>
                   <div>
                   옵션 : 옵션정보
-                  <p>상품 금액 : <span className={styles.price}>\{item.price}</span></p>
+                  <p>상품 정가 : <span className={styles.price}>\{item.price}</span></p>
                   </div>
                 </td>
                 <td>{item.cnt}</td>
-                <td className={styles.price}>\{item.finprice}</td>
+                <td className={styles.price}>
+                  {item.discount
+                  ? 
+                  <>
+                    <p style={{textDecoration: "line-through", color: "lightgray"}}>
+                      \{item.finprice}
+                    </p> 
+                    \{ item.finprice - (((item.price/100)*item.discount)*item.cnt)}
+                  </>
+                  : `\\${item.finprice}`}
+                </td>
               </tr>
             ))}
             </tbody>
@@ -300,7 +318,12 @@ export function Basket(props){
           <div className={styles.finalCalculate}>
             <div className={styles.finalContainer}>
                 <div className={styles.finalBox}>
-                  <h2>총 상품 금액</h2>
+                  <h2 style={{display:"flex", alignItems: 'center'}}>
+                    총 상품 금액
+                    <p style={{margin: '0'}}>
+                      (정가)
+                    </p>
+                  </h2>
                   <div className={styles.price}>
                     <h5>\{sum ? sum : props.orderList!== null || []
                     ? props.orderList.map((item)=> item.finprice) : 0} </h5>
@@ -315,10 +338,15 @@ export function Basket(props){
                 </div>
                 <i className="fal fa-minus"></i>
                 <div className={styles.finalBox}>
-                  <h2>할인 금액</h2>
+                  <h2 style={{display:"flex", alignItems: 'center'}}>
+                    할인 금액
+                    <p style={{margin: '0'}}>
+                      (상품 할인가격 포함)
+                    </p>
+                  </h2>
                   <div className={styles.price}>
                     <h5>\{sum ? discount : props.orderList !== null || [] ? props.orderList.map(item => 
-                      item.discount) : 0}</h5>
+                      ((item.price/100)*item.discount)*item.cnt) : 0}</h5>
                   </div>
                 </div>
                 <i className="fal fa-equals"></i>
@@ -327,7 +355,7 @@ export function Basket(props){
                   <div className={styles.price}>
                     <h5>\{sum ? resultOrderPrice : props.orderList !== null || []
                     ? props.orderList.map((item) =>
-                    item.finprice + delivery - item.discount) : 0}</h5>
+                    item.finprice + delivery - ((item.price/100)*item.discount)*item.cnt) : 0}</h5>
                   </div>
                 </div>
             </div>

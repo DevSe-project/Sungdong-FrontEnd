@@ -1,6 +1,6 @@
 import { Tab } from './Tab'
 import styles from './Detail.module.css'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useHref, useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { CategoryBar } from '../AboutHeader/CategoryBar'
 import { TopBanner } from '../AboutHeader/TopBanner'
@@ -90,7 +90,7 @@ function buyThis(product, count){
       cnt : Number(count), 
       price: product.price,
       finprice : (product.price * count), //총 계산액
-      discount : product.discount ? ((product.price/100) * product.discount) * count : 0
+      discount : product.discount ? product.discount : 0
     }]
       // editedData 객체를 JSON 형식의 문자열로 변환
       const buyData = JSON.stringify(editedData);
@@ -186,13 +186,27 @@ function basketThis(product, count){
               </div>
               <h4 className={styles.h4}>
                 {props.data 
-                ? `${detailData.price} 원`
+                ? detailData.discount !== 0
+                ? 
+                <div className={styles.priceTag}>
+                  <div>
+                    <h3>{detailData.discount}%</h3>
+                  </div>
+                  <div style={{display: 'flex', alignItems: 'center', gap: '0.5em'}}>
+                    <p style={{textDecoration: "line-through", color: "lightgray"}}>
+                      {detailData.price}원
+                    </p>
+                      {detailData.price-((detailData.price/100)*detailData.discount)}원
+                  </div>
+                </div>
+                : `${detailData.price} 원`
                 : <div className={styles.skeleton}>&nbsp;</div>}
               </h4>
+
+
+
+
               <div className={styles.textBox}>
-
-
-
                 {/* 상품 수량 및 옵션, 최종 결제금액 */}
               {props.data ? 
               <>
@@ -200,18 +214,30 @@ function basketThis(product, count){
                 수량 : <input value={count} className={styles.input} onChange={maxLengthCheck} type='number' placeholder='숫자만 입력'/> 개
                 </label>
                 <br/>
-                <label>
-                  선택 옵션 : 
-                  <input type='checkbox'/>
-                </label>
-                </>
-              : <div className={styles.skeleton}>&nbsp;</div>}
+                  {detailData.option &&
+                  <>
+                  선택 옵션 :
+                  <select>
+                    {detailData.option.map((item) =>
+                    <option>{item.value}</option>
+                    )}
+                  </select>
+                  </>
+                  }
+                  </>
+              : <div className={styles.skeleton}>&nbsp;</div>
+              }
               </div>
               {props.data ?
                 <>
                 총 수량 {count ? count : 1}개 |
                 <h4 className={styles.finalprice}>
-                최종 결제 금액 : {detailData.price * count}원 </h4></>
+                최종 결제 금액 : 
+                {detailData.discount 
+                ? `${(detailData.price-((detailData.price/100)*detailData.discount))*count}원` 
+                : `${detailData.price * count}원`}
+                </h4>
+                </>
                 : <div className={styles.skeleton}>&nbsp;</div>
               }
 
