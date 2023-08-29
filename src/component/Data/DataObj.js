@@ -7,6 +7,20 @@ export let DataObj = [{
     brand : '프로덕트랩',
     madeIn : '중국',
     new : true,
+    option : [
+      {
+        value: '260'
+      },
+      {
+        value: '270'
+      },
+      {
+        value: '280'
+      },
+      {
+        value: '290'
+      }
+    ],
     qna : [
       {
         id: 1,
@@ -66,6 +80,20 @@ export let DataObj = [{
     brand : '프로덕트랩',
     madeIn : '중국',
     new : true,
+    option : [
+      {
+        value: '10mm'
+      },
+      {
+        value: '20mm'
+      },
+      {
+        value: '30mm'
+      },
+      {
+        value: '40mm'
+      }
+    ],
   },
   {
     id : 3,

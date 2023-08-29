@@ -29,7 +29,7 @@
   box-sizing: border-box;
   background-color: beige;
   width: 25em;
-  height: 34em;
+  height: 37em;
   overflow: hidden;
   border: 1px solid lightgray;
   object-fit: cover;
@@ -39,11 +39,11 @@
   flex-direction: column;
   box-sizing: border-box;
   width: 25em;
-  height: 34em;
   text-align: end;
   border: 1px solid lightgray;
   gap: 1em;
   padding: 1em;
+  height: 37em;
 }
 
 .priceTag{
@@ -53,12 +53,18 @@
   align-items: center;
 }
 
+.selectSize{
+  font-size: 1em;
+  height: 2em;
+}
+
 .textBox{
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 1.5em;
+  height: 100%;
   font-size: 1.2em;
   border-top: 1px solid lightgray;
   border-bottom: 1px solid lightgray;

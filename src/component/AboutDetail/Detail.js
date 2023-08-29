@@ -19,6 +19,8 @@ export function Detail(props) {
   //최근 리뷰 STATE 변수
   const [newReview, setNewReview] = useState([]); 
 
+  //옵션 선택 state
+  const [optionSelected, setOptionSelected] = useState(null);
 
   useEffect(() => {
 
@@ -83,22 +85,27 @@ export function Detail(props) {
 function buyThis(product, count){
   // 수량 0을 장바구니에 저장하는 것 방지, ** 백엔드 : login 캐쉬값이 저장되어 있는 것이 확인이 되면 허용
   if(count > 0){
-    const editedData = [{
-      productId : product.id,
-      userId: "asdfx100", 
-      productName : product.title,
-      cnt : Number(count), 
-      price: product.price,
-      finprice : (product.price * count), //총 계산액
-      discount : product.discount ? product.discount : 0
-    }]
-      // editedData 객체를 JSON 형식의 문자열로 변환
-      const buyData = JSON.stringify(editedData);
-      // localStorage에 저장
-      localStorage.setItem('orderData', buyData);
-      props.setOrderList(editedData);
-      navigate("/basket/receipt");
-      props.setActiveTab(2);
+    if(product.option && optionSelected !== null){
+      const editedData = [{
+        productId : product.id,
+        userId: "asdfx100", 
+        productName : product.title,
+        cnt : Number(count), 
+        price: product.price,
+        finprice : (product.price * count), //총 계산액
+        discount : product.discount ? product.discount : 0,
+        option : optionSelected
+      }]
+        // editedData 객체를 JSON 형식의 문자열로 변환
+        const buyData = JSON.stringify(editedData);
+        // localStorage에 저장
+        localStorage.setItem('orderData', buyData);
+        props.setOrderList(editedData);
+        navigate("/basket/receipt");
+        props.setActiveTab(2);
+    } else {
+      alert("필수 옵션을 선택해주세요!")
+    }
   } else {
     alert("수량은 0보다 커야합니다.")
   }
@@ -110,15 +117,20 @@ function basketThis(product, count){
   if(count > 0){
     //중복 확인 (.some 함수 : basketList item.id 중 product.id와 같은 중복인 아이템이 있으면 true 반환 | !some이니 false면..== 중복이 아니면..)
     if (!props.basketList.some((item) => item.id === product.id)){
-      const newBasketProduct = {
-        ...product,
-        cnt : count,
-        finprice : (product.price * count), //총 계산액
+      if(product.option && optionSelected !== null){
+        const newBasketProduct = {
+          ...product,
+          cnt : count,
+          finprice : (product.price * count), //총 계산액
+          option : optionSelected
+        }
+        //props.basketList의 원래 배열들과 배열 product를 합쳐서 새로운 배열을 생성하여 State에 삽입
+        props.setBasketList([...props.basketList, newBasketProduct]); 
+        // *중요 basketList의 배열들을 백엔드 서버로 전송하여 저장하기, Username의 db -> 장바구니 db에 아이템 저장해놓기 //
+        alert("해당 상품이 장바구니에 추가되었습니다.")
+      } else {
+        alert("필수 옵션을 선택해주세요!")
       }
-      //props.basketList의 원래 배열들과 배열 product를 합쳐서 새로운 배열을 생성하여 State에 삽입
-      props.setBasketList([...props.basketList, newBasketProduct]); 
-      // *중요 basketList의 배열들을 백엔드 서버로 전송하여 저장하기, Username의 db -> 장바구니 db에 아이템 저장해놓기 //
-      alert("해당 상품이 장바구니에 추가되었습니다.")
     } else {
       alert("이미 장바구니에 추가된 상품입니다.")
     }
@@ -215,14 +227,18 @@ function basketThis(product, count){
                 </label>
                 <br/>
                   {detailData.option &&
-                  <>
-                  선택 옵션 :
-                  <select>
-                    {detailData.option.map((item) =>
-                    <option>{item.value}</option>
-                    )}
-                  </select>
-                  </>
+                  <div style={{display: 'flex', alignItems:'center', gap:'0.5em'}}>
+                    옵션 :
+                    <select 
+                    onChange={(e)=>{setOptionSelected(e.target.value)}}
+                    className={styles.selectSize}
+                    >
+                      <option selected disabled>옵션 선택</option>
+                      {detailData.option.map((item) =>
+                      <option>{item.value}</option>
+                      )}
+                    </select>
+                  </div>
                   }
                   </>
               : <div className={styles.skeleton}>&nbsp;</div>

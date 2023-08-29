@@ -111,7 +111,7 @@ export function Basket(props){
     setSelectedItems([]);
     
     //알림
-    alert("찜 리스트에서 해당 품목이 성공적으로 삭제되었습니다.")
+    alert("장바구니에서 해당 품목이 성공적으로 삭제되었습니다.")
   } else {
     alert("선택된 항목이 없습니다.")
   }
@@ -260,7 +260,7 @@ export function Basket(props){
                 <td>
                   <h5 className={styles.link} onClick={()=>navigate(`/detail/${item.id}`)}>{item.title}</h5>
                   <div>
-                  옵션 : 옵션정보
+                  {item.option && `옵션 : ${item.option}`}
                   <p>상품 정가 : <span className={styles.price}>\{item.price}</span></p>
                   </div>
                 </td>
@@ -298,7 +298,7 @@ export function Basket(props){
                   ? item.title : item.productName
                   ? item.productName : null}</h5>
                   <div>
-                  옵션 : 옵션정보
+                  {item.option && `옵션 : ${item.option}`}
                   <p>상품 정가 : <span className={styles.price}>\{item.price}</span></p>
                   </div>
                 </td>
