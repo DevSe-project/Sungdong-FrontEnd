@@ -96,7 +96,7 @@ export function OrderDetail(props){
       <form className={styles.form}>
         {/* 결제 방식 정보 */}
         {orderData ? payInputValue.map((item, index) => 
-        <div className={styles.formInner}>
+        <div key={index} className={styles.formInner}>
           <div className={styles.label}>
             <label>{item.title}</label>
           </div>

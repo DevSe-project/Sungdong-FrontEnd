@@ -116,6 +116,13 @@ textarea{
 }
 
 /* 상단 메뉴 바 */
+
+/* 활성화된 탭 아이템 스타일 */
+.menutab-item.active span  {
+  color: var(--background-color-clicked) !important;
+  cursor: pointer;
+}
+
 .menu-item {
   padding: 1em;
   position: relative;
@@ -138,13 +145,13 @@ textarea{
 }
 
 .menu-item .sub-menu {
-  display: none;
+  display: block;
   position: absolute;
   top: 100%;
-  left: -2.8em;
+  left: -25%;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  width: 12em;
+  width: 150%;
   z-index: 999;
 }
 
@@ -153,6 +160,7 @@ textarea{
   opacity: 1;
   transform: ease 0.3s;
 }
+
 /* ==== 검색 아이콘 ==== */
 i.fas.fa-search {
   background-color: white;
@@ -207,18 +215,18 @@ i.fa-solid.fa-heart{
 }
 
 .categorymenu-item .sub-menu {
-  display: none;
-  position: absolute;
-  top: 100%;
   border-radius: 1dvb;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  width: 10em;
   z-index: 990;
   text-align: center;
   justify-content: center;
   align-items: center;
-  left: -3.5dvb;
+  display: block;
+  position: absolute;
+  top: 100%;
+  left: -25%;
+  width: 150%;
 }
 
 .categorymenu-item.open .sub-menu {

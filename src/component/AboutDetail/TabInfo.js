@@ -412,12 +412,13 @@ export function TabInfo(props){
             )}
             </React.Fragment>
             ))
-          : '해당 상품에 Q & A가 없습니다.'
-          : '로딩중'
+          : <tr><td>해당 상품에 Q & A가 없습니다.</td></tr>
+          : <tr><td>로딩중</td></tr>
           }
         </tbody>
-        {/* write 모달창 */}
-        {writeState
+      </table>
+      {/* write 모달창 */}
+      {writeState
         ?
         <QnAWrite
           setData={props.setData}
@@ -426,8 +427,7 @@ export function TabInfo(props){
           setWriteState={setWriteState}
           writeState={writeState}
         />
-        :null}
-      </table>
+      :null}
       <div className={styles.buttonContainer}>
         {/* 이전 페이지 */}
         <button

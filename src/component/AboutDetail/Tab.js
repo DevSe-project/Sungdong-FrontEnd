@@ -4,48 +4,52 @@ export function Tab(){
   const [tabActive, setTabActive] = useState(0); // 초기값은 0
   const [tabOffsets, setTabOffsets] = useState([]);
   
-    useEffect(() => {
-    // 각 페이지의 offsetTop 속성을 업데이트
+  useEffect(() => {
     const Page__updateOffsetTop = () => {
       const pageOffsets = [];
       const pages = document.querySelectorAll('.tab-content');
-      // 각 tab-content의 시작점을 지정하는 구문
       pages.forEach((page) => {
-        //tabOffsets = pageOffsets = offsetTop = page.dataset.offsetTop = page.offsetTop
         const offsetTop = page.offsetTop;
         page.dataset.offsetTop = offsetTop;
         pageOffsets.push(offsetTop);
       });
-      setTabOffsets(pageOffsets);
+      return pageOffsets;
     };
-
-    // 스크롤이 발생할 때 인디케이터 상태 갱신
+  
     const handleScroll = () => {
       const scrollTop = window.scrollY;
-      // tab-content의 시작점은 4개 = length : 4
+      let activeTabIndex = tabOffsets.length - 1;
       for (let i = tabOffsets.length - 1; i >= 0; i--) {
         const offsetTop = tabOffsets[i];
         if (scrollTop >= offsetTop) {
-          setTabActive(i);
+          activeTabIndex = i;
           break;
         }
       }
+      setTabActive(activeTabIndex);
     };
-
-    // 초기화 함수 실행
-    Page__updateOffsetTop();
-    handleScroll(); // 초기 스크롤 위치에 따른 초기 인디케이터 상태 설정
-
-    // 이벤트 리스너 등록
-    window.addEventListener('scroll', handleScroll);
-    window.addEventListener('resize', Page__updateOffsetTop);
-
-    // 이벤트 리스너 해제 (cleanup)
+  
+    const pageOffsets = Page__updateOffsetTop();
+    setTabOffsets(pageOffsets);
+    handleScroll();
+  
+    const handleScrollEvent = () => {
+      handleScroll();
+    };
+    const handleResizeEvent = () => {
+      const updatedOffsets = Page__updateOffsetTop();
+      setTabOffsets(updatedOffsets);
+      handleScroll();
+    };
+  
+    window.addEventListener('scroll', handleScrollEvent);
+    window.addEventListener('resize', handleResizeEvent);
+  
     return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', Page__updateOffsetTop);
+      window.removeEventListener('scroll', handleScrollEvent);
+      window.removeEventListener('resize', handleResizeEvent);
     };
-  }, [tabOffsets]);
+  }, []);
 
   const tabItems = [
     { id: 1, title: '상세정보' },

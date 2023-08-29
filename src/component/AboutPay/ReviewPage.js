@@ -144,7 +144,7 @@ export function ReviewPage(props){
               <h4>{props.data && reviewData.title}</h4>
               <h1>  
                 {star.map((item, index) =>
-                <span onClick={() => paintedStar(index)}>{item}</span>
+                <span key={index} onClick={() => paintedStar(index)}>{item}</span>
                 )}
               </h1>
               {/* 별점 별 부가 설명 */}

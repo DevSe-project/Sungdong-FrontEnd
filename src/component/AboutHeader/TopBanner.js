@@ -1,14 +1,30 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import logo from '../../image/logo.jpeg'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import styles from './TopBanner.module.css';
 import {SearchBar} from './SearchBar';
 //상단 메뉴 리스트 
 export function TopBanner () {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [topTab, setTopTab] = useState(null); // 현재 활성화된 탭을 추적
+
+  useEffect(() => {
+    const tabstate = JSON.parse(localStorage.getItem('tabState'));
+    setTopTab(tabstate);
+    
+    // 경로에 따른 상태 초기화
+    if (location.pathname === '/' || location.pathname === '/login') {
+      localStorage.removeItem('tabState');
+      setTopTab(null);
+    }
+  }, []); // 두 번째 매개변수를 빈 배열로 설정하여 최초 렌더링 시에만 실행
+
   const menuData = [
     {
+      id : 1,
       title: {
-        item : '회사소개',
+        item : '성동물산 소개',
         link : '/introduceCompany'
       },
       subMenuItems: [{
@@ -28,10 +44,11 @@ export function TopBanner () {
         link : '/event',
       }],
     },
-    {
+    { 
+      id : 2,
       title: {
         item : '고객센터',
-        link : '/userservice'
+        link : '/userservice/questions'
       },
       subMenuItems: [
         {
@@ -45,6 +62,7 @@ export function TopBanner () {
       ],
     },
     {
+      id : 3,
       title: {
         item : '마이페이지',
         link : '/mypages'
@@ -67,7 +85,6 @@ export function TopBanner () {
       }],
     }, 
   ];
-  const navigate = useNavigate();
 
   //서브메뉴 열림창 변수 초기화
   const [subMenuStates, setSubMenuStates] = useState(menuData.map(() => false));
@@ -86,6 +103,11 @@ export function TopBanner () {
     setSubMenuStates(newSubMenuStates);
   };
 
+  function saveTab(id){
+    localStorage.setItem('tabState', JSON.stringify(id));
+  }
+
+
   return (
     <div className={styles.top_container}>
       <div className={styles.top_nav}>
@@ -97,15 +119,28 @@ export function TopBanner () {
         {menuData.map((item, index) => (
           <li
             key={index}
+            id={item.id}  // data-id 속성을 사용하여 탭의 id를 저장
             onMouseEnter={() => handleMouseEnter(index)}
             onMouseLeave={() => handleMouseLeave(index)}
-            className={`menu-item ${subMenuStates[index] && 'open'}`}
+            className={`menu-item ${subMenuStates[index] && 'open'}
+            menutab-item ${topTab === item.id ? 'active' : ''}`}
+            onClick={()=>{saveTab(item.id)}}
           >
-            <span className={styles.link} onClick={()=>{navigate(`${item.title.link}`)}}>{item.title.item}</span>
+            <span 
+            className={styles.link} 
+            onClick={()=>{navigate(`${item.title.link}`)}}>
+              
+              {item.title.item}
+            </span>
             {subMenuStates[index] && (
-              <ul onMouseLeave={() => handleMouseLeave(index)} className="sub-menu">
+              <ul 
+              onMouseLeave={() => handleMouseLeave(index)} 
+              className="sub-menu">
                 {item.subMenuItems.map((subMenuItem, subMenuItemindex) => (
-                  <li onClick={() => navigate(`${subMenuItem.link}`)} className={styles.sub_item} key={subMenuItemindex}>
+                  <li 
+                  onClick={() => navigate(`${subMenuItem.link}`)} 
+                  className={styles.sub_item} 
+                  key={subMenuItemindex}>
                     {subMenuItem.item}
                   </li>
                 ))}

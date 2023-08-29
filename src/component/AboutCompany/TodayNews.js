@@ -17,14 +17,35 @@ export function TodayNews(props){
         <div className={styles.title}>
           <h1>오늘의 뉴스</h1>
           <div className={styles.contentsFilter}>
-            <p style={{cursor: 'pointer'}} onClick={()=>setFilterList(false)}><i class="fas fa-object-ungroup"/> 카드 별 보기</p>
-            <p style={{cursor: 'pointer'}} onClick={()=>setFilterList(true)}><i class="fas fa-bars"/> 목록 별 보기</p>
+            <p 
+            style={{cursor: 'pointer'}} 
+            onClick={()=>setFilterList(false)}>
+              <i className="fas fa-object-ungroup"/> 
+              카드 별 보기
+            </p>
+            <p 
+            style={{cursor: 'pointer'}} 
+            onClick={()=>setFilterList(true)}>
+              <i className="fas fa-bars"/> 
+              목록 별 보기
+            </p>
           </div>
         </div>
         <div className={styles.searchContainer}>
           <div onClick={()=>setFilterModal(!filterModal)} className={styles.searchFilter}>
-            <div><span>{filterSearch}</span></div>
-            <div><i style={{color:'gray'}} className={filterModal ? 'fas fa-angle-up' : 'fas fa-angle-down'}/></div>
+            <div>
+              <span>
+                {filterSearch}
+              </span>
+            </div>
+            <div>
+              <i 
+              style={{color:'gray'}} 
+              className={filterModal 
+              ? 'fas fa-angle-up' 
+              : 'fas fa-angle-down'}
+              />
+            </div>
             {props.todayTopicData && filterModal &&
             <div className={styles.filterUI}>
               <ul className={styles.filter}>

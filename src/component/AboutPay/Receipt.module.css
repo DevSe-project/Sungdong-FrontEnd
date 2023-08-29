@@ -65,6 +65,21 @@
   border: 0.1em solid gray;
 }
 
+.selectSize{
+  width: 50%;
+  border: none;
+  border-radius: 1em;
+  background-color: rgb(230, 225, 225);
+  height: 3.3em;
+  padding: 0.5em;
+}
+
+.selectSize:focus{
+  background-color: white;
+  border: 0.1em solid gray;
+  color: black;
+}
+
 .searchAddress{
   display: flex;
   flex-direction: row;

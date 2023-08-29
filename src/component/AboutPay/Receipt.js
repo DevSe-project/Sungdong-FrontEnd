@@ -398,9 +398,11 @@ export function Receipt(props){
             <div className={styles.label}>
               <label>배송 메세지</label>
             </div>
-            <div className={styles.searchResult}>
+            <div style={{flexDirection: 'row', width: '60%'}} className={styles.searchResult}>
               <input 
+              style={{flexDirection: 'row', width: '50%'}}
               className={styles.inputSize} 
+              value={deliveryInformation.deliveryMessage}
               type="text" 
               placeholder='택배 기사님께 남길 메세지를 적어주세요'
               onChange={(e)=>setDeliveryInformation(
@@ -410,6 +412,32 @@ export function Receipt(props){
                 })
               )}
               />
+              <select
+              className={styles.selectSize}
+              name="deliveryMessage"              
+              onChange={(e)=>setDeliveryInformation(
+                prevdata=> ({
+                  ...prevdata,
+                  deliveryMessage : e.target.value,
+                })
+              )}
+              >
+                <option disabled selected>
+                  /----배송 메세지 선택----/
+                </option>
+                <option>
+                  빠른 배송 부탁할게요!
+                </option>
+                <option>
+                  문 앞에 두고 가주세요.
+                </option>
+                <option>
+                  벨 누르지 말고 배송 전 연락바랍니다.
+                </option>
+                <option>
+                  배송 전 연락 바랍니다.
+                </option>
+              </select>
             </div>
           </div>
         </form>

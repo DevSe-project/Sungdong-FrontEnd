@@ -117,8 +117,8 @@ export function ComewayList(){
             </div>
           </div>
             <div className={styles.companyInfo}>
-              {tabMenu.map((item) => 
-              <div className={styles.companyInner}>
+              {tabMenu.map((item, index) => 
+              <div key={index} className={styles.companyInner}>
 
                 <div className={styles.companyLabal}>
                   <p>{item.icon} {item.label}</p>
@@ -132,12 +132,12 @@ export function ComewayList(){
                   ) : (
                   item.content.label.map((label,index) => (
                   <div className={styles.contentInner} key={index}>
-                    <p>
+                    <div>
                       <div className={styles.col}>
-                        <div style={{fontWeight: '650', color: 'gray', whiteSpace: 'nowrap'}}>{label}</div>
-                        <div>{item.content.content[index]}</div>
+                        <p style={{fontWeight: '650', color: 'gray', whiteSpace: 'nowrap'}}>{label}</p>
+                        <p>{item.content.content[index]}</p>
                       </div>
-                    </p>
+                    </div>
                   </div>
                     ))
                   )}

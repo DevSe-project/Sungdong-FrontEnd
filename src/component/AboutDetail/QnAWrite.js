@@ -5,8 +5,8 @@ export function QnAWrite(props) {
 
   const [tempInput, setTempInput] = useState([
     {
-      title: '',
-      content: '',
+      title: "",
+      content: "",
     },
   ])
   // 제목을 담음
@@ -73,7 +73,7 @@ export function QnAWrite(props) {
         {/* X 버튼 */}
         <div className={styles.exit}>
           <span onClick={() => { props.setWriteState(0) }}>
-            <i class="fas fa-times"></i>
+            <i className="fas fa-times"></i>
           </span>
         </div>
         {/* POST : 창 이름 */}
@@ -82,21 +82,19 @@ export function QnAWrite(props) {
         <div className={styles.inputContainer}>
           {/* 제목 */}
           <div className={styles.title}>
-            <label className={styles.title_label} for="titleInput">제목</label>
+            <label className={styles.title_label} htmlFor="titleInput">제목</label>
             <input
               className={styles.title_input}
               id='titleInput'
-              value={tempInput.title}
               onChange={e => { handleTitle(e) }}
             />
           </div>
           {/* 내용 */}
           <div className={styles.content}>
-            <label className={styles.content_label} for="contentInput">내용</label>
+            <label className={styles.content_label} htmlFor="contentInput">내용</label>
             <textarea
               className={styles.content_input}
               id='contentInput'
-              value={tempInput.content}
               onChange={e => { handleContent(e) }}
             />
           </div>

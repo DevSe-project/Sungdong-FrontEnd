@@ -62,7 +62,7 @@ export let DataObj = [{
     title : "전동 드릴",
     price : 170000,
     content : "촌스럽지 않은 깔끔함",
-    discount : 0,
+    discount : 20,
     brand : '프로덕트랩',
     madeIn : '중국',
     new : true,

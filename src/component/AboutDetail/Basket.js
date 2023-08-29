@@ -3,6 +3,7 @@ import styles from './Basket.module.css'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { TopBanner } from '../AboutHeader/TopBanner';
 import { CategoryBar } from '../AboutHeader/CategoryBar';
+import React from 'react';
 export function Basket(props){
   const navigate = useNavigate();
   //총 상품 금액
@@ -38,6 +39,8 @@ export function Basket(props){
       setSum(0);
       setDiscount(0);
       setOrderPrice(0);
+      setSelectedItems([]);
+      setSelectAll(false);
       navigate('/basket');
     };
     window.history.pushState(null, null, window.location.href);
@@ -58,6 +61,8 @@ export function Basket(props){
       setSum(0);
       setDiscount(0);
       setOrderPrice(0);
+      setSelectedItems([]);
+      setSelectAll(false);
       props.setActiveTab(1);
       props.setOrderList([]);
       localStorage.removeItem('orderData');
@@ -199,7 +204,7 @@ export function Basket(props){
       <div className={styles.stepBlock}>
         <div className={styles.stepBar}>
         {stepItems.map((item, index)=> (
-          <>
+          <React.Fragment key={index}>
             {item.id === props.activeTab ?
             <div key={index} className={styles.stepOn}> 
               <p>Step 0{item.id}</p>
@@ -215,7 +220,7 @@ export function Basket(props){
               <i className="fal fa-chevron-right"></i>
             </div>
             }
-          </>
+          </React.Fragment>
           ))}
         </div>
       </div>

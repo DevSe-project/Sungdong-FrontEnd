@@ -8,12 +8,12 @@ export function Delivery(props){
   }
   return(
     <div className={styles.container}>
-      {props.orderData ? props.orderData.map((item)=> 
-      <div className={styles.deliveryList}>
+      {props.orderData ? props.orderData.map((item, key)=> 
+      <div key={key} className={styles.deliveryList}>
         <div className={styles.orderDate}>
           <h4>{item.date} 주문</h4>
           <div onClick={()=>detailOrder(item)} className={styles.orderDetail}>
-            <span>주문 상세보기</span>
+            <span>주문 상세보기</span> 
             <i className="far fa-chevron-right"></i>
           </div>
         </div>

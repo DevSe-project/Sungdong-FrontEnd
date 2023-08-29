@@ -62,7 +62,7 @@ export default function WriteModal(props) {
         {/* X 버튼 */}
         <div className={styles.exit}>
           <span onClick={() => { props.setWriteState(0) }}>
-            <i class="fas fa-times"></i>
+            <i className="fas fa-times"></i>
           </span>
         </div>
         {/* POST : 창 이름 */}
@@ -71,7 +71,7 @@ export default function WriteModal(props) {
         <div className={styles.inputContainer}>
           {/* 제목 */}
           <div className={styles.title}>
-            <label className={styles.title_label} for="titleInput">제목 </label>
+            <label className={styles.title_label} htmlFor="titleInput">제목 </label>
             <textarea
               type='text'
               className={styles.title_input}
@@ -82,7 +82,7 @@ export default function WriteModal(props) {
           </div>
           {/* 내용 */}
           <div className={styles.content}>
-            <label className={styles.content_label} for="contentInput">내용</label>
+            <label className={styles.content_label} htmlFor="contentInput">내용</label>
             <textarea
               type='text'
               className={styles.content_input}
