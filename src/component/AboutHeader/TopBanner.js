@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import logo from '../../image/logo.jpeg'
 import { useLocation, useNavigate } from 'react-router-dom'
 import styles from './TopBanner.module.css';
-import {SearchBar} from './SearchBar';
+import { SearchBar } from './SearchBar';
 //상단 메뉴 리스트 
-export function TopBanner () {
+export function TopBanner(props) {
   const navigate = useNavigate();
   const location = useLocation();
   const [topTab, setTopTab] = useState(null); // 현재 활성화된 탭을 추적
@@ -12,7 +12,7 @@ export function TopBanner () {
   useEffect(() => {
     const tabstate = JSON.parse(localStorage.getItem('tabState'));
     setTopTab(tabstate);
-    
+
     // 경로에 따른 상태 초기화
     if (location.pathname === '/' || location.pathname === '/login') {
       localStorage.removeItem('tabState');
@@ -22,68 +22,68 @@ export function TopBanner () {
 
   const menuData = [
     {
-      id : 1,
+      id: 1,
       title: {
-        item : '성동물산 소개',
-        link : '/introduceCompany'
+        item: '성동물산 소개',
+        link: '/introduceCompany'
       },
       subMenuItems: [{
-        item : '기업 소개',
-        link : '/introduceCompany'
-        },
-        {
-        item : '오시는 길',
-        link : '/comeway',
-        },
-        {
-        item : '오늘의 뉴스',
-        link : '/todaytopic/1',
-        },
-        {
-        item : '진행 중인 이벤트',
-        link : '/event',
+        item: '기업 소개',
+        link: '/introduceCompany'
+      },
+      {
+        item: '오시는 길',
+        link: '/comeway',
+      },
+      {
+        item: '오늘의 뉴스',
+        link: '/todaytopic/1',
+      },
+      {
+        item: '진행 중인 이벤트',
+        link: '/event',
       }],
     },
-    { 
-      id : 2,
+    {
+      id: 2,
       title: {
-        item : '고객센터',
-        link : '/userservice/questions'
+        item: '고객센터',
+        link: '/userservice/questions'
       },
       subMenuItems: [
         {
-        item : '질문 게시판',
-        link : '/userservice/questions',
+          item: '질문 게시판',
+          link: '/userservice/questions',
         },
         {
-        item : '1:1 고객센터',
-        link : '/userservice/eachservice',
+          item: '1:1 고객센터',
+          link: '/userservice/eachservice',
         }
       ],
     },
     {
-      id : 3,
+      id: 3,
       title: {
-        item : '마이페이지',
-        link : '/mypages'
+        item: '마이페이지',
+        link: '/mypages'
       },
       subMenuItems: [{
-        item : '내 정보 관리',
-        link : '/mypages'
-        },
-        {
-        item : '장바구니 목록',
-        link : '/basket',
-        },
-        {
-        item : '내가 찜한 목록',
-        link : '/likeitem',
-        },
-        {
-        item : '주문 / 배송 게시판',
-        link : '/delivery',
+        item: '내 정보 관리',
+        link: '/mypages'
+      },
+      {
+        item: '장바구니 목록',
+        link: '/basket',
+      },
+      {
+        item: '내가 찜한 목록',
+        link: '/likeitem',
+      },
+      {
+        item: '주문 / 배송 게시판',
+        link: '/delivery',
       }],
-    }, 
+    },
   ];
 
   //서브메뉴 열림창 변수 초기화
@@ -103,7 +103,7 @@ export function TopBanner () {
     setSubMenuStates(newSubMenuStates);
   };
 
-  function saveTab(id){
+  function saveTab(id) {
     localStorage.setItem('tabState', JSON.stringify(id));
   }
 
@@ -112,9 +112,9 @@ export function TopBanner () {
     <div className={styles.top_container}>
       <div className={styles.top_nav}>
         {/* 로고 */}
-        <img className={styles.image} onClick={() => navigate("/")} src={logo} alt="로고" height='80px'/>
+        <img className={styles.image} onClick={() => navigate("/")} src={logo} alt="로고" height='80px' />
         {/* 서치바 */}
-        <SearchBar/>
+        <SearchBar />
         {/* 메뉴 loop */}
         {menuData.map((item, index) => (
           <li
@@ -124,23 +124,23 @@ export function TopBanner () {
             onMouseLeave={() => handleMouseLeave(index)}
             className={`menu-item ${subMenuStates[index] && 'open'}
             menutab-item ${topTab === item.id ? 'active' : ''}`}
-            onClick={()=>{saveTab(item.id)}}
+            onClick={() => { saveTab(item.id) }}
           >
-            <span 
-            className={styles.link} 
-            onClick={()=>{navigate(`${item.title.link}`)}}>
-              
+            <span
+              className={styles.link}
+              onClick={() => { navigate(`${item.title.link}`) }}>
+
               {item.title.item}
             </span>
             {subMenuStates[index] && (
-              <ul 
-              onMouseLeave={() => handleMouseLeave(index)} 
-              className="sub-menu">
+              <ul
+                onMouseLeave={() => handleMouseLeave(index)}
+                className="sub-menu">
                 {item.subMenuItems.map((subMenuItem, subMenuItemindex) => (
-                  <li 
-                  onClick={() => navigate(`${subMenuItem.link}`)} 
-                  className={styles.sub_item} 
-                  key={subMenuItemindex}>
+                  <li
+                    onClick={() => navigate(`${subMenuItem.link}`)}
+                    className={styles.sub_item}
+                    key={subMenuItemindex}>
                     {subMenuItem.item}
                   </li>
                 ))}
@@ -148,7 +148,16 @@ export function TopBanner () {
             )}
           </li>
         ))}
-        <button className={styles.link_signIn} onClick={()=>{navigate("/login")}}>로그인</button>
+        {props.login
+          ?
+          <button className={styles.link_signIn} onClick={ () => {
+            sessionStorage.removeItem('saveLoginData');
+            props.setLogin(false);
+          } }>로그아웃</button>
+          :
+          <button className={styles.link_signIn} onClick={() => { navigate("/login") }}>로그인</button>
+        }
+
       </div>
     </div>
   );
