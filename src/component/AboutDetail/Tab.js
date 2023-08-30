@@ -1,55 +1,80 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import styles from './Tab.module.css'
+
+// 디바운싱 함수
+function debounce(func, delay) {
+  let timeoutId;
+  return function (...args) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      func.apply(this, args);
+    }, delay);
+  };
+}
+
 export function Tab(){
-  const [tabActive, setTabActive] = useState(0); // 초기값은 0
+
+  const [tabActive, setTabActive] = useState(0);
   const [tabOffsets, setTabOffsets] = useState([]);
-  
-  useEffect(() => {
-    const Page__updateOffsetTop = () => {
-      const pageOffsets = [];
-      const pages = document.querySelectorAll('.tab-content');
-      pages.forEach((page) => {
-        const offsetTop = page.offsetTop;
-        page.dataset.offsetTop = offsetTop;
-        pageOffsets.push(offsetTop);
-      });
-      return pageOffsets;
-    };
-  
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      let activeTabIndex = tabOffsets.length - 1;
-      for (let i = tabOffsets.length - 1; i >= 0; i--) {
-        const offsetTop = tabOffsets[i];
-        if (scrollTop >= offsetTop) {
-          activeTabIndex = i;
-          break;
-        }
-      }
-      setTabActive(activeTabIndex);
-    };
-  
-    const pageOffsets = Page__updateOffsetTop();
-    setTabOffsets(pageOffsets);
-    handleScroll();
-  
-    const handleScrollEvent = () => {
-      handleScroll();
-    };
-    const handleResizeEvent = () => {
-      const updatedOffsets = Page__updateOffsetTop();
-      setTabOffsets(updatedOffsets);
-      handleScroll();
-    };
-  
-    window.addEventListener('scroll', handleScrollEvent);
-    window.addEventListener('resize', handleResizeEvent);
-  
-    return () => {
-      window.removeEventListener('scroll', handleScrollEvent);
-      window.removeEventListener('resize', handleResizeEvent);
-    };
+
+  // TabOffsets (offset의 상단 값) 배열 받아오기
+  const updateTabOffsets = useCallback(() => {
+    const pages = Array.from(document.querySelectorAll('.tab-content'));
+    setTabOffsets(pages.map(page => page.offsetTop));
   }, []);
+  
+  // 스크롤이 tab에 근접하게 다가가면 해당 탭 값으로 옮겨지게 하기위한 handleScroll
+  const handleScroll = useCallback(() => {
+    const scrollTop = window.scrollY;
+    const tabOffSet = [...tabOffsets];
+    let closestTabIndex = 0;
+    let closestOffsetDiff = Math.abs(scrollTop - tabOffSet[0]);
+  
+    for (let i = 1; i < tabOffSet.length; i++) {
+      const offsetDiff = Math.abs(scrollTop - tabOffSet[i]);
+      if (offsetDiff < closestOffsetDiff) {
+        closestOffsetDiff = offsetDiff;
+        closestTabIndex = i;
+      }
+    }
+    return closestTabIndex;
+  }, [tabOffsets]);
+  
+
+
+  // 스크롤핸들러 디바운스 함수 (debounce는 분리함)
+  const debouncedScrollHandler = useCallback(() => {
+    const handleScrollTimeout = debounce(() => {
+      const closestTabIndex = handleScroll();
+      setTabActive(closestTabIndex);
+    }, 10);
+  
+    return handleScrollTimeout;
+  }, [handleScroll]);
+  
+
+
+
+  // 의존성 배열 분리를 위한 useEffect 2번 사용
+
+  // 1. tabOffset들을 classname에서 받아오는 구문
+  useEffect(() => {
+    updateTabOffsets();
+  }, [updateTabOffsets]);
+
+  // 2. 디바운스 스크롤 핸들러와 tabOffset들을 받아 스크롤 이벤트 진행시키는 구문
+  useEffect(() => {
+    const handleScrollTimeout = debouncedScrollHandler();
+
+    window.addEventListener('scroll', handleScrollTimeout);
+    window.addEventListener('resize', updateTabOffsets);
+
+    return () => {
+      window.removeEventListener('scroll', handleScrollTimeout);
+      window.removeEventListener('resize', updateTabOffsets);
+    };
+  }, [debouncedScrollHandler, updateTabOffsets]);
+  
 
   const tabItems = [
     { id: 1, title: '상세정보' },

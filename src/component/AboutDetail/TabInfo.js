@@ -236,6 +236,7 @@ export function TabInfo(props){
 
                 { reviewData.map((item, key) => (
                 <li 
+                  key={key}
                   className={styles.filterInner} 
                   onClick={()=>funcFilterSter(item.rating)}
                 >

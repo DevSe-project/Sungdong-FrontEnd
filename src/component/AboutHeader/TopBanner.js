@@ -18,7 +18,7 @@ export function TopBanner () {
       localStorage.removeItem('tabState');
       setTopTab(null);
     }
-  }, []); // 두 번째 매개변수를 빈 배열로 설정하여 최초 렌더링 시에만 실행
+  }, [location]); // 두 번째 매개변수를 빈 배열로 설정하여 최초 렌더링 시에만 실행
 
   const menuData = [
     {

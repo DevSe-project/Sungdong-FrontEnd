@@ -230,12 +230,13 @@ function basketThis(product, count){
                   <div style={{display: 'flex', alignItems:'center', gap:'0.5em'}}>
                     옵션 :
                     <select 
+                    value={optionSelected || ""}
                     onChange={(e)=>{setOptionSelected(e.target.value)}}
                     className={styles.selectSize}
                     >
-                      <option selected disabled>옵션 선택</option>
-                      {detailData.option.map((item) =>
-                      <option>{item.value}</option>
+                      <option value="" disabled>옵션 선택</option>
+                      {detailData.option.map((item, index) =>
+                      <option key={index} value={item.value}>{item.value}</option>
                       )}
                     </select>
                   </div>

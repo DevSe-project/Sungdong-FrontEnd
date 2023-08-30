@@ -35,7 +35,18 @@ export function TodayNewsCard(props){
           </div>
         </div>
         ))
-        : '로딩중'}
+        :
+        <div className={styles.colskeleton}>
+          <div className={styles.frameskeleton}>
+          &nbsp;
+          </div>
+          <div className={styles.nameskeleton}>
+            &nbsp;
+          </div>
+          <div className={styles.priceskeleton}>
+            &nbsp;
+          </div>
+        </div>}
         <div className={styles.buttonContainer}>
           {/* 이전 페이지 */}
           <button

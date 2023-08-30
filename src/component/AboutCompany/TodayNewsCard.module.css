@@ -61,3 +61,46 @@
   padding-left: 1.5em;
   padding-right: 1.5em;
 }
+
+/* 스켈레톤 부분 */
+.skeleton{
+  display: flex;
+  background-color: lightgray;
+  width: 100%;
+  height: 100%;
+  justify-content: flex-end;
+  border-radius: 10dvw;
+}
+.colskeleton{
+  padding: 1em;
+  height: 10em;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  white-space: nowrap;
+  gap: 1em;
+  cursor: pointer;
+}
+.frameskeleton{
+  background-color: lightgray;
+  width: 10em;
+  height: 5em;
+  overflow: hidden;
+}
+.nameskeleton{
+  width: 100%;
+  height: 2em;
+  background-color: lightgray;
+  text-align: start;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  border-radius: 0.8dvw;
+}
+.priceskeleton{
+  height: 1em;
+  background-color: lightgray;
+  text-align: end;
+  border-radius: 0.8dvw;
+}

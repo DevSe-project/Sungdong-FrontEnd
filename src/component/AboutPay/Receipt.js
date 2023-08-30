@@ -114,6 +114,13 @@ export function Receipt(props){
     }
   }
 
+  const deliveryMessageExample=[
+  {value: '빠른배송 부탁드립니다.'},
+  {value: '벨 누르지 말고 배송 전 연락바랍니다.'},
+  {value: '배송 전 연락 바랍니다.'},
+  {value: '문 앞에 두고 가주세요.'},
+]
+
   return(
     <div>
       <div className={styles.container}>
@@ -414,7 +421,8 @@ export function Receipt(props){
               />
               <select
               className={styles.selectSize}
-              name="deliveryMessage"              
+              name="deliveryMessage"
+              value={deliveryInformation.deliveryMessage || ""}              
               onChange={(e)=>setDeliveryInformation(
                 prevdata=> ({
                   ...prevdata,
@@ -422,21 +430,14 @@ export function Receipt(props){
                 })
               )}
               >
-                <option disabled selected>
+                <option value="" disabled>
                   /----배송 메세지 선택----/
                 </option>
-                <option>
-                  빠른 배송 부탁할게요!
+                {deliveryMessageExample.map((item, index) => 
+                <option key={index} value={item.value}>
+                  {item.value}
                 </option>
-                <option>
-                  문 앞에 두고 가주세요.
-                </option>
-                <option>
-                  벨 누르지 말고 배송 전 연락바랍니다.
-                </option>
-                <option>
-                  배송 전 연락 바랍니다.
-                </option>
+                )}
               </select>
             </div>
           </div>
