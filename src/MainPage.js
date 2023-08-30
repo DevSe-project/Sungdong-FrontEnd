@@ -5,7 +5,7 @@ import { TopBanner } from './component/AboutHeader/TopBanner'
 export default function MainPage(props) {
   return (
     <div>
-      <TopBanner/>
+      <TopBanner login={props.login} setLogin={props.setLogin}/>
     
       <CategoryBar />
 

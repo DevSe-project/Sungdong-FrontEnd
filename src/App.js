@@ -57,6 +57,15 @@ function App() {
   const [userData, setUserData] = useState();
   const [codeState, setCodeState] = useState();
   const [todayTopicData, setTodayTopicData] = useState();
+  const [login, setLogin] = useState(false);
+
+  // 로그인 상태 유지
+  const inLogin = sessionStorage.getItem('saveLoginData');
+  useEffect( () => {
+    if(inLogin) { //저장된 로그인Data가 존재
+      setLogin(true); //로그인상태유지
+    }
+  }, [inLogin] )
 
   // 찜 데이터(캐쉬) 불러오기
   useEffect(() => {
@@ -88,7 +97,7 @@ function App() {
       <Routes>
         <Route path='/' element={
           <>
-            <MainPage />
+            <MainPage login={login} setLogin={setLogin}/>
             <List data={data}/>
             <TodayTopicList todayTopicData={todayTopicData} setTodayTopicData={setTodayTopicData} />
             <ComewayList/>
@@ -140,7 +149,7 @@ function App() {
         </Route>
         {/* 리뷰 작성하기 */}
         <Route path='/review/:id' element={<ReviewPage data={data} setData={setData} />}/>
-e
+
         {/* 회사 관련 */}
         <Route path='/comeway' element={<Comeway/>}/>
         <Route path='/todayTopic/:page' element={
