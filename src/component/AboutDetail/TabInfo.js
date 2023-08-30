@@ -284,75 +284,75 @@ export function TabInfo(props){
           </p>
         </div>
       </div>
-    )
-    : getReviewCurrentPagePosts().map((item,index) => 
-    <div key={index} className={styles.review}>
-    <div className={styles.reviewList}>
-      <div className={styles.reviewListProfileImg}>
-        <img className={styles.thumnail} src='../../image/logo.jpeg' alt='프로필이미지' width={20}/>
-      </div>
-      <div className={styles.reviewListProfile}>
-        <h4>{item.profileName}</h4>
-        <span>{ratingToStar(item.rating)}</span>
-        <p>{item.date}</p>
-      </div>
-    </div>
-    <div className={styles.reviewListProduct}>
-      {props.detailData.title}
-    </div>
-    {item.image &&
-    <div className={styles.reviewImg}>
-      {item.image}
-    </div>
-    }
-    <div className={styles.reviewListBody}>
-      <h5>
-        {item.title}
-      </h5>
-      <p>
-        {item.content}
-      </p>
-    </div>
-  </div>
-    )
-  : 
-  <div className={styles.review}>
-        작성된 리뷰가 없습니다..
-  </div>
-  }
-      <div className={styles.buttonContainer}>
-        {/* 이전 페이지 */}
-        <button
-        className={styles.button} 
-        onClick={()=> {
-          if(reviewCurrentPage !== 1){
-            setReviewCurrentPage(reviewCurrentPage - 1)
-          } else {
-            alert("해당 페이지가 가장 첫 페이지 입니다.")
-          }}}>
-            <i className="far fa-angle-left"/>
-        </button>
-        <div className={styles.button}>
-          {reviewCurrentPage}
+      )
+      : getReviewCurrentPagePosts().map((item,index) => 
+      <div key={index} className={styles.review}>
+        <div className={styles.reviewList}>
+          <div className={styles.reviewListProfileImg}>
+        <   img className={styles.thumnail} src='../../image/logo.jpeg' alt='프로필이미지' width={20}/>
+          </div>
+          <div className={styles.reviewListProfile}>
+            <h4>{item.profileName}</h4>
+            <span>{ratingToStar(item.rating)}</span>
+            <p>{item.date}</p>
+          </div>
         </div>
-        {/* 다음 페이지 */}
-        <button
-        className={styles.button}
-        onClick={()=> {
-          if(
-            props.detailData.review 
-            && props.detailData.review.length > 5
-            )
-          {
-            setReviewCurrentPage(reviewCurrentPage + 1)
-          } 
-          else {
-            alert("다음 페이지가 없습니다.")
-          }}}>
-            <i className="far fa-angle-right"/>
-        </button>
+        <div className={styles.reviewListProduct}>
+          {props.detailData.title}
+        </div>
+        {item.image &&
+        <div className={styles.reviewImg}>
+          {item.image}
+        </div>
+        }
+        <div className={styles.reviewListBody}>
+          <h5>
+            {item.title}
+          </h5>
+          <p>
+            {item.content}
+          </p>
+        </div>
       </div>
-  </div>
+        )
+      : 
+      <div className={styles.review}>
+            작성된 리뷰가 없습니다..
+      </div>
+      }
+        <div className={styles.buttonContainer}>
+          {/* 이전 페이지 */}
+          <button
+          className={styles.button} 
+          onClick={()=> {
+            if(reviewCurrentPage !== 1){
+              setReviewCurrentPage(reviewCurrentPage - 1)
+            } else {
+              alert("해당 페이지가 가장 첫 페이지 입니다.")
+            }}}>
+              <i className="far fa-angle-left"/>
+          </button>
+          <div className={styles.button}>
+            {reviewCurrentPage}
+          </div>
+          {/* 다음 페이지 */}
+          <button
+          className={styles.button}
+          onClick={()=> {
+            if(
+              props.detailData.review 
+              && props.detailData.review.length > 5
+              )
+            {
+              setReviewCurrentPage(reviewCurrentPage + 1)
+            } 
+            else {
+              alert("다음 페이지가 없습니다.")
+            }}}>
+              <i className="far fa-angle-right"/>
+          </button>
+        </div>
+    </div>
 
     {/* 탭 Q & A */}
     <div id='3' className="tab-content">

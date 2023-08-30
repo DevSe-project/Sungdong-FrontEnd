@@ -262,5 +262,5 @@ input[type="checkbox"] {
 
 /* 상세페이지 - 탭 콘텐츠의 마진 조절 */
 .tab-content{
-  padding-top: 10em;
+  padding-top : 10em;
 }

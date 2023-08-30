@@ -103,6 +103,23 @@ function buyThis(product, count){
         props.setOrderList(editedData);
         navigate("/basket/receipt");
         props.setActiveTab(2);
+    } else if(!product.option && optionSelected === null) {
+        const editedData = [{
+          productId : product.id,
+          userId: "asdfx100", 
+          productName : product.title,
+          cnt : Number(count), 
+          price: product.price,
+          finprice : (product.price * count), //총 계산액
+          discount : product.discount ? product.discount : 0,
+        }]
+          // editedData 객체를 JSON 형식의 문자열로 변환
+          const buyData = JSON.stringify(editedData);
+          // localStorage에 저장
+          localStorage.setItem('orderData', buyData);
+          props.setOrderList(editedData);
+          navigate("/basket/receipt");
+          props.setActiveTab(2);
     } else {
       alert("필수 옵션을 선택해주세요!")
     }
@@ -123,6 +140,16 @@ function basketThis(product, count){
           cnt : count,
           finprice : (product.price * count), //총 계산액
           option : optionSelected
+        }
+        //props.basketList의 원래 배열들과 배열 product를 합쳐서 새로운 배열을 생성하여 State에 삽입
+        props.setBasketList([...props.basketList, newBasketProduct]); 
+        // *중요 basketList의 배열들을 백엔드 서버로 전송하여 저장하기, Username의 db -> 장바구니 db에 아이템 저장해놓기 //
+        alert("해당 상품이 장바구니에 추가되었습니다.")
+      } else if(!product.option && optionSelected === null) {
+          const newBasketProduct = {
+            ...product,
+            cnt : count,
+            finprice : (product.price * count), //총 계산액
         }
         //props.basketList의 원래 배열들과 배열 product를 합쳐서 새로운 배열을 생성하여 State에 삽입
         props.setBasketList([...props.basketList, newBasketProduct]); 

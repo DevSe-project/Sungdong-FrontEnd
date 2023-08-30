@@ -179,6 +179,7 @@ export function Basket(props){
         cnt : Number(item.cnt), 
         price: item.price,
         finprice: item.finprice,
+        option: item.option && item.option,
       }));
       // editedData 객체를 JSON 형식의 문자열로 변환
       const editedDataString = JSON.stringify(editedData);
