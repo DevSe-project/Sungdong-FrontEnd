@@ -93,6 +93,9 @@ export function Receipt(props){
   function gotoLink(){
     validateForm();
     if(props.activeTab===2 && isFormValid) {
+        // 현재 날짜와 시간을 가져오기
+      const currentDate =  new Date();
+      const formattedDate = currentDate.toLocaleString();
       const newOrderId = props.orderData.length + 1;
       const editedData = JSON.parse(localStorage.getItem('orderData'))
       const newOrderData = editedData.map((item) => ({
@@ -100,7 +103,7 @@ export function Receipt(props){
         orderId: newOrderId,
         order: orderInformation,
         delivery: deliveryInformation,
-        date: '2020-08-22',
+        date: formattedDate,
         orderState: 0, //0 => 결제대기, 1 => 결제완료 2 => 배송준비중 3 => 배송중 4 => 배송완료 
       }));
       // 데이터 삽입
