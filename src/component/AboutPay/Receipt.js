@@ -436,6 +436,9 @@ export function Receipt(props){
                 <option value="" disabled>
                   /----배송 메세지 선택----/
                 </option>
+                <option value="">
+                  직접 입력
+                </option>
                 {deliveryMessageExample.map((item, index) => 
                 <option key={index} value={item.value}>
                   {item.value}
