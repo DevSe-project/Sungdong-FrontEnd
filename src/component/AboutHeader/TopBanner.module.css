@@ -21,11 +21,10 @@
 .top_nav {
   flex: 1; /* 네비게이션 영역을 균등 영역으로 나누도록 설정 */
   display: flex;
-  justify-content: center; /* 가로 가운데 정렬 */
+  justify-content: space-evenly; /* 가로 가운데 정렬 */
   align-items: center; /* 세로 가운데 정렬 */
   margin-top: 1em;
   list-style-type: none;
-  gap: 3em;
   white-space: nowrap;
 }
 
