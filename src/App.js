@@ -101,6 +101,14 @@ function App() {
             <List data={data}/>
             <TodayTopicList todayTopicData={todayTopicData} setTodayTopicData={setTodayTopicData} />
             <ComewayList/>
+            <div 
+              className='topButton' 
+              onClick={() => 
+                window.scrollTo({top: '0', behavior: 'smooth'})}
+            >
+              <i style={{color: 'black', fontSize: '1.4em'}}className="fas fa-arrow-up"
+              />
+            </div>
           </>
         } />
         
