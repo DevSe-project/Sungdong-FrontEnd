@@ -4,38 +4,29 @@ import styles from './UserService.module.css';
 import { CategoryBar } from "../AboutHeader/CategoryBar";
 import { useState } from "react";
 
-export default function UserService() {
-    // 메인컴포넌트를 바꿀 state
-    const [mainState, setMainState] = useState(0)
+export function UserService() {
 
     const serviceList = [
         {
             id : 0,
-            serviceTitle : '질문 게시판',
-            link : '/userservice/questions'
+            serviceTitle : '공지사항',
+            link : '/userservice/notice'
         },
         {
             id : 1,
-            serviceTitle : '1:1 채팅',
-            link : '/userservice/eachchat',
+            serviceTitle : '문의하기',
+            link : '/userservice/ask    ',
         },
         
     ]
     
     const navigate = useNavigate();
 
-    const mainPages = () => {
-        return(
-            <div></div>
-        )
-    }
-
     return(
         <div className={styles.body}>
             <TopBanner />
             <CategoryBar />
-            <div className={styles.mainScreen}>{/*메인화면 가로정렬*/}
-            
+            <div className={styles.mainScreen}> {/*메인화면 가로정렬*/}
                 <div className={styles.sideBar}> {/*사이드바 세로정렬*/}
                     <div className={styles.title} onClick={ () => {navigate('/userservice/')} }> 고객센터 </div>
                     {/* 목록 */}

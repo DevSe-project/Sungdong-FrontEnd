@@ -19,6 +19,11 @@ import { ComewayList } from './component/AboutHome/ComewayList';
 import Join from './component/AboutLogin/Join';
 import { Login } from './component/AboutLogin/Login';
 
+// 고객서비스 관련
+import { UserService } from './component/AboutUserService/UserService';
+import { Notice } from  './component/AboutUserService/Notice';
+import { Ask }  from './component/AboutUserService/Ask';
+
 // 상세보기, 장바구니, 찜하기
 import { Detail } from './component/AboutDetail/Detail';
 import { Basket } from './component/AboutDetail/Basket';
@@ -31,11 +36,6 @@ import { Receipt } from './component/AboutPay/Receipt';
 import { DeliveryMain } from './component/AboutPay/DeliveryMain';
 import { ReviewPage } from './component/AboutPay/ReviewPage';
 import { OrderDetail } from './component/AboutPay/OrderDetail';
-
-// 고객서비스 관련
-import UserService from './component/AboutAsk/UserService';
-import Questions from './component/AboutAsk/Questions';
-import EachChat from './component/AboutAsk/EachChat';
 
 // 회사 이벤트 관련
 import { Comeway } from './component/AboutCompany/Comeway';
@@ -136,20 +136,23 @@ function App() {
           <Route path='pay' element={<Pay activeTab={activeTab} setActiveTab={setActiveTab} orderData={orderData} setOrderData={setOrderData}/>} />
           <Route path='order' element={<Order activeTab={activeTab} setActiveTab={setActiveTab} orderData={orderData} setOrderData={setOrderData}/>} />
         </Route>
+
         {/* 주문 조회 */}
         <Route path='/delivery' element={<DeliveryMain orderData={orderData} setOrderData={setOrderData}/>} />
+        
         {/* 배송 조회 */}
         <Route path='/orderDetail' element={<OrderDetail/>}/>
 
         {/* 로그인 */}
         <Route path='/login' element={<Login userData={userData} setUserData={setUserData} codeState={codeState} setCodeState={setCodeState}/>} />
         <Route path='/join' element={<Join userData={userData} setUserData={setUserData}/>} />
-
+        
         {/* 문의하기 */}
-        <Route path='/userservice' element={<UserService/>}>
-          <Route path='questions' element={<Questions/>}/>
-          <Route path='eachchat' element={<EachChat/>}/>
+        <Route path='/userservice' element={<UserService />}>
+          <Route path='notice' element={<Notice/>}/>
+          <Route path='ask' element={<Ask/>}/>
         </Route>
+        
         {/* 리뷰 작성하기 */}
         <Route path='/review/:id' element={<ReviewPage data={data} setData={setData} />}/>
 

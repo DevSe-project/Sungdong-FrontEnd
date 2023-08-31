@@ -48,16 +48,16 @@ export function TopBanner(props) {
       id: 2,
       title: {
         item: '고객센터',
-        link: '/userservice/questions'
+        link: '/userservice/notice'
       },
       subMenuItems: [
         {
-          item: '질문 게시판',
-          link: '/userservice/questions',
+          item: '공지사항',
+          link: '/userservice/notice',
         },
         {
-          item: '1:1 고객센터',
-          link: '/userservice/eachservice',
+          item: '문의하기',
+          link: '/userservice/ask',
         }
       ],
     },
