@@ -63,26 +63,24 @@ export default function Join(props) {
     };
 
     // [필수]항목들이 모두 체크되었는지 확인하는 함수
-    function areAllRequiredChecked() {
-        return checkboxState.every((state, index) => !PolicyObj[index].need || state);
-        //.every(callback): 배열의 모든 요소가 주어진 콜백 함수를 만족하면 true를 반환하는 배열 메서드. 
-        // every 메서드는 state 배열의 모든 요소가 특정 조건을 만족하는지 확인.
-    }
+    const areAllRequiredChecked = checkboxState.every((state, index) => !PolicyObj[index].need || state);
 
     //경고문구 : 초기값(닫힌상태) - 아래의 삼항연산자를 움직일 State
     const [warningMsg, setWarningMsg] = useState(false)
 
     // [필수]항목들이 모두 체크됐는지 유무에 따라 warningMsg state를 조정하는 함수
     useEffect(() => {
-        if (areAllRequiredChecked() === false) {
+        if (areAllRequiredChecked === false) {
             setWarningMsg(true);
-        } else setWarningMsg(false);
-    })
+        } else { 
+            setWarningMsg(false);
+        }
+    }, [areAllRequiredChecked])
 
     // 가입하기 버튼 클릭 event(가입s조건 모두 충족됐는지)
     let signUp_checkCondition = () => {
         // [필수]항목 체크확인
-        if (areAllRequiredChecked()) {
+        if (areAllRequiredChecked) {
             // 가입하기 버튼을 눌렀을 때, input받은 정보를 userData state에 저장하기 전 유효성 검사 실시.
             // if(props.inputData && UserData.find(item => item.id === props.inputData.id)) {
             //     console.log('중복된 아이디입니다.');
@@ -158,8 +156,8 @@ export default function Join(props) {
             {/* 이용약관 체크박스 컨테이너 */}
             <ul className={styles.policyContainer}>
                 {/* 이용약관 */}
+                {/* 약관 Container */ }
                 {PolicyObj.map((policy, index) => {
-                    {/* 약관 Container */ }
                     return <li key={index} className={styles.li_policy}>
                         <div className={styles.eachContent}>
                             {/* 왼쪽 Content*/}
@@ -209,7 +207,7 @@ export default function Join(props) {
                 </div>
                 {/* 가입하기 */}
                 <div
-                    className={`${styles.sign_up} ${!areAllRequiredChecked() && styles.disabled}`}
+                    className={`${styles.sign_up} ${!areAllRequiredChecked && styles.disabled}`}
                     onClick={signUp_checkCondition}
                 >
                     가입하기

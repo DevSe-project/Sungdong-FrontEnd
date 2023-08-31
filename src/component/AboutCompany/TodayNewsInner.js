@@ -8,7 +8,7 @@ export function TodayNewsInner(props){
   const loadData = ()=> {
     if(props.todayTopicData){
       //입력된 id과 data내부의 id값 일치하는 값 찾아 변수 선언
-      const data = props.todayTopicData.find((item)=>item.id==id);
+      const data = props.todayTopicData.find((item)=>item.id===id);
       return data;
     } else {
       return <div>데이터를 불러오는 중이거나 상품을 찾을 수 없습니다.</div>;

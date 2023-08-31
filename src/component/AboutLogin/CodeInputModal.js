@@ -19,7 +19,7 @@ export default function CodeInputModal(props) {
     return () => {
       window.removeEventListener('keydown', exit_esc);
     };
-  }, []);
+  }, [props.onClose]);
 
   // 입력받을 코드
   const [inputCode, setInputCode] = useState('');
@@ -43,7 +43,7 @@ export default function CodeInputModal(props) {
         {/* Exit Button */}
         <div className={styles.exitButton}>
           <span onClick={() => { props.onClose() }}>
-            <i class="fas fa-times"></i>
+            <i className="fas fa-times"></i>
           </span>
         </div>
         {/* Title */}

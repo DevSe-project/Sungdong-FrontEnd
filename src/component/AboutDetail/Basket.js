@@ -295,7 +295,14 @@ export function Basket(props){
               <tr key={key}>
                 <td><img src='../image/logo.jpeg' alt='이미지'/></td>
                 <td>
-                  <h5 className={styles.link} onClick={()=>navigate(`/detail/${item.id ? item.id : item.productId}`)}>{item.title 
+                  <h5 className={styles.link} 
+                  onClick={()=>props.activeTab <= 2 
+                  ? navigate(`/detail/${item.id 
+                    ? item.id 
+                    : item.productId}`) 
+                    : null}
+                  >
+                    {item.title 
                   ? item.title : item.productName
                   ? item.productName : null}</h5>
                   <div>

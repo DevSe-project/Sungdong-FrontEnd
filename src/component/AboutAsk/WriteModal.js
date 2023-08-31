@@ -52,7 +52,6 @@ export default function WriteModal(props) {
     props.setWriteState(0);
   }
 
-  const navigate = useNavigate();
 
   return (
     // 뒷배경 오버레이

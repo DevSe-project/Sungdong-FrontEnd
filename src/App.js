@@ -42,6 +42,7 @@ import { Comeway } from './component/AboutCompany/Comeway';
 import { TodayNews } from './component/AboutCompany/TodayNews';
 import { TodayNewsInner } from './component/AboutCompany/TodayNewsInner';
 import { Event } from './component/AboutCompany/Event'
+import { AdminMain } from './component/AboutAdmin/AdminMain';
 
 function App() {
   const navigate = useNavigate();
@@ -157,6 +158,9 @@ function App() {
         <Route path='/todayTopicPost/:id' 
         element={<TodayNewsInner todayTopicData={todayTopicData} setTodayTopicData={setTodayTopicData} />}/>
         <Route path='/event' element={<Event/>}/>
+
+        {/* 관리자페이지 */}
+        <Route path='/adminMain' element={<AdminMain/>}/>
       </Routes>
     </div>
   );

@@ -1,6 +1,6 @@
 import { Tab } from './Tab'
 import styles from './Detail.module.css'
-import { useHref, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { CategoryBar } from '../AboutHeader/CategoryBar'
 import { TopBanner } from '../AboutHeader/TopBanner'

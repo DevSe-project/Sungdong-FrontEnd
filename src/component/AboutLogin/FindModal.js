@@ -17,7 +17,7 @@ export default function FindModal({ type, onClose, openModal }) {
         return () => {
             window.removeEventListener('keydown', exit_esc);
         };
-    }, []);
+    }, [onClose]);
 
 
     return (
@@ -39,7 +39,7 @@ export default function FindModal({ type, onClose, openModal }) {
                     </div>
 
                     {/* 아이디 비번 선택란 */}
-                    {type === 'id' ? <Find_IdModal /> : <Find_PasswordModal />}
+                    {type === 'id' ? <Find_IdModal /> : <Find_PasswordModal />} 
                 </div>
             </div>
         </div>
