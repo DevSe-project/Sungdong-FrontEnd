@@ -11,8 +11,8 @@ export default function Questions() {
 
     const [writeList, setWriteList] = useState([
         {
-            title: '성동물산 왜 이렇게 빨간가요...?',
-            content: '성동물산 프로젝트... 아직도 API가 구현을 못하겠다 싯팔 그냥 백앤드도 공부해야겠다는 생각이 든다. 어떤 식으로 하면 좋을까요 성동 씨?',
+            title: '성동물산 품질 최상',
+            content: '성동물산의 품질 만족도에 대하여',
             date: `2023. 8. 22. 오후 8:23:55`,
             writer: '엄지석',
             viewer: 0,
