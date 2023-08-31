@@ -13,41 +13,9 @@ export function Detail(props) {
  //수량 개수 state
   const [count, setCount] = useState("1");
 
-  //추천 상품 STATE 변수
-  const [recommendedItem, setRecommendedItem] = useState([]);
-
-  //최근 리뷰 STATE 변수
-  const [newReview, setNewReview] = useState([]); 
-
   //옵션 선택 state
   const [optionSelected, setOptionSelected] = useState(null);
 
-  useEffect(() => {
-
-    // 추천 상품 렌더링시 띄우기
-    const getRandomItem = () => {
-      if(props.data){
-      const shuffledArray = props.data.sort(() => 0.5 - Math.random());
-      return shuffledArray.slice(0, 4);
-      }
-    };
-    setRecommendedItem(getRandomItem);
-
-    // 최근 리뷰 렌더링 시 띄우기
-    if(detailData){
-      const sliceReview = () => {
-        if (detailData.review) { // detailData.review가 정의되었을 때만 처리
-          const newData = [...detailData.review]; // 복사해서 정렬하도록 수정
-          newData.sort((a, b) => {
-            return new Date(a.date) - new Date(b.date);
-          });
-          return newData.slice(0, 4);
-        } return [];
-      };
-      const newReviewData = sliceReview();
-      setNewReview(newReviewData);
-    }
-  }, [props.data])
 
 
   //주소창 입력된 id값 받아오기
@@ -183,22 +151,6 @@ function basketThis(product, count){
     }
   }
 
-  //[최근 리뷰] 리뷰 평점에 따른 별 표시
-
-  function ratingToStar(rating) {
-    const totalStars = [];
-  
-    for (let i = 0; i < Number(rating); i++) {
-      totalStars.push(<i style={{color: '#CC0000'}} className="fas fa-star" />);
-    }
-  
-    for (let i = 0; i < 5 - Number(rating); i++) {
-      totalStars.push(<i style={{color: '#CC0000'}} className="fal fa-star" />);
-    }
-  
-    return <>{totalStars}</>;
-  }
-
   return(
     <div>
       <TopBanner/>
@@ -308,77 +260,6 @@ function basketThis(product, count){
               </div>
             </div>
           </div>
-
-
-          {/* 최근 리뷰 */}
-          <div className={styles.headBottom}>
-            <div className={styles.headAtcTab}>
-              <h2>최근 리뷰</h2><br/>
-              <div className={styles.rowAtcTab}>
-                {props.data && detailData && newReview 
-                ? detailData.review == null 
-                ? <p>리뷰가 없습니다!</p>
-                :
-                newReview.map((item, index) =>
-                <div key={index} className={styles.colAtcTab}>
-                  <span>{ratingToStar(item.rating)}</span>
-                  <p className={styles.spanTag}>{item.profileName} 님</p>
-                  <span className={styles.spanTag}>{item.date}</span>
-                  <p className={styles.spanTag}>
-                    {item.title}
-                  </p>
-                </div>
-                )
-                :
-                <div className={styles.colskeleton}>
-                  <div className={styles.frameskeleton}>
-                  &nbsp;
-                  </div>
-                  <div className={styles.nameskeleton}>
-                    &nbsp;
-                  </div>
-                  <div className={styles.priceskeleton}>
-                  &nbsp;
-                  </div>
-                </div>
-                }
-              </div>
-            </div>
-
-
-            {/* 추천 상품 */}
-            <div className={styles.headAtcTab}>
-              <h2>추천 상품</h2><br/>
-              <div className={styles.rowAtcTab}>
-                {recommendedItem ? recommendedItem.map((item, index) => 
-                <div onClick={()=> navigate(`/detail/${item.id}`)} key={index} className={styles.colAtcTab}>
-                  <div className={styles.frame}>
-                    <img className={styles.thumnail} src="http://pop7.co.kr/web/product/big/201806/344_shop1_15289487355825.jpg" alt="추천 이미지" width="100px"/>
-                  </div>
-                  <div className={styles.recommendTitle}>
-                    <span className={styles.spanTag}>{item.title}</span>
-                  </div>
-                  <div className={styles.recommendPrice}>
-                    <p>{`\\${item.price}`}</p>
-                  </div>
-                </div>
-                ):
-                // 스켈레톤 처리
-                <div className={styles.colskeleton}>
-                  <div className={styles.frameskeleton}>
-                  &nbsp;
-                  </div>
-                  <div className={styles.nameskeleton}>
-                    &nbsp;
-                  </div>
-                  <div className={styles.priceskeleton}>
-                    &nbsp;
-                  </div>
-                </div>
-                }
-              </div>
-            </div>  
-          </div> 
         </section>
 
 

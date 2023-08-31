@@ -112,8 +112,13 @@ export function Receipt(props){
         props.setOrderData(copyData);
         localStorage.removeItem('orderData');
         localStorage.setItem('newOrderData', JSON.stringify(newOrderData))
+        if(orderInformation.payRoute === 'CMS'){
+          props.setActiveTab(4);
+          navigate("/basket/order");
+        } else if (orderInformation.payRoute === '일반 결제') {
         props.setActiveTab(3);
         navigate("/basket/pay");
+        }
     }
   }
 
@@ -299,8 +304,8 @@ export function Receipt(props){
             <div className={styles.input}>
               <input 
               name='delivery' 
-              value="일반택배(선불)" 
-              checked={deliveryInformation.deliveryType === '일반택배(선불)'} 
+              value="책임택배" 
+              checked={deliveryInformation.deliveryType === '책임택배'} 
               type="radio"
               onChange={(e)=>
                 setDeliveryInformation(prevdata=>
@@ -311,11 +316,11 @@ export function Receipt(props){
                 )
               }
               />
-              일반 택배(선불)
+              책임 택배
               <input 
               name='delivery' 
-              value="일반택배(착불)" 
-              checked={deliveryInformation.deliveryType === '일반택배(착불)'} 
+              value="화물" 
+              checked={deliveryInformation.deliveryType === '화물'} 
               type="radio"
               onChange={(e)=>
                 setDeliveryInformation(prevdata=>
@@ -326,11 +331,11 @@ export function Receipt(props){
                 )
               }
               />
-              일반 택배(착불)
+              화물
               <input 
               name='delivery' 
-              value="화물(선불)" 
-              checked={deliveryInformation.deliveryType === '화물(선불)'} 
+              value="일반택배" 
+              checked={deliveryInformation.deliveryType === '일반택배'} 
               type="radio"
               onChange={(e)=>
                 setDeliveryInformation(prevdata=>
@@ -341,52 +346,7 @@ export function Receipt(props){
                 )
               }
               />
-              화물(선불)
-              <input 
-              name='delivery' 
-              value="화물(착불)" 
-              checked={deliveryInformation.deliveryType === '화물(착불)'} 
-              type="radio"
-              onChange={(e)=>
-                setDeliveryInformation(prevdata=>
-                  ({
-                    ...prevdata,
-                    deliveryType : e.target.value, 
-                  })
-                )
-              }
-              />
-              화물(착불)
-              <input 
-              name='delivery' 
-              value="화물택배(선불)" 
-              checked={deliveryInformation.deliveryType === '화물택배(선불)'} 
-              type="radio"
-              onChange={(e)=>
-                setDeliveryInformation(prevdata=>
-                  ({
-                    ...prevdata,
-                    deliveryType : e.target.value, 
-                  })
-                )
-              }
-              />
-              화물 택배(선불)
-              <input 
-              name='delivery' 
-              value="화물택배(착불)" 
-              checked={deliveryInformation.deliveryType === '화물택배(착불)'} 
-              type="radio"
-              onChange={(e)=>
-                setDeliveryInformation(prevdata=>
-                  ({
-                    ...prevdata,
-                    deliveryType : e.target.value, 
-                  })
-                )
-              }
-              />
-              화물 택배(착불)
+              일반택배
               <input 
               name='delivery' 
               value="직접픽업" 
@@ -453,41 +413,14 @@ export function Receipt(props){
         <form className={styles.form}>
           <div className={styles.formInner}>
             <div className={styles.label}>
-              <label>쿠폰사용</label>
-            </div>
-            <div className={styles.input}>
-              <input 
-              className={styles.inputSize} 
-              type="text"
-              readOnly
-              />원 
-              <button className={styles.button}>
-                쿠폰조회 및 적용
-              </button>
-            </div>
-          </div>
-          <div className={styles.formInner}>
-            <div className={styles.label}>
-              <label>적립금 사용</label>
-            </div>
-            <div className={styles.input}>
-              <input 
-              className={styles.inputSize} 
-              type="num" 
-              />원 
-              [ 보유 적립금 : ] 
-            </div>
-          </div>
-          <div className={styles.formInner}>
-            <div className={styles.label}>
               <label>결제 방법</label>
             </div>
             <div className={styles.input}>
               <input 
               name='payroute' 
               type="radio"
-              value="신용카드"
-              checked={orderInformation.payRoute === '신용카드'} 
+              value="일반결제"
+              checked={orderInformation.payRoute === '일반결제'} 
               onChange={(e)=>setOrderInformation(
                 prevdata=> ({
                   ...prevdata,
@@ -495,12 +428,12 @@ export function Receipt(props){
                 })
               )}
               />
-              신용카드
+              일반결제 (카드, 계좌이체 등)
               <input 
               name='payroute' 
               type="radio"
-              value="무통장입금"
-              checked={orderInformation.payRoute === '무통장입금'} 
+              value="CMS"
+              checked={orderInformation.payRoute === 'CMS'} 
               onChange={(e)=>setOrderInformation(
                 prevdata=> ({
                   ...prevdata,
@@ -508,59 +441,7 @@ export function Receipt(props){
                 })
               )}
               />
-              무통장입금
-              <input 
-              name='payroute' 
-              type="radio"
-              value="가상계좌"
-              checked={orderInformation.payRoute === '가상계좌'} 
-              onChange={(e)=>setOrderInformation(
-                prevdata=> ({
-                  ...prevdata,
-                  payRoute : e.target.value,
-                })
-              )}
-              />
-              가상계좌
-              <input 
-              name='payroute' 
-              type="radio"
-              value="계좌이체"
-              checked={orderInformation.payRoute === '계좌이체'} 
-              onChange={(e)=>setOrderInformation(
-                prevdata=> ({
-                  ...prevdata,
-                  payRoute : e.target.value,
-                })
-              )}
-              />
-              계좌이체
-              <input 
-              name='payroute' 
-              type="radio"
-              value="카카오페이"
-              checked={orderInformation.payRoute === '카카오페이'} 
-              onChange={(e)=>setOrderInformation(
-                prevdata=> ({
-                  ...prevdata,
-                  payRoute : e.target.value,
-                })
-              )}
-              />
-              카카오페이
-              <input 
-              name='payroute' 
-              type="radio"
-              value="삼성페이"
-              checked={orderInformation.payRoute === '삼성페이'} 
-              onChange={(e)=>setOrderInformation(
-                prevdata=> ({
-                  ...prevdata,
-                  payRoute : e.target.value,
-                })
-              )}
-              />
-              삼성페이
+              CMS (매달 정기일 자동 결제)
             </div>
           </div>
           <div className={styles.formInner}>

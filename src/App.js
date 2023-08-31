@@ -92,6 +92,8 @@ function App() {
     window.scrollTo(0 ,0);
   }, [navigate]); // navigate가 변경될 때마다 실행
 
+  
+
 
   return (
     <div className="App">

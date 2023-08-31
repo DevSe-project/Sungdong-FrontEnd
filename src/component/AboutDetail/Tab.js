@@ -78,9 +78,8 @@ export function Tab(){
 
   const tabItems = [
     { id: 1, title: '상세정보' },
-    { id: 2, title: '리뷰' },
-    { id: 3, title: 'Q & A' },
-    { id: 4, title: '반품 / 교환정보' },
+    { id: 2, title: '반품 / 교환정보' },
+    { id: 3, title: '관련상품' },
   ];
 
   return (
