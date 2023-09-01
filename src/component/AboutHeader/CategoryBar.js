@@ -2,95 +2,95 @@ import { useNavigate } from 'react-router-dom';
 import styles from './CategoryBar.module.css'
 import { useState } from 'react';
 
-export function CategoryBar() {
+export function CategoryBar(props) {
   const menuData = [
     {
-      id : 1,
+      id: 1,
       title: '생활/건강',
       link: '/lifeHealth',
       subMenuItems: [{
-        item : '공구',
-        link : '/tool',
-        },
-        {
-        item : '건강관리 용품',
-        link : '/healthcareTool',
-        },
-        {
-        item : '주방 용품',
-        link : '/kitchenTool',
+        item: '공구',
+        link: '/tool',
       },
       {
-        item : '생활 용품',
-        link : '/lifeTool',
+        item: '건강관리 용품',
+        link: '/healthcareTool',
       },
       {
-        item : '정원/원예용품',
-        link : '/grassTool',
+        item: '주방 용품',
+        link: '/kitchenTool',
       },
       {
-        item : '문구/사무용품',
-        link : '/officeTool',
+        item: '생활 용품',
+        link: '/lifeTool',
+      },
+      {
+        item: '정원/원예용품',
+        link: '/grassTool',
+      },
+      {
+        item: '문구/사무용품',
+        link: '/officeTool',
       }],
     },
     {
-      id : 2,
+      id: 2,
       title: '디지털/가전',
       link: '/digiter',
       subMenuItems: [{
-        item : 'PC 액세서리',
-        link : '/pc',
-        },
-        {
-        item : '계절가전',
-        link : '/weathermachine',
-        }],
-    },
-    {
-      id : 3,
-      title: '스포츠/레저',
-      link: 'sports',
-      subMenuItems: [{
-        item : '골프',
-        link : '/golf',
-        },
-        {
-        item : '캠핑',
-        link : '/camping',
-        },
-        {
-        item : '스포츠액세서리',
-        link : '/sportAtc',
+        item: 'PC 액세서리',
+        link: '/pc',
+      },
+      {
+        item: '계절가전',
+        link: '/weathermachine',
       }],
     },
     {
-      id : 4,
-      title: '패션의류',
-      link : 'fashion',
+      id: 3,
+      title: '스포츠/레저',
+      link: 'sports',
       subMenuItems: [{
-        item : '남성의류',
-        link : '/manclothes',
-        },
-        {
-        item : '여성의류',
-        link : '/womanclothes',
-        }],
+        item: '골프',
+        link: '/golf',
+      },
+      {
+        item: '캠핑',
+        link: '/camping',
+      },
+      {
+        item: '스포츠액세서리',
+        link: '/sportAtc',
+      }],
     },
     {
-      id : 5,
+      id: 4,
+      title: '패션의류',
+      link: 'fashion',
+      subMenuItems: [{
+        item: '남성의류',
+        link: '/manclothes',
+      },
+      {
+        item: '여성의류',
+        link: '/womanclothes',
+      }],
+    },
+    {
+      id: 5,
       title: '패션잡화',
       link: '/fashionAtc',
       subMenuItems: [{
-        item : '남성신발',
-        link : '/manshoes',
-        },
-        {
-        item : '신발용품',
-        link : '/shoes',
-        },
-        {
-        item : '장갑',
-        link : '/glove',
+        item: '남성신발',
+        link: '/manshoes',
+      },
+      {
+        item: '신발용품',
+        link: '/shoes',
+      },
+      {
+        item: '장갑',
+        link: '/glove',
       }],
     },
   ];
@@ -117,29 +117,34 @@ export function CategoryBar() {
     setSubMenuStates(newSubMenuStates);
   };
 
-  return(
-      <div className={styles.categoryBarContainer}>
-        {/* 메뉴 loop */}
-        {menuData.map((item, index) => (
+  return (
+    // 좌에서 우로 밀려오는 애니메이션 스타일 지정
+    <div className={styles.categoryBarContainer} 
+    style={{...props.category_dynamicStyle}}>
+      {/* 아이콘 hovered */}
+      {
+        menuData.map((item, index) => (
           <li
             key={index}
             onMouseEnter={() => handleMouseEnter(index)}
             onMouseLeave={() => handleMouseLeave(index)}
             className={`categorymenu-item ${subMenuStates[index] && 'open'} + categorytab-item ${activeTab === item.id ? 'active' : ''}`}
-            onClick={() => {handleTabClick(item)}}
+            onClick={() => { handleTabClick(item) }}
           >
-            <span onClick={()=> navigate(item.link)}>{item.title}</span>
+            <span onClick={() => navigate(item.link)}>{item.title}</span>
+            {/* 서브메뉴 loop */}
             {subMenuStates[index] && (
               <ul onMouseLeave={() => handleMouseLeave(index)} className="sub-menu">
                 {item.subMenuItems.map((item, index) => (
-                  <li onClick={()=>navigate(`${item.link}`)} className={styles.category} key={index}>
+                  <li onClick={() => navigate(`${item.link}`)} className={styles.category} key={index}>
                     {item.item}
                   </li>
                 ))}
               </ul>
             )}
           </li>
-        ))}
-      </div>
+        ))
+      }
+    </div>
   )
 }
