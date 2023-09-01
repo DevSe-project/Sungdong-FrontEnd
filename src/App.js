@@ -114,7 +114,7 @@ function App() {
     transition: `color ${transitionDurate}ms, font-size ${transitionDurate}ms, font-weight ${transitionDurate}ms`,
     color: iconClicked ? '#6d3535 ' : '#000',
     fontSize: iconClicked ? '1em' : '0.8em',
-    fontWeight: iconClicked ? '800' : 'none',
+    fontWeight: iconClicked ? '800' : '600',
   }
   const category_dynamicStyle = {
     transition: `opacity ${transitionDurate}ms, transform ${transitionDurate}ms, height ${transitionDurate}ms`,
