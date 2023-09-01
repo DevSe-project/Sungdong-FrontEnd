@@ -4,7 +4,7 @@ import styles from './UserService.module.css';
 import { CategoryBar } from "../AboutHeader/CategoryBar";
 import { useState } from "react";
 
-export function UserService() {
+export function UserService(props) {
 
     const serviceList = [
         {
@@ -24,8 +24,8 @@ export function UserService() {
 
     return(
         <div className={styles.body}>
-            <TopBanner />
-            <CategoryBar />
+            <TopBanner iconHovered={props.iconHovered} iconMouseEnter={props.iconMouseEnter} iconMouseLeave={props.iconMouseLeave} icon_dynamicStyle={props.icon_dynamicStyle} category_dynamicBarStyle={props.category_dynamicBarStyle} iconOnClick={props.iconOnClick}  />
+            <CategoryBar category_dynamicBarStyle={props.category_dynamicBarStyle} />
             <div className={styles.mainScreen}> {/*메인화면 가로정렬*/}
                 <div className={styles.sideBar}> {/*사이드바 세로정렬*/}
                     <div className={styles.title} onClick={ () => {navigate('/userservice/')} }> 고객센터 </div>

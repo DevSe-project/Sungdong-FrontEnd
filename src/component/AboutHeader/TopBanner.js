@@ -3,6 +3,10 @@ import logo from '../../image/logo.jpeg'
 import { useLocation, useNavigate } from 'react-router-dom'
 import styles from './TopBanner.module.css';
 import { SearchBar } from './SearchBar';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { Transition } from 'react-transition-group';
+
 //상단 메뉴 리스트 
 export function TopBanner(props) {
   const navigate = useNavigate();
@@ -85,10 +89,6 @@ export function TopBanner(props) {
       }],
     },
   ];
-
-  //서브메뉴 열림창 변수 초기화
-  const [subMenuStates, setSubMenuStates] = useState(menuData.map(() => false));
-
   const handleMouseEnter = (index) => {
     // 해당 인덱스의 메뉴를 열기 위해 true로 설정
     const newSubMenuStates = [...subMenuStates];
@@ -103,14 +103,37 @@ export function TopBanner(props) {
     setSubMenuStates(newSubMenuStates);
   };
 
+  //서브메뉴 열림창 변수 초기화
+  const [subMenuStates, setSubMenuStates] = useState(menuData.map(() => false));
+
   function saveTab(id) {
     localStorage.setItem('tabState', JSON.stringify(id));
   }
 
-
   return (
     <div className={styles.top_container}>
       <div className={styles.top_nav}>
+        {/* 카테고리 박스 */}
+        <div
+          className={styles.categoryBox}
+          onClick={props.iconOnClick}
+          onMouseEnter={props.iconMouseEnter}
+          onMouseLeave={props.iconMouseLeave}
+          style={{...props.border_dynamicStyle}}
+        >
+          {/* 카테고리 아이콘 */}
+          <FontAwesomeIcon
+            icon={faBars} // 사용할 FontAwesome 아이콘 선택
+            style={{ ...props.icon_dynamicStyle }}
+            className={styles.categoryIcon}
+          />
+          {/* 카데고리 텍스트 */}
+          <div style={{...props.text_dynamicStyle}}>
+            카테<br/>
+            고리
+          </div>
+        </div>
+
         {/* 로고 */}
         <img className={styles.image} onClick={() => navigate("/")} src={logo} alt="로고" height='80px' />
         {/* 서치바 */}
@@ -129,12 +152,10 @@ export function TopBanner(props) {
             <span
               className={styles.link}
               onClick={() => { navigate(`${item.title.link}`) }}>
-
               {item.title.item}
             </span>
             {subMenuStates[index] && (
               <ul
-                onMouseLeave={() => handleMouseLeave(index)}
                 className="sub-menu">
                 {item.subMenuItems.map((subMenuItem, subMenuItemindex) => (
                   <li
@@ -148,12 +169,14 @@ export function TopBanner(props) {
             )}
           </li>
         ))}
+
+        {/* 로그인/로그아웃 */}
         {props.login
           ?
-          <button className={styles.link_signIn} onClick={ () => {
+          <button className={styles.link_signIn} onClick={() => {
             sessionStorage.removeItem('saveLoginData');
             props.setLogin(false);
-          } }>로그아웃</button>
+          }}>로그아웃</button>
           :
           <button className={styles.link_signIn} onClick={() => { navigate("/login") }}>로그인</button>
         }

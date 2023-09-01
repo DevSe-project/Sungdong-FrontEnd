@@ -1,0 +1,19 @@
+.noticeContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.post {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  width: 100%;
+  font-size: 1.8em;
+  font-weight: bold;
+  padding: 0.8em;
+  margin-left: 3em;
+  border-bottom: 2px solid lightgray;
+}

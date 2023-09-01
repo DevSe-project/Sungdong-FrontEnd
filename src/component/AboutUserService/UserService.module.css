@@ -7,7 +7,7 @@
     justify-content: space-evenly;
     align-items: center;
 }
-/*  */
+/* 메인스크린 */
 .mainScreen {
     display: flex;
     flex-direction: row;

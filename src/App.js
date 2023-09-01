@@ -92,13 +92,42 @@ function App() {
     window.scrollTo(0 ,0);
   }, [navigate]); // navigate가 변경될 때마다 실행
 
+  // 아이콘 클릭 관련 객체, 함수, state //
+  const [iconHovered, setIconHovered] = useState(false);
+  const [iconClicked, setIconClicked] = useState(false);
+  const iconMouseEnter = () => {
+    setIconHovered(true);
+  };
+  const iconMouseLeave = () => {
+    setIconHovered(false);
+  };
+  const iconOnClick = () => {
+    setIconClicked(!iconClicked);
+  }
+  const transitionDurate = 350; // 애니메이션 지속 시간(ms)
+  const icon_dynamicStyle = {
+    transition: `color ${transitionDurate}ms, font-size ${transitionDurate}ms`,
+    color: iconClicked ? '#cc0000' : '#000',
+    fontSize: iconClicked ? '2.5em' : '2em',
+  };
+  const text_dynamicStyle = {
+    transition: `color ${transitionDurate}ms, font-size ${transitionDurate}ms, font-weight ${transitionDurate}ms`,
+    color: iconClicked ? '#6d3535 ' : '#000',
+    fontSize: iconClicked ? '1em' : '0.8em',
+    fontWeight: iconClicked ? '800' : '600',
+  }
+  const category_dynamicStyle = {
+    transition: `opacity ${transitionDurate}ms, transform ${transitionDurate}ms, height ${transitionDurate}ms`,
+    opacity: iconClicked ? 1 : 0,
+    height: iconClicked ? '100%' : '0px',
+  }
 
   return (
     <div className="App">
       <Routes>
         <Route path='/' element={
           <>
-            <MainPage login={login} setLogin={setLogin}/>
+            <MainPage login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle}/>
             <List data={data}/>
             <TodayTopicList todayTopicData={todayTopicData} setTodayTopicData={setTodayTopicData} />
             <ComewayList/>
@@ -146,7 +175,7 @@ function App() {
         <Route path='/join' element={<Join userData={userData} setUserData={setUserData}/>} />
         
         {/* 문의하기 */}
-        <Route path='/userservice' element={<UserService />}>
+        <Route path='/userservice' element={<UserService iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />}>
           <Route path='notice' element={<Notice/>}/>
           <Route path='ask' element={<Ask/>}/>
         </Route>
