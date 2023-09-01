@@ -52,10 +52,10 @@ function App() {
   // 데이터 State
   const [data, setData] = useState();
   const [orderData, setOrderData] = useState();
+  const [userData, setUserData] = useState();
   const [basketList, setBasketList] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   const [orderList, setOrderList] = useState([]);
-  const [userData, setUserData] = useState();
   const [codeState, setCodeState] = useState();
   const [todayTopicData, setTodayTopicData] = useState();
   const [login, setLogin] = useState(false);
@@ -91,8 +91,6 @@ function App() {
     // 페이지 이동시 항상 스크롤을 최상단으로 이동
     window.scrollTo(0 ,0);
   }, [navigate]); // navigate가 변경될 때마다 실행
-
-  
 
 
   return (
