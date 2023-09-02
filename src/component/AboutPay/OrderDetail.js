@@ -60,8 +60,8 @@ export function OrderDetail(props){
   ]
   return(
     <div>
-    <TopBanner/>
-    <CategoryBar/>
+    <TopBanner iconHovered={props.iconHovered} iconMouseEnter={props.iconMouseEnter} iconMouseLeave={props.iconMouseLeave} icon_dynamicStyle={props.icon_dynamicStyle} category_dynamicStyle={props.category_dynamicStyle} iconOnClick={props.iconOnClick} text_dynamicStyle={props.text_dynamicStyle} />
+      <CategoryBar category_dynamicStyle={props.category_dynamicStyle}/>
     <div className={styles.container}>
       <h1 className={styles.getInformation}>받으시는 분 정보</h1>
       <form className={styles.form}>
