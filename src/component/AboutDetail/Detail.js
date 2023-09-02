@@ -99,38 +99,47 @@ function buyThis(product, count){
 // 장바구니 담기 함수
 function basketThis(product, count){
   // 수량 0을 장바구니에 저장하는 것 방지, ** 백엔드 : login 캐쉬값이 저장되어 있는 것이 확인이 되면 허용
-  if(count > 0){
-    //중복 확인 (.some 함수 : basketList item.id 중 product.id와 같은 중복인 아이템이 있으면 true 반환 | !some이니 false면..== 중복이 아니면..)
-    if (!props.basketList.some((item) => item.id === product.id)){
-      if(product.option && optionSelected !== null){
-        const newBasketProduct = {
-          ...product,
-          cnt : count,
-          finprice : (product.price * count), //총 계산액
-          option : optionSelected
-        }
-        //props.basketList의 원래 배열들과 배열 product를 합쳐서 새로운 배열을 생성하여 State에 삽입
-        props.setBasketList([...props.basketList, newBasketProduct]); 
-        // *중요 basketList의 배열들을 백엔드 서버로 전송하여 저장하기, Username의 db -> 장바구니 db에 아이템 저장해놓기 //
-        alert("해당 상품이 장바구니에 추가되었습니다.")
-      } else if(!product.option && optionSelected === null) {
-          const newBasketProduct = {
-            ...product,
-            cnt : count,
-            finprice : (product.price * count), //총 계산액
-        }
-        //props.basketList의 원래 배열들과 배열 product를 합쳐서 새로운 배열을 생성하여 State에 삽입
-        props.setBasketList([...props.basketList, newBasketProduct]); 
-        // *중요 basketList의 배열들을 백엔드 서버로 전송하여 저장하기, Username의 db -> 장바구니 db에 아이템 저장해놓기 //
-        alert("해당 상품이 장바구니에 추가되었습니다.")
-      } else {
-        alert("필수 옵션을 선택해주세요!")
-      }
-    } else {
-      alert("이미 장바구니에 추가된 상품입니다.")
-    }
-  } else {
+  if(count <= 0){
     alert("수량은 0보다 커야합니다.")
+    return;
+  }
+
+  if (product.option && !optionSelected) {
+    alert("필수 옵션을 선택해주세요!");
+    return;
+  }
+
+  //중복 확인 (.some 함수 : basketList item.id 중 product.id와 같은 중복인 아이템이 있으면 true 반환)
+  const isDuplicate = props.basketList.some((basketItem) =>
+  basketItem.id === product.id &&
+  (
+    (basketItem.option === null && product.option === null) || // 둘 다 옵션이 없는 경우
+    (basketItem.option === optionSelected) // 옵션값이 같은 경우
+  )
+);
+  
+
+  const newBasketProduct = () => { 
+    if(product.option && optionSelected){
+      return {
+        ...product,
+        cnt : count,
+        finprice : (product.price * count), //총 계산액
+        option : optionSelected
+      }
+    } return {
+      ...product,
+      cnt : count,
+      finprice : (product.price * count)
+    }
+  }
+
+  if (isDuplicate) {
+    alert("이미 장바구니에 추가된 상품입니다.");
+  } else {
+    // 중복 상품이 아닌 경우에만 추가
+    props.setBasketList([...props.basketList, newBasketProduct()]);
+    alert("해당 상품이 장바구니에 추가되었습니다.");
   }
 }
 
@@ -268,7 +277,7 @@ function basketThis(product, count){
         <div className={styles.sticky} >
           <Tab navigate={props.navigate}/>
         </div>
-        <TabInfo setData={props.setData} data={props.data} qnAData={props.qnAData} setQnAData={props.setQnAData} detailData={detailData}/>       
+        <TabInfo basketList={props.basketList} setBasketList={props.setBasketList} setData={props.setData} data={props.data} qnAData={props.qnAData} setQnAData={props.setQnAData} detailData={detailData}/>       
       </main>
     </div>
   )

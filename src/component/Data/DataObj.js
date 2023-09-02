@@ -4,6 +4,10 @@ export let DataObj = [{
     price : 150000,
     content : "검은색과의 조화",
     discount: 0,
+    category: {
+      main: '패션잡화',
+      sub: '신발용품',
+    },
     brand : '프로덕트랩',
     madeIn : '중국',
     new : true,
@@ -69,6 +73,10 @@ export let DataObj = [{
     discount : 10,
     brand : '프로덕트랩',
     madeIn : '중국',
+    category: {
+      main: '패션잡화',
+      sub: '장갑',
+    },
     new : true,
   },
   {
@@ -79,6 +87,10 @@ export let DataObj = [{
     discount : 20,
     brand : '프로덕트랩',
     madeIn : '중국',
+    category: {
+      main: '생활건강',
+      sub: '공구',
+    },
     new : true,
     option : [
       {
@@ -103,6 +115,10 @@ export let DataObj = [{
     discount : 0,
     brand : '프로덕트랩',
     madeIn : '중국',
+    category: {
+      main: '생활건강',
+      sub: '생활용품',
+    },
     new : true,
   },
   {
@@ -113,5 +129,23 @@ export let DataObj = [{
     discount: 0,
     brand : '프로덕트랩',
     madeIn : '중국',
+    category: {
+      main: '생활건강',
+      sub: '공구',
+    },
     new : true,
+    option : [
+      {
+        value: '10mm'
+      },
+      {
+        value: '20mm'
+      },
+      {
+        value: '30mm'
+      },
+      {
+        value: '40mm'
+      }
+    ],
   }]

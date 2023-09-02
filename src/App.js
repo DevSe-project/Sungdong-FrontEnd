@@ -34,7 +34,6 @@ import { Pay } from './component/AboutPay/Pay';
 import { Order } from './component/AboutPay/Order';
 import { Receipt } from './component/AboutPay/Receipt';
 import { DeliveryMain } from './component/AboutPay/DeliveryMain';
-import { ReviewPage } from './component/AboutPay/ReviewPage';
 import { OrderDetail } from './component/AboutPay/OrderDetail';
 
 // 회사 이벤트 관련
@@ -52,10 +51,10 @@ function App() {
   // 데이터 State
   const [data, setData] = useState();
   const [orderData, setOrderData] = useState();
+  const [userData, setUserData] = useState();
   const [basketList, setBasketList] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   const [orderList, setOrderList] = useState([]);
-  const [userData, setUserData] = useState();
   const [codeState, setCodeState] = useState();
   const [todayTopicData, setTodayTopicData] = useState();
   const [login, setLogin] = useState(false);
@@ -121,8 +120,6 @@ function App() {
     opacity: iconClicked ? 1 : 0,
     height: iconClicked ? '100%' : '0px',
   }
-  
-
 
   return (
     <div className="App">
@@ -181,9 +178,6 @@ function App() {
           <Route path='notice' element={<Notice/>}/>
           <Route path='ask' element={<Ask/>}/>
         </Route>
-        
-        {/* 리뷰 작성하기 */}
-        <Route path='/review/:id' element={<ReviewPage data={data} setData={setData} />}/>
 
         {/* 회사 관련 */}
         <Route path='/comeway' element={<Comeway/>}/>

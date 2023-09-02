@@ -39,7 +39,6 @@ export function Delivery(props){
           <div className={styles.deliveryMenu}>
             <button onClick={()=> console.log(props.orderData)} className={styles.button}>배송 조회</button>
             <button className={styles.button}>교환, 반품 신청</button>
-            <button onClick={()=>navigate(`/review/${item.productId}`)} className={styles.button}>리뷰 작성하기</button>
           </div>
         </div>
       </div>

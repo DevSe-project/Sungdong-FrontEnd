@@ -279,10 +279,7 @@ export function Basket(props){
                 <td className={styles.price}>
                   {item.discount
                   ? 
-                  <>
-                    <p style={{textDecoration: "line-through", color: "lightgray"}}>\{item.finprice}</p> 
-                    \{ item.finprice - (((item.price/100)*item.discount)*item.cnt)}
-                  </>
+                  `\\${ item.finprice - (((item.price/100)*item.discount)*item.cnt)}`
                   : `\\${item.finprice}`}
                 </td>
               </tr>
@@ -307,19 +304,14 @@ export function Basket(props){
                   ? item.productName : null}</h5>
                   <div>
                   {item.option && `옵션 : ${item.option}`}
-                  <p>상품 정가 : <span className={styles.price}>\{item.price}</span></p>
+                  <p>상품 도매가 : <span className={styles.price}>\{item.price}</span></p>
                   </div>
                 </td>
                 <td>{item.cnt}</td>
                 <td className={styles.price}>
                   {item.discount
                   ? 
-                  <>
-                    <p style={{textDecoration: "line-through", color: "lightgray"}}>
-                      \{item.finprice}
-                    </p> 
-                    \{ item.finprice - (((item.price/100)*item.discount)*item.cnt)}
-                  </>
+                  `\\${ item.finprice - (((item.price/100)*item.discount)*item.cnt)}`
                   : `\\${item.finprice}`}
                 </td>
               </tr>
@@ -332,14 +324,14 @@ export function Basket(props){
             <div className={styles.finalContainer}>
                 <div className={styles.finalBox}>
                   <h2 style={{display:"flex", alignItems: 'center'}}>
-                    총 상품 금액
-                    <p style={{margin: '0'}}>
-                      (정가)
-                    </p>
+                    총 상품 도매가
                   </h2>
                   <div className={styles.price}>
-                    <h5>\{sum ? sum : props.orderList!== null || []
-                    ? props.orderList.map((item)=> item.finprice) : 0} </h5>
+                    <h5>\{sum ? sum : props.orderList.length !== 0
+                    ? props.orderList.map((item)=> 
+                    item.finprice)
+                    : 0} 
+                    </h5>
                   </div>
                 </div>
                 <i className="fal fa-plus"></i>
@@ -347,19 +339,6 @@ export function Basket(props){
                   <h2>배송비</h2>
                   <div className={styles.price}>
                     <h5>\{delivery ? delivery : 0}</h5>
-                  </div>
-                </div>
-                <i className="fal fa-minus"></i>
-                <div className={styles.finalBox}>
-                  <h2 style={{display:"flex", alignItems: 'center'}}>
-                    할인 금액
-                    <p style={{margin: '0'}}>
-                      (상품 할인가격 포함)
-                    </p>
-                  </h2>
-                  <div className={styles.price}>
-                    <h5>\{sum ? discount : props.orderList !== null || [] ? props.orderList.map(item => 
-                      ((item.price/100)*item.discount)*item.cnt) : 0}</h5>
                   </div>
                 </div>
                 <i className="fal fa-equals"></i>
