@@ -185,7 +185,7 @@ function App() {
           <TodayNews todayTopicData={todayTopicData} setTodayTopicData={setTodayTopicData} />}/>
         <Route path='/todayTopicPost/:id' 
         element={<TodayNewsInner todayTopicData={todayTopicData} setTodayTopicData={setTodayTopicData} />}/>
-        <Route path='/event' element={<Event/>}/>
+        <Route path='/event' element={<Event iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />}/>
 
         {/* 관리자페이지 */}
         <Route path='/adminMain' element={<AdminMain/>}/>
