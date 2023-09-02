@@ -141,7 +141,7 @@ export function RelatedData(props) {
 
   
     if (selectedItems.some((item, index) => 
-    item.option && (optionSelected[index] === "" || optionSelected[index] === undefined))) {
+    item.option && optionSelected[index] === undefined)) {
     alert("필수 옵션을 선택해주세요!");
     return;
   }
@@ -175,7 +175,7 @@ export function RelatedData(props) {
   
     // 옵션 선택한 경우에만 option 객체로 추가
     const basketProductsToAdd = selectedItems.map((item, index) => {
-      if (item.option && optionSelected[index] !== (null || "")) {
+      if (item.option && optionSelected[index] !== undefined) {
         return { ...item, option: optionSelected[index] };
       }
       return item;
@@ -190,6 +190,8 @@ export function RelatedData(props) {
     const newOptionSelected = [...optionSelected];
     newOptionSelected[index] = e.target.value;
     setOptionSelected(newOptionSelected);
+    console.log(optionSelected)
+    console.log(selectedItems)
   }
 
   return(

@@ -304,7 +304,7 @@ export function Basket(props){
                   ? item.productName : null}</h5>
                   <div>
                   {item.option && `옵션 : ${item.option}`}
-                  <p>상품 정가 : <span className={styles.price}>\{item.price}</span></p>
+                  <p>상품 도매가 : <span className={styles.price}>\{item.price}</span></p>
                   </div>
                 </td>
                 <td>{item.cnt}</td>
@@ -324,10 +324,7 @@ export function Basket(props){
             <div className={styles.finalContainer}>
                 <div className={styles.finalBox}>
                   <h2 style={{display:"flex", alignItems: 'center'}}>
-                    총 상품 금액
-                    <p style={{margin: '0'}}>
-                      (정가)
-                    </p>
+                    총 상품 도매가
                   </h2>
                   <div className={styles.price}>
                     <h5>\{sum ? sum : props.orderList.length !== 0
