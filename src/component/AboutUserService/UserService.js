@@ -24,7 +24,7 @@ export function UserService(props) {
 
     return(
         <div className={styles.body}>
-            <TopBanner iconHovered={props.iconHovered} iconMouseEnter={props.iconMouseEnter} iconMouseLeave={props.iconMouseLeave} icon_dynamicStyle={props.icon_dynamicStyle} category_dynamicBarStyle={props.category_dynamicBarStyle} iconOnClick={props.iconOnClick}  />
+            <TopBanner iconHovered={props.iconHovered} iconMouseEnter={props.iconMouseEnter} iconMouseLeave={props.iconMouseLeave} icon_dynamicStyle={props.icon_dynamicStyle} category_dynamicStyle={props.category_dynamicStyle} iconOnClick={props.iconOnClick} text_dynamicStyle={props.text_dynamicStyle}  />
             <CategoryBar category_dynamicBarStyle={props.category_dynamicBarStyle} />
             <div className={styles.mainScreen}> {/*메인화면 가로정렬*/}
                 <div className={styles.sideBar}> {/*사이드바 세로정렬*/}
