@@ -180,7 +180,7 @@ function App() {
         </Route>
 
         {/* 회사 관련 */}
-        <Route path='/comeway' element={<Comeway/>}/>
+        <Route path='/comeway' element={<Comeway iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />}/>
         <Route path='/todayTopic/:page' element={
           <TodayNews todayTopicData={todayTopicData} setTodayTopicData={setTodayTopicData} />}/>
         <Route path='/todayTopicPost/:id' 
