@@ -239,7 +239,7 @@ export function Basket(props){
                 <th>상품 이미지</th>
                 <th className={styles.name}>상품 정보</th>
                 <th>수량</th>
-                <th>가격</th>
+                <th>구매 가격</th>
               </tr>
             </thead>
             <tbody>
@@ -259,7 +259,7 @@ export function Basket(props){
                   <h5 className={styles.link} onClick={()=>navigate(`/detail/${item.id}`)}>{item.title}</h5>
                   <div>
                   {item.option && `옵션 : ${item.optionSelected}`}
-                  <p>상품 정가 : <span className={styles.price}>\{item.price}</span></p>
+                  <p>상품 도매가 : <span className={styles.price}>\{item.price}</span></p>
                   </div>
                 </td>
                 <td>{editStatus[index]===false 

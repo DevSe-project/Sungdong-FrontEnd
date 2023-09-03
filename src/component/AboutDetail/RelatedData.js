@@ -209,7 +209,7 @@ export function RelatedData(props) {
             <th>상품코드</th>
             <th className={styles.title}>상품명</th>
             <th>단위</th>
-            <th>단가</th>
+            <th>도매가</th>
             <th>
               <input 
                 type='checkbox'
@@ -309,7 +309,11 @@ export function RelatedData(props) {
                       }
                       </td>
                       <td>
-                        {item.finprice ? item.finprice : item.price}
+                      {item.finprice
+                      ? item.discount
+                      ? `\\${ item.finprice - (((item.price/100)*item.discount)*item.cnt)}`
+                      : `\\${item.finprice}`
+                      : item.price}
                       </td>
                     </tr>
                   </tbody>

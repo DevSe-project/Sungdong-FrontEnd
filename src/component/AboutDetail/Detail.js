@@ -185,15 +185,7 @@ function basketThis(product, count){
                 ? detailData.discount !== 0
                 ? 
                 <div className={styles.priceTag}>
-                  <div>
-                    <h3>{detailData.discount}%</h3>
-                  </div>
-                  <div style={{display: 'flex', alignItems: 'center', gap: '0.5em'}}>
-                    <p style={{textDecoration: "line-through", color: "lightgray"}}>
-                      {detailData.price}원
-                    </p>
-                      {detailData.price-((detailData.price/100)*detailData.discount)}원
-                  </div>
+                  {detailData.price-((detailData.price/100)*detailData.discount)}원
                 </div>
                 : `${detailData.price} 원`
                 : <div className={styles.skeleton}>&nbsp;</div>}
