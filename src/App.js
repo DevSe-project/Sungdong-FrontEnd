@@ -124,6 +124,7 @@ function App() {
   return (
     <div className="App">
       <Routes>
+        {/* 메인페이지 */}
         <Route path='/' element={
           <>
             <MainPage login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle}/>
