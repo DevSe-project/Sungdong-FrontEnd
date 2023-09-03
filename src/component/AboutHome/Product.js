@@ -33,7 +33,7 @@ export function Product(props){
                 : <h3>\{item.price}</h3>
                 }
                 <br/><hr/><br/>
-                구매평 {item.review ? item.review.length : 0}
+                <span>{item.category && `${item.category.main}`}</span>
               </div>
             </div>
           </div>
