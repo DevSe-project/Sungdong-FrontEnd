@@ -51,28 +51,38 @@ export function Detail(props) {
 
 // 즉시구매 함수
 function buyThis(product, count){
-  // 수량 0을 장바구니에 저장하는 것 방지, ** 백엔드 : login 캐쉬값이 저장되어 있는 것이 확인이 되면 허용
-  if(count > 0){
-    if(product.option && optionSelected !== null){
-      const editedData = [{
-        productId : product.id,
-        userId: "asdfx100", 
-        productName : product.title,
-        cnt : Number(count), 
-        price: product.price,
-        finprice : (product.price * count), //총 계산액
-        discount : product.discount ? product.discount : 0,
-        option : optionSelected
-      }]
-        // editedData 객체를 JSON 형식의 문자열로 변환
-        const buyData = JSON.stringify(editedData);
-        // localStorage에 저장
-        localStorage.setItem('orderData', buyData);
-        props.setOrderList(editedData);
-        navigate("/basket/receipt");
-        props.setActiveTab(2);
-    } else if(!product.option && optionSelected === null) {
-        const editedData = [{
+    // 수량 0을 장바구니에 저장하는 것 방지, ** 백엔드 : login 캐쉬값이 저장되어 있는 것이 확인이 되면 허용
+    if(count <= 0){
+      alert("수량은 0보다 커야합니다.")
+      return;
+    }
+  
+    if (product.option && !optionSelected) {
+      alert("필수 옵션을 선택해주세요!");
+      return;
+    }
+  
+    //중복 확인 (.some 함수 : basketList item.id 중 product.id와 같은 중복인 아이템이 있으면 true 반환)
+    const isDuplicate = props.basketList.some((basketItem) =>
+    basketItem.id === product.id &&
+    (
+      (basketItem.option === null && product.option === null) || // 둘 다 옵션이 없는 경우
+      (basketItem.option === optionSelected) // 옵션값이 같은 경우
+    )
+  );
+      const newBasketProduct = () => { 
+        if(product.option && optionSelected){
+          return {
+            productId : product.id,
+            userId: "asdfx100", 
+            productName : product.title,
+            cnt : Number(count), 
+            price: product.price,
+            finprice : (product.price * count), //총 계산액
+            discount : product.discount ? product.discount : 0,
+            optionSelected : optionSelected
+          }
+        } return {
           productId : product.id,
           userId: "asdfx100", 
           productName : product.title,
@@ -80,20 +90,17 @@ function buyThis(product, count){
           price: product.price,
           finprice : (product.price * count), //총 계산액
           discount : product.discount ? product.discount : 0,
-        }]
-          // editedData 객체를 JSON 형식의 문자열로 변환
-          const buyData = JSON.stringify(editedData);
-          // localStorage에 저장
-          localStorage.setItem('orderData', buyData);
-          props.setOrderList(editedData);
-          navigate("/basket/receipt");
-          props.setActiveTab(2);
-    } else {
-      alert("필수 옵션을 선택해주세요!")
-    }
-  } else {
-    alert("수량은 0보다 커야합니다.")
-  }
+        }
+      }
+        if (isDuplicate) {
+          alert("이미 장바구니에 추가된 상품입니다.");
+        } else {
+        // localStorage에 저장
+        localStorage.setItem('orderData', JSON.stringify(newBasketProduct));
+        props.setOrderList(newBasketProduct);
+        navigate("/basket/receipt");
+        props.setActiveTab(2);
+        }
 }
 
 // 장바구니 담기 함수

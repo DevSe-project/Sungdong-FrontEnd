@@ -9,9 +9,8 @@ export function Basket(props){
   //총 상품 금액
   const [sum, setSum] = useState(0);
 
-  // 배송가, 할인가
+  // 배송가
   const delivery = 3000;
-  const [discount, setDiscount] = useState(0);
 
   //최종 주문 금액
   const [resultOrderPrice, setOrderPrice] = useState(0);
@@ -37,7 +36,6 @@ export function Basket(props){
       alert("주문서 작성, 결제 중 뒤로가기 시 결제 정보가 초기화 됩니다.")
       props.setActiveTab(1);
       setSum(0);
-      setDiscount(0);
       setOrderPrice(0);
       setSelectedItems([]);
       setSelectAll(false);
@@ -59,7 +57,6 @@ export function Basket(props){
     ) {
       // 필요한 상태 초기화 로직을 여기에 추가
       setSum(0);
-      setDiscount(0);
       setOrderPrice(0);
       setSelectedItems([]);
       setSelectAll(false);
@@ -161,7 +158,7 @@ export function Basket(props){
     });
     //변수 저장식
     setSum(sum);
-    setDiscount(totalDiscount);
+
     // 할인 금액이 총 가격을 넘지 않도록 보정
     totalDiscount = Math.min(totalDiscount, sum);
   
