@@ -155,7 +155,7 @@ export function RelatedData(props) {
     const isDuplicate = selectedItemsInfo.some((selectedItemsInfo) =>
       props.basketList.some((basketItem) =>
         basketItem.id === selectedItemsInfo.id &&
-        basketItem.option === selectedItemsInfo.option
+        basketItem.optionSelected === selectedItemsInfo.option
       )
     );
   
@@ -163,7 +163,7 @@ export function RelatedData(props) {
       const findDuplicate = props.basketList.filter((item) =>
         selectedItemsInfo.some((selectedItemInfo) =>
           item.id === selectedItemInfo.id &&
-          item.option === selectedItemInfo.option
+          item.optionSelected === selectedItemInfo.option
         )
       );
   
@@ -176,7 +176,7 @@ export function RelatedData(props) {
     // 옵션 선택한 경우에만 option 객체로 추가
     const basketProductsToAdd = selectedItems.map((item, index) => {
       if (item.option && optionSelected[index] !== undefined) {
-        return { ...item, option: optionSelected[index] };
+        return { ...item, optionSelected: optionSelected[index] };
       }
       return item;
     });
