@@ -42,6 +42,7 @@ import { TodayNews } from './component/AboutCompany/TodayNews';
 import { TodayNewsInner } from './component/AboutCompany/TodayNewsInner';
 import { Event } from './component/AboutCompany/Event'
 import { AdminMain } from './component/AboutAdmin/AdminMain';
+import MyPage from './component/AboutMyPage/MyPage';
 
 function App() {
   const navigate = useNavigate();
@@ -180,6 +181,10 @@ function App() {
           <Route path='ask' element={<Ask/>}/>
         </Route>
 
+        {/* 마이페이지 */}
+        <Route path='/mypages' element={<MyPage iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />}>
+          
+        </Route>
         {/* 회사 관련 */}
         <Route path='/comeway' element={<Comeway iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />}/>
         <Route path='/todayTopic/:page' element={
