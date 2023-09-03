@@ -9,9 +9,8 @@ export function Basket(props){
   //총 상품 금액
   const [sum, setSum] = useState(0);
 
-  // 배송가, 할인가
+  // 배송가
   const delivery = 3000;
-  const [discount, setDiscount] = useState(0);
 
   //최종 주문 금액
   const [resultOrderPrice, setOrderPrice] = useState(0);
@@ -37,7 +36,6 @@ export function Basket(props){
       alert("주문서 작성, 결제 중 뒤로가기 시 결제 정보가 초기화 됩니다.")
       props.setActiveTab(1);
       setSum(0);
-      setDiscount(0);
       setOrderPrice(0);
       setSelectedItems([]);
       setSelectAll(false);
@@ -59,7 +57,6 @@ export function Basket(props){
     ) {
       // 필요한 상태 초기화 로직을 여기에 추가
       setSum(0);
-      setDiscount(0);
       setOrderPrice(0);
       setSelectedItems([]);
       setSelectAll(false);
@@ -161,7 +158,7 @@ export function Basket(props){
     });
     //변수 저장식
     setSum(sum);
-    setDiscount(totalDiscount);
+
     // 할인 금액이 총 가격을 넘지 않도록 보정
     totalDiscount = Math.min(totalDiscount, sum);
   
@@ -169,7 +166,7 @@ export function Basket(props){
     setOrderPrice(orderSum);
   }
 
-  // 링크 함수
+  // 링크 함수(receipt에 넘어가면 해당 객체의 키와 값만 가지고 감(주의))
   function gotoLink(){
     if(props.activeTab===1 && (selectedItems !== null || selectedItems.length > 0)) {
       const editedData = selectedItems.map((item) => ({
@@ -179,13 +176,13 @@ export function Basket(props){
         cnt : Number(item.cnt), 
         price: item.price,
         finprice: item.finprice,
-        option: item.option && item.option,
+        // 이후 discount 값 수정 필요 (등급에 따라)
+        discount : item.discount ? item.discount : 0, 
+        optionSelected: item.option && item.optionSelected,
       }));
-      // editedData 객체를 JSON 형식의 문자열로 변환
-      const editedDataString = JSON.stringify(editedData);
       // localStorage에 저장
-      localStorage.setItem('orderData', editedDataString);
-      props.setOrderList(selectedItems);
+      localStorage.setItem('orderData', JSON.stringify(editedData));
+      props.setOrderList(editedData);
       navigate("/basket/receipt");
       props.setActiveTab(2);
     }
@@ -242,7 +239,7 @@ export function Basket(props){
                 <th>상품 이미지</th>
                 <th className={styles.name}>상품 정보</th>
                 <th>수량</th>
-                <th>가격</th>
+                <th>구매 가격</th>
               </tr>
             </thead>
             <tbody>
@@ -261,8 +258,8 @@ export function Basket(props){
                 <td>
                   <h5 className={styles.link} onClick={()=>navigate(`/detail/${item.id}`)}>{item.title}</h5>
                   <div>
-                  {item.option && `옵션 : ${item.option}`}
-                  <p>상품 정가 : <span className={styles.price}>\{item.price}</span></p>
+                  {item.option && `옵션 : ${item.optionSelected}`}
+                  <p>상품 도매가 : <span className={styles.price}>\{item.price}</span></p>
                   </div>
                 </td>
                 <td>{editStatus[index]===false 
@@ -293,7 +290,7 @@ export function Basket(props){
                 <td><img src='../image/logo.jpeg' alt='이미지'/></td>
                 <td>
                   <h5 className={styles.link} 
-                  onClick={()=>props.activeTab <= 2 
+                  onClick={()=>props.activeTab === 1
                   ? navigate(`/detail/${item.id 
                     ? item.id 
                     : item.productId}`) 
@@ -303,7 +300,7 @@ export function Basket(props){
                   ? item.title : item.productName
                   ? item.productName : null}</h5>
                   <div>
-                  {item.option && `옵션 : ${item.option}`}
+                  {item.optionSelected && `옵션 : ${item.optionSelected}`}
                   <p>상품 도매가 : <span className={styles.price}>\{item.price}</span></p>
                   </div>
                 </td>
