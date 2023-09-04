@@ -209,7 +209,7 @@ export function RelatedData(props) {
             <th>상품코드</th>
             <th className={styles.title}>상품명</th>
             <th>단위</th>
-            <th>도매가</th>
+            <th>표준가</th>
             <th>
               <input 
                 type='checkbox'
@@ -249,17 +249,20 @@ export function RelatedData(props) {
                       <th style={{width: '15%'}}>
                         브랜드
                       </th>
-                      <th style={{width: '30%'}}>
+                      <th style={{width: '25%'}}>
                         상세보기
                       </th>
-                      <th style={{width: '20%'}}>
+                      <th style={{width: '15%'}}>
                         옵션
                       </th>
-                      <th style={{width: '20%'}}>
+                      <th style={{width: '15%'}}>
                         개수
                       </th>
                       <th style={{width: '15%'}}>
-                        구매가
+                        적용률
+                      </th>
+                      <th style={{width: '15%'}}>
+                        공급가
                       </th>
                     </tr>
                   </thead>
@@ -276,7 +279,7 @@ export function RelatedData(props) {
                       <td>
                         {item.option 
                         ?                   
-                        <div style={{display: 'flex', alignItems:'center', gap:'0.5em'}}>
+                        <div style={{ width: '5em', display: 'flex', alignItems:'center', textAlign: 'center', justifyContent: 'center'}}>
                           <select 
                           value={optionSelected[index] || ""}
                           onChange={(e)=>{optionChange(e, index)}}
@@ -307,6 +310,9 @@ export function RelatedData(props) {
                         >수정 완료
                         </button>
                       }
+                      </td>
+                      <td>
+                        {item.discount}%
                       </td>
                       <td>
                       {item.finprice

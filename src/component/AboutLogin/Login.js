@@ -38,6 +38,7 @@ export function Login(props) {
       sessionStorage.setItem('saveLoginData', JSON.stringify(LoginDataObj)); //로그인 정보를 sessionStorage로 저장
       navigate('/'); //메인페이지로 이동하면서
       alert('성동물산에 오신 걸 환영합니다!'); //환영문구 출력
+      window.location.reload();
       console.log(props.userData);
     } else { //일치하지 않다면
       console.log(id === UserData.id)

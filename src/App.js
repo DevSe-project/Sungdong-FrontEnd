@@ -1,6 +1,6 @@
 import './App.css';
 import { useEffect, useState } from 'react';
-import { Routes, Route, useNavigate, json } from 'react-router-dom';
+import { Routes, Route, useNavigate} from 'react-router-dom';
 // Data 객체들 불러오기
 import { OrderObj } from './component/Data/OrderObj';
 import { DataObj } from './component/Data/DataObj'
@@ -60,7 +60,6 @@ function App() {
   const [todayTopicData, setTodayTopicData] = useState();
   const [login, setLogin] = useState(false);
 
-
   useEffect( () => {
     // 로그인 상태 유지
     const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'));
@@ -106,7 +105,7 @@ function App() {
       }
     }
   }
-}, [setData, userData]);
+}, [setData, userData, setLogin]);
 
   // 찜 데이터(캐쉬) 불러오기
   useEffect(() => {
@@ -190,18 +189,18 @@ function App() {
         <Route path='/product' element={<Product data={data}/>}/>
         {/* 상세 페이지 */}
         <Route path="/detail/:id" element={
-          <Detail setData={setData} data={data} navigate={navigate} wishlist={wishlist} setWishlist={setWishlist} basketList={basketList} setBasketList={setBasketList} setActiveTab={setActiveTab} activeTab={activeTab}
+          <Detail login={login} setLogin={setLogin} setData={setData} data={data} navigate={navigate} wishlist={wishlist} setWishlist={setWishlist} basketList={basketList} setBasketList={setBasketList} setActiveTab={setActiveTab} activeTab={activeTab}
           orderList={orderList} setOrderList={setOrderList} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
         } />
         
         {/* 찜 목록 */}
         <Route path='/likeitem' element={
-          <LikeItem basketList={basketList} setBasketList={setBasketList} setWishlist={setWishlist} wishlist={wishlist} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+          <LikeItem login={login} setLogin={setLogin} basketList={basketList} setBasketList={setBasketList} setWishlist={setWishlist} wishlist={wishlist} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
         } />
 
         {/* 장바구니 ~ 주문 */}
         <Route path='/basket' element={
-          <Basket activeTab={activeTab} setActiveTab={setActiveTab} basketList={basketList} setBasketList={setBasketList} orderList={orderList} setOrderList={setOrderList} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+          <Basket login={login} setLogin={setLogin} activeTab={activeTab} setActiveTab={setActiveTab} basketList={basketList} setBasketList={setBasketList} orderList={orderList} setOrderList={setOrderList} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
         }>
           <Route path='receipt' element={<Receipt data={data} activeTab={activeTab} setActiveTab={setActiveTab} orderData={orderData} setOrderData={setOrderData} />} />
           <Route path='pay' element={<Pay activeTab={activeTab} setActiveTab={setActiveTab} orderData={orderData} setOrderData={setOrderData}/>} />
@@ -209,32 +208,32 @@ function App() {
         </Route>
 
         {/* 주문 조회 */}
-        <Route path='/delivery' element={<DeliveryMain orderData={orderData} setOrderData={setOrderData} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />} />
+        <Route path='/delivery' element={<DeliveryMain login={login} setLogin={setLogin} orderData={orderData} setOrderData={setOrderData} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />} />
         
         {/* 배송 조회 */}
-        <Route path='/orderDetail' element={<OrderDetail iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />}/>
+        <Route path='/orderDetail' element={<OrderDetail login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />}/>
 
         {/* 로그인 */}
         <Route path='/login' element={<Login userData={userData} setUserData={setUserData} codeState={codeState} setCodeState={setCodeState}/>} />
         <Route path='/join' element={<Join userData={userData} setUserData={setUserData}/>} />
         
         {/* 문의하기 */}
-        <Route path='/userservice' element={<UserService iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />}>
+        <Route path='/userservice' element={<UserService login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />}>
           <Route path='notice' element={<Notice/>}/>
           <Route path='ask' element={<Ask/>}/>
         </Route>
 
         {/* 마이페이지 */}
-        <Route path='/mypages' element={<MyPage iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />}>
+        <Route path='/mypages' element={<MyPage login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />}>
           
         </Route>
         {/* 회사 관련 */}
-        <Route path='/comeway' element={<Comeway iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />}/>
+        <Route path='/comeway' element={<Comeway login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />}/>
         <Route path='/todayTopic/:page' element={
-          <TodayNews todayTopicData={todayTopicData} setTodayTopicData={setTodayTopicData} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />}/>
+          <TodayNews login={login} setLogin={setLogin} todayTopicData={todayTopicData} setTodayTopicData={setTodayTopicData} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />}/>
         <Route path='/todayTopicPost/:id' 
-        element={<TodayNewsInner todayTopicData={todayTopicData} setTodayTopicData={setTodayTopicData} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />}/>
-        <Route path='/event' element={<Event iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />}/>
+        element={<TodayNewsInner login={login} setLogin={setLogin} todayTopicData={todayTopicData} setTodayTopicData={setTodayTopicData} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />}/>
+        <Route path='/event' element={<Event login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />}/>
 
         {/* 관리자페이지 */}
         <Route path='/adminMain' element={<AdminMain/>}/>

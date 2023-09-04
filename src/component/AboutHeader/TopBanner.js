@@ -171,16 +171,15 @@ export function TopBanner(props) {
         ))}
 
         {/* 로그인/로그아웃 */}
-        {props.login
-          ?
-          <button className={styles.link_signIn} onClick={() => {
+        <button className={styles.link_signIn} onClick={() => { 
+          if(props.login){
             sessionStorage.removeItem('saveLoginData');
             props.setLogin(false);
-          }}>로그아웃</button>
-          :
-          <button className={styles.link_signIn} onClick={() => { navigate("/login") }}>로그인</button>
-        }
-
+            window.location.reload();
+          } else {
+            navigate("/login");
+          }}}>{props.login ? '로그아웃' : '로그인'} 
+        </button>
       </div>
     </div>
   );

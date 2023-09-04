@@ -12,12 +12,26 @@ export function Product(props){
               <img className={styles.thumnail} src="http://pop7.co.kr/web/product/big/201806/344_shop1_15289487355825.jpg" alt="상품 이미지" width="200px"/>
             </div>
             <div className={styles.product}>
-                {item.title}
+              <p>{item.title}</p>
               <div className={styles.price}>
-                {item.discount ?
+              {item.discount
+                ? <div style={{display: 'flex', alignItems: 'center', gap: '0.5em', justifyContent: 'flex-end'}}>
+                  <p style={{textDecoration: "line-through", color: "gray", margin: '0'}}>
+                    \{item.price}
+                  </p>
+                  <p>{item.discount 
+                    ? <>
+                      <span style={{color: 'red', fontWeight: '750'}}>
+                        ({item.discount}%)
+                      </span>
+                      &nbsp; <i className="fal fa-long-arrow-right"/>
+                      </>
+                    : `${item.title}`}
+                  </p>
                   <h3>
                     \{item.price-((item.price/100)*item.discount)}
                   </h3>
+                </div>
                 : <h3>\{item.price}</h3>
                 }
                 <br/><hr/><br/>

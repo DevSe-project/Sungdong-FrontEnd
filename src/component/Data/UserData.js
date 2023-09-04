@@ -6,7 +6,7 @@ export let UserData = [
         confirmPassword: 'bigdev2023!',
         email: 'bigdev@gmail.com',
         emailService: 'yes',
-        grade : 'D',
+        grade : 'C',
         name: '빅데브',
         num1: '010',
         num2: '1234',
