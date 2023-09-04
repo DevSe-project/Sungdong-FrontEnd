@@ -1,0 +1,39 @@
+.body {
+  margin: 1em;
+}
+
+.title {
+  font-size: 1.5em;
+  font-weight: bold;
+  text-align: left;
+  padding-left: 20px;
+  margin-bottom: 0.3em;
+}
+
+.subtitle {
+  font-size: 1em;
+  font-weight: bold;
+  text-align: left;
+  padding-left: 20px;
+}
+
+.table {
+  width: 100%;
+  padding-left: 20px;
+  margin-bottom: 0.3em;
+}
+
+.tr {
+
+}
+
+.th {
+  background-color: #f4f2f2;
+  width: 7em;
+}
+
+.td {
+  border: none;
+  height: max-content;
+  padding: 1em;
+}
