@@ -115,7 +115,7 @@ export function Receipt(props){
         if(orderInformation.payRoute === 'CMS'){
           props.setActiveTab(4);
           navigate("/basket/order");
-        } else if (orderInformation.payRoute === '일반 결제') {
+        } else if (orderInformation.payRoute === '일반결제') {
         props.setActiveTab(3);
         navigate("/basket/pay");
         }

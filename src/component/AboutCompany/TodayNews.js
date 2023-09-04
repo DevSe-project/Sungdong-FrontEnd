@@ -11,8 +11,8 @@ export function TodayNews(props){
 
   return( 
     <div>
-      <TopBanner/>
-      <CategoryBar/>
+      <TopBanner iconHovered={props.iconHovered} iconMouseEnter={props.iconMouseEnter} iconMouseLeave={props.iconMouseLeave} icon_dynamicStyle={props.icon_dynamicStyle} category_dynamicStyle={props.category_dynamicStyle} iconOnClick={props.iconOnClick} text_dynamicStyle={props.text_dynamicStyle} />
+      <CategoryBar category_dynamicStyle={props.category_dynamicStyle}/>
       <main className={styles.body}>
         <div className={styles.title}>
           <h1>오늘의 뉴스</h1>

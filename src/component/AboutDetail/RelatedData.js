@@ -21,7 +21,7 @@ export function RelatedData(props) {
   // 관련상품 리스트 
   const [relatedList, setRelatedList] = useState([]);
 
-  //Modal State 변수
+  //Td 선택시 Modal State 변수
   const [selectRelatedData, setSelectRelatedData] = useState(null);
 
   //수정하기 state
@@ -36,10 +36,11 @@ export function RelatedData(props) {
     if (props.data && props.detailData) {
       const filterList = props.data.filter((item) =>
       item.category.main === props.detailData.category.main);
-      const addCntList = filterList.map((item) => ({
+      const addCntList = filterList.map((item,index) => ({
         ...item,
         cnt: item.cnt ? item.cnt : 1,
         finprice : item.finprice ? item.finprice : item.price,
+        listId : index,
       }));
       setRelatedList(addCntList);
     }
@@ -76,12 +77,12 @@ export function RelatedData(props) {
     };
   
     // 체크박스 클릭 시 호출되는 함수
-    function checkedBox(productId) {
-      if (selectedItems.includes(productId)) { //productID가 중복이면 true == 이미 체크박스가 클릭되어 있으면
-        setSelectedItems(selectedItems.filter((item) => item !== productId)); //체크박스를 해제함 == 선택한 상품 저장 변수에서 제외
+    function checkedBox(product) {
+      if (selectedItems.includes(product)) { //productID가 중복이면 true == 이미 체크박스가 클릭되어 있으면
+        setSelectedItems(selectedItems.filter((item) => item !== product)); //체크박스를 해제함 == 선택한 상품 저장 변수에서 제외
         setSelectAll(false);
       } else {
-        setSelectedItems([...selectedItems, productId]); //selectedItems의 배열과 productID 배열을 합쳐 다시 selectedItems에 저장
+        setSelectedItems([...selectedItems, product]); //selectedItems의 배열과 productID 배열을 합쳐 다시 selectedItems에 저장
         if(selectedItems.length + 1 === relatedList.length){
           setSelectAll(true);
         }
@@ -140,22 +141,22 @@ export function RelatedData(props) {
     }
 
   
-    if (selectedItems.some((item, index) => 
-    item.option && optionSelected[index] === undefined)) {
+    if (selectedItems.some((item) => 
+    item.option && (optionSelected[item.listId] === undefined || optionSelected.length === 0))) {
     alert("필수 옵션을 선택해주세요!");
     return;
-  }
+}
   
     // 중복확인
-    const selectedItemsInfo = selectedItems.map((item, index) => ({
+    const selectedItemsInfo = selectedItems.map((item) => ({
       id: item.id,
-      option: optionSelected[index],
+      option: optionSelected[item.listId],
     }));
   
     const isDuplicate = selectedItemsInfo.some((selectedItemsInfo) =>
       props.basketList.some((basketItem) =>
         basketItem.id === selectedItemsInfo.id &&
-        basketItem.option === selectedItemsInfo.option
+        basketItem.optionSelected === selectedItemsInfo.option
       )
     );
   
@@ -163,7 +164,7 @@ export function RelatedData(props) {
       const findDuplicate = props.basketList.filter((item) =>
         selectedItemsInfo.some((selectedItemInfo) =>
           item.id === selectedItemInfo.id &&
-          item.option === selectedItemInfo.option
+          item.optionSelected === selectedItemInfo.option
         )
       );
   
@@ -174,9 +175,9 @@ export function RelatedData(props) {
     }
   
     // 옵션 선택한 경우에만 option 객체로 추가
-    const basketProductsToAdd = selectedItems.map((item, index) => {
-      if (item.option && optionSelected[index] !== undefined) {
-        return { ...item, option: optionSelected[index] };
+    const basketProductsToAdd = selectedItems.map((item) => {
+      if (item.option && optionSelected[item.listId] !== undefined) {
+        return { ...item, optionSelected: optionSelected[item.listId] };
       }
       return item;
     });
@@ -208,7 +209,7 @@ export function RelatedData(props) {
             <th>상품코드</th>
             <th className={styles.title}>상품명</th>
             <th>단위</th>
-            <th>단가</th>
+            <th>도매가</th>
             <th>
               <input 
                 type='checkbox'
@@ -277,7 +278,7 @@ export function RelatedData(props) {
                         ?                   
                         <div style={{display: 'flex', alignItems:'center', gap:'0.5em'}}>
                           <select 
-                          value={optionSelected[index] === undefined ? "" : optionSelected[index] || ""}
+                          value={optionSelected[index] || ""}
                           onChange={(e)=>{optionChange(e, index)}}
                           className={styles.selectSize}
                           >
@@ -308,7 +309,11 @@ export function RelatedData(props) {
                       }
                       </td>
                       <td>
-                        {item.finprice ? item.finprice : item.price}
+                      {item.finprice
+                      ? item.discount
+                      ? `\\${ item.finprice - (((item.price/100)*item.discount)*item.cnt)}`
+                      : `\\${item.finprice}`
+                      : item.price}
                       </td>
                     </tr>
                   </tbody>

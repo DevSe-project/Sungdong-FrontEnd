@@ -24,46 +24,7 @@ export let DataObj = [{
       {
         value: '290'
       }
-    ],
-    qna : [
-      {
-        id: 1,
-        userId: 'asdfx100',
-        nickName: '빨간 곰돌',
-        answer: "빠른시간 내에 처리하겠습니다.",
-        title: '배송일이 어떻게 되나요?',
-        content: '어제 시킨 사람입니다.. 혹시 배송일이 어떻게 될까요? 급해서요..',
-        date: '2020/02/29',
-      },
-      {
-        id: 2,
-        userId: 'asdfx100',
-        nickName: '노란 곰돌',
-        title: '배송일이 어떻게??',
-        content: '혹시 배송일이 어떻게 될까요? 급해서요..',
-        date: '2020/02/29',
-      },
-    ],
-    review : [{
-      id : 0,
-      userId : 'asdasdx100',
-      profileName : '빨간양말',
-      rating : 5,
-      title : '좋은데요 전?!',
-      content : '너무좋았고 배송도 빠르고 너무 좋네요 성동물산 화이팅!...',
-      image : 'asdasd',
-      date : '20/11/22',
-    },
-    {
-      id : 1,
-      userId : 'asdxxasdx100',
-      profileName : '누런양말',
-      rating : 4,
-      title : '좋아용',
-      content : '전체적으로 만족스러우나 조금 아쉬워요!..',
-      date : '22/11/22',
-    },
-  ],
+    ]
   },
   {
     id : 1,

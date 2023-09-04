@@ -31,7 +31,7 @@ export function Delivery(props){
             <div className={styles.deliveryNowItem}>
               <img className={styles.img} src='../../image/logo.jpeg' alt="주문상품"/>
               <div className={styles.deliveryNowInformation}>
-                <span>{item.productName}{item.option && `(${item.option})`}, {item.cnt}개 </span>
+                <span>{item.productName}{item.optionSelected && `(${item.optionSelected})`}, {item.cnt}개 </span>
                 <span>{item.finprice}원</span>
               </div>
             </div>

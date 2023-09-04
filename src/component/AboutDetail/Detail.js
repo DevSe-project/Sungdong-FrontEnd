@@ -51,28 +51,20 @@ export function Detail(props) {
 
 // 즉시구매 함수
 function buyThis(product, count){
-  // 수량 0을 장바구니에 저장하는 것 방지, ** 백엔드 : login 캐쉬값이 저장되어 있는 것이 확인이 되면 허용
-  if(count > 0){
-    if(product.option && optionSelected !== null){
-      const editedData = [{
-        productId : product.id,
-        userId: "asdfx100", 
-        productName : product.title,
-        cnt : Number(count), 
-        price: product.price,
-        finprice : (product.price * count), //총 계산액
-        discount : product.discount ? product.discount : 0,
-        option : optionSelected
-      }]
-        // editedData 객체를 JSON 형식의 문자열로 변환
-        const buyData = JSON.stringify(editedData);
-        // localStorage에 저장
-        localStorage.setItem('orderData', buyData);
-        props.setOrderList(editedData);
-        navigate("/basket/receipt");
-        props.setActiveTab(2);
-    } else if(!product.option && optionSelected === null) {
-        const editedData = [{
+
+    if(count <= 0){
+      alert("수량은 0보다 커야합니다.")
+      return;
+    }
+  
+    if (product.option && !optionSelected) {
+      alert("필수 옵션을 선택해주세요!");
+      return;
+    }
+  
+    const newBuyProduct = () => { 
+      if(product.option && optionSelected){
+        return {
           productId : product.id,
           userId: "asdfx100", 
           productName : product.title,
@@ -80,21 +72,25 @@ function buyThis(product, count){
           price: product.price,
           finprice : (product.price * count), //총 계산액
           discount : product.discount ? product.discount : 0,
-        }]
-          // editedData 객체를 JSON 형식의 문자열로 변환
-          const buyData = JSON.stringify(editedData);
-          // localStorage에 저장
-          localStorage.setItem('orderData', buyData);
-          props.setOrderList(editedData);
-          navigate("/basket/receipt");
-          props.setActiveTab(2);
-    } else {
-      alert("필수 옵션을 선택해주세요!")
+          optionSelected : optionSelected,
+        }
+      } return {
+        productId : product.id,
+        userId: "asdfx100", 
+        productName : product.title,
+        cnt : Number(count), 
+        price: product.price,
+        finprice : (product.price * count), //총 계산액
+        // 이후 discount 값 수정 필요 (등급에 따라)
+        discount : product.discount ? product.discount : 0,
+      }
     }
-  } else {
-    alert("수량은 0보다 커야합니다.")
-  }
-}
+      // localStorage에 저장
+      localStorage.setItem('orderData', JSON.stringify([newBuyProduct()]));
+      props.setOrderList([newBuyProduct()]);
+      navigate("/basket/receipt");
+      props.setActiveTab(2);
+    }
 
 // 장바구니 담기 함수
 function basketThis(product, count){
@@ -114,7 +110,7 @@ function basketThis(product, count){
   basketItem.id === product.id &&
   (
     (basketItem.option === null && product.option === null) || // 둘 다 옵션이 없는 경우
-    (basketItem.option === optionSelected) // 옵션값이 같은 경우
+    (basketItem.optionSelected === optionSelected) // 옵션값이 같은 경우
   )
 );
   
@@ -125,7 +121,7 @@ function basketThis(product, count){
         ...product,
         cnt : count,
         finprice : (product.price * count), //총 계산액
-        option : optionSelected
+        optionSelected : optionSelected,
       }
     } return {
       ...product,
@@ -162,8 +158,8 @@ function basketThis(product, count){
 
   return(
     <div>
-      <TopBanner/>
-      <CategoryBar/>
+      <TopBanner iconHovered={props.iconHovered} iconMouseEnter={props.iconMouseEnter} iconMouseLeave={props.iconMouseLeave} icon_dynamicStyle={props.icon_dynamicStyle} category_dynamicStyle={props.category_dynamicStyle} iconOnClick={props.iconOnClick} text_dynamicStyle={props.text_dynamicStyle} />
+      <CategoryBar category_dynamicStyle={props.category_dynamicStyle}/>
       <main className={styles.main}>
         <section className={styles.head}>
           <div className={styles.headTop}>
@@ -189,15 +185,7 @@ function basketThis(product, count){
                 ? detailData.discount !== 0
                 ? 
                 <div className={styles.priceTag}>
-                  <div>
-                    <h3>{detailData.discount}%</h3>
-                  </div>
-                  <div style={{display: 'flex', alignItems: 'center', gap: '0.5em'}}>
-                    <p style={{textDecoration: "line-through", color: "lightgray"}}>
-                      {detailData.price}원
-                    </p>
-                      {detailData.price-((detailData.price/100)*detailData.discount)}원
-                  </div>
+                  {detailData.price-((detailData.price/100)*detailData.discount)}원
                 </div>
                 : `${detailData.price} 원`
                 : <div className={styles.skeleton}>&nbsp;</div>}

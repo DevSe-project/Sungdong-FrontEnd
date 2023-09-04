@@ -2,7 +2,7 @@ import styles from './Comeway.module.css'
 import { CategoryBar } from '../AboutHeader/CategoryBar'
 import { TopBanner } from '../AboutHeader/TopBanner'
 import { useEffect } from 'react';
-export function Comeway(){
+export function Comeway(props){
   // 카카오맵 API
   useEffect(() => {
   // 카카오 맵 스크립트 로드되었는지 확인
@@ -73,8 +73,8 @@ export function Comeway(){
   ]
   return(
     <div>
-      <TopBanner/>
-      <CategoryBar/>
+      <TopBanner iconHovered={props.iconHovered} iconMouseEnter={props.iconMouseEnter} iconMouseLeave={props.iconMouseLeave} icon_dynamicStyle={props.icon_dynamicStyle} category_dynamicStyle={props.category_dynamicStyle} iconOnClick={props.iconOnClick} text_dynamicStyle={props.text_dynamicStyle}/>
+      <CategoryBar category_dynamicStyle={props.category_dynamicStyle}/>
       <main className={styles.body}>
         <div className={styles.title}>
           <h1>오시는 길</h1>
