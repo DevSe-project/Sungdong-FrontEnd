@@ -166,9 +166,15 @@ export function Basket(props){
 
   // 주문서 작성창 링크 함수(receipt에 넘어가면 해당 객체의 키와 값만 가지고 감(주의))
   function gotoLink(){
+    const isValidSupply = selectedItems.filter((item)=> item.supply <= 0)
+    const duplicateTitles = isValidSupply.map((item) => item.title).join(", ")
+    if(isValidSupply.length > 0){
+      alert(`품절된 상품이 포함되어 있습니다.
+            (품절된 상품 : ${duplicateTitles})`)
+      return;
+    }
     if(props.activeTab===1 
-      && (selectedItems !== null || selectedItems.length > 0)
-      && selectedItems.map((item)=> item.supply > 0)) {
+      && (selectedItems !== null || selectedItems.length > 0)) {
       const editedData = selectedItems.map((item) => ({
         productId : item.id,
         userId: "asdfx100", 

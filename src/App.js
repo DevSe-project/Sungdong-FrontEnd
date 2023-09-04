@@ -171,7 +171,7 @@ function App() {
         <Route path='/' element={
           <>
             <MainPage login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
-            <List data={data} />
+            <List data={data}/>
             <TodayTopicList todayTopicData={todayTopicData} setTodayTopicData={setTodayTopicData} />
             <ComewayList />
             <div
