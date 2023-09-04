@@ -61,11 +61,6 @@ function App() {
 
   // 로그인 상태 유지
   const inLogin = sessionStorage.getItem('saveLoginData');
-  useEffect( () => {
-    if(inLogin) { //저장된 로그인Data가 존재
-      setLogin(true); //로그인상태유지
-    }
-  }, [inLogin] )
 
   // 찜 데이터(캐쉬) 불러오기
   useEffect(() => {
@@ -85,6 +80,51 @@ function App() {
       return clearTimeout(dataload)
     }, 1500)
   }, [])
+
+  useEffect( () => {
+    if(inLogin) { //저장된 로그인Data가 존재
+      setLogin(true); //로그인상태유지
+      // 유저 아이디에 해당하는 데이터 찾기
+      if(data){
+        const findUser = userData.find((item)=>
+        item.id === inLogin.id);
+        console.log(findUser)
+        if(findUser){
+          // 등급별 할인율 적용 없으면 그대로.
+          switch(findUser.grade){
+            case 'D' :
+              return setData(data.map((item) => ({
+                  ...item,
+                  discount : 5,
+                })
+              ))
+            case 'C' :
+              return setData(data.map((item) => ({
+                  ...item,
+                  discount : 8,
+                })
+              ))
+            case 'B' :
+              return setData(data.map((item) => ({
+                  ...item,
+                  discount : 10,
+                })
+              ))
+            case 'A' :
+              return setData(data.map((item) => ({
+                  ...item,
+                  discount : 15,
+                })
+              ))
+            default : 
+              return setData(data);
+          }
+        } else {
+          console.log("사용자를 찾을 수 업습니다.")
+        }
+      }
+    }
+  }, [inLogin] )
 
   useEffect(() => {
     // 페이지 이동시 항상 스크롤을 최상단으로 이동

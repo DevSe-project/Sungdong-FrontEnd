@@ -190,8 +190,6 @@ export function RelatedData(props) {
     const newOptionSelected = [...optionSelected];
     newOptionSelected[index] = e.target.value;
     setOptionSelected(newOptionSelected);
-    console.log(optionSelected)
-    console.log(selectedItems)
   }
 
   return(
