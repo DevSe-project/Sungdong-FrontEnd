@@ -174,7 +174,7 @@ export function TopBanner(props) {
         {props.login
           ?
           <button className={styles.link_signIn} onClick={() => {
-            sessionStorage.removeItem('saveLoginData');
+            sessionStorage.removeItem('saveLoginData'); //클릭하면 로그인데이터를 삭제
             props.setLogin(false);
           }}>로그아웃</button>
           :
