@@ -61,8 +61,13 @@ function buyThis(product, count){
       alert("필수 옵션을 선택해주세요!");
       return;
     }
+
+    if(product.supply <= 0){
+      alert("해당상품의 재고가 없습니다.")
+      return;
+    } 
   
-    const newBuyProduct = () => { 
+    const newBuyProduct = () => {
       if(product.option && optionSelected){
         return {
           productId : product.id,
