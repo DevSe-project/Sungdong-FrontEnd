@@ -207,11 +207,7 @@ function App() {
           <Route path='order' element={<Order activeTab={activeTab} setActiveTab={setActiveTab} orderData={orderData} setOrderData={setOrderData}/>} />
         </Route>
 
-<<<<<<< HEAD
         {/* 주문 조회 */}
-=======
-        {/* 주문조회 */}
->>>>>>> ad84a6947bb1f175d3dda16a237900da1c8f3e71
         <Route path='/delivery' element={<DeliveryMain login={login} setLogin={setLogin} orderData={orderData} setOrderData={setOrderData} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />} />
         
         {/* 배송 조회 */}
