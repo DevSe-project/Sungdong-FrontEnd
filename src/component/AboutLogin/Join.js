@@ -94,6 +94,7 @@ export default function Join(props) {
                 confirmPassword: inputData.confirmPassword,
                 email: inputData.email,
                 emailService: inputData.emailService,
+                grade: 'D',
                 name: inputData.name,
                 num1: inputData.num1,
                 num2: inputData.num2,

@@ -51,7 +51,7 @@ export function Detail(props) {
 
 // 즉시구매 함수
 function buyThis(product, count){
-
+    console.log(product)
     if(count <= 0){
       alert("수량은 0보다 커야합니다.")
       return;
@@ -61,14 +61,20 @@ function buyThis(product, count){
       alert("필수 옵션을 선택해주세요!");
       return;
     }
+
+    if(product.supply <= 0){
+      alert("해당상품의 재고가 없습니다.")
+      return;
+    } 
   
-    const newBuyProduct = () => { 
+    const newBuyProduct = () => {
       if(product.option && optionSelected){
         return {
           productId : product.id,
           userId: "asdfx100", 
           productName : product.title,
           cnt : Number(count), 
+          supply: product.supply,
           price: product.price,
           finprice : (product.price * count), //총 계산액
           discount : product.discount ? product.discount : 0,
@@ -79,6 +85,7 @@ function buyThis(product, count){
         userId: "asdfx100", 
         productName : product.title,
         cnt : Number(count), 
+        supply: product.supply,
         price: product.price,
         finprice : (product.price * count), //총 계산액
         // 이후 discount 값 수정 필요 (등급에 따라)

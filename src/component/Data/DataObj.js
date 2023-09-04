@@ -3,6 +3,7 @@ export let DataObj = [{
     title : "검정 신발",
     price : 150000,
     content : "검은색과의 조화",
+    supply : 99,
     discount: 0,
     category: {
       main: '패션잡화',
@@ -31,7 +32,8 @@ export let DataObj = [{
     title : "[많이 팔리는 제품] 3M 장갑",
     price : 120000,
     content : "날렵한",
-    discount : 10,
+    discount : 0,
+    supply : 99,
     brand : '프로덕트랩',
     madeIn : '중국',
     category: {
@@ -45,7 +47,8 @@ export let DataObj = [{
     title : "전동 드릴",
     price : 170000,
     content : "촌스럽지 않은 깔끔함",
-    discount : 20,
+    discount : 0,
+    supply : 99,
     brand : '프로덕트랩',
     madeIn : '중국',
     category: {
@@ -74,6 +77,7 @@ export let DataObj = [{
     price : 140000,
     content : "가성비 신발",
     discount : 0,
+    supply : 1,
     brand : '프로덕트랩',
     madeIn : '중국',
     category: {
@@ -88,6 +92,7 @@ export let DataObj = [{
     price : 90000,
     content : "싼 신발",
     discount: 0,
+    supply : 99,
     brand : '프로덕트랩',
     madeIn : '중국',
     category: {

@@ -164,13 +164,16 @@ export function Basket(props){
     setOrderPrice(orderSum);
   }
 
-  // 링크 함수(receipt에 넘어가면 해당 객체의 키와 값만 가지고 감(주의))
+  // 주문서 작성창 링크 함수(receipt에 넘어가면 해당 객체의 키와 값만 가지고 감(주의))
   function gotoLink(){
-    if(props.activeTab===1 && (selectedItems !== null || selectedItems.length > 0)) {
+    if(props.activeTab===1 
+      && (selectedItems !== null || selectedItems.length > 0)
+      && selectedItems.map((item)=> item.supply > 0)) {
       const editedData = selectedItems.map((item) => ({
         productId : item.id,
         userId: "asdfx100", 
         productName : item.title,
+        supply: item.supply,
         cnt : Number(item.cnt), 
         price: item.price,
         finprice: item.finprice,
@@ -183,6 +186,8 @@ export function Basket(props){
       props.setOrderList(editedData);
       navigate("/basket/receipt");
       props.setActiveTab(2);
+    } else {
+      alert("주문 요청한 상품 중에 재고가 없는 상품이 있습니다!");
     }
   }
   //스탭 메뉴
