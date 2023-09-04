@@ -253,8 +253,8 @@ function basketThis(product, count){
               <div className={styles.textButton}>
                 <button 
                 className={styles.mainButton}
-                onClick={()=> buyThis(detailData, count)}
-                >결제하기</button>
+                onClick={()=> {detailData.supply <= 0 ? alert("해당 상품은 품절 상품입니다.") : buyThis(detailData, count)}}
+                >{detailData.supply <= 0 ? '품절' : detailData.supply < 5 ? `결제하기 (재고 ${detailData.supply}개 남음)` : '결제하기'}</button>
                 <div className={styles.sideTextButton}>
                   <button 
                   onClick={()=>{basketThis(detailData, count)}}
