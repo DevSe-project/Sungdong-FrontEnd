@@ -92,12 +92,35 @@ export function Receipt(props){
   // submit 버튼
   function gotoLink(){
     validateForm();
-    if(props.activeTab===2 && isFormValid) {
-        // 현재 날짜와 시간을 가져오기
+    const isValidSupply = props.orderList.every((orderItem) => {
+      const productMatchingId = props.data.find((item) => item.id === orderItem.productId);
+      return productMatchingId && productMatchingId.supply > 0;
+    });
+    
+    if (!isValidSupply) {
+      alert("주문 요청한 상품 중에 재고가 없는 상품이 있습니다!");
+      return;
+    }
+    if(props.activeTab===2 && isFormValid && isValidSupply) {
+    // supply 수정
+      const productData = props.data.map((item) => {
+        const isProductInOrderList = props.orderList.some(
+          (orderListItem) => orderListItem.productId === item.id
+        );
+      if (isProductInOrderList) {
+        return {
+          ...item,
+          supply: item.supply - 1,
+        };
+      }
+      return item;
+    });
+      props.setData(productData);
+      // 현재 날짜와 시간을 가져오기
       const currentDate =  new Date();
       const formattedDate = currentDate.toLocaleString();
       const newOrderId = props.orderData.length + 1;
-      const editedData = JSON.parse(localStorage.getItem('orderData'))
+      const editedData = JSON.parse(localStorage.getItem('orderData'));
       const newOrderData = editedData.map((item) => ({
         ...item,
         orderId: newOrderId,
@@ -106,15 +129,21 @@ export function Receipt(props){
         date: formattedDate,
         orderState: 0, //0 => 결제대기, 1 => 결제완료 2 => 배송준비중 3 => 배송중 4 => 배송완료 
       }));
-      // 데이터 삽입
+        // 데이터 삽입
+        //orderData (주문 진행 객체) 업데이트
         const copyData = [...props.orderData];
         copyData.push(...newOrderData);
         props.setOrderData(copyData);
+
+        // localStorage 변경
         localStorage.removeItem('orderData');
         localStorage.setItem('newOrderData', JSON.stringify(newOrderData))
+        //결제 방식이 CMS일때
         if(orderInformation.payRoute === 'CMS'){
           props.setActiveTab(4);
           navigate("/basket/order");
+
+          // 결제방식이 일반결제 일때
         } else if (orderInformation.payRoute === '일반결제') {
         props.setActiveTab(3);
         navigate("/basket/pay");
@@ -502,7 +531,9 @@ export function Receipt(props){
         </div>
         <div>
           <button  
-          onClick={()=>gotoLink()} 
+          onClick={()=> {
+            gotoLink()
+          }} 
           className={styles.submitButton}
           >
             결제하기

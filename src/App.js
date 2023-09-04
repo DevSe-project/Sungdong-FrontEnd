@@ -75,13 +75,13 @@ function App() {
           case 'D':
             newData = newData.map((item) => ({
               ...item,
-              discount: 5,
+              discount: 0,
             }));
             break;
           case 'C':
             newData = newData.map((item) => ({
               ...item,
-              discount: 8,
+              discount: 5,
             }));
             break;
           case 'B':
@@ -202,7 +202,7 @@ function App() {
         <Route path='/basket' element={
           <Basket login={login} setLogin={setLogin} activeTab={activeTab} setActiveTab={setActiveTab} basketList={basketList} setBasketList={setBasketList} orderList={orderList} setOrderList={setOrderList} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
         }>
-          <Route path='receipt' element={<Receipt data={data} activeTab={activeTab} setActiveTab={setActiveTab} orderData={orderData} setOrderData={setOrderData} />} />
+          <Route path='receipt' element={<Receipt data={data} setData={setData} orderList={orderList} setOrderList={setOrderList} activeTab={activeTab} setActiveTab={setActiveTab} orderData={orderData} setOrderData={setOrderData} />} />
           <Route path='pay' element={<Pay activeTab={activeTab} setActiveTab={setActiveTab} orderData={orderData} setOrderData={setOrderData}/>} />
           <Route path='order' element={<Order activeTab={activeTab} setActiveTab={setActiveTab} orderData={orderData} setOrderData={setOrderData}/>} />
         </Route>
