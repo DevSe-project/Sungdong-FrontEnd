@@ -5,7 +5,7 @@ import styles from './TopBanner.module.css';
 import { SearchBar } from './SearchBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
-import { Transition } from 'react-transition-group';
+import { CategoryBar } from './CategoryBar';
 
 //상단 메뉴 리스트 
 export function TopBanner(props) {
@@ -111,76 +111,79 @@ export function TopBanner(props) {
   }
 
   return (
-    <div className={styles.top_container}>
-      <div className={styles.top_nav}>
-        {/* 카테고리 박스 */}
-        <div
-          className={styles.categoryBox}
-          onClick={props.iconOnClick}
-          onMouseEnter={props.iconMouseEnter}
-          onMouseLeave={props.iconMouseLeave}
-          style={{...props.border_dynamicStyle}}
-        >
-          {/* 카테고리 아이콘 */}
-          <FontAwesomeIcon
-            icon={faBars} // 사용할 FontAwesome 아이콘 선택
-            style={{ ...props.icon_dynamicStyle }}
-            className={styles.categoryIcon}
-          />
-          {/* 카데고리 텍스트 */}
-          <div style={{...props.text_dynamicStyle}}>
-            카테<br/>
-            고리
-          </div>
-        </div>
-
-        {/* 로고 */}
-        <img className={styles.image} onClick={() => navigate("/")} src={logo} alt="로고" height='80px' />
-        {/* 서치바 */}
-        <SearchBar />
-        {/* 메뉴 loop */}
-        {menuData.map((item, index) => (
-          <li
-            key={index}
-            id={item.id}  // data-id 속성을 사용하여 탭의 id를 저장
-            onMouseEnter={() => handleMouseEnter(index)}
-            onMouseLeave={() => handleMouseLeave(index)}
-            className={`menu-item ${subMenuStates[index] && 'open'}
-            menutab-item ${topTab === item.id ? 'active' : ''}`}
-            onClick={() => { saveTab(item.id) }}
+    <div className={styles.body}>
+      <div className={styles.top_container}>
+        <div className={styles.top_nav}>
+          {/* 카테고리 박스 */}
+          <div
+            className={styles.categoryBox}
+            onClick={props.iconOnClick}
+            onMouseEnter={props.iconMouseEnter}
+            onMouseLeave={props.iconMouseLeave}
+            style={{...props.border_dynamicStyle}}
           >
-            <span
-              className={styles.link}
-              onClick={() => { navigate(`${item.title.link}`) }}>
-              {item.title.item}
-            </span>
-            {subMenuStates[index] && (
-              <ul
-                className="sub-menu">
-                {item.subMenuItems.map((subMenuItem, subMenuItemindex) => (
-                  <li
-                    onClick={() => navigate(`${subMenuItem.link}`)}
-                    className={styles.sub_item}
-                    key={subMenuItemindex}>
-                    {subMenuItem.item}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </li>
-        ))}
-
-        {/* 로그인/로그아웃 */}
-        <button className={styles.link_signIn} onClick={() => { 
-          if(props.login){
-            sessionStorage.removeItem('saveLoginData');
-            props.setLogin(false);
-            window.location.reload();
-          } else {
-            navigate("/login");
-          }}}>{props.login ? '로그아웃' : '로그인'} 
-        </button>
+            {/* 카테고리 아이콘 */}
+            <FontAwesomeIcon
+              icon={faBars} // 사용할 FontAwesome 아이콘 선택
+              style={{ ...props.icon_dynamicStyle }}
+              className={styles.categoryIcon}
+            />
+            {/* 카데고리 텍스트 */}
+            <div style={{...props.text_dynamicStyle}}>
+              카테<br/>
+              고리
+            </div>
+          </div>
+          {/* 로고 */}
+          <img className={styles.image} onClick={() => navigate("/")} src={logo} alt="로고" height='70px' />
+          {/* 서치바 */}
+          <SearchBar />
+          {/* 메뉴 loop */}
+          {menuData.map((item, index) => (
+            <li
+              key={index}
+              id={item.id}  // data-id 속성을 사용하여 탭의 id를 저장
+              onMouseEnter={() => handleMouseEnter(index)}
+              onMouseLeave={() => handleMouseLeave(index)}
+              className={`menu-item ${subMenuStates[index] && 'open'}
+              menutab-item ${topTab === item.id ? 'active' : ''}`}
+              onClick={() => { saveTab(item.id) }}
+            >
+              <span
+                className={styles.link}
+                onClick={() => { navigate(`${item.title.link}`) }}>
+                {item.title.item}
+              </span>
+              {subMenuStates[index] && (
+                <ul
+                  className="sub-menu">
+                  {item.subMenuItems.map((subMenuItem, subMenuItemindex) => (
+                    <li
+                      onClick={() => navigate(`${subMenuItem.link}`)}
+                      className={styles.sub_item}
+                      key={subMenuItemindex}>
+                      {subMenuItem.item}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))}
+          {/* 로그인/로그아웃 */}
+          <button className={styles.link_signIn} onClick={() => {
+            if(props.login){
+              sessionStorage.removeItem('saveLoginData');
+              props.setLogin(false);
+              window.location.reload();
+            } else {
+              navigate("/login");
+            }}}>{props.login ? '로그아웃' : '로그인'}
+          </button>
+        </div>
       </div>
+      
+      {/* 클릭하면 나오는 카테고리바 */}
+      <CategoryBar category_dynamicStyle={props.category_dynamicStyle}/>
     </div>
   );
 }

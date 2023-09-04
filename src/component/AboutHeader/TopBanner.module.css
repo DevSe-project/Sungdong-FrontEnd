@@ -1,21 +1,23 @@
 /* -------------------- TopBanner -------------------- */
 
-/* 화면 넓이에 꽉 맞도록 설정 */
-.top_container {
   /* 상단바 고정 작업 */
-  background-color: white;
-  position:sticky;
-  z-index: 990;
-  top: 0;
-  height: 80px;
+.body {
   width: 100%;
-  display: flex;
+  top: 0;
+  position: sticky;
+  z-index: 999;
   padding-bottom: 0.5em;
   margin: 0;
+}
+
+/* 화면 넓이에 꽉 맞도록 설정 */
+.top_container {
+  display: flex;
+  height: 90px;
+  justify-content: center;
   align-items: center;
   align-content: center;
-  justify-content: center;
-  width: 100%;
+  background-color: white;
   border-bottom: 1px solid lightgray;
 }
 

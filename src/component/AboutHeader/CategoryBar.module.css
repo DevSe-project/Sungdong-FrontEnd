@@ -1,6 +1,7 @@
 .categoryBarContainer {
   width: 100%;
   background-color: #FFF;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-evenly;

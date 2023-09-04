@@ -8,7 +8,6 @@ export default function MyPage(props) {
     <div>
       {/* 탑배너 & 카테고리 */}
       <TopBanner iconHovered={props.iconHovered} iconMouseEnter={props.iconMouseEnter} iconMouseLeave={props.iconMouseLeave} icon_dynamicStyle={props.icon_dynamicStyle} category_dynamicStyle={props.category_dynamicStyle} iconOnClick={props.iconOnClick} text_dynamicStyle={props.text_dynamicStyle} />
-      <CategoryBar category_dynamicStyle={props.category_dynamicStyle} />
       {/* 마이페이지 body */}
       <div className={styles.body}>
         {/* 내 정보(수정) */}
