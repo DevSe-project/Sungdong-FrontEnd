@@ -171,16 +171,22 @@ export function TopBanner(props) {
         ))}
 
         {/* 로그인/로그아웃 */}
+<<<<<<< HEAD
         {props.login
           ?
           <button className={styles.link_signIn} onClick={() => {
             sessionStorage.removeItem('saveLoginData'); //클릭하면 로그인데이터를 삭제
+=======
+        <button className={styles.link_signIn} onClick={() => { 
+          if(props.login){
+            sessionStorage.removeItem('saveLoginData');
+>>>>>>> aaeac29e576950e20fc9df15e38a4698bbbe53b5
             props.setLogin(false);
-          }}>로그아웃</button>
-          :
-          <button className={styles.link_signIn} onClick={() => { navigate("/login") }}>로그인</button>
-        }
-
+            window.location.reload();
+          } else {
+            navigate("/login");
+          }}}>{props.login ? '로그아웃' : '로그인'} 
+        </button>
       </div>
     </div>
   );

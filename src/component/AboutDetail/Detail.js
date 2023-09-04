@@ -158,7 +158,7 @@ function basketThis(product, count){
 
   return(
     <div>
-      <TopBanner iconHovered={props.iconHovered} iconMouseEnter={props.iconMouseEnter} iconMouseLeave={props.iconMouseLeave} icon_dynamicStyle={props.icon_dynamicStyle} category_dynamicStyle={props.category_dynamicStyle} iconOnClick={props.iconOnClick} text_dynamicStyle={props.text_dynamicStyle} />
+      <TopBanner login={props.login} setLogin={props.setLogin} iconHovered={props.iconHovered} iconMouseEnter={props.iconMouseEnter} iconMouseLeave={props.iconMouseLeave} icon_dynamicStyle={props.icon_dynamicStyle} category_dynamicStyle={props.category_dynamicStyle} iconOnClick={props.iconOnClick} text_dynamicStyle={props.text_dynamicStyle} />
       <CategoryBar category_dynamicStyle={props.category_dynamicStyle}/>
       <main className={styles.main}>
         <section className={styles.head}>
@@ -185,7 +185,15 @@ function basketThis(product, count){
                 ? detailData.discount !== 0
                 ? 
                 <div className={styles.priceTag}>
-                  {detailData.price-((detailData.price/100)*detailData.discount)}원
+                  <div>
+                    <h3>{detailData.discount}%</h3>
+                  </div>
+                  <div style={{display: 'flex', alignItems: 'center', gap: '0.5em'}}>
+                    <p style={{textDecoration: "line-through", color: "gray"}}>
+                      {detailData.price}원
+                    </p>
+                      {detailData.price-((detailData.price/100)*detailData.discount)}원
+                  </div>
                 </div>
                 : `${detailData.price} 원`
                 : <div className={styles.skeleton}>&nbsp;</div>}

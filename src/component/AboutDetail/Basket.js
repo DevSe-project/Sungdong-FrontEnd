@@ -156,12 +156,10 @@ export function Basket(props){
         }
       }
     });
-    //변수 저장식
-    setSum(sum);
-
     // 할인 금액이 총 가격을 넘지 않도록 보정
     totalDiscount = Math.min(totalDiscount, sum);
-  
+    const prevOrderSum = sum - totalDiscount;
+    setSum(prevOrderSum);
     const orderSum = sum + delivery - totalDiscount;
     setOrderPrice(orderSum);
   }
@@ -196,7 +194,7 @@ export function Basket(props){
     ];
   return(
     <div>
-      <TopBanner iconHovered={props.iconHovered} iconMouseEnter={props.iconMouseEnter} iconMouseLeave={props.iconMouseLeave} icon_dynamicStyle={props.icon_dynamicStyle} category_dynamicStyle={props.category_dynamicStyle} iconOnClick={props.iconOnClick} text_dynamicStyle={props.text_dynamicStyle} />
+      <TopBanner login={props.login} setLogin={props.setLogin} iconHovered={props.iconHovered} iconMouseEnter={props.iconMouseEnter} iconMouseLeave={props.iconMouseLeave} icon_dynamicStyle={props.icon_dynamicStyle} category_dynamicStyle={props.category_dynamicStyle} iconOnClick={props.iconOnClick} text_dynamicStyle={props.text_dynamicStyle} />
       <CategoryBar category_dynamicStyle={props.category_dynamicStyle}/>
       {/* 스탭 모듈 */}
       <div className={styles.stepBlock}>
@@ -239,7 +237,7 @@ export function Basket(props){
                 <th>상품 이미지</th>
                 <th className={styles.name}>상품 정보</th>
                 <th>수량</th>
-                <th>구매 가격</th>
+                <th>공급 가격</th>
               </tr>
             </thead>
             <tbody>
@@ -259,7 +257,7 @@ export function Basket(props){
                   <h5 className={styles.link} onClick={()=>navigate(`/detail/${item.id}`)}>{item.title}</h5>
                   <div>
                   {item.option && `옵션 : ${item.optionSelected}`}
-                  <p>상품 도매가 : <span className={styles.price}>\{item.price}</span></p>
+                  <p>상품 표준가 : <span className={styles.price}>\{item.price}</span></p>
                   </div>
                 </td>
                 <td>{editStatus[index]===false 
@@ -301,14 +299,13 @@ export function Basket(props){
                   ? item.productName : null}</h5>
                   <div>
                   {item.optionSelected && `옵션 : ${item.optionSelected}`}
-                  <p>상품 도매가 : <span className={styles.price}>\{item.price}</span></p>
+                  <p>상품 표준가 : <span className={styles.price}>\{item.price}</span></p>
                   </div>
                 </td>
                 <td>{item.cnt}</td>
                 <td className={styles.price}>
                   {item.discount
-                  ? 
-                  `\\${ item.finprice - (((item.price/100)*item.discount)*item.cnt)}`
+                  ? `\\${ item.finprice - (((item.price/100)*item.discount)*item.cnt)}`
                   : `\\${item.finprice}`}
                 </td>
               </tr>
@@ -321,13 +318,13 @@ export function Basket(props){
             <div className={styles.finalContainer}>
                 <div className={styles.finalBox}>
                   <h2 style={{display:"flex", alignItems: 'center'}}>
-                    총 상품 도매가
+                    총 상품 공급가
                   </h2>
                   <div className={styles.price}>
-                    <h5>\{sum ? sum : props.orderList.length !== 0
-                    ? props.orderList.map((item)=> 
-                    item.finprice)
-                    : 0} 
+                    <h5>
+                    \{sum ? sum : props.orderList !== null || []
+                    ? props.orderList.map((item) =>
+                    item.finprice - ((item.price/100)*item.discount)*item.cnt) : 0}
                     </h5>
                   </div>
                 </div>
