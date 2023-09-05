@@ -14,9 +14,11 @@ export function TopBanner(props) {
   const [topTab, setTopTab] = useState(null); // 현재 활성화된 탭을 추적
 
   useEffect(() => {
-
+    const tabstate = JSON.parse(localStorage.getItem('tabState'));
+    setTopTab(tabstate);
+    
     // 경로에 따른 상태 초기화
-    if (location.pathname === '/' || location.pathname === '/login') {
+    if (location.pathname === '/' || location.pathname === '/login' || location.pathname === '/category') {
       localStorage.removeItem('tabState');
       setTopTab(null);
     }
@@ -199,7 +201,7 @@ export function TopBanner(props) {
       </div>
       
       {/* 클릭하면 나오는 카테고리바 */}
-      <CategoryBar data={props.data} setData={props.setData} categoryData={props.categoryData} setCategoryData={props.setCategoryData} category_dynamicStyle={props.category_dynamicStyle}/>
+      <CategoryBar selectedCategory={props.selectedCategory} setSelectedCategory={props.setSelectedCategory} selectedSubCategory={props.selectedSubCategory} setSelectedSubCategory={props.setSelectedSubCategory} data={props.data} setData={props.setData} categoryData={props.categoryData} setCategoryData={props.setCategoryData} category_dynamicStyle={props.category_dynamicStyle}/>
     </div>
   );
 }

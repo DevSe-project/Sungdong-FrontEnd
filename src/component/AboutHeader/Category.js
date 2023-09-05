@@ -1,23 +1,36 @@
 import { useEffect, useState } from "react";
 import { TopBanner } from "./TopBanner";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styles from './Category.module.css'
 import React from 'react';
 export function Category(props){
-    const [selectedCategory, setSelectedCategory] = useState('전체'); // 선택된 카테고리
-    const [selectedSubCategory, setSelectedSubCategory] = useState(null);
+    // 카테고리
+    const [selectedCategory, setSelectedCategory] = useState('전체'); //메인 카테고리
+    const [selectedSubCategory, setSelectedSubCategory] = useState(null); //서브 카테고리
 
+    
     // 필터된 항목을 저장할 상태 변수
     const [filteredItems, setFilteredItems] = useState([]);
 
-    // 선택된 카테고리 변경 핸들러
-    const handleCategoryChange = (category) => {
-      setSelectedCategory(category);
-    };
-    const handleSubCategoryChange = (category) => {
-      setSelectedSubCategory(category);
-    };
+    const mainCategory = JSON.parse(sessionStorage.getItem('category'));
+    const subCategory = JSON.parse(sessionStorage.getItem('subCategory'));
+
+    // mainCategory와 subCategory가 바뀔 때 마다 실행
+    useEffect(() => {
+      setSelectedCategory(mainCategory);
+      setSelectedSubCategory(subCategory);
+    }, [mainCategory, subCategory]);
+
+
+    // // 선택된 카테고리 변경 핸들러
+    // const handleCategoryChange = (category) => {
+    //   setSelectedCategory(category);
+    // };
+    // const handleSubCategoryChange = (category) => {
+    //   setSelectedSubCategory(category);
+    // };
     // 카테고리에 따라 아이템 필터링
+
     useEffect(() => {
       if(props.data){
         if (selectedCategory === '전체' && selectedSubCategory === null) {
@@ -261,7 +274,7 @@ export function Category(props){
           </thead>
           <tbody>
             {props.data 
-            ? filteredItems !== null
+            ? filteredItems.length > 0
             ? getCurrentPagePosts().map((item, index)=> (
             <React.Fragment key={index}>
               <tr className={styles.list}>
@@ -374,7 +387,7 @@ export function Category(props){
               )}
               </React.Fragment>
               ))
-            : <tr><td>해당하는 상품의 관련된 상품이 존재하지 않습니다.</td></tr>
+            : <tr><td>해당하는 상품과 관련된 상품이 존재하지 않습니다.</td></tr>
             : <tr><td>로딩중</td></tr>
             }
           </tbody>

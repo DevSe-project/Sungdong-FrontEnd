@@ -1,16 +1,38 @@
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './CategoryBar.module.css'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export function CategoryBar(props) {
+  // 선택된 카테고리 변경 핸들러
+  const handleCategoryChange = (category) => {
+    sessionStorage.setItem('category', JSON.stringify(category));
+    navigate("/category");
+    window.location.reload();
+  };
+  const handleSubCategoryChange = (category) => {
+    sessionStorage.setItem('subCategory', JSON.stringify(category));
+    navigate("/category");
+    window.location.reload();
+  };
+  const location = useLocation();
+  const [activeTab, setActiveTab] = useState(null); // 현재 활성화된 탭을 추적
+
+  useEffect(() => {
+    const tabstate = JSON.parse(localStorage.getItem('categoryTabState'));
+    setActiveTab(tabstate);
+
+    if (location.pathname !== '/category') {
+      localStorage.removeItem('tabState');
+      setActiveTab(null);
+    }
+  },[location])
 
   const navigate = useNavigate();
   //서브메뉴 열림창 변수 초기화
   const [subMenuStates, setSubMenuStates] = useState(props.categoryData && props.categoryData.map(()=>false));
-  const [activeTab, setActiveTab] = useState(0); // 현재 활성화된 탭을 추적하는 상태
 
   const handleTabClick = (tabItem) => {
-    setActiveTab(tabItem.id);
+    localStorage.setItem('categoryTabState', JSON.stringify(tabItem.id));
   };
 
   const handleMouseEnter = (index) => {
@@ -42,12 +64,12 @@ export function CategoryBar(props) {
             className={`categorymenu-item ${subMenuStates[index] && 'open'} + categorytab-item ${activeTab === item.id ? 'active' : ''}`}
             onClick={() => { handleTabClick(item) }}
           >
-            <span onClick={() => navigate(item.link)}>{item.title}</span>
+            <span onClick={() => handleCategoryChange(item.title)}>{item.title}</span>
             {/* 서브메뉴 loop */}
             {subMenuStates[index] && (
               <ul onMouseLeave={() => handleMouseLeave(index)} className="sub-menu">
                 {item.subMenuItems.map((item, index) => (
-                  <li onClick={() => navigate(`${item.link}`)} className={styles.category} key={index}>
+                  <li onClick={() => handleSubCategoryChange(item.item)} className={styles.category} key={index}>
                     {item.item}
                   </li>
                 ))}
