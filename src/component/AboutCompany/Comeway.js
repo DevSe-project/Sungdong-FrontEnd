@@ -42,7 +42,7 @@ export function Comeway(props){
     }
   }, []);
 
-
+  // 이용정보 탭 메뉴
   const tabMenu = [
   {
     icon: <i style={{color:'#cc0000'}} className="fas fa-map-marker-alt"/>, 

@@ -29,6 +29,18 @@ export function Basket(props){
 
   const location = useLocation();
 
+  // 배송 주문 건 팝업띄우기
+  const [openDeliveryModal, setOpenDeliveryModal] = useState(true);
+
+  // 일정 시간 후 팝업 닫음
+  useEffect(()=> {
+    const opentime = setTimeout(() => {
+      setOpenDeliveryModal(false)
+    }, 2000)
+
+    return () => clearTimeout(opentime)
+  }, [])
+
   // 장바구니 탭 - 결제 탭에서 뒤로가기 시 뒤로가기 방지 후 장바구니 탭으로 이동
   useEffect(() => {
     const handleBack = (e) => {
@@ -206,6 +218,7 @@ export function Basket(props){
   return(
     <div>
       <TopBanner login={props.login} setLogin={props.setLogin} iconHovered={props.iconHovered} iconMouseEnter={props.iconMouseEnter} iconMouseLeave={props.iconMouseLeave} icon_dynamicStyle={props.icon_dynamicStyle} text_dynamicStyle={props.text_dynamicStyle} category_dynamicStyle={props.category_dynamicStyle} iconOnClick={props.iconOnClick} />
+
       {/* 스탭 모듈 */}
       <div className={styles.stepBlock}>
         <div className={styles.stepBar}>
@@ -233,8 +246,12 @@ export function Basket(props){
 
         {/* 본문 시작 */}
         <div className={styles.body}>
+          {/* 팝업 띄우기 */}
+            {openDeliveryModal &&
+            <div>오후 12시 이전 주문 건 당일배송, 오후 12시 이후 주문 건 익일 배송</div>}
           {props.activeTab===3 ? <h3>고객님께서 결제하실 상품정보입니다.</h3>
           : props.activeTab===4 && <h3>다음 상품을 준비하여 고객님께 보내드리겠습니다.</h3>}
+          
           {/* 주문 정보 테이블 */}
           <table className={styles.table}>
             <thead>
@@ -366,6 +383,7 @@ export function Basket(props){
             {props.activeTab===1 && 
             <>
             <button className={styles.deletebutton} onClick={()=>deletedList()}>삭제</button>
+            <button className={styles.deletebutton}>장바구니 확인서 출력</button>
             <button onClick={selectedItems.length > 0 && props.activeTab === 1 ? ()=>{gotoLink();} : null} className={styles.button}>{selectedItems ? `${selectedItems.length}건` : `0건`} 주문하기</button>
             </>}
           </div>

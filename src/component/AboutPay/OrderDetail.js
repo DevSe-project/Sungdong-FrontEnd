@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import styles from './OrderDetail.module.css'
-import { CategoryBar } from '../AboutHeader/CategoryBar'
 import { TopBanner } from '../AboutHeader/TopBanner'
 export function OrderDetail(props){
   const navigate = useNavigate();
@@ -57,6 +56,14 @@ export function OrderDetail(props){
       title : '증빙 서류 발급', 
       value : orderData.order.moneyReceipt,
     },
+    {
+      id: 2,
+      title : '명세서',
+      value : orderData.order 
+      && orderData.order.transAction
+      ? orderData.order.transAction 
+      : '발급안함'
+    }
   ]
   return(
     <div>
