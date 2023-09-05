@@ -73,6 +73,14 @@ export function Order(props){
       title : '증빙 서류 발급', 
       value : orderProductData.order && orderProductData.order.moneyReceipt,
     },
+    {
+      id: 2,
+      title : '명세서',
+      value : orderProductData.order 
+      && orderProductData.order.transAction
+      ? orderProductData.order.transAction 
+      : '발급안함'
+    }
   ]
   return(
     <div className={styles.container}>

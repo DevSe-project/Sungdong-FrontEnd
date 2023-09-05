@@ -35,7 +35,7 @@ export function Basket(props){
   // 일정 시간 후 팝업 닫음
   useEffect(()=> {
     const opentime = setTimeout(() => {
-      setOpenDeliveryModal(!openDeliveryModal)
+      setOpenDeliveryModal(false)
     }, 2000)
 
     return () => clearTimeout(opentime)
@@ -383,6 +383,7 @@ export function Basket(props){
             {props.activeTab===1 && 
             <>
             <button className={styles.deletebutton} onClick={()=>deletedList()}>삭제</button>
+            <button className={styles.deletebutton}>장바구니 확인서 출력</button>
             <button onClick={selectedItems.length > 0 && props.activeTab === 1 ? ()=>{gotoLink();} : null} className={styles.button}>{selectedItems ? `${selectedItems.length}건` : `0건`} 주문하기</button>
             </>}
           </div>

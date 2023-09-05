@@ -47,6 +47,7 @@ export function Receipt(props){
     email : "",
     payRoute : "",
     moneyReceipt : "",
+    transAction : "",
     checked : false,
   })
   const [deliveryInformation, setDeliveryInformation] = useState({
@@ -67,8 +68,11 @@ export function Receipt(props){
       orderInformation.tel !== "" &&
       orderInformation.email !== "" &&
       orderInformation.payRoute !== "" &&
-      orderInformation.moneyReceipt !== "";
-  
+      `${orderInformation.transAction 
+      ? orderInformation.moneyReceipt !== "" &&
+      orderInformation.transAction !== ""
+      : orderInformation.moneyReceipt !== ""}`
+      
     const isDeliveryInformationValid =
       deliveryInformation.name !== "" &&
       deliveryInformation.tel !== "" &&
@@ -134,7 +138,7 @@ export function Receipt(props){
         const copyData = [...props.orderData];
         copyData.push(...newOrderData);
         props.setOrderData(copyData);
-
+        console.log(props.orderData)
         // localStorage 변경
         localStorage.removeItem('orderData');
         localStorage.setItem('newOrderData', JSON.stringify(newOrderData))
@@ -514,8 +518,53 @@ export function Receipt(props){
                 })
               )}
               /> 세금계산서
+              <input 
+              name='moneyreceipt' 
+              type="radio"
+              value="명세서"
+              checked={orderInformation.moneyReceipt === '명세서'} 
+              onChange={(e)=>setOrderInformation(
+                prevdata=> ({
+                  ...prevdata,
+                  moneyReceipt : e.target.value,
+                })
+              )}
+              /> 명세서
             </div>
           </div>
+          {orderInformation.moneyReceipt === '명세서' && 
+          <div className={styles.formInner}>
+            <div className={styles.label}>
+              <label>명세서</label>
+            </div>
+            <div className={styles.input}>
+              <input 
+              name='transaction' 
+              type="radio"
+              value="명세서실물"
+              checked={orderInformation.transAction === '명세서실물'} 
+              onChange={(e)=>setOrderInformation(
+                prevdata=> ({
+                  ...prevdata,
+                  transAction : e.target.value,
+                })
+              )}
+              /> 명세서 실물 동봉
+              <input 
+              name='transaction' 
+              type="radio"
+              value="명세서출력"
+              checked={orderInformation.transAction === '명세서출력'} 
+              onChange={(e)=>setOrderInformation(
+                prevdata=> ({
+                  ...prevdata,
+                  transAction : e.target.value,
+                })
+              )}
+              /> 명세서 FAX 출력
+            </div>
+          </div>
+          }
         </form>
         <div className={styles.formInner}>
           <input 
