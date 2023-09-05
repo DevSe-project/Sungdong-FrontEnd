@@ -102,6 +102,8 @@
 .buttonBox{
   display: flex;
   flex-direction: row;
+  justify-content: flex-end;
+  margin: 0.5em;
   gap: 0.5em;
 }
 

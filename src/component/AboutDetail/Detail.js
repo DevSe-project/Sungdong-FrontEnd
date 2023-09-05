@@ -15,7 +15,8 @@ export function Detail(props) {
   //옵션 선택 state
   const [optionSelected, setOptionSelected] = useState(null);
 
-
+  //로그인 정보 불러오기
+  const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'))
 
   //주소창 입력된 id값 받아오기
   let {id} = useParams();
@@ -51,6 +52,11 @@ export function Detail(props) {
 // 즉시구매 함수
 function buyThis(product, count){
     console.log(product)
+    if(!props.login){
+      alert("로그인 후 이용가능한 서비스입니다.")
+      navigate("/login");
+      return;
+    }
     if(count <= 0){
       alert("수량은 0보다 커야합니다.")
       return;
@@ -70,7 +76,7 @@ function buyThis(product, count){
       if(product.option && optionSelected){
         return {
           productId : product.id,
-          userId: "asdfx100", 
+          userId: inLogin.id, 
           productName : product.title,
           cnt : Number(count), 
           supply: product.supply,
@@ -100,12 +106,18 @@ function buyThis(product, count){
 
 // 장바구니 담기 함수
 function basketThis(product, count){
-  // 수량 0을 장바구니에 저장하는 것 방지, ** 백엔드 : login 캐쉬값이 저장되어 있는 것이 확인이 되면 허용
+  // login 캐쉬값이 저장되어 있는 것이 확인이 되면 허용
+  if(!props.login){
+    alert("로그인 후 이용가능한 서비스입니다.")
+    navigate("/login");
+    return;
+  }
+  // 수량 0개 저장방지
   if(count <= 0){
     alert("수량은 0보다 커야합니다.")
     return;
   }
-
+  // 필수옵션 선택 조건
   if (product.option && !optionSelected) {
     alert("필수 옵션을 선택해주세요!");
     return;
@@ -278,7 +290,7 @@ function basketThis(product, count){
         <div className={styles.sticky} >
           <Tab navigate={props.navigate}/>
         </div>
-        <TabInfo basketList={props.basketList} setBasketList={props.setBasketList} setData={props.setData} data={props.data} qnAData={props.qnAData} setQnAData={props.setQnAData} detailData={detailData}/>       
+        <TabInfo login={props.login} setLogin={props.setLogin} basketList={props.basketList} setBasketList={props.setBasketList} setData={props.setData} data={props.data} qnAData={props.qnAData} setQnAData={props.setQnAData} detailData={detailData}/>       
       </main>
     </div>
   )

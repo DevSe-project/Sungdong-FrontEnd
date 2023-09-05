@@ -124,6 +124,12 @@ export function RelatedData(props) {
   // 장바구니 담기 함수
   function basketRelatedData() {
     // 유효성 체크
+    if(!props.login){
+      alert("로그인 후 이용가능한 서비스입니다.")
+      navigate("/login");
+      return;
+    }
+
     if (selectedItems.length === 0) {
       alert("먼저 담을 상품을 체크해주세요!");
       return;
@@ -227,7 +233,10 @@ export function RelatedData(props) {
               <td>{item.image}</td>
               <td>{item.id}</td>
               <td className={styles.titleTd} onClick={()=>handleItemClick(item.id)}>
-                <h5>{item.title}</h5>
+                <h5>{item.title} [ 더보기 {selectRelatedData === item.id  
+                ? <i className="fa-sharp fa-solid fa-caret-up"></i>
+                : <i className="fa-sharp fa-solid fa-caret-down"></i>} ]
+                </h5>
               </td>
               <td>EA</td>
               <td>{item.price}</td>
