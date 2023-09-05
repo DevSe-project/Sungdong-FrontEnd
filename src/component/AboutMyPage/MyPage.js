@@ -1,8 +1,13 @@
+import { useEffect, useState } from "react";
 import { TopBanner } from "../AboutHeader/TopBanner";
 import styles from "./Mypage.module.css";
-
 export default function MyPage(props) {
 
+  const [callUserData, setCallUserData] = useState()
+
+  useEffect(() => {
+    
+  }, [])
   return (
     <div>
       {/* 탑배너 & 카테고리 */}
@@ -42,7 +47,7 @@ export default function MyPage(props) {
           <tr className={styles.tr}>
             <th className={styles.th} id={styles.editAddress}>주소</th>
             <td className={styles.td}>대충 주소임
-            <div>수정하기</div>
+              <div>수정하기</div>
             </td>
             <th className={styles.th}>FAX</th>
             <td className={styles.td}>대충 FAX임</td>

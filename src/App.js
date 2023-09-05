@@ -10,10 +10,7 @@ import { IssuanceCode } from './component/Data/IssuanceCode'
 
 // 메인페이지
 import MainPage from './MainPage';
-import { List } from './component/AboutHome/List';
 import { Product } from './component/AboutHome/Product';
-import { TodayTopicList } from './component/AboutHome/TodayTopicList';
-import { ComewayList } from './component/AboutHome/ComewayList';
 
 // 로그인
 import Join from './component/AboutLogin/Join';
@@ -215,7 +212,7 @@ function App() {
         <Route path='/join' element={<Join userData={userData} setUserData={setUserData} />} />
 
         {/* 문의하기 */}
-        <Route path='/userservice' element={<UserService login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />}>
+        <Route path='/userservice' element={<UserService  userData={userData} setUserData={setUserData} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />}>
           <Route path='notice' element={<Notice/>}/>
           <Route path='ask' element={<Ask/>}/>
         </Route>

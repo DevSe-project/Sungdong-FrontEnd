@@ -117,7 +117,7 @@ export default function Join(props) {
                 basket: [],
                 order: [],
             }
-            props.setUserData(prevUserData => [...prevUserData, newUserData])
+            props.setUserData(prevUserData => [...prevUserData, newUserData]);
             setWarningMsg(false); // 경고 메시지를 지우고
             navigate('/login');
             alert('성동물산에 오신 걸 환영합니다! 이제 로그인을 진행할 수 있습니다.');
