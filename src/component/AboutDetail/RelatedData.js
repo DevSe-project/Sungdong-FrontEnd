@@ -233,7 +233,10 @@ export function RelatedData(props) {
               <td>{item.image}</td>
               <td>{item.id}</td>
               <td className={styles.titleTd} onClick={()=>handleItemClick(item.id)}>
-                <h5>{item.title}</h5>
+                <h5>{item.title} [ 더보기 {selectRelatedData === item.id  
+                ? <i className="fa-sharp fa-solid fa-caret-up"></i>
+                : <i className="fa-sharp fa-solid fa-caret-down"></i>} ]
+                </h5>
               </td>
               <td>EA</td>
               <td>{item.price}</td>

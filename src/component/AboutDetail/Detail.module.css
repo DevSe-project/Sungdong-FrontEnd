@@ -202,7 +202,7 @@
 
 /* tab Sticky */
 .sticky{
-  top: 110px;
+  top: 100px;
   position: sticky;
   z-index: 989;
   height: 40px;
