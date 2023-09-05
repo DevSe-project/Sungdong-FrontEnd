@@ -1,8 +1,6 @@
 import { useNavigate, Outlet } from "react-router-dom";
 import { TopBanner } from "../AboutHeader/TopBanner";
 import styles from './UserService.module.css';
-import { CategoryBar } from "../AboutHeader/CategoryBar";
-import { useState } from "react";
 
 export function UserService(props) {
 

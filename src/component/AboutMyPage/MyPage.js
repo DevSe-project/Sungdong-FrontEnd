@@ -1,4 +1,3 @@
-import { CategoryBar } from "../AboutHeader/CategoryBar";
 import { TopBanner } from "../AboutHeader/TopBanner";
 import styles from "./Mypage.module.css";
 
