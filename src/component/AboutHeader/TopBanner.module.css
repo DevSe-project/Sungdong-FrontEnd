@@ -13,6 +13,7 @@
 /* 화면 넓이에 꽉 맞도록 설정 */
 .top_container {
   display: flex;
+  width: 100%;
   height: 80px;
   justify-content: center;
   align-items: center;
