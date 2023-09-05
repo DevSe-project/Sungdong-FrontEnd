@@ -124,6 +124,12 @@ export function RelatedData(props) {
   // 장바구니 담기 함수
   function basketRelatedData() {
     // 유효성 체크
+    if(!props.login){
+      alert("로그인 후 이용가능한 서비스입니다.")
+      navigate("/login");
+      return;
+    }
+
     if (selectedItems.length === 0) {
       alert("먼저 담을 상품을 체크해주세요!");
       return;

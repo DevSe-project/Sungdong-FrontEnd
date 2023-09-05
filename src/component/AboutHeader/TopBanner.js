@@ -14,8 +14,6 @@ export function TopBanner(props) {
   const [topTab, setTopTab] = useState(null); // 현재 활성화된 탭을 추적
 
   useEffect(() => {
-    const tabstate = JSON.parse(localStorage.getItem('tabState'));
-    setTopTab(tabstate);
 
     // 경로에 따른 상태 초기화
     if (location.pathname === '/' || location.pathname === '/login') {
@@ -62,6 +60,7 @@ export function TopBanner(props) {
         {
           item: '문의하기',
           link: '/userservice/ask',
+          require : !props.login
         }
       ],
     },
@@ -73,11 +72,13 @@ export function TopBanner(props) {
       },
       subMenuItems: [{
         item: '내 정보 관리',
-        link: '/mypages'
+        link: '/mypages',
+        require : !props.login
       },
       {
         item: '장바구니 목록',
         link: '/basket',
+        require : !props.login
       },
       {
         item: '내가 찜한 목록',
@@ -86,6 +87,7 @@ export function TopBanner(props) {
       {
         item: '주문 / 배송 게시판',
         link: '/delivery',
+        require : !props.login
       }],
     },
   ];
@@ -151,7 +153,12 @@ export function TopBanner(props) {
             >
               <span
                 className={styles.link}
-                onClick={() => { navigate(`${item.title.link}`) }}>
+                onClick={() => { 
+                  if(item.require){
+                    alert("로그인이 필요한 서비스입니다.");
+                    return;
+                  } 
+                    navigate(`${item.title.link}`) }}>
                 {item.title.item}
               </span>
               {subMenuStates[index] && (
@@ -159,7 +166,14 @@ export function TopBanner(props) {
                   className="sub-menu">
                   {item.subMenuItems.map((subMenuItem, subMenuItemindex) => (
                     <li
-                      onClick={() => navigate(`${subMenuItem.link}`)}
+                      onClick={() => {
+                        if(subMenuItem.require){
+                          alert("로그인이 필요한 서비스입니다.");
+                          navigate("/login");
+                          return;
+                        } 
+                        navigate(`${subMenuItem.link}`)
+                      }}
                       className={styles.sub_item}
                       key={subMenuItemindex}>
                       {subMenuItem.item}

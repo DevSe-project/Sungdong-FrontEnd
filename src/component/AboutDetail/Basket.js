@@ -32,6 +32,9 @@ export function Basket(props){
   // 배송 주문 건 팝업띄우기
   const [openDeliveryModal, setOpenDeliveryModal] = useState(true);
 
+  //로그인 정보 불러오기
+  const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'))
+
   // 일정 시간 후 팝업 닫음
   useEffect(()=> {
     const opentime = setTimeout(() => {
@@ -189,7 +192,7 @@ export function Basket(props){
       && (selectedItems !== null || selectedItems.length > 0)) {
       const editedData = selectedItems.map((item) => ({
         productId : item.id,
-        userId: "asdfx100", 
+        userId: inLogin.id, 
         productName : item.title,
         supply: item.supply,
         cnt : Number(item.cnt), 
