@@ -10,10 +10,6 @@ export function Category(props){
     // 필터된 항목을 저장할 상태 변수
     const [filteredItems, setFilteredItems] = useState([]);
 
-    // 카테고리 목록
-    const categories = [props.categoryData && props.categoryData.map((item)=> item.title)];
-    const subCategories = [props.categoryData && props.categoryData.subMenuItems.map((item)=> item.item)];
-
     // 선택된 카테고리 변경 핸들러
     const handleCategoryChange = (category) => {
       setSelectedCategory(category);
@@ -23,30 +19,38 @@ export function Category(props){
     };
     // 카테고리에 따라 아이템 필터링
     useEffect(() => {
-      if (props.data && selectedCategory === '전체' && selectedSubCategory === null) {
-        setFilteredItems(props.data);
-      } else {
-        if(props.data && selectedSubCategory !== null){
-          const filtered = props.data.filter((item) => item.category.sub === selectedSubCategory);
-          const addCntList = filtered.map((item,index) => ({
+      if(props.data){
+        if (selectedCategory === '전체' && selectedSubCategory === null) {
+          const addCntList = props.data.map((item,index) => ({
             ...item,
             cnt: item.cnt ? item.cnt : 1,
             finprice : item.finprice ? item.finprice : item.price,
             listId : index,
           }));
           setFilteredItems(addCntList);
-        } else if(props.data && selectedSubCategory === null){
-          const filtered = props.data.filter((item) => item.category.main === selectedCategory);
-          const addCntList = filtered.map((item,index) => ({
-            ...item,
-            cnt: item.cnt ? item.cnt : 1,
-            finprice : item.finprice ? item.finprice : item.price,
-            listId : index,
-          }));
-          setFilteredItems(addCntList);
+        } else {
+          if(selectedSubCategory !== null){
+            const filtered = props.data.filter((item) => item.category.sub === selectedSubCategory);
+            const addCntList = filtered.map((item,index) => ({
+              ...item,
+              cnt: item.cnt ? item.cnt : 1,
+              finprice : item.finprice ? item.finprice : item.price,
+              listId : index,
+            }));
+            setFilteredItems(addCntList);
+          } else if(selectedSubCategory === null){
+            const filtered = props.data.filter((item) => item.category.main === selectedCategory);
+            const addCntList = filtered.map((item,index) => ({
+              ...item,
+              cnt: item.cnt ? item.cnt : 1,
+              finprice : item.finprice ? item.finprice : item.price,
+              listId : index,
+            }));
+            setFilteredItems(addCntList);
+          }
         }
       }
-    }, [setSelectedCategory, props.setData]);
+    }, [props.data]);
 
     const navigate = useNavigate();
 
@@ -227,9 +231,11 @@ export function Category(props){
   
   return(
     <div>
-      <TopBanner categoryData={props.categoryData} setCategoryData={props.setCategoryData} login={props.login} setLogin={props.setLogin} iconHovered={props.iconHovered} iconMouseEnter={props.iconMouseEnter} iconMouseLeave={props.iconMouseLeave} icon_dynamicStyle={props.icon_dynamicStyle} text_dynamicStyle={props.text_dynamicStyle} category_dynamicStyle={props.category_dynamicStyle} iconOnClick={props.iconOnClick} />
-      {filteredItems ? filteredItems.map((item)=>
-      <>
+      <TopBanner categoryData={props.categoryData} setCategoryData={props.setCategoryData} 
+      login={props.login} setLogin={props.setLogin} iconHovered={props.iconHovered} 
+      iconMouseEnter={props.iconMouseEnter} iconMouseLeave={props.iconMouseLeave} 
+      icon_dynamicStyle={props.icon_dynamicStyle} text_dynamicStyle={props.text_dynamicStyle} 
+      category_dynamicStyle={props.category_dynamicStyle} iconOnClick={props.iconOnClick} />
         <div className={styles.buttonBox}>
           <button className={styles.button} onClick={()=> basketRelatedData()}>
             장바구니 추가
@@ -400,9 +406,6 @@ export function Category(props){
               <i className="far fa-angle-right"/>
           </button>
         </div>
-      </>
-      )
-      : '로딩중'}
     </div>
   )
 }
