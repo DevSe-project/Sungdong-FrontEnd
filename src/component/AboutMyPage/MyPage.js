@@ -3,11 +3,28 @@ import { TopBanner } from "../AboutHeader/TopBanner";
 import styles from "./Mypage.module.css";
 export default function MyPage(props) {
 
-  const [callUserData, setCallUserData] = useState()
+  const [userProfile, setUserProfile] = useState(null);
 
+  // 현재 로그인 된 유저의 데이터를 호출
   useEffect(() => {
-    
-  }, [])
+    // 로그인 상태 유지
+    const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'));
+    if (inLogin) { //저장된 로그인Data가 존재
+      props.setLogin(true); //로그인상태유지
+      console.log(inLogin.id);
+    }
+    if (props.userData) { //데이터 로딩 시간을 1500ms로 지정해놨기 때문에 불러들였다면, 표
+      const findUser = props.userData.find(userData => userData.id === inLogin.id);
+      if (findUser) {
+        // 사용자 데이터를 state에 저장
+        setUserProfile(findUser);
+        console.log(userProfile);
+      } else {
+        // 현재 새로고침하면 userData가 연동 안 되는 버그가 있음.
+      }
+    }
+  })
+  // 조건에 부합하는 해당 유저의 데이터를 호출
   return (
     <div>
       {/* 탑배너 & 카테고리 */}
@@ -21,7 +38,7 @@ export default function MyPage(props) {
           {/* 상호명 | 대표자 |  사업자번호 */}
           <tr className={styles.tr}>
             <th className={styles.th}>상호명</th>
-            <td className={styles.td}>대충 상호명</td>
+            <td className={styles.td}>{userProfile.name}</td>
             <th className={styles.th}>대표자</th>
             <td className={styles.td}>대충 대표자명</td>
             <th className={styles.th}>사업자번호</th>
@@ -30,11 +47,11 @@ export default function MyPage(props) {
           {/* 아이디 | 비밀번호 | 이메일 */}
           <tr className={styles.tr}>
             <th className={styles.th}>아이디</th>
-            <td className={styles.td}>대충 아이디</td>
+            <td className={styles.td}>{userProfile.id}</td>
             <th className={styles.th}>비밀번호</th>
-            <td className={styles.td}>대충 비밀번호</td>
+            <td className={styles.td}>{userProfile.password}</td>
             <th className={styles.th}>E-MAIL</th>
-            <td className={styles.td}>대충 이메일</td>
+            <td className={styles.td}>{userProfile.email}</td>
           </tr>
           {/* 업태 | 종목 */}
           <tr className={styles.tr}>
@@ -52,7 +69,7 @@ export default function MyPage(props) {
             <th className={styles.th}>FAX</th>
             <td className={styles.td}>대충 FAX임</td>
             <th className={styles.th}>전화번호</th>
-            <td className={styles.td}>대충 전화번호임</td>
+            <td className={styles.td}>{userProfile.num1}-{userProfile.num2}-{userProfile.num3}</td>
           </tr>
         </table>
       </div>
