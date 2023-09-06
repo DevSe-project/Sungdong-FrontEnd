@@ -3,7 +3,6 @@ import styles from './Login.module.css';
 import MainLogo from '../../image/MainLogo.jpeg';
 import { useState } from 'react';
 import FindModal from './FindModal';
-import { UserData } from '../Data/UserData';
 import CodeInputModal from './CodeInputModal';
 
 export function Login(props) {
@@ -41,7 +40,6 @@ export function Login(props) {
       window.location.reload();
       console.log(props.userData);
     } else { //일치하지 않다면
-      console.log(id === UserData.id)
       alert('아이디 혹은 비밀번호를 확인주세요.'); //경고문구 출력
       console.log(props.userData.address);
     }
