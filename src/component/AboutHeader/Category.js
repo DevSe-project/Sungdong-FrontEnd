@@ -249,149 +249,165 @@ export function Category(props){
       iconMouseEnter={props.iconMouseEnter} iconMouseLeave={props.iconMouseLeave} 
       icon_dynamicStyle={props.icon_dynamicStyle} text_dynamicStyle={props.text_dynamicStyle} 
       category_dynamicStyle={props.category_dynamicStyle} iconOnClick={props.iconOnClick} />
+        <div className={styles.topTitle}>
+          <h1>카테고리</h1>
+        </div>
         <div className={styles.buttonBox}>
-          <button className={styles.button} onClick={()=> basketRelatedData()}>
-            장바구니 추가
+          <button className={styles.button} onClick={()=> navigate("/basket")}>
+            장바구니 이동
           </button>
         </div>
-        <table className={styles.table}>
-          <thead 
-          style={{backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)'}}
-          >
-            <tr>
-              <th>이미지</th>
-              <th>상품코드</th>
-              <th className={styles.title}>상품명</th>
-              <th>단위</th>
-              <th>표준가</th>
-              <th>
-                <input 
-                  type='checkbox'
-                  checked={selectAll}
-                  onChange={()=>handleSelectAllChange()}/>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {props.data 
-            ? filteredItems.length > 0
-            ? getCurrentPagePosts().map((item, index)=> (
-            <React.Fragment key={index}>
-              <tr className={styles.list}>
-                <td>{item.image}</td>
-                <td>{item.id}</td>
-                <td className={styles.titleTd} onClick={()=>handleItemClick(item.id)}>
-                  <h5>{item.title} [ 더보기 {selectedData === item.id  
-                  ? <i className="fa-sharp fa-solid fa-caret-up"></i>
-                  : <i className="fa-sharp fa-solid fa-caret-down"></i>} ]
-                  </h5>
-                </td>
-                <td>EA</td>
-                <td>{item.price}</td>
-                <td>
-                  <input 
-                    checked={selectedItems.includes(item)}
-                    onChange={() => checkedBox(item)}
-                    type='checkbox'
-                  />   
-                </td>
-              </tr>
-              {/* 모달 */}
-              {selectedData === item.id && (
+        <div className={styles.tableLocation}>
+          <table className={styles.table}>
+            <thead 
+            style={{backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)'}}
+            >
               <tr>
-                <td colSpan="6">
-                  <table className={styles.colTable}>
-                    <thead style={{backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.6)'}}>
-                      <tr>
-                        <th style={{width: '15%'}}>
-                          브랜드
-                        </th>
-                        <th style={{width: '25%'}}>
-                          상세보기
-                        </th>
-                        <th style={{width: '15%'}}>
-                          옵션
-                        </th>
-                        <th style={{width: '15%'}}>
-                          개수
-                        </th>
-                        <th style={{width: '15%'}}>
-                          적용률
-                        </th>
-                        <th style={{width: '15%'}}>
-                          공급가
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                          {item.brand}
-                        </td>
-                        <td 
-                          className={styles.titleTd}
-                          onClick={()=>navigate(`/detail/${item.id}`)}>
-                          상세보기
-                        </td>
-                        <td>
-                          {item.option 
-                          ?                   
-                          <div style={{ width: '5em', display: 'flex', alignItems:'center', textAlign: 'center', justifyContent: 'center'}}>
-                            <select 
-                            value={optionSelected[index] || ""}
-                            onChange={(e)=>{optionChange(e, index)}}
-                            className={styles.selectSize}
-                            >
-                              <option value="" disabled>옵션 선택</option>
-                              {item.option.map((item, index) =>
-                              <option key={index} value={item.value}>{item.value}</option>
-                              )}
-                            </select>
-                          </div>  : '없음'}
-                        </td>
-                        <td>
-                        {!editStatus[index]
-                        ? item.cnt
-                        : <input value={count} className={styles.input} onChange={maxLengthCheck} minLength={1} maxLength={3} min={0} max={999} type='number' placeholder='숫자만 입력'/> }
-                        <br/>
-  
-                        {!editStatus[index] 
-                        ? <button
-                          onClick={()=>{editItem(index)}} 
-                          className={styles.editButton}
-                          >개수 수정
-                          </button> 
-                        : <button 
-                          className={styles.editButton}
-                          onClick={()=>updatedItem(index)}
-                          >수정 완료
-                          </button>
-                        }
-                        </td>
-                        <td>
-                          {item.discount}%
-                        </td>
-                        <td>
-                        {item.finprice
-                        ? item.discount
-                        ? `\\${ item.finprice - (((item.price/100)*item.discount)*item.cnt)}`
-                        : `\\${item.finprice}`
-                        : item.price}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </td>
+                <th>이미지</th>
+                <th>상품코드</th>
+                <th>상세보기</th>
+                <th>상품명</th>
+                <th>단위</th>
+                <th>표준가</th>
+                <th>더보기</th>
               </tr>
-  
-              )}
-              </React.Fragment>
-              ))
-            : <tr><td>해당하는 상품과 관련된 상품이 존재하지 않습니다.</td></tr>
-            : <tr><td>로딩중</td></tr>
-            }
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {props.data 
+              ? filteredItems.length > 0
+              ? getCurrentPagePosts().map((item, index)=> (
+              <React.Fragment key={index}>
+                <tr className={styles.list}>
+                  <td>{item.image}</td>
+                  <td>{item.id}</td>
+                  <td 
+                    style={{cursor: 'pointer'}}
+                    onClick={()=>navigate(`/detail/${item.id}`)}>
+                    상세보기
+                  </td>
+                  <td className={styles.titleTd} onClick={()=>handleItemClick(item.id)}>
+                    <h5>{item.title} [ 더보기 {selectedData === item.id  
+                    ? <i className="fa-sharp fa-solid fa-caret-up"></i>
+                    : <i className="fa-sharp fa-solid fa-caret-down"></i>} ]
+                    </h5>
+                  </td>
+                  <td>EA</td>
+                  <td>{item.price}</td>
+                  <td 
+                    style={{cursor: 'pointer'}}
+                    onClick={()=>handleItemClick(item.id)}>
+                    [ 더보기&nbsp;{selectedData === item.id  
+                    ? <i className="fa-sharp fa-solid fa-caret-up"></i>
+                    : <i className="fa-sharp fa-solid fa-caret-down"></i>}&nbsp;]
+                  </td>
+                </tr>
+                {/* 모달 */}
+                {selectedData === item.id && (
+                <tr>
+                  <td colSpan="7">
+                    <table className={styles.colTable}>
+                      <thead style={{ backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.6)'}}>
+                        <tr>
+                          <th style={{width: '15%'}}>
+                            브랜드
+                          </th>
+                          <th style={{width: '10%'}}>
+                            옵션
+                          </th>
+                          <th style={{width: '15%'}}>
+                            개수
+                          </th>
+                          <th style={{width: '15%'}}>
+                            적용률
+                          </th>
+                          <th style={{width: '15%'}}>
+                            적용가
+                          </th>
+                          <th style={{width: '15%'}}>
+                            공급가
+                          </th>
+                          <th style={{width: '20%'}}>
+                            <button className={styles.button} onClick={()=> basketRelatedData()}>장바구니 추가</button>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            {item.brand}
+                          </td>
+                          <td>
+                            {item.option 
+                            ?                   
+                            <div style={{ width: '100%', display: 'flex', alignItems:'center', textAlign: 'center', justifyContent: 'center'}}>
+                              <select 
+                              value={optionSelected[index] || ""}
+                              onChange={(e)=>{optionChange(e, index)}}
+                              className={styles.selectSize}
+                              >
+                                <option value="" disabled>옵션 선택</option>
+                                {item.option.map((item, index) =>
+                                <option key={index} value={item.value}>{item.value}</option>
+                                )}
+                              </select>
+                            </div>  : '없음'}
+                          </td>
+                          <td>
+                          {!editStatus[index]
+                          ? item.cnt
+                          : <input value={count} className={styles.input} onChange={maxLengthCheck} minLength={1} maxLength={3} min={0} max={999} type='number' placeholder='숫자만 입력'/> }
+                          <br/>
+    
+                          {!editStatus[index] 
+                          ? <button
+                            onClick={()=>{editItem(index)}} 
+                            className={styles.editButton}
+                            >개수 수정
+                            </button> 
+                          : <button 
+                            className={styles.editButton}
+                            onClick={()=>updatedItem(index)}
+                            >수정 완료
+                            </button>
+                          }
+                          </td>
+                          <td>
+                            {item.discount}%
+                          </td>
+                          <td>
+                            {item.discount
+                            ? `\\${((item.price/100)*item.discount)*item.cnt}`
+                            : 0}
+                          </td>
+                          <td>
+                          {item.finprice
+                          ? item.discount
+                          ? `\\${ item.finprice - (((item.price/100)*item.discount)*item.cnt)}`
+                          : `\\${item.finprice}`
+                          : item.price}
+                          </td>
+                          <td>
+                            <input 
+                              checked={selectedItems.includes(item)}
+                              onChange={() => checkedBox(item)}
+                              type='checkbox'
+                            />   
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+    
+                )}
+                </React.Fragment>
+                ))
+              : <tr><td>해당하는 상품과 관련된 상품이 존재하지 않습니다.</td></tr>
+              : <tr><td>로딩중</td></tr>
+              }
+            </tbody>
+          </table>
+        </div>
         <div className={styles.buttonContainer}>
           {/* 이전 페이지 */}
           <button

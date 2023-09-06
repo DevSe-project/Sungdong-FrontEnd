@@ -124,7 +124,7 @@ function App() {
       setCodeState(IssuanceCode);
       setCategoryData(CategoryDataObj);
       JSON.parse(sessionStorage.getItem('saveLoginData'));
-    }, 1500)
+    }, 1000)
 
     return () => clearTimeout(dataload)
   }, [])
