@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { TopBanner } from "./TopBanner";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styles from './Category.module.css'
 import React from 'react';
 export function Category(props){
@@ -76,9 +76,6 @@ export function Category(props){
     // 체크박스를 통해 선택한 상품들을 저장할 상태 변수
     const [selectedItems, setSelectedItems] = useState([]);
   
-    // 전체 선택 체크박스 상태를 저장할 상태 변수
-    const [selectAll, setSelectAll] = useState(false);
-  
     //Td 선택시 Modal State 변수
     const [selectedData, setSelectedData] = useState(null);
   
@@ -105,30 +102,13 @@ export function Category(props){
       const startIndex = (currentPage - 1) * 5; // 한 페이지에 5개씩 표시
       return filteredItems.slice(startIndex, startIndex + 5);
     };
-  
-  
-      // 전체 선택 체크박스 클릭 시 호출되는 함수
-      function handleSelectAllChange() {
-        setSelectAll(!selectAll);
-        
-        if (!selectAll) {
-            const allId = filteredItems.map((item) => item);
-            setSelectedItems(allId);
-          } else {
-            setSelectedItems([]);
-          }
-      };
     
       // 체크박스 클릭 시 호출되는 함수
       function checkedBox(product) {
         if (selectedItems.includes(product)) { //productID가 중복이면 true == 이미 체크박스가 클릭되어 있으면
           setSelectedItems(selectedItems.filter((item) => item !== product)); //체크박스를 해제함 == 선택한 상품 저장 변수에서 제외
-          setSelectAll(false);
         } else {
           setSelectedItems([...selectedItems, product]); //selectedItems의 배열과 productID 배열을 합쳐 다시 selectedItems에 저장
-          if(selectedItems.length + 1 === filteredItems.length){
-            setSelectAll(true);
-          }
         }
       };
   
@@ -234,6 +214,7 @@ export function Category(props){
       props.setBasketList([...props.basketList, ...basketProductsToAdd]);
     
       alert("해당 상품이 장바구니에 추가되었습니다.");
+      setSelectedItems([]);
     }
     
     function optionChange(e, index) {
@@ -255,6 +236,9 @@ export function Category(props){
         <div className={styles.buttonBox}>
           <button className={styles.button} onClick={()=> navigate("/basket")}>
             장바구니 이동
+          </button>
+          <button className={styles.button} onClick={()=> basketRelatedData()}>
+            선택 항목 장바구니 추가
           </button>
         </div>
         <div className={styles.tableLocation}>
@@ -281,20 +265,17 @@ export function Category(props){
                   <td>{item.image}</td>
                   <td>{item.id}</td>
                   <td 
-                    style={{cursor: 'pointer'}}
+                    className={styles.detailView}
                     onClick={()=>navigate(`/detail/${item.id}`)}>
                     상세보기
                   </td>
                   <td className={styles.titleTd} onClick={()=>handleItemClick(item.id)}>
-                    <h5>{item.title} [ 더보기 {selectedData === item.id  
-                    ? <i className="fa-sharp fa-solid fa-caret-up"></i>
-                    : <i className="fa-sharp fa-solid fa-caret-down"></i>} ]
-                    </h5>
+                    <h5>{item.title}</h5>
                   </td>
                   <td>EA</td>
                   <td>{item.price}</td>
                   <td 
-                    style={{cursor: 'pointer'}}
+                    className={styles.detailView}
                     onClick={()=>handleItemClick(item.id)}>
                     [ 더보기&nbsp;{selectedData === item.id  
                     ? <i className="fa-sharp fa-solid fa-caret-up"></i>
@@ -308,22 +289,22 @@ export function Category(props){
                     <table className={styles.colTable}>
                       <thead style={{ backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.6)'}}>
                         <tr>
-                          <th style={{width: '15%'}}>
+                          <th style={{width: '25%'}}>
                             브랜드
                           </th>
                           <th style={{width: '10%'}}>
                             옵션
                           </th>
-                          <th style={{width: '15%'}}>
+                          <th style={{width: '20%'}}>
                             개수
                           </th>
-                          <th style={{width: '15%'}}>
+                          <th style={{width: '10%'}}>
                             적용률
                           </th>
-                          <th style={{width: '15%'}}>
+                          <th style={{width: '10%'}}>
                             적용가
                           </th>
-                          <th style={{width: '15%'}}>
+                          <th style={{width: '10%'}}>
                             공급가
                           </th>
                           <th style={{width: '20%'}}>

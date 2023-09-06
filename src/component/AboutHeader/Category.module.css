@@ -132,3 +132,11 @@
   padding-left: 1.5em;
   padding-right: 1.5em;
 }
+
+.detailView{
+  cursor: pointer;
+}
+
+.detailView:hover{
+  color: gray;
+}
