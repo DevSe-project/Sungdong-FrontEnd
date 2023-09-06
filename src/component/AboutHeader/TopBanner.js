@@ -14,9 +14,11 @@ export function TopBanner(props) {
   const [topTab, setTopTab] = useState(null); // 현재 활성화된 탭을 추적
 
   useEffect(() => {
-
+    const tabstate = JSON.parse(localStorage.getItem('tabState'));
+    setTopTab(tabstate);
+    
     // 경로에 따른 상태 초기화
-    if (location.pathname === '/' || location.pathname === '/login') {
+    if (location.pathname === '/' || location.pathname === '/login' || location.pathname === '/category') {
       localStorage.removeItem('tabState');
       setTopTab(null);
     }
@@ -68,7 +70,8 @@ export function TopBanner(props) {
       id: 3,
       title: {
         item: '마이페이지',
-        link: '/mypages'
+        link: '/mypages',
+        require : !props.login
       },
       subMenuItems: [{
         item: '내 정보 관리',
@@ -154,8 +157,9 @@ export function TopBanner(props) {
               <span
                 className={styles.link}
                 onClick={() => { 
-                  if(item.require){
+                  if(item.title.require){
                     alert("로그인이 필요한 서비스입니다.");
+                    navigate("/login");
                     return;
                   } 
                     navigate(`${item.title.link}`) }}>
@@ -197,7 +201,7 @@ export function TopBanner(props) {
       </div>
       
       {/* 클릭하면 나오는 카테고리바 */}
-      <CategoryBar category_dynamicStyle={props.category_dynamicStyle}/>
+      <CategoryBar selectedCategory={props.selectedCategory} setSelectedCategory={props.setSelectedCategory} selectedSubCategory={props.selectedSubCategory} setSelectedSubCategory={props.setSelectedSubCategory} data={props.data} setData={props.setData} categoryData={props.categoryData} setCategoryData={props.setCategoryData} category_dynamicStyle={props.category_dynamicStyle}/>
     </div>
   );
 }

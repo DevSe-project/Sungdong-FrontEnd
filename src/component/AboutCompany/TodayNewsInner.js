@@ -1,5 +1,4 @@
 import styles from './TodayNewsInner.module.css'
-import { CategoryBar } from '../AboutHeader/CategoryBar'
 import { TopBanner } from '../AboutHeader/TopBanner'
 import { useNavigate, useParams } from 'react-router-dom'
 export function TodayNewsInner(props){
@@ -8,8 +7,8 @@ export function TodayNewsInner(props){
   const loadData = ()=> {
     if(props.todayTopicData){
       //입력된 id과 data내부의 id값 일치하는 값 찾아 변수 선언
-      const data = props.todayTopicData.find((item)=>item.id===id);
-      return data;
+      const listData = props.todayTopicData.find((item)=>item.id==id);
+      return listData;
     } else {
       return <div>데이터를 불러오는 중이거나 상품을 찾을 수 없습니다.</div>;
     }
@@ -20,7 +19,7 @@ export function TodayNewsInner(props){
 
   return(
     <div>
-      <TopBanner login={props.login} setLogin={props.setLogin} iconHovered={props.iconHovered} iconMouseEnter={props.iconMouseEnter} iconMouseLeave={props.iconMouseLeave} icon_dynamicStyle={props.icon_dynamicStyle} text_dynamicStyle={props.text_dynamicStyle} category_dynamicStyle={props.category_dynamicStyle} iconOnClick={props.iconOnClick} />
+      <TopBanner data={props.data} setData={props.setData} categoryData={props.categoryData} setCategoryData={props.setCategoryData} login={props.login} setLogin={props.setLogin} iconHovered={props.iconHovered} iconMouseEnter={props.iconMouseEnter} iconMouseLeave={props.iconMouseLeave} icon_dynamicStyle={props.icon_dynamicStyle} text_dynamicStyle={props.text_dynamicStyle} category_dynamicStyle={props.category_dynamicStyle} iconOnClick={props.iconOnClick} />
       <main className={styles.body}>
         <div className={styles.title}>
           <h1>오늘의 뉴스</h1>
@@ -29,7 +28,8 @@ export function TodayNewsInner(props){
           {/* 본문 제목 */}
           <div>
             <h1>{props.todayTopicData && postData ? postData.title
-            : '로딩중'}</h1>
+            : '로딩중'}
+            </h1>
           </div>
           <div>
             <h4>관리자 | {props.todayTopicData && postData ? postData.date

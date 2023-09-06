@@ -3,32 +3,26 @@ import { TopBanner } from "../AboutHeader/TopBanner";
 import styles from "./Mypage.module.css";
 export default function MyPage(props) {
 
-  const [userProfile, setUserProfile] = useState(null);
-
+  const [userProfile, setUserProfile] = useState([]);
+  const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'));
   // 현재 로그인 된 유저의 데이터를 호출
   useEffect(() => {
-    // 로그인 상태 유지
-    const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'));
-    if (inLogin) { //저장된 로그인Data가 존재
-      props.setLogin(true); //로그인상태유지
-      console.log(inLogin.id);
-    }
-    if (props.userData) { //데이터 로딩 시간을 1500ms로 지정해놨기 때문에 불러들였다면, 표
-      const findUser = props.userData.find(userData => userData.id === inLogin.id);
-      if (findUser) {
-        // 사용자 데이터를 state에 저장
-        setUserProfile(findUser);
-        console.log(userProfile);
-      } else {
-        // 현재 새로고침하면 userData가 연동 안 되는 버그가 있음.
+    if (props.login) { //저장된 로그인Data가 존재
+      if (props.userData) { //데이터 로딩 시간을 1500ms로 지정해놨기 때문에 불러들였다면, 표
+        const findUser = props.userData.find(userData => userData.id == inLogin.id);
+        if (findUser) {
+          // 사용자 데이터를 state에 저장
+          setUserProfile(findUser);
+          console.log(userProfile);
+        }
       }
     }
-  })
+  }, [inLogin, props.userData])
   // 조건에 부합하는 해당 유저의 데이터를 호출
   return (
     <div>
       {/* 탑배너 & 카테고리 */}
-      <TopBanner login={props.login} setLogin={props.setLogin} iconHovered={props.iconHovered} iconMouseEnter={props.iconMouseEnter} iconMouseLeave={props.iconMouseLeave} icon_dynamicStyle={props.icon_dynamicStyle} category_dynamicStyle={props.category_dynamicStyle} iconOnClick={props.iconOnClick} text_dynamicStyle={props.text_dynamicStyle} />
+      <TopBanner data={props.data} setData={props.setData} categoryData={props.categoryData} setCategoryData={props.setCategoryData} login={props.login} setLogin={props.setLogin} iconHovered={props.iconHovered} iconMouseEnter={props.iconMouseEnter} iconMouseLeave={props.iconMouseLeave} icon_dynamicStyle={props.icon_dynamicStyle} category_dynamicStyle={props.category_dynamicStyle} iconOnClick={props.iconOnClick} text_dynamicStyle={props.text_dynamicStyle} />
       {/* 마이페이지 body */}
       <div className={styles.body}>
         {/* 내 정보(수정) */}
