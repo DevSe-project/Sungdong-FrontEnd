@@ -63,7 +63,7 @@ export function Category(props){
           }
         }
       }
-    }, [props.data]);
+    }, [props.data, selectedCategory, selectedSubCategory]);
 
     const navigate = useNavigate();
 

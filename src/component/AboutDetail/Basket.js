@@ -37,11 +37,11 @@ export function Basket(props){
 
   // 일정 시간 후 팝업 닫음
   useEffect(()=> {
-    const opentime = setTimeout(() => {
-      setOpenDeliveryModal(false)
-    }, 2000)
+    const opentime = setInterval(() => {
+      setOpenDeliveryModal((prev) => !prev)
+    }, 1000)
 
-    return () => clearTimeout(opentime)
+    return () => clearInterval(opentime)
   }, [])
 
   // 장바구니 탭 - 결제 탭에서 뒤로가기 시 뒤로가기 방지 후 장바구니 탭으로 이동
@@ -218,6 +218,7 @@ export function Basket(props){
       { id: 3, title: '결제하기' },
       { id: 4, title: '주문 완료' },
     ];
+
   return(
     <div>
       <TopBanner data={props.data} setData={props.setData} categoryData={props.categoryData} setCategoryData={props.setCategoryData} login={props.login} setLogin={props.setLogin} iconHovered={props.iconHovered} iconMouseEnter={props.iconMouseEnter} iconMouseLeave={props.iconMouseLeave} icon_dynamicStyle={props.icon_dynamicStyle} text_dynamicStyle={props.text_dynamicStyle} category_dynamicStyle={props.category_dynamicStyle} iconOnClick={props.iconOnClick} />
@@ -250,8 +251,16 @@ export function Basket(props){
         {/* 본문 시작 */}
         <div className={styles.body}>
           {/* 팝업 띄우기 */}
-            {openDeliveryModal &&
-            <div>오후 12시 이전 주문 건 당일배송, 오후 12시 이후 주문 건 익일 배송</div>}
+
+            <div style={{display: 'block', height: '2em', width: '50%'}}>
+              {openDeliveryModal &&
+              <h5 style={{
+                visibility: openDeliveryModal ? 'visible' : 'hidden', 
+                color: '#CC0000',
+                height: openDeliveryModal ? 'auto' : 0,
+                overflow: 'hidden',
+              }}>오후 12시 이전 주문 건 당일 배송, 오후 12시 이후 주문 건 익일 배송</h5>}
+            </div>
           {props.activeTab===3 ? <h3>고객님께서 결제하실 상품정보입니다.</h3>
           : props.activeTab===4 && <h3>다음 상품을 준비하여 고객님께 보내드리겠습니다.</h3>}
           

@@ -9,12 +9,10 @@ export function CategoryBar(props) {
     sessionStorage.removeItem('subCategory');
     sessionStorage.setItem('category', JSON.stringify(category));
     navigate("/category");
-    window.location.reload();
   };
   const handleSubCategoryChange = (category) => {
     sessionStorage.setItem('subCategory', JSON.stringify(category));
     navigate("/category");
-    window.location.reload();
   };
   const location = useLocation();
   const [activeTab, setActiveTab] = useState(null); // 현재 활성화된 탭을 추적
