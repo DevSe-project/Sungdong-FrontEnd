@@ -18,46 +18,55 @@ export function Category(props){
 
     // mainCategory와 subCategory가 바뀔 때 마다 실행
     useEffect(() => {
-      if(mainCategory){
-      setSelectedCategory(mainCategory);
-      } else {
-        setSelectedCategory('전체');
+      //props.categoryData가 있을 때만 진행
+      if (props.categoryData) {
+        if (mainCategory) {
+          setSelectedCategory(mainCategory);
+        }
+        // 메인 카테고리와 함께 출력하기 위해 로직 구성
+        if (subCategory) {
+          const findCategory = props.categoryData.find((item) =>
+            item.subMenuItems.some((item) => item.item === subCategory)
+          );
+          // 상위 카테고리를 찾으면 표시
+          if(findCategory) {
+          setSelectedSubCategory(subCategory);
+          setSelectedCategory(findCategory.title);
+          }
+        // 서브 카테고리가 없을때 초기값으로 변경
+        } else {
+          setSelectedSubCategory(null);
+        }
+        // 검색 카테고리는 상위 카테고리와 하위 카테고리가 없다.
+        if (resultSearch) {
+          setFilterSearch(resultSearch);
+          setSelectedCategory('전체');
+          setSelectedSubCategory(null);
+        } else {
+          setFilterSearch("");
+        }
       }
-      if(subCategory){
-      setSelectedSubCategory(subCategory);
-      } else {
-        setSelectedSubCategory(null);
-      }
-      if(resultSearch){
-        setFilterSearch(resultSearch);
-      } else {
-        setFilterSearch("");
-      }
+    }, [mainCategory, subCategory, resultSearch, props.categoryData]);
 
-    }, [mainCategory, subCategory, resultSearch]);
-
-
-    // // 선택된 카테고리 변경 핸들러
-    // const handleCategoryChange = (category) => {
-    //   setSelectedCategory(category);
-    // };
-    // const handleSubCategoryChange = (category) => {
-    //   setSelectedSubCategory(category);
-    // };
     // 카테고리에 따라 아이템 필터링
-
     useEffect(() => {
+      // 상품이 렌더링 되었을 때만 진행
       if(props.data){
+        // 조건1. 검색 필터가 공백이 아닐때 (검색 했을 때)
         if (filterSearch !== "") {
+          // 데이터에서 타이틀과 검색결과를 찾고
           const filtered = props.data.filter((item) =>
             item.title=== filterSearch)
+          // 목록 밑작업 해줌
           const addCntList = filtered.map((item, index) => ({
             ...item,
             cnt: item.cnt ? item.cnt : 1,
             finprice: item.finprice ? item.finprice : item.price,
             listId: index,
           }));
+          // 필터링 된 아이템 표시
           setFilteredItems(addCntList);
+        // 카테고리에 해당되는 필터링이 없을 때 (검색도 X)
         } else if (selectedCategory === '전체' && selectedSubCategory === null) {
           const addCntList = props.data.map((item,index) => ({
             ...item,
@@ -67,6 +76,7 @@ export function Category(props){
           }));
           setFilteredItems(addCntList);
         } else {
+          // 서브 카테고리를 선택했을 때
           if(selectedSubCategory !== null){
             const filtered = props.data.filter((item) => item.category.sub === selectedSubCategory);
             const addCntList = filtered.map((item,index) => ({
@@ -76,6 +86,7 @@ export function Category(props){
               listId : index,
             }));
             setFilteredItems(addCntList);
+          // 상위 카테고리만 선택했을 때
           } else if(selectedSubCategory === null){
             const filtered = props.data.filter((item) => item.category.main === selectedCategory);
             const addCntList = filtered.map((item,index) => ({
@@ -241,13 +252,49 @@ export function Category(props){
       alert("해당 상품이 장바구니에 추가되었습니다.");
       setSelectedItems([]);
     }
-    
+    // 옵션 변경 함수
     function optionChange(e, index) {
       const newOptionSelected = [...optionSelected];
       newOptionSelected[index] = e.target.value;
       setOptionSelected(newOptionSelected);
     }
-  
+
+  // 카테고리 필터 부분
+    // 중복 처리
+    const isIncludeBrands = [...new Set(filteredItems.map((item) => item.brand))];
+    const isIncludeMaden = [...new Set(filteredItems.map((item) => item.madeIn))];
+
+    // 브랜드별 및 원산지별 개수를 계산.
+    const brandCounts = isIncludeBrands.map((brand) => ({
+      brand,
+      count: filteredItems.filter((item) => item.brand === brand).length,
+    }));
+    const madenCounts = isIncludeMaden.map((madeIn) => ({
+      madeIn,
+      count: filteredItems.filter((item) => item.madeIn === madeIn).length,
+    }));
+    const categoryFilter = [
+      {
+        label: '카테고리',
+        content:
+        filterSearch !== '' 
+        ? '검색결과' 
+        : selectedCategory !== '전체' 
+        ? selectedSubCategory
+        ? `${selectedCategory} > ${selectedSubCategory}` 
+        : selectedCategory : '전체',
+      },
+      {
+        label: '브랜드',
+        content: isIncludeBrands.map((brand) => `${brand}
+        (${brandCounts.find((item) => item.brand === brand).count})`).join(', '),
+      },
+      {
+        label: '원산지',
+        content: isIncludeMaden.map((madeIn) => `${madeIn}
+        (${madenCounts.find((item) => item.madeIn === madeIn).count})`).join(', '),
+      }
+    ];
   return(
     <div>
       <TopBanner data={props.data} setData={props.setData} categoryData={props.categoryData} setCategoryData={props.setCategoryData} 
@@ -257,6 +304,18 @@ export function Category(props){
       category_dynamicStyle={props.category_dynamicStyle} iconOnClick={props.iconOnClick} />
         <div className={styles.topTitle}>
           <h1>카테고리</h1>
+        </div>
+        <div className={styles.filterUI}>
+          {categoryFilter.map((item) =>
+          <>
+          <div className={styles.label}>
+            {item.label}
+          </div>
+          <div className={styles.content}>
+            {item.content}
+          </div>
+          </>
+          )}
         </div>
         <div className={styles.buttonBox}>
           <button className={styles.button} onClick={()=> navigate("/basket")}>

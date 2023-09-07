@@ -23,7 +23,7 @@ export let DataObj = [{
       main: '생활건강',
       sub: '공구',
     },
-    brand : '프로덕트랩',
+    brand : '프로덕트스프레이',
     madeIn : '중국',
     new : true,
   },
@@ -38,7 +38,7 @@ export let DataObj = [{
     content : "날렵한",
     discount : 0,
     supply : 99,
-    brand : '프로덕트랩',
+    brand : '세이프어스',
     madeIn : '중국',
     category: {
       main: '패션잡화',
@@ -71,7 +71,7 @@ export let DataObj = [{
     content : "골프공",
     discount : 0,
     supply : 99,
-    brand : '프로덕트랩',
+    brand : '프로덕트골프',
     madeIn : '중국',
     category: {
       main: '스포츠레저',
@@ -123,11 +123,11 @@ export let DataObj = [{
     content : "시원한 망토",
     discount: 0,
     supply : 99,
-    brand : '프로덕트랩',
+    brand : '썬쿨',
     madeIn : '중국',
     category: {
-      main: '패션의류',
-      sub: '남성의류'
+      main: '스포츠레저',
+      sub: '스포츠액세서리'
     },
     new : true,
   }]

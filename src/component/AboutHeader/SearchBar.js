@@ -13,15 +13,21 @@ export function SearchBar(props) {
   const inputRef = useRef(null);
 
 
+  // 검색 로직
   const handleSearch = (event) => {
+    // 입력 값을 저장하는 로직
     const query = event.target.value;
     setSearchTerm(query);
+    // 입력창이 공백이 아닐 때 (==검색 중이면?)
     if (query !== '') {
+      // 데이터 중 타이틀로들만 구성된 변수 생성 후 
+      // 그 변수들 중 첫 글자와 입력값이 일치하는 것을 연관 검색어 목록에 띄워줌
       const filteredtitle = props.data && props.data.map((item) => item.title);
       const filteredResults = filteredtitle.filter((word) =>
         word.startsWith(query)
       );
       setResults(filteredResults);
+    // 입력창이 공백이면 연관 검색어를 띄우지 않는다.
     } else {
       setResults([]);
     }
@@ -30,12 +36,12 @@ export function SearchBar(props) {
 
   const handleKeyDown = (event) => {
     // 방향키로 선택한 결과 항목 인덱스 업데이트
-    if (event.key === 'ArrowDown') {
+    if (event.key === 'ArrowDown') { // 아래 방향키
       event.preventDefault();
       setSelectedResultIndex((prevIndex) =>
         prevIndex < results.length - 1 ? prevIndex + 1 : prevIndex
       );
-    } else if (event.key === 'ArrowUp') {
+    } else if (event.key === 'ArrowUp') { // 위 방향키
       event.preventDefault();
       setSelectedResultIndex((prevIndex) =>
         prevIndex > 0 ? prevIndex - 1 : -1
@@ -47,6 +53,8 @@ export function SearchBar(props) {
       navigate("/category")
       setResults([]); // 결과 항목 숨기기
     } else if (event.key === 'Tab' && selectedResultIndex !== -1) {
+      // 탭 키 누르면 자동완성
+      event.preventDefault();
       setSearchTerm(results[selectedResultIndex]);
     }
   };
