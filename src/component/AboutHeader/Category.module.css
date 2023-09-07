@@ -91,11 +91,14 @@
 }
 
 .buttonBox{
-  width: 89%;
+  width: 80%;
   display: flex;
+  margin-left: 10%;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
   flex-direction: row;
   justify-content: flex-end;
-  margin: 0.5em;
+  align-items: center;
   gap: 0.5em;
 }
 
@@ -137,9 +140,17 @@
 }
 
 .content{
-  width: 68%;
+  display: flex;
+  width: 65%;
   justify-content: flex-start;
+  gap: 1em;
   text-align: left;
   border-left: 1px solid lightgray;
   padding-left: 1em;
+
+}
+
+.contentItem:hover{
+  cursor: pointer;
+  color: gray;
 }

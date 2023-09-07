@@ -261,40 +261,67 @@ export function Category(props){
 
   // 카테고리 필터 부분
     // 중복 처리
+    const isIncludeCategory = [...new Set(filteredItems.map((item) => item.category.sub ? item.category.sub : item.category.main))];
     const isIncludeBrands = [...new Set(filteredItems.map((item) => item.brand))];
     const isIncludeMaden = [...new Set(filteredItems.map((item) => item.madeIn))];
 
-    // 브랜드별 및 원산지별 개수를 계산.
-    const brandCounts = isIncludeBrands.map((brand) => ({
-      brand,
-      count: filteredItems.filter((item) => item.brand === brand).length,
-    }));
-    const madenCounts = isIncludeMaden.map((madeIn) => ({
-      madeIn,
-      count: filteredItems.filter((item) => item.madeIn === madeIn).length,
-    }));
     const categoryFilter = [
       {
         label: '카테고리',
-        content:
-        filterSearch !== '' 
-        ? '검색결과' 
-        : selectedCategory !== '전체' 
-        ? selectedSubCategory
-        ? `${selectedCategory} > ${selectedSubCategory}` 
-        : selectedCategory : '전체',
+        content: 
+        isIncludeCategory ? 
+        isIncludeCategory.map((category) => ({
+          title : category,
+          count : filteredItems.filter((item) => item.category.main === category).length > 0 
+          ? filteredItems.filter((item) => item.category.main === category).length
+          : filteredItems.filter((item) => item.category.sub === category).length,
+        }))
+        : filterSearch !== ''
+        ? '검색결과'
+        : '전체'
       },
       {
         label: '브랜드',
-        content: isIncludeBrands.map((brand) => `${brand}
-        (${brandCounts.find((item) => item.brand === brand).count})`).join(', '),
+        content: isIncludeBrands.map((brand) => ({
+          title: brand,
+          count: filteredItems.filter((item) => item.brand === brand).length,
+        }))
       },
       {
         label: '원산지',
-        content: isIncludeMaden.map((madeIn) => `${madeIn}
-        (${madenCounts.find((item) => item.madeIn === madeIn).count})`).join(', '),
+        content: isIncludeMaden.map((madeIn) => ({
+          title: madeIn,
+          count: filteredItems.filter((item) => item.madeIn === madeIn).length,
+        }))
       }
     ];
+
+    function handleCategoryClick(item, contentItem){
+      let filtered;
+
+      switch (item.label) {
+        case '브랜드':
+          filtered = filteredItems.filter((item) => item.brand === contentItem.title);
+          break;
+        case '원산지':
+          filtered = filteredItems.filter((item) => item.madeIn === contentItem.title);
+          break;
+        case '카테고리':
+          filtered = filteredItems.filter((item) => item.category.sub === contentItem.title);
+          break;
+        default:
+          filtered = [];
+      }
+  
+      const addCntList = filtered.map((item, index) => ({
+        ...item,
+        cnt: item.cnt ? item.cnt : 1,
+        finprice : item.finprice ? item.finprice : item.price,
+        listId : index,
+      }));
+  
+      setFilteredItems(addCntList);
+    };
   return(
     <div>
       <TopBanner data={props.data} setData={props.setData} categoryData={props.categoryData} setCategoryData={props.setCategoryData} 
@@ -312,7 +339,18 @@ export function Category(props){
             {item.label}
           </div>
           <div className={styles.content}>
-            {item.content}
+            {item.content && Array.isArray(item.content)
+            ? item.content.map((contentItem, index) => 
+            <div 
+            key={index} 
+            className={styles.contentItem}
+            onClick={()=> {
+              handleCategoryClick(item, contentItem)
+            }}>
+              {contentItem.title}({contentItem.count})
+            </div>
+            ) 
+            : item.content }
           </div>
           </>
           )}
