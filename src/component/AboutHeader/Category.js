@@ -262,7 +262,7 @@ export function Category(props){
               ? getCurrentPagePosts().map((item, index)=> (
               <React.Fragment key={index}>
                 <tr className={styles.list}>
-                  <td><img src={item.image.mini}></img></td>
+                  <td><img src={item.image.mini} alt='이미지'></img></td>
                   <td>{item.id}</td>
                   <td 
                     className={styles.detailView}

@@ -15,9 +15,6 @@ export function RelatedData(props) {
   // 체크박스를 통해 선택한 상품들을 저장할 상태 변수
   const [selectedItems, setSelectedItems] = useState([]);
 
-  // 전체 선택 체크박스 상태를 저장할 상태 변수
-  const [selectAll, setSelectAll] = useState(false);
-
   // 관련상품 리스트 
   const [relatedList, setRelatedList] = useState([]);
 
@@ -67,12 +64,8 @@ export function RelatedData(props) {
     function checkedBox(product) {
       if (selectedItems.includes(product)) { //productID가 중복이면 true == 이미 체크박스가 클릭되어 있으면
         setSelectedItems(selectedItems.filter((item) => item !== product)); //체크박스를 해제함 == 선택한 상품 저장 변수에서 제외
-        setSelectAll(false);
       } else {
         setSelectedItems([...selectedItems, product]); //selectedItems의 배열과 productID 배열을 합쳐 다시 selectedItems에 저장
-        if(selectedItems.length + 1 === relatedList.length){
-          setSelectAll(true);
-        }
       }
     };
 
@@ -218,7 +211,7 @@ export function RelatedData(props) {
             ? getCurrentPagePosts().map((item, index)=> (
             <React.Fragment key={index}>
               <tr className={styles.list}>
-                <td><img src={item.image.mini}/></td>
+                <td><img src={item.image.mini} alt='이미지'/></td>
                 <td>{item.id}</td>
                 <td 
                   className={styles.detailView}
