@@ -1,6 +1,5 @@
 import { useState } from "react";
 import styles from './RelativeJoin.module.css';
-import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 
@@ -44,7 +43,7 @@ export default function JoinForm(props) {
                         "corp_no": "0000000000000",
                         "b_sector": "",
                         "b_type": "",
-                        "b_adr": ""
+                        "b_adr": "",
                     }
                 ]
             })
@@ -566,7 +565,11 @@ export default function JoinForm(props) {
                         />
                         <button onClick={callApi}>사업자등록번호 인증</button>
                     </div>
-                    { apiResponse.status_code === "OK" ? <strong>정상적으로 인증되었습니다.</strong> : <strong>해당 번호로 인증할 수 없습니다.</strong> }
+                    {/* { apiResponse.status === "OK" 
+                    ? 
+                    <strong>정상적으로 인증되었습니다.</strong> 
+                    : 
+                    <strong>해당 번호로 인증할 수 없습니다.</strong> } */}
                 </li>
                 <li className={styles.inputContainer}>
                     {/* API 호출 결과 표시 */}
