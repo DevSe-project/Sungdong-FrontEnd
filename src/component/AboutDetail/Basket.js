@@ -192,6 +192,10 @@ export function Basket(props){
       && (selectedItems !== null || selectedItems.length > 0)) {
       const editedData = selectedItems.map((item) => ({
         productId : item.id,
+        image : {
+          mini : item.image.mini,
+          original : item.image.original,
+        },
         userId: inLogin.id, 
         productName : item.title,
         supply: item.supply,

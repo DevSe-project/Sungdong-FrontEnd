@@ -77,6 +77,10 @@ function buyThis(product, count){
         return {
           productId : product.id,
           userId: inLogin.id, 
+          image : {
+            mini : product.image.mini,
+            original : product.image.original,
+          },
           productName : product.title,
           cnt : Number(count), 
           supply: product.supply,
