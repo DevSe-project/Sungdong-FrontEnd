@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styles from './RelativeJoin.module.css';
-import CorporateMember from "./CorporateMembers";
+import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 
 export default function JoinForm(props) {
@@ -24,17 +25,78 @@ export default function JoinForm(props) {
         document.body.appendChild(script);
     }
 
+    // 사업자등록번호 인증 API
+    // API 호출 결과를 저장할 상태 변수
+    const [apiResponse, setApiResponse] = useState(null);
+    // API 호출 함수
+    const callApi = () => {
+        const API_KEY = '%2FRM319x1LSNsYv3Zs4dbkeZ4iIGKMDc54ysPEQBiGmcIqj3%2Badug9JP2VKliI7op92oe7EeDVFnx3bKiYGdnVg%3D%3D';
+        // API 호출
+        axios
+            .post('https://api.odcloud.kr/api/nts-businessman/v1/validate?serviceKey=' + API_KEY + '&returnType=JSON', {
+                "businesses": [
+                    {
+                        "b_no": props.inputData.corporationData.businessNum,
+                        "start_dt": "20000101",
+                        "p_nm": "홍길동",
+                        "p_nm2": "홍길동",
+                        "b_nm": "(주)테스트",
+                        "corp_no": "0000000000000",
+                        "b_sector": "",
+                        "b_type": "",
+                        "b_adr": ""
+                    }
+                ]
+            })
+            .then((response) => {
+                // API 호출 성공 시 데이터를 상태 변수에 저장
+                const responseData = response.data;
+    
+                if (responseData.status === "OK") {
+                    // 유효한 사업자 등록번호인 경우 데이터를 받아온다.
+                    setApiResponse(responseData);
+                } else {
+                    // 유효하지 않은 사업자 등록번호인 경우 알림창을 띄운다.
+                    alert("유효하지 않은 사업자 등록번호입니다.");
+                }
+            })
+            .catch((error) => {
+                // API 호출 실패 시 에러 처리
+                console.error('API 호출 중 에러:', error);
+            });
+    };
+
     //data 일치유무 체크
     let confirmPassword = props.inputData.password === props.inputData.confirmPassword;
 
-    return (
-        <div>
-            {/* 회원정보를 입력해주세요! */}
-            <strong className={styles.noti}>회원정보를 입력해주세요!</strong>
-
-            {/* 회원정보 입력란 */}
-            <ul className={styles.inputWrap}>
-                <div className={styles.indivisualMembers}>기본정보</div>
+    // 기업정보 컴포넌트 - 사업자등록번호 유효성검사가 통과되면 해당 사업자등록번호에 등록된 기업정보를 받아와 표시
+    // 현재 API에서 받아 온 데이터 연동 안 한 상태
+    const CorData = () => {
+        return (
+            <>
+                {/* 기업명 */}
+                <li className={styles.inputContainer}>
+                    <div className={styles.left}>기업명</div>
+                    <div className={styles.right}>
+                        <input
+                            className={styles.isInput}
+                            type='text'
+                            placeholder={'ex) OO전자'}
+                            value={props.inputData.corporationData.companyName}
+                            onChange={(e) => {
+                                props.setInputData(
+                                    (prevData) => ({
+                                        ...prevData,
+                                        corporationData: {
+                                            ...prevData.corporationData,
+                                            companyName: e.target.value
+                                        }
+                                    })
+                                )
+                            }}
+                        />
+                    </div>
+                </li>
 
                 {/* 개인 OR 기업 체크박스 */}
                 <li className={styles.inputContainer}>
@@ -54,7 +116,7 @@ export default function JoinForm(props) {
                                         )
                                     }}
                                 />
-                                <label htmlFor="indivisualMember">개인회원</label>
+                                <label htmlFor="indivisualMember">개인사업자</label>
                             </div>
                             <div className={styles.typeMember}>
                                 <input
@@ -69,12 +131,132 @@ export default function JoinForm(props) {
                                         )
                                     }}
                                 />
-                                <label htmlFor="corporateMember">기업회원</label>
+                                <label htmlFor="corporateMember">법인사업자</label>
                             </div>
                         </div>
-                        <div className={styles.notification}>기업회원은 아래에 추가 정보입력 란이 있습니다.</div>
                     </div>
                 </li>
+
+
+                {/* 대표자명 */}
+                <li className={styles.inputContainer}>
+                    <div className={styles.left}>대표자명</div>
+                    <div className={styles.right}>
+                        <input
+                            className={styles.isInput}
+                            type='text'
+                            placeholder={'홍길동'}
+                            value={props.inputData.corporationData.ceoName}
+                            onChange={(e) => {
+                                props.setInputData(prevData => ({
+                                    ...prevData,
+                                    corporationData: {
+                                        ...prevData.corporationData,
+                                        ceoName: e.target.value
+                                    }
+                                }))
+                            }}
+                        />
+                    </div>
+                </li>
+
+                {/* 대표번호 */}
+                <li className={styles.inputContainer}>
+                    <div className={styles.left}>대표번호</div>
+                    <div className={styles.right}>
+                        <input
+                            className={styles.phoneNum}
+                            type='text'
+                            placeholder={'ex) 010'}
+                            maxLength="3"
+                            size="6"
+                            value={props.inputData.corporationData.companyNum.num1}
+                            onChange={(e) => {
+                                props.setInputData(prevData => ({
+                                    ...prevData,
+                                    corporationData: {
+                                        ...prevData.corporationData,
+                                        companyNum: {
+                                            ...prevData.corporationData.companyNum,
+                                            num1: e.target.value
+                                        }
+                                    }
+                                }))
+                            }}
+                        />
+                        <input
+                            className={styles.phoneNum}
+                            type='text'
+                            placeholder={'ex) 1234'}
+                            maxLength="4"
+                            size="8"
+                            value={props.inputData.corporationData.companyNum.num2}
+                            onChange={(e) => {
+                                props.setInputData(prevData => ({
+                                    ...prevData,
+                                    corporationData: {
+                                        ...prevData.corporationData,
+                                        companyNum: {
+                                            ...prevData.corporationData.companyNum,
+                                            num2: e.target.value
+                                        }
+                                    }
+                                }))
+                            }}
+                        />
+                        <input
+                            className={styles.phoneNum}
+                            type='text'
+                            placeholder={'ex) 5678'}
+                            maxLength="4"
+                            size="8"
+                            value={props.inputData.corporationData.companyNum.num3}
+                            onChange={(e) => {
+                                props.setInputData(prevData => ({
+                                    ...prevData,
+                                    corporationData: {
+                                        ...prevData.corporationData,
+                                        companyNum: {
+                                            ...prevData.corporationData.companyNum,
+                                            num3: e.target.value
+                                        }
+                                    }
+                                }))
+                            }}
+                        />
+                        <div className={styles.notification}>
+                            <strong>문자(SMS) 서비스를 받으시겠습니까?</strong>
+                            <div className={styles.YesNo}>
+                                <input
+                                    type="radio"
+                                    name="CEO_SMS"
+                                    id="CEO_SMS_Y"
+                                />
+                                <label for="CEO_SMS_Y">예</label>
+                            </div>
+                            <div className={styles.YesNo}>
+                                <input
+                                    type="radio"
+                                    name="CEO_SMS"
+                                    id="CEO_SMS_N"
+                                />
+                                <label for="CEO_SMS_N">아니오</label>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </>
+        )
+    }
+
+    return (
+        <div>
+            {/* 회원정보를 입력해주세요! */}
+            <strong className={styles.noti}>회원정보를 입력해주세요!</strong>
+
+            {/* 회원정보 입력란 */}
+            <ul className={styles.inputWrap}>
+                <div className={styles.indivisualMembers}>기본정보</div>
 
                 {/* 아이디 */}
                 <li className={styles.inputContainer}>
@@ -295,79 +477,109 @@ export default function JoinForm(props) {
                         </div>
                     </div>
                 </li>
-                {/* 우편번호 찾기 - 개인회원일 때만 보이도록 */}
-                {props.inputData.userType === 'corporation' ? null :
-                    <li> {/* 개인회원일 떄 보이는 우편번호찾기API */}
-                        <div className={styles.inputContainer}>
-                            <div className={styles.left}>배송주소</div>
-                            <div className={styles.right}>
-                                <div className={styles.rightInnerContainer}>
-                                    <div className={styles.searchAddress}>
-                                        <input
-                                            className={styles.isInput}
-                                            type="text"
-                                            placeholder="우편번호"
-                                            readOnly
-                                            name="address"
-                                            value={address && address.zonecode}
-                                            onChange={(e) => {
-                                                props.setInputData(
-                                                    (prevData) => ({ ...prevData, address: e.target.value })
-                                                )
-                                            }}
-                                        />
-                                        <input
-                                            className={styles.searchButton}
-                                            type="button"
-                                            onClick={() => {
-                                                openPopup(setAddress);
-                                            }}
-                                            value="우편번호 찾기"
-                                        />
-                                    </div>
-                                    <div className={styles.inputAddress}>
-                                        <input
-                                            className={styles.loadname}
-                                            type="text"
-                                            value={address && address.roadAddress}
-                                            placeholder="도로명 주소"
-                                            readOnly
-                                        />
-                                        <input
-                                            className={styles.buildingname}
-                                            type="text"
-                                            value={
-                                                address && address.buildingName
-                                                    ?
-                                                    `(${address.bname}, ${address.buildingName})`
-                                                    :
-                                                    address && `(${address.bname}, ${address.jibunAddress})`
-                                            }
-                                            placeholder="건물 이름 또는 지번 주소"
-                                            readOnly
-                                        />
-                                        <input
-                                            className={styles.detailAddress}
-                                            type="text"
-                                            placeholder="상세주소를 입력해주세요."
-                                            name="detailAddress"
-                                            value={props.inputData.detailAddress}
-                                            onChange={(e) => {
-                                                props.setInputData(
-                                                    (prevData) => ({ ...prevData, detailAddress: e.target.value })
-                                                )
-                                            }}
-                                        />
-                                    </div>
+                {/* 우편번호 찾기 */}
+                <li>
+                    <div className={styles.inputContainer}>
+                        <div className={styles.left}>배송주소</div>
+                        <div className={styles.right}>
+                            <div className={styles.rightInnerContainer}>
+                                <div className={styles.searchAddress}>
+                                    <input
+                                        className={styles.isInput}
+                                        type="text"
+                                        placeholder="우편번호"
+                                        readOnly
+                                        name="address"
+                                        value={address && address.zonecode}
+                                        onChange={(e) => {
+                                            props.setInputData(
+                                                (prevData) => ({ ...prevData, address: e.target.value })
+                                            )
+                                        }}
+                                    />
+                                    <input
+                                        className={styles.searchButton}
+                                        type="button"
+                                        onClick={() => {
+                                            openPopup(setAddress);
+                                        }}
+                                        value="우편번호 찾기"
+                                    />
+                                </div>
+                                <div className={styles.inputAddress}>
+                                    <input
+                                        className={styles.loadname}
+                                        type="text"
+                                        value={address && address.roadAddress}
+                                        placeholder="도로명 주소"
+                                        readOnly
+                                    />
+                                    <input
+                                        className={styles.buildingname}
+                                        type="text"
+                                        value={
+                                            address && address.buildingName
+                                                ?
+                                                `(${address.bname}, ${address.buildingName})`
+                                                :
+                                                address && `(${address.bname}, ${address.jibunAddress})`
+                                        }
+                                        placeholder="건물 이름 또는 지번 주소"
+                                        readOnly
+                                    />
+                                    <input
+                                        className={styles.detailAddress}
+                                        type="text"
+                                        placeholder="상세주소를 입력해주세요."
+                                        name="detailAddress"
+                                        value={props.inputData.detailAddress}
+                                        onChange={(e) => {
+                                            props.setInputData(
+                                                (prevData) => ({ ...prevData, detailAddress: e.target.value })
+                                            )
+                                        }}
+                                    />
                                 </div>
                             </div>
                         </div>
-                    </li>
-                }
+                    </div>
+                </li>
+
+                {/* 사업자등록번호 */}
+                <li className={styles.inputContainer}>
+                    <div className={styles.left}>사업자등록번호</div>
+                    <div className={styles.right}>
+                        <input
+                            className={styles.isInput}
+                            type='text'
+                            placeholder={'숫자만 입력 가능'}
+                            value={props.inputData.corporationData.businessNum}
+                            onChange={(e) => {
+                                props.setInputData((prevData) => ({
+                                    ...prevData,
+                                    corporationData: {
+                                        ...prevData.corporationData,
+                                        businessNum: e.target.value
+                                    }
+                                }))
+                            }}
+                        />
+                        <button onClick={callApi}>사업자등록번호 인증</button>
+                    </div>
+                    { apiResponse.status_code === "OK" ? <strong>정상적으로 인증되었습니다.</strong> : <strong>해당 번호로 인증할 수 없습니다.</strong> }
+                </li>
+                <li className={styles.inputContainer}>
+                    {/* API 호출 결과 표시 */}
+                    {apiResponse && (
+                        <div>
+                            <h2>인증 결과:</h2>
+                            <pre>{JSON.stringify(apiResponse, null, 2)}</pre>
+                        </div>
+                    )}
+                </li>
+                <CorData />
+
             </ul>
-            <br /> <br />
-            {/* 회원구분 체크에 따라 기업회원 가입정보창을 보여줄지 말지 */}
-            {props.inputData.userType === "corporation" ? <CorporateMember inputData={props.inputData} setInputData={props.setInputData} address={address} setAddress={setAddress} openPopup={openPopup} /> : null}
         </div>
     )
 }
