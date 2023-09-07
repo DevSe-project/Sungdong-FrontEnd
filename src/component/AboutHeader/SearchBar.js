@@ -6,15 +6,18 @@ export function SearchBar(props) {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState([]);
+  // 연관 검색어 방향키 이동, 설정을 위한 State
   const [selectedResultIndex, setSelectedResultIndex] = useState(-1); // 초기 선택 인덱스는 -1로 설정
 
-  const inputRef = useRef(null); // input 엘리먼트에 대한 ref
+  // input 엘리먼트에 대한 ref
+  const inputRef = useRef(null);
+
 
   const handleSearch = (event) => {
     const query = event.target.value;
     setSearchTerm(query);
     if (query !== '') {
-      const filteredtitle = props.data.map((item) => item.title);
+      const filteredtitle = props.data && props.data.map((item) => item.title);
       const filteredResults = filteredtitle.filter((word) =>
         word.startsWith(query)
       );
@@ -43,6 +46,8 @@ export function SearchBar(props) {
       sessionStorage.setItem('filterSearch', JSON.stringify(results[selectedResultIndex]))
       navigate("/category")
       setResults([]); // 결과 항목 숨기기
+    } else if (event.key === 'Tab' && selectedResultIndex !== -1) {
+      setSearchTerm(results[selectedResultIndex]);
     }
   };
 
@@ -66,7 +71,7 @@ export function SearchBar(props) {
           onKeyDown={handleKeyDown} // onKeyDown 이벤트 핸들러 추가
         />
         <ul className={searchTerm !== "" && results.length > 0 && styles.result}>
-          {results.map((result, index) => (
+          {results && results.map((result, index) => (
             <li
               key={index}
               className={index === selectedResultIndex ? styles.selected : styles.resultInner}
@@ -76,7 +81,13 @@ export function SearchBar(props) {
           ))}
         </ul>
         {/* 돋보기 아이콘 */}
-        <i className="fas fa-search" />
+        <i 
+        onClick={() => {
+          sessionStorage.setItem('filterSearch', JSON.stringify(searchTerm))
+          navigate("/category")
+          setResults([]); // 결과 항목 숨기기
+        }}
+        className="fas fa-search" />
       </div>
     </div>
   );

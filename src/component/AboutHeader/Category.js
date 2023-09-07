@@ -18,9 +18,22 @@ export function Category(props){
 
     // mainCategory와 subCategory가 바뀔 때 마다 실행
     useEffect(() => {
+      if(mainCategory){
       setSelectedCategory(mainCategory);
+      } else {
+        setSelectedCategory('전체');
+      }
+      if(subCategory){
       setSelectedSubCategory(subCategory);
-      setFilterSearch(resultSearch);
+      } else {
+        setSelectedSubCategory(null);
+      }
+      if(resultSearch){
+        setFilterSearch(resultSearch);
+      } else {
+        setFilterSearch("");
+      }
+
     }, [mainCategory, subCategory, resultSearch]);
 
 
@@ -35,16 +48,16 @@ export function Category(props){
 
     useEffect(() => {
       if(props.data){
-        if(filterSearch !== ""){
-          const filtered = props.data.filter((item) => item.title === filterSearch);
-          const addCntList = filtered.map((item,index) => ({
+        if (filterSearch !== "") {
+          const filtered = props.data.filter((item) =>
+            item.title=== filterSearch)
+          const addCntList = filtered.map((item, index) => ({
             ...item,
             cnt: item.cnt ? item.cnt : 1,
-            finprice : item.finprice ? item.finprice : item.price,
-            listId : index,
+            finprice: item.finprice ? item.finprice : item.price,
+            listId: index,
           }));
           setFilteredItems(addCntList);
-          setFilterSearch('');
         } else if (selectedCategory === '전체' && selectedSubCategory === null) {
           const addCntList = props.data.map((item,index) => ({
             ...item,
@@ -237,7 +250,7 @@ export function Category(props){
   
   return(
     <div>
-      <TopBanner categoryData={props.categoryData} setCategoryData={props.setCategoryData} 
+      <TopBanner data={props.data} setData={props.setData} categoryData={props.categoryData} setCategoryData={props.setCategoryData} 
       login={props.login} setLogin={props.setLogin} iconHovered={props.iconHovered} 
       iconMouseEnter={props.iconMouseEnter} iconMouseLeave={props.iconMouseLeave} 
       icon_dynamicStyle={props.icon_dynamicStyle} text_dynamicStyle={props.text_dynamicStyle} 

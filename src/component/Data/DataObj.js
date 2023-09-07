@@ -95,7 +95,7 @@ export let DataObj = [{
   },
   {
     id : 3,
-    title : "[많이 팔리는 제품] 3M 장갑",
+    title : "3M 장갑 [많이 팔리는 제품!]",
     image : {
       mini: image4_mini,
       original : image4_original,
