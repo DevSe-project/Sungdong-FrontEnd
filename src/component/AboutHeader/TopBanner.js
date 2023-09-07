@@ -142,7 +142,7 @@ export function TopBanner(props) {
           {/* 로고 */}
           <img className={styles.image} onClick={() => navigate("/")} src={logo} alt="로고" height='70px' />
           {/* 서치바 */}
-          <SearchBar />
+          <SearchBar data={props.data} setData={props.setData}/>
           {/* 메뉴 loop */}
           {menuData.map((item, index) => (
             <li

@@ -46,6 +46,11 @@ export function Basket(props){
 
   // 장바구니 탭 - 결제 탭에서 뒤로가기 시 뒤로가기 방지 후 장바구니 탭으로 이동
   useEffect(() => {
+    if(!inLogin){
+      alert("잘못된 접근입니다.");
+      navigate("/");
+      return;
+    }
     const handleBack = (e) => {
       e.preventDefault();
       alert("주문서 작성, 결제 중 뒤로가기 시 결제 정보가 초기화 됩니다.")
@@ -192,6 +197,10 @@ export function Basket(props){
       && (selectedItems !== null || selectedItems.length > 0)) {
       const editedData = selectedItems.map((item) => ({
         productId : item.id,
+        image : {
+          mini : item.image.mini,
+          original : item.image.original,
+        },
         userId: inLogin.id, 
         productName : item.title,
         supply: item.supply,
@@ -291,7 +300,7 @@ export function Basket(props){
                   type='checkbox'
                   /> 
                 </td>
-                <td><img src='../image/logo.jpeg' alt='이미지'/></td>
+                <td><img src={item.image.mini} alt='이미지'/></td>
                 <td>
                   <h5 className={styles.link} onClick={()=>navigate(`/detail/${item.id}`)}>{item.title}</h5>
                   <div>
@@ -324,7 +333,7 @@ export function Basket(props){
             {props.activeTab > 1 && props.orderList &&
             props.orderList.map((item, key)=> (
               <tr key={key}>
-                <td><img src='../image/logo.jpeg' alt='이미지'/></td>
+                <td><img src={item.image.mini} alt='이미지'/></td>
                 <td>
                   <h5 className={styles.link} 
                   onClick={()=>props.activeTab === 1

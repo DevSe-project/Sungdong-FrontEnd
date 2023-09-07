@@ -7,10 +7,13 @@ export function CategoryBar(props) {
   const handleCategoryChange = (category) => {
     // 큰 카테고리에 해당하는 탭만을 찾기위해 subCategory는 삭제
     sessionStorage.removeItem('subCategory');
+    sessionStorage.removeItem('filterSearch');
     sessionStorage.setItem('category', JSON.stringify(category));
     navigate("/category");
   };
   const handleSubCategoryChange = (category) => {
+    sessionStorage.removeItem('category');
+    sessionStorage.removeItem('filterSearch');
     sessionStorage.setItem('subCategory', JSON.stringify(category));
     navigate("/category");
   };
@@ -18,8 +21,13 @@ export function CategoryBar(props) {
   const [activeTab, setActiveTab] = useState(null); // 현재 활성화된 탭을 추적
 
   useEffect(() => {
-    const tabstate = JSON.parse(localStorage.getItem('categoryTabState'));
-    setActiveTab(tabstate);
+    if(sessionStorage.getItem('filterSearch')){
+      localStorage.removeItem('tabState');
+      setActiveTab(null);
+    } else {
+      const tabstate = JSON.parse(localStorage.getItem('categoryTabState'));
+      setActiveTab(tabstate);
+    }
 
     if (location.pathname !== '/category') {
       localStorage.removeItem('tabState');
@@ -64,7 +72,11 @@ export function CategoryBar(props) {
             className={`categorymenu-item ${subMenuStates[index] && 'open'} + categorytab-item ${activeTab === item.id ? 'active' : ''}`}
             onClick={() => { handleTabClick(item) }}
           >
-            <span onClick={() => handleCategoryChange(item.title)}>{item.title}</span>
+            <span 
+            onClick={() => handleCategoryChange(item.title)}
+            >
+              {item.title}
+            </span>
             {/* 서브메뉴 loop */}
             {subMenuStates[index] && (
               <ul onMouseLeave={() => handleMouseLeave(index)} className="sub-menu">
