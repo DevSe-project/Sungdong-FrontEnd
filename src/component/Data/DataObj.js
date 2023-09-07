@@ -14,8 +14,8 @@ export let DataObj = [{
       mini: image1_mini,
       original : image1_original,
     },
-    title : "그린솔",
-    price : 150000,
+    title : "그린솔 부식 제거 스프레이",
+    price : 20000,
     content : "스프레이",
     supply : 99,
     discount: 0,
@@ -26,20 +26,6 @@ export let DataObj = [{
     brand : '프로덕트랩',
     madeIn : '중국',
     new : true,
-    option : [
-      {
-        value: '260'
-      },
-      {
-        value: '270'
-      },
-      {
-        value: '280'
-      },
-      {
-        value: '290'
-      }
-    ]
   },
   {
     id : 1,
@@ -48,7 +34,7 @@ export let DataObj = [{
       original : image2_original,
     },
     title : "작업화",
-    price : 120000,
+    price : 60000,
     content : "날렵한",
     discount : 0,
     supply : 99,
@@ -58,6 +44,20 @@ export let DataObj = [{
       main: '패션잡화',
       sub: '신발용품',
     },
+    option : [
+      {
+        value: '260mm'
+      },
+      {
+        value: '270mm'
+      },
+      {
+        value: '280mm'
+      },
+      {
+        value: '290mm'
+      }
+    ],
     new : true,
   },
   {
@@ -67,7 +67,7 @@ export let DataObj = [{
       mini: image3_mini,
       original : image3_original,
     },
-    price : 170000,
+    price : 90000,
     content : "골프공",
     discount : 0,
     supply : 99,
@@ -100,7 +100,7 @@ export let DataObj = [{
       mini: image4_mini,
       original : image4_original,
     },
-    price : 140000,
+    price : 10000,
     content : "가성비 장갑",
     discount : 0,
     supply : 1,
@@ -119,8 +119,8 @@ export let DataObj = [{
       mini: image5_mini,
       original : image5_original,
     },
-    price : 90000,
-    content : "싼 신발",
+    price : 30000,
+    content : "시원한 망토",
     discount: 0,
     supply : 99,
     brand : '프로덕트랩',
@@ -130,18 +130,4 @@ export let DataObj = [{
       sub: '남성의류'
     },
     new : true,
-    option : [
-      {
-        value: '10mm'
-      },
-      {
-        value: '20mm'
-      },
-      {
-        value: '30mm'
-      },
-      {
-        value: '40mm'
-      }
-    ],
   }]

@@ -7,19 +7,21 @@ export function Category(props){
     // 카테고리
     const [selectedCategory, setSelectedCategory] = useState('전체'); //메인 카테고리
     const [selectedSubCategory, setSelectedSubCategory] = useState(null); //서브 카테고리
-
+    const [filterSearch, setFilterSearch] = useState("");
     
     // 필터된 항목을 저장할 상태 변수
     const [filteredItems, setFilteredItems] = useState([]);
 
     const mainCategory = JSON.parse(sessionStorage.getItem('category'));
     const subCategory = JSON.parse(sessionStorage.getItem('subCategory'));
+    const resultSearch = JSON.parse(sessionStorage.getItem('filterSearch'))
 
     // mainCategory와 subCategory가 바뀔 때 마다 실행
     useEffect(() => {
       setSelectedCategory(mainCategory);
       setSelectedSubCategory(subCategory);
-    }, [mainCategory, subCategory]);
+      setFilterSearch(resultSearch);
+    }, [mainCategory, subCategory, resultSearch]);
 
 
     // // 선택된 카테고리 변경 핸들러
@@ -33,7 +35,17 @@ export function Category(props){
 
     useEffect(() => {
       if(props.data){
-        if (selectedCategory === '전체' && selectedSubCategory === null) {
+        if(filterSearch !== ""){
+          const filtered = props.data.filter((item) => item.title === filterSearch);
+          const addCntList = filtered.map((item,index) => ({
+            ...item,
+            cnt: item.cnt ? item.cnt : 1,
+            finprice : item.finprice ? item.finprice : item.price,
+            listId : index,
+          }));
+          setFilteredItems(addCntList);
+          setFilterSearch('');
+        } else if (selectedCategory === '전체' && selectedSubCategory === null) {
           const addCntList = props.data.map((item,index) => ({
             ...item,
             cnt: item.cnt ? item.cnt : 1,
@@ -60,10 +72,10 @@ export function Category(props){
               listId : index,
             }));
             setFilteredItems(addCntList);
-          }
+          } 
         }
       }
-    }, [props.data, selectedCategory, selectedSubCategory]);
+    }, [props.data, selectedCategory, selectedSubCategory, filterSearch]);
 
     const navigate = useNavigate();
 
@@ -273,7 +285,7 @@ export function Category(props){
                     <h5>{item.title}</h5>
                   </td>
                   <td>EA</td>
-                  <td>{item.price}</td>
+                  <td>\{item.price}</td>
                   <td 
                     className={styles.detailView}
                     onClick={()=>handleItemClick(item.id)}>
