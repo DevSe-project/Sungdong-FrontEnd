@@ -46,6 +46,11 @@ export function Basket(props){
 
   // 장바구니 탭 - 결제 탭에서 뒤로가기 시 뒤로가기 방지 후 장바구니 탭으로 이동
   useEffect(() => {
+    if(!inLogin){
+      alert("잘못된 접근입니다.");
+      navigate("/");
+      return;
+    }
     const handleBack = (e) => {
       e.preventDefault();
       alert("주문서 작성, 결제 중 뒤로가기 시 결제 정보가 초기화 됩니다.")
