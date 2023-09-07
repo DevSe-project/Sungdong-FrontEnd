@@ -291,7 +291,7 @@ export function Basket(props){
                   type='checkbox'
                   /> 
                 </td>
-                <td><img src='../image/logo.jpeg' alt='이미지'/></td>
+                <td><img src={item.image.mini} alt='이미지'/></td>
                 <td>
                   <h5 className={styles.link} onClick={()=>navigate(`/detail/${item.id}`)}>{item.title}</h5>
                   <div>
@@ -324,7 +324,7 @@ export function Basket(props){
             {props.activeTab > 1 && props.orderList &&
             props.orderList.map((item, key)=> (
               <tr key={key}>
-                <td><img src='../image/logo.jpeg' alt='이미지'/></td>
+                <td><img src={item.image.mini} alt='이미지'/></td>
                 <td>
                   <h5 className={styles.link} 
                   onClick={()=>props.activeTab === 1

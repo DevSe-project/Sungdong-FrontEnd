@@ -31,18 +31,6 @@
   text-align: center;
 }
 
-.titleTd{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  cursor: pointer;
-}
-
-.titleTd:hover{
-  color: grey;
-}
-
 .buttonContainer{
   font-size: 1.2em;
   margin-top: 1em;

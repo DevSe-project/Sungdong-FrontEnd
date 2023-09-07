@@ -184,8 +184,8 @@ function basketThis(product, count){
 
             {/* 상품 이미지 부분 */}
             <div className={styles.headLeft}>
-              <img src="http://pop7.co.kr/web/product/big/201806/344_shop1_15289487355825.jpg" alt="이미지" 
-              className={styles.thumnail} width="600px"/>
+              <img src={detailData.image.original} alt="이미지" 
+              className={styles.thumnail}/>
             </div>
 
 

@@ -262,14 +262,14 @@ export function Category(props){
               ? getCurrentPagePosts().map((item, index)=> (
               <React.Fragment key={index}>
                 <tr className={styles.list}>
-                  <td>{item.image}</td>
+                  <td><img src={item.image.mini}></img></td>
                   <td>{item.id}</td>
                   <td 
                     className={styles.detailView}
                     onClick={()=>navigate(`/detail/${item.id}`)}>
                     상세보기
                   </td>
-                  <td className={styles.titleTd} onClick={()=>handleItemClick(item.id)}>
+                  <td className={styles.detailView} onClick={()=>handleItemClick(item.id)}>
                     <h5>{item.title}</h5>
                   </td>
                   <td>EA</td>

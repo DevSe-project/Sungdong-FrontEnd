@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import styles from './Login.module.css';
-import MainLogo from '../../image/MainLogo.jpeg';
+import MainLogo from '../../image/sungdonglogo.svg';
 import { useState } from 'react';
 import FindModal from './FindModal';
 import CodeInputModal from './CodeInputModal';
@@ -60,6 +60,7 @@ export function Login(props) {
           <img
             src={MainLogo}
             alt="로고"
+            height={250}
             className={styles.logo}
             onClick={() => { navigate("/") }}
           />
