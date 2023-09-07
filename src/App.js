@@ -163,6 +163,7 @@ function App() {
     transition: `opacity ${transitionDurate}ms, transform ${transitionDurate}ms, height ${transitionDurate}ms`,
     opacity: iconClicked ? 1 : 0,
     height: iconClicked ? '100%' : '0px',
+    visibility: iconClicked ? 'visible' : 'hidden',
   }
   // (END) 아이콘 클릭 관련 객체, 함수, state //
   return (
