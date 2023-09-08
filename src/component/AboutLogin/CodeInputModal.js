@@ -3,6 +3,8 @@ import styles from './Modal.module.css';
 import { useNavigate } from 'react-router-dom';
 
 export default function CodeInputModal(props) {
+  
+
 
   const navigate = useNavigate();
 
@@ -26,14 +28,7 @@ export default function CodeInputModal(props) {
 
   // 입력코드 유효성 검사
   const confirmCode = () => {
-    const checkCode = props.codeState.find(codeState => codeState.code === inputCode);
-    if (checkCode && checkCode.code === inputCode) {
-      setInputCode('');
-      navigate('/join');
-    } else {
-      alert('유효하지 않은 코드입니다.');
-      console.log(props.codeState);
-    }
+    sessionStorage.getItem('savePrintCodeList');
   }
 
 
