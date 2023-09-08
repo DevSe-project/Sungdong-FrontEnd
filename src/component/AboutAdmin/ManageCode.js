@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Managecode() {
@@ -50,8 +50,16 @@ export default function Managecode() {
     setCodeListObj(updatedCodeList); //잘라줬으니 업데이트
   }
 
-  // [저장] codeList 저장
-  sessionStorage.setItem('savePrintCodeList', JSON.stringify(codeListObj));
+  useEffect(() => {
+    // [저장] 코드목록이 변경될 때마다 세션에 저장
+    sessionStorage.setItem('savePrintCodeList', JSON.stringify(codeListObj));
+  }, [codeListObj]);
+
+  useEffect(() => {
+    // 컴포넌트가 마운트될 때 세션 스토리지에서 코드 목록을 불러옴
+    const savedCodeList = JSON.parse(sessionStorage.getItem('savePrintCodeList')) || [];
+    setCodeListObj(savedCodeList);
+  }, []);
 
 
   return (
@@ -67,11 +75,11 @@ export default function Managecode() {
             </div>
           })}
         </div>
-        <div onClick={()=>{
+        <button onClick={() => {
           const callPrintedCodeList = sessionStorage.getItem('savePrintCodeList');
           console.log(callPrintedCodeList);
-        }}>저장된 세션 확인</div>
-        <button onClick={()=>{navigate('/')}}>홈으로 가기</button>
+        }}>저장된 세션 확인(console)</button>
+        <button onClick={() => { navigate('/') }}>홈으로 가기</button>
       </div>
     </div>
   )
