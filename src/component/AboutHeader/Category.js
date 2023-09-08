@@ -16,7 +16,7 @@ export function Category(props){
     const subCategory = JSON.parse(sessionStorage.getItem('subCategory'));
     const resultSearch = JSON.parse(sessionStorage.getItem('filterSearch'))
 
-    // mainCategory와 subCategory가 바뀔 때 마다 실행
+    // 카테고리 찾기 - mainCategory와 subCategory가 바뀔 때 마다 실행
     useEffect(() => {
       //props.categoryData가 있을 때만 진행
       if (props.categoryData) {
@@ -56,13 +56,13 @@ export function Category(props){
           setFilterSearch("");
         }
       }
-    }, [mainCategory, subCategory, resultSearch, props.categoryData]);
+    }, [mainCategory, subCategory, resultSearch, props.categoryData, props.data]);
 
-    // 카테고리에 따라 아이템 필터링
+    // 찾은 카테고리에 따라 아이템 필터링
     useEffect(() => {
       // 상품이 렌더링 되었을 때만 진행
       if(props.data){
-        // 조건1. 검색 필터가 공백이 아닐때 (검색 했을 때)
+        // 조건 - 상위 카테고리가 '전체' (기본 값) 일 때
         if (selectedCategory === '전체'){
           const addCntList = props.data.map((item,index) => ({
             ...item,
@@ -73,6 +73,7 @@ export function Category(props){
           setFilteredItems(addCntList);
           return;
         }
+        // 조건 - 검색 필터가 공백이 아닐때 (검색 했을 때)
         if (filterSearch !== "") {
           // 데이터에서 타이틀과 검색결과를 찾고
           const filtered = props.data.filter((item) =>
@@ -86,9 +87,9 @@ export function Category(props){
           }));
           // 필터링 된 아이템 표시
           setFilteredItems(addCntList);
-        // 카테고리에 해당되는 필터링이 없을 때 (검색도 X)
+        // 조건 - 검색 필터가 공백이면 ?
         } else {
-          // 서브 카테고리를 선택했을 때
+          // 조건(2) - 서브 카테고리를 null이 아닐때, 즉 서브 카테고리가 있을 때
           if(selectedSubCategory !== null){
             const filtered = props.data.filter((item) => item.category.sub === selectedSubCategory);
             const addCntList = filtered.map((item,index) => ({
@@ -335,6 +336,27 @@ export function Category(props){
   
       setFilteredItems(addCntList);
     };
+
+    function prevContentClick(){
+      if(selectedCategory === '전체'){
+        const addCntList = props.data.map((item,index) => ({
+          ...item,
+          cnt: item.cnt ? item.cnt : 1,
+          finprice : item.finprice ? item.finprice : item.price,
+          listId : index,
+        }));
+        setFilteredItems(addCntList);
+        return;
+      }
+      const filtered = props.data.filter((item) => item.category.main === selectedCategory);
+      const addCntList = filtered.map((item,index) => ({
+        ...item,
+        cnt: item.cnt ? item.cnt : 1,
+        finprice : item.finprice ? item.finprice : item.price,
+        listId : index,
+      }));
+      setFilteredItems(addCntList);
+    }
   return(
     <div>
       <TopBanner data={props.data} setData={props.setData} categoryData={props.categoryData} setCategoryData={props.setCategoryData} 
@@ -345,33 +367,35 @@ export function Category(props){
         <div className={styles.topTitle}>
           <h1>카테고리</h1>
         </div>
+        {resultSearch &&
+        <h3 style={{margin: '1em'}}>
+        "{resultSearch}" 에 대해
+        <span style={{color: '#CC0000', fontWeight: '650', margin: '0.5em'}}>{filteredItems.length}건</span>
+        이 검색 되었습니다.
+        </h3>}
         {/* 카테고리 필터 */}
         <div className={styles.filterUI}>
-          {categoryFilter.map((item) =>
-          <>
+          {categoryFilter.map((item, key) =>
+          <React.Fragment key={key}>
+          {/* 필터 별 라벨 */}
           <div className={styles.label}>
             {item.label}
           </div>
           <div className={styles.content}>
+            {/* 상위 카테고리 항목 */}
             {item.prevContent &&
             <>
             <span
               className={styles.contentItem}
               onClick={()=> {
-                const filtered = props.data.filter((item) => item.category.main === selectedCategory);
-                const addCntList = filtered.map((item,index) => ({
-                  ...item,
-                  cnt: item.cnt ? item.cnt : 1,
-                  finprice : item.finprice ? item.finprice : item.price,
-                  listId : index,
-                }));
-                setFilteredItems(addCntList);
+                prevContentClick();
               }}>
               {item.prevContent}
             </span>
-            <i className="far fa-chevron-right"></i>
+            <i className="far fa-chevron-right"/>
             </>
             }
+            {/* 하위 카테고리 항목 */}
             {item.content && Array.isArray(item.content)
             ? item.content.map((contentItem, index) => 
             <div 
@@ -385,7 +409,7 @@ export function Category(props){
             ) 
             : item.content }
           </div>
-          </>
+          </React.Fragment>
           )}
         </div>
         {/* 카테고리 목록 TABLE */}
