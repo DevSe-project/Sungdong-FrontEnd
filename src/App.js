@@ -6,8 +6,7 @@ import { OrderObj } from './component/Data/OrderObj';
 import { DataObj } from './component/Data/DataObj'
 import { TodayTopicPostObj } from './component/Data/TodayTopicPostObj';
 import { UserData } from './component/Data/UserData';
-import { IssuanceCode } from './component/Data/IssuanceCode'
-import { CategoryDataObj } from './component/Data/CategoryDataObj'
+import { CategoryDataObj } from './component/Data/CategoryDataObj';
 import { Category } from './component/AboutHeader/Category';
 
 // 메인페이지
@@ -42,6 +41,7 @@ import { TodayNewsInner } from './component/AboutCompany/TodayNewsInner';
 import { Event } from './component/AboutCompany/Event'
 import { AdminMain } from './component/AboutAdmin/AdminMain';
 import MyPage from './component/AboutMyPage/MyPage';
+import Managecode from './component/AboutAdmin/ManageCode';
 
 function App() {
   const navigate = useNavigate();
@@ -56,7 +56,6 @@ function App() {
   const [basketList, setBasketList] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   const [orderList, setOrderList] = useState([]);
-  const [codeState, setCodeState] = useState();
   const [todayTopicData, setTodayTopicData] = useState();
   const [login, setLogin] = useState(false);
 
@@ -121,7 +120,6 @@ function App() {
       setOrderData(OrderObj);
       setUserData(UserData);
       setTodayTopicData(TodayTopicPostObj);
-      setCodeState(IssuanceCode);
       setCategoryData(CategoryDataObj);
       JSON.parse(sessionStorage.getItem('saveLoginData'));
     }, 1000)
@@ -166,6 +164,8 @@ function App() {
     visibility: iconClicked ? 'visible' : 'hidden',
   }
   // (END) 아이콘 클릭 관련 객체, 함수, state //
+
+  // 
   return (
     <div className="App">
       <Routes>
@@ -219,7 +219,7 @@ function App() {
         <Route path='/orderDetail' element={<OrderDetail data={data} setData={setData} categoryData={categoryData} setCategoryData={setCategoryData} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />} />
 
         {/* 로그인 */}
-        <Route path='/login' element={<Login userData={userData} setUserData={setUserData} codeState={codeState} setCodeState={setCodeState} />} />
+        <Route path='/login' element={<Login userData={userData} setUserData={setUserData} />} />
         <Route path='/join' element={<Join userData={userData} setUserData={setUserData} />} >
         </Route>
 
@@ -243,6 +243,7 @@ function App() {
 
         {/* 관리자페이지 */}
         <Route path='/adminMain' element={<AdminMain />} />
+        <Route path='/adminMain/managecode' element={<Managecode />}/>
       </Routes>
     </div>
   );
