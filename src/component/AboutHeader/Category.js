@@ -12,6 +12,7 @@ export function Category(props){
     // 필터된 항목을 저장할 상태 변수
     const [filteredItems, setFilteredItems] = useState([]);
 
+    const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'))
     const mainCategory = JSON.parse(sessionStorage.getItem('category'));
     const subCategory = JSON.parse(sessionStorage.getItem('subCategory'));
     const resultSearch = JSON.parse(sessionStorage.getItem('filterSearch'))
@@ -133,7 +134,12 @@ export function Category(props){
   
     //옵션 선택 state
     const [optionSelected, setOptionSelected] = useState(filteredItems.map(() => ""));
-  
+    
+    // 장바구니 복사
+    const copyList = [...props.basketList];
+
+    // userId가 같은 항목만 필터링
+    const onlyUserData = copyList.filter((item)=> item.userId === inLogin.id);
   
     // 아이템 클릭 핸들러
     const handleItemClick = (itemId) => {
@@ -193,6 +199,7 @@ export function Category(props){
       }
     }
   
+
     // 장바구니 담기 함수
     function basketRelatedData() {
       // 유효성 체크
@@ -232,14 +239,14 @@ export function Category(props){
       }));
     
       const isDuplicate = selectedItemsInfo.some((selectedItemsInfo) =>
-        props.basketList.some((basketItem) =>
+        onlyUserData.some((basketItem) =>
           basketItem.id === selectedItemsInfo.id &&
           basketItem.optionSelected === selectedItemsInfo.option
         )
       );
     
       if (isDuplicate) {
-        const findDuplicate = props.basketList.filter((item) =>
+        const findDuplicate = onlyUserData.filter((item) =>
           selectedItemsInfo.some((selectedItemInfo) =>
             item.id === selectedItemInfo.id &&
             item.optionSelected === selectedItemInfo.option
@@ -255,9 +262,9 @@ export function Category(props){
       // 옵션 선택한 경우에만 option 객체로 추가
       const basketProductsToAdd = selectedItems.map((item) => {
         if (item.option && optionSelected[item.listId] !== undefined) {
-          return { ...item, optionSelected: optionSelected[item.listId] };
+          return { ...item, userId: inLogin.id, optionSelected: optionSelected[item.listId] };
         }
-        return item;
+        return {...item, userId: inLogin.id };
       });
     
       props.setBasketList([...props.basketList, ...basketProductsToAdd]);
