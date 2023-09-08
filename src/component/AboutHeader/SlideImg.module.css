@@ -2,7 +2,6 @@
 /* 슬라이더 컨테이너 */
 .sliderContainer {
   padding-top: 2em;
-  padding-bottom: 2em;
   overflow: hidden;
   width: 300vw;
   max-width: 500px; /* 원하는 크기로 설정 */
