@@ -24,7 +24,7 @@ export function SearchBar(props) {
       // 그 변수들 중 첫 글자와 입력값이 일치하는 것을 연관 검색어 목록에 띄워줌
       const filteredtitle = props.data && props.data.map((item) => item.title);
       const filteredResults = filteredtitle.filter((word) =>
-        word.startsWith(query)
+        word.includes(query)
       );
       setResults(filteredResults);
     // 입력창이 공백이면 연관 검색어를 띄우지 않는다.
@@ -52,6 +52,7 @@ export function SearchBar(props) {
       sessionStorage.setItem('filterSearch', JSON.stringify(results[selectedResultIndex]))
       navigate("/category")
       setResults([]); // 결과 항목 숨기기
+      setSearchTerm("");
     } else if (event.key === 'Tab' && selectedResultIndex !== -1) {
       // 탭 키 누르면 자동완성
       event.preventDefault();
@@ -78,11 +79,17 @@ export function SearchBar(props) {
           onChange={handleSearch}
           onKeyDown={handleKeyDown} // onKeyDown 이벤트 핸들러 추가
         />
-        <ul className={searchTerm !== "" && results.length > 0 && styles.result}>
+        <ul 
+        className={searchTerm !== "" 
+        && results.length > 0 
+        ? styles.result
+        : null}>
           {results && results.map((result, index) => (
             <li
               key={index}
-              className={index === selectedResultIndex ? styles.selected : styles.resultInner}
+              className={index === selectedResultIndex 
+                ? styles.selected 
+                : styles.resultInner}
             >
               {result}
             </li>
@@ -94,6 +101,7 @@ export function SearchBar(props) {
           sessionStorage.setItem('filterSearch', JSON.stringify(searchTerm))
           navigate("/category")
           setResults([]); // 결과 항목 숨기기
+          setSearchTerm("");
         }}
         className="fas fa-search" />
       </div>
