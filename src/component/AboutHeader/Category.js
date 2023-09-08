@@ -37,11 +37,21 @@ export function Category(props){
         } else {
           setSelectedSubCategory(null);
         }
-        // 검색 카테고리는 상위 카테고리와 하위 카테고리가 없다.
+        // 검색 카테고리
         if (resultSearch) {
           setFilterSearch(resultSearch);
-          setSelectedCategory('전체');
-          setSelectedSubCategory(null);
+          // 메인 카테고리와 함께 출력하기 위해 로직 구성
+          if (props.data) { // 데이터가 로드되었는지 확인
+            const findCategory = props.data.find((item) =>
+              item.title === resultSearch
+            );
+            // 상위 카테고리를 찾으면 표시
+            if (findCategory) {
+              setSelectedCategory(findCategory.category.main);
+            } else {
+              setSelectedCategory('전체');
+            }
+          }
         } else {
           setFilterSearch("");
         }
@@ -53,6 +63,16 @@ export function Category(props){
       // 상품이 렌더링 되었을 때만 진행
       if(props.data){
         // 조건1. 검색 필터가 공백이 아닐때 (검색 했을 때)
+        if (selectedCategory === '전체'){
+          const addCntList = props.data.map((item,index) => ({
+            ...item,
+            cnt: item.cnt ? item.cnt : 1,
+            finprice : item.finprice ? item.finprice : item.price,
+            listId : index,
+          }));
+          setFilteredItems(addCntList);
+          return;
+        }
         if (filterSearch !== "") {
           // 데이터에서 타이틀과 검색결과를 찾고
           const filtered = props.data.filter((item) =>
@@ -67,14 +87,6 @@ export function Category(props){
           // 필터링 된 아이템 표시
           setFilteredItems(addCntList);
         // 카테고리에 해당되는 필터링이 없을 때 (검색도 X)
-        } else if (selectedCategory === '전체' && selectedSubCategory === null) {
-          const addCntList = props.data.map((item,index) => ({
-            ...item,
-            cnt: item.cnt ? item.cnt : 1,
-            finprice : item.finprice ? item.finprice : item.price,
-            listId : index,
-          }));
-          setFilteredItems(addCntList);
         } else {
           // 서브 카테고리를 선택했을 때
           if(selectedSubCategory !== null){
@@ -260,14 +272,17 @@ export function Category(props){
     }
 
   // 카테고리 필터 부분
+  
     // 중복 처리
     const isIncludeCategory = [...new Set(filteredItems.map((item) => item.category.sub ? item.category.sub : item.category.main))];
     const isIncludeBrands = [...new Set(filteredItems.map((item) => item.brand))];
     const isIncludeMaden = [...new Set(filteredItems.map((item) => item.madeIn))];
 
+    // 카테고리 필터 구성
     const categoryFilter = [
       {
         label: '카테고리',
+        prevContent : selectedCategory && selectedCategory,
         content: 
         isIncludeCategory ? 
         isIncludeCategory.map((category) => ({
@@ -276,8 +291,6 @@ export function Category(props){
           ? filteredItems.filter((item) => item.category.main === category).length
           : filteredItems.filter((item) => item.category.sub === category).length,
         }))
-        : filterSearch !== ''
-        ? '검색결과'
         : '전체'
       },
       {
@@ -295,7 +308,7 @@ export function Category(props){
         }))
       }
     ];
-
+    // 카테고리 필터 클릭 시 진행 함수
     function handleCategoryClick(item, contentItem){
       let filtered;
 
@@ -332,6 +345,7 @@ export function Category(props){
         <div className={styles.topTitle}>
           <h1>카테고리</h1>
         </div>
+        {/* 카테고리 필터 */}
         <div className={styles.filterUI}>
           {categoryFilter.map((item) =>
           <>
@@ -339,6 +353,25 @@ export function Category(props){
             {item.label}
           </div>
           <div className={styles.content}>
+            {item.prevContent &&
+            <>
+            <span
+              className={styles.contentItem}
+              onClick={()=> {
+                const filtered = props.data.filter((item) => item.category.main === selectedCategory);
+                const addCntList = filtered.map((item,index) => ({
+                  ...item,
+                  cnt: item.cnt ? item.cnt : 1,
+                  finprice : item.finprice ? item.finprice : item.price,
+                  listId : index,
+                }));
+                setFilteredItems(addCntList);
+              }}>
+              {item.prevContent}
+            </span>
+            <i className="far fa-chevron-right"></i>
+            </>
+            }
             {item.content && Array.isArray(item.content)
             ? item.content.map((contentItem, index) => 
             <div 
@@ -355,6 +388,7 @@ export function Category(props){
           </>
           )}
         </div>
+        {/* 카테고리 목록 TABLE */}
         <div className={styles.buttonBox}>
           <button className={styles.button} onClick={()=> navigate("/basket")}>
             장바구니 이동
