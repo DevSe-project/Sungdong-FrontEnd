@@ -6,34 +6,43 @@
   font-size: 1.5em;
   font-weight: bold;
   text-align: left;
-  padding-left: 20px;
-  margin-bottom: 0.3em;
+  margin-left: 40px;
+  margin-right: 40px;
+  margin-bottom: 1em;
 }
 
 .subtitle {
-  font-size: 1em;
+  font-size: 1.3em;
   font-weight: bold;
   text-align: left;
-  padding-left: 20px;
+  margin-bottom: 0.5em;
+  margin-left: 40px;
+  margin-right: 40px;
 }
 
 .table {
-  width: 100%;
-  padding-left: 20px;
-  margin-bottom: 0.3em;
+  width: 95%;
+  margin-left: 40px;
+  padding-right: 40px;
+  border: none;
+  border-collapse: collapse;
 }
 
 .tr {
-
 }
 
 .th {
-  background-color: #f4f2f2;
+  background-color: #540000;
+  color: white;
   width: 7em;
 }
 
 .td {
+  background-color: #e8e8e8fd;
   border: none;
   height: max-content;
+  width: 15em;
   padding: 1em;
+  font-size: 1em;
+  font-weight: bold;
 }

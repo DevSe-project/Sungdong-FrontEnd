@@ -34,34 +34,35 @@ export default function MyPage(props) {
             <th className={styles.th}>상호명</th>
             <td className={styles.td}>{userProfile.name}</td>
             <th className={styles.th}>대표자</th>
-            <td className={styles.td}>대충 대표자명</td>
+            <td className={styles.td}>장민욱</td>
             <th className={styles.th}>사업자번호</th>
-            <td className={styles.td}>대충 사업자번호</td>
+            <td className={styles.td}>250-81-59602</td>
           </tr>
           {/* 아이디 | 비밀번호 | 이메일 */}
           <tr className={styles.tr}>
             <th className={styles.th}>아이디</th>
             <td className={styles.td}>{userProfile.id}</td>
             <th className={styles.th}>비밀번호</th>
-            <td className={styles.td}>{userProfile.password}</td>
+            <td className={styles.td}><button>비밀번호 확인/변경하기</button></td>
             <th className={styles.th}>E-MAIL</th>
             <td className={styles.td}>{userProfile.email}</td>
           </tr>
           {/* 업태 | 종목 */}
           <tr className={styles.tr}>
             <th className={styles.th}>업태</th>
-            <td className={styles.td}>대충 업태임</td>
-            <th>종목</th>
-            <td className={styles.td}>대충 종목임</td>
+            <td className={styles.td}>소프트웨어 개발 및 IT 서비스</td>
+            <th className={styles.th}>종목</th>
+            <td className={styles.td}>웹사이트 및 앱 개발</td>
+            <th className={styles.th}></th>
+            <td className={styles.td}></td>
           </tr>
           {/* 주소 | FAX | 전화번호 */}
           <tr className={styles.tr}>
             <th className={styles.th} id={styles.editAddress}>주소</th>
-            <td className={styles.td}>대충 주소임
-              <div>수정하기</div>
+            <td className={styles.td}>울산광역시 동구 봉수로 101
             </td>
             <th className={styles.th}>FAX</th>
-            <td className={styles.td}>대충 FAX임</td>
+            <td className={styles.td}>1800-3904</td>
             <th className={styles.th}>전화번호</th>
             <td className={styles.td}>{userProfile.num1}-{userProfile.num2}-{userProfile.num3}</td>
           </tr>
