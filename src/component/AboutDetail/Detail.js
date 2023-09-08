@@ -91,7 +91,11 @@ function buyThis(product, count){
         }
       } return {
         productId : product.id,
-        userId: "asdfx100", 
+        userId: inLogin.id,
+        image : {
+          mini : product.image.mini,
+          original : product.image.original,
+        },
         productName : product.title,
         cnt : Number(count), 
         supply: product.supply,
@@ -141,12 +145,14 @@ function basketThis(product, count){
     if(product.option && optionSelected){
       return {
         ...product,
+        userId: inLogin.id,
         cnt : count,
         finprice : (product.price * count), //총 계산액
         optionSelected : optionSelected,
       }
     } return {
       ...product,
+      userId: inLogin.id,
       cnt : count,
       finprice : (product.price * count)
     }

@@ -1,14 +1,21 @@
 import { useNavigate } from 'react-router-dom'
 import styles from './Delivery.module.css'
 export function Delivery(props){
+
+  //로그인 정보 불러오기
+  const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'))
+
   const navigate = useNavigate();
   function detailOrder(item){
     localStorage.setItem('newOrderData', JSON.stringify(item));
     navigate('/orderDetail');
   }
+
+  const filterOrderData = props.orderData && props.orderData.filter((item)=>item.userId === inLogin.id)
+
   return(
     <div className={styles.container}>
-      {props.orderData ? props.orderData.map((item, key)=> 
+      {props.orderData ? filterOrderData.map((item, key)=> 
       <div key={key} className={styles.deliveryList}>
         <div className={styles.orderDate}>
           <h4>{item.date} 주문</h4>

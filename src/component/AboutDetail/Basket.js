@@ -35,6 +35,13 @@ export function Basket(props){
   //로그인 정보 불러오기
   const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'))
 
+  // 게시물 데이터와 페이지 번호 상태 관리    
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const copyList = [...props.basketList];
+
+  const onlyUserData = copyList.filter((item)=> item.userId === inLogin.id);
+
   // 일정 시간 후 팝업 닫음
   useEffect(()=> {
     const opentime = setInterval(() => {
@@ -47,8 +54,8 @@ export function Basket(props){
   // 장바구니 탭 - 결제 탭에서 뒤로가기 시 뒤로가기 방지 후 장바구니 탭으로 이동
   useEffect(() => {
     if(!inLogin){
-      alert("잘못된 접근입니다.");
-      navigate("/");
+      alert("로그인 후 이용가능한 서비스입니다.");
+      navigate("/login");
       return;
     }
     const handleBack = (e) => {
@@ -214,6 +221,7 @@ export function Basket(props){
       // localStorage에 저장
       localStorage.setItem('orderData', JSON.stringify(editedData));
       props.setOrderList(editedData);
+      props.setBasketList(props.basketList.filter((item)=>!selectedItems.includes(item)));
       navigate("/basket/receipt");
       props.setActiveTab(2);
     } else {
@@ -227,6 +235,12 @@ export function Basket(props){
       { id: 3, title: '결제하기' },
       { id: 4, title: '주문 완료' },
     ];
+
+    // 장바구니 목록 나열
+    const getCurrentPagePosts = () => {
+      const startIndex = (currentPage - 1) * 10; // 한 페이지에 5개씩 표시
+      return onlyUserData.slice(startIndex, startIndex + 5);
+    };
 
   return(
     <div>
@@ -291,7 +305,7 @@ export function Basket(props){
             <tbody>
               {/* 장바구니 탭일 때는 장바구니 목록만 */}
               {props.activeTab===1 &&
-              props.basketList ? props.basketList.map((item, index)=>(
+              props.basketList ? getCurrentPagePosts().map((item, index)=>(
               <tr key={index}>
                 <td>
                   <input 
@@ -394,7 +408,33 @@ export function Basket(props){
                 </div>
             </div>
           </div>
-
+          <div className={styles.buttonContainer}>
+            {/* 이전 페이지 */}
+            <button
+            className={styles.moveButton} 
+            onClick={()=> {
+              if(currentPage !== 1){
+                setCurrentPage(currentPage - 1)
+              } else {
+                alert("해당 페이지가 가장 첫 페이지 입니다.")
+              }}}>
+                <i className="far fa-angle-left"/>
+            </button>
+            <div className={styles.moveButton}>
+              {currentPage}
+            </div>
+            {/* 다음 페이지 */}
+            <button
+            className={styles.moveButton}
+            onClick={()=> {
+              if(onlyUserData.length > 5){
+                setCurrentPage(currentPage + 1)
+              } else {
+                alert("다음 페이지가 없습니다.")
+              }}}>
+                <i className="far fa-angle-right"/>
+            </button>
+          </div>
           {/* Outlet부분 (스탭 2,3,4) */}
           <Outlet></Outlet>
 
