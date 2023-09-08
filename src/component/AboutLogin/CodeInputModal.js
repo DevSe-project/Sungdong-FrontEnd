@@ -25,21 +25,17 @@ export default function CodeInputModal(props) {
 
   // 인증코드 입력 state
   const [inputCode, setInputCode] = useState('');
-  // 인증 통과 유무에 따른 상태값
-  const [allowAccess, setAllowAccess] = useState(false);
-
+  // 유효코드인증API
   const confirmCode = () => {
     const calledCodeList = JSON.parse(sessionStorage.getItem('savePrintCodeList')) || []; // 코드 리스트를 불러오고, 없을 경우 빈 배열로 초기화
     const matchedCode = calledCodeList.find(codeItem => codeItem.code === inputCode); //매칭되는 코드를 찾음
     if (matchedCode) { // 일치하는 코드가 발견된 경우
-      setAllowAccess(true); //접근 허용
-      sessionStorage.setItem('saveAllowAccess', JSON.stringify(allowAccess)); //세션에 해당상태 저장
+      sessionStorage.setItem('saveAllowAccess', JSON.stringify(true)); //세션에 해당상태 저장
       alert('코드 인증이 완료되었습니다. 가입 절차를 진행할 수 있습니다.')
       navigate('/join'); // 1. 회원가입 페이지로 이동
       // 2. userData의 id값으로 입력받은 코드를 삽입
     } else { //코드일치X -> 접근권한 false -> 경고창
-      setAllowAccess(false); //접근 거부
-      sessionStorage.setItem('saveAllowAccess', JSON.stringify(allowAccess)); //세션에 해당상태 저장
+      sessionStorage.setItem('saveAllowAccess', JSON.stringify(false)); //세션에 해당상태 저장
       alert('유효하지 않은 코드입니다.');
     }
   }
