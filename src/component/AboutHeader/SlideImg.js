@@ -1,13 +1,17 @@
 import { useEffect, useMemo, useState } from 'react';
 import styles from './SlideImg.module.css'
-import readyimage from '../../image/page_ready.png'
+import image1 from '../../image/[이벤트]-오렌지방한장갑.png'
+import image2 from '../../image/[이벤트]-착착테이프.png'
+import image3 from '../../image/[이벤트]국산방진마스크.png'
+import { useNavigate } from 'react-router-dom';
 export function SlideImg() {
+  const navigate = useNavigate();
   //의존성 배열 Warning 메세지 해결 -
   // useMemo사용 - 의존성이 변경될 때만 다시 계산
     const images = useMemo(() => [
-      readyimage,
-      readyimage,
-      readyimage,
+      image1,
+      image2,
+      image3,
     ], []);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -24,7 +28,10 @@ export function SlideImg() {
   return(
     <div className={styles.sliderContainer}>
       {/* transform : translateX(-100%,-200%,-300%) -> x축방향으로 이동 */}
-      <div className={styles.sliderTrack} style={{ transform: `translateX(-${currentImageIndex * 100}%)` }}>
+      <div 
+      className={styles.sliderTrack} 
+      style={{ transform: `translateX(-${currentImageIndex * 100}%)`, cursor: 'pointer'}}
+      onClick={()=> navigate("/event")}>
         {/* 이미지들을 옆으로 이동시키기 위해 slider-track */}
         {images.map((url, index) => (
           <img key={index} src={url} alt={`슬라이드 화면 ${index}번`} className={styles.slide} />

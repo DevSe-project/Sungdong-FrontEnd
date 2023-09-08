@@ -43,7 +43,7 @@ export function Category(props){
           // 메인 카테고리와 함께 출력하기 위해 로직 구성
           if (props.data) { // 데이터가 로드되었는지 확인
             const findCategory = props.data.find((item) =>
-              item.title === resultSearch
+              item.title.includes(resultSearch)
             );
             // 상위 카테고리를 찾으면 표시
             if (findCategory) {
@@ -77,7 +77,7 @@ export function Category(props){
         if (filterSearch !== "") {
           // 데이터에서 타이틀과 검색결과를 찾고
           const filtered = props.data.filter((item) =>
-            item.title=== filterSearch)
+            item.title.includes(filterSearch))
           // 목록 밑작업 해줌
           const addCntList = filtered.map((item, index) => ({
             ...item,

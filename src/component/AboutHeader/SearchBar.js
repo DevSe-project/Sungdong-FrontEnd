@@ -46,13 +46,20 @@ export function SearchBar(props) {
       setSelectedResultIndex((prevIndex) =>
         prevIndex > 0 ? prevIndex - 1 : -1
       );
-    } else if (event.key === 'Enter' && selectedResultIndex !== -1) {
+    } else if (event.key === 'Enter') {
       // Enter 키를 누르면 선택한 결과 항목을 검색어로 설정
-      setSearchTerm(results[selectedResultIndex]);
-      sessionStorage.setItem('filterSearch', JSON.stringify(results[selectedResultIndex]))
-      navigate("/category")
-      setResults([]); // 결과 항목 숨기기
-      setSearchTerm("");
+      if(selectedResultIndex !== -1) {
+        setSearchTerm(results[selectedResultIndex]);
+        sessionStorage.setItem('filterSearch', JSON.stringify(results[selectedResultIndex]))
+        navigate("/category")
+        setResults([]); // 결과 항목 숨기기
+        setSearchTerm("");
+      } else {
+        sessionStorage.setItem('filterSearch', JSON.stringify(searchTerm))
+        navigate("/category")
+        setResults([]); // 결과 항목 숨기기
+        setSearchTerm("");
+      }
     } else if (event.key === 'Tab' && selectedResultIndex !== -1) {
       // 탭 키 누르면 자동완성
       event.preventDefault();
