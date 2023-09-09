@@ -127,6 +127,7 @@ textarea{
   padding: 1em;
   position: relative;
   cursor: pointer;
+  background-color: white;
 }
 .menu-item::after{
   content: '';

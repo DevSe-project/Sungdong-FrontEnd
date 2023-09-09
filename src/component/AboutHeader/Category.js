@@ -370,7 +370,8 @@ export function Category(props){
       login={props.login} setLogin={props.setLogin} iconHovered={props.iconHovered} 
       iconMouseEnter={props.iconMouseEnter} iconMouseLeave={props.iconMouseLeave} 
       icon_dynamicStyle={props.icon_dynamicStyle} text_dynamicStyle={props.text_dynamicStyle} 
-      category_dynamicStyle={props.category_dynamicStyle} iconOnClick={props.iconOnClick} />
+      category_dynamicStyle={props.category_dynamicStyle} iconOnClick={props.iconOnClick} 
+      menuOnClick={props.menuOnClick} menu_dynamicStyle={props.menu_dynamicStyle}/>
         <div className={styles.topTitle}>
           <h1>카테고리</h1>
         </div>
