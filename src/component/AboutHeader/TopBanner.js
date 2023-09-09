@@ -104,18 +104,19 @@ export function TopBanner(props) {
           onMouseLeave={() => handleMouseLeave(index)}
           className={`menu-item ${subMenuStates[index] && 'open'}
           menutab-item ${topTab === item.id ? 'active' : ''}`}
-          onClick={() => { saveTab(item.id) }}
-          >
-            <span
-            className={styles.link}
-            onClick={() => { 
+          onClick={() => 
+            { 
               if(item.require){
                 alert("로그인이 필요한 서비스입니다.");
                 navigate("/login");
                 return;
-              } 
-                navigate(`${item.link}`) }}>
-            {item.icon} {item.title}
+              }
+              saveTab(item.id) 
+              navigate(`${item.link}`)
+            }}
+          >
+            <span className={styles.link}>
+              {item.icon} {item.title}
             </span>
           </li>
           ))}
