@@ -117,7 +117,7 @@ export function MenuData(props){
             }}>
             {item.title.item}
           </span>
-          {subMenuStates[index] &&
+          {subMenuStates[index] === true &&
             <ul
               className={styles.subMenu}>
               {item.subMenuItems.map((subMenuItem, subMenuItemindex) => (
