@@ -1,0 +1,25 @@
+/* -------------------- TopBanner -------------------- */
+/* 위치 조정 */
+  .menuLocation{
+    background-color: lightgray;
+    list-style: none;
+    transition: transform 0.3s ease; /* 변환 효과를 부드럽게 적용합니다. */
+  }
+
+  /* 네비게이션 내부 링크 스타일링 (옵션) */
+  .link {
+    text-decoration: none;
+    color: black;
+    font-size: 1.2em;
+    font-weight: 550;
+    cursor: pointer;
+  }
+  
+  .sub_item{
+    padding: 1em;
+    font-size: large;
+    word-wrap: wrap;
+  }
+  .sub_item:hover{
+    background-color: lightgray;
+  }

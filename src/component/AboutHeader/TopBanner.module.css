@@ -85,3 +85,12 @@
 .sub_item:hover{
   background-color: lightgray;
 }
+
+.categoryBar{
+  flex-grow: 1; /* 메인 콘텐츠가 남은 공간을 채우도록 설정합니다. */
+  height: 100%;
+}
+
+.menuBar {
+  height: 0;
+}

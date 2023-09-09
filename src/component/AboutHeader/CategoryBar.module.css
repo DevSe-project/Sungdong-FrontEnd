@@ -1,3 +1,8 @@
+.categoryLocation{
+  display: flex;
+  justify-content: center;
+}
+
 .categoryBarContainer {
   width: 100%;
   background-color: #FFF;

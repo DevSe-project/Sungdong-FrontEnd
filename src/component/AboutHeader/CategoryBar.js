@@ -58,38 +58,40 @@ export function CategoryBar(props) {
   };
 
   return (
-    // 좌에서 우로 밀려오는 애니메이션 스타일 지정
-    <div className={styles.categoryBarContainer} 
-    style={{...props.category_dynamicStyle}}>
-      {/* 아이콘 hovered */}
-      {
-        props.categoryData
-        ? props.categoryData.map((item, index) => (
-          <li
-            key={index}
-            onMouseEnter={() => handleMouseEnter(index)}
-            onMouseLeave={() => handleMouseLeave(index)}
-            className={`categorymenu-item ${subMenuStates[index] && 'open'} + categorytab-item ${activeTab === item.id ? 'active' : ''}`}
-            onClick={() => { handleTabClick(item) }}
-          >
-            <span 
-            onClick={() => handleCategoryChange(item.title)}
+    <div className={styles.categoryLocation}>
+      <div className={styles.categoryBarContainer} 
+      //애니메이션 스타일 지정
+      style={{...props.category_dynamicStyle}}>
+        {/* 아이콘 hovered */}
+        {
+          props.categoryData
+          ? props.categoryData.map((item, index) => (
+            <li
+              key={index}
+              onMouseEnter={() => handleMouseEnter(index)}
+              onMouseLeave={() => handleMouseLeave(index)}
+              className={`categorymenu-item ${subMenuStates[index] && 'open'} + categorytab-item ${activeTab === item.id ? 'active' : ''}`}
+              onClick={() => { handleTabClick(item) }}
             >
-              {item.title}
-            </span>
-            {/* 서브메뉴 loop */}
-            {subMenuStates[index] && (
-              <ul onMouseLeave={() => handleMouseLeave(index)} className="sub-menu">
-                {item.subMenuItems.map((item, index) => (
-                  <li onClick={() => handleSubCategoryChange(item.item)} className={styles.category} key={index}>
-                    {item.item}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </li>
-        ))
-      : '로딩중'}
+              <span 
+              onClick={() => handleCategoryChange(item.title)}
+              >
+                {item.title}
+              </span>
+              {/* 서브메뉴 loop */}
+              {subMenuStates[index] && (
+                <ul onMouseLeave={() => handleMouseLeave(index)} className="sub-menu">
+                  {item.subMenuItems.map((item, index) => (
+                    <li onClick={() => handleSubCategoryChange(item.item)} className={styles.category} key={index}>
+                      {item.item}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))
+        : '로딩중'}
+      </div>
     </div>
   )
 }

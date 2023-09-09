@@ -136,6 +136,7 @@ function App() {
   // (START) 아이콘 클릭 관련 객체, 함수, state //
   const [iconHovered, setIconHovered] = useState(false);
   const [iconClicked, setIconClicked] = useState(true);
+  const [menuClicked, setMenuClicked] = useState(true);
   const iconMouseEnter = () => {
     setIconHovered(true);
   };
@@ -145,16 +146,20 @@ function App() {
   const iconOnClick = () => {
     setIconClicked(!iconClicked);
   }
+  const menuOnClick = () => {
+    setMenuClicked(!menuClicked);
+  }
+  // 카테고리 변하는 스타일 지정
   const transitionDurate = 350; // 애니메이션 지속 시간(ms)
   const icon_dynamicStyle = {
     transition: `color ${transitionDurate}ms, font-size ${transitionDurate}ms`,
-    color: iconClicked ? '#cc0000' : '#000',
-    fontSize: iconClicked ? '2.5em' : '2em',
+    color: menuClicked ? '#cc0000' : '#000',
+    fontSize: menuClicked ? '2.5em' : '2em',
   };
   const text_dynamicStyle = {
     transition: `color ${transitionDurate}ms, font-size ${transitionDurate}ms, font-weight ${transitionDurate}ms`,
     color: iconClicked ? '#6d3535 ' : '#000',
-    fontSize: iconClicked ? '1em' : '0.8em',
+    fontSize: '1.2em',
     fontWeight: iconClicked ? '800' : '600',
   }
   const category_dynamicStyle = {
@@ -162,6 +167,13 @@ function App() {
     opacity: iconClicked ? 1 : 0,
     height: iconClicked ? '100%' : '0px',
     visibility: iconClicked ? 'visible' : 'hidden',
+  }
+  const menu_dynamicStyle = {
+    transition: `opacity ${transitionDurate}ms, transform ${transitionDurate}ms, height ${transitionDurate}ms`,
+    opacity: menuClicked ? 1 : 0,
+    width: menuClicked ? '200px' : '0px',
+    height: menuClicked ? '100%' : '0px',
+    visibility: menuClicked ? 'visible' : 'hidden',
   }
   // (END) 아이콘 클릭 관련 객체, 함수, state //
 
@@ -174,8 +186,8 @@ function App() {
           <>
             <MainPage categoryData={categoryData} setCategoryData={setCategoryData} login={login} setLogin={setLogin}
               iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle}
-              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle}
-              data={data} todayTopicData={todayTopicData} setTodayTopicData={setTodayTopicData} />
+              category_dynamicStyle={category_dynamicStyle} menuOnClick={menuOnClick} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle}
+              data={data} todayTopicData={todayTopicData} setTodayTopicData={setTodayTopicData} menu_dynamicStyle={menu_dynamicStyle} />
             <div
               className='topButton'
               onClick={() =>
