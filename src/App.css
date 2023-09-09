@@ -129,6 +129,10 @@ textarea{
   cursor: pointer;
   background-color: white;
 }
+
+.menu-item ul {
+  padding-top: 1.5em;
+}
 .menu-item::after{
   content: '';
   position: absolute;
