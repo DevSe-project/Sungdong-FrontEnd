@@ -1,7 +1,7 @@
 /* -------------------- TopBanner -------------------- */
 /* 위치 조정 */
   .menuLocation{
-    background-color: lightgray;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     list-style: none;
     transition: transform 0.3s ease; /* 변환 효과를 부드럽게 적용합니다. */
   }
@@ -13,6 +13,11 @@
     font-size: 1.2em;
     font-weight: 550;
     cursor: pointer;
+  }
+
+  .subMenu{
+    display: flex;
+    flex-direction: column;
   }
   
   .sub_item{

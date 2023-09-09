@@ -18,25 +18,28 @@ export function TopBanner(props) {
     setTopTab(tabstate);
     
     // 경로에 따른 상태 초기화
-    if (location.pathname === '/' || location.pathname === '/login' || location.pathname === '/category') {
-      localStorage.removeItem('tabState');
+    if (!(location.pathname === '/delivery' || location.pathname === '/likeitem' || location.pathname === '/basket')) {
+      localStorage.removeItem('menuTab');
       setTopTab(null);
     }
   }, [location]); // 두 번째 매개변수를 빈 배열로 설정하여 최초 렌더링 시에만 실행
   const menuData = [
     {
       id: 1,
+      icon : <i className="fas fa-boxes"></i>,
       title: '주문/배송 현황',
       link: '/delivery',
       require : !props.login
     },
     {
       id: 2,
+      icon : <i className="fas fa-heart-circle"/>,
       title: '찜 목록',
       link: '/likeitem',
     },
     {
       id: 3,
+      icon : <i class="fa fa-shopping-basket"/>,
       title: '장바구니 목록',
       link: '/basket',
       require : !props.login
@@ -91,7 +94,7 @@ export function TopBanner(props) {
             onMouseEnter={props.iconMouseEnter}
             onMouseLeave={props.iconMouseLeave}
           >
-            카테고리
+            <i className="fas fa-bookmark"/> 카테고리
           </li>
           {menuData.map((item, index) => (
           <li
@@ -112,7 +115,7 @@ export function TopBanner(props) {
                 return;
               } 
                 navigate(`${item.link}`) }}>
-            {item.title}
+            {item.icon} {item.title}
             </span>
           </li>
           ))}
@@ -132,7 +135,13 @@ export function TopBanner(props) {
       {/* 클릭하면 나오는 카테고리바 */}
       <div style={{display: 'flex', justifyContent: 'flex-start', width: '100%'}}>
         <div className={styles.menuBar}>
-          <MenuData menu_dynamicStyle={props.menu_dynamicStyle}/>
+          <MenuData data={props.data} setData={props.setData} 
+          categoryData={props.categoryData} setCategoryData={props.setCategoryData} 
+          login={props.login} setLogin={props.setLogin} iconHovered={props.iconHovered} 
+          iconMouseEnter={props.iconMouseEnter} iconMouseLeave={props.iconMouseLeave} 
+          icon_dynamicStyle={props.icon_dynamicStyle} text_dynamicStyle={props.text_dynamicStyle} 
+          category_dynamicStyle={props.category_dynamicStyle} iconOnClick={props.iconOnClick}
+          menuOnClick={props.menuOnClick} menu_dynamicStyle={props.menu_dynamicStyle}/>
         </div>
         <div className={styles.categoryBar}>
           <CategoryBar selectedCategory={props.selectedCategory} setSelectedCategory={props.setSelectedCategory} selectedSubCategory={props.selectedSubCategory} setSelectedSubCategory={props.setSelectedSubCategory} data={props.data} setData={props.setData} categoryData={props.categoryData} setCategoryData={props.setCategoryData} category_dynamicStyle={props.category_dynamicStyle}/>

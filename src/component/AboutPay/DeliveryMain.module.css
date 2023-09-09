@@ -1,17 +1,17 @@
 /* 큰 컨테이너 */
 .container{
   margin-top: 2em;
-  width: 100%;
+  width: 80%;
+  margin-left: 10%;
   display: flex;
   flex-direction: column;
   gap: 1em;
 }
 
 .title{
-  width: 80%;
+  width: 100%;
   margin: 2em;
   padding-bottom: 1%;
-  margin-left: 10%;
   margin-right: 0;
   display: flex;
   flex-direction: row;

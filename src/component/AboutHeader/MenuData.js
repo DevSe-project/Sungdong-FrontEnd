@@ -9,7 +9,6 @@ export function MenuData(props){
   useEffect(() => {
     const tabstate = JSON.parse(localStorage.getItem('tabState'));
     setTopTab(tabstate);
-    
     // 경로에 따른 상태 초기화
     if (location.pathname === '/' || location.pathname === '/login' || location.pathname === '/category') {
       localStorage.removeItem('tabState');
@@ -22,7 +21,6 @@ export function MenuData(props){
       id: 1,
       title: {
         item: '성동물산 소개',
-        link: '/introduceCompany'
       },
       subMenuItems: [{
         item: '기업 소개',
@@ -45,7 +43,6 @@ export function MenuData(props){
       id: 2,
       title: {
         item: '고객센터',
-        link: '/userservice/notice'
       },
       subMenuItems: [
         {
@@ -63,49 +60,32 @@ export function MenuData(props){
       id: 3,
       title: {
         item: '마이페이지',
-        link: '/mypages',
-        require : !props.login
       },
       subMenuItems: [{
         item: '내 정보 관리',
         link: '/mypages',
         require : !props.login
-      },
-      {
-        item: '장바구니 목록',
-        link: '/basket',
-        require : !props.login
-      },
-      {
-        item: '내가 찜한 목록',
-        link: '/likeitem',
-      },
-      {
-        item: '주문 / 배송 게시판',
-        link: '/delivery',
-        require : !props.login
       }],
     },
   ];
-  const handleMouseEnter = (index) => {
-    // 해당 인덱스의 메뉴를 열기 위해 true로 설정
-    const newSubMenuStates = [...subMenuStates];
-    newSubMenuStates[index] = true;
-    setSubMenuStates(newSubMenuStates);
-  };
-
-  const handleMouseLeave = (index) => {
-    // 해당 인덱스의 메뉴를 닫기 위해 false로 설정
-    const newSubMenuStates = [...subMenuStates];
-    newSubMenuStates[index] = false;
-    setSubMenuStates(newSubMenuStates);
-  };
 
   //서브메뉴 열림창 변수 초기화
-  const [subMenuStates, setSubMenuStates] = useState(menuData.map(() => false));
+  const [subMenuStates, setSubMenuStates] = useState([menuData.map(() => false)]);
 
   function saveTab(id) {
     localStorage.setItem('tabState', JSON.stringify(id));
+  }
+
+  function toggleSubMenu(index) {
+    const newSubMenuStates = Array.from({ length: menuData.length }, () => false); // 모든 서브메뉴를 닫도록 초기화
+    // subMenuStates 배열의 해당 인덱스의 값을 반전시킴
+    newSubMenuStates[index] = !newSubMenuStates[index];
+    setSubMenuStates(newSubMenuStates);
+  }
+
+  const transMenu = {
+    transition: `height 350ms`,
+    height: subMenuStates ? '100px' : '0px'
   }
 
   return(
@@ -117,11 +97,14 @@ export function MenuData(props){
         <li
           key={index}
           id={item.id}  // data-id 속성을 사용하여 탭의 id를 저장
-          onMouseEnter={() => handleMouseEnter(index)}
-          onMouseLeave={() => handleMouseLeave(index)}
-          className={`menu-item ${subMenuStates[index] && 'open'}
+          style={{ boxShadow: `0px 2px 4px 1px rgba(0, 0, 0, 0.2)`}}
+          className={`menu-item
           menutab-item ${topTab === item.id ? 'active' : ''}`}
-          onClick={() => { saveTab(item.id) }}
+          onClick={() => { 
+            saveTab(item.id)
+            toggleSubMenu(index) 
+          }}
+          
         >
           <span
             className={styles.link}
@@ -131,12 +114,12 @@ export function MenuData(props){
                 navigate("/login");
                 return;
               } 
-                navigate(`${item.title.link}`) }}>
+            }}>
             {item.title.item}
           </span>
-          {subMenuStates[index] && (
+          {subMenuStates[index] &&
             <ul
-              className="sub-menu">
+              className={styles.subMenu}>
               {item.subMenuItems.map((subMenuItem, subMenuItemindex) => (
                 <li
                   onClick={() => {
@@ -153,7 +136,7 @@ export function MenuData(props){
                 </li>
               ))}
             </ul>
-          )}
+          }
         </li>
       ))}
     </div>

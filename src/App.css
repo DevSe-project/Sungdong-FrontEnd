@@ -145,23 +145,6 @@ textarea{
   height: 3px;
 }
 
-.menu-item .sub-menu {
-  display: block;
-  position: absolute;
-  top: 100%;
-  left: -25%;
-  background-color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  width: 150%;
-  z-index: 999;
-}
-
-.menu-item.open .sub-menu {
-  display: block;
-  opacity: 1;
-  transform: ease 0.3s;
-}
-
 /* ==== 검색 아이콘 ==== */
 i.fas.fa-search {
   background-color: white;
