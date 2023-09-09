@@ -12,8 +12,6 @@ export default function MainPage(props) {
       {/* 이벤트 등의 항목을 표시할 슬라이드이미지바 */}
       <SlideImg />
       <List data={props.data}/>
-      <TodayTopicList todayTopicData={props.todayTopicData} setTodayTopicData={props.setTodayTopicData} />
-      <ComewayList />
 
     </div>
   )

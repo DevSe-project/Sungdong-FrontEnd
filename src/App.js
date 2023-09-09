@@ -135,7 +135,7 @@ function App() {
 
   // (START) 아이콘 클릭 관련 객체, 함수, state //
   const [iconHovered, setIconHovered] = useState(false);
-  const [iconClicked, setIconClicked] = useState(false);
+  const [iconClicked, setIconClicked] = useState(true);
   const iconMouseEnter = () => {
     setIconHovered(true);
   };

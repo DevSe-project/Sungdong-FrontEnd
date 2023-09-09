@@ -133,11 +133,11 @@ export function TopBanner(props) {
               style={{ ...props.icon_dynamicStyle }}
               className={styles.categoryIcon}
             />
-            {/* 카데고리 텍스트 */}
+            {/* 카데고리 텍스트
             <div style={{...props.text_dynamicStyle}}>
               카테<br/>
               고리
-            </div>
+            </div> */}
           </div>
           {/* 로고 */}
           <img className={styles.image} onClick={() => navigate("/")} src={logo} alt="로고" height='70px' />

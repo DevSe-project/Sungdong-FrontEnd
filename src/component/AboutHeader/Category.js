@@ -440,6 +440,7 @@ export function Category(props){
                 <th>상품명</th>
                 <th>단위</th>
                 <th>표준가</th>
+                <th style={{fontWeight: '650'}}>공급가</th>
                 <th>더보기</th>
               </tr>
             </thead>
@@ -461,6 +462,13 @@ export function Category(props){
                   </td>
                   <td>EA</td>
                   <td>\{item.price}</td>
+                  <td style={{fontWeight: '650'}}>
+                    {item.finprice
+                    ? item.discount
+                    ? `\\${ item.finprice - (((item.price/100)*item.discount)*item.cnt)}`
+                    : `\\${item.finprice}`
+                    : item.price}
+                  </td>
                   <td 
                     className={styles.detailView}
                     onClick={()=>handleItemClick(item.id)}>
@@ -472,12 +480,15 @@ export function Category(props){
                 {/* 모달 */}
                 {selectedData === item.id && (
                 <tr>
-                  <td colSpan="7">
+                  <td colSpan="8">
                     <table className={styles.colTable}>
                       <thead style={{ backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.6)'}}>
                         <tr>
-                          <th style={{width: '25%'}}>
+                          <th style={{width: '15%'}}>
                             브랜드
+                          </th>
+                          <th style={{width: '15%'}}>
+                            규격
                           </th>
                           <th style={{width: '10%'}}>
                             옵션
@@ -491,7 +502,7 @@ export function Category(props){
                           <th style={{width: '10%'}}>
                             적용가
                           </th>
-                          <th style={{width: '10%'}}>
+                          <th style={{width: '10%', fontWeight: '650'}}>
                             공급가
                           </th>
                           <th style={{width: '20%'}}>
@@ -503,6 +514,9 @@ export function Category(props){
                         <tr>
                           <td>
                             {item.brand}
+                          </td>
+                          <td>
+                            규격 정보
                           </td>
                           <td>
                             {item.option 
@@ -542,12 +556,12 @@ export function Category(props){
                           <td>
                             {item.discount}%
                           </td>
-                          <td>
+                          <td style={{fontWeight: '650'}}>
                             {item.discount
                             ? `\\${((item.price/100)*item.discount)*item.cnt}`
                             : 0}
                           </td>
-                          <td>
+                          <td style={{fontWeight: '650'}}>
                           {item.finprice
                           ? item.discount
                           ? `\\${ item.finprice - (((item.price/100)*item.discount)*item.cnt)}`
