@@ -134,7 +134,17 @@ export function TopBanner(props) {
               window.location.reload();
             } else {
               navigate("/login");
-            }}}>{props.login ? <div style={{display: 'flex', flexDirection: 'column'}}><i className="fas fa-sign-out"/> <span className={styles.text}>로그아웃</span></div> : <div style={{display: 'flex', flexDirection: 'column'}}><i className="fas fa-sign-in"/> <span className={styles.text}>로그인</span></div>}
+            }}}>
+            { props.login 
+            ? <div>
+                <i style={{fontSize: '1.2em'}} className="fas fa-sign-out"/> 
+                <span className={styles.text}>&nbsp;로그아웃</span>
+              </div> 
+            : <div>
+                <i style={{fontSize: '1.2em'}} className="fas fa-sign-in"/> 
+                <span className={styles.text}>&nbsp;로그인</span>
+              </div>
+            }
           </button>
         </div>
       </div>
