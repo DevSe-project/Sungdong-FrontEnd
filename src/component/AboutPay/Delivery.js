@@ -73,7 +73,7 @@ export function Delivery(props){
               <i style={{color: '#ccc'}} className="fas fa-trash-alt"></i>
             </div>
             <div className={styles.deliveryNowItem}>
-              <img className={styles.img} src='../../image/logo.jpeg' alt="주문상품"/>
+              <img className={styles.img} src={item.image.mini} alt="주문상품"/>
               <div className={styles.deliveryNowInformation}>
                 <span>{item.productName}{item.optionSelected && `(${item.optionSelected})`}, {item.cnt}개 </span>
                 <span>{item.discount 
@@ -111,7 +111,7 @@ export function Delivery(props){
             <i style={{color: '#ccc'}} className="fas fa-trash-alt"></i>
           </div>
           <div className={styles.deliveryNowItem}>
-            <img className={styles.img} src='../../image/logo.jpeg' alt="주문상품"/>
+            <img className={styles.img} src={item.image.mini} alt="주문상품"/>
             <div className={styles.deliveryNowInformation}>
               <span>{item.productName}{item.optionSelected && `(${item.optionSelected})`}, {item.cnt}개 </span>
               <span>{item.discount 
