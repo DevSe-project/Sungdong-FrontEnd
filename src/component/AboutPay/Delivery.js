@@ -45,6 +45,12 @@ export function Delivery(props){
 
   return(
     <div className={styles.container}>
+      {resultSearch &&
+      <h3 style={{margin: '1em'}}>
+      "{resultSearch}" 에 대해
+      <span style={{color: '#CC0000', fontWeight: '650', margin: '0.5em'}}>{filteredItems.length}건</span>
+      이 검색 되었습니다.
+      </h3>}
       {props.orderData ?
       filteredItems.length > 0 ? filteredItems.map((item, key)=> 
       <div key={key} className={styles.deliveryList}>

@@ -94,6 +94,22 @@ export function DeliveryMain(props){
             onChange={handleSearch}
             onKeyDown={handleKeyDown} // onKeyDown 이벤트 핸들러 추가
             />
+            <ul 
+            className={searchTerm !== "" 
+            && results.length > 0 
+            ? styles.result
+            : null}>
+            {results && results.map((result, index) => (
+              <li
+                key={index}
+                className={index === selectedResultIndex 
+                  ? styles.selected 
+                  : styles.resultInner}
+              >
+                {result}
+              </li>
+          ))}
+        </ul>
             <i className="fas fa-search"/>
           </div>
         </div>

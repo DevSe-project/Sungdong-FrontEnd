@@ -38,6 +38,7 @@
   padding: 0.4em;
   margin: 0;
   justify-content: space-between;
+  position: relative;
 }
 
 /* Input 창 스타일 */
@@ -50,4 +51,25 @@
   margin: 0;
   padding: 0.3em;
   padding-left: 0.5em;
+}
+
+.result{
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+  position: absolute;
+  top: 110%;
+  width: 90%;
+  left: 0;
+  right: 0;
+  z-index: 999;
+}
+.resultInner{
+  padding: 1em;
+}
+.selected{
+  background-color: lightgray;
+  padding: 1em;
 }
