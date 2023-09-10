@@ -64,10 +64,10 @@ i.fas.fa-search {
 
 @media screen and (max-width: 768px) {
   .searchInput {
-      display: none; /* 텍스트 숨김 */
+      display: none; /* 서치바 숨김 */
   }
   .searchInputContainer {
-    display: none; /* 텍스트 숨김 */
+    display: none; /* 서치바 숨김 */
   }
 }
 
