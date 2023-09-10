@@ -27,20 +27,20 @@ export function TopBanner(props) {
   const menuData = [
     {
       id: 1,
-      icon : <i className="fas fa-boxes"></i>,
+      icon : <i style={{fontSize: '1.2em'}} className="fas fa-boxes"></i>,
       title: '주문/배송 현황',
       link: '/delivery',
       require : !props.login
     },
     {
       id: 2,
-      icon : <i className="fas fa-heart-circle"/>,
+      icon : <i style={{fontSize: '1.2em'}} className="fas fa-heart-circle"/>,
       title: '찜 목록',
       link: '/likeitem',
     },
     {
       id: 3,
-      icon : <i className="fa fa-shopping-basket"/>,
+      icon : <i style={{fontSize: '1.2em'}} className="fa fa-shopping-basket"/>,
       title: '장바구니 목록',
       link: '/basket',
       require : !props.login
@@ -96,7 +96,9 @@ export function TopBanner(props) {
             onMouseEnter={props.iconMouseEnter}
             onMouseLeave={props.iconMouseLeave}
           >
-            <i className="fas fa-bookmark"/> <span className={styles.text}>카테고리</span>
+          <div style={{display: 'flex', flexDirection: 'column', gap: '0.5em'}}>
+            <i style={{fontSize: '1.2em'}} className="fas fa-bookmark"/> <span className={styles.text}>카테고리</span>
+          </div>
           </li>
           {menuData.map((item, index) => (
           <li
@@ -118,7 +120,9 @@ export function TopBanner(props) {
             }}
           >
             <span className={styles.link}>
-              {item.icon} <span className={styles.text}>{item.title}</span>
+              <div style={{display: 'flex', flexDirection: 'column', gap: '0.5em'}}>
+                {item.icon} <span className={styles.text}>{item.title}</span>
+              </div>
             </span>
           </li>
           ))}
@@ -130,7 +134,7 @@ export function TopBanner(props) {
               window.location.reload();
             } else {
               navigate("/login");
-            }}}>{props.login ? <><i className="fas fa-sign-out"/> <span className={styles.text}>로그아웃</span></> : <><i className="fas fa-sign-in"/> <span className={styles.text}>로그인</span></>}
+            }}}>{props.login ? <div style={{display: 'flex', flexDirection: 'column'}}><i className="fas fa-sign-out"/> <span className={styles.text}>로그아웃</span></div> : <div style={{display: 'flex', flexDirection: 'column'}}><i className="fas fa-sign-in"/> <span className={styles.text}>로그인</span></div>}
           </button>
         </div>
       </div>
