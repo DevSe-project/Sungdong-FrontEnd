@@ -1,10 +1,18 @@
 
+.container{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin-left: 10%;
+  width: 80%;
+}
+
 /* 슬라이더 컨테이너 */
 .sliderContainer {
   padding-top: 2em;
   overflow: hidden;
-  width: 300vw;
-  max-width: 500px; /* 원하는 크기로 설정 */
+  width: clamp(200px, 30vw, 50em);
+  max-width: clamp(200px, 30vw, 50em); /* 원하는 크기로 설정 */
   margin: 0 auto;
   object-fit: cover;
 }
@@ -12,12 +20,12 @@
 /* 이미지들을 옆으로 이동시키기 위한 슬라이더 트랙 */
 .sliderTrack {
   display: flex;
-  width: 500px;
+  width: clamp(200px, 30vw, 50em);
   transition: transform 0.5s ease-in-out;
 }
 
 /* 각 이미지 슬라이드 */
 .slide {
-  width: 500px;
+  width: clamp(200px, 30vw, 50em);
   height: auto;
 }

@@ -52,6 +52,11 @@
   color: #000;
 }
 
+.shortimage{
+  display: none;
+  cursor: pointer;
+}
+
 .image{
   cursor: pointer;
 }
@@ -93,4 +98,26 @@
 
 .menuBar {
   height: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .text {
+      display: none; /* 텍스트 숨김 */
+  }
+  .image{
+    display: none;
+  }
+  .shortimage{
+    display: block;
+  }
+}
+
+
+@media screen and (max-width: 1200px) and (min-width: 769px) {
+  .text {
+    display: none; /* 텍스트 숨김 */
+}
+  .searchInputContainer {
+    width: 10em; /* 텍스트 숨김 */
+}
 }

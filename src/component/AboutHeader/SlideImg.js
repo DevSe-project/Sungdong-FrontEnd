@@ -13,6 +13,7 @@ export function SlideImg() {
       image2,
       image3,
     ], []);
+
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     useEffect(() => {
@@ -26,6 +27,7 @@ export function SlideImg() {
     }, [images]);
   
   return(
+  <div className={styles.container}>
     <div className={styles.sliderContainer}>
       {/* transform : translateX(-100%,-200%,-300%) -> x축방향으로 이동 */}
       <div 
@@ -38,5 +40,17 @@ export function SlideImg() {
         ))}
       </div>
     </div>
+    <div className={styles.sliderContainer}>
+      <div 
+      className={styles.sliderTrack} 
+      style={{ transform: `translateX(-${currentImageIndex * 100}%)`, cursor: 'pointer'}}
+      onClick={()=> navigate("/event")}>
+        {/* 이미지들을 옆으로 이동시키기 위해 slider-track */}
+        {images.map((url, index) => (
+          <img key={index} src={url} alt={`슬라이드 화면 ${index}번`} className={styles.slide} />
+        ))}
+      </div>
+    </div>
+  </div>
   );
 };

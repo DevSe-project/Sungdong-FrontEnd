@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import logo from '../../image/logo.jpeg'
+import shortLogo from '../../image/shortLogo.png'
 import { useLocation, useNavigate } from 'react-router-dom'
 import styles from './TopBanner.module.css';
 import { SearchBar } from './SearchBar';
@@ -39,7 +40,7 @@ export function TopBanner(props) {
     },
     {
       id: 3,
-      icon : <i class="fa fa-shopping-basket"/>,
+      icon : <i className="fa fa-shopping-basket"/>,
       title: '장바구니 목록',
       link: '/basket',
       require : !props.login
@@ -85,6 +86,7 @@ export function TopBanner(props) {
           </div>
           {/* 로고 */}
           <img className={styles.image} onClick={() => navigate("/")} src={logo} alt="로고" height='70px' />
+          <img className={styles.shortimage} onClick={() => navigate("/")} src={shortLogo} alt="로고" height='70px' />
           {/* 서치바 */}
           <SearchBar data={props.data} setData={props.setData}/>
           <li
@@ -94,7 +96,7 @@ export function TopBanner(props) {
             onMouseEnter={props.iconMouseEnter}
             onMouseLeave={props.iconMouseLeave}
           >
-            <i className="fas fa-bookmark"/> 카테고리
+            <i className="fas fa-bookmark"/> <span className={styles.text}>카테고리</span>
           </li>
           {menuData.map((item, index) => (
           <li
@@ -116,7 +118,7 @@ export function TopBanner(props) {
             }}
           >
             <span className={styles.link}>
-              {item.icon} {item.title}
+              {item.icon} <span className={styles.text}>{item.title}</span>
             </span>
           </li>
           ))}
@@ -128,7 +130,7 @@ export function TopBanner(props) {
               window.location.reload();
             } else {
               navigate("/login");
-            }}}>{props.login ? '로그아웃' : '로그인'}
+            }}}>{props.login ? <><i className="fas fa-sign-out"/> <span className={styles.text}>로그아웃</span></> : <><i className="fas fa-sign-in"/> <span className={styles.text}>로그인</span></>}
           </button>
         </div>
       </div>
