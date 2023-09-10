@@ -194,7 +194,7 @@ function basketThis(product, count){
 
             {/* 상품 이미지 부분 */}
             <div className={styles.headLeft}>
-              <img src={detailData.image.original} alt="이미지" 
+              <img src={props.data && detailData.image.original} alt="이미지" 
               className={styles.thumnail}/>
             </div>
 

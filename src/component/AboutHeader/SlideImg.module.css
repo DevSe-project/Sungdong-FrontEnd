@@ -1,4 +1,3 @@
-
 .container{
   display: flex;
   flex-direction: row;
@@ -28,4 +27,19 @@
 .slide {
   width: clamp(200px, 30vw, 50em);
   height: auto;
+}
+
+@media screen and (max-width: 768px) {
+  .container{
+    display: none;
+  }
+  .sliderContainer{
+    display: none;
+  }
+  .sliderTrack{
+    display: none;
+  }
+  .slide{
+    display: none;
+  }
 }

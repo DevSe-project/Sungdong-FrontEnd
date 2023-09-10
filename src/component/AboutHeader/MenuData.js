@@ -35,7 +35,7 @@ export function MenuData(props){
         link: '/todaytopic/1',
       },
       {
-        item: '진행 중인 이벤트',
+        item: '이벤트',
         link: '/event',
       }],
     },
@@ -85,7 +85,7 @@ export function MenuData(props){
 
   const transMenu = {
     transition: `height 350ms`,
-    height: subMenuStates ? '100px' : '0px'
+    height: subMenuStates ? '100%' : '0px'
   }
 
   return(
@@ -119,7 +119,8 @@ export function MenuData(props){
           </span>
           {subMenuStates[index] === true &&
             <ul
-              className={styles.subMenu}>
+              className={styles.subMenu}
+              >
               {item.subMenuItems.map((subMenuItem, subMenuItemindex) => (
                 <li
                   onClick={() => {
