@@ -206,7 +206,7 @@
   position: sticky;
   z-index: 989;
   height: 40px;
-  width: clamp(30em, 50%, 50em);
+  width: clamp(25em, 50%, 50em);
 }
 
 /* 스켈레톤 부분 */
