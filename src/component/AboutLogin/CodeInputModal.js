@@ -12,7 +12,7 @@ export default function CodeInputModal(props) {
   useEffect(() => {
     const exit_esc = (event) => {
       if (event.key === 'Escape') {
-        props.onClose(); // "Esc" 키 누를 때 모달 닫기 함수 호출
+        props.closeModal(); // "Esc" 키 누를 때 모달 닫기 함수 호출
       }
     };
 
@@ -21,7 +21,7 @@ export default function CodeInputModal(props) {
     return () => {
       window.removeEventListener('keydown', exit_esc);
     };
-  }, [props.onClose]);
+  }, [props.closeModal]);
 
   // 인증코드 입력 state
   const [inputCode, setInputCode] = useState('');
@@ -46,7 +46,7 @@ export default function CodeInputModal(props) {
       <div className={styles.modalContainer}>
         {/* Exit Button */}
         <div className={styles.exitButton}>
-          <span onClick={() => { props.onClose() }}>
+          <span onClick={() => { props.closeModal() }}>
             <i className="fas fa-times"></i>
           </span>
         </div>

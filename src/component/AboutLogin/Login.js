@@ -103,11 +103,11 @@ export function Login(props) {
         {/* 아이디or비밀번호 둘 중 하나를 누르기만 하면 찾기창 오픈 
          ->오픈했을 때 나타나는 화면은 openModal의 state에 따라 FindModal.js에서 결정 */}
         {modalType &&
-          <FindModal userData={props.userData} setUserData={props.setUserData} type={modalType} onClose={closeModal} openModal={openModal} />}
+          <FindModal userData={props.userData} setUserData={props.setUserData} modalType={modalType} closeModal={closeModal} openModal={openModal} />}
 
         {/* 회원가입을 눌러야만 코드입력창 오픈 */}
         {modalType === 'code' &&
-          <CodeInputModal userData={props.userData} setUserData={props.setUserData} onClose={closeModal} codeState={props.codeState} setCode={props.setCodeState} />}
+          <CodeInputModal userData={props.userData} setUserData={props.setUserData} closeModal={closeModal} codeState={props.codeState} setCode={props.setCodeState} />}
       </div>
 
     </div>
