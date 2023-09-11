@@ -100,10 +100,8 @@ export function Login(props) {
           </div>
         </div>
 
-        {modalType && (
-          <FindModal type={modalType} onClose={closeModal} openModal={openModal} />
-        )}
-        {modalType === 'code' ? <CodeInputModal onClose={closeModal} codeState={props.codeState} setCode={props.setCodeState} /> : null}
+        {modalType && <FindModal type={modalType} onClose={closeModal} openModal={openModal} />}
+        {modalType === 'code' && <CodeInputModal onClose={closeModal} codeState={props.codeState} setCode={props.setCodeState} />}
       </div>
 
     </div>
