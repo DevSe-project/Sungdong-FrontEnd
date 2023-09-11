@@ -26,8 +26,8 @@ export default function JoinForm(props) {
     // 무작위 사업자 등록번호 생성 함수 (테스트용)
     function generateRandomBusinessNumber() {
         const num1 = String(Math.floor(Math.random() * 1000)).padStart(3, '0');
-        const num2 = String(Math.floor(Math.random() * 10000)).padStart(4, '0');
-        const num3 = String(Math.floor(Math.random() * 10000)).padStart(4, '0');
+        const num2 = String(Math.floor(Math.random() * 100)).padStart(2, '0');
+        const num3 = String(Math.floor(Math.random() * 100000)).padStart(5, '0');
         return num1 + '-' + num2 + '-' + num3;
     }
 
@@ -48,7 +48,7 @@ export default function JoinForm(props) {
                     p_nm: "홍길동",
                     p_nm2: "홍길동",
                     b_nm: "(주)테스트",
-                    corp_no: "0000000000000",
+                    corp_no: "231-86-23454",
                     b_sector: "",
                     b_type: "",
                     b_adr: "",
