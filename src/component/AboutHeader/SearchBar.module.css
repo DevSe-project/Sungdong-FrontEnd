@@ -63,6 +63,7 @@ i.fas.fa-search {
 }
 
 .select{
+  cursor: pointer;
   align-items: center;
   font-size: 1em;
   font-weight: 550;

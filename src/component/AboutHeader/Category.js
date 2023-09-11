@@ -554,11 +554,8 @@ export function Category(props){
                     <table className={styles.colTable}>
                       <thead style={{ backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.6)'}}>
                         <tr>
-                          <th style={{width: '15%'}}>
+                          <th style={{width: '25%'}}>
                             브랜드
-                          </th>
-                          <th style={{width: '15%'}}>
-                            규격
                           </th>
                           <th style={{width: '10%'}}>
                             옵션
@@ -584,9 +581,6 @@ export function Category(props){
                         <tr>
                           <td>
                             {item.brand}
-                          </td>
-                          <td>
-                            규격 정보
                           </td>
                           <td>
                             {item.option 
