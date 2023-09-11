@@ -19,7 +19,7 @@ export let UserData = [
                 num2 : '123',
                 num3 : '4567',
             },
-            businessNum : '123-45-67890',
+            businessNum : '1234567890',
         },
         smsService: 'yes',
         address: '',
