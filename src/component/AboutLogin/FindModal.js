@@ -1,14 +1,13 @@
-import { React, useEffect, useState } from 'react';
+import { React, useEffect } from 'react';
 import styles from './Modal.module.css';
 
-export default function FindModal({ type, onClose, openModal }) {
-
-
+export default function FindModal(props) {
+    
     // esc키를 누르면 모달창 닫기.
     useEffect(() => {
         const exit_esc = (event) => {
             if (event.key === 'Escape') {
-                onClose(); // "Esc" 키 누를 때 모달 닫기 함수 호출
+                props.CloseModal(); // "Esc" 키 누를 때 모달 닫기 함수 호출
             }
         };
 
@@ -17,29 +16,29 @@ export default function FindModal({ type, onClose, openModal }) {
         return () => {
             window.removeEventListener('keydown', exit_esc);
         };
-    }, [onClose]);
+    }, [props.closeModal]);
 
 
     return (
         <div className={styles.modalOverlay}>
             <div className={styles.modalContainer}>
                 <div className={styles.exitButton}>
-                    <span onClick={() => { onClose() }}>
+                    <span onClick={() => { props.closeModal() }}>
                         <i class="fas fa-times"></i>
                     </span>
                 </div>
                 <div className={styles.modalContent}>
                     <div className={styles.titleBox}>
-                        <div className={`${styles.title} ${type == 'id' ? styles.selected_title : ``}`} onClick={() => { openModal('id') }}>
+                        <div className={`${styles.title} ${props.modalType == 'id' ? styles.selected_title : ``}`} onClick={() => { props.openModal('id') }}>
                             아이디 찾기
                         </div>
-                        <div className={`${styles.title} ${type == 'pw' ? styles.selected_title : ``}`} onClick={() => { openModal('pw') }}>
+                        <div className={`${styles.title} ${props.modalType == 'pw' ? styles.selected_title : ``}`} onClick={() => { props.openModal('pw') }}>
                             비밀번호 찾기
                         </div>
                     </div>
 
                     {/* 아이디 비번 선택란 */}
-                    {type === 'id' ? <Find_IdModal /> : <Find_PasswordModal />}
+                    {props.modalType === 'id' ? <Find_IdModal /> : <Find_PasswordModal />}
                 </div>
             </div>
         </div>
