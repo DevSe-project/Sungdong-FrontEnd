@@ -97,6 +97,10 @@ export function SearchBar(props) {
             sessionStorage.removeItem('filterSearch');
             break;
           default:
+            sessionStorage.setItem('filterSearch', JSON.stringify(searchTerm));
+            sessionStorage.removeItem('filterSearchBrand');
+            sessionStorage.removeItem('filterSearchCode');
+            sessionStorage.removeItem('filterSearchOption');
             break;
         }
         navigate("/category")
@@ -127,6 +131,12 @@ export function SearchBar(props) {
             sessionStorage.removeItem('filterSearchBrand');
             sessionStorage.removeItem('filterSearchCode');
             sessionStorage.removeItem('filterSearch');
+            break;
+          default:
+            sessionStorage.setItem('filterSearch', JSON.stringify(searchTerm));
+            sessionStorage.removeItem('filterSearchBrand');
+            sessionStorage.removeItem('filterSearchCode');
+            sessionStorage.removeItem('filterSearchOption');
             break;
         }
         navigate("/category")
