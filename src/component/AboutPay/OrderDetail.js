@@ -4,10 +4,10 @@ import { TopBanner } from '../AboutHeader/TopBanner'
 export function OrderDetail(props){
   const navigate = useNavigate();
   function gotoLink(){
-    localStorage.removeItem('newOrderData');
+    sessionStorage.removeItem('newOrderData');
     navigate("/");
   }
-  const orderData = JSON.parse(localStorage.getItem('newOrderData'))
+  const orderData = JSON.parse(sessionStorage.getItem('newOrderData'))
   const orderInputValue = [
     { 
       id : 0, 

@@ -1,20 +1,18 @@
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import styles from './Delivery.module.css'
 import { useEffect, useState } from 'react';
 export function Delivery(props){
-
   //로그인 정보 불러오기
   const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'))
   const filterOrderData = props.orderData && props.orderData.filter((item)=>item.userId === inLogin.id);
   const [filterSearch, setFilterSearch] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
-  const resultSearch = JSON.parse(sessionStorage.getItem('filterDelivery'))
 
   useEffect(()=>{
-    if(resultSearch){
-      setFilterSearch(resultSearch)
+    if(props.resultSearch){
+      setFilterSearch(props.resultSearch)
     }
-  },[resultSearch])
+  },[props.resultSearch])
 
   useEffect(() => {
     if(filterOrderData){
@@ -37,7 +35,7 @@ export function Delivery(props){
 
   const navigate = useNavigate();
   function detailOrder(item){
-    localStorage.setItem('newOrderData', JSON.stringify(item));
+    sessionStorage.setItem('newOrderData', JSON.stringify(item));
     navigate('/orderDetail');
   }
 
@@ -45,9 +43,9 @@ export function Delivery(props){
 
   return(
     <div className={styles.container}>
-      {resultSearch &&
+      {props.resultSearch &&
       <h3 style={{margin: '1em'}}>
-      "{resultSearch}" 에 대해
+      "{props.resultSearch}" 에 대해
       <span style={{color: '#CC0000', fontWeight: '650', margin: '0.5em'}}>{filteredItems.length}건</span>
       이 검색 되었습니다.
       </h3>}
