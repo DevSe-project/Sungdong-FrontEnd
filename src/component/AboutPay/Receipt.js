@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom';
 export function Receipt(props){
   const navigate = useNavigate();
   const [address, setAddress] = useState("");
-
+  const [inputUser, setInputUser] = useState("사업자정보");
+  const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'));
   // 유효성검사 State
   const [isFormValid, setIsFormValid] = useState(false);  
 
@@ -60,6 +61,49 @@ export function Receipt(props){
     deliveryType : "",
     deliveryMessage : "",
   })
+
+  useEffect(() => {
+    if(props.userData){
+      const findUser = props.userData.find(userData => userData.id == inLogin.id);
+      if (findUser) {
+        if (inputUser === '사업자정보') {
+          setAddress(findUser.address);
+          setOrderInformation(prevData => ({
+            ...prevData,
+            name: findUser.corporationData.ceoName,
+            tel: `${findUser.num1}-${findUser.num2}-${findUser.num3}`,
+            email: findUser.email,
+          }));
+          setDeliveryInformation(prevData => ({
+            ...prevData,
+            name : findUser.corporationData.ceoName,
+            tel: `${findUser.num1}-${findUser.num2}-${findUser.num3}`,
+            address : {
+              address : address,
+              addressDetail : findUser.addressDetail,
+            },
+          }));
+        } else if (inputUser === '직접입력') {
+          setAddress("")
+          setOrderInformation(prevData => ({
+            ...prevData,
+            name: findUser.corporationData.ceoName,
+            tel: `${findUser.num1}-${findUser.num2}-${findUser.num3}`,
+            email: findUser.email,
+          }));
+          setDeliveryInformation(prevData => ({
+            ...prevData,
+            name : "",
+            tel: "",
+            address : {
+              address : "",
+              addressDetail : "",
+            },
+          }));
+        }
+      }
+    }
+  }, [inputUser, props.userData, inLogin.id, address]);
 
   // Input란 유효성 검사
   const validateForm = () => {
@@ -165,6 +209,32 @@ export function Receipt(props){
   return(
     <div>
       <div className={styles.container}>
+        <h1 className={styles.headTag}>자동 정보 입력</h1>
+        <div className={styles.form}>
+          <div className={styles.formInner}>
+            <div className={styles.label}>
+              <label>구분</label>
+            </div>
+            <div className={styles.input}>
+              <input 
+              name='inputUser'
+              onChange={()=>setInputUser("사업자정보")}
+              value="사업자정보" 
+              checked={inputUser === "사업자정보"} 
+              type="radio"
+              />
+              사업자 정보로 입력
+              <input 
+              name='inputUser'
+              onChange={()=>setInputUser("직접입력")} 
+              value="직접입력" 
+              checked={inputUser === "직접입력"} 
+              type="radio"
+              />
+              직접입력
+            </div>
+          </div>
+        </div>
         <h1 className={styles.headTag}>주문자 정보</h1>
         <form className={styles.form}>
           <div className={styles.formInner}>
@@ -316,7 +386,7 @@ export function Receipt(props){
               className={styles.inputSize} 
               type="text" 
               placeholder="상세주소를 입력해주세요."
-              value={deliveryInformation.addressDetail} 
+              value={deliveryInformation.address.addressDetail} 
               required
               onChange={(e)=>setDeliveryInformation(
                 prevdata=> ({
