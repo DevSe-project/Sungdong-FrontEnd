@@ -110,7 +110,13 @@ export function DeliveryMain(props){
               </li>
           ))}
         </ul>
-            <i className="fas fa-search"/>
+            <i 
+            className="fas fa-search"
+            onClick={()=> {
+              sessionStorage.setItem('filterDelivery', JSON.stringify(searchTerm))
+              setResults([]); // 결과 항목 숨기기
+              setSearchTerm("");
+            }}/>
           </div>
         </div>
       </div>

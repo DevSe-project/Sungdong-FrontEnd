@@ -8,6 +8,7 @@ export function SearchBar(props) {
   const [results, setResults] = useState([]);
   // 연관 검색어 방향키 이동, 설정을 위한 State
   const [selectedResultIndex, setSelectedResultIndex] = useState(-1); // 초기 선택 인덱스는 -1로 설정
+  const [searchFilter, setSearchFilter] = useState("상품명");
 
   // input 엘리먼트에 대한 ref
   const inputRef = useRef(null);
@@ -20,14 +21,34 @@ export function SearchBar(props) {
     setSearchTerm(query);
     // 입력창이 공백이 아닐 때 (==검색 중이면?)
     if (query !== '') {
-      // 데이터 중 타이틀로들만 구성된 변수 생성 후 
-      // 그 변수들 중 첫 글자와 입력값이 일치하는 것을 연관 검색어 목록에 띄워줌
-      const filteredtitle = props.data && props.data.map((item) => item.title);
-      const filteredResults = filteredtitle.filter((word) =>
-        word.includes(query)
-      );
-      setResults(filteredResults);
-    // 입력창이 공백이면 연관 검색어를 띄우지 않는다.
+      if(searchFilter === '상품명'){
+        // 데이터 중 타이틀로들만 구성된 변수 생성 후 
+        // 그 변수들 중 첫 글자와 입력값이 일치하는 것을 연관 검색어 목록에 띄워줌
+          const filteredtitle = props.data && props.data.map((item) => item.title);
+          const filteredResults = filteredtitle.filter((word) =>
+            word.includes(query)
+          );
+          setResults(filteredResults);
+        } else if (searchFilter === '코드'){
+          const filteredtitle = props.data && props.data.map((item) => item.id);
+          const filteredResults = filteredtitle.filter((word) =>
+            word.toString().includes(query)
+          );
+          setResults(filteredResults);
+        } else if (searchFilter === '브랜드'){
+          const filteredtitle = props.data && props.data.map((item) => item.brand);
+          const filteredResults = filteredtitle.filter((word) =>
+            word.includes(query)
+          );
+          setResults(filteredResults);
+        } else if (searchFilter === '옵션'){
+          const filteredResults = props.data && props.data.flatMap((item) =>
+          item.option && item.option.map((option) => option.value).filter((word) =>
+            word.includes(query)
+          )
+        ).filter(Boolean);
+          setResults(filteredResults);
+        } 
     } else {
       setResults([]);
     }
@@ -50,12 +71,74 @@ export function SearchBar(props) {
       // Enter 키를 누르면 선택한 결과 항목을 검색어로 설정
       if(selectedResultIndex !== -1) {
         setSearchTerm(results[selectedResultIndex]);
-        sessionStorage.setItem('filterSearch', JSON.stringify(results[selectedResultIndex]))
+        switch (searchFilter) {
+          case '상품명':
+            sessionStorage.setItem('filterSearch', JSON.stringify(results[selectedResultIndex]));
+            sessionStorage.removeItem('filterSearchBrand');
+            sessionStorage.removeItem('filterSearchCode');
+            sessionStorage.removeItem('filterSearchOption');
+            break;
+          case '브랜드':
+            sessionStorage.setItem('filterSearchBrand', JSON.stringify(results[selectedResultIndex]));
+            sessionStorage.removeItem('filterSearch');
+            sessionStorage.removeItem('filterSearchCode');
+            sessionStorage.removeItem('filterSearchOption');
+            break;
+          case '코드':
+            sessionStorage.setItem('filterSearchCode', JSON.stringify(results[selectedResultIndex]));
+            sessionStorage.removeItem('filterSearchBrand');
+            sessionStorage.removeItem('filterSearch');
+            sessionStorage.removeItem('filterSearchOption');
+            break;
+          case '옵션':
+            sessionStorage.setItem('filterSearchOption', JSON.stringify(results[selectedResultIndex]));
+            sessionStorage.removeItem('filterSearchBrand');
+            sessionStorage.removeItem('filterSearchCode');
+            sessionStorage.removeItem('filterSearch');
+            break;
+          default:
+            sessionStorage.setItem('filterSearch', JSON.stringify(searchTerm));
+            sessionStorage.removeItem('filterSearchBrand');
+            sessionStorage.removeItem('filterSearchCode');
+            sessionStorage.removeItem('filterSearchOption');
+            break;
+        }
         navigate("/category")
         setResults([]); // 결과 항목 숨기기
         setSearchTerm("");
       } else {
-        sessionStorage.setItem('filterSearch', JSON.stringify(searchTerm))
+        switch (searchFilter) {
+          case '상품명':
+            sessionStorage.setItem('filterSearch', JSON.stringify(searchTerm));
+            sessionStorage.removeItem('filterSearchBrand');
+            sessionStorage.removeItem('filterSearchCode');
+            sessionStorage.removeItem('filterSearchOption');
+            break;
+          case '브랜드':
+            sessionStorage.setItem('filterSearchBrand', JSON.stringify(searchTerm));
+            sessionStorage.removeItem('filterSearch');
+            sessionStorage.removeItem('filterSearchCode');
+            sessionStorage.removeItem('filterSearchOption');
+            break;
+          case '코드':
+            sessionStorage.setItem('filterSearchCode', JSON.stringify(searchTerm));
+            sessionStorage.removeItem('filterSearchBrand');
+            sessionStorage.removeItem('filterSearch');
+            sessionStorage.removeItem('filterSearchOption');
+            break;
+          case '옵션':
+            sessionStorage.setItem('filterSearchOption', JSON.stringify(searchTerm));
+            sessionStorage.removeItem('filterSearchBrand');
+            sessionStorage.removeItem('filterSearchCode');
+            sessionStorage.removeItem('filterSearch');
+            break;
+          default:
+            sessionStorage.setItem('filterSearch', JSON.stringify(searchTerm));
+            sessionStorage.removeItem('filterSearchBrand');
+            sessionStorage.removeItem('filterSearchCode');
+            sessionStorage.removeItem('filterSearchOption');
+            break;
+        }
         navigate("/category")
         setResults([]); // 결과 항목 숨기기
         setSearchTerm("");
@@ -77,6 +160,25 @@ export function SearchBar(props) {
   return (
     <div>
       <div className={styles.searchInputContainer}>
+        <select 
+        className={styles.select}
+        name="searchFilter"
+        value={searchFilter}              
+        onChange={(e)=>setSearchFilter(e.target.value)}
+        >
+          <option value='상품명'>
+            상품명
+          </option>
+          <option value='코드'>
+            코드
+          </option>
+          <option value='브랜드'>
+            브랜드
+          </option>
+          <option value='옵션'>
+            옵션
+          </option>
+        </select>
         <input
           ref={inputRef}
           className={styles.searchInput}

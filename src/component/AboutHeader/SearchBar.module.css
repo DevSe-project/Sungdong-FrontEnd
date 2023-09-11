@@ -62,6 +62,20 @@ i.fas.fa-search {
   padding: 1em;
 }
 
+.select{
+  cursor: pointer;
+  align-items: center;
+  font-size: 1em;
+  font-weight: 550;
+  border: none;
+  text-align: center;
+  border-right: 1px solid lightgray;
+}
+
+.select:focus{
+  outline: none;
+}
+
 @media screen and (max-width: 768px) {
   .searchInput {
       display: none; /* 서치바 숨김 */
