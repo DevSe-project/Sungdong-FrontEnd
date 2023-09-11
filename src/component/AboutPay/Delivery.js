@@ -5,7 +5,7 @@ export function Delivery(props){
 
   //로그인 정보 불러오기
   const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'))
-  const filterOrderData = props.orderData && props.orderData.filter((item)=>item.userId === inLogin.id)
+  const filterOrderData = props.orderData && props.orderData.filter((item)=>item.userId === inLogin.id);
   const [filterSearch, setFilterSearch] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
   const resultSearch = JSON.parse(sessionStorage.getItem('filterDelivery'))
@@ -33,7 +33,7 @@ export function Delivery(props){
         setFilteredItems(addCntList);
       }
     }
-  }, [filterSearch, filterOrderData])
+  }, [filterSearch])
 
   const navigate = useNavigate();
   function detailOrder(item){
