@@ -34,9 +34,9 @@ export default function MyPage(props) {
             <th className={styles.th}>상호명</th>
             <td className={styles.td}>{userProfile.name}</td>
             <th className={styles.th}>대표자</th>
-            <td className={styles.td}>장민욱</td>
+            <td className={styles.td}>{userProfile.corporationData.ceoName}</td>
             <th className={styles.th}>사업자번호</th>
-            <td className={styles.td}>250-81-59602</td>
+            <td className={styles.td}>{userProfile.corporationData.businessNum}</td>
           </tr>
           {/* 아이디 | 비밀번호 | 이메일 */}
           <tr className={styles.tr}>
@@ -59,7 +59,7 @@ export default function MyPage(props) {
           {/* 주소 | FAX | 전화번호 */}
           <tr className={styles.tr}>
             <th className={styles.th} id={styles.editAddress}>주소</th>
-            <td className={styles.td}>울산광역시 동구 봉수로 101
+            <td className={styles.td}>{userProfile.address.roadAddress}
             </td>
             <th className={styles.th}>FAX</th>
             <td className={styles.td}>1800-3904</td>
