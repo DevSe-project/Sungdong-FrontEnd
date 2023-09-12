@@ -108,19 +108,39 @@ export function Receipt(props){
 
   // Input란 유효성 검사
   const validateForm = () => {
-    const isOrderInformationValid =
+    if (!orderInformation || !deliveryInformation) {
+      alert("주문 정보 및 배송 정보가 정의되지 않았습니다.");
+      return;
+    }
+    const isOrderInformationValid = () => {
+      if(
       orderInformation.name !== "" &&
       orderInformation.tel !== "" &&
       orderInformation.email !== "" &&
-      orderInformation.payRoute !== "" &&
-      `${ orderInformation.transAction === '명세서출력'
-      ? orderInformation.moneyReceipt !== "" &&
-      orderInformation.transAction === "명세서출력" &&
-      orderInformation.fax !== ""
-      : orderInformation.transAction 
-      ? orderInformation.moneyReceipt !== "" &&
-      orderInformation.transAction !== ""
-      : orderInformation.moneyReceipt !== ""}`
+      orderInformation.payRoute !== ""
+      ){
+        if(orderInformation.moneyReceipt === '명세서'){
+          if(orderInformation.transAction === '명세서출력'){
+            return (
+              orderInformation.moneyReceipt !== "" &&
+              orderInformation.transAction !== "" &&
+              orderInformation.fax !== ""
+            );
+          } else {
+            return (
+            orderInformation.moneyReceipt !== "" &&
+            orderInformation.transAction !== ""
+            )
+          }
+        } else {
+          return(
+            orderInformation.moneyReceipt !== ""
+          )
+        }
+      } else {
+      return false;
+      }
+  }
       
       
       
@@ -135,11 +155,13 @@ export function Receipt(props){
   
     const isCheckboxChecked = orderInformation.checked === true;
 
-    setIsFormValid(isOrderInformationValid && isDeliveryInformationValid && isCheckboxChecked);
+    const isOrderValid = isOrderInformationValid();
 
-    if (!isOrderInformationValid || !isDeliveryInformationValid || !isCheckboxChecked){
+    setIsFormValid(isOrderValid && isDeliveryInformationValid && isCheckboxChecked);
+
+    if (!isOrderValid || !isDeliveryInformationValid || !isCheckboxChecked){
       alert("작성이 되지 않은 란이 있습니다. 다시 확인해주세요!");
-  }
+    }
   };
 
 
