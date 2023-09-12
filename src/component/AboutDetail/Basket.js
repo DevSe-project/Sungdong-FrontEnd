@@ -161,7 +161,7 @@ export function Basket(props){
   function updatedItem(index){
     if(count > 0) {
       props.basketList[index].cnt = count;
-      props.basketList[index].finprice = props.basketList[index].price * count;
+      props.basketList[index].finprice = (props.basketList[index].price * count).toLocaleString();
       const newEditStatus = [...editStatus]; 
       newEditStatus[index] = false;
       setEditStatus(newEditStatus);
@@ -179,16 +179,16 @@ export function Basket(props){
       if(calculate){
         sum += calculate.finprice;
         if (typeof calculate.discount === 'number') {
-        totalDiscount += Number((calculate.finprice / 100) * calculate.discount);
+        totalDiscount += (Number((calculate.finprice / 100) * calculate.discount));
         }
       }
     });
     // 할인 금액이 총 가격을 넘지 않도록 보정
     totalDiscount = Math.min(totalDiscount, sum);
     const prevOrderSum = sum - totalDiscount;
-    setSum(prevOrderSum);
+    setSum(prevOrderSum.toLocaleString());
     const orderSum = sum + delivery - totalDiscount;
-    setOrderPrice(orderSum);
+    setOrderPrice(orderSum.toLocaleString());
   }
 
   // 주문서 작성창 링크 함수(receipt에 넘어가면 해당 객체의 키와 값만 가지고 감(주의))
@@ -319,7 +319,7 @@ export function Basket(props){
                   <h5 className={styles.link} onClick={()=>navigate(`/detail/${item.id}`)}>{item.title}</h5>
                   <div>
                   {item.option && `옵션 : ${item.optionSelected}`}
-                  <p>상품 표준가 : <span className={styles.price}>\{item.price}</span></p>
+                  <p>상품 표준가 : <span className={styles.price}>\{item.price.toLocaleString()}</span></p>
                   </div>
                 </td>
                 <td>{editStatus[index]===false 
@@ -336,8 +336,8 @@ export function Basket(props){
                 <td className={styles.price}>
                   {item.discount
                   ? 
-                  `\\${ item.finprice - (((item.price/100)*item.discount)*item.cnt)}`
-                  : `\\${item.finprice}`}
+                  `\\${ (item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}`
+                  : `\\${item.finprice.toLocaleString()}`}
                 </td>
               </tr>
               ))
@@ -361,14 +361,14 @@ export function Basket(props){
                   ? item.productName : null}</h5>
                   <div>
                   {item.optionSelected && `옵션 : ${item.optionSelected}`}
-                  <p>상품 표준가 : <span className={styles.price}>\{item.price}</span></p>
+                  <p>상품 표준가 : <span className={styles.price}>\{item.price.toLocaleString()}</span></p>
                   </div>
                 </td>
                 <td>{item.cnt}</td>
                 <td className={styles.price}>
                   {item.discount
-                  ? `\\${ item.finprice - (((item.price/100)*item.discount)*item.cnt)}`
-                  : `\\${item.finprice}`}
+                  ? `\\${ (item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}`
+                  : `\\${item.finprice.toLocaleString()}`}
                 </td>
               </tr>
             ))}
@@ -386,7 +386,7 @@ export function Basket(props){
                     <h5>
                     \{sum ? sum : props.orderList !== null || []
                     ? props.orderList.map((item) =>
-                    item.finprice - ((item.price/100)*item.discount)*item.cnt) : 0}
+                    (item.finprice - ((item.price/100)*item.discount)*item.cnt).toLocaleString()) : 0}
                     </h5>
                   </div>
                 </div>
@@ -394,7 +394,7 @@ export function Basket(props){
                 <div className={styles.finalBox}>
                   <h2>배송비</h2>
                   <div className={styles.price}>
-                    <h5>\{delivery ? delivery : 0}</h5>
+                    <h5>\{delivery ? delivery.toLocaleString() : 0}</h5>
                   </div>
                 </div>
                 <i className="fal fa-equals"></i>
@@ -403,7 +403,7 @@ export function Basket(props){
                   <div className={styles.price}>
                     <h5>\{sum ? resultOrderPrice : props.orderList !== null || []
                     ? props.orderList.map((item) =>
-                    item.finprice + delivery - ((item.price/100)*item.discount)*item.cnt) : 0}</h5>
+                    (item.finprice + delivery - ((item.price/100)*item.discount)*item.cnt).toLocaleString()) : 0}</h5>
                   </div>
                 </div>
             </div>

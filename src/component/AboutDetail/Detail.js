@@ -217,12 +217,12 @@ function basketThis(product, count){
                   </div>
                   <div style={{display: 'flex', alignItems: 'center', gap: '0.5em'}}>
                     <p style={{textDecoration: "line-through", color: "gray"}}>
-                      {detailData.price}원
+                      {detailData.price.toLocaleString()}원
                     </p>
-                      {detailData.price-((detailData.price/100)*detailData.discount)}원
+                      {(detailData.price-((detailData.price/100)*detailData.discount)).toLocaleString()}원
                   </div>
                 </div>
-                : `${detailData.price} 원`
+                : `${detailData.price.toLocaleString()} 원`
                 : <div className={styles.skeleton}>&nbsp;</div>}
               </h4>
 
@@ -262,8 +262,8 @@ function basketThis(product, count){
                 <h4 className={styles.finalprice}>
                 최종 결제 금액 : 
                 {detailData.discount 
-                ? `${(detailData.price-((detailData.price/100)*detailData.discount))*count}원` 
-                : `${detailData.price * count}원`}
+                ? `${((detailData.price-((detailData.price/100)*detailData.discount))*count).toLocaleString()}원` 
+                : `${(detailData.price * count).toLocaleString()}원`}
                 </h4>
                 </>
                 : <div className={styles.skeleton}>&nbsp;</div>

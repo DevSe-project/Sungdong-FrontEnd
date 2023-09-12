@@ -28,7 +28,7 @@ export function Product(props){
               {item.discount
                 ? <div style={{display: 'flex', alignItems: 'center', gap: '0.5em', justifyContent: 'flex-end'}}>
                   <p style={{textDecoration: "line-through", color: "gray", margin: '0'}}>
-                    \{item.price}
+                    \{item.price.toLocaleString()}
                   </p>
                   <p>{item.discount 
                     ? <>
@@ -40,10 +40,10 @@ export function Product(props){
                     : `${item.title}`}
                   </p>
                   <h3>
-                    \{item.price-((item.price/100)*item.discount)}
+                    \{(item.price-((item.price/100)*item.discount)).toLocaleString()}
                   </h3>
                 </div>
-                : <h3>\{item.price}</h3>
+                : <h3>\{item.price.toLocaleString()}</h3>
                 }
                 <br/><hr/><br/>
                 <span>{item.category && `${item.category.main}`}</span>

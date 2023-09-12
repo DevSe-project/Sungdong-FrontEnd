@@ -87,9 +87,9 @@ export function LikeItem(props){
                   type='checkbox'
                   />
                 </td>
-                <td><img src='../image/logo.jpeg' alt='이미지'/></td>
+                <td><img src={item.image.mini && item.image.mini} alt='이미지'/></td>
                 <td><span className={styles.link} onClick={()=>navigate(`/detail/${item.id}`)}>{item.title}</span></td>
-                <td>\{item.price}</td>
+                <td>\{item.price.toLocaleString()}</td>
               </tr>
               ))}
             </tbody>

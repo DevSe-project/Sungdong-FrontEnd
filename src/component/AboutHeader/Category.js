@@ -259,7 +259,7 @@ export function Category(props){
     function updatedItem(index){
       if(count > 0) {
         filteredItems[index].cnt = count;
-        filteredItems[index].finprice = filteredItems[index].price * count;
+        filteredItems[index].finprice = (filteredItems[index].price * count);
         const newEditStatus = [...editStatus]; 
         newEditStatus[index] = false;
         setEditStatus(newEditStatus);
@@ -531,13 +531,13 @@ export function Category(props){
                     <h5>{item.title}</h5>
                   </td>
                   <td>EA</td>
-                  <td>\{item.price}</td>
+                  <td>\{item.price.toLocaleString()}</td>
                   <td style={{fontWeight: '650'}}>
                     {item.finprice
                     ? item.discount
-                    ? `\\${ item.finprice - (((item.price/100)*item.discount)*item.cnt)}`
-                    : `\\${item.finprice}`
-                    : item.price}
+                    ? `\\${ (item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}`
+                    : `\\${item.finprice.toLocaleString()}`
+                    : item.price.toLocaleString()}
                   </td>
                   <td 
                     className={styles.detailView}
@@ -622,15 +622,15 @@ export function Category(props){
                           </td>
                           <td style={{fontWeight: '650'}}>
                             {item.discount
-                            ? `\\${((item.price/100)*item.discount)*item.cnt}`
+                            ? `\\${(((item.price/100)*item.discount)*item.cnt).toLocaleString()}`
                             : 0}
                           </td>
                           <td style={{fontWeight: '650'}}>
                           {item.finprice
                           ? item.discount
-                          ? `\\${ item.finprice - (((item.price/100)*item.discount)*item.cnt)}`
-                          : `\\${item.finprice}`
-                          : item.price}
+                          ? `\\${ (item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}`
+                          : `\\${item.finprice.toLocaleString()}`
+                          : item.price.toLocaleString()}
                           </td>
                           <td>
                             <input 

@@ -44,7 +44,7 @@ export function RelatedData(props) {
       const addCntList = filterList.map((item,index) => ({
         ...item,
         cnt: item.cnt ? item.cnt : 1,
-        finprice : item.finprice ? item.finprice : item.price,
+        finprice : item.finprice ? item.finprice.toLocaleString() : item.price.toLocaleString(),
         listId : index,
       }));
       setRelatedList(addCntList);
@@ -100,7 +100,7 @@ export function RelatedData(props) {
   function updatedItem(index){
     if(count > 0) {
       relatedList[index].cnt = count;
-      relatedList[index].finprice = relatedList[index].price * count;
+      relatedList[index].finprice = (relatedList[index].price * count).toLocaleString();
       const newEditStatus = [...editStatus]; 
       newEditStatus[index] = false;
       setEditStatus(newEditStatus);
@@ -230,7 +230,7 @@ export function RelatedData(props) {
                   <h5>{item.title}</h5>
                 </td>
                 <td>EA</td>
-                <td>{item.price}</td>
+                <td>{item.price.toLocaleString()}</td>
                 <td 
                   className={styles.detailView}
                   onClick={()=>handleItemClick(item.id)}>
@@ -314,15 +314,15 @@ export function RelatedData(props) {
                         </td>
                         <td>
                           {item.discount
-                          ? `\\${((item.price/100)*item.discount)*item.cnt}`
+                          ? `\\${(((item.price/100)*item.discount)*item.cnt).toLocaleString()}`
                           : 0}
                         </td>
                         <td>
                         {item.finprice
                         ? item.discount
-                        ? `\\${ item.finprice - (((item.price/100)*item.discount)*item.cnt)}`
-                        : `\\${item.finprice}`
-                        : item.price}
+                        ? `\\${ (item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}`
+                        : `\\${item.finprice.toLocaleString()}`
+                        : item.price.toLocaleString()}
                         </td>
                         <td>
                           <input 
