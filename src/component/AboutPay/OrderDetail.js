@@ -59,10 +59,13 @@ export function OrderDetail(props){
     {
       id: 2,
       title : '명세서',
-      value : orderData.order 
+      value : orderData.order
+      && orderData.order.moneyReceipt 
       && orderData.order.transAction
-      ? orderData.order.transAction 
-      : '발급안함'
+      ? orderData.order.transAction === '명세서출력'
+      ? `${orderData.order.transAction} (Fax 번호 : ${orderData.order.fax})`
+      : orderData.order.transAction
+      : '발행안함'
     }
   ]
   return(

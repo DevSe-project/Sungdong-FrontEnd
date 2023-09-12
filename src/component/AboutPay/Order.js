@@ -76,10 +76,13 @@ export function Order(props){
     {
       id: 2,
       title : '명세서',
-      value : orderProductData.order 
+      value : orderProductData.order
+      && orderProductData.order.moneyReceipt 
       && orderProductData.order.transAction
-      ? orderProductData.order.transAction 
-      : '발급안함'
+      ? orderProductData.order.transAction === '명세서출력'
+      ? `${orderProductData.order.transAction} (Fax 번호 : ${orderProductData.order.fax})`
+      : orderProductData.order.transAction
+      : '발행안함'
     }
   ]
   return(
