@@ -2,13 +2,15 @@ import { useEffect, useRef, useState } from 'react'
 import { TopBanner } from '../AboutHeader/TopBanner'
 import { Delivery } from './Delivery'
 import styles from './DeliveryMain.module.css'
+import { useLocation } from 'react-router-dom'
 export function DeliveryMain(props){
-
+  const location = useLocation();
   //로그인 정보 불러오기
   const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'))
   const filterOrderData = props.orderData && props.orderData.filter((item)=>item.userId === inLogin.id)
   
   const [searchTerm, setSearchTerm] = useState('');
+  const [resultSearch, setResultSearch] = useState('');
   const [results, setResults] = useState([]);
   // 연관 검색어 방향키 이동, 설정을 위한 State
   const [selectedResultIndex, setSelectedResultIndex] = useState(-1); // 초기 선택 인덱스는 -1로 설정
@@ -54,13 +56,12 @@ export function DeliveryMain(props){
       // Enter 키를 누르면 선택한 결과 항목을 검색어로 설정
       if(selectedResultIndex !== -1) {
         setSearchTerm(results[selectedResultIndex]);
-        sessionStorage.setItem('filterDelivery', JSON.stringify(results[selectedResultIndex]))
         setResults([]); // 결과 항목 숨기기
+        setResultSearch(results[selectedResultIndex]);
         setSearchTerm("");
       } else {
-        sessionStorage.setItem('filterDelivery', JSON.stringify(searchTerm))
+        setResultSearch(searchTerm);
         setResults([]); // 결과 항목 숨기기
-        setSearchTerm("");
       }
     } else if (event.key === 'Tab' && selectedResultIndex !== -1) {
       // 탭 키 누르면 자동완성
@@ -113,14 +114,13 @@ export function DeliveryMain(props){
             <i 
             className="fas fa-search"
             onClick={()=> {
-              sessionStorage.setItem('filterDelivery', JSON.stringify(searchTerm))
+              setResultSearch(searchTerm);
               setResults([]); // 결과 항목 숨기기
-              setSearchTerm("");
             }}/>
           </div>
         </div>
       </div>
-      <Delivery orderData={props.orderData}/>
+      <Delivery resultSearch={resultSearch} setResultSearch={setResultSearch} orderData={props.orderData}/>
     </div>
   )
 }

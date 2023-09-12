@@ -542,9 +542,9 @@ export function Category(props){
                   <td 
                     className={styles.detailView}
                     onClick={()=>handleItemClick(item.id)}>
-                    [ 더보기&nbsp;{selectedData === item.id  
+                    더보기&nbsp;{selectedData === item.id  
                     ? <i className="fa-sharp fa-solid fa-caret-up"></i>
-                    : <i className="fa-sharp fa-solid fa-caret-down"></i>}&nbsp;]
+                    : <i className="fa-sharp fa-solid fa-caret-down"></i>}&nbsp;
                   </td>
                 </tr>
                 {/* 모달 */}

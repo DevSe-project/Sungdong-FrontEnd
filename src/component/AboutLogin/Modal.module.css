@@ -132,13 +132,13 @@
 }
 
 
-.smsCheckbox:hover {
+.idCheckbox:hover {
   color: #CC0000;
   cursor: pointer;
 }
 
-.sms_layout {
-  margin: 1em;
+.id_layout {
+  margin: 2em;
   display: flex;
   flex-direction: row;
   width: 35em;
@@ -146,7 +146,7 @@
   justify-content: center;
 }
 
-.smsContainer {
+.idContainer {
   height: 150px;
   width: 25em;
 }
@@ -159,6 +159,7 @@
   height: 130px;
   width: 90px;
   font-size: 1.3rem;
+  font-weight: bold;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -169,7 +170,7 @@
   background-color: #fe4b4b;
 }
 
-.smsInput_Container {
+.idInput_Container {
   display: flex;
   flex-direction: column;
   width: 25em;
