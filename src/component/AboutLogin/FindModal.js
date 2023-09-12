@@ -34,6 +34,19 @@ export default function FindModal(props) {
         }
     }
 
+    // enter키를 누르면 'ID찾기'
+    function handleEnter_idFind(event) {
+        if(event.key === 'Enter') {
+            checking_FindId();
+        }
+    }
+    // enter키를 누르면 'PW찾기'
+    function handleEnter_pwFind(event) {
+        if(event.key === 'Enter') {
+            checking_FindPw();
+        }
+    }
+
 
     // esc키를 누르면 모달창 닫기.
     useEffect(() => {
@@ -73,9 +86,9 @@ export default function FindModal(props) {
                     {
                         props.modalType === 'id'
                             ?
-                            <Find_IdModal inputForFind={inputForFind} setInputForFind={setInputForFind} checking_FindId={checking_FindId} checking_FindPw={checking_FindPw} />
+                            <Find_IdModal inputForFind={inputForFind} setInputForFind={setInputForFind} checking_FindId={checking_FindId} checking_FindPw={checking_FindPw} handleEnter_idFind={handleEnter_idFind} />
                             :
-                            <Find_PasswordModal inputForFind={inputForFind} setInputForFind={setInputForFind} checking_FindId={checking_FindId} checking_FindPw={checking_FindPw} />
+                            <Find_PasswordModal inputForFind={inputForFind} setInputForFind={setInputForFind} checking_FindId={checking_FindId} checking_FindPw={checking_FindPw} handleEnter_pwFind={handleEnter_pwFind}/>
                     }
                 </div>
             </div>
@@ -107,6 +120,7 @@ function Find_IdModal(props) {
                                             };
                                             props.setInputForFind(inputCeoName);
                                         }}
+                                        onKeyDown={props.handleEnter_idFind}
                                     />
                                 </div>
                             </div>
@@ -125,6 +139,7 @@ function Find_IdModal(props) {
                                             };
                                             props.setInputForFind(inputCeoName);
                                         }}
+                                        onKeyDown={props.handleEnter_idFind}
                                     />
                                 </div>
                             </div>
@@ -162,6 +177,7 @@ function Find_PasswordModal(props) {
                                         };
                                         props.setInputForFind(inputCeoName);
                                     }}
+                                    onKeyDown={props.handleEnter_pwFind}
                                 />
                             </div>
                         </div>
@@ -180,6 +196,7 @@ function Find_PasswordModal(props) {
                                         };
                                         props.setInputForFind(inputCeoName);
                                     }}
+                                    onKeyDown={props.handleEnter_pwFind}
                                 />
                             </div>
                         </div>
