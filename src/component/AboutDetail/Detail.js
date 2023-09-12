@@ -85,7 +85,7 @@ function buyThis(product, count){
           cnt : Number(count), 
           supply: product.supply,
           price: product.price,
-          finprice : (product.price * count), //총 계산액
+          finprice : product.price * count, //총 계산액
           discount : product.discount ? product.discount : 0,
           optionSelected : optionSelected,
         }
@@ -100,7 +100,7 @@ function buyThis(product, count){
         cnt : Number(count), 
         supply: product.supply,
         price: product.price,
-        finprice : (product.price * count), //총 계산액
+        finprice : product.price * count, //총 계산액
         // 이후 discount 값 수정 필요 (등급에 따라)
         discount : product.discount ? product.discount : 0,
       }
@@ -147,14 +147,14 @@ function basketThis(product, count){
         ...product,
         userId: inLogin.id,
         cnt : count,
-        finprice : (product.price * count), //총 계산액
+        finprice : product.price * count, //총 계산액
         optionSelected : optionSelected,
       }
     } return {
       ...product,
       userId: inLogin.id,
       cnt : count,
-      finprice : (product.price * count)
+      finprice : product.price * count
     }
   }
 

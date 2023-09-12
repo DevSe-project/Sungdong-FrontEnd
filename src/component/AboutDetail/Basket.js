@@ -161,7 +161,7 @@ export function Basket(props){
   function updatedItem(index){
     if(count > 0) {
       props.basketList[index].cnt = count;
-      props.basketList[index].finprice = (props.basketList[index].price * count).toLocaleString();
+      props.basketList[index].finprice = (props.basketList[index].price * count);
       const newEditStatus = [...editStatus]; 
       newEditStatus[index] = false;
       setEditStatus(newEditStatus);
@@ -186,9 +186,9 @@ export function Basket(props){
     // 할인 금액이 총 가격을 넘지 않도록 보정
     totalDiscount = Math.min(totalDiscount, sum);
     const prevOrderSum = sum - totalDiscount;
-    setSum(prevOrderSum.toLocaleString());
+    setSum(prevOrderSum);
     const orderSum = sum + delivery - totalDiscount;
-    setOrderPrice(orderSum.toLocaleString());
+    setOrderPrice(orderSum);
   }
 
   // 주문서 작성창 링크 함수(receipt에 넘어가면 해당 객체의 키와 값만 가지고 감(주의))
@@ -384,7 +384,7 @@ export function Basket(props){
                   </h2>
                   <div className={styles.price}>
                     <h5>
-                    \{sum ? sum : props.orderList !== null || []
+                    \{sum ? sum.toLocaleString() : props.orderList !== null || []
                     ? props.orderList.map((item) =>
                     (item.finprice - ((item.price/100)*item.discount)*item.cnt).toLocaleString()) : 0}
                     </h5>
@@ -401,7 +401,7 @@ export function Basket(props){
                 <div className={styles.finalBox}>
                   <h2>최종 결제 금액</h2>
                   <div className={styles.price}>
-                    <h5>\{sum ? resultOrderPrice : props.orderList !== null || []
+                    <h5>\{sum ? resultOrderPrice.toLocaleString() : props.orderList !== null || []
                     ? props.orderList.map((item) =>
                     (item.finprice + delivery - ((item.price/100)*item.discount)*item.cnt).toLocaleString()) : 0}</h5>
                   </div>
