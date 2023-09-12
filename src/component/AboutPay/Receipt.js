@@ -49,6 +49,7 @@ export function Receipt(props){
     payRoute : "",
     moneyReceipt : "",
     transAction : "",
+    fax : "",
     checked : false,
   })
   const [deliveryInformation, setDeliveryInformation] = useState({
@@ -112,10 +113,16 @@ export function Receipt(props){
       orderInformation.tel !== "" &&
       orderInformation.email !== "" &&
       orderInformation.payRoute !== "" &&
-      `${orderInformation.transAction 
+      `${ orderInformation.transAction === '명세서출력'
+      ? orderInformation.moneyReceipt !== "" &&
+      orderInformation.transAction === "명세서출력" &&
+      orderInformation.fax !== ""
+      : orderInformation.transAction 
       ? orderInformation.moneyReceipt !== "" &&
       orderInformation.transAction !== ""
       : orderInformation.moneyReceipt !== ""}`
+      
+      
       
     const isDeliveryInformationValid =
       deliveryInformation.name !== "" &&
@@ -531,7 +538,7 @@ export function Receipt(props){
                 })
               )}
               />
-              일반결제 (카드, 계좌이체 등)
+              일반결제 (무통장 입금)
               <input 
               name='payroute' 
               type="radio"
@@ -632,6 +639,28 @@ export function Receipt(props){
                 })
               )}
               /> 명세서 FAX 출력
+            </div>
+          </div>
+          }
+          {orderInformation.transAction === '명세서출력' &&
+          <div className={styles.formInner}>
+            <div className={styles.label}>
+              <label>FAX 번호</label>
+            </div>
+            <div className={styles.input}>
+              <input 
+              type="text" 
+              className={styles.inputSize} 
+              placeholder="FAX 번호를 입력하세요"
+              value={orderInformation.fax}
+              required 
+              onChange={(e)=>setOrderInformation(
+                prevdata=> ({
+                  ...prevdata,
+                  fax : e.target.value,
+                })
+              )}
+              />
             </div>
           </div>
           }
