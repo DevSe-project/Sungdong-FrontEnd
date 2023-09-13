@@ -84,13 +84,17 @@ export function Delivery(props){
             <button 
           onClick={() => {
             if(item.orderState === 3){
-              if(item.delivery.deliveryType === '일반택배'){
-                window.open(`https://tracker.delivery/#/kr.cjlogistics/453984691860`, '_blank', 'width=600,height=800');
-              } else if(item.delivery.deliveryType === '화물') {
-                window.open(`https://tracker.delivery/#/kr.daesin/111111111111`, '_blank', 'width=600,height=800');
-              } else {
-                alert("직접 수령이나 성동 택배는 조회하실 수 없습니다.")
-              }
+              switch(item.delivery.deliveryType){
+                case '일반택배':
+                  window.open(`https://tracker.delivery/#/kr.cjlogistics/453984691860`, '_blank', 'width=600,height=800');
+                  break;
+                case '화물':
+                  window.open(`https://tracker.delivery/#/kr.daesin/111111111111`, '_blank', 'width=600,height=800');
+                  break;
+                default : 
+                  alert("직접 수령이나 성동 택배는 조회하실 수 없습니다.");
+                  break;
+              } 
             } else {
               alert("배송 준비 중일때는 조회하실 수 없습니다.")
             }
@@ -136,13 +140,17 @@ export function Delivery(props){
           <button             
           onClick={() => {
             if(item.orderState === 3){
-              if(item.delivery.deliveryType === '일반택배'){
-                window.open(`https://tracker.delivery/#/kr.cjlogistics/453984691860`, '_blank', 'width=600,height=800');
-              } else if(item.delivery.deliveryType === '화물') {
-                window.open(`https://tracker.delivery/#/kr.daesin/111111111111`, '_blank', 'width=600,height=800');
-              } else {
-                alert("직접 수령이나 성동 택배는 조회하실 수 없습니다.")
-              }
+              switch(item.delivery.deliveryType){
+                case '일반택배':
+                  window.open(`https://tracker.delivery/#/kr.cjlogistics/453984691860`, '_blank', 'width=600,height=800');
+                  break;
+                case '화물':
+                  window.open(`https://tracker.delivery/#/kr.daesin/111111111111`, '_blank', 'width=600,height=800');
+                  break;
+                default : 
+                  alert("직접 수령이나 성동 택배는 조회하실 수 없습니다.");
+                  break;
+              } 
             } else {
               alert("배송 준비 중일때는 조회하실 수 없습니다.")
             }
