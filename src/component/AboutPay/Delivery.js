@@ -82,8 +82,12 @@ export function Delivery(props){
           </div>
           <div className={styles.deliveryMenu}>
             <button 
-            onClick={() => {
-              window.location.href=`http://nplus.doortodoor.co.kr/web/detail.jsp?slipno=123123123`}} 
+          onClick={() => {
+            if(item.orderState === 3){
+              window.location.href=`http://nplus.doortodoor.co.kr/web/detail.jsp?slipno=123123123`
+            } else {
+              alert("운송장 번호가 없거나 일반택배가 아닙니다.")
+            }}}
             className={styles.button}>배송 조회</button>
             <button className={styles.button}>교환, 반품 신청</button>
           </div>
@@ -124,7 +128,11 @@ export function Delivery(props){
         <div className={styles.deliveryMenu}>
           <button             
           onClick={() => {
-              window.location.href=`http://nplus.doortodoor.co.kr/web/detail.jsp?slipno=123123123`}}
+            if(item.orderState === 3){
+              window.location.href=`http://nplus.doortodoor.co.kr/web/detail.jsp?slipno=123123123`
+            } else {
+              alert("운송장 번호가 없거나 일반택배가 아닙니다.")
+            }}}
           className={styles.button}>
             배송 조회
           </button>
