@@ -22,7 +22,7 @@ export let UserData = [
             businessSector : 'SW Develop & IT service',
             businessCategory : '웹사이트 및 앱 개발',
             businessNum : '1234567890',
-            FAX : '1800-3904'
+            FAX : '1800-3904',
         },
         smsService: 'yes',
         address: {
