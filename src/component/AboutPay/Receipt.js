@@ -204,7 +204,7 @@ export function Receipt(props){
         order: orderInformation,
         delivery: deliveryInformation,
         date: formattedDate,
-        orderState: 0, //0 => 결제대기, 1 => 결제완료 2 => 배송준비중 3 => 배송중 4 => 배송완료 
+        orderState: orderInformation.payRoute === 'CMS' ? 2 : 0, //0 => 결제대기, 1 => 결제완료 2 => 배송준비중 3 => 배송중 4 => 배송완료 
       }));
         // 데이터 삽입
         //orderData (주문 진행 객체) 업데이트
