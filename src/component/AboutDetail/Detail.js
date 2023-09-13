@@ -134,11 +134,14 @@ function basketThis(product, count){
 
   //중복 확인 (.some 함수 : basketList item.id 중 product.id와 같은 중복인 아이템이 있으면 true 반환)
   const isDuplicate = props.basketList.some((basketItem) =>
+  product.option 
+  ?
   basketItem.id === product.id &&
-  (
-    (basketItem.option === null && product.option === null) || // 둘 다 옵션이 없는 경우
-    (basketItem.optionSelected === optionSelected) // 옵션값이 같은 경우
-  )
+  basketItem.userId === inLogin.id &&
+  basketItem.optionSelected === optionSelected
+  :
+  basketItem.id === product.id &&
+  basketItem.userId === inLogin.id
 );
   
 
