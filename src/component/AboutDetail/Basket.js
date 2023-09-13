@@ -221,7 +221,6 @@ export function Basket(props){
       // localStorage에 저장
       localStorage.setItem('orderData', JSON.stringify(editedData));
       props.setOrderList(editedData);
-      props.setBasketList(props.basketList.filter((item)=>!selectedItems.includes(item)));
       navigate("/basket/receipt");
       props.setActiveTab(2);
     } else {
