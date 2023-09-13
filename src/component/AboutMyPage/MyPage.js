@@ -26,7 +26,7 @@ export default function MyPage(props) {
       {/* 마이페이지 body */}
       <div className={styles.body}>
         {/* 내 정보(수정) */}
-        <div className={styles.title}><h1>내 정보</h1></div>
+        <div className={styles.title}><h1>{userProfile.name} 정보</h1></div>
         <div className={styles.subtitle}>개인정보수정</div>
         <table className={styles.table}>
           {/* 상호명 | 대표자 |  사업자번호 */}
@@ -50,19 +50,19 @@ export default function MyPage(props) {
           {/* 업태 | 종목 */}
           <tr className={styles.tr}>
             <th className={styles.th}>업태</th>
-            <td className={styles.td}>소프트웨어 개발 및 IT 서비스</td>
+            <td className={styles.td}>{userProfile.corporationData.businessSector}</td>
             <th className={styles.th}>종목</th>
-            <td className={styles.td}>웹사이트 및 앱 개발</td>
+            <td className={styles.td}>{userProfile.corporationData.businessCategory}</td>
             <th className={styles.th}></th>
             <td className={styles.td}></td>
           </tr>
           {/* 주소 | FAX | 전화번호 */}
           <tr className={styles.tr}>
             <th className={styles.th} id={styles.editAddress}>주소</th>
-            <td className={styles.td}>{userProfile.address.roadAddress}
+            <td className={styles.td}>{userProfile.address.roadAddress}({userProfile.address.zonecode})
             </td>
             <th className={styles.th}>FAX</th>
-            <td className={styles.td}>1800-3904</td>
+            <td className={styles.td}>{userProfile.corporationData.FAX}</td>
             <th className={styles.th}>전화번호</th>
             <td className={styles.td}>{userProfile.num1}-{userProfile.num2}-{userProfile.num3}</td>
           </tr>
