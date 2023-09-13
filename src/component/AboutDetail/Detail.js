@@ -125,6 +125,7 @@ function basketThis(product, count){
     alert("수량은 0보다 커야합니다.")
     return;
   }
+
   // 필수옵션 선택 조건
   if (product.option && !optionSelected) {
     alert("필수 옵션을 선택해주세요!");

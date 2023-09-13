@@ -212,10 +212,18 @@ export function Receipt(props){
         const copyData = [...props.orderData];
         copyData.push(...newOrderData);
         props.setOrderData(copyData);
-        console.log(props.orderData)
         // localStorage 변경
         localStorage.removeItem('orderData');
         localStorage.setItem('newOrderData', JSON.stringify(newOrderData))
+        props.setBasketList(props.basketList.filter((item)=>!props.orderList.some((orderItem) =>
+        orderItem.optionSelected 
+        ? 
+        orderItem.optionSelected === item.optionSelected &&
+        orderItem.userId === item.userId &&
+        orderItem.productId === item.id
+        :  
+        orderItem.userId === item.userId &&
+        orderItem.productId === item.id)))
         //결제 방식이 CMS일때
         if(orderInformation.payRoute === 'CMS'){
           props.setActiveTab(4);
