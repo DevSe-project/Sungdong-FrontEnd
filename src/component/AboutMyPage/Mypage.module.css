@@ -16,7 +16,7 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 3px solid #540000;
+  border-bottom: 3px solid #CC0000;
   box-sizing: border-box; 
 }
 
@@ -39,16 +39,18 @@
 }
 
 .tr {
+  border-bottom: 1px solid white;
 }
 
 .th {
-  background-color: #540000;
+  background-color: #a63e3e;
   color: white;
   width: 7em;
+  font-size: 1em;
 }
 
 .td {
-  background-color: #e8e8e8fd;
+  background-color: whitesmoke;
   border: none;
   height: max-content;
   width: 15em;
