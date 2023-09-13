@@ -23,7 +23,7 @@ export function Product(props){
                   품절
                 </p>
               </div>
-              : <p>{item.title}</p>}
+              : <p style={{fontSize: '1.2em', fontWeight: 'bold',margin: '0px'}}>{item.title}</p>}
               <div className={styles.price}>
               {item.discount
                 ? <div style={{display: 'flex', alignItems: 'center', gap: '0.5em', justifyContent: 'flex-end'}}>
