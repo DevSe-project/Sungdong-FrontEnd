@@ -11,6 +11,8 @@ export let UserData = [
         num1: '010',
         num2: '1234',
         num3: '5678',
+        smsService: 'yes',
+        CMS: '',
         corporationData : {
             ceoName : '장민욱',
             companyName : 'UlsanBigDev',
@@ -24,7 +26,6 @@ export let UserData = [
             businessNum : '1234567890',
             FAX : '1800-3904',
         },
-        smsService: 'yes',
         address: {
             zonecode: 44781,
             roadAddress: '울산 남구 산업로440번길 8',
@@ -32,7 +33,7 @@ export let UserData = [
             buildingName: '(주)UlsanBigDev',
             jibunAddress: '(주)UlsanBigDev',
         },
-        addressDetail: "(주)성동물산 1층",
+        addressDetail: "1층",
         coupon: "",
         bonusMoney: "",
         basket: [],

@@ -6,7 +6,7 @@ import PolicyObj from "../Data/PolicyObj";
 import JoinForm from "./JoinForm";
 
 export default function Join(props) {
-    // link_navigate
+    // link_navigate 
     let navigate = useNavigate();
 
     // 액세스 권한 불러오기
@@ -31,10 +31,13 @@ export default function Join(props) {
             confirmPassword: '',
             email: '',
             emailService: '',
+            grade : 'D',
             name: '',
             num1: '',
             num2: '',
             num3: '',
+            smsService: '', 
+            CMS: '',
             corporationData : {
                 ceoName : '',
                 companyName : '',
@@ -43,10 +46,18 @@ export default function Join(props) {
                     num2 : '',
                     num3 : '',
                 },
-                businessNum : '',
+                businessNum : '', 
+                businessSector : '',
+                businessCategory : '',
+                FAX : '',
             },
-            smsService: '', 
-            address: '', 
+            address: {
+                zonecode: '',
+                roadAddress: '',
+                bname : '',
+                buildingName: '',
+                jibunAddress : '',
+            }, 
             detailAddress: '',
             coupon: "",
             bonusMoney: "",
@@ -105,11 +116,13 @@ export default function Join(props) {
                 confirmPassword: inputData.confirmPassword,
                 email: inputData.email,
                 emailService: inputData.emailService,
-                grade: 'D',
+                grade: inputData.grade,
                 name: inputData.name,
                 num1: inputData.num1,
                 num2: inputData.num2,
                 num3: inputData.num3,
+                smsService: inputData.smsService,
+                CMS: inputData.CMS,
                 corporationData : {
                     ceoName : inputData.corporationData.ceoName,
                     companyName : inputData.corporationData.companyName,
@@ -118,9 +131,11 @@ export default function Join(props) {
                         num2 : inputData.corporationData.companyNum.num2,
                         num3 : inputData.corporationData.companyNum.num3,
                     },
+                    businessSector: inputData.corporationData.businessSector,
+                    businessCategory: inputData.corporationData.businessCategory,
                     businessNum : inputData.corporationData.businessNum,
+                    FAX : inputData.corporationData.FAX,
                 },
-                smsService: inputData.smsService,
                 address: inputData.address, 
                 detailAddress: inputData.detailAddress,
                 coupon: "",
@@ -167,7 +182,6 @@ export default function Join(props) {
 
             {/* 이용약관 체크박스 컨테이너 */}
             <ul className={styles.policyContainer}>
-                {/* 이용약관 */}
                 {/* 약관 Container */ }
                 {PolicyObj.map((policy, index) => {
                     return <li key={index} className={styles.li_policy}>

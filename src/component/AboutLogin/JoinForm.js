@@ -90,7 +90,7 @@ export default function JoinForm(props) {
                 <li className={styles.inputContainer}>
                     <div className={styles.left}>기업명</div>
                     <div className={styles.right}>
-                        {/* <input
+                        <input
                             className={styles.isInput}
                             type='text'
                             placeholder={'ex) OO전자'}
@@ -106,8 +106,9 @@ export default function JoinForm(props) {
                                     })
                                 )
                             }}
-                        /> */}
-                        <button onClick={handleApiCall}>API 호출</button>
+                        />
+                        <button onClick={handleApiCall}>기업명 호출(미완성)</button>
+                        {/* 해당 기업명을 호출 */}
                         {apiResponse && apiResponse.businesses && apiResponse.businesses[0] && (
                             // 기업명 출력
                             <div>
