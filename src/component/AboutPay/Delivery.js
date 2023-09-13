@@ -84,10 +84,17 @@ export function Delivery(props){
             <button 
           onClick={() => {
             if(item.orderState === 3){
-              window.location.href=`http://nplus.doortodoor.co.kr/web/detail.jsp?slipno=123123123`
+              if(item.delivery.deliveryType === '일반택배'){
+                window.open(`https://tracker.delivery/#/kr.cjlogistics/453984691860`, '_blank', 'width=600,height=800');
+              } else if(item.delivery.deliveryType === '화물') {
+                window.open(`https://tracker.delivery/#/kr.daesin/111111111111`, '_blank', 'width=600,height=800');
+              } else {
+                alert("직접 수령이나 성동 택배는 조회하실 수 없습니다.")
+              }
             } else {
-              alert("운송장 번호가 없거나 일반택배가 아닙니다.")
-            }}}
+              alert("배송 준비 중일때는 조회하실 수 없습니다.")
+            }
+          }}
             className={styles.button}>배송 조회</button>
             <button className={styles.button}>교환, 반품 신청</button>
           </div>
@@ -130,9 +137,9 @@ export function Delivery(props){
           onClick={() => {
             if(item.orderState === 3){
               if(item.delivery.deliveryType === '일반택배'){
-                window.location.href=`http://nplus.doortodoor.co.kr/web/detail.jsp?slipno=123123123`
+                window.open(`https://tracker.delivery/#/kr.cjlogistics/453984691860`, '_blank', 'width=600,height=800');
               } else if(item.delivery.deliveryType === '화물') {
-                window.location.href=`https://www.ds3211.co.kr/freight/internalFreightSearch.ht?billno=123123`
+                window.open(`https://tracker.delivery/#/kr.daesin/111111111111`, '_blank', 'width=600,height=800');
               } else {
                 alert("직접 수령이나 성동 택배는 조회하실 수 없습니다.")
               }
