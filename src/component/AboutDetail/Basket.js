@@ -335,8 +335,14 @@ export function Basket(props){
                 </td>
                 <td className={styles.price}>
                   {item.discount
-                  ? 
-                  `\\${ (item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}`
+                  ?
+                  <>
+                  <span style={{color: 'red', fontWeight: '750'}}>
+                    ({item.discount}%)
+                  </span>
+                  &nbsp;<i className="fal fa-long-arrow-right"/>&nbsp;
+                  \{(item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}
+                  </>
                   : `\\${item.finprice.toLocaleString()}`}
                 </td>
               </tr>
@@ -366,8 +372,15 @@ export function Basket(props){
                 </td>
                 <td>{item.cnt}</td>
                 <td className={styles.price}>
-                  {item.discount
-                  ? `\\${ (item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}`
+                {item.discount
+                  ?
+                  <>
+                  <span style={{color: 'red', fontWeight: '750'}}>
+                    ({item.discount}%)
+                  </span>
+                  &nbsp;<i className="fal fa-long-arrow-right"/>&nbsp;
+                  \{(item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}
+                  </>
                   : `\\${item.finprice.toLocaleString()}`}
                 </td>
               </tr>

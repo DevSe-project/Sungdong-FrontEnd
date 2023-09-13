@@ -74,6 +74,7 @@ export function Receipt(props){
             name: findUser.corporationData.ceoName,
             tel: `${findUser.num1}-${findUser.num2}-${findUser.num3}`,
             email: findUser.email,
+            fax: findUser.corporationData.FAX,
           }));
           setDeliveryInformation(prevData => ({
             ...prevData,
