@@ -40,9 +40,11 @@ export default function MyPage(props) {
         text_dynamicStyle={props.text_dynamicStyle}
       />
 
-{userProfile ? (
+      {userProfile ? ( //coData 관련data는 조건부 렌더링하도록 
         <div className={styles.body}>
-          <div className={styles.title}><h1>{userProfile.name} 정보</h1></div>
+          <div className={styles.title}>
+            <h1>{userProfile.name} 정보</h1>
+          </div>
           <div className={styles.subtitle}>개인정보수정</div>
           <table className={styles.table}>
             <tr className={styles.tr}>

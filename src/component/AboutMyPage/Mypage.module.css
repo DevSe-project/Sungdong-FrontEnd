@@ -1,38 +1,41 @@
 .body {
-  margin-top: 2em;
+  margin: 1em auto; /* 위 아래 1em, 좌우 중앙 정렬 */
   width: 80%;
-  margin-left: 10%;
   display: flex;
   flex-direction: column;
   gap: 1em;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  padding-bottom: 2em;
+  align-items: center; /* 가운데 정렬 */
 }
 
 .title {
-  margin: 2em;
-  padding-bottom: 1%;
-  margin-right: 0;
+  width: 95%;
+  padding: 2em 1em 0.5em 1em; /* 위 아래 1em, 좌우 2em 여백 추가 */
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 3px solid #cc0000;
+  border-bottom: 3px solid #540000;
+  box-sizing: border-box; 
 }
 
 .subtitle {
   font-size: 1.3em;
   font-weight: bold;
   text-align: left;
-  margin-bottom: 0.5em;
-  margin-left: 40px;
-  margin-right: 40px;
+  margin: 0.5em 2em;
+  box-sizing: border-box; 
 }
 
 .table {
   width: 95%;
-  margin-left: 40px;
-  padding-right: 40px;
   border: none;
+  border-radius: 1px;
   border-collapse: collapse;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  padding: 1em 2em; 
+  box-sizing: border-box;
 }
 
 .tr {
