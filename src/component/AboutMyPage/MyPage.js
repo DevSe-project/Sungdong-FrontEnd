@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
 import { TopBanner } from "../AboutHeader/TopBanner";
 import styles from "./Mypage.module.css";
+import ModifyPW from "./ModifyPW";
 export default function MyPage(props) {
 
+  // gather state 
   const [userProfile, setUserProfile] = useState([]);
+  const [modifyModal, setModifyModal] = useState(false);
+  
   const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'));
+
   // 현재 로그인 된 유저의 데이터를 호출
   useEffect(() => {
     if (props.login) { //저장된 로그인Data가 존재
@@ -18,7 +23,13 @@ export default function MyPage(props) {
       }
     }
   }, [props, inLogin, props.userData])
+
   // 조건에 부합하는 해당 유저의 데이터를 호출
+
+
+  // 비밀번호 수정
+
+
   return (
     <div>
       {/* 탑배너 & 카테고리 */}
@@ -59,7 +70,13 @@ export default function MyPage(props) {
               <th className={styles.th}>아이디</th>
               <td className={styles.td}>{userProfile.id}</td>
               <th className={styles.th}>비밀번호</th>
-              <td className={styles.td}><button>비밀번호 확인/변경하기</button></td>
+              <td className={styles.td}>
+                <button
+                  onClick={() => {
+                    setModifyModal(true);
+                  }}
+                >비밀번호 수정</button>
+              </td>
               <th className={styles.th}>E-MAIL</th>
               <td className={styles.td}>{userProfile.email}</td>
             </tr>
@@ -80,6 +97,16 @@ export default function MyPage(props) {
               <td className={styles.td}>{`${userProfile.num1}-${userProfile.num2}-${userProfile.num3}`}</td>
             </tr>
           </table>
+          {modifyModal
+            ?
+            <ModifyPW
+              userData={props.userData}
+              setUserData={props.setUserData}
+              modifyModal={modifyModal}
+              setModifyModal={setModifyModal}
+            />
+            :
+            null}
         </div>
       ) : (
         <p>Loading...</p>
