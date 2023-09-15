@@ -72,14 +72,16 @@ export function Delivery(props){
         <div className={styles.orderDate}>
           <h4>{item.date} 주문</h4>
           <div onClick={()=>detailOrder(item)} className={styles.orderDetail}>
-            <span>주문 상세보기</span> 
+            <span style={{fontWeight: '450'}}>주문 상세보기</span> 
             <i className="far fa-chevron-right"></i>
           </div>
         </div>
         <div className={styles.deliveryStyle}>
           <div className={styles.deliveryNow}>
             <div className={styles.deliveryNowMenu}>
-              <h5>{item.orderState === 0 ? '결제 대기' 
+              <h5>{item.delivery.deliveryDate 
+              ? `배송 예정 : ${item.delivery.deliveryDate}`
+              : item.orderState === 0 ? '결제 대기' 
               : item.orderState === 1 ? '결제 완료'
               : item.orderState === 2 ? '배송 준비중'
               : item.orderState === 3 ? '배송 중'
@@ -90,8 +92,8 @@ export function Delivery(props){
             <div className={styles.deliveryNowItem}>
               <img className={styles.img} src={item.image.mini} alt="주문상품"/>
               <div className={styles.deliveryNowInformation}>
-                <span>{item.productName}{item.optionSelected && `(${item.optionSelected})`}, {item.cnt}개 </span>
-                <span>{item.discount 
+                <span style={{fontWeight: '650'}}>{item.productName}{item.optionSelected && `(${item.optionSelected})`}, {item.cnt}개 </span>
+                <span style={{fontWeight: '650'}}>{item.discount 
                 ? (item.finprice - item.finprice/100*item.discount).toLocaleString()
                 : item.finprice.toLocaleString()}원</span>
               </div>
@@ -114,14 +116,16 @@ export function Delivery(props){
       <div className={styles.orderDate}>
         <h4>{item.date} 주문</h4>
         <div onClick={()=>detailOrder(item)} className={styles.orderDetail}>
-          <span>주문 상세보기</span> 
+          <span style={{fontWeight: '450'}}>주문 상세보기</span> 
           <i className="far fa-chevron-right"></i>
         </div>
       </div>
       <div className={styles.deliveryStyle}>
         <div className={styles.deliveryNow}>
           <div className={styles.deliveryNowMenu}>
-            <h5>{item.orderState === 0 ? '결제 대기' 
+            <h5>{item.delivery.deliveryDate 
+            ? `배송 예정 : ${item.delivery.deliveryDate}`
+            : item.orderState === 0 ? '결제 대기' 
             : item.orderState === 1 ? '결제 완료'
             : item.orderState === 2 ? '배송 준비중'
             : item.orderState === 3 ? '배송 중'
@@ -132,8 +136,8 @@ export function Delivery(props){
           <div className={styles.deliveryNowItem}>
             <img className={styles.img} src={item.image.mini} alt="주문상품"/>
             <div className={styles.deliveryNowInformation}>
-              <span>{item.productName}{item.optionSelected && `(${item.optionSelected})`}, {item.cnt}개 </span>
-              <span>{item.discount 
+              <span style={{fontWeight: '650'}}>{item.productName}{item.optionSelected && `(${item.optionSelected})`}, {item.cnt}개 </span>
+              <span style={{fontWeight: '650'}}>{item.discount 
               ? (item.finprice - item.finprice/100*item.discount).toLocaleString()
               : item.finprice.toLocaleString()}원</span>
             </div>
