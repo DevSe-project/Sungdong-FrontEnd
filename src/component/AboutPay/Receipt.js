@@ -312,7 +312,7 @@ export function Receipt(props){
     const dayOfWeek = date.getDay(); // 0: 일요일, 1: 월요일, ..., 6: 토요일
 
 
-  // 만약 날짜의 요일이 일요일(0)이 아니라면 옵션을 추가하고 i를 증가시킵니다.
+  // 날짜의 요일이 일요일(0)이 아닌 경우에만 옵션추가
   if (dayOfWeek !== 0) {
     const formattedOption = date.toLocaleDateString(undefined, dateOptions);
     dateSelectOptions.push(
