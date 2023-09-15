@@ -44,7 +44,7 @@ export function RelatedData(props) {
       const addCntList = filterList.map((item,index) => ({
         ...item,
         cnt: item.cnt ? item.cnt : 1,
-        finprice : item.finprice ? item.finprice.toLocaleString() : item.price.toLocaleString(),
+        finprice : item.finprice ? item.finprice : item.price,
         listId : index,
       }));
       setRelatedList(addCntList);
@@ -100,7 +100,7 @@ export function RelatedData(props) {
   function updatedItem(index){
     if(count > 0) {
       relatedList[index].cnt = count;
-      relatedList[index].finprice = (relatedList[index].price * count).toLocaleString();
+      relatedList[index].finprice = relatedList[index].price * count;
       const newEditStatus = [...editStatus]; 
       newEditStatus[index] = false;
       setEditStatus(newEditStatus);
