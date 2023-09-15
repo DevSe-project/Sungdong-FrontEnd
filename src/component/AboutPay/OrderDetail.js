@@ -44,6 +44,11 @@ export function OrderDetail(props){
       title : '배송 메세지', 
       value : orderData.delivery.deliveryMessage,
     },
+    { 
+      id : 5, 
+      title : '성동 메세지', 
+      value : orderData.order.smtMessage ? orderData.order.smtMessage : '없음',
+    },
   ];
   const payInputValue = [
     { 

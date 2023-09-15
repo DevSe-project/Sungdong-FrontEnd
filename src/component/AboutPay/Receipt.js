@@ -46,6 +46,7 @@ export function Receipt(props){
     name : "",
     tel : "",
     email : "",
+    smtMessage: "",
     payRoute : "",
     moneyReceipt : "",
     transAction : "",
@@ -244,6 +245,12 @@ export function Receipt(props){
   {value: '문 앞에 두고 가주세요.'},
 ]
 
+  const smtMessageExample=[
+    {value: '빠른 출고 부탁드립니다.'},
+    {value: '명세서 제외 바랍니다.'},
+    {value: '발송자 표시 바랍니다.(고객 직송 건)'}
+  ]
+
   return(
     <div>
       <div className={styles.container}>
@@ -336,6 +343,49 @@ export function Receipt(props){
                 })
               )}
               />
+            </div>
+          </div>
+          <div className={styles.formInner}>
+            <div className={styles.label}>
+              <label>성동 메세지</label>
+            </div>
+            <div style={{flexDirection: 'row', width: '60%'}} className={styles.searchResult}>
+              <input 
+              style={{flexDirection: 'row', width: '50%'}}
+              className={styles.inputSize} 
+              value={orderInformation.smtMessage}
+              type="text" 
+              placeholder='성동물산에 남길 메세지를 적어주세요'
+              onChange={(e)=>setOrderInformation(
+                prevdata=> ({
+                  ...prevdata,
+                  smtMessage : e.target.value,
+                })
+              )}
+              />
+              <select
+              className={styles.selectSize}
+              name="orderMessage"
+              value={orderInformation.smtMessage || ""}              
+              onChange={(e)=>setOrderInformation(
+                prevdata=> ({
+                  ...prevdata,
+                  smtMessage : e.target.value,
+                })
+              )}
+              >
+                <option value="" disabled>
+                  /----메세지 선택----/
+                </option>
+                <option value="">
+                  직접 입력
+                </option>
+                {smtMessageExample.map((item, index) => 
+                <option key={index} value={item.value}>
+                  {item.value}
+                </option>
+                )}
+              </select>
             </div>
           </div>
         </form>
@@ -602,7 +652,7 @@ export function Receipt(props){
                 })
               )}
               /> 발행안함
-              <input 
+              {/* <input 
               name='moneyreceipt' 
               type="radio"
               value="현금영수증"
@@ -625,7 +675,7 @@ export function Receipt(props){
                   moneyReceipt : e.target.value,
                 })
               )}
-              /> 세금계산서
+              /> 세금계산서 */}
               <input 
               name='moneyreceipt' 
               type="radio"
