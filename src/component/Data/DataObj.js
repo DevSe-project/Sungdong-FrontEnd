@@ -33,7 +33,7 @@ export let DataObj = [{
       mini: image2_mini,
       original : image2_original,
     },
-    title : "작업화",
+    title : "안전화",
     price : 60000,
     content : "날렵한",
     discount : 0,
@@ -95,7 +95,7 @@ export let DataObj = [{
   },
   {
     id : 3,
-    title : "3M 장갑 [많이 팔리는 제품!]",
+    title : "스마트 그립 글러브",
     image : {
       mini: image4_mini,
       original : image4_original,
@@ -114,7 +114,7 @@ export let DataObj = [{
   },
   {
     id : 4,
-    title : "썬쿨망토",
+    title : "썬쿨 케이프",
     image : {
       mini: image5_mini,
       original : image5_original,

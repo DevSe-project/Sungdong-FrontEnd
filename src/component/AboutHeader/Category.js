@@ -528,11 +528,11 @@ export function Category(props){
                     상세보기
                   </td>
                   <td className={styles.detailView} onClick={()=>handleItemClick(item.id)}>
-                    <h5>{item.title}</h5>
+                    <h5 style={{fontSize: '1.1em', fontWeight: '550'}}>{item.title}</h5>
                   </td>
                   <td>EA</td>
                   <td>\{item.price.toLocaleString()}</td>
-                  <td style={{fontWeight: '650'}}>
+                  <td style={{fontWeight: '750'}}>
                     {item.finprice
                     ? item.discount
                     ? `\\${ (item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}`
@@ -620,12 +620,12 @@ export function Category(props){
                           <td>
                             {item.discount}%
                           </td>
-                          <td style={{fontWeight: '650'}}>
+                          <td style={{fontWeight: '750'}}>
                             {item.discount
                             ? `\\${(((item.price/100)*item.discount)*item.cnt).toLocaleString()}`
                             : 0}
                           </td>
-                          <td style={{fontWeight: '650'}}>
+                          <td style={{fontWeight: '750'}}>
                           {item.finprice
                           ? item.discount
                           ? `\\${ (item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}`

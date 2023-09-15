@@ -43,7 +43,7 @@ export function TabInfo(props){
       <div className={styles.reviewHeader}>
       <h3 style={{borderBottom: '3px solid #cc0000', marginBottom: '1em'}}>상품 설명</h3>
         <p>
-        상품정보 내용임<br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
+          {props.detailData.content}
         </p>
       </div>
     </div>

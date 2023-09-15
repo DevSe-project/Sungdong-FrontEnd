@@ -210,6 +210,7 @@ export function RelatedData(props) {
               <th>상품명</th>
               <th>단위</th>
               <th>표준가</th>
+              <th>공급가</th>
               <th>더보기</th>
             </tr>
           </thead>
@@ -227,10 +228,17 @@ export function RelatedData(props) {
                   상세보기
                 </td>
                 <td className={styles.detailView} onClick={()=>handleItemClick(item.id)}>
-                  <h5>{item.title}</h5>
+                  <h5 style={{fontSize: '1.1em', fontWeight: '550'}}>{item.title}</h5>
                 </td>
                 <td>EA</td>
-                <td>{item.price.toLocaleString()}</td>
+                <td>\{item.price.toLocaleString()}</td>
+                <td style={{fontWeight: '750'}}>
+                {item.finprice
+                  ? item.discount
+                  ? `\\${ (item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}`
+                  : `\\${item.finprice.toLocaleString()}`
+                  : item.price.toLocaleString()}
+                </td>
                 <td 
                   className={styles.detailView}
                   onClick={()=>handleItemClick(item.id)}>
@@ -242,14 +250,14 @@ export function RelatedData(props) {
               {/* 모달 */}
               {selectRelatedData === item.id && (
               <tr>
-                <td colSpan="7">
+                <td colSpan="8">
                   <table className={styles.colTable}>
                     <thead style={{ backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.6)'}}>
                       <tr>
-                        <th style={{width: '15%'}}>
+                        <th style={{width: '20%'}}>
                           브랜드
                         </th>
-                        <th style={{width: '12%'}}>
+                        <th style={{width: '15%'}}>
                           옵션
                         </th>
                         <th style={{width: '15%'}}>
@@ -317,7 +325,7 @@ export function RelatedData(props) {
                           ? `\\${(((item.price/100)*item.discount)*item.cnt).toLocaleString()}`
                           : 0}
                         </td>
-                        <td>
+                        <td style={{fontWeight: '750'}}> 
                         {item.finprice
                         ? item.discount
                         ? `\\${ (item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}`
