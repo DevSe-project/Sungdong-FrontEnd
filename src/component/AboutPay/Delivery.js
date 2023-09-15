@@ -39,6 +39,23 @@ export function Delivery(props){
     navigate('/orderDetail');
   }
 
+  function handleDeliveryAPI(item, deliveryNum){
+    if(item.orderState === 3){
+      switch(item.delivery.deliveryType){
+        case '일반택배':
+          window.open(`https://tracker.delivery/#/kr.cjlogistics/${deliveryNum}`, '_blank', 'width=600,height=800');
+          break;
+        case '화물':
+          window.open(`https://tracker.delivery/#/kr.daesin/${deliveryNum}`, '_blank', 'width=600,height=800');
+          break;
+        default : 
+          alert("직접 수령이나 성동 택배는 조회하실 수 없습니다.");
+          break;
+      } 
+    } else {
+      alert("배송 준비 중일때는 조회하실 수 없습니다.")
+    }
+  }
 
 
   return(
@@ -83,21 +100,7 @@ export function Delivery(props){
           <div className={styles.deliveryMenu}>
             <button 
           onClick={() => {
-            if(item.orderState === 3){
-              switch(item.delivery.deliveryType){
-                case '일반택배':
-                  window.open(`https://tracker.delivery/#/kr.cjlogistics/453984691860`, '_blank', 'width=600,height=800');
-                  break;
-                case '화물':
-                  window.open(`https://tracker.delivery/#/kr.daesin/111111111111`, '_blank', 'width=600,height=800');
-                  break;
-                default : 
-                  alert("직접 수령이나 성동 택배는 조회하실 수 없습니다.");
-                  break;
-              } 
-            } else {
-              alert("배송 준비 중일때는 조회하실 수 없습니다.")
-            }
+            handleDeliveryAPI(item, 111111111111)
           }}
             className={styles.button}>배송 조회</button>
             <button className={styles.button}>교환, 반품 신청</button>
@@ -139,21 +142,7 @@ export function Delivery(props){
         <div className={styles.deliveryMenu}>
           <button             
           onClick={() => {
-            if(item.orderState === 3){
-              switch(item.delivery.deliveryType){
-                case '일반택배':
-                  window.open(`https://tracker.delivery/#/kr.cjlogistics/453984691860`, '_blank', 'width=600,height=800');
-                  break;
-                case '화물':
-                  window.open(`https://tracker.delivery/#/kr.daesin/111111111111`, '_blank', 'width=600,height=800');
-                  break;
-                default : 
-                  alert("직접 수령이나 성동 택배는 조회하실 수 없습니다.");
-                  break;
-              } 
-            } else {
-              alert("배송 준비 중일때는 조회하실 수 없습니다.")
-            }
+            handleDeliveryAPI(item, 111111111111)
           }}
           className={styles.button}>
             배송 조회
