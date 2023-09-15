@@ -567,7 +567,7 @@ export function Category(props){
                             적용률
                           </th>
                           <th style={{width: '10%'}}>
-                            적용가
+                            할인금액
                           </th>
                           <th style={{width: '10%', fontWeight: '650'}}>
                             공급가

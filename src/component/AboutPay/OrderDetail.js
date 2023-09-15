@@ -39,10 +39,16 @@ export function OrderDetail(props){
       title : '배송방식', 
       value : 
       orderData.delivery.deliveryType === '화물'
+
       ? orderData.delivery.deliverySelect === 'kr.daesin' 
-      ? `${orderData.delivery && orderData.delivery.deliveryType} (대신)` 
-      : `${orderData.delivery && orderData.delivery.deliveryType} (경동)`
-      : orderData.delivery && orderData.delivery.deliveryType
+      ? `${orderData.delivery && orderData.delivery.deliveryType} (배송 업체 : 대신화물)` 
+      : `${orderData.delivery && orderData.delivery.deliveryType} (배송 업체 : 경동화물)`
+
+      : orderData.delivery.deliveryType === '성동택배'
+
+      ? `${orderData.delivery && orderData.delivery.deliveryType} 
+      (배송 예정일 : ${orderData.delivery && orderData.delivery.deliveryDate})`
+      : orderData.delivery && orderData.deliveryType
     },
     { 
       id : 4, 

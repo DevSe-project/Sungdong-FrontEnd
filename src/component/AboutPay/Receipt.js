@@ -10,6 +10,10 @@ export function Receipt(props){
   // 유효성검사 State
   const [isFormValid, setIsFormValid] = useState(false);  
 
+  // 성동 택배 날짜 계산 로직 ~
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date()); // 선택한 날짜를 Date 객체로 저장
+
   // 주소창으로 접근 등 잘못된 접근 시 경고창 표시 후 홈으로 이동 
   useEffect(()=>{ 
     if (props.activeTab !== 2) {
@@ -63,6 +67,7 @@ export function Receipt(props){
     deliveryType : "",
     deliverySelect: "",
     deliveryMessage : "",
+    deliveryDate : "",
   })
 
   useEffect(() => {
@@ -159,7 +164,14 @@ export function Receipt(props){
             deliveryInformation.deliverySelect !== "" &&
             deliveryInformation.deliveryMessage !== ""
           );
-        } else {
+          } else if (deliveryInformation.deliveryType === '성동택배'){
+            return(
+              deliveryInformation.deliveryType !== "" &&
+              deliveryInformation.deliveryDate !== "" &&
+              deliveryInformation.deliveryMessage !== ""
+            );
+          }
+          else {
           return(
             deliveryInformation.deliveryType !== "" &&
             deliveryInformation.deliveryMessage !== ""
@@ -266,6 +278,66 @@ export function Receipt(props){
     {value: '명세서 제외 바랍니다.'},
     {value: '발송자 표시 바랍니다.(고객 직송 건)'}
   ]
+
+  // 성동 택배 일 때 택배 날짜 로직
+  useEffect(() => {
+    updateDateList();
+  }, []);
+
+  const updateDateList = () => {
+    const currentHour = currentDate.getHours();
+
+    // 만약 현재 시간이 12시 이후라면 모레 날짜를 계산합니다.
+    if (currentHour >= 12) {
+      const tomorrow = new Date(currentDate);
+      tomorrow.setDate(currentDate.getDate() + 1);
+      setCurrentDate(tomorrow);
+    }
+    // 그렇지 않으면 내일 날짜를 계산합니다.
+    else {
+      const tomorrow = new Date(currentDate);
+      tomorrow.setDate(currentDate.getDate());
+      setCurrentDate(tomorrow);
+    }
+  };
+
+  const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  const formatDate = selectedDate.toLocaleDateString(undefined, dateOptions);
+
+  // 선택 가능한 날짜 목록을 생성합니다.
+  const dateSelectOptions = [];
+  for (let i = 0; i < 5; i++) {
+    const date = new Date(currentDate);
+    date.setDate(currentDate.getDate() + i);
+    const formattedOption = date.toLocaleDateString(undefined, dateOptions);
+    dateSelectOptions.push(
+      <option key={i} value={formattedOption}>
+        {formattedOption}
+      </option>
+    );
+  }
+
+  const handleDateChange = (event) => {
+    const selectedDateStr = event.target.value;
+  
+    // "년", "월", "요일" 등의 문자를 "-"로 대체하고 공백을 제거하여 "YYYY-MM-DD" 형식의 문자열로 변환합니다.
+    const formattedDateStr = selectedDateStr
+      .replace(/년|월/g, '-')
+      .replace(/(일요일|월요일|화요일|수요일|목요일|금요일|토요일|일|요일|-)/g, '')
+      .trim();
+  
+    // 요일 정보를 제외한 "YYYY-MM-DD" 형식의 문자열을 Date 객체로 파싱합니다.
+    const selectedDateObj = new Date(formattedDateStr);
+  
+    // 날짜 파싱이 올바르게 되었는지 확인하기 위해 콘솔에 출력합니다.
+    if (!isNaN(selectedDateObj)) {
+      setSelectedDate(selectedDateObj);
+      setDeliveryInformation(prevData => ({
+        ...prevData,
+        deliveryDate : selectedDateStr,
+      }))
+    }
+  };
 
   return(
     <div>
@@ -511,8 +583,8 @@ export function Receipt(props){
             <div className={styles.input}>
               <input 
               name='delivery' 
-              value="책임택배" 
-              checked={deliveryInformation.deliveryType === '책임택배'} 
+              value="성동택배" 
+              checked={deliveryInformation.deliveryType === '성동택배'} 
               type="radio"
               onChange={(e)=>
                 setDeliveryInformation(prevdata=>
@@ -523,7 +595,7 @@ export function Receipt(props){
                 )
               }
               />
-              책임 택배
+              성동 택배
               <input 
               name='delivery' 
               value="화물" 
@@ -571,6 +643,33 @@ export function Receipt(props){
               직접 픽업
             </div>
           </div>
+          {deliveryInformation.deliveryType === '성동택배'
+          &&
+          <div className={styles.formInner}>
+            <div className={styles.label}>
+              <label>희망 택배일자</label>
+            </div>
+            <div className={styles.input}>
+              <input 
+                name='deliveryDate' 
+                className={styles.inputSize}
+                value={deliveryInformation.deliveryDate} 
+                type="text"
+                readOnly
+                />
+              <select 
+              onChange={(e) => handleDateChange(e)}
+              value={formatDate}
+              className={styles.selectSize}
+              >
+                <option value="">
+                  /---배송 일자 선택---/
+                </option>
+                {dateSelectOptions}
+              </select>
+            </div>
+          </div>
+          }
           {deliveryInformation.deliveryType === '화물'
           &&
           <div className={styles.formInner}>

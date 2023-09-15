@@ -57,10 +57,18 @@ export function Order(props){
       value : orderProductData.delivery &&
       orderProductData.delivery.deliveryType &&
       orderProductData.delivery.deliveryType === '화물'
+
       ? orderProductData.delivery.deliverySelect === 'kr.daesin' 
-      ? `${orderProductData.delivery && orderProductData.delivery.deliveryType} (대신)` 
-      : `${orderProductData.delivery && orderProductData.delivery.deliveryType} (경동)`
-      : orderProductData.delivery && orderProductData.delivery.deliveryType
+      ? `${orderProductData.delivery && orderProductData.delivery.deliveryType} (배송 업체 : 대신화물)` 
+      : `${orderProductData.delivery && orderProductData.delivery.deliveryType} (배송 업체 : 경동화물)`
+
+      : orderProductData.delivery &&
+      orderProductData.delivery.deliveryType &&
+      orderProductData.delivery.deliveryType === '성동택배'
+
+      ? `${orderProductData.delivery && orderProductData.delivery.deliveryType} 
+      (배송 예정일 : ${orderProductData.delivery && orderProductData.delivery.deliveryDate})`
+      : orderProductData.delivery && orderProductData.deliveryType
     },
     { 
       id : 4, 
