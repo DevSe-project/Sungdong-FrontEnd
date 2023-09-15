@@ -61,6 +61,7 @@ export function Receipt(props){
       addressDetail : "",
     },
     deliveryType : "",
+    deliverySelect: "",
     deliveryMessage : "",
   })
 
@@ -146,22 +147,37 @@ export function Receipt(props){
       
       
       
-    const isDeliveryInformationValid =
-      deliveryInformation.name !== "" &&
+    const isDeliveryInformationValid = () => {
+      if(deliveryInformation.name !== "" &&
       deliveryInformation.tel !== "" &&
       deliveryInformation.address.address !== "" &&
-      deliveryInformation.address.addressDetail !== "" &&
-      deliveryInformation.deliveryType !== "" &&
-      deliveryInformation.deliveryMessage !== "";
-
+      deliveryInformation.address.addressDetail !== "" 
+      ){
+        if(deliveryInformation.deliveryType === '화물'){
+          return(
+            deliveryInformation.deliveryType !== "" &&
+            deliveryInformation.deliverySelect !== "" &&
+            deliveryInformation.deliveryMessage !== ""
+          );
+        } else {
+          return(
+            deliveryInformation.deliveryType !== "" &&
+            deliveryInformation.deliveryMessage !== ""
+          )
+        }
+      } else {
+        return false;
+      }
+    }
   
     const isCheckboxChecked = orderInformation.checked === true;
 
     const isOrderValid = isOrderInformationValid();
+    const isDeliveryValid = isDeliveryInformationValid();
 
-    setIsFormValid(isOrderValid && isDeliveryInformationValid && isCheckboxChecked);
+    setIsFormValid(isOrderValid && isDeliveryValid && isCheckboxChecked);
 
-    if (!isOrderValid || !isDeliveryInformationValid || !isCheckboxChecked){
+    if (!isOrderValid || !isDeliveryValid || !isCheckboxChecked){
       alert("작성이 되지 않은 란이 있습니다. 다시 확인해주세요!");
     }
   };
@@ -555,6 +571,46 @@ export function Receipt(props){
               직접 픽업
             </div>
           </div>
+          {deliveryInformation.deliveryType === '화물'
+          &&
+          <div className={styles.formInner}>
+            <div className={styles.label}>
+              <label>배송 업체</label>
+            </div>
+            <div className={styles.input}>
+              <input 
+              name='deliverySel' 
+              value="kr.daesin" 
+              checked={deliveryInformation.deliverySelect === 'kr.daesin'} 
+              type="radio"
+              onChange={(e)=>
+                setDeliveryInformation(prevdata=>
+                  ({
+                    ...prevdata,
+                    deliverySelect : e.target.value, 
+                  })
+                )
+              }
+              />
+              대신화물
+              <input 
+              name='deliverySel' 
+              value="kr.kdexp" 
+              checked={deliveryInformation.deliverySelect === 'kr.kdexp'} 
+              type="radio"
+              onChange={(e)=>
+                setDeliveryInformation(prevdata=>
+                  ({
+                    ...prevdata,
+                    deliverySelect : e.target.value, 
+                  })
+                )
+              }
+              />
+              경동화물
+            </div>
+          </div>
+          }
           <div className={styles.formInner}>
             <div className={styles.label}>
               <label>배송 메세지</label>

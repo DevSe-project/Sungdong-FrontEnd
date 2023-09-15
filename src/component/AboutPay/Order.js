@@ -54,7 +54,13 @@ export function Order(props){
     { 
       id : 3, 
       title : '배송방식', 
-      value : orderProductData.delivery && orderProductData.delivery.deliveryType,
+      value : orderProductData.delivery &&
+      orderProductData.delivery.deliveryType &&
+      orderProductData.delivery.deliveryType === '화물'
+      ? orderProductData.delivery.deliverySelect === 'kr.daesin' 
+      ? `${orderProductData.delivery && orderProductData.delivery.deliveryType} (대신)` 
+      : `${orderProductData.delivery && orderProductData.delivery.deliveryType} (경동)`
+      : orderProductData.delivery && orderProductData.delivery.deliveryType
     },
     { 
       id : 4, 

@@ -46,7 +46,7 @@ export function Delivery(props){
           window.open(`https://tracker.delivery/#/kr.cjlogistics/${deliveryNum}`, '_blank', 'width=600,height=800');
           break;
         case '화물':
-          window.open(`https://tracker.delivery/#/kr.daesin/${deliveryNum}`, '_blank', 'width=600,height=800');
+          window.open(`https://tracker.delivery/#/${item.delivery.deliverySelect}/${deliveryNum}`, '_blank', 'width=600,height=800');
           break;
         default : 
           alert("직접 수령이나 성동 택배는 조회하실 수 없습니다.");
