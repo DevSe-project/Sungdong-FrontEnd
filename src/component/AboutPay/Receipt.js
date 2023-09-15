@@ -306,16 +306,30 @@ export function Receipt(props){
 
   // 선택 가능한 날짜 목록을 생성합니다.
   const dateSelectOptions = [];
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 10; i++) {
     const date = new Date(currentDate);
     date.setDate(currentDate.getDate() + i);
+    const dayOfWeek = date.getDay(); // 0: 일요일, 1: 월요일, ..., 6: 토요일
+
+
+  // 만약 날짜의 요일이 일요일(0)이 아니라면 옵션을 추가하고 i를 증가시킵니다.
+  if (dayOfWeek !== 0) {
     const formattedOption = date.toLocaleDateString(undefined, dateOptions);
     dateSelectOptions.push(
       <option key={i} value={formattedOption}>
         {formattedOption}
       </option>
     );
+  } else {
+    continue;
   }
+}
+
+
+
+
+
+
 
   const handleDateChange = (event) => {
     const selectedDateStr = event.target.value;
