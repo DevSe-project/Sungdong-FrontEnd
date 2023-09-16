@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from 'react';
-import styles from '../AboutLogin/Modal.module.css';
+import styles from './ModyfyPW.module.css';
 
 export default function ModifyPW(props) {
 
@@ -58,16 +58,16 @@ export default function ModifyPW(props) {
                 </div>
                 <div className={styles.modalContent}>
                     <div className={styles.titleBox}>
-                        <div className={`${styles.title} ${props.modalType == 'pw' ? styles.selected_title : ``}`} onClick={() => { props.openModal('pw') }}>
-                            비밀번호 찾기
+                        <div className={`${styles.title}`}>
+                            비밀번호 수정
                         </div>
                     </div>
 
                     {/* 아이디 비번 선택란 */}
                     {
-                        props.modalType
+                        props.modifyModal
                             ?
-                            <Find_PasswordModal
+                            <Modify_passwordModal
                                 inputForFind={inputForFind}
                                 setInputForFind={setInputForFind}
                                 checking_FindPw={checking_FindPw}
@@ -82,14 +82,14 @@ export default function ModifyPW(props) {
 }
 
 // 비밀번호찾기 모달창
-function Find_PasswordModal(props) {
+function Modify_passwordModal(props) {
 
     return (
-        <div className={styles.inputContainer}>
+        <div className={styles.contents_container}>
             <div className={styles.pw_layout}>
                 <div className={styles.idContainer}>
                     <div className={styles.idInput_Container}>
-                        <div className={styles.nameContainer}>
+                        <div className={styles.inputContainer}>
                             <div className={styles.label}>아이디</div>
                             <div className={styles.input}>
                                 <input
@@ -108,8 +108,27 @@ function Find_PasswordModal(props) {
                                 />
                             </div>
                         </div>
-                        <div className={styles.phoneNumContainer}>
-                            <div className={styles.label}>사업자등록번호</div>
+                        <div className={styles.inputContainer}>
+                            <div className={styles.label}>대표명</div>
+                            <div className={styles.input}>
+                                <input
+                                    type='text'
+                                    placeholder='대표명'
+                                    className={styles.input}
+                                    value={props.inputForFind.ceoName}
+                                    onChange={(e) => {
+                                        const inputCeoName = {
+                                            ...props.inputForFind,
+                                            ceoName: e.target.value
+                                        };
+                                        props.setInputForFind(inputCeoName);
+                                    }}
+                                    onKeyDown={props.handleEnter_idFind}
+                                />
+                            </div>
+                        </div>
+                        <div className={styles.inputContainer}>
+                            <div className={styles.label}>사업자 <br/> 등록번호</div>
                             <div className={styles.input}>
                                 <input
                                     type='text'
@@ -117,11 +136,11 @@ function Find_PasswordModal(props) {
                                     className={styles.input}
                                     value={props.inputForFind.biz_num}
                                     onChange={(e) => {
-                                        const inputCeoName = {
+                                        const inputbiz_num = {
                                             ...props.inputForFind,
                                             biz_num: e.target.value
                                         };
-                                        props.setInputForFind(inputCeoName);
+                                        props.setInputForFind(inputbiz_num);
                                     }}
                                     onKeyDown={props.handleEnter_pwFind}
                                 />
@@ -129,11 +148,11 @@ function Find_PasswordModal(props) {
                         </div>
                     </div>
                 </div>
-                <div className={styles.goResetPassword} onClick={props.checking_FindPw}>
-                    비밀번호<br />
-                    찾기
-                </div>
             </div>
+                <div className={styles.goModify} onClick={props.checking_FindPw}>
+                    비밀번호<br />
+                    변경하기
+                </div>
         </div>
     )
 }
