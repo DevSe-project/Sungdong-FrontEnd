@@ -102,17 +102,6 @@
   justify-content: center;
   align-items: center;
 }
-
-.idContainer {
-  height: 150px;
-  width: 25em;
-}
-/* ID입력 컨테이너 */
-.idInput_Container {
-  display: flex;
-  flex-direction: column;
-  width: 25em;
-}
 /* 대표명 입력 컨테이 */
 .inputContainer {
   display: flex;
@@ -124,12 +113,11 @@
 /* ------------find_pw modal CSS------------ */
 .pw_layout {
   display: flex;
-  flex-direction: row;
-  width: 32em;
+  flex-direction: column;
+  width: 25em;
   align-items: center;
   justify-content: center;
   align-items: center;
-
 }
 /* 비밀번호 변경하기 Button */
 .goModify {

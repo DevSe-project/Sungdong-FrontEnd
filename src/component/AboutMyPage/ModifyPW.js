@@ -87,72 +87,70 @@ function Modify_passwordModal(props) {
     return (
         <div className={styles.contents_container}>
             <div className={styles.pw_layout}>
-                <div className={styles.idContainer}>
-                    <div className={styles.idInput_Container}>
-                        <div className={styles.inputContainer}>
-                            <div className={styles.label}>아이디</div>
-                            <div className={styles.input}>
-                                <input
-                                    type='text'
-                                    placeholder='아이디'
-                                    className={styles.input}
-                                    value={props.inputForFind.id}
-                                    onChange={(e) => {
-                                        const inputCeoName = {
-                                            ...props.inputForFind,
-                                            id: e.target.value
-                                        };
-                                        props.setInputForFind(inputCeoName);
-                                    }}
-                                    onKeyDown={props.handleEnter_pwFind}
-                                />
-                            </div>
-                        </div>
-                        <div className={styles.inputContainer}>
-                            <div className={styles.label}>대표명</div>
-                            <div className={styles.input}>
-                                <input
-                                    type='text'
-                                    placeholder='대표명'
-                                    className={styles.input}
-                                    value={props.inputForFind.ceoName}
-                                    onChange={(e) => {
-                                        const inputCeoName = {
-                                            ...props.inputForFind,
-                                            ceoName: e.target.value
-                                        };
-                                        props.setInputForFind(inputCeoName);
-                                    }}
-                                    onKeyDown={props.handleEnter_idFind}
-                                />
-                            </div>
-                        </div>
-                        <div className={styles.inputContainer}>
-                            <div className={styles.label}>사업자 <br/> 등록번호</div>
-                            <div className={styles.input}>
-                                <input
-                                    type='text'
-                                    placeholder='예)000-00-00000'
-                                    className={styles.input}
-                                    value={props.inputForFind.biz_num}
-                                    onChange={(e) => {
-                                        const inputbiz_num = {
-                                            ...props.inputForFind,
-                                            biz_num: e.target.value
-                                        };
-                                        props.setInputForFind(inputbiz_num);
-                                    }}
-                                    onKeyDown={props.handleEnter_pwFind}
-                                />
-                            </div>
-                        </div>
+                <div className={styles.inputContainer}>
+                    <div className={styles.label}>아이디</div>
+                    <div className={styles.input}>
+                        <input
+                            type='text'
+                            placeholder='아이디'
+                            className={styles.input}
+                            value={props.inputForFind.id}
+                            onChange={(e) => {
+                                const inputCeoName = {
+                                    ...props.inputForFind,
+                                    id: e.target.value
+                                };
+                                props.setInputForFind(inputCeoName);
+                            }}
+                            onKeyDown={props.handleEnter_pwFind}
+                        />
+                    </div>
+                </div>
+                <div className={styles.inputContainer}>
+                    <div className={styles.label}>대표명</div>
+                    <div className={styles.input}>
+                        <input
+                            type='text'
+                            placeholder='대표명'
+                            className={styles.input}
+                            value={props.inputForFind.ceoName}
+                            onChange={(e) => {
+                                const inputCeoName = {
+                                    ...props.inputForFind,
+                                    ceoName: e.target.value
+                                };
+                                props.setInputForFind(inputCeoName);
+                            }}
+                            onKeyDown={props.handleEnter_idFind}
+                        />
+                    </div>
+                </div>
+                <div className={styles.inputContainer}>
+                    <div className={styles.label}>사업자 <br /> 등록번호</div>
+                    <div className={styles.input}>
+                        <input
+                            type='text'
+                            placeholder='예)000-00-00000'
+                            className={styles.input}
+                            value={props.inputForFind.biz_num}
+                            onChange={(e) => {
+                                const inputbiz_num = {
+                                    ...props.inputForFind,
+                                    biz_num: e.target.value
+                                };
+                                props.setInputForFind(inputbiz_num);
+                            }}
+                            onKeyDown={props.handleEnter_pwFind}
+                        />
                     </div>
                 </div>
             </div>
-                <div className={styles.goModify} onClick={props.checking_FindPw}>
-                    비밀번호<br />
-                    변경하기
-                </div>
+            <div
+                className={styles.goModify}
+                onClick={props.checking_FindPw}>
+                비밀번호<br />
+                변경하기
+            </div>
         </div>
     )
 }
