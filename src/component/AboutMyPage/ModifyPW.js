@@ -62,19 +62,12 @@ export default function ModifyPW(props) {
                             비밀번호 수정
                         </div>
                     </div>
-
-                    {/* 아이디 비번 선택란 */}
-                    {
-                        props.modifyModal
-                            ?
-                            <Modify_passwordModal
-                                inputForFind={inputForFind}
-                                setInputForFind={setInputForFind}
-                                checking_FindPw={checking_FindPw}
-                                handleEnter_pwFind={handleEnter_pwFind} />
-                            :
-                            null
-                    }
+                    {/* 비밀번호 수정 모달 내부 컴포넌트 */}
+                    <Modify_passwordModal
+                        inputForFind={inputForFind}
+                        setInputForFind={setInputForFind}
+                        checking_FindPw={checking_FindPw}
+                        handleEnter_pwFind={handleEnter_pwFind} />
                 </div>
             </div>
         </div>
