@@ -10,12 +10,12 @@ export default function ModifyPW(props) {
         biz_num: '',
     })
 
-    // 비밀번호 찾기 Input정보(아이디, 사업자등록번호) 일치 확인
-    function checking_FindPw() {
+    // 비밀번호 수정 Input정보(아이디, 대표명, 사업자등록번호) 일치 확인
+    function goModify() {
         // 일치하는 값 추출
-        const confirmPwFind = props.userData.find(userData => userData.id === inputForFind.id && userData.corporationData.businessNum === inputForFind.biz_num);
+        const confirmPwFind = props.userData.find(userData => userData.id === inputForFind.id && userData.corporationData.ceoName === inputForFind.ceoName && userData.corporationData.businessNum === inputForFind.biz_num);
         // 값이 있다면 조건문 실행
-        if (confirmPwFind && confirmPwFind.id === inputForFind.id && confirmPwFind.corporationData.businessNum === inputForFind.biz_num) {
+        if (confirmPwFind && confirmPwFind.id === inputForFind.id && confirmPwFind.corporationData.ceoName === inputForFind.ceoName && confirmPwFind.corporationData.businessNum === inputForFind.biz_num) {
             alert(`일치한 정보입니다. 비밀번호는 ${confirmPwFind.password}입니다.`);
         } else {
             alert("입력하신 정보가 일치하지 않습니다.");
@@ -25,7 +25,7 @@ export default function ModifyPW(props) {
     // enter키를 누르면 'PW찾기'
     function handleEnter_pwFind(event) {
         if (event.key === 'Enter') {
-            checking_FindPw();
+            goModify();
         }
     }
 
@@ -66,7 +66,7 @@ export default function ModifyPW(props) {
                     <Modify_passwordModal
                         inputForFind={inputForFind}
                         setInputForFind={setInputForFind}
-                        checking_FindPw={checking_FindPw}
+                        goModify={goModify}
                         handleEnter_pwFind={handleEnter_pwFind} />
                 </div>
             </div>
@@ -74,7 +74,7 @@ export default function ModifyPW(props) {
     );
 }
 
-// 비밀번호찾기 모달창
+// 비밀번호찾기 모달 컴포넌트
 function Modify_passwordModal(props) {
 
     return (
@@ -140,7 +140,7 @@ function Modify_passwordModal(props) {
             </div>
             <div
                 className={styles.goModify}
-                onClick={props.checking_FindPw}>
+                onClick={props.goModify}>
                 비밀번호<br />
                 변경하기
             </div>
