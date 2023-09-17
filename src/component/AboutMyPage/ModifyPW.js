@@ -10,6 +10,9 @@ export default function ModifyPW(props) {
         biz_num: '',
     })
 
+    // 인증창 or 변경창 무엇을 보여줄 것인지
+    const [viewModal, setViewModal] = useState('prove');
+
     // 비밀번호 수정 Input정보(아이디, 대표명, 사업자등록번호) 일치 확인
     function goModify() {
         // 일치하는 값 추출
@@ -63,19 +66,101 @@ export default function ModifyPW(props) {
                         </div>
                     </div>
                     {/* 비밀번호 수정 모달 내부 컴포넌트 */}
-                    <Modify_passwordModal
-                        inputForFind={inputForFind}
-                        setInputForFind={setInputForFind}
-                        goModify={goModify}
-                        handleEnter_pwFind={handleEnter_pwFind} />
+                    {
+                        viewModal === 'prove'
+                            ?
+                            <ProveInput
+                                inputForFind={inputForFind}
+                                setInputForFind={setInputForFind}
+                                goModify={goModify}
+                                handleEnter_pwFind={handleEnter_pwFind} />
+                            :
+                            <ModifyInput
+                                goModify={goModify} />
+                    }
                 </div>
             </div>
         </div>
     );
 }
 
-// 비밀번호찾기 모달 컴포넌트
-function Modify_passwordModal(props) {
+// ProveUser 모달 컴포넌트
+function ProveInput(props) {
+
+    return (
+        <div className={styles.contents_container}>
+            <div className={styles.pw_layout}>
+                <div className={styles.inputContainer}>
+                    <div className={styles.label}>아이디</div>
+                    <div className={styles.input}>
+                        <input
+                            type='text'
+                            placeholder='아이디'
+                            className={styles.input}
+                            value={props.inputForFind.id}
+                            onChange={(e) => {
+                                const inputCeoName = {
+                                    ...props.inputForFind,
+                                    id: e.target.value
+                                };
+                                props.setInputForFind(inputCeoName);
+                            }}
+                            onKeyDown={props.handleEnter_pwFind}
+                        />
+                    </div>
+                </div>
+                <div className={styles.inputContainer}>
+                    <div className={styles.label}>대표명</div>
+                    <div className={styles.input}>
+                        <input
+                            type='text'
+                            placeholder='대표명'
+                            className={styles.input}
+                            value={props.inputForFind.ceoName}
+                            onChange={(e) => {
+                                const inputCeoName = {
+                                    ...props.inputForFind,
+                                    ceoName: e.target.value
+                                };
+                                props.setInputForFind(inputCeoName);
+                            }}
+                            onKeyDown={props.handleEnter_idFind}
+                        />
+                    </div>
+                </div>
+                <div className={styles.inputContainer}>
+                    <div className={styles.label}>사업자 <br /> 등록번호</div>
+                    <div className={styles.input}>
+                        <input
+                            type='text'
+                            placeholder='예)000-00-00000'
+                            className={styles.input}
+                            value={props.inputForFind.biz_num}
+                            onChange={(e) => {
+                                const inputbiz_num = {
+                                    ...props.inputForFind,
+                                    biz_num: e.target.value
+                                };
+                                props.setInputForFind(inputbiz_num);
+                            }}
+                            onKeyDown={props.handleEnter_pwFind}
+                        />
+                    </div>
+                </div>
+            </div>
+            <div
+                className={styles.goModify}
+                onClick={props.goModify}>
+                비밀번호<br />
+                변경하기
+            </div>
+        </div>
+    )
+}
+
+// 수정 컴포넌트
+function ModifyInput(props) {
+
 
     return (
         <div className={styles.contents_container}>
