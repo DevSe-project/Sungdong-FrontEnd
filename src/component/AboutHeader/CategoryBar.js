@@ -22,15 +22,15 @@ export function CategoryBar(props) {
 
   useEffect(() => {
     if(sessionStorage.getItem('filterSearch')){
-      localStorage.removeItem('tabState');
+      sessionStorage.removeItem('tabState');
       setActiveTab(null);
     } else {
-      const tabstate = JSON.parse(localStorage.getItem('categoryTabState'));
+      const tabstate = JSON.parse(sessionStorage.getItem('categoryTabState'));
       setActiveTab(tabstate);
     }
 
     if (location.pathname !== '/category') {
-      localStorage.removeItem('tabState');
+      sessionStorage.removeItem('tabState');
       setActiveTab(null);
     }
   },[location])
@@ -40,7 +40,7 @@ export function CategoryBar(props) {
   const [subMenuStates, setSubMenuStates] = useState(props.categoryData && props.categoryData.map(()=>false));
 
   const handleTabClick = (tabItem) => {
-    localStorage.setItem('categoryTabState', JSON.stringify(tabItem.id));
+    sessionStorage.setItem('categoryTabState', JSON.stringify(tabItem.id));
   };
 
   const handleMouseEnter = (index) => {

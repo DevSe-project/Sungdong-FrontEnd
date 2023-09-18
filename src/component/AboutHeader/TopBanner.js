@@ -15,12 +15,12 @@ export function TopBanner(props) {
   const [topTab, setTopTab] = useState(null); // 현재 활성화된 탭을 추적
 
   useEffect(() => {
-    const tabstate = JSON.parse(localStorage.getItem('menuTab'));
+    const tabstate = JSON.parse(sessionStorage.getItem('menuTab'));
     setTopTab(tabstate);
     
     // 경로에 따른 상태 초기화
     if (!(location.pathname === '/delivery' || location.pathname === '/likeitem' || location.pathname === '/basket')) {
-      localStorage.removeItem('menuTab');
+      sessionStorage.removeItem('menuTab');
       setTopTab(null);
     }
   }, [location]); // 두 번째 매개변수를 빈 배열로 설정하여 최초 렌더링 시에만 실행
@@ -64,7 +64,7 @@ export function TopBanner(props) {
   const [subMenuStates, setSubMenuStates] = useState(menuData.map(() => false));
 
   function saveTab(id) {
-    localStorage.setItem('menuTab', JSON.stringify(id));
+    sessionStorage.setItem('menuTab', JSON.stringify(id));
   }
   return (
     <div className={styles.body}>

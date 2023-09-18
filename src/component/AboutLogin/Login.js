@@ -4,10 +4,13 @@ import MainLogo from '../../image/sungdonglogo.svg';
 import { useState } from 'react';
 import FindModal from './FindModal';
 import CodeInputModal from './CodeInputModal';
+import CryptoJS from 'crypto-js';
 
 export function Login(props) {
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
+  // 암호화 키 (암호화와 복호화에 동일한 키를 사용해야 합니다.)
+  const encryptionKey = 'bigdev2023!';
 
 
   const navigate = useNavigate();
@@ -34,7 +37,10 @@ export function Login(props) {
         id: id,
         pw: pw,
       }
-      sessionStorage.setItem('saveLoginData', JSON.stringify(LoginDataObj)); //로그인 정보를 sessionStorage로 저장
+
+      // 데이터를 암호화
+      const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(LoginDataObj), encryptionKey).toString();
+      sessionStorage.setItem('saveLoginData', JSON.stringify(encryptedData));
       navigate('/'); //메인페이지로 이동하면서
       alert('성동물산에 오신 걸 환영합니다!'); //환영문구 출력
       window.location.reload();

@@ -2,11 +2,9 @@ import { useEffect, useRef, useState } from 'react'
 import { TopBanner } from '../AboutHeader/TopBanner'
 import { Delivery } from './Delivery'
 import styles from './DeliveryMain.module.css'
-import { useLocation } from 'react-router-dom'
 export function DeliveryMain(props){
-  const location = useLocation();
   //로그인 정보 불러오기
-  const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'))
+  const inLogin = props.decryptData(JSON.parse(sessionStorage.getItem('saveLoginData')));
   const filterOrderData = props.orderData && props.orderData.filter((item)=>item.userId === inLogin.id)
   
   const [searchTerm, setSearchTerm] = useState('');

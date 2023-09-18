@@ -7,7 +7,7 @@ export function RelatedData(props) {
   const navigate = useNavigate();
 
   //로그인 데이터 불러오기
-  const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'))
+  const inLogin = props.decryptData(JSON.parse(sessionStorage.getItem('saveLoginData')));
 
   // 게시물 데이터와 페이지 번호 상태 관리    
   const [currentPage, setCurrentPage] = useState(1);

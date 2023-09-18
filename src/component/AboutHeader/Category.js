@@ -12,7 +12,7 @@ export function Category(props){
     // 필터된 항목을 저장할 상태 변수
     const [filteredItems, setFilteredItems] = useState([]);
 
-    const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'))
+    const inLogin = props.decryptData(JSON.parse(sessionStorage.getItem('saveLoginData')));
     const mainCategory = JSON.parse(sessionStorage.getItem('category'));
     const subCategory = JSON.parse(sessionStorage.getItem('subCategory'));
     const resultSearch = JSON.parse(sessionStorage.getItem('filterSearch'));
@@ -182,7 +182,7 @@ export function Category(props){
         } 
       }
     }
-  }, [props.data, selectedCategory, selectedSubCategory, filterSearch]);
+  }, [props.data, selectedCategory, selectedSubCategory, filterSearch, resultSearch, resultSearchBrand, resultSearchCode, resultSearchOption]);
 
     const navigate = useNavigate();
 

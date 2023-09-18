@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import styles from './Receipt.module.css'
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export function Receipt(props){
   const navigate = useNavigate();
   const [address, setAddress] = useState("");
   const [inputUser, setInputUser] = useState("사업자정보");
-  const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'));
+  const location = useLocation();
+  const inLogin = props.decryptData(JSON.parse(sessionStorage.getItem('saveLoginData')));
   // 유효성검사 State
   const [isFormValid, setIsFormValid] = useState(false);  
 
@@ -227,7 +228,7 @@ export function Receipt(props){
       const currentDate =  new Date();
       const formattedDate = currentDate.toLocaleString();
       const newOrderId = props.orderData.length + 1;
-      const editedData = JSON.parse(localStorage.getItem('orderData'));
+      const editedData = JSON.parse(sessionStorage.getItem('orderData'));
       const newOrderData = editedData.map((item) => ({
         ...item,
         orderId: newOrderId,
@@ -241,9 +242,9 @@ export function Receipt(props){
         const copyData = [...props.orderData];
         copyData.push(...newOrderData);
         props.setOrderData(copyData);
-        // localStorage 변경
-        localStorage.removeItem('orderData');
-        localStorage.setItem('newOrderData', JSON.stringify(newOrderData))
+        // sessionStorage 변경
+        sessionStorage.removeItem('orderData');
+        sessionStorage.setItem('newOrderData', JSON.stringify(newOrderData))
         props.setBasketList(props.basketList.filter((item)=>!props.orderList.some((orderItem) =>
         orderItem.optionSelected 
         ? 
