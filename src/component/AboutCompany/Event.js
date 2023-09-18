@@ -1,4 +1,3 @@
-import { CategoryBar } from '../AboutHeader/CategoryBar'
 import { TopBanner } from '../AboutHeader/TopBanner'
 import image from '../.././image/page_ready.png'
 import styles from './Event.module.css'

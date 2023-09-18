@@ -1,5 +1,4 @@
 import styles from './TodayNews.module.css'
-import { CategoryBar } from '../AboutHeader/CategoryBar'
 import { TopBanner } from '../AboutHeader/TopBanner'
 import { useState } from 'react'
 import { TodayNewsCard } from './TodayNewsCard'
