@@ -6,7 +6,6 @@ export function DeliveryMain(props){
   //로그인 정보 불러오기
   const inLogin = props.decryptData(JSON.parse(sessionStorage.getItem('saveLoginData')));
   const filterOrderData = props.orderData && props.orderData.filter((item)=>item.userId === inLogin.id)
-  
   const [searchTerm, setSearchTerm] = useState('');
   const [resultSearch, setResultSearch] = useState('');
   const [results, setResults] = useState([]);
@@ -118,7 +117,7 @@ export function DeliveryMain(props){
           </div>
         </div>
       </div>
-      <Delivery resultSearch={resultSearch} setResultSearch={setResultSearch} orderData={props.orderData}/>
+      <Delivery decryptData={props.decryptData} resultSearch={resultSearch} setResultSearch={setResultSearch} orderData={props.orderData}/>
     </div>
   )
 }

@@ -48,7 +48,7 @@ export function OrderDetail(props){
 
       ? `${orderData.delivery && orderData.delivery.deliveryType} 
       (배송 예정일 : ${orderData.delivery && orderData.delivery.deliveryDate})`
-      : orderData.delivery && orderData.deliveryType
+      : orderData.delivery.deliveryType
     },
     { 
       id : 4, 

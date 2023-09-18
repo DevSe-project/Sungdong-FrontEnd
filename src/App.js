@@ -79,10 +79,22 @@ function App() {
     if (
       location.pathname !== '/basket/order' &&
       location.pathname !== '/basket/receipt' &&
-      location.pathname !== '/basket/pay'
+      location.pathname !== '/basket/pay' &&
+      location.pathname !== '/orderDetail'
     ) {
       sessionStorage.removeItem('orderData');
       sessionStorage.removeItem('newOrderData');
+    }
+    if (
+      location.pathname !== '/category'
+    ) {
+      sessionStorage.removeItem('category');
+      sessionStorage.removeItem('categoryTabState');
+      sessionStorage.removeItem('subCategory');
+      sessionStorage.removeItem('filterSearch');
+      sessionStorage.removeItem('filterSearchBrand');
+      sessionStorage.removeItem('filterSearchCode');
+      sessionStorage.removeItem('filterSearchOption');
     }
   }, [location])
   

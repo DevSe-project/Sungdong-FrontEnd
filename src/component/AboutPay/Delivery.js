@@ -3,7 +3,7 @@ import styles from './Delivery.module.css'
 import { useEffect, useState } from 'react';
 export function Delivery(props){
   //로그인 정보 불러오기
-  const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'))
+  const inLogin = props.decryptData(JSON.parse(sessionStorage.getItem('saveLoginData')));
   const filterOrderData = props.orderData && props.orderData.filter((item)=>item.userId === inLogin.id);
   const [filterSearch, setFilterSearch] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);

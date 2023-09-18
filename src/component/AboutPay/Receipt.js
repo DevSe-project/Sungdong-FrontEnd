@@ -6,7 +6,6 @@ export function Receipt(props){
   const navigate = useNavigate();
   const [address, setAddress] = useState("");
   const [inputUser, setInputUser] = useState("사업자정보");
-  const location = useLocation();
   const inLogin = props.decryptData(JSON.parse(sessionStorage.getItem('saveLoginData')));
   // 유효성검사 State
   const [isFormValid, setIsFormValid] = useState(false);  
