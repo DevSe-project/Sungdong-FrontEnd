@@ -28,7 +28,7 @@ export function Order(props){
       props.setActiveTab(1);
       navigate("/");
     } else {
-      const parsingData = JSON.parse(sessionStorage.getItem('newOrderData'));
+      const parsingData = props.decryptData(JSON.parse(sessionStorage.getItem('newOrderData')));
       setOrderProductData(parsingData[0]); 
     }
   }, [navigate, props])

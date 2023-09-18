@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import styles from './Receipt.module.css'
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import CryptoJS from 'crypto-js';
 
 export function Receipt(props){
   const navigate = useNavigate();
@@ -13,6 +14,9 @@ export function Receipt(props){
   // 성동 택배 날짜 계산 로직 ~
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date()); // 선택한 날짜를 Date 객체로 저장
+
+    // 암호화와 복호화 키
+    const encryptionKey = 'bigdev2023!';
 
   // 주소창으로 접근 등 잘못된 접근 시 경고창 표시 후 홈으로 이동 
   useEffect(()=>{ 
@@ -227,7 +231,7 @@ export function Receipt(props){
       const currentDate =  new Date();
       const formattedDate = currentDate.toLocaleString();
       const newOrderId = props.orderData.length + 1;
-      const editedData = JSON.parse(sessionStorage.getItem('orderData'));
+      const editedData = props.decryptData(JSON.parse(sessionStorage.getItem('orderData')));
       const newOrderData = editedData.map((item) => ({
         ...item,
         orderId: newOrderId,
@@ -243,7 +247,8 @@ export function Receipt(props){
         props.setOrderData(copyData);
         // sessionStorage 변경
         sessionStorage.removeItem('orderData');
-        sessionStorage.setItem('newOrderData', JSON.stringify(newOrderData))
+        const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(newOrderData), encryptionKey).toString();
+        sessionStorage.setItem('newOrderData', JSON.stringify(encryptedData));
         props.setBasketList(props.basketList.filter((item)=>!props.orderList.some((orderItem) =>
         orderItem.optionSelected 
         ? 

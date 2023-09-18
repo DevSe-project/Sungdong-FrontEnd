@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useState } from 'react'
 import { TopBanner } from '../AboutHeader/TopBanner'
 import { TabInfo } from './TabInfo'
+import CryptoJS from 'crypto-js';
 
 export function Detail(props) {
   // Usenavigate
@@ -17,6 +18,9 @@ export function Detail(props) {
 
   //로그인 정보 불러오기
   const inLogin = props.decryptData(JSON.parse(sessionStorage.getItem('saveLoginData')));
+
+  // 암호화와 복호화 키
+  const encryptionKey = 'bigdev2023!';
 
   //주소창 입력된 id값 받아오기
   let {id} = useParams();
@@ -106,7 +110,8 @@ function buyThis(product, count){
       }
     }
       // sessionStorage에 저장
-      sessionStorage.setItem('orderData', JSON.stringify([newBuyProduct()]));
+      const encryptedData = CryptoJS.AES.encrypt(JSON.stringify([newBuyProduct()]), encryptionKey).toString();
+      sessionStorage.setItem('orderData', JSON.stringify(encryptedData));
       props.setOrderList([newBuyProduct()]);
       navigate("/basket/receipt");
       props.setActiveTab(2);

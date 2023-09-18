@@ -60,8 +60,10 @@ function App() {
   const [orderList, setOrderList] = useState([]);
   const [todayTopicData, setTodayTopicData] = useState();
   const [login, setLogin] = useState(false);
-  // 세션 스토리지에서 데이터를 가져와서 복호화
+
+  // 세션 스토리지에서 데이터를 가져와서 복호화(백엔드에서 꽁꽁 숨기기 필요)
   const encryptionKey = 'bigdev2023!';
+
   // 복호화 함수
   const decryptData = (encryptedData) => {
     try {
@@ -71,10 +73,12 @@ function App() {
       const decryptedData = JSON.parse(decryptedDataString);
       return decryptedData;
     } catch (error) {
-      console.error('Error decrypting data:', error);
+      console.error('데이터를 복호화 하는데에 실패했습니다:', error);
       return null;
     }
   };
+
+  // 특정 주소에서만 SessionStorage 사용하기
   useEffect(() => {
     if (
       location.pathname !== '/basket/order' &&
@@ -99,16 +103,14 @@ function App() {
   }, [location])
   
   useEffect(() => {
-    // 로그인 상태 유지
-    // 세션 스토리지에서 암호화된 데이터 가져오기
+    // 세션 스토리지의 데이터 파싱
     const parseId = JSON.parse(sessionStorage.getItem('saveLoginData'))
-    if(parseId){
-      const inLogin = decryptData(parseId);
-      if (inLogin) { //저장된 로그인Data가 존재
+    if(parseId){ // 파싱된 데이터가 있으면
+      const inLogin = decryptData(parseId);  // 복호화 실행
+      if (inLogin) {   //복호화 성공 시
         setLogin(true); //로그인상태유지
-        // 유저 아이디에 해당하는 데이터 찾기
-        if (data) {
-          const findUser = userData.find((item) => item.id === inLogin.id);
+        if (data) {   
+          const findUser = userData.find((item) => item.id === inLogin.id); // 유저 아이디에 해당하는 데이터 찾기
           if (findUser) {
             // 등급별 할인율 적용
             let newData = data.map((item) => ({ ...item }));
@@ -264,7 +266,7 @@ function App() {
         }>
           <Route path='receipt' element={<Receipt  decryptData={decryptData} userData={userData} basketList={basketList} setBasketList={setBasketList} data={data} setData={setData} orderList={orderList} setOrderList={setOrderList} activeTab={activeTab} setActiveTab={setActiveTab} orderData={orderData} setOrderData={setOrderData} />} />
           <Route path='pay' element={<Pay activeTab={activeTab} setActiveTab={setActiveTab} orderData={orderData} setOrderData={setOrderData} />} />
-          <Route path='order' element={<Order activeTab={activeTab} setActiveTab={setActiveTab} orderData={orderData} setOrderData={setOrderData} />} />
+          <Route path='order' element={<Order decryptData={decryptData} activeTab={activeTab} setActiveTab={setActiveTab} orderData={orderData} setOrderData={setOrderData} />} />
         </Route>
 
         {/* 주문 조회 */}

@@ -38,7 +38,7 @@ export function Login(props) {
         pw: pw,
       }
 
-      // 데이터를 암호화
+      // 데이터를 암호화 (JSON 변환 2번 과정 거치기 (암호화 시 1번, 암호화 성공 후 세션스토리지 저장 시 1번))
       const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(LoginDataObj), encryptionKey).toString();
       sessionStorage.setItem('saveLoginData', JSON.stringify(encryptedData));
       navigate('/'); //메인페이지로 이동하면서

@@ -7,7 +7,7 @@ export function OrderDetail(props){
     sessionStorage.removeItem('newOrderData');
     navigate("/");
   }
-  const orderData = JSON.parse(sessionStorage.getItem('newOrderData'))
+  const orderData = props.decryptData(JSON.parse(sessionStorage.getItem('newOrderData')));
   const orderInputValue = [
     { 
       id : 0, 

@@ -2,8 +2,12 @@ import { useEffect, useState } from 'react';
 import styles from './Basket.module.css'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { TopBanner } from '../AboutHeader/TopBanner';
+import CryptoJS from 'crypto-js';
 import React from 'react';
 export function Basket(props){
+  // 암호화와 복호화 키
+  const encryptionKey = 'bigdev2023!';
+
   const navigate = useNavigate();
   //총 상품 금액
   const [sum, setSum] = useState(0);
@@ -217,7 +221,9 @@ export function Basket(props){
         optionSelected: item.option && item.optionSelected,
       }));
       // sessionStoragerage에 저장
-      sessionStorage.setItem('orderData', JSON.stringify(editedData));
+      // 데이터를 암호화 (JSON 변환 2번 과정 거치기 (암호화 시 1번, 암호화 성공 후 세션스토리지 저장 시 1번))
+      const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(editedData), encryptionKey).toString();
+      sessionStorage.setItem('orderData', JSON.stringify(encryptedData));
       props.setOrderList(editedData);
       navigate("/basket/receipt");
       props.setActiveTab(2);
