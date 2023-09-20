@@ -7,11 +7,11 @@ export function MenuData(props){
   const [topTab, setTopTab] = useState(null); // 현재 활성화된 탭을 추적
 
   useEffect(() => {
-    const tabstate = JSON.parse(localStorage.getItem('tabState'));
+    const tabstate = JSON.parse(sessionStorage.getItem('tabState'));
     setTopTab(tabstate);
     // 경로에 따른 상태 초기화
     if (location.pathname === '/' || location.pathname === '/login' || location.pathname === '/category') {
-      localStorage.removeItem('tabState');
+      sessionStorage.removeItem('tabState');
       setTopTab(null);
     }
   }, [location]); // 두 번째 매개변수를 빈 배열로 설정하여 최초 렌더링 시에만 실행
@@ -73,7 +73,7 @@ export function MenuData(props){
   const [subMenuStates, setSubMenuStates] = useState([menuData.map(() => false)]);
 
   function saveTab(id) {
-    localStorage.setItem('tabState', JSON.stringify(id));
+    sessionStorage.setItem('tabState', JSON.stringify(id));
   }
 
   function toggleSubMenu(index) {
@@ -81,11 +81,6 @@ export function MenuData(props){
     // subMenuStates 배열의 해당 인덱스의 값을 반전시킴
     newSubMenuStates[index] = !newSubMenuStates[index];
     setSubMenuStates(newSubMenuStates);
-  }
-
-  const transMenu = {
-    transition: `height 350ms`,
-    height: subMenuStates ? '100%' : '0px'
   }
 
   return(

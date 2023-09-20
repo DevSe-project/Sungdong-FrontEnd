@@ -1,12 +1,15 @@
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import styles from './Delivery.module.css'
 import { useEffect, useState } from 'react';
+import CryptoJS from 'crypto-js';
 export function Delivery(props){
   //로그인 정보 불러오기
-  const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'))
+  const inLogin = props.decryptData(JSON.parse(sessionStorage.getItem('saveLoginData')));
   const filterOrderData = props.orderData && props.orderData.filter((item)=>item.userId === inLogin.id);
   const [filterSearch, setFilterSearch] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
+  // 암호화와 복호화 키
+  const encryptionKey = 'bigdev2023!';
 
   useEffect(()=>{
     if(props.resultSearch){
@@ -35,7 +38,8 @@ export function Delivery(props){
 
   const navigate = useNavigate();
   function detailOrder(item){
-    sessionStorage.setItem('newOrderData', JSON.stringify(item));
+    const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(item), encryptionKey).toString();
+    sessionStorage.setItem('newOrderData', JSON.stringify(encryptedData));
     navigate('/orderDetail');
   }
 

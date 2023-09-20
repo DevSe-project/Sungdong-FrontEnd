@@ -8,7 +8,7 @@ export default function MyPage(props) {
   const [userProfile, setUserProfile] = useState([]);
   const [modifyModal, setModifyModal] = useState(false);
   
-  const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'));
+  const inLogin = props.decryptData(JSON.parse(sessionStorage.getItem('saveLoginData')));
 
   // 현재 로그인 된 유저의 데이터를 호출
   useEffect(() => {

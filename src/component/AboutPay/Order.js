@@ -1,13 +1,23 @@
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './Order.module.css'
 import { useEffect, useState } from 'react';
 export function Order(props){
   const [orderProductData, setOrderProductData] = useState({});
   const navigate = useNavigate();
+  const location = useLocation();
+  useEffect(() => {
+    if (
+      location.pathname !== '/basket/order'
+    ) {
+      props.setActiveTab(1);
+      sessionStorage.removeItem('newOrderData');
+    }
+  }, [location, navigate])
+  
   function gotoLink(){
     if(props.activeTab===4) {
       props.setActiveTab(1);
-      localStorage.removeItem('newOrderData');
+      sessionStorage.removeItem('newOrderData');
       navigate("/");
     }
   }
@@ -18,7 +28,7 @@ export function Order(props){
       props.setActiveTab(1);
       navigate("/");
     } else {
-      const parsingData = JSON.parse(localStorage.getItem('newOrderData'));
+      const parsingData = props.decryptData(JSON.parse(sessionStorage.getItem('newOrderData')));
       setOrderProductData(parsingData[0]); 
     }
   }, [navigate, props])
@@ -68,7 +78,7 @@ export function Order(props){
 
       ? `${orderProductData.delivery && orderProductData.delivery.deliveryType} 
       (배송 예정일 : ${orderProductData.delivery && orderProductData.delivery.deliveryDate})`
-      : orderProductData.delivery && orderProductData.deliveryType
+      : orderProductData.delivery && orderProductData.delivery.deliveryType
     },
     { 
       id : 4, 

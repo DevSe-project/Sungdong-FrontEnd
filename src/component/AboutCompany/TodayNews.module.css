@@ -49,6 +49,11 @@
   position: relative;
 }
 
+.searchInputBox{
+  width: auto;
+  position: relative;
+}
+
 .searchInput{
   border: 1px solid   lightgray;
   font-size: 1.1em;
@@ -92,4 +97,27 @@
   justify-content: space-between;
   cursor: pointer;
   color: black;
+}
+
+.result{
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+  position: absolute;
+  top: 110%;
+  width: 90%;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  position: absolute;
+}
+
+.resultInner{
+  padding: 1em;
+}
+.selected{
+  background-color: lightgray;
+  padding: 1em;
 }

@@ -1,5 +1,4 @@
 import styles from './Comeway.module.css'
-import { CategoryBar } from '../AboutHeader/CategoryBar'
 import { TopBanner } from '../AboutHeader/TopBanner'
 import { useEffect } from 'react';
 export function Comeway(props){

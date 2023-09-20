@@ -1,18 +1,22 @@
 import { useEffect, useState } from 'react';
 import styles from './Receipt.module.css'
 import { useNavigate } from 'react-router-dom';
+import CryptoJS from 'crypto-js';
 
 export function Receipt(props){
   const navigate = useNavigate();
   const [address, setAddress] = useState("");
   const [inputUser, setInputUser] = useState("사업자정보");
-  const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'));
+  const inLogin = props.decryptData(JSON.parse(sessionStorage.getItem('saveLoginData')));
   // 유효성검사 State
   const [isFormValid, setIsFormValid] = useState(false);  
 
   // 성동 택배 날짜 계산 로직 ~
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date()); // 선택한 날짜를 Date 객체로 저장
+
+    // 암호화와 복호화 키
+    const encryptionKey = 'bigdev2023!';
 
   // 주소창으로 접근 등 잘못된 접근 시 경고창 표시 후 홈으로 이동 
   useEffect(()=>{ 
@@ -227,7 +231,7 @@ export function Receipt(props){
       const currentDate =  new Date();
       const formattedDate = currentDate.toLocaleString();
       const newOrderId = props.orderData.length + 1;
-      const editedData = JSON.parse(localStorage.getItem('orderData'));
+      const editedData = props.decryptData(JSON.parse(sessionStorage.getItem('orderData')));
       const newOrderData = editedData.map((item) => ({
         ...item,
         orderId: newOrderId,
@@ -241,9 +245,10 @@ export function Receipt(props){
         const copyData = [...props.orderData];
         copyData.push(...newOrderData);
         props.setOrderData(copyData);
-        // localStorage 변경
-        localStorage.removeItem('orderData');
-        localStorage.setItem('newOrderData', JSON.stringify(newOrderData))
+        // sessionStorage 변경
+        sessionStorage.removeItem('orderData');
+        const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(newOrderData), encryptionKey).toString();
+        sessionStorage.setItem('newOrderData', JSON.stringify(encryptedData));
         props.setBasketList(props.basketList.filter((item)=>!props.orderList.some((orderItem) =>
         orderItem.optionSelected 
         ? 

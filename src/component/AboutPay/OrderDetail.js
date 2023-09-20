@@ -7,7 +7,7 @@ export function OrderDetail(props){
     sessionStorage.removeItem('newOrderData');
     navigate("/");
   }
-  const orderData = JSON.parse(sessionStorage.getItem('newOrderData'))
+  const orderData = props.decryptData(JSON.parse(sessionStorage.getItem('newOrderData')));
   const orderInputValue = [
     { 
       id : 0, 
@@ -48,7 +48,7 @@ export function OrderDetail(props){
 
       ? `${orderData.delivery && orderData.delivery.deliveryType} 
       (배송 예정일 : ${orderData.delivery && orderData.delivery.deliveryDate})`
-      : orderData.delivery && orderData.deliveryType
+      : orderData.delivery.deliveryType
     },
     { 
       id : 4, 

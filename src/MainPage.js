@@ -1,8 +1,6 @@
 import { SlideImg } from './component/AboutHeader/SlideImg';
 import { TopBanner } from './component/AboutHeader/TopBanner';
-import { ComewayList } from './component/AboutHome/ComewayList';
 import { List } from './component/AboutHome/List';
-import { TodayTopicList } from './component/AboutHome/TodayTopicList';
 
 export default function MainPage(props) {
   return (

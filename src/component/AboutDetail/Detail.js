@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useState } from 'react'
 import { TopBanner } from '../AboutHeader/TopBanner'
 import { TabInfo } from './TabInfo'
+import CryptoJS from 'crypto-js';
 
 export function Detail(props) {
   // Usenavigate
@@ -16,7 +17,10 @@ export function Detail(props) {
   const [optionSelected, setOptionSelected] = useState(null);
 
   //로그인 정보 불러오기
-  const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'))
+  const inLogin = props.decryptData(JSON.parse(sessionStorage.getItem('saveLoginData')));
+
+  // 암호화와 복호화 키
+  const encryptionKey = 'bigdev2023!';
 
   //주소창 입력된 id값 받아오기
   let {id} = useParams();
@@ -105,8 +109,9 @@ function buyThis(product, count){
         discount : product.discount ? product.discount : 0,
       }
     }
-      // localStorage에 저장
-      localStorage.setItem('orderData', JSON.stringify([newBuyProduct()]));
+      // sessionStorage에 저장
+      const encryptedData = CryptoJS.AES.encrypt(JSON.stringify([newBuyProduct()]), encryptionKey).toString();
+      sessionStorage.setItem('orderData', JSON.stringify(encryptedData));
       props.setOrderList([newBuyProduct()]);
       navigate("/basket/receipt");
       props.setActiveTab(2);
@@ -304,7 +309,7 @@ function basketThis(product, count){
         <div className={styles.sticky} >
           <Tab navigate={props.navigate}/>
         </div>
-        <TabInfo login={props.login} setLogin={props.setLogin} basketList={props.basketList} setBasketList={props.setBasketList} setData={props.setData} data={props.data} qnAData={props.qnAData} setQnAData={props.setQnAData} detailData={detailData}/>       
+        <TabInfo decryptData={props.decryptData} login={props.login} setLogin={props.setLogin} basketList={props.basketList} setBasketList={props.setBasketList} setData={props.setData} data={props.data} qnAData={props.qnAData} setQnAData={props.setQnAData} detailData={detailData}/>       
       </main>
     </div>
   )

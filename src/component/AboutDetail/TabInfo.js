@@ -18,7 +18,6 @@ export function TabInfo(props){
     {label: '반품/교환 요청 가능 기간', value: '구매자 단순 변심은 상품 구매 후 7일 이내(구매자 반품 배송비 부담)'},
     {label: '반품/교환 불가능 사유', value: '1. 반품요청기간이 지난 경우'},
   ]
-
   return(
     <div className={styles.tabInnerHeader}>
 
@@ -77,7 +76,7 @@ export function TabInfo(props){
           <p>해당 상품과 관련된 상품입니다.</p>
         </div>
       </div>
-      <RelatedData login={props.login} setLogin={props.setLogin} basketList={props.basketList} setBasketList={props.setBasketList} detailData={props.detailData} data={props.data} setData={props.setData}/>
+      <RelatedData decryptData={props.decryptData} login={props.login} setLogin={props.setLogin} basketList={props.basketList} setBasketList={props.setBasketList} detailData={props.detailData} data={props.data} setData={props.setData}/>
     </div>
   </div>
   )
