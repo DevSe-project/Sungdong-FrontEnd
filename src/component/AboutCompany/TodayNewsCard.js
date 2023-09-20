@@ -8,7 +8,13 @@ export function TodayNewsCard(props){
   const [currentPage, setCurrentPage] = useState(1);
   const [filterSearch, setFilterSearch] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
-
+  const truncateText = (text, maxLength) => {
+    if (text.length > maxLength) {
+      return text.slice(0, maxLength) + '...';
+    } else {
+      return text;
+    }
+  };
   useEffect(()=> {
     if(props.resultSearch){
       setFilterSearch(props.resultSearch);
@@ -19,7 +25,7 @@ export function TodayNewsCard(props){
     if (filterSearch !== "") {
       // 데이터에서 타이틀과 검색결과를 찾고
       const filtered = props.todayTopicData.filter((item) =>
-        item.title.includes(filterSearch) || item.content.includes(filterSearch))
+        item.title.includes(props.resultSearch) || item.content.includes(props.resultSearch))
       // 목록 밑작업 해줌
       const addList = filtered.map((item, index) => ({
         ...item,
@@ -27,6 +33,7 @@ export function TodayNewsCard(props){
       }));
       // 필터링 된 아이템 표시
       setFilteredItems(addList);
+      setFilterSearch(truncateText(props.resultSearch, 10));
     }
   }, [filterSearch])
 
@@ -43,7 +50,7 @@ export function TodayNewsCard(props){
     <main className={styles.body}>
       {props.resultSearch &&
       <h3 style={{margin: '1em'}}>
-      "{props.resultSearch}" 에 대해
+      "{filterSearch}" 에 대해
       <span style={{color: '#CC0000', fontWeight: '650', margin: '0.5em'}}>{filteredItems.length}건</span>
       이 검색 되었습니다.
       </h3>}

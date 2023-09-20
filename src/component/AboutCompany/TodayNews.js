@@ -12,11 +12,14 @@ export function TodayNews(props){
   const [searchTerm, setSearchTerm] = useState('');
   const [resultSearch, setResultSearch] = useState('');
   const [results, setResults] = useState([]);
+  const [indexedResults, setIndexedResults] = useState([]);
   // 연관 검색어 방향키 이동, 설정을 위한 State
   const [selectedResultIndex, setSelectedResultIndex] = useState(-1); // 초기 선택 인덱스는 -1로 설정
 
   // input 엘리먼트에 대한 ref
   const inputRef = useRef(null);
+
+
 
   // 검색 로직
   const handleSearch = (event) => {
@@ -27,18 +30,43 @@ export function TodayNews(props){
     if (query !== '' && filterSearch === '제목') {
       // 데이터 중 타이틀로들만 구성된 변수 생성 후 
       // 그 변수들 중 첫 글자와 입력값이 일치하는 것을 연관 검색어 목록에 띄워줌
-      const filteredtitle = props.todayTopicData.map((item) => item.title);
-      const filteredResults = filteredtitle.filter((word) =>
-        word.includes(query)
+      const filteredTitle = props.todayTopicData
+        .map((item) => item.title)
+        .filter((word) => word.includes(searchTerm));
+
+          // 원본 검색 결과에서 제한 길이로 표시하기 위한 함수
+      const truncateText = (text, maxLength) => {
+        if (text.length > maxLength) {
+          return text.slice(0, maxLength) + '...';
+        } else {
+          return text;
+        }
+      };
+
+      // 검색 결과를 제한 길이로 표시하고, 색인 결과를 저장
+      setResults(filteredTitle);
+      setIndexedResults(
+        filteredTitle.map((result) => truncateText(result, 10))
       );
-      setResults(filteredResults);
     // 입력창이 공백이면 연관 검색어를 띄우지 않는다.
     } else if(query !== '' && filterSearch === '내용') {
-      const filteredtitle = props.todayTopicData.map((item) => item.content);
-      const filteredResults = filteredtitle.filter((word) =>
-        word.includes(query)
+      const filteredTitle = props.todayTopicData
+        .map((item) => item.content)
+        .filter((word) => word.includes(searchTerm));
+
+        const truncateText = (text, maxLength) => {
+          if (text.length > maxLength) {
+            return text.slice(0, maxLength) + '...';
+          } else {
+            return text;
+          }
+        };
+
+      // 검색 결과를 제한 길이로 표시하고, 색인 결과를 저장
+      setResults(filteredTitle);
+      setIndexedResults(
+        filteredTitle.map((result) => truncateText(result, 10))
       );
-      setResults(filteredResults);
     } else {
       setResults([]);
     }
@@ -60,12 +88,14 @@ export function TodayNews(props){
     } else if (event.key === 'Enter') {
       // Enter 키를 누르면 선택한 결과 항목을 검색어로 설정
       if(selectedResultIndex !== -1) {
-        setSearchTerm(results[selectedResultIndex]);
+        setSearchTerm(indexedResults[selectedResultIndex]);
         setResults([]); // 결과 항목 숨기기
+        setIndexedResults([]);
         setResultSearch(results[selectedResultIndex]);
         setSearchTerm("");
       } else {
         setResultSearch(searchTerm);
+        setIndexedResults([]);
         setResults([]); // 결과 항목 숨기기
       }
     } else if (event.key === 'Tab' && selectedResultIndex !== -1) {
@@ -148,10 +178,10 @@ export function TodayNews(props){
             />
             <ul 
             className={searchTerm !== "" 
-            && results.length > 0 
+            && indexedResults.length > 0 
             ? styles.result
             : null}>
-            {results && results.map((result, index) => (
+            {indexedResults && indexedResults.map((result, index) => (
               <li
                 key={index}
                 className={index === selectedResultIndex 
@@ -160,8 +190,8 @@ export function TodayNews(props){
               >
                 {result}
               </li>
-          ))}
-          </ul>
+            ))}
+            </ul>
           </div>
           <button className={styles.searchButton}>검색</button>
         </div>
