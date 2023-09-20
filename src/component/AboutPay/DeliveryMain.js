@@ -5,7 +5,8 @@ import styles from './DeliveryMain.module.css'
 export function DeliveryMain(props){
   //로그인 정보 불러오기
   const inLogin = props.decryptData(JSON.parse(sessionStorage.getItem('saveLoginData')));
-  const filterOrderData = props.orderData && props.orderData.filter((item)=>item.userId === inLogin.id)
+  const filterOrderData = props.orderData && props.orderData.filter((item)=>item.userId === inLogin.id);
+  
   const [searchTerm, setSearchTerm] = useState('');
   const [resultSearch, setResultSearch] = useState('');
   const [results, setResults] = useState([]);
@@ -106,8 +107,8 @@ export function DeliveryMain(props){
               >
                 {result}
               </li>
-          ))}
-        </ul>
+            ))}
+            </ul>
             <i 
             className="fas fa-search"
             onClick={()=> {
