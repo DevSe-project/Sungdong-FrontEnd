@@ -34,8 +34,6 @@ export let UserData = [
             jibunAddress: '(주)UlsanBigDev',
         },
         addressDetail: "1층",
-        coupon: "",
-        bonusMoney: "",
         basket: [],
         order: [],
     },

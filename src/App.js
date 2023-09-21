@@ -1,6 +1,6 @@
 import './App.css';
 import CryptoJS from 'crypto-js';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 // Data 객체들 불러오기
 import { OrderObj } from './component/Data/OrderObj';
@@ -43,6 +43,9 @@ import { Event } from './component/AboutCompany/Event'
 import { AdminMain } from './component/AboutAdmin/AdminMain';
 import MyPage from './component/AboutMyPage/MyPage';
 import Managecode from './component/AboutAdmin/ManageCode';
+
+import axios from 'axios';
+import UserContext, { UserProvider } from './component/AboutContext/UserContext';
 
 function App() {
   const navigate = useNavigate();
@@ -224,6 +227,7 @@ function App() {
   // 
   return (
     <div className="App">
+      <UserProvider>
       <Routes>
         {/* 메인페이지 */}
         <Route path='/' element={
@@ -301,6 +305,7 @@ function App() {
         <Route path='/adminMain' element={<AdminMain />} />
         <Route path='/adminMain/managecode' element={<Managecode />}/>
       </Routes>
+    </UserProvider>
     </div>
   );
 }
