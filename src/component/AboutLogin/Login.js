@@ -79,10 +79,8 @@ export function Login(props) {
       navigate('/'); //메인페이지로 이동하면서
       alert('성동물산에 오신 걸 환영합니다!'); //환영문구 출력
       window.location.reload();
-      console.log(props.userData);
     } else { //일치하지 않다면
       alert('아이디 혹은 비밀번호를 확인주세요.'); //경고문구 출력
-      console.log(props.userData.address);
     }
   }
 
