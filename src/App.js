@@ -166,7 +166,6 @@ function App() {
       setUserData(UserData);
       setTodayTopicData(TodayTopicPostObj);
       setCategoryData(CategoryDataObj);
-      JSON.parse(sessionStorage.getItem('saveLoginData'));
     }, 1000)
 
     return () => clearTimeout(dataload)
