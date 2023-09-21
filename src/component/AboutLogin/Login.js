@@ -34,6 +34,9 @@ export function Login(props) {
     try {
       const response = await loginRequest();
       if (response.data && response.data.message === "success") {
+        // 데이터를 암호화 (JSON 변환 2번 과정 거치기 (암호화 시 1번, 암호화 성공 후 세션스토리지 저장 시 1번))
+        const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(response.data), encryptionKey).toString();
+        sessionStorage.setItem('saveLoginData', JSON.stringify(encryptedData));
         alert("성동물산에 오신 걸 환영합니다.")
         login()
         window.location.href = "/"
