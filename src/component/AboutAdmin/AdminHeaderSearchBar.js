@@ -183,7 +183,7 @@ export function AdminHeaderSearchBar(props) {
           ref={inputRef}
           className={styles.searchInput}
           type="text"
-          placeholder="검색어를 입력하세요"
+          placeholder="조회할 주문 정보를 입력하세요"
           value={searchTerm}
           onChange={handleSearch}
           onKeyDown={handleKeyDown} // onKeyDown 이벤트 핸들러 추가

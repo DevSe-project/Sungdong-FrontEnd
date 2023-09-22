@@ -2,12 +2,14 @@ import styles from './AdminHeader.module.css'
 import logo from '../../image/logo.jpeg'
 import { AdminHeaderSearchBar } from './AdminHeaderSearchBar'
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 export function AdminHeader(){
   const [filterModal, setFilterModal] = useState(false);
+  const navigate = useNavigate();
   return(
     <div>
       <div className={styles.background}>
-        <img src={logo} alt='로고' height='70px'/>
+        <img style={{cursor: 'pointer'}} src={logo} alt='로고' height='70px' onClick={()=> navigate("/adminMain")}/>
         <AdminHeaderSearchBar/>
         <div style={{display: 'flex', gap: '2em', alignItems: 'center'}}>
           <i 
