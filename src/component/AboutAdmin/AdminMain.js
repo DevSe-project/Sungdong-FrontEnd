@@ -1,7 +1,9 @@
+import { AdminHeader } from './AdminHeader'
 import styles from './AdminMain.module.css'
 export function AdminMain() {
   return (
     <div className={styles.main}>
+      <AdminHeader/>
       {/* 상품 관리 */}
       <div className={styles.productManage}>
 

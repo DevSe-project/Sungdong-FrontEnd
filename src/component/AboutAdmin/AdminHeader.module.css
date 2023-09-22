@@ -1,0 +1,19 @@
+.background{
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  border-bottom: 1px solid lightgray;
+}
+
+.searchFilter{
+  display: flex;
+  flex-direction: row;
+  width: 5em;
+  border: 1px solid lightgray;
+  justify-content: space-between;
+  align-items: center;
+  white-space: nowrap;
+  padding: 0.5em;
+  cursor: pointer;
+  position: relative;
+}
