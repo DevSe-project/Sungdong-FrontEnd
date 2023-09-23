@@ -678,7 +678,8 @@ export function Receipt(props){
                 />
               <select 
               onChange={(e) => handleDateChange(e)}
-              value={formatDate}
+              name='deliveryDate'
+              value={formatDate || ""}
               className={styles.selectSize}
               >
                 <option value="">

@@ -1,12 +1,17 @@
 import { useNavigate } from 'react-router-dom';
 import styles from './Login.module.css';
 import MainLogo from '../../image/sungdonglogo.svg';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import FindModal from './FindModal';
 import CodeInputModal from './CodeInputModal';
 import CryptoJS from 'crypto-js';
+import axios from 'axios';
+import UserContext from '../AboutContext/UserContext';
 
 export function Login(props) {
+
+  const { isLogin, login, logout } = useContext(UserContext);
+
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
   // 암호화 키 (암호화와 복호화에 동일한 키를 사용해야 합니다.)
@@ -24,9 +29,42 @@ export function Login(props) {
   const closeModal = () => {
     setModalType(null); //초기화 시켜서 모달창을 닫음
   }
+  //로그인 요청
+  const goLogin = async () => {
+    try {
+      const response = await loginRequest();
+      if (response.data && response.data.message === "success") {
+        // 데이터를 암호화 (JSON 변환 2번 과정 거치기 (암호화 시 1번, 암호화 성공 후 세션스토리지 저장 시 1번))
+        const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(response.data), encryptionKey).toString();
+        sessionStorage.setItem('saveLoginData', JSON.stringify(encryptedData));
+        alert("성동물산에 오신 걸 환영합니다.")
+        login()
+        window.location.href = "/"
+      } else {
+        alert("아이디 혹은 비밀번호를 확인주세요.")
+      }
+    } catch { // 서버가 없는경우 기존 태훈, 지석 코드
+      developLogin();
+    }
 
-  // 로그인 함수
-  const goLogin = () => {
+  }
+  async function loginRequest() {
+    const response = await axios.post(
+      "/user",
+      JSON.stringify({
+        id : id,
+        password : pw
+      }),
+      {
+        headers : {
+          "Content-Type" : "application/json"
+        }
+      }
+    )
+    return response;
+  }
+
+  function developLogin() { //서버 없이 테스트용 로그인 함수
     const confirmUser = props.userData.find(userData => userData.id === id && userData.password === pw); //UserData의 id,password와 input받은 id,pw값이 일치하는 것을 꺼내옴
     if (confirmUser && confirmUser.id === id && confirmUser.password === pw) { //꺼내 온 id,pw가 일치한다면 
       setId(''); //입력된 id를 지움
@@ -44,10 +82,8 @@ export function Login(props) {
       navigate('/'); //메인페이지로 이동하면서
       alert('성동물산에 오신 걸 환영합니다!'); //환영문구 출력
       window.location.reload();
-      console.log(props.userData);
     } else { //일치하지 않다면
       alert('아이디 혹은 비밀번호를 확인주세요.'); //경고문구 출력
-      console.log(props.userData.address);
     }
   }
 
