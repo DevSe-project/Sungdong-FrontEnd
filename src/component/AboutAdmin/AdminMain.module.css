@@ -9,18 +9,19 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: flex-start;
   gap: 1em;
 }
 
 .bodyInnerTile{
-  width: 20em;
-  height: 15em;
+  width: 25em;
+  height: 20em;
   border: 1px solid lightgray;
 }
 
 .leftSideBar{
   width: 14em;
-  height: 100vw;
+  height: 100vh;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
