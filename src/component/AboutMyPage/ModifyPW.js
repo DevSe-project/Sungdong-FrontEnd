@@ -18,12 +18,10 @@ export default function ModifyPW(props) {
         const confirmPwFind = props.userData.find(userData => userData.password === inputForModify.now_password);
 
         if (confirmPwFind && confirmPwFind.password === inputForModify.now_password) {
-            if (inputForModify.re_password != null) {
-                // 두 비밀번호가 같은지
-                if (equal_re_password) {
+            if (inputForModify.re_password != null) { // 입력유무 감지
+                if (equal_re_password) { // 두 비밀번호가 같은지
                     alert("두 비밀번호가 같습니다.");
-                    // 비밀번호 8글자 이상인지
-                    if (inputForModify.re_password.length >= 8) {
+                    if (inputForModify.re_password.length >= 8) { // 비밀번호 8글자 이상인지
                         alert("비밀번호를 8글자 이상 입력하셨습니다. 비밀번호가 변경되었습니다.")
 
                         const newPassword = {
