@@ -77,30 +77,6 @@ function App() {
       return null;
     }
   };
-
-  // 특정 주소에서만 SessionStorage 사용하기
-  useEffect(() => {
-    if (
-      location.pathname !== '/basket/order' &&
-      location.pathname !== '/basket/receipt' &&
-      location.pathname !== '/basket/pay' &&
-      location.pathname !== '/orderDetail'
-    ) {
-      sessionStorage.removeItem('orderData');
-      sessionStorage.removeItem('newOrderData');
-    }
-    if (
-      location.pathname !== '/category'
-    ) {
-      sessionStorage.removeItem('category');
-      sessionStorage.removeItem('categoryTabState');
-      sessionStorage.removeItem('subCategory');
-      sessionStorage.removeItem('filterSearch');
-      sessionStorage.removeItem('filterSearchBrand');
-      sessionStorage.removeItem('filterSearchCode');
-      sessionStorage.removeItem('filterSearchOption');
-    }
-  }, [location])
   
   useEffect(() => {
     // 세션 스토리지의 데이터 파싱
@@ -150,6 +126,30 @@ function App() {
       }
     }
   }, [setData, userData, setLogin]);
+
+  // 특정 주소에서만 SessionStorage 사용하기
+  useEffect(() => {
+    if (
+      location.pathname !== '/basket/order' &&
+      location.pathname !== '/basket/receipt' &&
+      location.pathname !== '/basket/pay' &&
+      location.pathname !== '/orderDetail'
+    ) {
+      sessionStorage.removeItem('orderData');
+      sessionStorage.removeItem('newOrderData');
+    }
+    if (
+      location.pathname !== '/category'
+    ) {
+      sessionStorage.removeItem('category');
+      sessionStorage.removeItem('categoryTabState');
+      sessionStorage.removeItem('subCategory');
+      sessionStorage.removeItem('filterSearch');
+      sessionStorage.removeItem('filterSearchBrand');
+      sessionStorage.removeItem('filterSearchCode');
+      sessionStorage.removeItem('filterSearchOption');
+    }
+  }, [location])
 
   // 찜 데이터(캐쉬) 불러오기
   useEffect(() => {
