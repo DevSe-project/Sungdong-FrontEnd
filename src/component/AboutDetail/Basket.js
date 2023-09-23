@@ -295,10 +295,17 @@ export function Basket(props){
             <thead>
               <tr>
                 {/* 장바구니 목록에서만 체크 가능 */}
-                {props.activeTab===1 ? <th><input 
+                {
+                props.activeTab===1 
+                ? 
+                <th>
+                <input 
                 type='checkbox'
                 checked={selectAll}
-                onChange={()=>handleSelectAllChange()}/></th> : null}
+                onChange={()=>handleSelectAllChange()}/>
+                </th> 
+                : null
+                }
                 <th>상품 이미지</th>
                 <th className={styles.name}>상품 정보</th>
                 <th>수량</th>

@@ -247,7 +247,7 @@ export function RelatedData(props) {
                   : <i className="fa-sharp fa-solid fa-caret-down"></i>}&nbsp;
                 </td>
               </tr>
-              {/* 모달 */}
+              {/* Modal */}
               {selectRelatedData === item.id && (
               <tr>
                 <td colSpan="8">

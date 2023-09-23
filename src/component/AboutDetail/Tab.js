@@ -27,8 +27,8 @@ export function Tab(){
   const handleScroll = useCallback(() => {
     const scrollTop = window.scrollY;
     const tabOffSet = [...tabOffsets];
-    let closestTabIndex = 0;
-    let closestOffsetDiff = Math.abs(scrollTop - tabOffSet[0]);
+    let closestTabIndex = 0; //근접 탭 인덱스 초기 값 설정
+    let closestOffsetDiff = Math.abs(scrollTop - tabOffSet[0]); //근접 offset diff값 설정
   
     for (let i = 1; i < tabOffSet.length; i++) {
       const offsetDiff = Math.abs(scrollTop - tabOffSet[i]);
@@ -57,7 +57,7 @@ export function Tab(){
 
   // 의존성 배열 분리를 위한 useEffect 2번 사용
 
-  // 1. tabOffset들을 classname에서 받아오는 구문
+  // 1. tabOffset들을 className에서 받아오는 구문
   useEffect(() => {
     updateTabOffsets();
   }, [updateTabOffsets]);

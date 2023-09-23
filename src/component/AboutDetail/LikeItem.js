@@ -61,17 +61,21 @@ export function LikeItem(props){
       category_dynamicStyle={props.category_dynamicStyle} iconOnClick={props.iconOnClick}
       menuOnClick={props.menuOnClick} menu_dynamicStyle={props.menu_dynamicStyle} />
       <div className={styles.body}>
+        {/* 헤드라인 */}
         <div className={styles.head}>
           <h1><i className="fa-solid fa-heart"/> 찜 리스트</h1>
         </div>
+        {/* 찜 목록 테이블 */}
         <div className={styles.tablebody}>
           <table className={styles.table}>
             <thead>
               <tr>
-                <th><input 
-                type='checkbox'
-                checked={selectAll}
-                onChange={()=>handleSelectAllChange()}/></th>
+                <th>
+                  <input 
+                  type='checkbox'
+                  checked={selectAll}
+                  onChange={()=>handleSelectAllChange()}/>
+                </th>
                 <th>상품 이미지</th>
                 <th className={styles.name}>상품명</th>
                 <th>가격</th>
