@@ -11,35 +11,35 @@ export default function ModifyPW(props) {
     })
 
     // 재설정 비번 일치확인
-    const equal_re_password = inputForModify.re_password === inputForModify.confirm_re_password;
+    const isPwEqual = inputForModify.re_password === inputForModify.confirm_re_password;
+    // 입력유무 확인
+    const isInputNull = inputForModify.re_password !== null && inputForModify.confirm_re_password != null;
 
     // 비밀번호 수정 함수. 
     function goModify() {
         const confirmPwFind = props.userData.find(userData => userData.password === inputForModify.now_password);
 
         if (confirmPwFind && confirmPwFind.password === inputForModify.now_password) {
-            if (inputForModify.re_password != null) { // 입력유무 감지
-                if (equal_re_password) { // 두 비밀번호가 같은지
-                    alert("두 비밀번호가 같습니다.");
-                    if (inputForModify.re_password.length >= 8) { // 비밀번호 8글자 이상인지
-                        alert("비밀번호를 8글자 이상 입력하셨습니다. 비밀번호가 변경되었습니다.")
-
+            if (isInputNull) { // 입력유무 감지
+                if (isPwEqual) { // 비밀번호 일치 확인
+                    if (inputForModify.re_password.length >= 8 && inputForModify.confirm_re_password >= 8) {// 입력 값 8글자 이상
+                        alert("변경 완료");
                         const newPassword = {
                             ...props.userData,
                             password: inputForModify.re_password // 새로운 비밀번호로 변경
                         }
                         props.setUserData(newPassword);
                     } else {
-                        alert("비밀번호를 8글자 이상 입력하십시오.")
+                        alert("비밀번호 8글자 이상 입력하십시오.");
                     }
                 } else {
-                    alert("두 비밀번호가 일치하지 않습니다.");
+                    alert("※비밀번호 불일치※")
                 }
             } else {
-                alert("아무런 입력이 감지되지 않았습니다.")
+                alert("입력하지 않은 란 존재");
             }
         } else {
-            alert("입력하신 정보가 일치하지 않습니다.");
+            alert("정확하지 않은 비밀번호");
         }
     }
 
