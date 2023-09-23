@@ -5,30 +5,40 @@ export default function ModifyPW(props) {
 
     // 현재비번, 재설정비번, 재설정비번확인 Input
     const [inputForModify, setInputForModify] = useState({
-        now_password: 'bigdev2023!',
-        re_password: '',
-        confirm_re_password: ''
+        now_password: null,
+        re_password: null,
+        confirm_re_password: null
     })
 
     // 재설정 비번 일치확인
     const equal_re_password = inputForModify.re_password === inputForModify.confirm_re_password;
 
     // 비밀번호 수정 함수. 
-    //Input정보 일치 확인 -> userData 최신화 
     function goModify() {
         const confirmPwFind = props.userData.find(userData => userData.password === inputForModify.now_password);
 
         if (confirmPwFind && confirmPwFind.password === inputForModify.now_password) {
-            if (equal_re_password && inputForModify.re_password.length >= 8) {
-                alert("두 비밀번호가 같고, 8글자 이상 입력하셨습니다.");
-                const newPassword = {
-                    ...props.userData,
-                    password: inputForModify.re_password // 새로운 비밀번호로 변경
+            if (inputForModify.re_password != null) {
+                // 두 비밀번호가 같은지
+                if (equal_re_password) {
+                    alert("두 비밀번호가 같습니다.");
+                    // 비밀번호 8글자 이상인지
+                    if (inputForModify.re_password.length >= 8) {
+                        alert("비밀번호를 8글자 이상 입력하셨습니다. 비밀번호가 변경되었습니다.")
+
+                        const newPassword = {
+                            ...props.userData,
+                            password: inputForModify.re_password // 새로운 비밀번호로 변경
+                        }
+                        props.setUserData(newPassword);
+                    } else {
+                        alert("비밀번호를 8글자 이상 입력하십시오.")
+                    }
+                } else {
+                    alert("두 비밀번호가 일치하지 않습니다.");
                 }
-                props.setUserData(newPassword);
-                alert("비밀번호가 변경되었습니다.");
             } else {
-                alert("두 비밀번호가 일치하지 않습니다.");
+                alert("아무런 입력이 감지되지 않았습니다.")
             }
         } else {
             alert("입력하신 정보가 일치하지 않습니다.");
