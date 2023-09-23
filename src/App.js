@@ -56,7 +56,7 @@ function App() {
   // 데이터 State
   const [data, setData] = useState();
   const [orderData, setOrderData] = useState();
-  const [userData, setUserData] = useState();
+  const [userData, setUserData] = useState([]);
   const [categoryData, setCategoryData] = useState([]);
   const [basketList, setBasketList] = useState([]);
   const [wishlist, setWishlist] = useState([]);
