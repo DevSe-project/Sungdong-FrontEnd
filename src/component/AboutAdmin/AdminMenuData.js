@@ -20,18 +20,18 @@ export function AdminMenuData(props){
     {
       id: 1,
       title: {
-        item: '상품 등록',
+        item: '상품 관리',
       },
       subMenuItems: [{
-        item: '상품 등록 / 수정',
+        item: '상품 등록',
         link: '/adminMain/adminDetail'
       },
       {
-        item: '상품 조회 / 삭제',
+        item: '상품 조회 / 수정',
         link: '/Admin/productList'
       },
       {
-        item: '상품 특이사항',
+        item: '카테고리 관리',
         link: '/event',
       }],
     },

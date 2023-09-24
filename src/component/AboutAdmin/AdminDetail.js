@@ -44,7 +44,7 @@ export function AdminDetail(props) {
                 <div className={styles.textBox}>
                   {/* 상품 수량 및 옵션, 최종 결제금액 */}
                   <label>
-                    <input type='number' placeholder='상품의 보유 수량을 입력해주세요'/> 개
+                    <input type='number' placeholder='상품의 재고 수량을 입력해주세요'/> 개
                   </label>
                   <br/>
                   <div style={{display: 'flex', alignItems:'center', gap:'0.5em'}}>
