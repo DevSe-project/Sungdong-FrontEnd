@@ -46,6 +46,7 @@ import Managecode from './component/AboutAdmin/ManageCode';
 
 import axios from 'axios';
 import UserContext, { UserProvider } from './component/AboutContext/UserContext';
+import { AdminDetail } from './component/AboutAdmin/AdminDetail';
 
 function App() {
   const navigate = useNavigate();
@@ -304,6 +305,7 @@ function App() {
         {/* 관리자페이지 */}
         <Route path='/adminMain' element={<AdminMain />} />
         <Route path='/adminMain/managecode' element={<Managecode />}/>
+        <Route path='/adminMain/adminDetail' element={<AdminDetail/>}/>
       </Routes>
     </UserProvider>
     </div>

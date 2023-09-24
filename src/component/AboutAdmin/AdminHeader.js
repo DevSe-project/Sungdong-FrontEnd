@@ -14,7 +14,7 @@ export function AdminHeader(){
         <div style={{display: 'flex', gap: '2em', alignItems: 'center'}}>
           <i 
           className="fal fa-bell"
-          style={{fontSize: '1.5em'}}/>
+          style={{fontSize: '1.5em', cursor: 'pointer'}}/>
           <div 
           onClick={()=>setFilterModal(!filterModal)}
           className={styles.searchFilter}>
