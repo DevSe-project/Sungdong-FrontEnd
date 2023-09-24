@@ -24,7 +24,7 @@ export function AdminMenuData(props){
       },
       subMenuItems: [{
         item: '상품 등록 / 수정',
-        link: '/Admin/productControl'
+        link: '/adminMain/adminDetail'
       },
       {
         item: '상품 조회 / 삭제',
