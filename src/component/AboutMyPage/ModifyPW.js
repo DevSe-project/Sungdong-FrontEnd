@@ -22,13 +22,21 @@ export default function ModifyPW(props) {
         if (confirmPwFind && confirmPwFind.password === inputForModify.now_password) {
             if (isInputNull) { // 입력유무 감지
                 if (isPwEqual) { // 비밀번호 일치 확인
-                    if (inputForModify.re_password.length >= 8 && inputForModify.confirm_re_password >= 8) {// 입력 값 8글자 이상
+                    if (inputForModify.re_password.length >= 8 && inputForModify.confirm_re_password.length >= 8) {// 입력 값 8글자 이상
+
+                        // 비밀번호 변경 로직 추가
+                        const updatedUserData = props.userData.map(userData => {
+                            if (userData.password === inputForModify.now_password) {
+                                return { ...userData, password: inputForModify.re_password };
+                            }
+                            return userData;
+                        });
+                        props.setUserData(updatedUserData); // 사용자 데이터 업데이트
+
+                        // 세션 스토리지에 변경사항 저장
+                        sessionStorage.setItem('userPassword', inputForModify.re_password);
+
                         alert("변경 완료");
-                        const newPassword = {
-                            ...props.userData,
-                            password: inputForModify.re_password // 새로운 비밀번호로 변경
-                        }
-                        props.setUserData(newPassword);
                     } else {
                         alert("비밀번호 8글자 이상 입력하십시오.");
                     }
@@ -42,6 +50,7 @@ export default function ModifyPW(props) {
             alert("정확하지 않은 비밀번호");
         }
     }
+
 
 
 
