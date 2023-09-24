@@ -48,7 +48,7 @@
 
 .priceTag{
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
 }
@@ -178,8 +178,6 @@
 /* 글자(폰트) CSS */
 .h4{
   font-size: 1.2em;
-  font-weight: 950;
-  color: red;
 }
 
 .spanTag{

@@ -21,15 +21,15 @@ export function AdminDetail(props) {
             {/* 상품 정보(상품 이름, 가격) 부분 (삼항연산자 : 스켈레톤 처리) */}
             <div className={styles.headRight}>
               <div className={styles.textBox}>
-                <input type='text'/>
+                <input type='text' placeholder='상품명을 입력해주세요'/>
               </div>
               <h4 className={styles.h4}>
                 <div className={styles.priceTag}>
                   <div>
-                    <h3><input type='text'/>%</h3>
+                    <h3><input type='text' placeholder='할인율을 입력해주세요'/> %</h3>
                   </div>
                   <div style={{display: 'flex', alignItems: 'center', gap: '0.5em'}}>
-                    <input type='text'/>원
+                    <input type='text' placeholder='상품 가격을 입력해주세요'/>원
                   </div>
                 </div>
               </h4>
@@ -40,38 +40,34 @@ export function AdminDetail(props) {
               <div className={styles.textBox}>
                 {/* 상품 수량 및 옵션, 최종 결제금액 */}
                 <label>
-                수량 : <input type='text'/>개
+                  <input type='number' placeholder='상품의 보유 수량을 입력해주세요'/> 개
                 </label>
                 <br/>
                 <div style={{display: 'flex', alignItems:'center', gap:'0.5em'}}>
-                  옵션 : <input type='text'/>
+                    <input type='text'placeholder='상품의 옵션을 입력해주세요'/>
+                  <button> 
+                  +
+                  </button>
                 </div>
               </div>
-                총 수량 개 |
-                <h4 className={styles.finalprice}>
-                최종 결제 금액 : 
-                </h4>
 
               {/* 버튼 부분들 (결제하기, 장바구니, 찜하기) */}
               <div className={styles.textButton}>
                 <button 
                 className={styles.mainButton}
-                >결제하기</button>
+                >등록하기</button>
                 <div className={styles.sideTextButton}>
                   <button 
-                  className={styles.sideButton}>장바구니</button>
+                  className={styles.sideButton}>삭제하기</button>
                   <button 
                   className={styles.sideButton}>
-                  <i className="fa-solid fa-heart"/>
-                  &nbsp;찜하기
+                  &nbsp;임시저장
                   </button>
                 </div>
               </div>
             </div>
           </div>
         </section>
-
-
 
         {/* 탭 부분 */}
         <div className={styles.sticky} >
