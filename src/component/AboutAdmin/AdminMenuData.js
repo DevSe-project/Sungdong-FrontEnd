@@ -97,6 +97,10 @@ export function AdminMenuData(props){
       subMenuItems: [{
         item: '회원 관리',
         link: '/adminMain/user'
+      },
+      {
+        item: '회원가입 코드 관리',
+        link: '/adminMain/printCode'
       }],
     },
   ];
