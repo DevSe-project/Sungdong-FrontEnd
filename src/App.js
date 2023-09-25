@@ -228,7 +228,6 @@ function App() {
   // 
   return (
     <div className="App">
-      <UserProvider>
       <Routes>
         {/* 메인페이지 */}
         <Route path='/' element={
@@ -307,7 +306,6 @@ function App() {
         <Route path='/adminMain/managecode' element={<Managecode />}/>
         <Route path='/adminMain/adminDetail' element={<AdminDetail/>}/>
       </Routes>
-    </UserProvider>
     </div>
   );
 }
