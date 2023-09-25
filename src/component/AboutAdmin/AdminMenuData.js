@@ -18,61 +18,85 @@ export function AdminMenuData(props){
 
   const menuData = [
     {
-      id: 1,
+      id: 0,
       title: {
         item: '상품 관리',
       },
       subMenuItems: [{
         item: '상품 등록',
-        link: '/adminMain/adminDetail'
+        link: '/adminMain/addProduct'
       },
       {
-        item: '상품 조회 / 수정',
-        link: '/Admin/productList'
+        item: '상품 조회/수정',
+        link: '/adminMain/editProduct'
       },
       {
         item: '카테고리 관리',
-        link: '/event',
+        link: '/adminMain/category',
       }],
     },
     {
-      id: 2,
+      id: 1,
       title: {
-        item: '주문 / 배송',
+        item: '판매 관리',
       },
       subMenuItems: [
         {
-          item: '공지사항',
-          link: '/userservice/notice',
+          item: '결제 완료 주문',
+          link: '/adminMain/paid',
         },
         {
-          item: '문의하기',
-          link: '/userservice/ask',
+          item: '미결제 주문',
+          link: '/adminMain/yetPay',
+        },
+        {
+          item: '반품 관리',
+          link: '/adminMain/return'
         }
       ],
     },
     {
-      id: 3,
+      id: 2,
       title: {
-        item: '판매 현황',
+        item: '배송 관리',
       },
       subMenuItems: [{
-        item: '내 정보 관리',
-        link: '/mypages',
+        item: '배송 준비 건 관리',
+        link: '/adminMain/delivery',
+      }],
+    },
+    {
+      id: 3,
+      title: {
+        item: '정산 관리',
+      },
+      subMenuItems: [{
+        item: 'CMS 정산',
+        link: '/adminMain/cms'
+      },
+      {
+        item: '누적 정산',
+        link: '/adminMain/total'
       }],
     },
     {
       id: 4,
       title: {
+        item: '문의 관리',
+      },
+      subMenuItems: [{
+        item: '문의 게시판',
+        link: '/adminMain/ask'
+      }],
+    },
+    {
+      id: 5,
+      title: {
         item: '회원 관리',
       },
       subMenuItems: [{
-        item: '코드 관리',
-        link: '/adminMain/manageCode'
-      },
-      {
-        item: '회원 정보 관리',
-        link: '/adminMain/manageUser'
+        item: '회원 관리',
+        link: '/adminMain/user'
       }],
     },
   ];
