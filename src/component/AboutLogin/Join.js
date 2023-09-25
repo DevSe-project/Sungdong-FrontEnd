@@ -12,7 +12,7 @@ export default function Join(props) {
     // 액세스 권한 불러오기
     const inAccess = JSON.parse(sessionStorage.getItem('saveAllowAccess'));
 
-    // 코드인증으로 액세스 혀용에 따른 접근 불/허용
+    // 최초 접근 권한검사 -> 코드인증으로 액세스 혀용에 따른 접근 불/허용
     useEffect(() => {
         if(inAccess) {
             alert('인증이 완료되었습니다.');
@@ -22,7 +22,7 @@ export default function Join(props) {
         }
     }, [navigate]);
 
-    // 입력받을 1회성 회원 정보 객체배열 state
+    // [JoinForm.js에서 사용]입력받을 1회성 회원 정보
     let [inputData, setInputData] = useState(
         {
             userType: '',
