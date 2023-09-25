@@ -61,6 +61,20 @@ export function AdminMenuData(props){
         link: '/mypages',
       }],
     },
+    {
+      id: 4,
+      title: {
+        item: '회원 관리',
+      },
+      subMenuItems: [{
+        item: '코드 관리',
+        link: '/adminMain/manageCode'
+      },
+      {
+        item: '회원 정보 관리',
+        link: '/adminMain/manageUser'
+      }],
+    },
   ];
 
   //서브메뉴 열림창 변수 초기화
