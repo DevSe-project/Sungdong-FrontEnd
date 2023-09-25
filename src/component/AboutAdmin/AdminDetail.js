@@ -1,10 +1,36 @@
-import { Tab } from '../AboutDetail/Tab'
+import { useState } from 'react'
 import styles from './AdminDetail.module.css'
-import { TopBanner } from '../AboutHeader/TopBanner'
 import { AdminHeader } from './AdminHeader'
 import { AdminMenuData } from './AdminMenuData'
+import { AdminTabInfo } from './AdminTabInfo'
 
 export function AdminDetail(props) {
+  const [isDiscount, setIsDiscount] = useState(false);
+  const [isOption, setIsOption] = useState(false);
+  const [addInputOption, setAddInputOption] = useState(0);
+
+
+  function AddInputOptionFunc(){
+    if(addInputOption > 3) return;
+    setAddInputOption(addInputOption+1);
+  }
+
+  // <input> 요소를 렌더링하는 함수
+  const renderInputs = () => {
+    const inputs = [];
+    for (let i = 0; i < addInputOption; i++) {
+      inputs.push(
+        <input
+          key={i}
+          className={styles.input}
+          type='text'
+          placeholder='상품의 옵션을 입력해주세요'
+        />
+      );
+    }
+    return inputs;
+  };
+
   return(
     <div>
       <AdminHeader/>
@@ -25,15 +51,31 @@ export function AdminDetail(props) {
               {/* 상품 정보(상품 이름, 가격) 부분 (삼항연산자 : 스켈레톤 처리) */}
               <div className={styles.headRight}>
                 <div className={styles.textBox}>
-                  <input type='text' placeholder='상품명을 입력해주세요'/>
+                  <input style={{width: '20em'}}className={styles.input} type='text' placeholder='상품명을 입력해주세요'/>
                 </div>
                 <h4 className={styles.h4}>
                   <div className={styles.priceTag}>
-                    <div>
-                      <h3><input type='text' placeholder='할인율을 입력해주세요'/> %</h3>
+                    <div style={{display: 'flex', gap: '1em', flexDirection: 'column'}}>
+                      <div>
+                        <span className={isDiscount ? styles.selectedButton : styles.selectButton} onClick={()=>setIsDiscount(true)}>
+                          할인 설정
+                        </span>
+                        <span className={isDiscount ? styles.selectButton : styles.selectedButton} onClick={()=>setIsDiscount(false)}>
+                          설정 안함
+                        </span>
+                      </div>
+                      {isDiscount &&
+                      <label style={{display:'flex'}}>
+                        <input className={styles.input} type='text' placeholder='할인율을 입력해주세요'/>
+                        <span className={styles.spanStyle}>%</span>
+                      </label>
+                      }
                     </div>
                     <div style={{display: 'flex', alignItems: 'center', gap: '0.5em'}}>
-                      <input type='text' placeholder='상품 가격을 입력해주세요'/>원
+                      <label style={{display:'flex'}}>
+                        <input className={styles.input} type='text' placeholder='판매가를 입력해주세요'/>
+                        <span className={styles.spanStyle}>원</span>
+                      </label>
                     </div>
                   </div>
                 </h4>
@@ -43,16 +85,31 @@ export function AdminDetail(props) {
 
                 <div className={styles.textBox}>
                   {/* 상품 수량 및 옵션, 최종 결제금액 */}
-                  <label>
-                    <input type='number' placeholder='상품의 재고 수량을 입력해주세요'/> 개
+                  <label style={{display:'flex'}}>
+                      <input className={styles.input} type='text' placeholder='재고수량을 입력해주세요'/>
+                      <span className={styles.spanStyle}>개</span>
                   </label>
                   <br/>
-                  <div style={{display: 'flex', alignItems:'center', gap:'0.5em'}}>
-                      <input type='text'placeholder='상품의 옵션을 입력해주세요'/>
-                    <button> 
-                    +
-                    </button>
+                  <div>
+                    <span className={isOption ? styles.selectedButton : styles.selectButton} onClick={()=>setIsOption(true)}>
+                      옵션 설정
+                    </span>
+                    <span className={isOption ? styles.selectButton : styles.selectedButton} onClick={()=>setIsOption(false)}>
+                      설정 안함
+                    </span>
                   </div>
+                  <br/>
+                  {isOption &&
+                  <>
+                    <label style={{display: 'flex'}}>
+                      <input className={styles.input} type='text'placeholder='상품의 옵션을 입력해주세요'/>
+                      <button className={styles.spanStyle} onClick={()=>AddInputOptionFunc()}>+</button>
+                    </label>
+                    <div style={{display: 'flex', flexDirection: 'column'}}>
+                      {renderInputs()}
+                    </div>
+                  </>
+                  }
                 </div>
 
                 {/* 버튼 부분들 (결제하기, 장바구니, 찜하기) */}
@@ -73,10 +130,9 @@ export function AdminDetail(props) {
             </div>
           </section>
 
+
           {/* 탭 부분 */}
-          <div className={styles.sticky} >
-            <Tab navigate={props.navigate}/>
-          </div>     
+          <AdminTabInfo/>
         </main>
         <div className={styles.leftSideBar}>
           사이드바 내용
