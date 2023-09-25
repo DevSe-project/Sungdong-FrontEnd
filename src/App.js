@@ -42,7 +42,7 @@ import { TodayNewsInner } from './component/AboutCompany/TodayNewsInner';
 import { Event } from './component/AboutCompany/Event'
 import { AdminMain } from './component/AboutAdmin/AdminMain';
 import MyPage from './component/AboutMyPage/MyPage';
-import Managecode from './component/AboutAdmin/ManageCode';
+import ManageCode from './component/AboutAdmin/ManageCode';
 
 import axios from 'axios';
 import UserContext, { UserProvider } from './component/AboutContext/UserContext';
@@ -304,7 +304,7 @@ function App() {
 
         {/* 관리자페이지 */}
         <Route path='/adminMain' element={<AdminMain />} />
-        <Route path='/adminMain/managecode' element={<Managecode />}/>
+        <Route path='/adminMain/manageCode' element={<ManageCode />}/>
         <Route path='/adminMain/adminDetail' element={<AdminDetail/>}/>
       </Routes>
     </UserProvider>
