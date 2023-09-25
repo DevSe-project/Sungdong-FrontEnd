@@ -317,7 +317,7 @@ function App() {
 
         {/* 관리자페이지 */}
         <Route path='/adminMain' element={<AdminMain />} />
-        <Route path='/adminMain/manageCode' element={<ManageCode />}/>
+        <Route path='/adminMain/printCode' element={<ManageCode />}/>
         <Route path='/adminMain/adminDetail' element={<AdminDetail/>}/>
       </Routes>
     </div>
