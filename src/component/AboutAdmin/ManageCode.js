@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styles from './ManageCode.module.css';
 import { AdminHeader } from "./AdminHeader";
 import { AdminMenuData } from "./AdminMenuData";
+import ListLayout from "./ListLayout";
 
 export default function Managecode() {
 
@@ -72,7 +73,7 @@ export default function Managecode() {
         <div className={styles.sideContents}>
           <AdminMenuData />
         </div>
-        <div className={styles.mainContents}>
+        {/* <div className={styles.mainContents}>
           <h2>발급된 코드 / 관리</h2>
           <button onClick={randomCode}>코드발급</button>
           <div>
@@ -88,9 +89,15 @@ export default function Managecode() {
             console.log(callPrintedCodeList);
           }}>저장된 세션 확인(console)</button>
           <button onClick={() => { navigate('/') }}>홈으로 가기</button>
+        </div> */}
+        <div className={styles.mainContents}>
+          <h2>발급된 코드 / 관리</h2>
+          <button onClick={randomCode}>코드발급</button>
+          <ListLayout title="발급된 코드 목록" items={codeListObj} />
+          <button onClick={() => { navigate('/') }}>홈으로 가기</button>
         </div>
-      </div>
 
+      </div>
     </div>
   )
 }
