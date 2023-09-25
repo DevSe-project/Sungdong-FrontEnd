@@ -187,7 +187,7 @@ export default function JoinForm(props) {
                     <div className={styles.right}>
                         <input
                             className={styles.phoneNum}
-                            type='text'
+                            type="text"
                             placeholder={'ex) 010'}
                             maxLength="3"
                             size="6"
@@ -350,7 +350,7 @@ export default function JoinForm(props) {
                     <div className={styles.right}>
                         <input
                             className={styles.isInput}
-                            type='text'
+                            type='email'
                             placeholder={'이메일'}
                             name="email"
                             value={props.inputData.email}

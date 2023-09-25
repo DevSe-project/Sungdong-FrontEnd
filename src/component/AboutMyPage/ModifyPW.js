@@ -33,9 +33,6 @@ export default function ModifyPW(props) {
                         });
                         props.setUserData(updatedUserData); // 사용자 데이터 업데이트
 
-                        // 세션 스토리지에 변경사항 저장
-                        sessionStorage.setItem('userPassword', inputForModify.re_password);
-
                         alert("변경 완료");
                     } else {
                         alert("비밀번호 8글자 이상 입력하십시오.");
