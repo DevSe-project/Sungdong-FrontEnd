@@ -1,9 +1,10 @@
 import styles from './AdminTabInfo.module.css'
-import React from 'react';
+import React, { useState } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-export function AdminTabInfo(){
 
+export function AdminTabInfo(){
+  const [editorData, setEditorData] = useState('');
   // 상품정보 데이터
   const productInfo = [
     {label: '상품번호', value: <input type='text'/>},
@@ -45,12 +46,13 @@ export function AdminTabInfo(){
         <p>
           <CKEditor
           editor={ ClassicEditor }
-          data=""
+          data={editorData}
           onReady={ ( editor ) => {
             console.log( "CKEditor5 React Component is ready to use!", editor );
           } }
           onChange={ ( event, editor ) => {
             const data = editor.getData();
+            setEditorData(data);
             console.log( { event, editor, data } );
           } }
           />

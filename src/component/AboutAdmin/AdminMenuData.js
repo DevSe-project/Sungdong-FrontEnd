@@ -7,11 +7,11 @@ export function AdminMenuData(props){
   const [topTab, setTopTab] = useState(null); // 현재 활성화된 탭을 추적
 
   useEffect(() => {
-    const tabstate = JSON.parse(sessionStorage.getItem('tabState'));
+    const tabstate = JSON.parse(sessionStorage.getItem('AdmintabState'));
     setTopTab(tabstate);
     // 경로에 따른 상태 초기화
     if (location.pathname === '/' || location.pathname === '/login' || location.pathname === '/category') {
-      sessionStorage.removeItem('tabState');
+      sessionStorage.removeItem('AdmintabState');
       setTopTab(null);
     }
   }, [location]); // 두 번째 매개변수를 빈 배열로 설정하여 최초 렌더링 시에만 실행
@@ -109,7 +109,7 @@ export function AdminMenuData(props){
   const [subMenuStates, setSubMenuStates] = useState([menuData.map(() => false)]);
 
   function saveTab(id) {
-    sessionStorage.setItem('tabState', JSON.stringify(id));
+    sessionStorage.setItem('AdmintabState', JSON.stringify(id));
   }
 
   function toggleSubMenu(index) {
