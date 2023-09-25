@@ -8,7 +8,7 @@ function UserProvider({children}) {
     const [isLogin, setIsLogin] = useState(false);
     const login = () => setIsLogin(true);
     const logout = () => setIsLogin(false);
-    return <UserContext.Provider value={{isLogin, login, logout}}>{children}</UserContext.Provider>
+    return <UserContext.Provider value={{isLogin, setIsLogin}}>{children}</UserContext.Provider>
 }
 export { UserProvider }
 export default UserContext

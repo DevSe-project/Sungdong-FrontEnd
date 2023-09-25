@@ -181,6 +181,20 @@ function App() {
     window.scrollTo(0, 0);
   }, [navigate]); // navigate가 변경될 때마다 실행
 
+  const {logout, setIsLogin} = useContext(UserContext);
+  // 백엔드 에서 세션 정보 받아오는 코드
+  useEffect(() => {
+    axios.get(
+      "/user/session"
+    )
+    .then(res => {
+      if (res.data.sessionId != null) {
+        setIsLogin(true)
+      }
+    })
+    .catch(()=>{setIsLogin(false)})
+  }, [])
+
   // (START) 아이콘 클릭 관련 객체, 함수, state //
   const [iconHovered, setIconHovered] = useState(false);
   const [iconClicked, setIconClicked] = useState(true);
