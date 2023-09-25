@@ -1,18 +1,20 @@
 import styles from './AdminTabInfo.module.css'
 import React from 'react';
-export function AdminTabInfo(props){
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+export function AdminTabInfo(){
 
   // 상품정보 데이터
   const productInfo = [
-    {label: '상품번호', },
-    {label: '브랜드', },
-    {label: '원산지', },
-    {label: '상품상태',},
+    {label: '상품번호', value: <input type='text'/>},
+    {label: '브랜드', value: <input type='text'/>},
+    {label: '원산지', value: <input type='text'/>},
+    {label: '상품상태',value: <input type='text'/>},
   ]
 
   const returnInfo = [
     {label: '택배사', value: 'CJ대한통운'},
-    {label: '반품 배송비', value: '편도 3,000원(최초 배송비 무료인 경우 6,000원 부과)'},
+    {label: '반품 배송비', value: '편도 5,000원(최초 배송비 무료인 경우 10,000원 부과)'},
     {label: '보내실 곳', value: '울산광역시 남구 산업로440번길 8 (주)성동물산  (우 : 44781)'},
     {label: '반품/교환 요청 가능 기간', value: '구매자 단순 변심은 상품 구매 후 7일 이내(구매자 반품 배송비 부담)'},
     {label: '반품/교환 불가능 사유', value: '1. 반품요청기간이 지난 경우'},
@@ -23,14 +25,16 @@ export function AdminTabInfo(props){
     {/* 탭 상품 정보 */}
     <h5 style={{fontWeight: '650'}}>상품 정보</h5>
     <div className={styles.productDetail}>
+    {productInfo.map((item) => 
       <div className={styles.productDetailInner}>
         <div className={styles.productDetail_label}>
-          <p>라벨정보</p>
+          <p>{item.label}</p>
         </div>
         <div className={styles.productDetail_content}>
-          벨류값
+          {item.value}
         </div>
       </div>
+    )}
     </div>
 
 
@@ -39,7 +43,17 @@ export function AdminTabInfo(props){
       <div className={styles.reviewHeader}>
       <h3 style={{borderBottom: '3px solid #cc0000', marginBottom: '1em'}}>상품 설명</h3>
         <p>
-          상세정보
+          <CKEditor
+          editor={ ClassicEditor }
+          data=""
+          onReady={ ( editor ) => {
+            console.log( "CKEditor5 React Component is ready to use!", editor );
+          } }
+          onChange={ ( event, editor ) => {
+            const data = editor.getData();
+            console.log( { event, editor, data } );
+          } }
+          />
         </p>
       </div>
     </div>
@@ -61,6 +75,22 @@ export function AdminTabInfo(props){
           </div>
         </div>
         )}
+      </div>
+    </div>
+
+
+    {/* 버튼 부분들 (결제하기, 장바구니, 찜하기) */}
+    <div className={styles.textButton}>
+      <button 
+      className={styles.mainButton}
+      >등록하기</button>
+      <div className={styles.sideTextButton}>
+        <button 
+        className={styles.sideButton}>삭제하기</button>
+        <button 
+        className={styles.sideButton}>
+        &nbsp;임시저장
+        </button>
       </div>
     </div>
   </div>

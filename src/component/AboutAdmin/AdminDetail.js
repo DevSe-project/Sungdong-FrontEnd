@@ -111,21 +111,6 @@ export function AdminDetail(props) {
                   </>
                   }
                 </div>
-
-                {/* 버튼 부분들 (결제하기, 장바구니, 찜하기) */}
-                <div className={styles.textButton}>
-                  <button 
-                  className={styles.mainButton}
-                  >등록하기</button>
-                  <div className={styles.sideTextButton}>
-                    <button 
-                    className={styles.sideButton}>삭제하기</button>
-                    <button 
-                    className={styles.sideButton}>
-                    &nbsp;임시저장
-                    </button>
-                  </div>
-                </div>
               </div>
             </div>
           </section>

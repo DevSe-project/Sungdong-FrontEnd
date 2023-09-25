@@ -78,45 +78,6 @@
 }
 
 /* 버튼 CSS */
-.textButton{
-  display: flex;
-  flex-direction: column;
-}
-
-.sideTextButton{
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-}
-
-.mainButton{
-  font-size: 1em;
-  font-weight: bold;
-  padding: 1rem 2rem;
-  color: white;
-  background-color: var(--background-color-set);
-  border-radius: 5dvw;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-top: 0.5em;
-  margin-right: 0.3em;
-  margin-left: 0.3em;
-}
-.sideButton{
-  font-size: 1em;
-  font-weight: bold;
-  padding: 1rem 2rem;
-  color: #000;
-  background-color: #ccc;
-  border-radius: 5dvw;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-top: 0.5em;
-  margin-right: 0.3em;
-  margin-left: 0.3em;
-}
 
 .selectButton{
   width: 100%;
@@ -140,7 +101,7 @@
   font-weight: bold;
   padding: 0.7rem 1rem;
   color: #ffffff;
-  background-color: #ff0000;
+  background-color: var(--background-color-set);
   border-radius: 5dvw;
   border: none;
   cursor: pointer;
