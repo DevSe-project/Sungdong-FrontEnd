@@ -30,11 +30,13 @@
   gap: 1em;
 }
 .headLeft{
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-size: cover;
   box-sizing: border-box;
   background-color: beige;
   width: 25em;
-  height: 37em;
   overflow: hidden;
   border: 1px solid lightgray;
   object-fit: cover;
@@ -48,7 +50,6 @@
   border: 1px solid lightgray;
   gap: 1em;
   padding: 1em;
-  height: 37em;
 }
 
 .priceTag{
@@ -56,6 +57,7 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  gap: 1em;
 }
 
 .selectSize{
@@ -102,12 +104,43 @@
   margin-left: 0.3em;
 }
 .sideButton{
-  width: 100%;
   font-size: 1em;
   font-weight: bold;
   padding: 1rem 2rem;
   color: #000;
   background-color: #ccc;
+  border-radius: 5dvw;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 0.5em;
+  margin-right: 0.3em;
+  margin-left: 0.3em;
+}
+
+.selectButton{
+  width: 100%;
+  font-size: 0.8em;
+  font-weight: bold;
+  padding: 0.7rem 1rem;
+  color: #000;
+  background-color: #ccc;
+  border-radius: 5dvw;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 0.5em;
+  margin-right: 0.3em;
+  margin-left: 0.3em;
+}
+
+.selectedButton{
+  width: 100%;
+  font-size: 0.8em;
+  font-weight: bold;
+  padding: 0.7rem 1rem;
+  color: #ffffff;
+  background-color: #ff0000;
   border-radius: 5dvw;
   border: none;
   cursor: pointer;
@@ -198,9 +231,26 @@
 }
 
 .input{
-  font-size: 1em;
-  width: 4em;
-  height: 2em;
+  display: flex;
+  flex-direction: row;
+  border: 1px solid lightgray;
+  justify-content: space-between;
+  align-items: center;
+  white-space: nowrap;
+  padding: 0.5em;
+}
+
+.spanStyle{
+  font-size: 0.7em;
+  display: flex;
+  flex-direction: row;
+  background-color: white;
+  border: 1px solid lightgray;
+  border-left: none;
+  justify-content: space-between;
+  align-items: center;
+  white-space: nowrap;
+  padding: 0.5em;
 }
 
 /* tab Sticky */
