@@ -1,0 +1,17 @@
+.body{
+  display: flex;
+}
+
+.sideContents{
+  width: 100px;
+}
+
+.mainContents{
+  width: 100%;
+}
+
+.bodyInnerTile{
+  width: 25em;
+  height: 20em;
+  border: 1px solid lightgray;
+}

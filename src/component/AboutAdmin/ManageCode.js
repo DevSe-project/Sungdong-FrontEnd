@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import styles from './ManageCode.module.css';
+import { AdminHeader } from "./AdminHeader";
+import { AdminMenuData } from "./AdminMenuData";
 
 export default function Managecode() {
 
@@ -64,23 +67,30 @@ export default function Managecode() {
 
   return (
     <div>
-      <div>
-        <h2>발급된 코드 / 관리</h2>
-        <button onClick={randomCode}>코드발급</button>
-        <div>
-          {codeListObj.map((item, index) => {
-            return <div>
-              <div key={index}>{index} - {item.code}</div>
-              <button onClick={() => { removeCode(index) }}>삭제</button>
-            </div>
-          })}
+      <AdminHeader />
+      <div className={styles.body}>
+        <div className={styles.sideContents}>
+          <AdminMenuData />
         </div>
-        <button onClick={() => {
-          const callPrintedCodeList = sessionStorage.getItem('savePrintCodeList');
-          console.log(callPrintedCodeList);
-        }}>저장된 세션 확인(console)</button>
-        <button onClick={() => { navigate('/') }}>홈으로 가기</button>
+        <div className={styles.mainContents}>
+          <h2>발급된 코드 / 관리</h2>
+          <button onClick={randomCode}>코드발급</button>
+          <div>
+            {codeListObj.map((item, index) => {
+              return <div>
+                <div key={index}>{index} - {item.code}</div>
+                <button onClick={() => { removeCode(index) }}>삭제</button>
+              </div>
+            })}
+          </div>
+          <button onClick={() => {
+            const callPrintedCodeList = sessionStorage.getItem('savePrintCodeList');
+            console.log(callPrintedCodeList);
+          }}>저장된 세션 확인(console)</button>
+          <button onClick={() => { navigate('/') }}>홈으로 가기</button>
+        </div>
       </div>
+
     </div>
   )
 }
