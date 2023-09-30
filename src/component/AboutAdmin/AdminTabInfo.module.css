@@ -169,3 +169,12 @@
   width: 100%;
   height: 20em;
 }
+
+.input{
+  border: 1px solid lightgray;
+  justify-content: space-between;
+  align-items: center;
+  white-space: nowrap;
+  padding: 0.5em;
+  width: 70%;
+}

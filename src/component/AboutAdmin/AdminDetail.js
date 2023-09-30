@@ -86,7 +86,9 @@ export function AdminDetail(props) {
                 <div className={styles.textBox}>
                   {/* 상품 수량 및 옵션, 최종 결제금액 */}
                   <label style={{display:'flex'}}>
-                      <input className={styles.input} type='text' placeholder='재고수량을 입력해주세요'/>
+                      <input className={styles.input} type='number' placeholder='재고수량을 입력해주세요'
+                      min={1}
+                      max={1000}/>
                       <span className={styles.spanStyle}>개</span>
                   </label>
                   <br/>

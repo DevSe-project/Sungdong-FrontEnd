@@ -7,10 +7,10 @@ export function AdminTabInfo(){
   const [editorData, setEditorData] = useState('');
   // 상품정보 데이터
   const productInfo = [
-    {label: '상품번호', value: <input type='text'/>},
-    {label: '브랜드', value: <input type='text'/>},
-    {label: '원산지', value: <input type='text'/>},
-    {label: '상품상태',value: <input type='text'/>},
+    {label: '상품번호', value: <input className={styles.input} type='text'/>},
+    {label: '브랜드', value: <input className={styles.input} type='text'/>},
+    {label: '원산지', value: <input className={styles.input} type='text'/>},
+    {label: '상품상태',value: <input className={styles.input} type='text'/>},
   ]
 
   const returnInfo = [
@@ -44,6 +44,7 @@ export function AdminTabInfo(){
       <div className={styles.reviewHeader}>
       <h3 style={{borderBottom: '3px solid #cc0000', marginBottom: '1em'}}>상품 설명</h3>
         <p>
+          {/* 에디터 훅 사용 */}
           <CKEditor
           editor={ ClassicEditor }
           data={editorData}
