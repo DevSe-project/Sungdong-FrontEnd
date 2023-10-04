@@ -6,8 +6,6 @@ import { AdminMenuData } from "./AdminMenuData";
 
 export default function Managecode() {
 
-  const navigate = useNavigate();
-
   // [목록] 발급된 코드리스트를 담을 State
   const [codeListObj, setCodeListObj] = useState([
     {
