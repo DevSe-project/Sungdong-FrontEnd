@@ -47,6 +47,7 @@ import ManageCode from './component/AboutAdmin/ManageCode';
 import axios from 'axios';
 import UserContext, { UserProvider } from './component/AboutContext/UserContext';
 import { AdminDetail } from './component/AboutAdmin/AdminDetail';
+import { AdminProductList } from './component/AboutAdmin/AdminProductList';
 
 function App() {
   const navigate = useNavigate();
@@ -319,6 +320,7 @@ function App() {
         <Route path='/adminMain' element={<AdminMain />} />
         <Route path='/adminMain/printCode' element={<ManageCode />}/>
         <Route path='/adminMain/addProduct' element={<AdminDetail/>}/>
+        <Route path='/adminMain/editProduct' element={<AdminProductList/>}/>
       </Routes>
     </div>
   );

@@ -498,6 +498,7 @@ export function Category(props){
             선택 항목 장바구니 추가
           </button>
         </div>
+        {/* 카테고리 결과 List */}
         <div className={styles.tableLocation}>
           <table className={styles.table}>
             <thead 
