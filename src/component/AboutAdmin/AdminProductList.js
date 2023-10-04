@@ -114,6 +114,9 @@ export function AdminProductList(props){
                             <th style={{width: '10%', fontWeight: '650'}}>
                               공급가
                             </th>
+                            <th>
+                              <button className={styles.button}>삭제</button>
+                            </th>
                           </tr>
                         </thead>
                         <tbody>
@@ -123,12 +126,14 @@ export function AdminProductList(props){
                             </td>
                             <td>
                               {item.option 
-                              &&            
+                              ?            
                               <span>옵션있음</span>
+                              :
+                              <span>옵션없음</span>
                               }
                             </td>
                             <td>
-                              설정된 재고수량
+                              {item.supply}
                             </td>
                             <td>
                               {item.discount}%
@@ -144,6 +149,9 @@ export function AdminProductList(props){
                             ? `\\${ (item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}`
                             : `\\${item.finprice.toLocaleString()}`
                             : `\\${item.price.toLocaleString()}`}
+                            </td>
+                            <td>
+                              <button className={styles.button}>수정</button>
                             </td>
                           </tr>
                         </tbody>
