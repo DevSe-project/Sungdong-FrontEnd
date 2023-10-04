@@ -538,7 +538,7 @@ export function Category(props){
                     ? item.discount
                     ? `\\${ (item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}`
                     : `\\${item.finprice.toLocaleString()}`
-                    : item.price.toLocaleString()}
+                    : `\\${item.price.toLocaleString()}`}
                   </td>
                   <td 
                     className={styles.detailView}
@@ -631,7 +631,7 @@ export function Category(props){
                           ? item.discount
                           ? `\\${ (item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}`
                           : `\\${item.finprice.toLocaleString()}`
-                          : item.price.toLocaleString()}
+                          : `\\${item.price.toLocaleString()}`}
                           </td>
                           <td>
                             <input 
