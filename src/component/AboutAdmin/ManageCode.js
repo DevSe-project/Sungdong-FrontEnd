@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import styles from './ManageCode.module.css';
 import { AdminHeader } from "./AdminHeader";
 import { AdminMenuData } from "./AdminMenuData";
-import ListLayout from "./ListLayout";
 
 export default function Managecode() {
 
@@ -70,33 +69,53 @@ export default function Managecode() {
     <div>
       <AdminHeader />
       <div className={styles.body}>
-        <div className={styles.sideContents}>
-          <AdminMenuData />
-        </div>
-        {/* <div className={styles.mainContents}>
-          <h2>발급된 코드 / 관리</h2>
-          <button onClick={randomCode}>코드발급</button>
-          <div>
-            {codeListObj.map((item, index) => {
-              return <div>
-                <div key={index}>{index} - {item.code}</div>
-                <button onClick={() => { removeCode(index) }}>삭제</button>
-              </div>
-            })}
-          </div>
-          <button onClick={() => {
-            const callPrintedCodeList = sessionStorage.getItem('savePrintCodeList');
-            console.log(callPrintedCodeList);
-          }}>저장된 세션 확인(console)</button>
-          <button onClick={() => { navigate('/') }}>홈으로 가기</button>
-        </div> */}
+        <AdminMenuData />
         <div className={styles.mainContents}>
-          <h2>발급된 코드 / 관리</h2>
-          <button onClick={randomCode}>코드발급</button>
-          <ListLayout title="발급된 코드 목록" items={codeListObj} />
-          <button onClick={() => { navigate('/') }}>홈으로 가기</button>
+          {/* 코드발급 | 최신코드 묶음 */}
+          <div className={styles.print_new}>
+            {/* 코드 발급 블록 */}
+            <div className={styles.printCode_block}>
+              <div className={styles.printCode_title}>Click <i class="fa-solid fa-arrow-down"></i></div>
+              <div className={styles.printCode_button} onClick={randomCode}>코드발급</div>
+            </div>
+            {/* 뭐 넣을지 미정 */}
+            <div className={styles.none_block}>
+              <div className={styles.none_title}>
+                뭐 넣을까
+              </div>
+              <div className={styles.none_code}>
+                아직 미정
+              </div>
+            </div>
+          </div>
+          {/* 발행코드 목록 */}
+          <div className={styles.printedCodeList_block}>
+            {/* Title */}
+            <div className={styles.printedCodeList_title}>발행 코드 LIST</div>
+            {/* List */}
+              {codeListObj.map((item, index) => (
+                <div className={styles.printedCodeList_list}>
+                  {/* No */}
+                  <div className={styles.printedCodeList_no}
+                    key={index}>
+                    {index + 1}
+                  </div>
+                  {/* Code */}
+                  <div className={styles.printedCodeList_code}
+                    key={index}>
+                    {item.code}
+                  </div>
+                  {/* Del */}
+                  <div>
+                    <div className={styles.printedCodeList_del}
+                      onClick={() => { removeCode(index) }}>
+                      삭제
+                    </div>
+                  </div>
+                </div>
+              ))}
+          </div>
         </div>
-
       </div>
     </div>
   )

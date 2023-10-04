@@ -25,6 +25,7 @@
     "react-scripts": "5.0.1",
     "react-transition-group": "^4.4.5",
     "recharts": "^2.7.3",
+    "stream-http": "^3.2.0",
     "styled-components": "^6.0.6",
     "web-vitals": "^2.1.4"
   },
