@@ -320,7 +320,7 @@ function App() {
         <Route path='/adminMain' element={<AdminMain />} />
         <Route path='/adminMain/printCode' element={<ManageCode />}/>
         <Route path='/adminMain/addProduct' element={<AdminDetail/>}/>
-        <Route path='/adminMain/editProduct' element={<AdminProductList/>}/>
+        <Route path='/adminMain/editProduct' element={<AdminProductList data={data}/>}/>
       </Routes>
     </div>
   );
