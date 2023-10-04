@@ -64,6 +64,21 @@ export default function Managecode() {
     setCodeListObj(savedCodeList);
   }, []);
 
+  // 12시간 후에 자동으로 코드 삭제
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const currentTime = new Date().getTime();
+      const updatedCodeList = codeListObj.filter((codeItem) => {
+        const codeTimestamp = codeItem.timestamp;
+        const elapsedMilliseconds = currentTime - codeTimestamp;
+        const elapsedHours = elapsedMilliseconds / (1000 * 60 * 60);
+        return elapsedHours <= 12; // 12시간 이내의 코드만 유지
+      });
+      setCodeListObj(updatedCodeList);
+    }, 1000 * 60 * 60); // 1시간마다 체크
+
+    return () => clearInterval(interval);
+  }, [codeListObj]);
 
   return (
     <div>
