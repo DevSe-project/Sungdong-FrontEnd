@@ -129,7 +129,7 @@ export function AdminMenuData(props){
           key={index}
           id={item.id}  // data-id 속성을 사용하여 탭의 id를 저장
           style={{ boxShadow: `0px 2px 4px 1px rgba(0, 0, 0, 0.2)`}}
-          className={`menu-item
+          className={`admin-menuItem
           menutab-item ${topTab === item.id ? 'active' : ''}`}
           onClick={() => { 
             saveTab(item.id)
