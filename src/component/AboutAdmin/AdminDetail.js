@@ -121,9 +121,6 @@ export function AdminDetail(props) {
           {/* 탭 부분 */}
           <AdminTabInfo/>
         </main>
-        <div className={styles.leftSideBar}>
-          사이드바 내용
-        </div>
       </div>
     </div>
   )

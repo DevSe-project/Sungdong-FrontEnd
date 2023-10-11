@@ -1,7 +1,6 @@
 import { AdminHeader } from './AdminHeader'
 import { AdminMenuData } from './AdminMenuData'
 import styles from './AdminMain.module.css'
-import { AdminSideBar } from './AdminSideBar'
 export function AdminMain() {
   return (
     <div className={styles.main}>
@@ -30,7 +29,6 @@ export function AdminMain() {
             고객관리 타일형
           </div>
         </div>
-        <AdminSideBar/>
       </div>
     </div>
   )

@@ -4,7 +4,6 @@ import { AdminMenuData } from './AdminMenuData'
 import React from 'react';
 import styles from './AdminProductList.module.css'
 import { useNavigate } from 'react-router-dom';
-import { AdminSideBar } from './AdminSideBar';
 export function AdminProductList(props){
   
   // 필터된 항목을 저장할 상태 변수
@@ -40,7 +39,7 @@ export function AdminProductList(props){
       <AdminHeader/>
       <div className={styles.body}>
         <AdminMenuData/>
-        <div>
+        <div className={styles.main}>
           <div className={styles.tableLocation}>
             <table className={styles.table}>
               <thead 
@@ -195,7 +194,6 @@ export function AdminProductList(props){
             </button>
           </div>
         </div>
-        <AdminSideBar/>
       </div>
     </div>
   )
