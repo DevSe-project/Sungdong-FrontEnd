@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { AdminHeader } from './AdminHeader'
 import { AdminMenuData } from './AdminMenuData'
+import { AdminProductFilter}  from './AdminProductFilter'
 import React from 'react';
 import styles from './AdminProductList.module.css'
 import { useNavigate } from 'react-router-dom';
@@ -40,6 +41,7 @@ export function AdminProductList(props){
       <div className={styles.body}>
         <AdminMenuData/>
         <div className={styles.main}>
+          <AdminProductFilter/>
           <div className={styles.tableLocation}>
             <table className={styles.table}>
               <thead 
