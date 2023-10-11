@@ -5,6 +5,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     list-style: none;
     transition: transform 0.3s ease; /* 변환 효과를 부드럽게 적용합니다. */
+    z-index: 999;
   }
 
   /* 네비게이션 내부 링크 스타일링 (옵션) */
