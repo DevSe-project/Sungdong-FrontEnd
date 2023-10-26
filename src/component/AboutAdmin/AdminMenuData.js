@@ -121,7 +121,6 @@ export function AdminMenuData(props){
 
   return(
     <div
-    style={props.menu_dynamicStyle} 
     className={styles.menuLocation}>
     {/* 메뉴 loop */}
       {menuData.map((item, index) => (
