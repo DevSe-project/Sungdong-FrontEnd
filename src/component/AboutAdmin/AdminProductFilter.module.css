@@ -10,7 +10,7 @@
   gap: 1em;
 }
 .container{
-  width: 70%;
+  width: 90%;
   display: flex;
   padding-bottom: 1em;
   border-bottom: 1px solid lightgray;
@@ -24,8 +24,13 @@
 .label{
   width: 30%;
   display: flex;
+  align-items: center;
 }
 .content{
   display: flex;
-  width: 70%;
+  width: 90%;
+}
+.searchFilterList{
+  display: flex;
+  
 }
