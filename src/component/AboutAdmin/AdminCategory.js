@@ -85,7 +85,7 @@ export function AdminCategory(props){
                     <td 
                       className={styles.detailView}
                       >
-                      <button className={styles.button}>변경</button>
+                      <button onClick={()=> navigate(`/adminMain/categoryEdit/${item.id}`)} className={styles.button}>변경</button>
                     </td>
                   </tr>
                   </React.Fragment>

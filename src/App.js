@@ -49,6 +49,7 @@ import UserContext, { UserProvider } from './component/AboutContext/UserContext'
 import { AdminDetail } from './component/AboutAdmin/AdminDetail';
 import { AdminProductList } from './component/AboutAdmin/AdminProductList';
 import { AdminCategory } from './component/AboutAdmin/AdminCategory';
+import { AdminCategoryEdit } from './component/AboutAdmin/AdminCategoryEdit';
 
 function App() {
   const navigate = useNavigate();
@@ -323,6 +324,7 @@ function App() {
         <Route path='/adminMain/addProduct' element={<AdminDetail/>}/>
         <Route path='/adminMain/editProduct' element={<AdminProductList data={data}/>}/>
         <Route path='/adminMain/category' element={<AdminCategory data={data}/>}/>
+        <Route path='/adminMain/categoryEdit/:id' element={<AdminCategoryEdit data={data}/>}/>
       </Routes>
     </div>
   );

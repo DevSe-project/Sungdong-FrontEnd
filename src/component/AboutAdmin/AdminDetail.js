@@ -38,19 +38,19 @@ export function AdminDetail(props) {
         <AdminMenuData/>
         <main className={styles.main}>
         <div style={{display: 'flex', gap: '1em', marginTop: '1em', alignItems: 'center'}}>
-            <div className={styles.categoryContainer}>
-              <div className={styles.categoryInner}>
-                메인 카테고리
-                <i className="far fa-chevron-right" style={{color: 'gray'}}/>
-              </div>
-            </div>
-            <i className="fas fa-chevron-right"/>
-            <div className={styles.categoryContainer}>
-              <div className={styles.categoryInner}>
-                서브 카테고리
-              </div>
+          <div className={styles.categoryContainer}>
+            <div className={styles.categoryInner}>
+              메인 카테고리
+              <i className="far fa-chevron-right" style={{color: 'gray'}}/>
             </div>
           </div>
+          <i className="fas fa-chevron-right"/>
+          <div className={styles.categoryContainer}>
+            <div className={styles.categoryInner}>
+              서브 카테고리
+            </div>
+          </div>
+        </div>
           <section className={styles.head}>
             <div className={styles.headTop}>
 

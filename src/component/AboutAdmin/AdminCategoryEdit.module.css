@@ -1,0 +1,97 @@
+.main{
+  display: flex;
+  flex-direction: row;
+  gap: 5%;
+}
+
+/* 테이블 */
+.table{
+  width: 45em;
+  border-top: 3px solid black;
+  border-bottom: 1px solid lightgray;
+  text-align: center;
+  align-items: center;
+}
+
+.tableLocation{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 3em;
+}
+
+.categoryContainer{
+  width: 15em;
+  height: 20em;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid lightgray;
+  justify-content: space-between;
+}
+
+.categoryInner{
+  width: 89.5%;
+  margin-top: 0.5em;
+  padding: 1em 0.8em 1em 0.8em;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+}
+.categoryInner:hover{
+  background-color: lightgray;
+}
+
+.changedCategory{
+  margin-top: 3em;
+  padding: 5em;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+/* 버튼 요소 */
+
+.buttonBox{
+  width: 50%;
+  display: flex;
+  margin-top: 1em;
+}
+
+.selectButton{
+  width: 60%;
+  font-size: 0.8em;
+  font-weight: bold;
+  padding: 0.7rem 1rem;
+  color: #000;
+  background-color: #ccc;
+  border-radius: 5dvw;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 0.5em;
+  margin-right: 0.3em;
+  margin-left: 0.3em;
+}
+
+.selectedButton{
+  width: 60%;
+  font-size: 0.8em;
+  font-weight: bold;
+  padding: 0.7rem 1rem;
+  color: #ffffff;
+  background-color: var(--background-color-set);
+  border-radius: 5dvw;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 0.5em;
+  margin-right: 0.3em;
+  margin-left: 0.3em;
+}
