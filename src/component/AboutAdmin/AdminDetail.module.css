@@ -12,6 +12,27 @@
   text-align: center;
   align-items: center;
 }
+.categoryContainer{
+  width: 15em;
+  height: 20em;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid lightgray;
+  justify-content: space-between;
+}
+
+.categoryInner{
+  width: 89.5%;
+  margin-top: 0.5em;
+  padding: 1em 0.8em 1em 0.8em;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+}
+.categoryInner:hover{
+  background-color: lightgray;
+}
 .head{
   display: flex;
   flex-direction: column;

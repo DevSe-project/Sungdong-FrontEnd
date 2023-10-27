@@ -322,7 +322,7 @@ function App() {
         <Route path='/adminMain/printCode' element={<ManageCode />}/>
         <Route path='/adminMain/addProduct' element={<AdminDetail/>}/>
         <Route path='/adminMain/editProduct' element={<AdminProductList data={data}/>}/>
-        <Route path='/adminMain/category' element={<AdminCategory/>}/>
+        <Route path='/adminMain/category' element={<AdminCategory data={data}/>}/>
       </Routes>
     </div>
   );

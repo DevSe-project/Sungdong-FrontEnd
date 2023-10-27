@@ -1,0 +1,146 @@
+.main{
+  display: flex;
+  flex-direction: row;
+  gap: 5%;
+}
+
+.listContainer{ 
+  display: flex;
+  flex-direction: column;
+  margin-top: 5em;
+  gap: 3em;
+  justify-content: center;
+  align-items: center;
+}
+
+.categoryContainer{
+  width: 15em;
+  height: 20em;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid lightgray;
+  justify-content: space-between;
+}
+
+.categoryInner{
+  width: 89.5%;
+  margin-top: 0.5em;
+  padding: 1em 0.8em 1em 0.8em;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+}
+
+.categoryInner:hover{
+  background-color: lightgray;
+}
+
+.buttonBox{
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid lightgray;
+  padding: 1em;
+}
+
+.button{
+  border: 1px solid lightgray;
+  background-color: white;
+  padding: 0.5em;
+  padding-left: 1.5em;
+  padding-right: 1.5em;
+}
+
+
+/* 테이블 */
+.table{
+  width: 60em;
+  border-top: 3px solid black;
+  border-bottom: 1px solid lightgray;
+  text-align: center;
+  align-items: center;
+}
+
+.tableLocation{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.topTitle{
+  width: 80%;
+  margin: 2em;
+  padding-bottom: 1%;
+  margin-left: 10%;
+  margin-right: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 3px solid #cc0000;
+}
+
+.colTable{
+  width: 100%;
+  text-align: center;
+}
+
+.buttonContainer{
+  font-size: 1.2em;
+  margin-top: 1em;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 0.5em;
+}
+
+.question{
+  font-weight: 550;
+  padding-bottom: 1em;
+  margin-bottom: 1em;
+}
+
+.form{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15em;
+}
+
+.formInner{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid lightgray;
+}
+
+.editButton{
+  border: none;
+  border-radius: 3em;
+  background-color: #ff3333;
+  color: white;
+  font-weight: 550;
+  cursor : pointer;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 0.5em;
+  padding: 0.5em;
+}
+
+.selectSize{
+  width: 100%;
+  text-align: center;
+}
+
+.detailView{
+  cursor: pointer;
+}
+
+.detailView:hover{
+  color: gray;
+}
