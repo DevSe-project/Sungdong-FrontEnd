@@ -60,6 +60,15 @@ export function Delivery(props){
       alert("배송 준비 중일때는 조회하실 수 없습니다.")
     }
   }
+  // 게시물 데이터와 페이지 번호 상태 관리    
+  const [currentPage, setCurrentPage] = useState(1);
+  // 현재 페이지에 해당하는 게시물 목록 가져오기
+  const getCurrentPagePosts = () => {
+    const startIndex = (currentPage - 1) * 5; // 한 페이지에 5개씩 표시
+    return filteredItems.length > 0 
+    ? filteredItems.slice(startIndex, startIndex + 5) 
+    : props.orderData && filterOrderData.slice(startIndex, startIndex + 5);
+  };
 
 
   return(
@@ -71,7 +80,7 @@ export function Delivery(props){
       이 검색 되었습니다.
       </h3>}
       {props.orderData ?
-      filteredItems.length > 0 ? filteredItems.map((item, key)=> 
+      getCurrentPagePosts.map((item, key)=> 
       <div key={key} className={styles.deliveryList}>
         <div className={styles.orderDate}>
           <h4>{item.date} 주문</h4>
@@ -112,54 +121,35 @@ export function Delivery(props){
             <button className={styles.button}>교환, 반품 신청</button>
           </div>
         </div>
+        <div className={styles.buttonContainer}>
+          {/* 이전 페이지 */}
+          <button
+          className={styles.button} 
+          onClick={()=> {
+            if(currentPage !== 1){
+              setCurrentPage(currentPage - 1)
+            } else {
+              alert("해당 페이지가 가장 첫 페이지 입니다.")
+            }}}>
+              <i className="far fa-angle-left"/>
+          </button>
+          <div className={styles.button}>
+            {currentPage}
+          </div>
+          {/* 다음 페이지 */}
+          <button
+          className={styles.button}
+          onClick={()=> {
+            if(filteredItems.length > 5){
+              setCurrentPage(currentPage + 1)
+            } else {
+              alert("다음 페이지가 없습니다.")
+            }}}>
+              <i className="far fa-angle-right"/>
+          </button>
+        </div>
       </div>
       )
-    :
-    filterOrderData.map((item, key) =>
-      <div key={key} className={styles.deliveryList}>
-      <div className={styles.orderDate}>
-        <h4>{item.date} 주문</h4>
-        <div onClick={()=>detailOrder(item)} className={styles.orderDetail}>
-          <span style={{fontWeight: '450'}}>주문 상세보기</span> 
-          <i className="far fa-chevron-right"></i>
-        </div>
-      </div>
-      <div className={styles.deliveryStyle}>
-        <div className={styles.deliveryNow}>
-          <div className={styles.deliveryNowMenu}>
-            <h5>{item.delivery.deliveryDate 
-            ? `배송 예정 : ${item.delivery.deliveryDate}`
-            : item.orderState === 0 ? '결제 대기' 
-            : item.orderState === 1 ? '결제 완료'
-            : item.orderState === 2 ? '배송 준비중'
-            : item.orderState === 3 ? '배송 중'
-            : item.orderState === 4 ? '배송 완료' 
-            : '누락된 상품(고객센터 문의)' }</h5>
-            <i style={{color: '#ccc'}} className="fas fa-trash-alt"></i>
-          </div>
-          <div className={styles.deliveryNowItem}>
-            <img className={styles.img} src={item.image.mini} alt="주문상품"/>
-            <div className={styles.deliveryNowInformation}>
-              <span style={{fontWeight: '650'}}>{item.productName}{item.optionSelected && `(${item.optionSelected})`}, {item.cnt}개 </span>
-              <span style={{fontWeight: '650'}}>{item.discount 
-              ? (item.finprice - item.finprice/100*item.discount).toLocaleString()
-              : item.finprice.toLocaleString()}원</span>
-            </div>
-          </div>
-        </div>
-        <div className={styles.deliveryMenu}>
-          <button             
-          onClick={() => {
-            handleDeliveryAPI(item, 111111111111)
-          }}
-          className={styles.button}>
-            배송 조회
-          </button>
-          <button className={styles.button}>교환, 반품 신청</button>
-        </div>
-      </div>
-    </div>
-    )
     : 
     // 스켈레톤 처리
     <div className={styles.colskeleton}>
