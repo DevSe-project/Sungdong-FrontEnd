@@ -38,11 +38,11 @@ export function AdminMenuData(props){
     {
       id: 1,
       title: {
-        item: '판매 관리',
+        item: '판매 및 발송 관리',
       },
       subMenuItems: [
         {
-          item: '결제 완료 주문',
+          item: '결제완료 주문',
           link: '/adminMain/paid',
         },
         {
@@ -60,9 +60,14 @@ export function AdminMenuData(props){
       title: {
         item: '배송 관리',
       },
-      subMenuItems: [{
-        item: '배송 준비 건 관리',
-        link: '/adminMain/delivery',
+      subMenuItems: [
+      {
+        item: '발송 완료건 관리',
+        link: '/adminMain/sended',
+      },
+      {
+        item: '배송 완료건 관리',
+        link: '/adminMain/delivery'
       }],
     },
     {

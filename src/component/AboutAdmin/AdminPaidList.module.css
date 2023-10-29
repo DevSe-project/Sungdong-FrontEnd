@@ -1,0 +1,133 @@
+.sectionSeperate{
+  display: flex;
+  flex-direction: row;
+  gap: 10%;
+}
+
+.main{
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 관련상품 탭 */
+.table{
+  width: 60em;
+  border-top: 3px solid black;
+  border-bottom: 1px solid lightgray;
+  text-align: center;
+  align-items: center;
+}
+
+.tableLocation{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.topTitle{
+  width: 80%;
+  margin: 2em;
+  padding-bottom: 1%;
+  margin-left: 10%;
+  margin-right: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 3px solid #cc0000;
+}
+
+.colTable{
+  width: 100%;
+  text-align: center;
+}
+
+.buttonContainer{
+  font-size: 1.2em;
+  margin-top: 1em;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 0.5em;
+}
+
+.question{
+  font-weight: 550;
+  padding-bottom: 1em;
+  margin-bottom: 1em;
+}
+
+.form{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15em;
+}
+
+.formInner{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid lightgray;
+}
+
+.editButton{
+  border: none;
+  border-radius: 3em;
+  background-color: #ff3333;
+  color: white;
+  font-weight: 550;
+  cursor : pointer;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 0.5em;
+  padding: 0.5em;
+}
+
+.selectSize{
+  width: 100%;
+  text-align: center;
+}
+
+.qnATop{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5em;
+}
+
+.buttonBox{
+  width: 80%;
+  display: flex;
+  margin-left: 10%;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.button{
+  border: 1px solid lightgray;
+  background-color: white;
+  padding: 0.5em;
+  padding-left: 1.5em;
+  padding-right: 1.5em;
+}
+
+.detailView{
+  cursor: pointer;
+}
+
+.detailView:hover{
+  color: gray;
+}
