@@ -1,10 +1,10 @@
-import styles from './AdminPaidList.module.css';
+import styles from './AdminSoldList.module.css';
 import { AdminHeader } from './AdminHeader';
 import { AdminMenuData } from './AdminMenuData';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import React from 'react';
-import { AdminPaidFilter } from './AdminPaidFilter';
+import { AdminSoldFilter } from './AdminSoldFilter';
 export function AdminPaidList(props){
   // 필터된 항목을 저장할 상태 변수
   const [filteredItems, setFilteredItems] = useState([]);
@@ -41,8 +41,26 @@ export function AdminPaidList(props){
       <div className={styles.sectionSeperate}>
         <AdminMenuData/>
         <main className={styles.main}>
-          <AdminPaidFilter/>
+          <AdminSoldFilter/>
           <div className={styles.tableLocation}>
+            <div className={styles.listContainer}>
+              <h4>목록</h4>
+              <div style={{display: 'flex', gap:'1em'}}>
+                <select>
+                  <option>내림차순</option>
+                  <option>오름차순</option>
+                </select>
+                <select>
+                  <option>50개씩 보기</option>
+                  <option>100개씩 보기</option>
+                </select>
+              </div>
+            </div>
+            <div className={styles.manageBox}>
+              <button className={styles.button}>발주확인</button>
+              <button className={styles.button}>발송처리</button>
+              <button className={styles.button}>취소처리</button>
+            </div>
             <table className={styles.table}>
               <thead 
               style={{backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)'}}
@@ -203,33 +221,33 @@ export function AdminPaidList(props){
                 }
               </tbody>
             </table>
-          </div>
-          <div className={styles.buttonContainer}>
-            {/* 이전 페이지 */}
-            <button
-            className={styles.button} 
-            onClick={()=> {
-              if(currentPage !== 1){
-                setCurrentPage(currentPage - 1)
-              } else {
-                alert("해당 페이지가 가장 첫 페이지 입니다.")
-              }}}>
-                <i className="far fa-angle-left"/>
-            </button>
-            <div className={styles.button}>
-              {currentPage}
+            <div className={styles.buttonContainer}>
+              {/* 이전 페이지 */}
+              <button
+              className={styles.button} 
+              onClick={()=> {
+                if(currentPage !== 1){
+                  setCurrentPage(currentPage - 1)
+                } else {
+                  alert("해당 페이지가 가장 첫 페이지 입니다.")
+                }}}>
+                  <i className="far fa-angle-left"/>
+              </button>
+              <div className={styles.button}>
+                {currentPage}
+              </div>
+              {/* 다음 페이지 */}
+              <button
+              className={styles.button}
+              onClick={()=> {
+                if(filteredItems.length > 5){
+                  setCurrentPage(currentPage + 1)
+                } else {
+                  alert("다음 페이지가 없습니다.")
+                }}}>
+                  <i className="far fa-angle-right"/>
+              </button>
             </div>
-            {/* 다음 페이지 */}
-            <button
-            className={styles.button}
-            onClick={()=> {
-              if(filteredItems.length > 5){
-                setCurrentPage(currentPage + 1)
-              } else {
-                alert("다음 페이지가 없습니다.")
-              }}}>
-                <i className="far fa-angle-right"/>
-            </button>
           </div>
         </main>
       </div>

@@ -23,8 +23,24 @@
 .tableLocation{
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  padding: 2em;
+  border: 1px solid lightgray;
+}
+
+.listContainer{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-bottom: 1px solid lightgray;
+  padding: 1em;
+}
+
+.manageBox{
+  display: flex;
+  flex-direction: row;
+  gap: 0.5em;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
 }
 
 .topTitle{

@@ -1,4 +1,4 @@
-import styles from './AdminPaidFilter.module.css';
+import styles from './AdminSoldFilter.module.css';
 export function AdminPaidFilter(){
   const filterList = [
     { label : '조회기간', content : searchTerm()},
