@@ -56,7 +56,7 @@ export function AdminPaidList(props){
                   <th>주문량</th>
                   <th>공급가</th>
                   <th style={{fontWeight: '650'}}>주문가</th>
-                  <th>더보기</th>
+                  <th>주문정보</th>
                 </tr>
               </thead>
               <tbody>
@@ -103,9 +103,12 @@ export function AdminPaidList(props){
                             <th style={{width: '10%'}}>
                               배송사
                             </th>
+                            {item.delivery.deliveryDate
+                            &&
                             <th style={{width: '15%'}}>
                               배송 희망일
                             </th>
+                            }
                             <th style={{width: '10%'}}>
                               옵션
                             </th>
@@ -138,17 +141,20 @@ export function AdminPaidList(props){
                               {item.delivery.deliveryType}
                             </td>
                             <td>
-                              {item.delivery.deliverySelect}
+                              {item.delivery.deliveryType === '일반택배'
+                              ? "대한통운"
+                              : item.delivery.deliveryType === '화물'
+                              ? item.delivery.deliverySelect
+                              : "없음"
+                              }
                             </td>
+                            {item.delivery.deliveryDate
+                            && <td>{item.delivery.deliveryDate}</td>
+                            }
                             <td>
-                              {item.delivery.deliveryDate
-                              ? item.delivery.deliveryDate
-                              : "없음"}
-                            </td>
-                            <td>
-                              {item.option 
+                              {item.optionSelected 
                               ?            
-                              <span>옵션있음</span>
+                              item.optionSelected
                               :
                               <span>옵션없음</span>
                               }
