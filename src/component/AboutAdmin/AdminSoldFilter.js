@@ -1,5 +1,5 @@
 import styles from './AdminSoldFilter.module.css';
-export function AdminPaidFilter(){
+export function AdminSoldFilter(){
   const filterList = [
     { label : '조회기간', content : searchTerm()},
     { label : '주문상태', content : orderStatus()},

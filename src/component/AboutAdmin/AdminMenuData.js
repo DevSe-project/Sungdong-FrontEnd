@@ -43,7 +43,7 @@ export function AdminMenuData(props){
       subMenuItems: [
         {
           item: '결제완료 주문',
-          link: '/adminMain/paid',
+          link: '/adminMain/sold',
         },
         {
           item: '미결제 주문',

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import React from 'react';
 import { AdminSoldFilter } from './AdminSoldFilter';
-export function AdminPaidList(props){
+export function AdminSoldList(props){
   // 필터된 항목을 저장할 상태 변수
   const [filteredItems, setFilteredItems] = useState([]);
 
