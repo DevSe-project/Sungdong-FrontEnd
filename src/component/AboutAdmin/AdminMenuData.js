@@ -62,7 +62,7 @@ export function AdminMenuData(props){
       },
       subMenuItems: [
       {
-        item: '발송 완료건 관리',
+        item: '배송 상태 관리',
         link: '/adminMain/sended',
       },
       {

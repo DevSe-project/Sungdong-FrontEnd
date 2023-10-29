@@ -1,7 +1,7 @@
-/* 관련상품 탭 */
+/* 테이블 탭 */
 .table{
   width: 80%;
-  border-top: 3px solid black;
+  border-top: 3px solid var(--background-color-set);
   border-bottom: 1px solid lightgray;
   text-align: center;
 }
