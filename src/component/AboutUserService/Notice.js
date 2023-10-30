@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import styles from './Notice.module.css';
+import NoticeDetail from './NoticeDetail';
 import { NoticeObj } from '../Data/NoticeObj';
 
 export function Notice() {
   const [list, setList] = useState(NoticeObj);
+  const [isDetailModal, setIsDetailModal] = useState(false);
+  // 글 클릭 > 해당 글의 상세페이지로 이동
 
   return (
     <div className={styles.noticeContainer}>
@@ -32,7 +35,9 @@ export function Notice() {
           </thead>
           <tbody>
             {list.map((item, index) => (
-              <tr key={index} className={styles.row}>
+              <tr key={index} 
+                className={styles.row}
+                onClick={() => { setIsDetailModal(!isDetailModal) }}>
                 <td>{item.id}</td>
                 <td>{item.title}</td>
                 <td>{item.writer}</td>
@@ -43,6 +48,12 @@ export function Notice() {
           </tbody>
         </table>
       </div>
+      { isDetailModal 
+        ?
+        <NoticeDetail/ >
+        :
+        null
+      }
     </div>
   );
 }
