@@ -10,14 +10,17 @@ export function AdminSoldList(props){
   // 필터된 항목을 저장할 상태 변수
   const [filteredItems, setFilteredItems] = useState([]);
 
+  //모달 창 생성 state
   const [modal, setModal] = useState(false);
 
   const navigate = useNavigate();
 
+  //결제완료인 목록만 필터링
   const filteredOrderData = props.orderData && props.orderData.filter((item) => item.orderState === 1);
     
   // 게시물 데이터와 페이지 번호 상태 관리    
   const [currentPage, setCurrentPage] = useState(1);
+
   // 현재 페이지에 해당하는 게시물 목록 가져오기
   const getCurrentPagePosts = () => {
     const startIndex = (currentPage - 1) * 5; // 한 페이지에 5개씩 표시
@@ -31,10 +34,13 @@ export function AdminSoldList(props){
       <div className={styles.sectionSeperate}>
         <AdminMenuData/>
         <main className={styles.main}>
+          {/* 필터 */}
           <AdminSoldFilter/>
+          {/* 목록 */}
           <div className={styles.tableLocation}>
+            {/* 목록 상위 타이틀 */}
             <div className={styles.listContainer}>
-              <h4>목록</h4>
+              <h4 style={{fontWeight: '650'}}>목록</h4>
               <div style={{display: 'flex', gap:'1em'}}>
                 <select>
                   <option>내림차순</option>
@@ -46,11 +52,13 @@ export function AdminSoldList(props){
                 </select>
               </div>
             </div>
+            {/* 발주, 발송, 취소 처리 박스 */}
             <div className={styles.manageBox}>
               <button className={styles.button}>발주확인</button>
               <button className={styles.button}>발송처리</button>
               <button className={styles.button}>취소처리</button>
             </div>
+            {/* 리스트 출력 */}
             <table className={styles.table}>
               <thead 
               style={{backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)'}}
@@ -98,6 +106,7 @@ export function AdminSoldList(props){
                       보기
                     </td>
                   </tr>
+                  {/* 모달 State가 true일때 생성됨 */}
                   {modal && <AdminSoldModal setModal={setModal} item={item}/>}
                   </React.Fragment>
                   ))

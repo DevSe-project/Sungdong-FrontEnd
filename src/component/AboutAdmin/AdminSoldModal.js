@@ -23,6 +23,8 @@ export default function AdminSoldModal(props) {
     };
   }, [props.setModal]);
 
+
+  // 주문자 정보가 들어있는 객체
   const orderInputValue = [
     { 
       id : 0, 
