@@ -20,9 +20,10 @@ export let OrderObj = [
           },
         userId: "", 
         productName :"안전화",
+        optionSelected : "260",
         cnt : 4,
-        price: 150000,
-        finprice: 600000,
+        price: 60000,
+        finprice: 240000,
         orderState: 1,
         date: "2023년 8월 12일",
         order: {

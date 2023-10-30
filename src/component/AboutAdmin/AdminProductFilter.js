@@ -21,8 +21,8 @@ export function AdminProductFilter(){
         </div>
         ))}
         <div style={{display: 'flex', gap: '0.5em'}}>
-          <input type='submit' title='검색'/>
-          <input type='reset'/>
+          <input className={styles.button} type='submit' value='검색'/>
+          <input className={styles.button} type='reset'/>
         </div>
       </form>
     </div>

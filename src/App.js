@@ -50,7 +50,7 @@ import { AdminDetail } from './component/AboutAdmin/AdminDetail';
 import { AdminProductList } from './component/AboutAdmin/AdminProductList';
 import { AdminCategory } from './component/AboutAdmin/AdminCategory';
 import { AdminCategoryEdit } from './component/AboutAdmin/AdminCategoryEdit';
-import { AdminPaidList } from './component/AboutAdmin/AdminPaidList';
+import { AdminSoldList } from './component/AboutAdmin/AdminSoldList';
 
 function App() {
   const navigate = useNavigate();
@@ -326,7 +326,7 @@ function App() {
         <Route path='/adminMain/editProduct' element={<AdminProductList data={data}/>}/>
         <Route path='/adminMain/category' element={<AdminCategory data={data}/>}/>
         <Route path='/adminMain/categoryEdit/:id' element={<AdminCategoryEdit data={data}/>}/>
-        <Route path='/adminMain/paid' element={<AdminPaidList data={data} orderData={orderData}/>}/>
+        <Route path='/adminMain/sold' element={<AdminSoldList data={data} orderData={orderData}/>}/>
       </Routes>
     </div>
   );
