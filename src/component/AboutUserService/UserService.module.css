@@ -11,16 +11,7 @@
 .mainScreen {
     display: flex;
     flex-direction: row;
-    width: 80em;
-}
-
-/* 사이드컨텐츠:세로정렬 */
-.sideBar {
-    width: 200px;
-    display: flex;
-    flex-direction: column;
-    cursor: pointer;
-    width: 12em;
+    width: 70em;
 }
 
 /* 해당 서비스의 컴포넌트가 나타나는 화면 */
