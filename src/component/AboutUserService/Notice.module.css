@@ -1,19 +1,62 @@
+/* Notice.module.css */
+
 .noticeContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   width: 100%;
+  margin: 0 auto;
+  padding: 20px;
 }
 
-.post {
+.header {
   display: flex;
-  justify-content: left;
+  justify-content: space-between;
   align-items: center;
-  width: 100%;
-  font-size: 1.8em;
+}
+
+.title {
+  font-size: 24px;
+  margin: 0;
+  color: #000; /* 글자 색상을 검은색으로 변경 */
+}
+
+.search_label {
+  margin-right: 10px;
   font-weight: bold;
-  padding: 0.8em;
-  margin-left: 3em;
-  border-bottom: 2px solid lightgray;
+  color: #000; /* 글자 색상을 검은색으로 변경 */
+}
+
+.searchContainer {
+  display: flex;
+  align-items: center;
+}
+
+.search_input [type="text"] {
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.listTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th {
+  background-color: #f0f0f0;
+  color: #000;
+  text-align: center;
+  padding: 10px;
+  font-weight: bold;
+}
+
+tr {
+  border-bottom: 1px solid #ccc;
+}
+
+td {
+  padding: 10px;
+}
+
+.row:nth-child(even) {
+  background-color: #f0f0f0;
 }
