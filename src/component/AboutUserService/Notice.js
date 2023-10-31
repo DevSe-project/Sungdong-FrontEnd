@@ -6,13 +6,13 @@ import { NoticeObj } from '../Data/NoticeObj';
 
 export function Notice(props) {
   const [list, setList] = useState(NoticeObj);
-  const [isDetailModal, setIsDetailModal] = useState(false);
+  const [isModal, setIsModal] = useState(false);
   // 글 클릭 > 해당 글의 상세페이지로 이동
 
   // modal escape
   const onClose = (event) => {
     if(event.key === 'Escape' || event.key === 'esc')
-      setIsDetailModal(false);
+      setIsModal(false);
   }
 
   return (
@@ -50,7 +50,7 @@ export function Notice(props) {
             {list.map((item, index) => (
               <tr key={index} 
                 className={styles.row}
-                onClick={() => { setIsDetailModal(!isDetailModal) }}>
+                onClick={() => { setIsModal(!isModal) }}>
                 <td>{item.id}</td>
                 <td>{item.title}</td>
                 <td>{item.writer}</td>
@@ -62,10 +62,14 @@ export function Notice(props) {
         </table>
       </div>
       {/* --------------Detail-Modal-------------- */}
-      {isDetailModal ? 
+      {isModal ? 
         <div className={styles.modalOverlay}>
           <div className={styles.modalContainer}>
-            <NoticeDetail list={list} setList={setList} />
+            <NoticeDetail list={list} 
+              setList={setList} 
+              isModal={isModal}
+              setIsModal={setIsModal}
+              onClose={onClose}/>
           </div>
         </div>
       : null}
