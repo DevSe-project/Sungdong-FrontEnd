@@ -1,15 +1,27 @@
 import React, { useState } from 'react';
 import styles from './Notice.module.css';
+import { TopBanner } from '../AboutHeader/TopBanner';
 import NoticeDetail from './NoticeDetail';
 import { NoticeObj } from '../Data/NoticeObj';
 
-export function Notice() {
+export function Notice(props) {
   const [list, setList] = useState(NoticeObj);
   const [isDetailModal, setIsDetailModal] = useState(false);
   // 글 클릭 > 해당 글의 상세페이지로 이동
 
+  // modal escape
+  const onClose = (event) => {
+    if(event.key === 'Escape' || event.key === 'esc')
+      setIsDetailModal(false);
+  }
+
   return (
+    <div className={styles.body}>
+    {/* TopBanner */}
+    <TopBanner menuOnClick={props.menuOnClick} menu_dynamicStyle={props.menu_dynamicStyle} data={props.data} setData={props.setData} categoryData={props.categoryData} setCategoryData={props.setCategoryData} login={props.login} setLogin={props.setLogin} iconHovered={props.iconHovered} iconMouseEnter={props.iconMouseEnter} iconMouseLeave={props.iconMouseLeave} icon_dynamicStyle={props.icon_dynamicStyle} text_dynamicStyle={props.text_dynamicStyle} category_dynamicStyle={props.category_dynamicStyle} iconOnClick={props.iconOnClick} />
+    
     <div className={styles.noticeContainer}>
+      {/* --------------header-------------- */}
       <div className={styles.header}>
         <h1 className={styles.title}>공지사항</h1>
         <div className={styles.searchContainer}>
@@ -22,6 +34,7 @@ export function Notice() {
           />
         </div>
       </div>
+      {/* --------------listContainer-------------- */}
       <div className={styles.listContainer}>
         <table className={styles.listTable}>
           <thead>
@@ -48,12 +61,15 @@ export function Notice() {
           </tbody>
         </table>
       </div>
-      { isDetailModal 
-        ?
-        <NoticeDetail/ >
-        :
-        null
-      }
+      {/* --------------Detail-Modal-------------- */}
+      {isDetailModal ? 
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContainer}>
+            <NoticeDetail list={list} setList={setList} />
+          </div>
+        </div>
+      : null}
+    </div>
     </div>
   );
 }

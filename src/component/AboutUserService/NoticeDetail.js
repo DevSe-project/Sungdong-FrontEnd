@@ -1,16 +1,12 @@
 import styles from './NoticeDetail.module.css';
 
 
-export default function NoticeDetail() {
+export default function NoticeDetail(props) {
     
 
     return (
-        <div className={styles.modalOveray}>
-            <div className={styles.modalContainer}>
-                <div>
-                    
-                </div>
-            </div>
+        <div className={styles.detailContainer}>
+            제목 : {props.list[0].title}
         </div>
     )
 }
