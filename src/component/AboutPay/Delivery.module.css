@@ -97,7 +97,26 @@
   white-space: nowrap;
 }
 
+
 /* 버튼 CSS */
+
+.buttonContainer{
+  font-size: 1.2em;
+  margin-top: 1em;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 0.5em;
+}
+
+.pageButton{
+  border: 1px solid lightgray;
+  background-color: white;
+  padding: 0.5em;
+  padding-left: 1.5em;
+  padding-right: 1.5em;
+}
+
 .button{
   color: black;
   padding: 0.6em;

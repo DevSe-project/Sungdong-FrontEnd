@@ -73,11 +73,12 @@ export function AdminSoldList(props){
                   <th style={{width:'10%'}}>주문량</th>
                   <th style={{width:'10%'}}>공급가</th>
                   <th style={{width:'10%', fontWeight: '650'}}>주문가</th>
-                  <th style={{width:'10%', fontWeight: '650'}}>주문자 정보</th>
+                  <th style={{width:'13%', fontWeight: '650'}}>주문자 정보</th>
                 </tr>
               </thead>
               <tbody>
                 {props.orderData 
+                ? filteredOrderData.length > 0
                 ? getCurrentPagePosts().map((item, index)=> (
                 <React.Fragment key={index}>
                   <tr className={styles.list}>
@@ -110,7 +111,8 @@ export function AdminSoldList(props){
                   {modal && <AdminSoldModal setModal={setModal} item={item}/>}
                   </React.Fragment>
                   ))
-                : <tr><td>로딩중</td></tr>
+                : <tr><td colSpan="10">불러들일 데이터가 없습니다.</td></tr>
+                : <tr><td colSpan="10">로딩중</td></tr>
                 }
               </tbody>
             </table>

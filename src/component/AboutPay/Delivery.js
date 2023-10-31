@@ -67,7 +67,7 @@ export function Delivery(props){
     const startIndex = (currentPage - 1) * 5; // 한 페이지에 5개씩 표시
     return filteredItems.length > 0 
     ? filteredItems.slice(startIndex, startIndex + 5) 
-    : props.orderData && filterOrderData.slice(startIndex, startIndex + 5);
+    : props.orderData && filterOrderData.slice(startIndex, startIndex + 5)
   };
 
 
@@ -80,7 +80,7 @@ export function Delivery(props){
       이 검색 되었습니다.
       </h3>}
       {props.orderData ?
-      getCurrentPagePosts.map((item, key)=> 
+      getCurrentPagePosts().map((item, key)=> 
       <div key={key} className={styles.deliveryList}>
         <div className={styles.orderDate}>
           <h4>{item.date} 주문</h4>
@@ -121,33 +121,6 @@ export function Delivery(props){
             <button className={styles.button}>교환, 반품 신청</button>
           </div>
         </div>
-        <div className={styles.buttonContainer}>
-          {/* 이전 페이지 */}
-          <button
-          className={styles.button} 
-          onClick={()=> {
-            if(currentPage !== 1){
-              setCurrentPage(currentPage - 1)
-            } else {
-              alert("해당 페이지가 가장 첫 페이지 입니다.")
-            }}}>
-              <i className="far fa-angle-left"/>
-          </button>
-          <div className={styles.button}>
-            {currentPage}
-          </div>
-          {/* 다음 페이지 */}
-          <button
-          className={styles.button}
-          onClick={()=> {
-            if(filteredItems.length > 5){
-              setCurrentPage(currentPage + 1)
-            } else {
-              alert("다음 페이지가 없습니다.")
-            }}}>
-              <i className="far fa-angle-right"/>
-          </button>
-        </div>
       </div>
       )
     : 
@@ -164,6 +137,33 @@ export function Delivery(props){
       </div>
     </div>
     }
+    <div className={styles.buttonContainer}>
+      {/* 이전 페이지 */}
+      <button
+        className={styles.pageButton} 
+        onClick={()=> {
+          if(currentPage !== 1){
+            setCurrentPage(currentPage - 1)
+          } else {
+            alert("해당 페이지가 가장 첫 페이지 입니다.")
+      }}}>
+      <i className="far fa-angle-left"/>
+      </button>
+      <div className={styles.pageButton}>
+        {currentPage}
+      </div>
+        {/* 다음 페이지 */}
+      <button
+      className={styles.pageButton}
+      onClick={()=> {
+        if(filteredItems.length > 5){
+          setCurrentPage(currentPage + 1)
+        } else {
+          alert("다음 페이지가 없습니다.")
+        }}}>
+          <i className="far fa-angle-right"/>
+      </button>
     </div>
+  </div>
   )
 }
