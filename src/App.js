@@ -19,7 +19,6 @@ import Join from './component/AboutLogin/Join';
 import { Login } from './component/AboutLogin/Login';
 
 // 고객서비스 관련
-import { UserService } from './component/AboutUserService/UserService';
 import { Notice } from './component/AboutUserService/Notice';
 import { Ask } from './component/AboutUserService/Ask';
 
@@ -301,11 +300,9 @@ function App() {
         <Route path='/join' element={<Join userData={userData} setUserData={setUserData} />} >
         </Route>
 
-        {/* 문의하기 */}
-        <Route path='/userservice' element={<UserService  decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} data={data} setData={setData} categoryData={categoryData} setCategoryData={setCategoryData} userData={userData} setUserData={setUserData} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />}>
-          <Route path='notice' element={<Notice />} />
-          <Route path='ask' element={<Ask />} />
-        </Route>
+        {/* 고객센터 */}
+        <Route path='/userservice/notice' element={<Notice decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} data={data} setData={setData} categoryData={categoryData} setCategoryData={setCategoryData} userData={userData} setUserData={setUserData} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />} />
+        <Route path='/userservice/ask' element={<Ask />} />
 
         {/* 마이페이지 */}
         <Route path='/mypages' element={<MyPage decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} data={data} setData={setData} categoryData={categoryData} setCategoryData={setCategoryData} userData={userData} setUserData={setUserData} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />}>
