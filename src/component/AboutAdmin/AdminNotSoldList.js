@@ -2,11 +2,17 @@ import { AdminHeader } from './AdminHeader';
 import { AdminMenuData } from './AdminMenuData';
 import styles from './AdminNotSoldList.module.css';
 import React, { useState } from 'react';
+import AdminSoldModal from './AdminSoldModal';
+import { useNavigate } from 'react-router-dom';
 export function AdminNotSoldList(props){
-    // 필터된 항목을 저장할 상태 변수
-    const [filteredItems, setFilteredItems] = useState([]);
+  // 필터된 항목을 저장할 상태 변수
+  const [filteredItems, setFilteredItems] = useState([]);
 
-    const filteredOrderData = props.orderData && props.orderData.filter((item) => item.orderState === 0);
+  //모달 창 생성 state
+  const [modal, setModal] = useState(false);
+
+  //State가 0인 주문 데이터들만 필터링.
+  const filteredOrderData = props.orderData && props.orderData.filter((item) => item.orderState === 0);
   // 게시물 데이터와 페이지 번호 상태 관리    
   const [currentPage, setCurrentPage] = useState(1);
   // 현재 페이지에 해당하는 게시물 목록 가져오기
@@ -71,6 +77,8 @@ export function AdminNotSoldList(props){
                     보기
                   </td>
                 </tr>
+                {/* 모달 State가 true일때 생성됨 */}
+                {modal && <AdminSoldModal setModal={setModal} item={item}/>}
                 </React.Fragment>
                 ))
               : <tr><td colSpan="10">불러들일 데이터가 없습니다.</td></tr>
