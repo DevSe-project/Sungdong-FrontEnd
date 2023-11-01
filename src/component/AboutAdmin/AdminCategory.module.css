@@ -4,10 +4,17 @@
   gap: 10%;
 }
 
+.bodyHeader{
+  width: 100%;
+  text-align: left;
+  padding: 5px;
+  border-bottom: 3px solid var(--background-color-set);
+}
+
 .listContainer{ 
   display: flex;
   flex-direction: column;
-  margin-top: 5em;
+  margin-top: 3em;
   gap: 3em;
   justify-content: center;
   align-items: center;

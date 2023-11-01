@@ -1,14 +1,24 @@
-.sectionSeperate{
+/* 헤드라인 및 바디 기본설정 */
+.main{
   display: flex;
   flex-direction: row;
   gap: 10%;
 }
 
-.main{
-  margin: 0;
-  padding: 0;
+.container{ 
   display: flex;
   flex-direction: column;
+  margin-top: 3em;
+  gap: 3em;
+  justify-content: center;
+  align-items: center;
+}
+
+.bodyHeader{
+  width: 100%;
+  text-align: left;
+  padding: 5px;
+  border-bottom: 3px solid var(--background-color-set);
 }
 
 /* 관련상품 탭 */

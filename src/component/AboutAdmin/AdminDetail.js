@@ -34,9 +34,12 @@ export function AdminDetail(props) {
   return(
     <div>
       <AdminHeader/>
-      <div className={styles.sectionSeperate}>
+      <div className={styles.main}>
         <AdminMenuData/>
-        <main className={styles.main}>
+        <main className={styles.container}>
+          <div className={styles.bodyHeader}>
+            <h1>상품 등록</h1>
+          </div>
         <div style={{display: 'flex', gap: '1em', marginTop: '1em', alignItems: 'center'}}>
           <div className={styles.categoryContainer}>
             <div className={styles.categoryInner}>

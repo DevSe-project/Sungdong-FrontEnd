@@ -32,9 +32,12 @@ export function AdminRefund(props){
     return(
       <div>
         <AdminHeader/>
-        <div className={styles.sectionSeperate}>
+        <div className={styles.main}>
           <AdminMenuData/>
-          <main className={styles.main}>
+          <main className={styles.container}>
+            <div className={styles.bodyHeader}>
+              <h1>반품 관리</h1>
+            </div>
             {/* 필터 */}
             <AdminRefundFilter/>
             {/* 목록 */}
@@ -64,6 +67,7 @@ export function AdminRefund(props){
                 <thead 
                 style={{backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)'}}
                 >
+                  {/* 헤드 */}
                   <tr>
                     <th><input type='checkbox'/></th>
                     <th>이미지</th>

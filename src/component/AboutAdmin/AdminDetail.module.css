@@ -1,17 +1,25 @@
-.sectionSeperate{
+.main{
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  gap: 10%;
 }
-.main{
-  width: 100%;
-  margin: 0;
-  padding: 0;
+
+.container{ 
   display: flex;
   flex-direction: column;
-  text-align: center;
+  margin-top: 3em;
+  gap: 3em;
+  justify-content: center;
   align-items: center;
 }
+
+.bodyHeader{
+  width: 100%;
+  text-align: left;
+  padding: 5px;
+  border-bottom: 3px solid var(--background-color-set);
+}
+
 .categoryContainer{
   width: 15em;
   height: 20em;

@@ -8,7 +8,7 @@ export function AdminRefundFilter(){
   return(
     <div style={{width: '100%'}}>
       <form className={styles.main}>
-        {filterList.map((item, index) => (
+        {filterList.map((item, index) => ( // 필터의 label 값이랑 content 값 출력
         <div className={styles.container}>
           <div className={styles.label}>
             {item.label}
@@ -18,6 +18,7 @@ export function AdminRefundFilter(){
           </div>
         </div>
         ))}
+        {/* 필터 검색 및 초기화 박스 */}
         <div style={{display: 'flex', gap: '0.5em'}}>
           <input className={styles.button} type='submit' value='검색'/>
           <input className={styles.button} type='reset'/>
@@ -27,6 +28,7 @@ export function AdminRefundFilter(){
   )
 }
 
+// 검색 옵션
 function searchTerm(){
   return (
     <div style={{display: 'flex', gap: '1em'}}>
@@ -45,7 +47,7 @@ function searchTerm(){
     </div>
   )
 }
-
+// 반품 상태 옵션
 function refundStatus(){
   return(
     <div style={{display: 'flex', gap: '0.5em'}}>
@@ -62,7 +64,7 @@ function refundStatus(){
     </div>
   )
 }
-
+// 상세 조건 옵션
 function detailFilter(){
   return(
     <div style={{display: 'flex', gap: '1em'}}>

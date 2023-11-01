@@ -1,21 +1,30 @@
-.sectionSeperate{
+/* 헤드라인 및 바디 기본설정 */
+.main{
   display: flex;
   flex-direction: row;
   gap: 10%;
 }
 
-.main{
-  margin: 0;
-  padding: 0;
+.container{ 
   display: flex;
   flex-direction: column;
+  margin-top: 3em;
+  gap: 3em;
+  justify-content: center;
+  align-items: center;
+}
+
+.bodyHeader{
+  width: 100%;
+  text-align: left;
+  padding: 5px;
+  border-bottom: 3px solid var(--background-color-set);
 }
 
 /* 관련상품 탭 */
 .table{
-  margin-top: 2em;
   width: 60em;
-  border-top: 3px solid var(--background-color-set);
+  border-top: 3px solid gray;
   border-bottom: 1px solid lightgray;
   text-align: center;
   align-items: center;
@@ -24,16 +33,8 @@
 .tableLocation{
   display: flex;
   flex-direction: column;
-  padding: 2em;
-  border: 1px solid lightgray;
-}
-
-.listContainer{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  border-bottom: 1px solid lightgray;
-  padding: 1em;
+  justify-content: center;
+  align-items: center;
 }
 
 .manageBox{
