@@ -37,7 +37,7 @@
   justify-content: center;
   align-items: center;
   width: 80%;
-  border-top: 3px solid var(--background-color-set);
+  border-top: 3px solid gray;
   border-bottom: 1px solid lightgray;
 }
 
