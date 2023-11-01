@@ -51,7 +51,7 @@ export function AdminMenuData(props){
         },
         {
           item: '반품 관리',
-          link: '/adminMain/return'
+          link: '/adminMain/refund'
         }
       ],
     },
