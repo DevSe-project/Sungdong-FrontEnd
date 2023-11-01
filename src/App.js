@@ -327,7 +327,7 @@ function App() {
         <Route path='/adminMain/categoryEdit/:id' element={<AdminCategoryEdit data={data}/>}/>
         <Route path='/adminMain/sold' element={<AdminSoldList data={data} orderData={orderData}/>}/>
         <Route path='/adminMain/yetPay' element={<AdminNotSoldList orderData={orderData} />}/>
-        <Route path='/adminMain/refund' element={<AdminRefund/>}/>
+        <Route path='/adminMain/refund' element={<AdminRefund orderData={orderData}/>}/>
       </Routes>
     </div>
   );
