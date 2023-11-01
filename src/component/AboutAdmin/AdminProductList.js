@@ -38,9 +38,12 @@ export function AdminProductList(props){
   return(
     <div>
       <AdminHeader/>
-      <div className={styles.body}>
+      <div className={styles.main}>
         <AdminMenuData/>
-        <div className={styles.main}>
+        <div className={styles.container}>
+          <div className={styles.bodyHeader}>
+            <h1>상품 조회</h1>
+          </div>
           <AdminProductFilter/>
           <div className={styles.tableLocation}>
             <table className={styles.table}>

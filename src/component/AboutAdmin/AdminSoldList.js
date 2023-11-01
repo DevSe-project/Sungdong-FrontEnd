@@ -31,9 +31,12 @@ export function AdminSoldList(props){
   return(
     <div>
       <AdminHeader/>
-      <div className={styles.sectionSeperate}>
+      <div className={styles.main}>
         <AdminMenuData/>
-        <main className={styles.main}>
+        <main className={styles.container}>
+          <div className={styles.bodyHeader}>
+            <h1>결제완료 주문 및 발송 처리</h1>
+          </div>
           {/* 필터 */}
           <AdminSoldFilter/>
           {/* 목록 */}

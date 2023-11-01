@@ -26,6 +26,9 @@ export function AdminCategory(props){
       <div className={styles.main}>
         <AdminMenuData/>
         <div className={styles.listContainer}>
+          <div className={styles.bodyHeader}>
+            <h1>카테고리 관리</h1>
+          </div>
           {/* 카테고리 목록 추가, 변경, 삭제 (대분류) -> (중분류) -> (소분류) */}
           <div style={{display: 'flex', gap: '2em'}}>
             <div className={styles.categoryContainer}>

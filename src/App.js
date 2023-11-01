@@ -51,6 +51,7 @@ import { AdminCategory } from './component/AboutAdmin/AdminCategory';
 import { AdminCategoryEdit } from './component/AboutAdmin/AdminCategoryEdit';
 import { AdminSoldList } from './component/AboutAdmin/AdminSoldList';
 import { AdminNotSoldList } from './component/AboutAdmin/AdminNotSoldList';
+import { AdminRefund } from './component/AboutAdmin/AdminRefund';
 
 function App() {
   const navigate = useNavigate();
@@ -326,6 +327,7 @@ function App() {
         <Route path='/adminMain/categoryEdit/:id' element={<AdminCategoryEdit data={data}/>}/>
         <Route path='/adminMain/sold' element={<AdminSoldList data={data} orderData={orderData}/>}/>
         <Route path='/adminMain/yetPay' element={<AdminNotSoldList orderData={orderData} />}/>
+        <Route path='/adminMain/refund' element={<AdminRefund orderData={orderData}/>}/>
       </Routes>
     </div>
   );

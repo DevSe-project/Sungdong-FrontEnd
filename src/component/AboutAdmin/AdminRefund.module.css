@@ -1,17 +1,11 @@
+/* 헤드라인 및 바디 기본설정 */
 .main{
   display: flex;
   flex-direction: row;
   gap: 10%;
 }
 
-.bodyHeader{
-  width: 99%;
-  text-align: left;
-  padding: 5px;
-  border-bottom: 3px solid var(--background-color-set);
-}
-
-.listContainer{ 
+.container{ 
   display: flex;
   flex-direction: column;
   margin-top: 3em;
@@ -20,46 +14,14 @@
   align-items: center;
 }
 
-.categoryContainer{
-  width: 15em;
-  height: 20em;
-  display: flex;
-  flex-direction: column;
-  border: 1px solid lightgray;
-  justify-content: space-between;
-}
-
-.categoryInner{
-  width: 89.5%;
-  margin-top: 0.5em;
-  padding: 1em 0.8em 1em 0.8em;
+.bodyHeader{
+  width: 100%;
   text-align: left;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
+  padding: 5px;
+  border-bottom: 3px solid var(--background-color-set);
 }
 
-.categoryInner:hover{
-  background-color: lightgray;
-}
-
-.buttonBox{
-  display: flex;
-  justify-content: space-between;
-  border-top: 1px solid lightgray;
-  padding: 1em;
-}
-
-.button{
-  border: 1px solid lightgray;
-  background-color: white;
-  padding: 0.5em;
-  padding-left: 1.5em;
-  padding-right: 1.5em;
-}
-
-
-/* 테이블 */
+/* 관련상품 탭 */
 .table{
   width: 60em;
   border-top: 3px solid var(--background-color-set);
@@ -71,8 +33,24 @@
 .tableLocation{
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  padding: 2em;
+  border: 1px solid lightgray;
+}
+
+.listContainer{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-bottom: 1px solid lightgray;
+  padding: 1em;
+}
+
+.manageBox{
+  display: flex;
+  flex-direction: row;
+  gap: 0.5em;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
 }
 
 .topTitle{
@@ -142,6 +120,34 @@
 .selectSize{
   width: 100%;
   text-align: center;
+}
+
+.qnATop{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5em;
+}
+
+.buttonBox{
+  width: 80%;
+  display: flex;
+  margin-left: 10%;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.button{
+  border: 1px solid lightgray;
+  background-color: white;
+  padding: 0.5em;
+  padding-left: 1.5em;
+  padding-right: 1.5em;
 }
 
 .detailView{
