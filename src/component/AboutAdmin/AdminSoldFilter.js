@@ -1,3 +1,4 @@
+
 import styles from './AdminSoldFilter.module.css';
 export function AdminSoldFilter(){
   const filterList = [
@@ -9,6 +10,9 @@ export function AdminSoldFilter(){
   return(
     <div style={{width: '100%'}}>
       <form className={styles.main}>
+        <div style={{ width: '90%', textAlign: 'left', padding: '1.5em', borderBottom: '1px solid lightgray'}}>
+          <h4 style={{fontSize: '1.2em', fontWeight: '650'}}>필터</h4>
+        </div>
         {filterList.map((item, index) => (
         <div className={styles.container}>
           <div className={styles.label}>

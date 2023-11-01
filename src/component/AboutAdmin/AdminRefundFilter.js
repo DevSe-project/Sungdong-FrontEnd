@@ -8,6 +8,9 @@ export function AdminRefundFilter(){
   return(
     <div style={{width: '100%'}}>
       <form className={styles.main}>
+        <div style={{ width: '90%', textAlign: 'left', padding: '1.5em', borderBottom: '1px solid lightgray'}}>
+          <h4 style={{fontSize: '1.2em', fontWeight: '650'}}>필터</h4>
+        </div>
         {filterList.map((item, index) => ( // 필터의 label 값이랑 content 값 출력
         <div className={styles.container}>
           <div className={styles.label}>

@@ -14,7 +14,7 @@
 }
 
 .bodyHeader{
-  width: 100%;
+  width: 99%;
   text-align: left;
   padding: 5px;
   border-bottom: 3px solid var(--background-color-set);
