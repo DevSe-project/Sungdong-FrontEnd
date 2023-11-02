@@ -87,12 +87,18 @@ export function AdminMenuData(props){
     {
       id: 4,
       title: {
-        item: '문의 관리',
+        item: '고객센터',
       },
-      subMenuItems: [{
+      subMenuItems: [
+        {
+          item: '공지사항',
+          link: '/adminMain/notice'
+        },
+        {
         item: '문의 게시판',
         link: '/adminMain/ask'
-      }],
+        },
+      ],
     },
     {
       id: 5,
