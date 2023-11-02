@@ -52,6 +52,7 @@ import { AdminCategoryEdit } from './component/AboutAdmin/AdminCategoryEdit';
 import { AdminSoldList } from './component/AboutAdmin/AdminSoldList';
 import { AdminNotSoldList } from './component/AboutAdmin/AdminNotSoldList';
 import { AdminRefund } from './component/AboutAdmin/AdminRefund';
+import AdminNotice from './component/AboutAdmin/AdminNotice';
 
 function App() {
   const navigate = useNavigate();
@@ -322,8 +323,13 @@ function App() {
         <Route path='/adminMain' element={<AdminMain />} />
         {/* 관리자페이지 - 코드관리 */}
         <Route path='/adminMain/printCode' element={<ManageCode />}/>
+        {/* 관리자페이지 - 고객센터 */}
+        <Route path='/adminMain/customerCenter'>
+          <Route path='/adminMain/customerCenter/notice'element={<AdminNotice/>}/>
+          <Route path='/adminMain/customerCenter/ask' element={<AdminAskManage/>}/>
+        </Route>
         {/* 관리자페이지 - 상품등록 */}
-        <Route path='/adminMain/addProduct' element={<AdminDetail/>}/>
+        <Route path='/adminMain/addProduct' element={<AdminDetail/>} />
         {/* 관리자페이지 - 상품수정 */}
         <Route path='/adminMain/editProduct' element={<AdminProductList data={data}/>}/>
         {/* 관리자페이지 - 카테고리 */}

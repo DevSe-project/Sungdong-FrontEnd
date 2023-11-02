@@ -92,11 +92,11 @@ export function AdminMenuData(props){
       subMenuItems: [
         {
           item: '공지사항',
-          link: '/adminMain/notice'
+          link: '/adminMain/customerCenter/notice'
         },
         {
         item: '문의 게시판',
-        link: '/adminMain/ask'
+        link: '/adminMain/customerCenter/ask'
         },
       ],
     },
