@@ -318,15 +318,23 @@ function App() {
           element={<TodayNewsInner menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} data={data} setData={setData} categoryData={categoryData} setCategoryData={setCategoryData} login={login} setLogin={setLogin} todayTopicData={todayTopicData} setTodayTopicData={setTodayTopicData} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />} />
         <Route path='/event' element={<Event menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} data={data} setData={setData} categoryData={categoryData} setCategoryData={setCategoryData} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />} />
 
-        {/* 관리자페이지 */}
+        {/* 관리자페이지 - 메인 */}
         <Route path='/adminMain' element={<AdminMain />} />
+        {/* 관리자페이지 - 코드관리 */}
         <Route path='/adminMain/printCode' element={<ManageCode />}/>
+        {/* 관리자페이지 - 상품등록 */}
         <Route path='/adminMain/addProduct' element={<AdminDetail/>}/>
+        {/* 관리자페이지 - 상품수정 */}
         <Route path='/adminMain/editProduct' element={<AdminProductList data={data}/>}/>
+        {/* 관리자페이지 - 카테고리 */}
         <Route path='/adminMain/category' element={<AdminCategory data={data}/>}/>
+        {/* 관리자페이지 - 카테고리 수정 */}
         <Route path='/adminMain/categoryEdit/:id' element={<AdminCategoryEdit data={data}/>}/>
+        {/* 관리자페이지 - 주문 관리*/}
         <Route path='/adminMain/sold' element={<AdminSoldList data={data} orderData={orderData}/>}/>
+        {/* 관리자페이지 - 미결제 주문 관리 */}
         <Route path='/adminMain/yetPay' element={<AdminNotSoldList orderData={orderData} />}/>
+        {/* 관리자페이지 - 반품 관리 */}
         <Route path='/adminMain/refund' element={<AdminRefund orderData={orderData}/>}/>
       </Routes>
     </div>
