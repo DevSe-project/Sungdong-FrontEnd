@@ -10,7 +10,7 @@
   background-color: #ffffff;
   width: 100%;
   max-width: 40em;
-  height: 30em;
+  height: 40em;
   max-height: 90%;
   /* 모달 내용이 화면을 넘지 않도록 최대 높이 설정 */
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
@@ -72,7 +72,7 @@
 
 .textarea {
   padding: 10px;
-  height: 20em;
+  height: 30em;
 }
 
 .printPost {
@@ -83,14 +83,13 @@
   text-align: center;
   margin-top: 1.5em;
   width: 100%;
-  height: 5em;
+  height: 40px;
   border-radius: 10px;
   /* 수정된 부분 */
   color: white;
   font-size: 20px;
   font-weight: bold;
 }
-
 .printPost:hover {
   background-color: #fc4040;
   cursor: pointer;

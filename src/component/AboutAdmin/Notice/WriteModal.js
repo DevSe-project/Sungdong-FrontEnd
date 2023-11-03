@@ -1,10 +1,13 @@
 import styles from "./WriteModal.module.css";
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
+
+
+// ----------------React-Quill----------------//
 import ReactQuill from 'react-quill-2';
 import 'react-quill/dist/quill.snow.css'; // 에디터 스타일
 import Quill from 'quill';
 
-// ReactQuill을 사용하기 전에 Quill 모듈을 확장합니다.
+// ReactQuill을 사용하기 전에 Quill 모듈을 확장 설정함.
 const Break = Quill.import('blots/break');
 Break.blotName = 'break';
 Break.tagName = 'br';
@@ -24,25 +27,28 @@ const modules = {
         matchVisual: false,
     }
 };
+// ----------------React-Quill---------------- //
+
 
 export default function WrtieModal(props) {
 
     // esc키를 누르면 모달창 닫기.
     useEffect(() => {
-        const onClose = (event) => {
-            if (event.key === 'Escape') {
-                props.closeWriteModal();
-            }
+        const handleEscapeKey = (event) => {
+          if (event.key === 'Escape' && props.modal && props.modalName != '') {
+            props.closeWriteModal();
+          }
         };
-
-        window.addEventListener('keydown', onClose);
-
+    
+        window.addEventListener('keydown', handleEscapeKey);
+    
         return () => {
-            window.removeEventListener('keydown', onClose);
+          window.removeEventListener('keydown', handleEscapeKey);
         };
-    }, []);
+      }, [props.modal, props.closeWriteModal]);
 
-    // 선택된 index가 있을 때만 렌더링
+    
+
     return (
         <div className={styles.modalContainer}>
             {/* 종료 버튼 */}
@@ -64,7 +70,7 @@ export default function WrtieModal(props) {
                         }))
                     }} required />
                 </div>
-                {/* 작성일과 작성자 */}
+                {/* 작성자 */}
                 <div className={styles.writer}>
                     작성자 : <input className={styles.inputWriter} type="text" value={props.tempList.writer} onChange={(e) => {
                         props.setTempList((prevdata) => ({
@@ -91,8 +97,12 @@ export default function WrtieModal(props) {
                         생성되어 줄 바꿈을 표현하지 않습니다. */}
                 </div>
             </div>
+
             {/* 첨부파일 */}
-            <input type="file" value={props.tempList.file} />
+            <div>
+                <input type="file" onChange={ () => {} } />
+            </div>
+
             {/* 등록 버튼 */}
             <div className={styles.printPost} onClick={() => { props.addPost() }}>
                 <div>등록</div>

@@ -10,6 +10,32 @@ export default function (props) {
   const [modal, setModal] = useState(false); // modal on / off
   const [modalName, setModalName] = useState(''); // what is modal?
   const [selectedItemIndex, setSelectedItemIndex] = useState(null); // 해당 인덱스의 모달을 찾기 위함
+  /* 추후
+  const [selectedFile, setSelectedFile] = useState(null); // 파일 업로드 state
+
+  const handleFileChange = (e) => {
+      const file = e.target.files[0];
+      setSelectedFile(file);
+  };
+
+  const handleUpload = () => {
+      if (selectedFile) {
+          // 파일 업로드 로직을 구현합니다.
+          // 여기에서 서버로 파일을 업로드하거나 다른 작업을 수행할 수 있습니다.
+          // 선택한 파일은 selectedFile 변수에 있습니다.
+          // 예를 들어, axios를 사용하여 서버로 파일을 업로드하는 방법:
+          // const formData = new FormData();
+          // formData.append('file', selectedFile);
+          // axios.post('/upload', formData)
+          //   .then(response => {
+          //     // 파일 업로드 성공 시 처리
+          //   })
+          //   .catch(error => {
+          //     // 업로드 실패 시 처리
+          //   });
+      }
+  };
+  */
 
   // 현재 시간을 얻기 위해 Date 객체 생성
   const currentDate = new Date();
@@ -45,6 +71,7 @@ export default function (props) {
       file: '',
     });
     setModal(false);
+    setModalName('');
   }
 
   // 글 담기
@@ -83,6 +110,7 @@ export default function (props) {
       });
 
       setModal(false);
+      setModalName('');
     } else {
       alert("제목, 작성자 명을 2글자 이상, 본문 내용을 10글자 이상 작성하십시오.");
     }
@@ -156,7 +184,7 @@ export default function (props) {
           modal && modalName == 'edit' ?
             <EditModal tempList={tempList} setTempList={setTempList} selectedItemIndex={setSelectedItemIndex} setSelectedItemIndex={setSelectedItemIndex} />
             :
-            null
+            ''
       }
 
     </div>
