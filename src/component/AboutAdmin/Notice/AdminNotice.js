@@ -4,7 +4,6 @@ import { AdminHeader } from "../AdminHeader";
 import { AdminMenuData } from "../AdminMenuData";
 import WrtieModal from "./WriteModal";
 import EditModal from "./EditModal";
-import { NoticeObj } from "../../Data/NoticeObj";
 
 export default function (props) {
   // State
@@ -59,7 +58,7 @@ export default function (props) {
   })
 
   const addPost = () => {
-    const { id, title, writer, contents } = tempList; // 
+    const { title, writer, contents } = tempList; // 입력 값들을 자체 할당
     const isInputValid = title.length > 2 && writer.length > 2 && contents.length > 10; // 입력 조건 부여
     // 조건에 부합한다면
     if (isInputValid) {
@@ -93,12 +92,6 @@ export default function (props) {
 
   // 글 클릭 시 해당 글 수정할 수 있는 모달 창 생성
 
-
-  // 글 삭제 (삭제 여부 묻기)
-  const removePost = () => {
-
-  }
-
   return (
     <div>
       <AdminHeader />
@@ -115,10 +108,10 @@ export default function (props) {
             {/* 뭐 넣을지 미정 */}
             <div className={styles.none_block}>
               <div className={styles.none_title}>
-                뭐 넣을까
+                none title
               </div>
               <div className={styles.none_code}>
-                아직 미정
+                none contents
               </div>
             </div>
           </div>
@@ -128,11 +121,11 @@ export default function (props) {
             <div className={styles.noticeList_title}>글 목록</div>
             {/* List */}
             {props.list.map((item, index) => (
-              <div className={styles.noticeList_list} onClick={() => { onOpen() }}> {/* 선택 모달의 key를 글 수정으로 지정*/}
+              <div className={styles.noticeList_list} onClick={() => { onOpen(item, index) }}> {/* 선택 모달의 key를 글 수정으로 지정*/}
                 {/* No */}
                 <div className={styles.noticeList_no}
                   key={index}>
-                  {item.id}
+                  {index + 1}
                 </div>
                 {/* Code */}
                 <div className={styles.noticeList_code}
@@ -142,7 +135,12 @@ export default function (props) {
                 {/* Del */}
                 <div>
                   <div className={styles.notice_del}
-                    onClick={() => { }}>
+                    onClick={() => {
+                        const data = [...props.list];
+                        data.splice(index, 1);
+                        props.setList(data);
+                      }
+                     }>
                     삭제
                   </div>
                 </div>
