@@ -9,6 +9,7 @@ import { TodayTopicPostObj } from './component/Data/TodayTopicPostObj';
 import { UserData } from './component/Data/UserData';
 import { CategoryDataObj } from './component/Data/CategoryDataObj';
 import { Category } from './component/AboutHeader/Category';
+import { NoticeObj } from './component/Data/NoticeObj';
 
 // 메인페이지
 import MainPage from './MainPage';
@@ -41,7 +42,7 @@ import { TodayNewsInner } from './component/AboutCompany/TodayNewsInner';
 import { Event } from './component/AboutCompany/Event'
 import { AdminMain } from './component/AboutAdmin/AdminMain';
 import MyPage from './component/AboutMyPage/MyPage';
-import ManageCode from './component/AboutAdmin/ManageCode';
+import ManageCode from './component/AboutAdmin/Code/ManageCode';
 
 import axios from 'axios';
 import UserContext, { UserProvider } from './component/AboutContext/UserContext';
@@ -52,7 +53,8 @@ import { AdminCategoryEdit } from './component/AboutAdmin/AdminCategoryEdit';
 import { AdminSoldList } from './component/AboutAdmin/AdminSoldList';
 import { AdminNotSoldList } from './component/AboutAdmin/AdminNotSoldList';
 import { AdminRefund } from './component/AboutAdmin/AdminRefund';
-import AdminNotice from './component/AboutAdmin/AdminNotice';
+import AdminNotice from './component/AboutAdmin/Notice/AdminNotice';
+import AdminContact from './component/AboutAdmin/Contact/AdminContact';
 
 function App() {
   const navigate = useNavigate();
@@ -70,6 +72,7 @@ function App() {
   const [orderList, setOrderList] = useState([]);
   const [todayTopicData, setTodayTopicData] = useState();
   const [login, setLogin] = useState(false);
+  const [postList, setPostList] = useState([]);
 
   // 세션 스토리지에서 데이터를 가져와서 복호화(백엔드에서 꽁꽁 숨기기 필요)
   const encryptionKey = 'bigdev2023!';
@@ -176,6 +179,7 @@ function App() {
       setUserData(UserData);
       setTodayTopicData(TodayTopicPostObj);
       setCategoryData(CategoryDataObj);
+      setPostList(NoticeObj);
     }, 1000)
 
     return () => clearTimeout(dataload)
@@ -325,8 +329,8 @@ function App() {
         <Route path='/adminMain/printCode' element={<ManageCode />}/>
         {/* 관리자페이지 - 고객센터 */}
         <Route path='/adminMain/customerCenter'>
-          <Route path='/adminMain/customerCenter/notice'element={<AdminNotice/>}/>
-          <Route path='/adminMain/customerCenter/ask' element={<AdminAskManage/>}/>
+          <Route path='/adminMain/customerCenter/notice'element={<AdminNotice list={postList} setList={setPostList}/>}/>
+          <Route path='/adminMain/customerCenter/ask' element={<AdminContact/>}/>
         </Route>
         {/* 관리자페이지 - 상품등록 */}
         <Route path='/adminMain/addProduct' element={<AdminDetail/>} />
