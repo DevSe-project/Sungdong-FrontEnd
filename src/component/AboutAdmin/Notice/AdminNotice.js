@@ -108,10 +108,10 @@ export default function (props) {
             {/* 뭐 넣을지 미정 */}
             <div className={styles.none_block}>
               <div className={styles.none_title}>
-                none title
+                custom title
               </div>
               <div className={styles.none_code}>
-                none contents
+                custom contents
               </div>
             </div>
           </div>

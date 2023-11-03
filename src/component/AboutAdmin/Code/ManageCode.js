@@ -95,10 +95,10 @@ export default function Managecode() {
             {/* 뭐 넣을지 미정 */}
             <div className={styles.none_block}>
               <div className={styles.none_title}>
-                뭐 넣을까
+                custom title
               </div>
               <div className={styles.none_code}>
-                아직 미정
+                custom contents
               </div>
             </div>
           </div>
