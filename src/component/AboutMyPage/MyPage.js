@@ -32,25 +32,6 @@ export default function MyPage(props) {
 
   return (
     <div>
-      {/* 탑배너 & 카테고리 */}
-      <TopBanner
-        menuOnClick={props.menuOnClick}
-        menu_dynamicStyle={props.menu_dynamicStyle}
-        data={props.data}
-        setData={props.setData}
-        categoryData={props.categoryData}
-        setCategoryData={props.setCategoryData}
-        login={props.login}
-        setLogin={props.setLogin}
-        iconHovered={props.iconHovered}
-        iconMouseEnter={props.iconMouseEnter}
-        iconMouseLeave={props.iconMouseLeave}
-        icon_dynamicStyle={props.icon_dynamicStyle}
-        category_dynamicStyle={props.category_dynamicStyle}
-        iconOnClick={props.iconOnClick}
-        text_dynamicStyle={props.text_dynamicStyle}
-      />
-
       {userProfile ? ( //coData 관련data는 조건부 렌더링하도록 
         <div className={styles.body}>
           <div className={styles.title}>

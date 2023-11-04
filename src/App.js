@@ -426,7 +426,24 @@ function App() {
         <Route path='/userservice/ask' element={<Ask />} />
 
         {/* 마이페이지 */}
-        <Route path='/mypages' element={<MyPage decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} data={data} setData={setData} categoryData={categoryData} setCategoryData={setCategoryData} userData={userData} setUserData={setUserData} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />}>
+        <Route path='/mypages' element={
+          <>
+          {/* 최상단배너 */}
+          <TopBanner data={data} setData={setData} 
+          categoryData={categoryData} setCategoryData={setCategoryData} 
+          login={login} setLogin={setLogin} iconHovered={iconHovered} 
+          iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} 
+          icon_dynamicStyle={icon_dynamicStyle} text_dynamicStyle={text_dynamicStyle} 
+          category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
+          menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
+          <div className='main'>
+            <MenuData/>
+            <div className='container'>           
+              <MyPage decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} data={data} setData={setData} categoryData={categoryData} setCategoryData={setCategoryData} userData={userData} setUserData={setUserData} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+            </div>
+          </div>
+        </>
+        }>
 
         </Route>
         {/* 회사 관련 */}
