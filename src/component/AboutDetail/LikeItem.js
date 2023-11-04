@@ -1,4 +1,4 @@
-import { TopBanner } from '../AboutHeader/TopBanner'
+import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner'
 import styles from './LikeItem.module.css'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';

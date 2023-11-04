@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from './Notice.module.css';
-import { TopBanner } from '../AboutHeader/TopBanner';
+import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner';
 import NoticeDetail from './NoticeDetail';
 import { NoticeObj } from '../Data/NoticeObj';
 

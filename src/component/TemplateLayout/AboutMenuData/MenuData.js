@@ -58,14 +58,130 @@ export function MenuData(props){
     },
     {
       id: 3,
+      icon : <i style={{fontSize: '1.2em'}} className="fas fa-heart-circle"/>,
       title: {
         item: '마이페이지',
       },
+      subMenuItems: [
+        {
+          item: '내 정보 관리',
+          link: '/mypages',
+          require : !props.login
+        },
+        {
+          item: '원장조회',
+          link: '/mypages',
+          require : !props.login
+        },
+        {
+          item: '입금내역',
+          link: '/mypages',
+          require : !props.login
+        },
+        {
+          item: '세금계산서',
+          link: '/mypages',
+          require : !props.login
+        }
+      ],
+    },
+    {
+      id: 4,
+      icon : <i style={{fontSize: '1.2em'}} className="fa fa-shopping-basket"/>,
+      title: {
+        item: '주문하기',
+      },
+      subMenuItems: 
+      [    
+        {
+          title: '찜 목록',
+          link: '/likeitem',
+        },
+        {
+          title: '장바구니 목록',
+          link: '/basket',
+          require : !props.login
+        },
+        {
+          title: '주문/배송 현황',
+          link: '/delivery',
+          require : !props.login
+        },
+      ],
+    },
+    {
+      id: 5,
+      icon : <i style={{fontSize: '1.2em'}} className="fas fa-boxes"></i>,
+      title: {
+        item: '배송관련',
+      },
+      subMenuItems: [        
+        {
+          title: '주문/배송 현황',
+          link: '/delivery',
+          require : !props.login
+        },
+        {
+          title: '배송 조회',
+          link: '/delivery',
+          require : !props.login
+        },
+        {
+          title: '미발송 조회',
+          link: '/delivery',
+          require : !props.login
+        },
+
+      ],
+    },
+    {
+      id: 6,
+      title: {
+        item: '견적하기',
+      },
       subMenuItems: [{
-        item: '내 정보 관리',
+        item: '견적함',
         link: '/mypages',
         require : !props.login
-      }],
+      },
+      {
+        item: '견적관리',
+        link: '/mypages',
+        require : !props.login
+      }
+      ]
+    },
+    {
+      id: 7,
+      title: {
+        item: '반품/수리/AS',
+      },
+      subMenuItems: [{
+        item: '반품신청',
+        link: '/mypages',
+        require : !props.login
+      },
+      {
+        item: '반품조회',
+        link: '/mypages',
+        require : !props.login
+      },
+      {
+        item: '불량교환신청',
+        link: '/mypages',
+        require : !props.login
+      },
+      {
+        item: '불량교환조회',
+        link: '/mypages',
+        require : !props.login
+      },
+      {
+        item: 'A/S신청, 조회',
+        link: '/mypages',
+        require : !props.login
+      },
+      ]
     },
   ];
 

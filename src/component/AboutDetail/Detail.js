@@ -2,7 +2,7 @@ import { Tab } from './Tab'
 import styles from './Detail.module.css'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useState } from 'react'
-import { TopBanner } from '../AboutHeader/TopBanner'
+import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner'
 import { TabInfo } from './TabInfo'
 import CryptoJS from 'crypto-js';
 

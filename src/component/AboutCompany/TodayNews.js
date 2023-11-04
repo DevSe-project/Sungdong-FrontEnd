@@ -1,5 +1,5 @@
 import styles from './TodayNews.module.css'
-import { TopBanner } from '../AboutHeader/TopBanner'
+import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner'
 import { useEffect, useRef, useState } from 'react'
 import { TodayNewsCard } from './TodayNewsCard'
 import { TodayNewsList } from './TodayNewsList'

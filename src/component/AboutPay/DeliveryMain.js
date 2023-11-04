@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { TopBanner } from '../AboutHeader/TopBanner'
+import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner'
 import { Delivery } from './Delivery'
 import styles from './DeliveryMain.module.css'
 export function DeliveryMain(props){

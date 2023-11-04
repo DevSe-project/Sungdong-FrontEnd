@@ -1,5 +1,5 @@
 import styles from './TodayNewsInner.module.css'
-import { TopBanner } from '../AboutHeader/TopBanner'
+import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner'
 import { useNavigate, useParams } from 'react-router-dom'
 export function TodayNewsInner(props){
   const navigate = useNavigate();

@@ -8,7 +8,7 @@ import { DataObj } from './component/Data/DataObj'
 import { TodayTopicPostObj } from './component/Data/TodayTopicPostObj';
 import { UserData } from './component/Data/UserData';
 import { CategoryDataObj } from './component/Data/CategoryDataObj';
-import { Category } from './component/AboutHeader/Category';
+import { Category } from './component/TemplateLayout/AboutHeader/Category';
 import { NoticeObj } from './component/Data/NoticeObj';
 
 // 메인페이지

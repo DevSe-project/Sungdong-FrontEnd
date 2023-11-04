@@ -1,5 +1,5 @@
-import { SlideImg } from './component/AboutHeader/SlideImg';
-import { TopBanner } from './component/AboutHeader/TopBanner';
+import { SlideImg } from './component/AboutHome/SlideImg';
+import { TopBanner } from './component/TemplateLayout/AboutHeader/TopBanner';
 import { List } from './component/AboutHome/List';
 
 export default function MainPage(props) {

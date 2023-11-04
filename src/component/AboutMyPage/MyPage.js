@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { TopBanner } from "../AboutHeader/TopBanner";
+import { TopBanner } from "../TemplateLayout/AboutHeader/TopBanner";
 import styles from "./Mypage.module.css";
 import ModifyPW from "./ModifyPW";
 export default function MyPage(props) {

@@ -1,4 +1,4 @@
-import { TopBanner } from '../AboutHeader/TopBanner'
+import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner'
 import image from '../.././image/page_ready.png'
 import styles from './Event.module.css'
 export function Event(props){

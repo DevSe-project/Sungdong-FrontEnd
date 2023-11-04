@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import styles from './Basket.module.css'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { TopBanner } from '../AboutHeader/TopBanner';
+import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner';
 import CryptoJS from 'crypto-js';
 import React from 'react';
 export function Basket(props){

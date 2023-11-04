@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import styles from './OrderDetail.module.css'
-import { TopBanner } from '../AboutHeader/TopBanner'
+import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner'
 export function OrderDetail(props){
   const navigate = useNavigate();
   function gotoLink(){
