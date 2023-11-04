@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 
 
 // ----------------React-Quill----------------//
-import ReactQuill from 'react-quill-2';
 import 'react-quill/dist/quill.snow.css'; // 에디터 스타일
 import Quill from 'quill';
 
@@ -81,18 +80,6 @@ export default function WrtieModal(props) {
                 </div>
                 {/* 글 내용 */}
                 <div className={styles.content}>
-                    <ReactQuill
-                        className={styles.textarea}
-                        value={props.tempList.contents}
-                        onChange={(html) => {
-                            props.setTempList((prevdata) => ({
-                                ...prevdata,
-                                contents: html
-                            }))
-                        }}
-                        modules={modules}
-                        required>
-                    </ReactQuill>
                     {/* 이 ReactQuill라이브러리의 기본 설정 중 하나로서 엔터 키를 눌렀을 때 자동으로 p태그가
                         생성되어 줄 바꿈을 표현하지 않습니다. */}
                 </div>
