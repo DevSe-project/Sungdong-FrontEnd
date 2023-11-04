@@ -54,7 +54,7 @@ export function TopBanner(props) {
       </div>
       
       {/* 클릭하면 나오는 카테고리바 */}
-      <div style={{display: 'flex', justifyContent: 'flex-end', width: '80%'}}>
+      <div style={{display: 'flex', justifyContent: 'flex-end', width: '100%'}}>
         <div className={styles.categoryBar}>
           <CategoryBar selectedCategory={props.selectedCategory} setSelectedCategory={props.setSelectedCategory} selectedSubCategory={props.selectedSubCategory} setSelectedSubCategory={props.setSelectedSubCategory} data={props.data} setData={props.setData} categoryData={props.categoryData} setCategoryData={props.setCategoryData} category_dynamicStyle={props.category_dynamicStyle}/>
         </div>

@@ -1,31 +1,38 @@
 /* -------------------- TopBanner -------------------- */
 /* 위치 조정 */
-  .menuLocation{
-    background-color: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    list-style: none;
-    transition: transform 0.3s ease; /* 변환 효과를 부드럽게 적용합니다. */
-  }
+.menuLocation{
+  width: 20em;
+  height: 100dwvh;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  list-style: none;
+  transition: transform 0.3s ease; /* 변환 효과를 부드럽게 적용합니다. */
+}
 
-  /* 네비게이션 내부 링크 스타일링 (옵션) */
-  .link {
-    text-decoration: none;
-    color: black;
-    font-size: 1.2em;
-    font-weight: 550;
-    cursor: pointer;
-  }
+/* 네비게이션 내부 링크 스타일링 (옵션) */
+.link {
+  text-decoration: none;
+  color: black;
+  font-size: 1.2em;
+  font-weight: 550;
+  text-wrap: nowrap;
+  cursor: pointer;
+}
 
-  .subMenu{
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .sub_item{
-    padding: 1em;
-    font-size: large;
-    word-wrap: wrap;
-  }
-  .sub_item:hover{
-    background-color: lightgray;
-  }
+.subMenu{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.sub_item{
+  padding-top: 1em;
+  padding-bottom: 1em;
+  width: 100%;
+  font-size: large;
+  text-wrap: nowrap;
+}
+.sub_item:hover{
+  background-color: lightgray;
+}

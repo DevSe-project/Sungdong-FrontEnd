@@ -1,12 +1,12 @@
 .categoryLocation{
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
 }
 
 .categoryBarContainer {
-  width: 100%;
+  width: 85%;
   background-color: #FFF;
-  position: relative;
+  position: absolute;
   display: flex;
   align-items: center;
   justify-content: space-evenly;

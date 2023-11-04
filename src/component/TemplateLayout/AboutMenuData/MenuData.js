@@ -91,19 +91,18 @@ export function MenuData(props){
       title: {
         item: '주문하기',
       },
-      subMenuItems: 
-      [    
+      subMenuItems: [    
         {
-          title: '찜 목록',
+          item: '찜 목록',
           link: '/likeitem',
         },
         {
-          title: '장바구니 목록',
+          item: '장바구니 목록',
           link: '/basket',
           require : !props.login
         },
         {
-          title: '주문/배송 현황',
+          item: '주문/배송 현황',
           link: '/delivery',
           require : !props.login
         },
@@ -117,17 +116,17 @@ export function MenuData(props){
       },
       subMenuItems: [        
         {
-          title: '주문/배송 현황',
+          item: '주문/배송 현황',
           link: '/delivery',
           require : !props.login
         },
         {
-          title: '배송 조회',
+          item: '배송 조회',
           link: '/delivery',
           require : !props.login
         },
         {
-          title: '미발송 조회',
+          item: '미발송 조회',
           link: '/delivery',
           require : !props.login
         },

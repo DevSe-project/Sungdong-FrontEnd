@@ -6,7 +6,6 @@
   top: 0;
   position: sticky;
   z-index: 999;
-  padding-bottom: 0.5em;
   margin: 0;
 }
 
@@ -14,7 +13,7 @@
 .top_container {
   display: flex;
   width: 100%;
-  height: 100px;
+  height: 6em;
   justify-content: center;
   align-items: center;
   align-content: center;
@@ -42,7 +41,7 @@
 }
 /* 카테고리 아이콘 */
 .categoryIcon {
-  font-size: 2em;
+  font-size: 1em;
   color: #000;
 }
 /* 카테고리 아이콘 양옆 텍스트 */

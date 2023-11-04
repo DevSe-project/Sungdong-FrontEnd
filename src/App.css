@@ -301,3 +301,18 @@ input[type="checkbox"] {
 .topButton:hover{
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
+
+/* 템플릿 CSS */
+.main{
+  display: flex;
+  flex-direction: row;
+}
+
+.container{ 
+  display: flex;
+  flex-direction: column;
+  margin-top: 3em;
+  gap: 3em;
+  justify-content: center;
+  align-items: center;
+}
