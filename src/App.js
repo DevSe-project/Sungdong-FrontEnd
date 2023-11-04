@@ -317,7 +317,22 @@ function App() {
 
         {/* 찜 목록 */}
         <Route path='/likeitem' element={
-          <LikeItem menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} data={data} setData={setData} categoryData={categoryData} setCategoryData={setCategoryData} login={login} setLogin={setLogin} basketList={basketList} setBasketList={setBasketList} setWishlist={setWishlist} wishlist={wishlist} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+          <>
+          {/* 최상단배너 */}
+          <TopBanner data={data} setData={setData} 
+          categoryData={categoryData} setCategoryData={setCategoryData} 
+          login={login} setLogin={setLogin} iconHovered={iconHovered} 
+          iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} 
+          icon_dynamicStyle={icon_dynamicStyle} text_dynamicStyle={text_dynamicStyle} 
+          category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
+          menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
+          <div className='main'>
+            <MenuData/>
+            <div className='container'>
+              <LikeItem menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} data={data} setData={setData} categoryData={categoryData} setCategoryData={setCategoryData} login={login} setLogin={setLogin} basketList={basketList} setBasketList={setBasketList} setWishlist={setWishlist} wishlist={wishlist} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+            </div>
+          </div>
+        </>
         } />
 
         {/* 장바구니 ~ 주문 */}
