@@ -99,12 +99,12 @@ export function MenuData(props){
         {
           item: '장바구니 목록',
           link: '/basket',
-          require : !props.login
+          require : props.login
         },
         {
           item: '주문/배송 현황',
           link: '/delivery',
-          require : !props.login
+          require : props.login
         },
       ],
     },
@@ -219,7 +219,7 @@ export function MenuData(props){
           <span
             className={styles.link}
             onClick={() => { 
-              if(item.title.require){
+              if(item.title.require && item.title.require === false){
                 alert("로그인이 필요한 서비스입니다.");
                 navigate("/login");
                 return;
@@ -234,7 +234,7 @@ export function MenuData(props){
               {item.subMenuItems.map((subMenuItem, subMenuItemindex) => (
                 <li
                   onClick={() => {
-                    if(subMenuItem.require){
+                    if(subMenuItem.require && subMenuItem.require === false){
                       alert("로그인이 필요한 서비스입니다.");
                       navigate("/login");
                       return;
