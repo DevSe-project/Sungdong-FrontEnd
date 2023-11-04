@@ -1,7 +1,6 @@
 /* 탭 내부 사항 */
 .tabInnerHeader{
-  width: clamp(23em, 50%, 50em);
-  padding: 1em;
+  width: 100%;
   display: flex;
   flex-direction: column;
   text-align: left;

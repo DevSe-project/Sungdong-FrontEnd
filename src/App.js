@@ -273,7 +273,7 @@ function App() {
           </>
         } />
 
-        {/* 상품 */}
+        {/* 상품 카테고리 검색 결과 */}
         <Route path='/category' element={
         <>
           {/* 최상단배너 */}
@@ -296,8 +296,23 @@ function App() {
 
         {/* 상세 페이지 */}
         <Route path="/detail/:id" element={
-          <Detail decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} categoryData={categoryData} setCategoryData={setCategoryData} login={login} setLogin={setLogin} setData={setData} data={data} navigate={navigate} wishlist={wishlist} setWishlist={setWishlist} basketList={basketList} setBasketList={setBasketList} setActiveTab={setActiveTab} activeTab={activeTab}
-            orderList={orderList} setOrderList={setOrderList} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+          <>
+          {/* 최상단배너 */}
+          <TopBanner data={data} setData={setData} 
+          categoryData={categoryData} setCategoryData={setCategoryData} 
+          login={login} setLogin={setLogin} iconHovered={iconHovered} 
+          iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} 
+          icon_dynamicStyle={icon_dynamicStyle} text_dynamicStyle={text_dynamicStyle} 
+          category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
+          menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
+          <div className='main'>
+            <MenuData/>
+            <div className='container'>
+              <Detail decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} categoryData={categoryData} setCategoryData={setCategoryData} login={login} setLogin={setLogin} setData={setData} data={data} navigate={navigate} wishlist={wishlist} setWishlist={setWishlist} basketList={basketList} setBasketList={setBasketList} setActiveTab={setActiveTab} activeTab={activeTab}
+                orderList={orderList} setOrderList={setOrderList} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+              </div>
+            </div>
+          </>
         } />
 
         {/* 찜 목록 */}
