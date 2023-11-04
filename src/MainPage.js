@@ -2,6 +2,7 @@ import { SlideImg } from './component/AboutHome/SlideImg';
 import { TopBanner } from './component/TemplateLayout/AboutHeader/TopBanner';
 import { List } from './component/AboutHome/List';
 import { MenuData } from './component/TemplateLayout/AboutMenuData/MenuData';
+import { Footer } from './component/TemplateLayout/AboutFooter/Footer';
 import styles from './MainPage.module.css'
 export default function MainPage(props) {
   return (
@@ -20,6 +21,9 @@ export default function MainPage(props) {
           {/* 이벤트 등의 항목을 표시할 슬라이드이미지바 */}
           <SlideImg />
           <List data={props.data}/>
+          <footer className='footer'>
+              <Footer/>
+          </footer>
         </div>
       </div>
     </div>
