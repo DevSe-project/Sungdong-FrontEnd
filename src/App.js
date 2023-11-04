@@ -380,7 +380,24 @@ function App() {
         } />
 
         {/* 배송 조회 */}
-        <Route path='/orderDetail' element={<OrderDetail  decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} data={data} setData={setData} categoryData={categoryData} setCategoryData={setCategoryData} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />} />
+        <Route path='/orderDetail' element={
+          <>
+          {/* 최상단배너 */}
+          <TopBanner data={data} setData={setData} 
+          categoryData={categoryData} setCategoryData={setCategoryData} 
+          login={login} setLogin={setLogin} iconHovered={iconHovered} 
+          iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} 
+          icon_dynamicStyle={icon_dynamicStyle} text_dynamicStyle={text_dynamicStyle} 
+          category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
+          menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
+          <div className='main'>
+            <MenuData/>
+            <div className='container'>
+              <OrderDetail  decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} data={data} setData={setData} categoryData={categoryData} setCategoryData={setCategoryData} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+            </div>
+          </div>
+        </>
+        } />
 
         {/* 로그인 */}
         <Route path='/login' element={<Login userData={userData} setUserData={setUserData} />} />

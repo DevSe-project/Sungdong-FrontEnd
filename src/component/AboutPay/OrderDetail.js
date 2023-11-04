@@ -86,36 +86,35 @@ export function OrderDetail(props){
   ]
   return(
     <div>
-    <TopBanner menuOnClick={props.menuOnClick} menu_dynamicStyle={props.menu_dynamicStyle} data={props.data} setData={props.setData} categoryData={props.categoryData} setCategoryData={props.setCategoryData} login={props.login} setLogin={props.setLogin} iconHovered={props.iconHovered} iconMouseEnter={props.iconMouseEnter} iconMouseLeave={props.iconMouseLeave} icon_dynamicStyle={props.icon_dynamicStyle} text_dynamicStyle={props.text_dynamicStyle} category_dynamicStyle={props.category_dynamicStyle} iconOnClick={props.iconOnClick} />
-    <div className={styles.container}>
-      <h1 className={styles.getInformation}>받으시는 분 정보</h1>
-      <form className={styles.form}>
-        {/* 주문자 정보 */}
-        {orderData ? orderInputValue.map((item, index) => 
-        <div key={index} className={styles.formInner}>
-          <div className={styles.label}>
-            <label>{item.title}</label>
+      <div className={styles.container}>
+        <h1 className={styles.getInformation}>받으시는 분 정보</h1>
+        <form className={styles.form}>
+          {/* 주문자 정보 */}
+          {orderData ? orderInputValue.map((item, index) => 
+          <div key={index} className={styles.formInner}>
+            <div className={styles.label}>
+              <label>{item.title}</label>
+            </div>
+            <div className={styles.input}>
+              <span>{item.value}</span>
+            </div>
           </div>
-          <div className={styles.input}>
-            <span>{item.value}</span>
-          </div>
-        </div>
-        )
-        : 
-        // 스켈레톤 처리
-        <div className={styles.colskeleton}>
-          <div className={styles.frameskeleton}>
-          &nbsp;
-          </div>
-          <div className={styles.nameskeleton}>
+          )
+          : 
+          // 스켈레톤 처리
+          <div className={styles.colskeleton}>
+            <div className={styles.frameskeleton}>
             &nbsp;
+            </div>
+            <div className={styles.nameskeleton}>
+              &nbsp;
+            </div>
+            <div className={styles.priceskeleton}>
+            &nbsp;
+            </div>
           </div>
-          <div className={styles.priceskeleton}>
-          &nbsp;
-          </div>
-        </div>
-        }
-      </form>
+          }
+        </form>
 
       <h1 className={styles.getInformation}>결제 수단</h1>
       <form className={styles.form}>
