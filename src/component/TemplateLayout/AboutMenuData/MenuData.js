@@ -41,23 +41,6 @@ export function MenuData(props){
     },
     {
       id: 2,
-      title: {
-        item: '고객센터',
-      },
-      subMenuItems: [
-        {
-          item: '공지사항',
-          link: '/userservice/notice',
-        },
-        {
-          item: '문의하기',
-          link: '/userservice/ask',
-          require : !props.login
-        }
-      ],
-    },
-    {
-      id: 3,
       icon : <i style={{fontSize: '1.2em'}} className="fas fa-heart-circle"/>,
       title: {
         item: '마이페이지',
@@ -86,7 +69,7 @@ export function MenuData(props){
       ],
     },
     {
-      id: 4,
+      id: 3,
       icon : <i style={{fontSize: '1.2em'}} className="fa fa-shopping-basket"/>,
       title: {
         item: '주문하기',
@@ -109,7 +92,7 @@ export function MenuData(props){
       ],
     },
     {
-      id: 5,
+      id: 4,
       icon : <i style={{fontSize: '1.2em'}} className="fas fa-boxes"></i>,
       title: {
         item: '배송관련',
@@ -134,7 +117,7 @@ export function MenuData(props){
       ],
     },
     {
-      id: 6,
+      id: 5,
       title: {
         item: '견적하기',
       },
@@ -151,7 +134,7 @@ export function MenuData(props){
       ]
     },
     {
-      id: 7,
+      id: 6,
       title: {
         item: '반품/수리/AS',
       },
@@ -181,6 +164,23 @@ export function MenuData(props){
         require : !props.login
       },
       ]
+    },
+    {
+      id: 7,
+      title: {
+        item: '고객센터',
+      },
+      subMenuItems: [
+        {
+          item: '공지사항',
+          link: '/userservice/notice',
+        },
+        {
+          item: '문의하기',
+          link: '/userservice/ask',
+          require : !props.login
+        }
+      ],
     },
   ];
 

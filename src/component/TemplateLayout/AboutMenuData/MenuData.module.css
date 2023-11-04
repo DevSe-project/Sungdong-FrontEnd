@@ -2,10 +2,12 @@
 /* 위치 조정 */
 .menuLocation{
   width: 16em;
-  height: 100dwvh;
+  height: 100vh;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   list-style: none;
+  position: sticky;
+  top: 96px;
   transition: transform 0.3s ease; /* 변환 효과를 부드럽게 적용합니다. */
 }
 
