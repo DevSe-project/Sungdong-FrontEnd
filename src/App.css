@@ -311,7 +311,8 @@ input[type="checkbox"] {
 .container{ 
   display: flex;
   flex-direction: column;
-  margin-top: 3em;
+  width: 100%;
+  margin-top: 5em;
   gap: 3em;
   justify-content: center;
   align-items: center;

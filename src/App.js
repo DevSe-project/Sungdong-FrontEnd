@@ -55,6 +55,8 @@ import { AdminNotSoldList } from './component/AboutAdmin/AdminNotSoldList';
 import { AdminRefund } from './component/AboutAdmin/AdminRefund';
 import AdminNotice from './component/AboutAdmin/Notice/AdminNotice';
 import AdminContact from './component/AboutAdmin/Contact/AdminContact';
+import { TopBanner } from './component/TemplateLayout/AboutHeader/TopBanner';
+import { MenuData } from './component/TemplateLayout/AboutMenuData/MenuData';
 
 function App() {
   const navigate = useNavigate();
@@ -272,9 +274,25 @@ function App() {
         } />
 
         {/* 상품 */}
-        <Route path='/product' element={<Product data={data} />} />
-        <Route path='/category' element={<Category  decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} categoryData={categoryData} setCategoryData={setCategoryData} login={login} setLogin={setLogin} setData={setData} data={data} navigate={navigate} wishlist={wishlist} setWishlist={setWishlist} basketList={basketList} setBasketList={setBasketList} setActiveTab={setActiveTab} activeTab={activeTab}
-          orderList={orderList} setOrderList={setOrderList} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />} />
+        <Route path='/category' element={
+        <>
+          {/* 최상단배너 */}
+          <TopBanner data={data} setData={setData} 
+          categoryData={categoryData} setCategoryData={setCategoryData} 
+          login={login} setLogin={setLogin} iconHovered={iconHovered} 
+          iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} 
+          icon_dynamicStyle={icon_dynamicStyle} text_dynamicStyle={text_dynamicStyle} 
+          category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
+          menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
+          <div className='main'>
+            <MenuData/>
+            <div className='container'>
+              <Category decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} categoryData={categoryData} setCategoryData={setCategoryData} login={login} setLogin={setLogin} setData={setData} data={data} navigate={navigate} wishlist={wishlist} setWishlist={setWishlist} basketList={basketList} setBasketList={setBasketList} setActiveTab={setActiveTab} activeTab={activeTab}
+            orderList={orderList} setOrderList={setOrderList} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+            </div>
+          </div>
+        </>
+        } />
 
         {/* 상세 페이지 */}
         <Route path="/detail/:id" element={

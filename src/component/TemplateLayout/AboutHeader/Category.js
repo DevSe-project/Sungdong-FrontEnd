@@ -434,254 +434,248 @@ export function Category(props){
       setFilteredItems(addCntList);
     }
   return(
-    <div>
-      <TopBanner data={props.data} setData={props.setData} categoryData={props.categoryData} setCategoryData={props.setCategoryData} 
-      login={props.login} setLogin={props.setLogin} iconHovered={props.iconHovered} 
-      iconMouseEnter={props.iconMouseEnter} iconMouseLeave={props.iconMouseLeave} 
-      icon_dynamicStyle={props.icon_dynamicStyle} text_dynamicStyle={props.text_dynamicStyle} 
-      category_dynamicStyle={props.category_dynamicStyle} iconOnClick={props.iconOnClick} 
-      menuOnClick={props.menuOnClick} menu_dynamicStyle={props.menu_dynamicStyle}/>
-        <div className={styles.topTitle}>
-          <h1>카테고리</h1>
+    <div className={styles.main}>
+      <div className={styles.topTitle}>
+        <h1>카테고리</h1>
+      </div>
+      {(resultSearch || resultSearchBrand || resultSearchCode || resultSearchOption) &&
+      <h3 style={{margin: '1em'}}>
+      "{resultSearch || resultSearchBrand || resultSearchCode || resultSearchOption}" 에 대해
+      <span style={{color: '#CC0000', fontWeight: '650', margin: '0.5em'}}>{filteredItems.length}건</span>
+      이 검색 되었습니다.
+      </h3>}
+      {/* 카테고리 필터 */}
+      <div className={styles.filterUI}>
+        {categoryFilter.map((item, key) =>
+        <React.Fragment key={key}>
+        {/* 필터 별 라벨 */}
+        <div className={styles.label}>
+          {item.label}
         </div>
-        {(resultSearch || resultSearchBrand || resultSearchCode || resultSearchOption) &&
-        <h3 style={{margin: '1em'}}>
-        "{resultSearch || resultSearchBrand || resultSearchCode || resultSearchOption}" 에 대해
-        <span style={{color: '#CC0000', fontWeight: '650', margin: '0.5em'}}>{filteredItems.length}건</span>
-        이 검색 되었습니다.
-        </h3>}
-        {/* 카테고리 필터 */}
-        <div className={styles.filterUI}>
-          {categoryFilter.map((item, key) =>
-          <React.Fragment key={key}>
-          {/* 필터 별 라벨 */}
-          <div className={styles.label}>
-            {item.label}
-          </div>
-          <div className={styles.content}>
-            {/* 상위 카테고리 항목 */}
-            {item.prevContent &&
-            <>
-            <span
-              className={styles.contentItem}
-              onClick={()=> {
-                prevContentClick();
-              }}>
-              {item.prevContent}
-            </span>
-            <i className="far fa-chevron-right"/>
-            </>
-            }
-            {/* 하위 카테고리 항목 */}
-            {item.content && Array.isArray(item.content)
-            ? item.content.map((contentItem, index) => 
-            <div 
-            key={index} 
+        <div className={styles.content}>
+          {/* 상위 카테고리 항목 */}
+          {item.prevContent &&
+          <>
+          <span
             className={styles.contentItem}
             onClick={()=> {
-              handleCategoryClick(item, contentItem)
+              prevContentClick();
             }}>
-              {contentItem.title}({contentItem.count})
-            </div>
-            ) 
-            : item.content }
+            {item.prevContent}
+          </span>
+          <i className="far fa-chevron-right"/>
+          </>
+          }
+          {/* 하위 카테고리 항목 */}
+          {item.content && Array.isArray(item.content)
+          ? item.content.map((contentItem, index) => 
+          <div 
+          key={index} 
+          className={styles.contentItem}
+          onClick={()=> {
+            handleCategoryClick(item, contentItem)
+          }}>
+            {contentItem.title}({contentItem.count})
           </div>
-          </React.Fragment>
-          )}
+          ) 
+          : item.content }
         </div>
-        {/* 카테고리 목록 TABLE */}
-        <div className={styles.buttonBox}>
-          <button className={styles.button} onClick={()=> navigate("/basket")}>
-            장바구니 이동
-          </button>
-          <button className={styles.button} onClick={()=> basketRelatedData()}>
-            선택 항목 장바구니 추가
-          </button>
-        </div>
-        {/* 카테고리 결과 List */}
-        <div className={styles.tableLocation}>
-          <table className={styles.table}>
-            <thead 
-            style={{backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)'}}
-            >
-              <tr>
-                <th>이미지</th>
-                <th>상품코드</th>
-                <th>상세보기</th>
-                <th>상품명</th>
-                <th>단위</th>
-                <th>표준가</th>
-                <th style={{fontWeight: '650'}}>공급가</th>
-                <th>더보기</th>
+        </React.Fragment>
+        )}
+      </div>
+      {/* 카테고리 목록 TABLE */}
+      <div className={styles.buttonBox}>
+        <button className={styles.button} onClick={()=> navigate("/basket")}>
+          장바구니 이동
+        </button>
+        <button className={styles.button} onClick={()=> basketRelatedData()}>
+          선택 항목 장바구니 추가
+        </button>
+      </div>
+      {/* 카테고리 결과 List */}
+      <div className={styles.tableLocation}>
+        <table className={styles.table}>
+          <thead 
+          style={{backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)'}}
+          >
+            <tr>
+              <th>이미지</th>
+              <th>상품코드</th>
+              <th>상세보기</th>
+              <th>상품명</th>
+              <th>단위</th>
+              <th>표준가</th>
+              <th style={{fontWeight: '650'}}>공급가</th>
+              <th>더보기</th>
+            </tr>
+          </thead>
+          <tbody>
+            {props.data 
+            ? filteredItems.length > 0
+            ? getCurrentPagePosts().map((item, index)=> (
+            <React.Fragment key={index}>
+              <tr className={styles.list}>
+                <td><img src={item.image.mini} alt='이미지'></img></td>
+                <td>{item.id}</td>
+                <td 
+                  className={styles.detailView}
+                  onClick={()=>navigate(`/detail/${item.id}`)}>
+                  상세보기
+                </td>
+                <td className={styles.detailView} onClick={()=>handleItemClick(item.id)}>
+                  <h5 style={{fontSize: '1.1em', fontWeight: '550'}}>{item.title}</h5>
+                </td>
+                <td>EA</td>
+                <td>\{item.price.toLocaleString()}</td>
+                <td style={{fontWeight: '750'}}>
+                  {item.finprice
+                  ? item.discount
+                  ? `\\${ (item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}`
+                  : `\\${item.finprice.toLocaleString()}`
+                  : `\\${item.price.toLocaleString()}`}
+                </td>
+                <td 
+                  className={styles.detailView}
+                  onClick={()=>handleItemClick(item.id)}>
+                  더보기&nbsp;{selectedData === item.id  
+                  ? <i className="fa-sharp fa-solid fa-caret-up"></i>
+                  : <i className="fa-sharp fa-solid fa-caret-down"></i>}&nbsp;
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {props.data 
-              ? filteredItems.length > 0
-              ? getCurrentPagePosts().map((item, index)=> (
-              <React.Fragment key={index}>
-                <tr className={styles.list}>
-                  <td><img src={item.image.mini} alt='이미지'></img></td>
-                  <td>{item.id}</td>
-                  <td 
-                    className={styles.detailView}
-                    onClick={()=>navigate(`/detail/${item.id}`)}>
-                    상세보기
-                  </td>
-                  <td className={styles.detailView} onClick={()=>handleItemClick(item.id)}>
-                    <h5 style={{fontSize: '1.1em', fontWeight: '550'}}>{item.title}</h5>
-                  </td>
-                  <td>EA</td>
-                  <td>\{item.price.toLocaleString()}</td>
-                  <td style={{fontWeight: '750'}}>
-                    {item.finprice
-                    ? item.discount
-                    ? `\\${ (item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}`
-                    : `\\${item.finprice.toLocaleString()}`
-                    : `\\${item.price.toLocaleString()}`}
-                  </td>
-                  <td 
-                    className={styles.detailView}
-                    onClick={()=>handleItemClick(item.id)}>
-                    더보기&nbsp;{selectedData === item.id  
-                    ? <i className="fa-sharp fa-solid fa-caret-up"></i>
-                    : <i className="fa-sharp fa-solid fa-caret-down"></i>}&nbsp;
-                  </td>
-                </tr>
-                {/* 모달 */}
-                {selectedData === item.id && (
-                <tr>
-                  <td colSpan="8">
-                    <table className={styles.colTable}>
-                      <thead style={{ backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.6)'}}>
-                        <tr>
-                          <th style={{width: '25%'}}>
-                            브랜드
-                          </th>
-                          <th style={{width: '10%'}}>
-                            옵션
-                          </th>
-                          <th style={{width: '20%'}}>
-                            개수
-                          </th>
-                          <th style={{width: '10%'}}>
-                            적용률
-                          </th>
-                          <th style={{width: '10%'}}>
-                            할인금액
-                          </th>
-                          <th style={{width: '10%', fontWeight: '650'}}>
-                            공급가
-                          </th>
-                          <th style={{width: '20%'}}>
-                            <button className={styles.button} onClick={()=> basketRelatedData()}>장바구니 추가</button>
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>
-                            {item.brand}
-                          </td>
-                          <td>
-                            {item.option 
-                            ?                   
-                            <div style={{ width: '100%', display: 'flex', alignItems:'center', textAlign: 'center', justifyContent: 'center'}}>
-                              <select 
-                              value={optionSelected[index] || ""}
-                              onChange={(e)=>{optionChange(e, index)}}
-                              className={styles.selectSize}
-                              >
-                                <option value="" disabled>옵션 선택</option>
-                                {item.option.map((item, index) =>
-                                <option key={index} value={item.value}>{item.value}</option>
-                                )}
-                              </select>
-                            </div>  : '없음'}
-                          </td>
-                          <td>
-                          {!editStatus[index]
-                          ? item.cnt
-                          : <input value={count} className={styles.input} onChange={maxLengthCheck} minLength={1} maxLength={3} min={0} max={999} type='number' placeholder='숫자만 입력'/> }
-                          <br/>
-    
-                          {!editStatus[index] 
-                          ? <button
-                            onClick={()=>{editItem(index)}} 
-                            className={styles.editButton}
-                            >개수 수정
-                            </button> 
-                          : <button 
-                            className={styles.editButton}
-                            onClick={()=>updatedItem(index)}
-                            >수정 완료
-                            </button>
-                          }
-                          </td>
-                          <td>
-                            {item.discount}%
-                          </td>
-                          <td style={{fontWeight: '750'}}>
-                            {item.discount
-                            ? `\\${(((item.price/100)*item.discount)*item.cnt).toLocaleString()}`
-                            : 0}
-                          </td>
-                          <td style={{fontWeight: '750'}}>
-                          {item.finprice
-                          ? item.discount
-                          ? `\\${ (item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}`
-                          : `\\${item.finprice.toLocaleString()}`
-                          : `\\${item.price.toLocaleString()}`}
-                          </td>
-                          <td>
-                            <input 
-                              checked={selectedItems.includes(item)}
-                              onChange={() => checkedBox(item)}
-                              type='checkbox'
-                            />   
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </td>
-                </tr>
-    
-                )}
-                </React.Fragment>
-                ))
-              : <tr><td>해당하는 상품과 관련된 상품이 존재하지 않습니다.</td></tr>
-              : <tr><td>로딩중</td></tr>
-              }
-            </tbody>
-          </table>
+              {/* 모달 */}
+              {selectedData === item.id && (
+              <tr>
+                <td colSpan="8">
+                  <table className={styles.colTable}>
+                    <thead style={{ backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.6)'}}>
+                      <tr>
+                        <th style={{width: '25%'}}>
+                          브랜드
+                        </th>
+                        <th style={{width: '10%'}}>
+                          옵션
+                        </th>
+                        <th style={{width: '20%'}}>
+                          개수
+                        </th>
+                        <th style={{width: '10%'}}>
+                          적용률
+                        </th>
+                        <th style={{width: '10%'}}>
+                          할인금액
+                        </th>
+                        <th style={{width: '10%', fontWeight: '650'}}>
+                          공급가
+                        </th>
+                        <th style={{width: '20%'}}>
+                          <button className={styles.button} onClick={()=> basketRelatedData()}>장바구니 추가</button>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          {item.brand}
+                        </td>
+                        <td>
+                          {item.option 
+                          ?                   
+                          <div style={{ width: '100%', display: 'flex', alignItems:'center', textAlign: 'center', justifyContent: 'center'}}>
+                            <select 
+                            value={optionSelected[index] || ""}
+                            onChange={(e)=>{optionChange(e, index)}}
+                            className={styles.selectSize}
+                            >
+                              <option value="" disabled>옵션 선택</option>
+                              {item.option.map((item, index) =>
+                              <option key={index} value={item.value}>{item.value}</option>
+                              )}
+                            </select>
+                          </div>  : '없음'}
+                        </td>
+                        <td>
+                        {!editStatus[index]
+                        ? item.cnt
+                        : <input value={count} className={styles.input} onChange={maxLengthCheck} minLength={1} maxLength={3} min={0} max={999} type='number' placeholder='숫자만 입력'/> }
+                        <br/>
+  
+                        {!editStatus[index] 
+                        ? <button
+                          onClick={()=>{editItem(index)}} 
+                          className={styles.editButton}
+                          >개수 수정
+                          </button> 
+                        : <button 
+                          className={styles.editButton}
+                          onClick={()=>updatedItem(index)}
+                          >수정 완료
+                          </button>
+                        }
+                        </td>
+                        <td>
+                          {item.discount}%
+                        </td>
+                        <td style={{fontWeight: '750'}}>
+                          {item.discount
+                          ? `\\${(((item.price/100)*item.discount)*item.cnt).toLocaleString()}`
+                          : 0}
+                        </td>
+                        <td style={{fontWeight: '750'}}>
+                        {item.finprice
+                        ? item.discount
+                        ? `\\${ (item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}`
+                        : `\\${item.finprice.toLocaleString()}`
+                        : `\\${item.price.toLocaleString()}`}
+                        </td>
+                        <td>
+                          <input 
+                            checked={selectedItems.includes(item)}
+                            onChange={() => checkedBox(item)}
+                            type='checkbox'
+                          />   
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+  
+              )}
+              </React.Fragment>
+              ))
+            : <tr><td>해당하는 상품과 관련된 상품이 존재하지 않습니다.</td></tr>
+            : <tr><td>로딩중</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      <div className={styles.buttonContainer}>
+        {/* 이전 페이지 */}
+        <button
+        className={styles.button} 
+        onClick={()=> {
+          if(currentPage !== 1){
+            setCurrentPage(currentPage - 1)
+          } else {
+            alert("해당 페이지가 가장 첫 페이지 입니다.")
+          }}}>
+            <i className="far fa-angle-left"/>
+        </button>
+        <div className={styles.button}>
+          {currentPage}
         </div>
-        <div className={styles.buttonContainer}>
-          {/* 이전 페이지 */}
-          <button
-          className={styles.button} 
-          onClick={()=> {
-            if(currentPage !== 1){
-              setCurrentPage(currentPage - 1)
-            } else {
-              alert("해당 페이지가 가장 첫 페이지 입니다.")
-            }}}>
-              <i className="far fa-angle-left"/>
-          </button>
-          <div className={styles.button}>
-            {currentPage}
-          </div>
-          {/* 다음 페이지 */}
-          <button
-          className={styles.button}
-          onClick={()=> {
-            if(filteredItems.length > 5){
-              setCurrentPage(currentPage + 1)
-            } else {
-              alert("다음 페이지가 없습니다.")
-            }}}>
-              <i className="far fa-angle-right"/>
-          </button>
-        </div>
+        {/* 다음 페이지 */}
+        <button
+        className={styles.button}
+        onClick={()=> {
+          if(filteredItems.length > 5){
+            setCurrentPage(currentPage + 1)
+          } else {
+            alert("다음 페이지가 없습니다.")
+          }}}>
+            <i className="far fa-angle-right"/>
+        </button>
+      </div>
     </div>
   )
 }
