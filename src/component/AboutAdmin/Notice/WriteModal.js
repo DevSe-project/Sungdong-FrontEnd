@@ -1,4 +1,4 @@
-import styles from "./WriteModal.module.css";
+import styles from "./WriteEditModal.module.css";
 import { useState, useEffect } from 'react';
 
 
@@ -53,8 +53,11 @@ export default function WrtieModal(props) {
                 </div>
                 {/* 글 내용 */}
                 <div className={styles.content}>
-                    {/* 이 ReactQuill라이브러리의 기본 설정 중 하나로서 엔터 키를 눌렀을 때 자동으로 p태그가
-                        생성되어 줄 바꿈을 표현하지 않습니다. */}
+                    <textarea
+                        className={styles.textarea}
+                        value={props.tempList.contents}>
+
+                    </textarea>
                 </div>
             </div>
 
