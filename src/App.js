@@ -13,7 +13,6 @@ import { NoticeObj } from './component/Data/NoticeObj';
 
 // 메인페이지
 import MainPage from './MainPage';
-import { Product } from './component/AboutHome/Product';
 
 // 로그인
 import Join from './component/AboutLogin/Join';
@@ -334,7 +333,7 @@ function App() {
           category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
           menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
           <div className='main'>
-            <MenuData/>
+            <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
             <div className='container'>
               <LikeItem menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} data={data} setData={setData} categoryData={categoryData} setCategoryData={setCategoryData} login={login} setLogin={setLogin} basketList={basketList} setBasketList={setBasketList} setWishlist={setWishlist} wishlist={wishlist} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
               <footer className='footer'>
@@ -357,7 +356,7 @@ function App() {
           category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
           menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
           <div className='main'>
-            <MenuData/>
+            <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
             <div className='container'>
               <Basket decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} data={data} setData={setData} categoryData={categoryData} setCategoryData={setCategoryData} login={login} setLogin={setLogin} activeTab={activeTab} setActiveTab={setActiveTab} basketList={basketList} setBasketList={setBasketList} orderList={orderList} setOrderList={setOrderList} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
               <footer className='footer'>
@@ -384,7 +383,7 @@ function App() {
           category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
           menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
           <div className='main'>
-            <MenuData/>
+            <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
             <div className='container'>       
               <DeliveryMain  decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} data={data} setData={setData} categoryData={categoryData} setCategoryData={setCategoryData} login={login} setLogin={setLogin} orderData={orderData} setOrderData={setOrderData} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
               <footer className='footer'>
@@ -407,7 +406,7 @@ function App() {
           category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
           menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
           <div className='main'>
-            <MenuData/>
+            <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
             <div className='container'>
               <OrderDetail  decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} data={data} setData={setData} categoryData={categoryData} setCategoryData={setCategoryData} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
               <footer className='footer'>
@@ -435,7 +434,7 @@ function App() {
           category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
           menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
           <div className='main'>
-            <MenuData/>
+            <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
             <div className='container'>        
               <Notice decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} data={data} setData={setData} categoryData={categoryData} setCategoryData={setCategoryData} userData={userData} setUserData={setUserData} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
               <footer className='footer'>
@@ -459,7 +458,7 @@ function App() {
           category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
           menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
           <div className='main'>
-            <MenuData/>
+            <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
             <div className='container'>           
               <MyPage decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} data={data} setData={setData} categoryData={categoryData} setCategoryData={setCategoryData} userData={userData} setUserData={setUserData} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
               <footer className='footer'>
@@ -483,7 +482,7 @@ function App() {
           category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
           menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
           <div className='main'>
-            <MenuData/>
+            <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
             <div className='container'>           
               <Comeway decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} data={data} setData={setData} categoryData={categoryData} setCategoryData={setCategoryData} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
               <footer className='footer'>
@@ -505,7 +504,7 @@ function App() {
           category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
           menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
           <div className='main'>
-            <MenuData/>
+            <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
             <div className='container'>   
               <TodayNews decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} data={data} setData={setData} categoryData={categoryData} setCategoryData={setCategoryData} login={login} setLogin={setLogin} todayTopicData={todayTopicData} setTodayTopicData={setTodayTopicData} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
               <footer className='footer'>
@@ -526,7 +525,7 @@ function App() {
             category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
             menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
             <div className='main'>
-              <MenuData/>
+              <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
               <div className='container'>             
                 <TodayNewsInner menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} data={data} setData={setData} categoryData={categoryData} setCategoryData={setCategoryData} login={login} setLogin={setLogin} todayTopicData={todayTopicData} setTodayTopicData={setTodayTopicData} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
@@ -547,7 +546,7 @@ function App() {
           category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
           menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
           <div className='main'>
-            <MenuData/>
+            <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
             <div className='container'>           
               <Event menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} data={data} setData={setData} categoryData={categoryData} setCategoryData={setCategoryData} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
               <footer className='footer'>

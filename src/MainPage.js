@@ -16,7 +16,7 @@ export default function MainPage(props) {
       category_dynamicStyle={props.category_dynamicStyle} iconOnClick={props.iconOnClick}
       menuOnClick={props.menuOnClick} menu_dynamicStyle={props.menu_dynamicStyle}/>
       <div className={styles.main}>
-        <MenuData/>
+        <MenuData login={props.login} menu_dynamicStyle={props.menu_dynamicStyle}/>
         <div className={styles.container}>
           {/* 이벤트 등의 항목을 표시할 슬라이드이미지바 */}
           <SlideImg />

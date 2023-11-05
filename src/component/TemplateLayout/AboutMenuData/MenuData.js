@@ -49,22 +49,22 @@ export function MenuData(props){
         {
           item: '내 정보 관리',
           link: '/mypages',
-          require : !props.login
+          require : props.login
         },
         {
           item: '원장조회',
           link: '/mypages',
-          require : !props.login
+          require : props.login
         },
         {
           item: '입금내역',
           link: '/mypages',
-          require : !props.login
+          require : props.login
         },
         {
           item: '세금계산서',
           link: '/mypages',
-          require : !props.login
+          require : props.login
         }
       ],
     },
@@ -101,17 +101,17 @@ export function MenuData(props){
         {
           item: '주문/배송 현황',
           link: '/delivery',
-          require : !props.login
+          require : props.login
         },
         {
           item: '배송 조회',
           link: '/delivery',
-          require : !props.login
+          require : props.login
         },
         {
           item: '미발송 조회',
           link: '/delivery',
-          require : !props.login
+          require : props.login
         },
 
       ],
@@ -124,12 +124,12 @@ export function MenuData(props){
       subMenuItems: [{
         item: '견적함',
         link: '/mypages',
-        require : !props.login
+        require : props.login
       },
       {
         item: '견적관리',
         link: '/mypages',
-        require : !props.login
+        require : props.login
       }
       ]
     },
@@ -141,27 +141,27 @@ export function MenuData(props){
       subMenuItems: [{
         item: '반품신청',
         link: '/mypages',
-        require : !props.login
+        require : props.login
       },
       {
         item: '반품조회',
         link: '/mypages',
-        require : !props.login
+        require : props.login
       },
       {
         item: '불량교환신청',
         link: '/mypages',
-        require : !props.login
+        require : props.login
       },
       {
         item: '불량교환조회',
         link: '/mypages',
-        require : !props.login
+        require : props.login
       },
       {
         item: 'A/S신청, 조회',
         link: '/mypages',
-        require : !props.login
+        require : props.login
       },
       ]
     },
@@ -178,7 +178,7 @@ export function MenuData(props){
         {
           item: '문의하기',
           link: '/userservice/ask',
-          require : !props.login
+          require : props.login
         }
       ],
     },
@@ -214,17 +214,8 @@ export function MenuData(props){
             saveTab(item.id)
             toggleSubMenu(index) 
           }}
-          
         >
-          <span
-            className={styles.link}
-            onClick={() => { 
-              if(item.title.require && item.title.require === false){
-                alert("로그인이 필요한 서비스입니다.");
-                navigate("/login");
-                return;
-              } 
-            }}>
+          <span className={styles.link}>
             {item.title.item}
           </span>
           {subMenuStates[index] === true &&
@@ -234,7 +225,7 @@ export function MenuData(props){
               {item.subMenuItems.map((subMenuItem, subMenuItemindex) => (
                 <li
                   onClick={() => {
-                    if(subMenuItem.require && subMenuItem.require === false){
+                    if(subMenuItem.require == false){
                       alert("로그인이 필요한 서비스입니다.");
                       navigate("/login");
                       return;
