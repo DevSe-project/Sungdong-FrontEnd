@@ -5,7 +5,7 @@ import { AdminMenuData } from "../AdminMenuData";
 import WrtieModal from "./WriteModal";
 import EditModal from "./EditModal";
 
-export default function (props) {
+export default function AdminNotice(props) {
   // State
   const [modal, setModal] = useState(false); // modal on / off
   const [modalName, setModalName] = useState(''); // what is modal?
@@ -49,11 +49,10 @@ export default function (props) {
 
 
   // Enter key를 누를 시, 모달 창 오픈
-  const onOpen = (event, index) => {
-    if (event.key === 'Enter') {
-      setModal(true);
-      setSelectedItemIndex(index);
-    }
+  const onOpen = (index) => {
+    setModal(true);
+    setModalName('edit');
+    setSelectedItemIndex(index);
   }
 
   const openWriteModal = () => {
@@ -76,7 +75,7 @@ export default function (props) {
 
   // 글 담기
   const [tempList, setTempList] = useState({
-    id: '', // length + 1로 지정할 것.
+    id: '', // length + 1로 지정할 것
     title: '',
     contents: '',
     writer: '', // 관리자 로그인 계정의 이름으로 자동 들어가도록
@@ -96,7 +95,7 @@ export default function (props) {
         writer,
         date: `${currentYear}/${currentMonth}/${currentDay} ${currentHour}시 ${currentMinute}분`,
       };
-      // 입력받은 정보를 추가
+      // 입력받은 정보 추가
       props.setList((prevListData) => [...prevListData, newPost]);
       alert("등록되었습니다.");
       // 입력란 초기화
@@ -115,6 +114,16 @@ export default function (props) {
       alert("제목, 작성자 명을 2글자 이상, 본문 내용을 10글자 이상 작성하십시오.");
     }
 
+  };
+
+  // 공지사항 리스트 업데이트
+  const updateNotice = (index, updatedData) => {
+    // 현재 공지사항 리스트 복제
+    const updatedList = [...props.list];
+    // 업데이트할 해당 공지사항에 새로운 데이터 할당
+    updatedList[index] = updatedData;
+    // 부모 컴포넌트에 업데이트된 리스트 전달
+    props.setList(updatedList);
   };
 
 
@@ -138,7 +147,7 @@ export default function (props) {
               <div className={styles.none_title}>
                 custom title
               </div>
-              <div className={styles.none_code}>
+              <div className={styles.none_contents}>
                 custom contents
               </div>
             </div>
@@ -146,29 +155,34 @@ export default function (props) {
           {/* 글 목록 */}
           <div className={styles.noticeList_block}>
             {/* Title */}
-            <div className={styles.noticeList_title}>글 목록</div>
+            <div className={styles.noticeList_post}>글 목록</div>
             {/* List */}
             {props.list.map((item, index) => (
-              <div className={styles.noticeList_list} onClick={() => { onOpen(item, index) }}> {/* 선택 모달의 key를 글 수정으로 지정*/}
+              <div className={styles.noticeList_list} onClick={() => { onOpen(index) }}> {/* 선택 모달의 key를 글 수정으로 지정*/}
                 {/* No */}
                 <div className={styles.noticeList_no}
                   key={index}>
                   {index + 1}
                 </div>
                 {/* Code */}
-                <div className={styles.noticeList_code}
+                <div className={styles.noticeList_title}
                   key={index}>
                   {item.title}
+                </div>
+                {/* Writer */}
+                <div className={styles.noticeList_writer}
+                  key={index}>
+                  작성자: {item.writer}
                 </div>
                 {/* Del */}
                 <div>
                   <div className={styles.notice_del}
                     onClick={() => {
-                        const data = [...props.list];
-                        data.splice(index, 1);
-                        props.setList(data);
-                      }
-                     }>
+                      const data = [...props.list];
+                      data.splice(index, 1);
+                      props.setList(data);
+                    }
+                    }>
                     삭제
                   </div>
                 </div>
@@ -178,14 +192,15 @@ export default function (props) {
         </div>
       </div>
       {
-        modal && modalName == 'write' ?
+        modal && modalName === 'write' ?
           <WrtieModal modalName={modalName} setModalName={setModalName} modal={modal} setModal={setModal} tempList={tempList} setTempList={setTempList} addPost={addPost} closeWriteModal={closeWriteModal} />
           :
-          modal && modalName == 'edit' ?
-            <EditModal tempList={tempList} setTempList={setTempList} selectedItemIndex={setSelectedItemIndex} setSelectedItemIndex={setSelectedItemIndex} />
+          modal && modalName === 'edit' ?
+            <EditModal updateNotice={updateNotice} list={props.list} modalName={modalName} setModalName={setModalName} modal={modal} setModal={setModal} tempList={tempList} setTempList={setTempList} selectedItemIndex={selectedItemIndex} setSelectedItemIndex={setSelectedItemIndex} closeWriteModal={closeWriteModal} />
             :
-            ''
+            null
       }
+
 
     </div>
   )
