@@ -2,33 +2,6 @@ import styles from "./WriteModal.module.css";
 import { useState, useEffect } from 'react';
 
 
-// ----------------React-Quill----------------//
-import 'react-quill/dist/quill.snow.css'; // 에디터 스타일
-import Quill from 'quill';
-
-// ReactQuill을 사용하기 전에 Quill 모듈을 확장 설정함.
-const Break = Quill.import('blots/break');
-Break.blotName = 'break';
-Break.tagName = 'br';
-Quill.register(Break);
-
-// 모듈 구성
-const modules = {
-    toolbar: [
-        [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-        ['bold', 'italic', 'underline'],
-        [{ 'color': [] }, { 'background': [] }], // 색상 설정 추가
-        ['link'],
-        ['clean']
-    ],
-    clipboard: {
-        matchVisual: false,
-    }
-};
-// ----------------React-Quill---------------- //
-
-
 export default function WrtieModal(props) {
 
     // esc키를 누르면 모달창 닫기.
