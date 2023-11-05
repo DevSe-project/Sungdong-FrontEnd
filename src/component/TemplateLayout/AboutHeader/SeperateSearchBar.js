@@ -4,151 +4,145 @@ import { useNavigate } from 'react-router-dom';
 
 export function SeperateSearchBar(props) {
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState('');
+
+  const [selectedResult, setSelectedResult] = useState(null);
+
+  const initialSearchTerms = {
+    productName: "",
+    productCode: "",
+    productBrand: "",
+    productOption: ""
+  };
+
+  const [searchTerm, setSearchTerm] = useState(initialSearchTerms);
+
   const [results, setResults] = useState([]);
   // 연관 검색어 방향키 이동, 설정을 위한 State
   const [selectedResultIndex, setSelectedResultIndex] = useState(-1); // 초기 선택 인덱스는 -1로 설정
-  const [searchFilter, setSearchFilter] = useState("상품명");
 
   // input 엘리먼트에 대한 ref
-  const inputRef = useRef(null);
-
-
-  // 검색 로직
-  const handleSearch = (event) => {
-    // 입력 값을 저장하는 로직
-    const query = event.target.value;
-    setSearchTerm(query);
-    // 입력창이 공백이 아닐 때 (==검색 중이면?)
-    if (query !== '') {
-      if(searchFilter === '상품명'){
-        // 데이터 중 타이틀로들만 구성된 변수 생성 후 
-        // 그 변수들 중 첫 글자와 입력값이 일치하는 것을 연관 검색어 목록에 띄워줌
-          const filteredtitle = props.data && props.data.map((item) => item.title);
-          const filteredResults = filteredtitle.filter((word) =>
-            word.includes(query)
-          );
-          setResults(filteredResults);
-        } else if (searchFilter === '코드'){
-          const filteredtitle = props.data && props.data.map((item) => item.id);
-          const filteredResults = filteredtitle.filter((word) =>
-            word.toString().includes(query)
-          );
-          setResults(filteredResults);
-        } else if (searchFilter === '브랜드'){
-          const filteredtitle = props.data && props.data.map((item) => item.brand);
-          const filteredResults = filteredtitle.filter((word) =>
-            word.includes(query)
-          );
-          setResults(filteredResults);
-        } else if (searchFilter === '옵션'){
-          const filteredResults = props.data && props.data.flatMap((item) =>
-          item.option && item.option.map((option) => option.value).filter((word) =>
-            word.includes(query)
-          )
-        ).filter(Boolean);
-          setResults(filteredResults);
-        } 
-    } else {
-      setResults([]);
-    }
-    setSelectedResultIndex(-1); // 검색어 변경 시 선택된 결과 초기화
+  const inputRef = {
+    productName: useRef(null),
+    productCode: useRef(null),
+    productBrand: useRef(null),
+    productOption: useRef(null)
   };
 
-  const handleKeyDown = (event) => {
-    // 방향키로 선택한 결과 항목 인덱스 업데이트
-    if (event.key === 'ArrowDown') { // 아래 방향키
+
+  useEffect(() => {
+    handleSearch();
+  }, [searchTerm]);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [selectedResultIndex]);
+
+  // 검색 엔진 구현
+  const handleSearch = () => {
+    if(props.data){
+    const filteredResults = props.data.filter(item => {
+      const productName = searchTerm.productName;
+      const productCode = searchTerm.productCode;
+      const productBrand = searchTerm.productBrand;
+      const productOption = searchTerm.productOption;
+
+      return (
+        (searchTerm.productName && item.title.includes(productName)) ||
+        (searchTerm.productCode && item.id.toString().includes(productCode)) ||
+        (searchTerm.productBrand && item.brand.includes(productBrand)) ||
+        (searchTerm.productOption && (Array.isArray(item.option) && item.option.some(option => option.value.includes(productOption))))
+          // item.option이 배열이고 적어도 하나의 item.value가 존재하는 경우에만 처리
+      )})
+      setResults(filteredResults);
+    };
+  }
+
+  
+  // 입력창의 변화에 따른 SearchTerm 업데이트
+  const handleInputChange = (inputName, value) => {
+    setSearchTerm(prevSearchTerm => ({
+      ...prevSearchTerm,
+      [inputName]: value
+    }));
+  };
+
+
+  const handleKeyDown = event => {
+    if (event.key === 'ArrowDown') {
       event.preventDefault();
-      setSelectedResultIndex((prevIndex) =>
+      setSelectedResultIndex(prevIndex =>
         prevIndex < results.length - 1 ? prevIndex + 1 : prevIndex
       );
-    } else if (event.key === 'ArrowUp') { // 위 방향키
+    } else if (event.key === 'ArrowUp') {
       event.preventDefault();
-      setSelectedResultIndex((prevIndex) =>
+      setSelectedResultIndex(prevIndex =>
         prevIndex > 0 ? prevIndex - 1 : -1
       );
     } else if (event.key === 'Enter') {
-      // Enter 키를 누르면 선택한 결과 항목을 검색어로 설정
-      if(selectedResultIndex !== -1) {
-        setSearchTerm(results[selectedResultIndex]);
-        switch (searchFilter) {
-          case '상품명':
-            sessionStorage.setItem('filterSearch', JSON.stringify(results[selectedResultIndex]));
-            sessionStorage.removeItem('filterSearchBrand');
-            sessionStorage.removeItem('filterSearchCode');
-            sessionStorage.removeItem('filterSearchOption');
-            break;
-          case '브랜드':
-            sessionStorage.setItem('filterSearchBrand', JSON.stringify(results[selectedResultIndex]));
-            sessionStorage.removeItem('filterSearch');
-            sessionStorage.removeItem('filterSearchCode');
-            sessionStorage.removeItem('filterSearchOption');
-            break;
-          case '코드':
-            sessionStorage.setItem('filterSearchCode', JSON.stringify(results[selectedResultIndex]));
-            sessionStorage.removeItem('filterSearchBrand');
-            sessionStorage.removeItem('filterSearch');
-            sessionStorage.removeItem('filterSearchOption');
-            break;
-          case '옵션':
-            sessionStorage.setItem('filterSearchOption', JSON.stringify(results[selectedResultIndex]));
-            sessionStorage.removeItem('filterSearchBrand');
-            sessionStorage.removeItem('filterSearchCode');
-            sessionStorage.removeItem('filterSearch');
-            break;
-          default:
-            sessionStorage.setItem('filterSearch', JSON.stringify(searchTerm));
-            sessionStorage.removeItem('filterSearchBrand');
-            sessionStorage.removeItem('filterSearchCode');
-            sessionStorage.removeItem('filterSearchOption');
-            break;
+      event.preventDefault();
+      if (selectedResultIndex !== -1) {
+        const selectedResult = results[selectedResultIndex];
+        setSearchTerm(selectedResult);
+        // Update sessionStorage based on the selected result
+        if (searchTerm.productName !== '') {
+          sessionStorage.setItem('filterSearch', JSON.stringify(selectedResult));
+          sessionStorage.removeItem('filterSearchBrand');
+          sessionStorage.removeItem('filterSearchCode');
+          sessionStorage.removeItem('filterSearchOption');
+        } else if (searchTerm.productBrand !== '') {
+          sessionStorage.setItem('filterSearchBrand', JSON.stringify(selectedResult));
+          sessionStorage.removeItem('filterSearch');
+          sessionStorage.removeItem('filterSearchCode');
+          sessionStorage.removeItem('filterSearchOption');
+        } else if (searchTerm.productCode) {
+          sessionStorage.setItem('filterSearchCode', JSON.stringify(selectedResult));
+          sessionStorage.removeItem('filterSearchBrand');
+          sessionStorage.removeItem('filterSearch');
+          sessionStorage.removeItem('filterSearchOption');
+        } else {
+          sessionStorage.setItem('filterSearchOption', JSON.stringify(selectedResult));
+          sessionStorage.removeItem('filterSearchBrand');
+          sessionStorage.removeItem('filterSearchCode');
+          sessionStorage.removeItem('filterSearch');
         }
-        navigate("/category")
-        setResults([]); // 결과 항목 숨기기
-        setSearchTerm("");
+  
+        navigate("/category");
+        setResults([]);
+        setSearchTerm(initialSearchTerms);
       } else {
-        switch (searchFilter) {
-          case '상품명':
-            sessionStorage.setItem('filterSearch', JSON.stringify(searchTerm));
-            sessionStorage.removeItem('filterSearchBrand');
-            sessionStorage.removeItem('filterSearchCode');
-            sessionStorage.removeItem('filterSearchOption');
-            break;
-          case '브랜드':
-            sessionStorage.setItem('filterSearchBrand', JSON.stringify(searchTerm));
-            sessionStorage.removeItem('filterSearch');
-            sessionStorage.removeItem('filterSearchCode');
-            sessionStorage.removeItem('filterSearchOption');
-            break;
-          case '코드':
-            sessionStorage.setItem('filterSearchCode', JSON.stringify(searchTerm));
-            sessionStorage.removeItem('filterSearchBrand');
-            sessionStorage.removeItem('filterSearch');
-            sessionStorage.removeItem('filterSearchOption');
-            break;
-          case '옵션':
-            sessionStorage.setItem('filterSearchOption', JSON.stringify(searchTerm));
-            sessionStorage.removeItem('filterSearchBrand');
-            sessionStorage.removeItem('filterSearchCode');
-            sessionStorage.removeItem('filterSearch');
-            break;
-          default:
-            sessionStorage.setItem('filterSearch', JSON.stringify(searchTerm));
-            sessionStorage.removeItem('filterSearchBrand');
-            sessionStorage.removeItem('filterSearchCode');
-            sessionStorage.removeItem('filterSearchOption');
-            break;
+        if (searchTerm.productName !== '') {
+          sessionStorage.setItem('filterSearch', JSON.stringify(searchTerm.productName));
+          sessionStorage.removeItem('filterSearchBrand');
+          sessionStorage.removeItem('filterSearchCode');
+          sessionStorage.removeItem('filterSearchOption');
+        } else if (searchTerm.productBrand !== '') {
+          sessionStorage.setItem('filterSearchBrand', JSON.stringify(searchTerm.productBrand));
+          sessionStorage.removeItem('filterSearch');
+          sessionStorage.removeItem('filterSearchCode');
+          sessionStorage.removeItem('filterSearchOption');
+        } else if (searchTerm.productCode !== '') {
+          sessionStorage.setItem('filterSearchCode', JSON.stringify(searchTerm.productCode));
+          sessionStorage.removeItem('filterSearchBrand');
+          sessionStorage.removeItem('filterSearch');
+          sessionStorage.removeItem('filterSearchOption');
+        } else {
+          sessionStorage.setItem('filterSearchOption', JSON.stringify(searchTerm.productOption));
+          sessionStorage.removeItem('filterSearchBrand');
+          sessionStorage.removeItem('filterSearchCode');
+          sessionStorage.removeItem('filterSearch');
         }
-        navigate("/category")
-        setResults([]); // 결과 항목 숨기기
-        setSearchTerm("");
+        navigate("/category");
+        setResults([]);
+        setSearchTerm(initialSearchTerms);
       }
     } else if (event.key === 'Tab' && selectedResultIndex !== -1) {
-      // 탭 키 누르면 자동완성
       event.preventDefault();
       setSearchTerm(results[selectedResultIndex]);
     }
   };
+  
 
   // 선택된 결과 항목이 변경될 때 input 엘리먼트에 포커스 설정
   useEffect(() => {
@@ -160,55 +154,37 @@ export function SeperateSearchBar(props) {
   return (
     <div>
       <div className={styles.searchInputContainer}>
+      {Object.keys(searchTerm).map(inputName => (
         <input
-          ref={inputRef}
-          className={styles.searchInput}
-          type="text"
-          placeholder="상품명"
-          value={searchTerm}
-          onChange={handleSearch}
-          onKeyDown={handleKeyDown} // onKeyDown 이벤트 핸들러 추가
+        key={inputName}
+        ref={inputRef[inputName]}
+        className={styles.searchInput}
+        type="text"
+        placeholder={
+          inputName == 'productName' 
+          ? '상품명' 
+          : inputName == 'productBrand'
+          ? '브랜드'
+          : inputName == 'productCode'
+          ? '코드'
+          : inputName == 'productOption'
+          && '옵션'
+        }
+        value={searchTerm[inputName]}
+        onChange={e => handleInputChange(inputName, e.target.value)}
+        onKeyDown={handleKeyDown}
         />
-        <input
-          ref={inputRef}
-          className={styles.searchInputCode}
-          type="text"
-          placeholder="규격"
-          value={searchTerm}
-          onChange={handleSearch}
-          onKeyDown={handleKeyDown} // onKeyDown 이벤트 핸들러 추가
-        />
-        <input
-          ref={inputRef}
-          className={styles.searchInputCode}
-          type="text"
-          placeholder="모델"
-          value={searchTerm}
-          onChange={handleSearch}
-          onKeyDown={handleKeyDown} // onKeyDown 이벤트 핸들러 추가
-        />
-        <input
-          ref={inputRef}
-          className={styles.searchInputCode}
-          type="text"
-          placeholder="코드"
-          value={searchTerm}
-          onChange={handleSearch}
-          onKeyDown={handleKeyDown} // onKeyDown 이벤트 핸들러 추가
-        />
-        <ul 
-        className={searchTerm !== "" 
-        && results.length > 0 
-        ? styles.result
-        : null}>
+        ))}
+        <ul className={results.length > 0 ? styles.result : null}>
           {results && results.map((result, index) => (
             <li
               key={index}
-              className={index === selectedResultIndex 
-                ? styles.selected 
+              className={index === selectedResultIndex
+                ? styles.selected
                 : styles.resultInner}
+              onClick={() => setSelectedResult(result)}
             >
-              {result}
+              <span>{result.title}</span>
             </li>
           ))}
         </ul>
