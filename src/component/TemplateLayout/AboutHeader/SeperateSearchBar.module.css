@@ -14,16 +14,29 @@
 }
 
 /* Input 창 스타일 */
-.searchInput {
-  width: 100%;
+.searchInputCode {
+  width: 25%;
   height: 100%;
-  border-radius: 10dvw;
+  border-left: 1px solid lightgray;
+  border-top: none;
+  border-right: none;
+  border-bottom: none;
   font-size: 1em;
-  border: none;
   margin: 0;
   padding: 0.3em;
   padding-left: 0.5em;
 }
+/* Input 창 스타일 */
+.searchInput {
+  width: 25%;
+  height: 100%;
+  border: none;
+  font-size: 1em;
+  border-radius: 10vw;
+  padding: 0.3em;
+  padding-left: 0.5em;
+}
+
 
 /* 검색 링크 스타일 */
 .searchLink {
