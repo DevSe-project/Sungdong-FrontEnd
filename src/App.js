@@ -285,7 +285,7 @@ function App() {
           category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
           menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
           <div className='main'>
-            <MenuData/>
+            <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
             <div className='container'>
               <Category decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} categoryData={categoryData} setCategoryData={setCategoryData} login={login} setLogin={setLogin} setData={setData} data={data} navigate={navigate} wishlist={wishlist} setWishlist={setWishlist} basketList={basketList} setBasketList={setBasketList} setActiveTab={setActiveTab} activeTab={activeTab}
             orderList={orderList} setOrderList={setOrderList} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
@@ -309,7 +309,7 @@ function App() {
           category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
           menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
           <div className='main'>
-            <MenuData/>
+            <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
             <div className='container'>
               <Detail decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} categoryData={categoryData} setCategoryData={setCategoryData} login={login} setLogin={setLogin} setData={setData} data={data} navigate={navigate} wishlist={wishlist} setWishlist={setWishlist} basketList={basketList} setBasketList={setBasketList} setActiveTab={setActiveTab} activeTab={activeTab}
                 orderList={orderList} setOrderList={setOrderList} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />

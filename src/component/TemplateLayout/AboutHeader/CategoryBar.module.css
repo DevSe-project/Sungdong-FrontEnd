@@ -4,9 +4,9 @@
 }
 
 .categoryBarContainer {
-  width: 76.3em;
+  width: 100%;
   background-color: #FFF;
-  position: absolute;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-evenly;
