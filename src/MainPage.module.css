@@ -1,3 +1,4 @@
+/* 템플릿 CSS */
 .main{
   display: flex;
   flex-direction: row;
@@ -6,9 +7,13 @@
 .container{ 
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
   margin-top: 5em;
   gap: 3em;
+}
+
+.footer{
   width: 100%;
-  justify-content: center;
-  align-items: center;
+  height: 10em;
 }
