@@ -245,8 +245,6 @@ function App() {
   const menu_dynamicStyle = {
     transition: `opacity ${transitionDurate}ms, transform ${transitionDurate}ms, height ${transitionDurate}ms`,
     opacity: menuClicked ? 1 : 0,
-    width: menuClicked ? '180px' : '0px',
-    height: menuClicked ? '100%' : '0px',
     visibility: menuClicked ? 'visible' : 'hidden',
   }
   // (END) 아이콘 클릭 관련 객체, 함수, state //
