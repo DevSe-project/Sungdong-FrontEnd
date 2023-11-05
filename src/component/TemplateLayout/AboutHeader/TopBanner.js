@@ -4,6 +4,7 @@ import shortLogo from '../../../image/shortLogo.png'
 import { useLocation, useNavigate } from 'react-router-dom'
 import styles from './TopBanner.module.css';
 import { SearchBar } from './SearchBar';
+import { SeperateSearchBar} from './SeperateSearchBar';
 import { CategoryBar } from './CategoryBar';
 //상단 메뉴 리스트 
 export function TopBanner(props) {
@@ -16,8 +17,10 @@ export function TopBanner(props) {
           {/* 로고 */}
           <img className={styles.image} onClick={() => navigate("/")} src={logo} alt="로고" height='70px' />
           <img className={styles.shortimage} onClick={() => navigate("/")} src={shortLogo} alt="로고" height='70px' />
-          {/* 서치바 */}
+          {/* 검색창 */}
           <SearchBar data={props.data} setData={props.setData}/>
+          {/* 분리된 검색창 */}
+          <SeperateSearchBar data={props.data} setData={props.setData}/>
           {/* 카테고리 아이콘 */}
           <li
             className='menu-item'
