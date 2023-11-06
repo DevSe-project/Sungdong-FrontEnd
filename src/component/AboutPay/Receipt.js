@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react';
 import styles from './Receipt.module.css'
 import { useNavigate } from 'react-router-dom';
 import CryptoJS from 'crypto-js';
-import { useDataStore } from '../../store/DataStore';
+import { useDataStore, useListStore } from '../../store/DataStore';
 
 export function Receipt(props){
   const navigate = useNavigate();
   const { setData, data, setOrderData, orderData, userData } = useDataStore();
+  const { orderList, basketList, setBasketList} = useListStore();
   const [address, setAddress] = useState("");
   const [inputUser, setInputUser] = useState("사업자정보");
   const inLogin = props.decryptData(JSON.parse(sessionStorage.getItem('saveLoginData')));
@@ -205,7 +206,7 @@ export function Receipt(props){
   // submit 버튼
   function gotoLink(){
     validateForm();
-    const isValidSupply = props.orderList.every((orderItem) => {
+    const isValidSupply = orderList.every((orderItem) => {
       const productMatchingId = data.find((item) => item.id === orderItem.productId);
       return productMatchingId && productMatchingId.supply > 0;
     });
@@ -217,7 +218,7 @@ export function Receipt(props){
     if(props.activeTab===2 && isFormValid && isValidSupply) {
     // supply 수정
       const productData = data.map((item) => {
-        const isProductInOrderList = props.orderList.some(
+        const isProductInOrderList = orderList.some(
           (orderListItem) => orderListItem.productId === item.id
         );
       if (isProductInOrderList) {
@@ -251,7 +252,7 @@ export function Receipt(props){
         sessionStorage.removeItem('orderData');
         const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(newOrderData), encryptionKey).toString();
         sessionStorage.setItem('newOrderData', JSON.stringify(encryptedData));
-        props.setBasketList(props.basketList.filter((item)=>!props.orderList.some((orderItem) =>
+        setBasketList(basketList.filter((item)=>!orderList.some((orderItem) =>
         orderItem.optionSelected 
         ? 
         orderItem.optionSelected === item.optionSelected &&

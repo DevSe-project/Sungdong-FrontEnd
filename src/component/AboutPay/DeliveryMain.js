@@ -2,10 +2,12 @@ import { useEffect, useRef, useState } from 'react'
 import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner'
 import { Delivery } from './Delivery'
 import styles from './DeliveryMain.module.css'
+import { useDataStore } from '../../store/DataStore'
 export function DeliveryMain(props){
   //로그인 정보 불러오기
+  const {orderData} = useDataStore();
   const inLogin = props.decryptData(JSON.parse(sessionStorage.getItem('saveLoginData')));
-  const filterOrderData = props.orderData && props.orderData.filter((item)=>item.userId === inLogin.id);
+  const filterOrderData = orderData && orderData.filter((item)=>item.userId === inLogin.id);
   
   const [searchTerm, setSearchTerm] = useState('');
   const [resultSearch, setResultSearch] = useState('');
@@ -117,7 +119,7 @@ export function DeliveryMain(props){
           </div>
         </div>
       </div>
-      <Delivery decryptData={props.decryptData} resultSearch={resultSearch} setResultSearch={setResultSearch} orderData={props.orderData}/>
+      <Delivery decryptData={props.decryptData} resultSearch={resultSearch} setResultSearch={setResultSearch}/>
     </div>
   )
 }

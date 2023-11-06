@@ -4,8 +4,10 @@ import { AdminHeader } from "../AdminHeader";
 import { AdminMenuData } from "../AdminMenuData";
 import WrtieModal from "./WriteModal";
 import EditModal from "./EditModal";
+import { useListStore } from "../../../store/DataStore";
 
-export default function AdminNotice(props) {
+export default function AdminNotice() {
+  const {postList, setPostList} = useListStore();
   // State
   const [modal, setModal] = useState(false); // modal on / off
   const [modalName, setModalName] = useState(''); // what is modal?
@@ -89,14 +91,14 @@ export default function AdminNotice(props) {
     // 조건에 부합한다면
     if (isInputValid) {
       const newPost = {
-        id: props.list.length + 1,
+        id: postList.length + 1,
         title,
         contents,
         writer,
         date: `${currentYear}/${currentMonth}/${currentDay} ${currentHour}시 ${currentMinute}분`,
       };
       // 입력받은 정보 추가
-      props.setList((prevListData) => [...prevListData, newPost]);
+      setPostList((prevListData) => [...prevListData, newPost]);
       alert("등록되었습니다.");
       // 입력란 초기화
       setTempList({
@@ -119,11 +121,11 @@ export default function AdminNotice(props) {
   // 공지사항 리스트 업데이트
   const updateNotice = (index, updatedData) => {
     // 현재 공지사항 리스트 복제
-    const updatedList = [...props.list];
+    const updatedList = [...postList];
     // 업데이트할 해당 공지사항에 새로운 데이터 할당
     updatedList[index] = updatedData;
     // 부모 컴포넌트에 업데이트된 리스트 전달
-    props.setList(updatedList);
+    setPostList(updatedList);
   };
 
 
@@ -157,7 +159,7 @@ export default function AdminNotice(props) {
             {/* Title */}
             <div className={styles.noticeList_post}>글 목록</div>
             {/* List */}
-            {props.list.map((item, index) => (
+            {postList.map((item, index) => (
               <div className={styles.noticeList_list} onClick={() => { onOpen(index) }}> {/* 선택 모달의 key를 글 수정으로 지정*/}
                 {/* No */}
                 <div className={styles.noticeList_no}
@@ -178,9 +180,9 @@ export default function AdminNotice(props) {
                 <div className={styles.noticeList_del}>
                   <div className={styles.noticeList_delBox}
                     onClick={() => {
-                      const data = [...props.list];
+                      const data = [...postList];
                       data.splice(index, 1);
-                      props.setList(data);
+                      setPostList(data);
                     }
                     }>
                     삭제
@@ -196,7 +198,7 @@ export default function AdminNotice(props) {
           <WrtieModal modalName={modalName} setModalName={setModalName} modal={modal} setModal={setModal} tempList={tempList} setTempList={setTempList} addPost={addPost} closeWriteModal={closeWriteModal} />
           :
           modal && modalName === 'edit' ?
-            <EditModal updateNotice={updateNotice} list={props.list} modalName={modalName} setModalName={setModalName} modal={modal} setModal={setModal} tempList={tempList} setTempList={setTempList} selectedItemIndex={selectedItemIndex} setSelectedItemIndex={setSelectedItemIndex} closeWriteModal={closeWriteModal} />
+            <EditModal updateNotice={updateNotice} list={postList} modalName={modalName} setModalName={setModalName} modal={modal} setModal={setModal} tempList={tempList} setTempList={setTempList} selectedItemIndex={selectedItemIndex} setSelectedItemIndex={setSelectedItemIndex} closeWriteModal={closeWriteModal} />
             :
             null
       }

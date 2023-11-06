@@ -1,13 +1,15 @@
 import styles from './TodayNewsInner.module.css'
 import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useDataStore } from '../../store/DataStore';
 export function TodayNewsInner(props){
+  const {todayTopicData} = useDataStore();
   const navigate = useNavigate();
   let {id} = useParams();
   const loadData = ()=> {
-    if(props.todayTopicData){
+    if(todayTopicData){
       //입력된 id과 data내부의 id값 일치하는 값 찾아 변수 선언
-      const listData = props.todayTopicData.find((item)=>item.id==id);
+      const listData = todayTopicData.find((item)=>item.id==id);
       return listData;
     } else {
       return <div>데이터를 불러오는 중이거나 상품을 찾을 수 없습니다.</div>;
@@ -26,18 +28,18 @@ export function TodayNewsInner(props){
         <div className={styles.contentsHead}>
           {/* 본문 제목 */}
           <div>
-            <h1>{props.todayTopicData && postData ? postData.title
+            <h1>{todayTopicData && postData ? postData.title
             : '로딩중'}
             </h1>
           </div>
           <div>
-            <h4>관리자 | {props.todayTopicData && postData ? postData.date
+            <h4>관리자 | {todayTopicData && postData ? postData.date
             : '로딩중'}</h4>
           </div>
         </div>
         <div className={styles.contentsBody}>
           {/* 본문 내용 */}
-          <p>{props.todayTopicData && postData ? postData.content
+          <p>{todayTopicData && postData ? postData.content
           : '로딩중'}</p>
         </div>
         <div className={styles.contentsFoot}>
@@ -56,7 +58,7 @@ export function TodayNewsInner(props){
             <button
             className={styles.button}
             onClick={()=> {
-              if(props.todayTopicData.includes(postData.id + 1)) {
+              if(todayTopicData.includes(postData.id + 1)) {
                 navigate(`/todayTopicPost/${postData.id + 1}`);
               } else {
               alert("현재 게시글이 목록의 마지막 게시글입니다.")

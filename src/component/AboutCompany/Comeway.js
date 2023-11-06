@@ -1,7 +1,7 @@
 import styles from './Comeway.module.css'
 import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner'
 import { useEffect } from 'react';
-export function Comeway(props){
+export function Comeway(){
   // 카카오맵 API
   useEffect(() => {
   // 카카오 맵 스크립트 로드되었는지 확인

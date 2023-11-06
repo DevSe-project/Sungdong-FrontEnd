@@ -3,9 +3,10 @@ import { TopBanner } from "./TopBanner";
 import { useNavigate } from "react-router-dom";
 import styles from './Category.module.css'
 import React from 'react';
-import { useDataStore } from "../../../store/DataStore";
+import { useDataStore, useListStore } from "../../../store/DataStore";
 export function Category(props){
     const { data, categoryData } = useDataStore();
+    const { basketList, setBasketList } = useListStore();
     // 카테고리
     const [selectedCategory, setSelectedCategory] = useState('전체'); //메인 카테고리
     const [selectedSubCategory, setSelectedSubCategory] = useState(null); //서브 카테고리
@@ -24,7 +25,7 @@ export function Category(props){
 
     // 카테고리 찾기 - mainCategory와 subCategory가 바뀔 때 마다 실행
     useEffect(() => {
-      //props.categoryData가 있을 때만 진행
+      //categoryData가 있을 때만 진행
       if (categoryData) {
         if (mainCategory) {
           setSelectedCategory(mainCategory);
@@ -207,7 +208,7 @@ export function Category(props){
     const [optionSelected, setOptionSelected] = useState(filteredItems.map(() => ""));
     
     // 장바구니 복사
-    const copyList = [...props.basketList];
+    const copyList = [...basketList];
 
     // userId가 같은 항목만 필터링
     const onlyUserData = copyList.filter((item)=> item.userId === inLogin.id);
@@ -338,7 +339,7 @@ export function Category(props){
         return {...item, userId: inLogin.id };
       });
     
-      props.setBasketList([...props.basketList, ...basketProductsToAdd]);
+      setBasketList([...basketList, ...basketProductsToAdd]);
     
       alert("해당 상품이 장바구니에 추가되었습니다.");
       setSelectedItems([]);

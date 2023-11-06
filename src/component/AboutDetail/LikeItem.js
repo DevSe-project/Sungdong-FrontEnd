@@ -1,8 +1,10 @@
+import { useListStore } from '../../store/DataStore';
 import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner'
 import styles from './LikeItem.module.css'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-export function LikeItem(props){
+export function LikeItem(){
+  const {wishList, setWishList} = useListStore();
   const navigate = useNavigate();
 
   // 체크박스를 통해 선택한 상품들을 저장할 상태 변수
@@ -16,7 +18,7 @@ export function LikeItem(props){
     setSelectAll(!selectAll);
 
     if (!selectAll) {
-      const allId = props.wishlist.map((item) => item.id);
+      const allId = wishList.map((item) => item.id);
       setSelectedItems(allId);
     } else {
       setSelectedItems([]);
@@ -35,9 +37,9 @@ export function LikeItem(props){
   // 선택된 항목들을 삭제하는 함수
   const deletedList = () => {
     if(selectedItems !== null && selectedItems.length > 0){
-      //props.wishlist 배열에서 selectedItems에 포함된(체크박스 선택된) 항목들이 아닌 것들로 새로운 배열을 생성
-      const updatedWishlist = props.wishlist.filter((item) => !selectedItems.includes(item.id)); 
-      props.setWishlist(updatedWishlist);
+      //wishList 배열에서 selectedItems에 포함된(체크박스 선택된) 항목들이 아닌 것들로 새로운 배열을 생성
+      const updatedWishlist = wishList.filter((item) => !selectedItems.includes(item.id)); 
+      setWishList(updatedWishlist);
 
       // LocalStorage에 업데이트된 찜 목록 저장
       localStorage.setItem('likelist', JSON.stringify(updatedWishlist));
@@ -75,7 +77,7 @@ export function LikeItem(props){
               </tr>
             </thead>
             <tbody>
-            {props.wishlist.map((item, key)=>(
+            {wishList.map((item, key)=>(
               <tr key={key}>
                 <td>
                   <input 

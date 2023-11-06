@@ -21,13 +21,18 @@ export const useDataStore = create((set)=>({
   set( (prev) => ({
     userData : input
     })),
+  todayTopicData: [],
+  setTodayTopicData : (input) =>
+  set( (prev) => ({
+    todayTopicData : input
+    })),
 }))
 
 export const useListStore = create((set)=>({
   wishList : [],
   setWishList : (val) =>
-   set( (state) => ({
-     wishList : val 
+   set( (prev) => ({
+     wishList : val
     })),
   orderList : [],
   setOrderList : (val) =>
@@ -38,5 +43,10 @@ export const useListStore = create((set)=>({
   setBasketList : (val) =>
    set( (state) => ({
      basketList : val 
+    })),
+  postList : [],
+  setPostList : (val) =>
+    set( (state) => ({
+      postList : val 
     }))
 }))

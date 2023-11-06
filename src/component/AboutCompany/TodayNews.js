@@ -3,7 +3,9 @@ import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner'
 import { useEffect, useRef, useState } from 'react'
 import { TodayNewsCard } from './TodayNewsCard'
 import { TodayNewsList } from './TodayNewsList'
-export function TodayNews(props){
+import { useDataStore } from '../../store/DataStore'
+export function TodayNews(){
+  const {todayTopicData} = useDataStore();
   const [filterList, setFilterList] = useState(false);
   const [filterModal, setFilterModal] = useState(false);
   const [filterSearch, setFilterSearch] = useState('제목');
@@ -30,7 +32,7 @@ export function TodayNews(props){
     if (query !== '' && filterSearch === '제목') {
       // 데이터 중 타이틀로들만 구성된 변수 생성 후 
       // 그 변수들 중 첫 글자와 입력값이 일치하는 것을 연관 검색어 목록에 띄워줌
-      const filteredTitle = props.todayTopicData
+      const filteredTitle = todayTopicData
         .map((item) => item.title)
         .filter((word) => word.includes(searchTerm));
 
@@ -50,7 +52,7 @@ export function TodayNews(props){
       );
     // 입력창이 공백이면 연관 검색어를 띄우지 않는다.
     } else if(query !== '' && filterSearch === '내용') {
-      const filteredTitle = props.todayTopicData
+      const filteredTitle = todayTopicData
         .map((item) => item.content)
         .filter((word) => word.includes(searchTerm));
 
@@ -148,7 +150,7 @@ export function TodayNews(props){
               : 'fas fa-angle-down'}
               />
             </div>
-            {props.todayTopicData && filterModal &&
+            {todayTopicData && filterModal &&
             <div className={styles.filterUI}>
               <ul className={styles.filter}>
                 <li 
@@ -196,8 +198,8 @@ export function TodayNews(props){
         </div>
         {/* 필터에 따라 표시되는 형태가 다름 */}
         {!filterList 
-        ? <TodayNewsCard resultSearch={resultSearch} todayTopicData={props.todayTopicData} setTodayTopicData={props.setTodayTopicData} />
-        : <TodayNewsList resultSearch={resultSearch} todayTopicData={props.todayTopicData} setTodayTopicData={props.setTodayTopicData} />
+        ? <TodayNewsCard resultSearch={resultSearch} />
+        : <TodayNewsList resultSearch={resultSearch} />
         }
       </main>
     </div>

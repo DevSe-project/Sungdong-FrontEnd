@@ -2,8 +2,10 @@ import styles from './TodayNewsCard.module.css'
 import image from '../../image/page_ready.png'
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDataStore } from '../../store/DataStore';
 export function TodayNewsCard(props){
   const navigate = useNavigate();
+  const {todayTopicData} = useDataStore();
   // 게시물 데이터와 페이지 번호 상태 관리
   const [currentPage, setCurrentPage] = useState(1);
   const [filterSearch, setFilterSearch] = useState("");
@@ -24,7 +26,7 @@ export function TodayNewsCard(props){
   useEffect(() => {
     if (filterSearch !== "") {
       // 데이터에서 타이틀과 검색결과를 찾고
-      const filtered = props.todayTopicData.filter((item) =>
+      const filtered = todayTopicData.filter((item) =>
         item.title.includes(props.resultSearch) || item.content.includes(props.resultSearch))
       // 목록 밑작업 해줌
       const addList = filtered.map((item, index) => ({
@@ -43,7 +45,7 @@ export function TodayNewsCard(props){
     return (
       filteredItems.length > 0 
     ? filteredItems.slice(startIndex, startIndex + 5)
-    : props.todayTopicData.slice(startIndex, startIndex + 5)
+    : todayTopicData.slice(startIndex, startIndex + 5)
     )
   };
   return(
@@ -55,7 +57,7 @@ export function TodayNewsCard(props){
       이 검색 되었습니다.
       </h3>}
       <div className={styles.contentsContainer}>
-        {props.todayTopicData ? getCurrentPagePosts().map((item, index)=> (
+        {todayTopicData ? getCurrentPagePosts().map((item, index)=> (
         <div onClick={()=>navigate(`/todayTopicPost/${item.id}`)} key={index} className={styles.contentsBox}>
           <img src={image} alt='이미지'/>
           <div style={{
@@ -107,7 +109,7 @@ export function TodayNewsCard(props){
           <button
           className={styles.button}
           onClick={()=> {
-            if(props.todayTopicData.length > 5){
+            if(todayTopicData.length > 5){
               setCurrentPage(currentPage + 1)
             } else {
               alert("존재하는 다음 페이지가 없습니다.")

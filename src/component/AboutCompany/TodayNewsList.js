@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import styles from './TodayNewsList.module.css'
 import { useNavigate } from 'react-router-dom';
+import { useDataStore } from '../../store/DataStore';
 export function TodayNewsList(props){
+    const {todayTopicData} = useDataStore();
     const navigate = useNavigate();
     // 게시물 데이터와 페이지 번호 상태 관리
     const [currentPage, setCurrentPage] = useState(1);
@@ -25,7 +27,7 @@ export function TodayNewsList(props){
     useEffect(() => {
       if (filterSearch !== "") {
         // 데이터에서 타이틀과 검색결과를 찾고
-        const filtered = props.todayTopicData.filter((item) =>
+        const filtered = todayTopicData.filter((item) =>
           item.title.includes(props.resultSearch) || item.content.includes(props.resultSearch))
         // 목록 밑작업 해줌
         const addList = filtered.map((item, index) => ({
@@ -44,7 +46,7 @@ export function TodayNewsList(props){
       return (
         filteredItems.length > 0 
       ? filteredItems.slice(startIndex, startIndex + 5)
-      : props.todayTopicData.slice(startIndex, startIndex + 5)
+      : todayTopicData.slice(startIndex, startIndex + 5)
       )
     };
   return(
@@ -65,7 +67,7 @@ export function TodayNewsList(props){
           </tr>
         </thead>
         <tbody>
-          {props.todayTopicData ? getCurrentPagePosts().map((item, index)=> (
+          {todayTopicData ? getCurrentPagePosts().map((item, index)=> (
           <tr key={index} className={styles.list}>
             <td>{item.id}</td>
             <td onClick={()=>navigate(`/todayTopicPost/${item.id}`)} className={styles.titleTd}>
@@ -97,7 +99,7 @@ export function TodayNewsList(props){
         <button
         className={styles.button}
         onClick={()=> {
-          if(props.todayTopicData.length > 5){
+          if(todayTopicData.length > 5){
             setCurrentPage(currentPage + 1)
           } else {
             alert("존재하는 다음 페이지가 없습니다.")

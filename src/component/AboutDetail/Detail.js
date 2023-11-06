@@ -5,10 +5,13 @@ import { useState } from 'react'
 import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner'
 import { TabInfo } from './TabInfo'
 import CryptoJS from 'crypto-js';
+import { useDataStore, useListStore } from '../../store/DataStore'
 
 export function Detail(props) {
   // Usenavigate
   const navigate = useNavigate();
+  const {data} = useDataStore();
+  const {wishList, setWishList, setOrderList, basketList, setBasketList} = useListStore();
 
  //수량 개수 state
   const [count, setCount] = useState("1");
@@ -25,9 +28,9 @@ export function Detail(props) {
   //주소창 입력된 id값 받아오기
   let {id} = useParams();
   const loadData = ()=> {
-    if(props.data){
+    if(data){
       //입력된 id과 data내부의 id값 일치하는 값 찾아 변수 선언
-      const data = props.data.find((item)=>item.id==id);
+      const data = data.find((item)=>item.id==id);
       return data;
     } else {
       return <div>데이터를 불러오는 중이거나 상품을 찾을 수 없습니다.</div>;
@@ -112,7 +115,7 @@ function buyThis(product, count){
       // sessionStorage에 저장
       const encryptedData = CryptoJS.AES.encrypt(JSON.stringify([newBuyProduct()]), encryptionKey).toString();
       sessionStorage.setItem('orderData', JSON.stringify(encryptedData));
-      props.setOrderList([newBuyProduct()]);
+      setOrderList([newBuyProduct()]);
       navigate("/basket/receipt");
       props.setActiveTab(2);
     }
@@ -138,7 +141,7 @@ function basketThis(product, count){
   }
 
   //중복 확인 (.some 함수 : basketList item.id 중 product.id와 같은 중복인 아이템이 있으면 true 반환)
-  const isDuplicate = props.basketList.some((basketItem) =>
+  const isDuplicate = basketList.some((basketItem) =>
   product.option 
   ?
   basketItem.id === product.id &&
@@ -171,7 +174,7 @@ function basketThis(product, count){
     alert("이미 장바구니에 추가된 상품입니다.");
   } else {
     // 중복 상품이 아닌 경우에만 추가
-    props.setBasketList([...props.basketList, newBasketProduct()]);
+    setBasketList([...basketList, newBasketProduct()]);
     alert("해당 상품이 장바구니에 추가되었습니다.");
   }
 }
@@ -179,16 +182,16 @@ function basketThis(product, count){
 
   // 찜하기
   function likethis(product){
-    //중복 확인 (.some 함수 : wishlist의 item.id 중 product.id와 같은 중복인 아이템이 있으면 true 반환 | !some이니 false면..== 중복이 아니면..)
-    if (!props.wishlist.some((item) => item.id === product.id)){
-      const likelist = [...props.wishlist, product]; //props.wishlist 배열들과 배열 product를 합쳐서 새로운 배열 likelist를 생성
-      props.setWishlist(likelist); //State에 새로운 배열 삽입
+    //중복 확인 (.some 함수 : wishList의 item.id 중 product.id와 같은 중복인 아이템이 있으면 true 반환 | !some이니 false면..== 중복이 아니면..)
+    if (!wishList.some((item) => item.id === product.id)){
+      const likelist = [...wishList, product]; //wishList 배열들과 배열 product를 합쳐서 새로운 배열 likelist를 생성
+      setWishList(likelist); //State에 새로운 배열 삽입
       localStorage.setItem('likelist', JSON.stringify(likelist)); //새로고침해도 찜 목록 유지
       alert("해당 상품이 관심 상품 목록에 추가되었습니다.")
     } else {
-      //wishlist 아이템들 중에서 item.id와 product.id와 같지 않은 것들로 필터링하여 unlikelist에 저장
-      const unlikelist = props.wishlist.filter((item)=> item.id !== product.id);
-      props.setWishlist(unlikelist); // state에 새로운 list 삽입
+      //wishList 아이템들 중에서 item.id와 product.id와 같지 않은 것들로 필터링하여 unlikelist에 저장
+      const unlikelist = wishList.filter((item)=> item.id !== product.id);
+      setWishList(unlikelist); // state에 새로운 list 삽입
       localStorage.setItem('likelist', JSON.stringify(unlikelist)); //새로고침하면 필터링 된 목록 표시
     }
   }
@@ -202,7 +205,7 @@ function basketThis(product, count){
 
             {/* 상품 이미지 부분 */}
             <div className={styles.headLeft}>
-              <img src={props.data && detailData.image.original} alt="이미지" 
+              <img src={data && detailData.image.original} alt="이미지" 
               className={styles.thumnail}/>
             </div>
 
@@ -211,12 +214,12 @@ function basketThis(product, count){
             {/* 상품 정보(상품 이름, 가격) 부분 (삼항연산자 : 스켈레톤 처리) */}
             <div className={styles.headRight}>
               <div className={styles.textBox}>
-                {props.data 
+                {data 
                 ? detailData.title
                 : <div className={styles.skeleton}>&nbsp;</div>}
               </div>
               <h4 className={styles.h4}>
-                {props.data 
+                {data 
                 ? detailData.discount !== 0
                 ? 
                 <div className={styles.priceTag}>
@@ -239,7 +242,7 @@ function basketThis(product, count){
 
               <div className={styles.textBox}>
                 {/* 상품 수량 및 옵션, 최종 결제금액 */}
-              {props.data ? 
+              {data ? 
               <>
                 <label>
                 수량 : <input value={count} className={styles.input} onChange={maxLengthCheck} type='number' placeholder='숫자만 입력'/> 개
@@ -264,7 +267,7 @@ function basketThis(product, count){
               : <div className={styles.skeleton}>&nbsp;</div>
               }
               </div>
-              {props.data ?
+              {data ?
                 <>
                 총 수량 {count ? count : 1}개 |
                 <h4 className={styles.finalprice}>
@@ -291,7 +294,7 @@ function basketThis(product, count){
                   <button 
                   onClick={()=>{likethis(detailData)}} 
                   className={styles.sideButton}>
-                  {props.wishlist.some((item) => item.id === detailData.id)
+                  {wishList.some((item) => item.id === detailData.id)
                   ? <i className="fa-solid fa-heart"/> //꽉 찬 하트와 빈 하트 아이콘
                   : <i className="fa-regular fa-heart"/>} 
                   &nbsp;찜하기
@@ -308,7 +311,7 @@ function basketThis(product, count){
         <div className={styles.sticky} >
           <Tab navigate={props.navigate}/>
         </div>
-        <TabInfo decryptData={props.decryptData} login={props.login} setLogin={props.setLogin} basketList={props.basketList} setBasketList={props.setBasketList} setData={props.setData} data={props.data} qnAData={props.qnAData} setQnAData={props.setQnAData} detailData={detailData}/>       
+        <TabInfo decryptData={props.decryptData} login={props.login} setLogin={props.setLogin} detailData={detailData}/>       
       </main>
     </div>
   )
