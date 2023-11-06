@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './CategoryBar.module.css'
 import { useEffect, useState } from 'react';
-import { useDataStore } from '../../../store/DataStore';
+import { useDataStore } from '../../../Store/DataStore';
 
 export function CategoryBar(props) {
   const { categoryData } = useDataStore();

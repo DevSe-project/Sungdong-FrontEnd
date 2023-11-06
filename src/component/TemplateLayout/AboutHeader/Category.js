@@ -3,7 +3,7 @@ import { TopBanner } from "./TopBanner";
 import { useNavigate } from "react-router-dom";
 import styles from './Category.module.css'
 import React from 'react';
-import { useDataStore, useListStore } from "../../../store/DataStore";
+import { useDataStore, useListStore } from "../../../Store/DataStore";
 export function Category(props){
     const { data, categoryData } = useDataStore();
     const { basketList, setBasketList } = useListStore();

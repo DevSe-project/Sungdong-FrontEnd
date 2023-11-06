@@ -1,7 +1,7 @@
 import { React, useEffect, useState } from 'react';
 import styles from './Modal.module.css';
 import { useNavigate } from 'react-router-dom';
-import { useDataStore } from '../../store/DataStore';
+import { useDataStore } from '../../Store/DataStore';
 
 export default function CodeInputModal(props) {
 

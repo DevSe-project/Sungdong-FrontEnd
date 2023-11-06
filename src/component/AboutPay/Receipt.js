@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import styles from './Receipt.module.css'
 import { useNavigate } from 'react-router-dom';
 import CryptoJS from 'crypto-js';
-import { useDataStore, useListStore } from '../../store/DataStore';
+import { useDataStore, useListStore } from '../../Store/DataStore';
 
 export function Receipt(props){
   const navigate = useNavigate();

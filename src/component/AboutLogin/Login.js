@@ -7,7 +7,7 @@ import CodeInputModal from './CodeInputModal';
 import CryptoJS from 'crypto-js';
 import axios from 'axios';
 import UserContext from '../AboutContext/UserContext';
-import { useDataStore } from '../../store/DataStore';
+import { useDataStore } from '../../Store/DataStore';
 
 export function Login(props) {
 

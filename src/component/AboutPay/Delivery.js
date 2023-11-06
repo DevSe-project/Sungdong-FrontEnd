@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import styles from './Delivery.module.css'
 import { useEffect, useState } from 'react';
 import CryptoJS from 'crypto-js';
-import { useDataStore } from '../../store/DataStore';
+import { useDataStore } from '../../Store/DataStore';
 export function Delivery(props){
   //로그인 정보 불러오기
   const { orderData } = useDataStore();

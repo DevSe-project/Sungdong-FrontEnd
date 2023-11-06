@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner'
 import { Delivery } from './Delivery'
 import styles from './DeliveryMain.module.css'
-import { useDataStore } from '../../store/DataStore'
+import { useDataStore } from '../../Store/DataStore'
 export function DeliveryMain(props){
   //로그인 정보 불러오기
   const {orderData} = useDataStore();

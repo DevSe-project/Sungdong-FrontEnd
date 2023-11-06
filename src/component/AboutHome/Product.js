@@ -1,4 +1,4 @@
-import { useDataStore } from '../../store/DataStore';
+import { useDataStore } from '../../Store/DataStore';
 import styles from './Product.module.css'; 
 import { useNavigate } from 'react-router-dom';
 export function Product(){

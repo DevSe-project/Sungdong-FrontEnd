@@ -4,7 +4,7 @@ import { AdminHeader } from "../AdminHeader";
 import { AdminMenuData } from "../AdminMenuData";
 import WrtieModal from "./WriteModal";
 import EditModal from "./EditModal";
-import { useListStore } from "../../../store/DataStore";
+import { useListStore } from "../../../Store/DataStore";
 
 export default function AdminNotice() {
   const {postList, setPostList} = useListStore();

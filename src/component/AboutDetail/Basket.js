@@ -4,7 +4,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner';
 import CryptoJS from 'crypto-js';
 import React from 'react';
-import { useListStore } from '../../store/DataStore';
+import { useListStore } from '../../Store/DataStore';
 export function Basket(props){
   const { basketList, setBasketList, orderList, setOrderList } = useListStore();
   // 암호화와 복호화 키

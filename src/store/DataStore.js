@@ -3,9 +3,9 @@ import { create } from 'zustand'
 export const useDataStore = create((set)=>({
   data : [],
   setData : (input) =>
-   set( (prev) => ({
+   set({
      data : input
-     })),
+     }),
   orderData: [],
   setOrderData : (input) =>
   set( (prev) => ({

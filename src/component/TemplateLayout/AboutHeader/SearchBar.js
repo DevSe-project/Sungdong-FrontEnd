@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import styles from './SearchBar.module.css';
 import { useNavigate } from 'react-router-dom';
-import { useDataStore } from '../../../store/DataStore';
+import { useDataStore } from '../../../Store/DataStore';
 
 export function SearchBar() {
   const {data} = useDataStore();

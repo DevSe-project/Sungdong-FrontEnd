@@ -1,4 +1,4 @@
-import { useListStore } from '../../store/DataStore';
+import { useListStore } from '../../Store/DataStore';
 import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner'
 import styles from './LikeItem.module.css'
 import { useState } from 'react';

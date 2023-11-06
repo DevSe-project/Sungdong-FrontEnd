@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from 'react';
 import styles from './Modal.module.css';
-import { useDataStore } from '../../store/DataStore';
+import { useDataStore } from '../../Store/DataStore';
 
 export default function FindModal(props) {
     const {userData, setUserData} = useDataStore();

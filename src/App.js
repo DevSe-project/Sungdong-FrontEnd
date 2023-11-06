@@ -58,7 +58,7 @@ import AdminContact from './component/AboutAdmin/Contact/AdminContact';
 import { TopBanner } from './component/TemplateLayout/AboutHeader/TopBanner';
 import { MenuData } from './component/TemplateLayout/AboutMenuData/MenuData';
 import { Footer } from './component/TemplateLayout/AboutFooter/Footer';
-import { useDataStore, useListStore } from "./store/DataStore";
+import { useDataStore, useListStore } from "./Store/DataStore";
 
 function App() {
   const navigate = useNavigate();
@@ -209,6 +209,7 @@ function App() {
     .catch(()=>{setIsLogin(false)})
   }, [])
 
+  // 이 부분 zustand State화 시켜줘
   // (START) 아이콘 클릭 관련 객체, 함수, state //
   const [iconHovered, setIconHovered] = useState(false);
   const [iconClicked, setIconClicked] = useState(true);

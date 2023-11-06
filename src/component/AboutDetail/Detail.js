@@ -5,12 +5,12 @@ import { useState } from 'react'
 import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner'
 import { TabInfo } from './TabInfo'
 import CryptoJS from 'crypto-js';
-import { useDataStore, useListStore } from '../../store/DataStore'
+import { useDataStore, useListStore } from '../../Store/DataStore'
 
 export function Detail(props) {
   // Usenavigate
   const navigate = useNavigate();
-  const {data} = useDataStore();
+  const {data, setData} = useDataStore();
   const {wishList, setWishList, setOrderList, basketList, setBasketList} = useListStore();
 
  //수량 개수 state
@@ -28,7 +28,7 @@ export function Detail(props) {
   //주소창 입력된 id값 받아오기
   let {id} = useParams();
   const loadData = ()=> {
-    if(data){
+    if(setData && data){
       //입력된 id과 data내부의 id값 일치하는 값 찾아 변수 선언
       const data = data.find((item)=>item.id==id);
       return data;

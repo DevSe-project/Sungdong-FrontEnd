@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import styles from './TodayNewsList.module.css'
 import { useNavigate } from 'react-router-dom';
-import { useDataStore } from '../../store/DataStore';
+import { useDataStore } from '../../Store/DataStore';
 export function TodayNewsList(props){
     const {todayTopicData} = useDataStore();
     const navigate = useNavigate();
