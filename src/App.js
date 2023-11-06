@@ -1,3 +1,4 @@
+import { firestore } from "./firebase"; // 파이어베이스 데이터베이스 임포트
 import './App.css';
 import CryptoJS from 'crypto-js';
 import { useContext, useEffect, useState } from 'react';
