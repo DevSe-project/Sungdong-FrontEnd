@@ -136,14 +136,14 @@ export default function AdminNotice(props) {
         <AdminMenuData />
         <div className={styles.mainContents}>
           {/* 코드발급 | 최신코드 묶음 */}
-          <div className={styles.writeContainer}>
+          <div className={styles.evnetHandleContainer}>
             {/* 코드 발급 블록 */}
-            <div className={styles.writeContainer_inner}>
+            <div className={styles.leftModule}>
               <div className={styles.writeNotice_icon}>Click <i class="fa-solid fa-arrow-down"></i></div>
               <div className={styles.write} onClick={() => { openWriteModal() }}>글 작성</div>
             </div>
             {/* 뭐 넣을지 미정 */}
-            <div className={styles.none_block}>
+            <div className={styles.rightModule}>
               <div className={styles.none_title}>
                 custom title
               </div>
@@ -175,8 +175,8 @@ export default function AdminNotice(props) {
                   작성자: {item.writer}
                 </div>
                 {/* Del */}
-                <div>
-                  <div className={styles.notice_del}
+                <div className={styles.noticeList_del}>
+                  <div className={styles.noticeList_delBox}
                     onClick={() => {
                       const data = [...props.list];
                       data.splice(index, 1);
