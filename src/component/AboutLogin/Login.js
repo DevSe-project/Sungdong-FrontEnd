@@ -7,8 +7,11 @@ import CodeInputModal from './CodeInputModal';
 import CryptoJS from 'crypto-js';
 import axios from 'axios';
 import UserContext from '../AboutContext/UserContext';
+import { useDataStore } from '../../store/DataStore';
 
 export function Login(props) {
+
+  const {userData, setUserData} = useDataStore(); //유저 데이터 불러오기
 
   const { isLogin, login, logout } = useContext(UserContext);
 
@@ -65,11 +68,11 @@ export function Login(props) {
   }
 
   function developLogin() { //서버 없이 테스트용 로그인 함수
-    const confirmUser = props.userData.find(userData => userData.id === id && userData.password === pw); //UserData의 id,password와 input받은 id,pw값이 일치하는 것을 꺼내옴
+    const confirmUser = userData.find(userData => userData.id === id && userData.password === pw); //UserData의 id,password와 input받은 id,pw값이 일치하는 것을 꺼내옴
     if (confirmUser && confirmUser.id === id && confirmUser.password === pw) { //꺼내 온 id,pw가 일치한다면 
       setId(''); //입력된 id를 지움
       setPw(''); //입력된 pw를 지움
-      console.log(props.userData); //확인된 유저데이터에 뭐가 들었는지 console로 확인
+      console.log(userData); //확인된 유저데이터에 뭐가 들었는지 console로 확인
       //session에 담을 data 객체
       const LoginDataObj = {
         id: id,
@@ -151,11 +154,11 @@ export function Login(props) {
         {/* 아이디or비밀번호 둘 중 하나를 누르기만 하면 찾기창 오픈 
          ->오픈했을 때 나타나는 화면은 openModal의 state에 따라 FindModal.js에서 결정 */}
         {modalType &&
-          <FindModal userData={props.userData} setUserData={props.setUserData} modalType={modalType} closeModal={closeModal} openModal={openModal} />}
+          <FindModal modalType={modalType} closeModal={closeModal} openModal={openModal} />}
 
         {/* 회원가입을 눌러야만 코드입력창 오픈 */}
         {modalType === 'code' &&
-          <CodeInputModal userData={props.userData} setUserData={props.setUserData} closeModal={closeModal} codeState={props.codeState} setCode={props.setCodeState} />}
+          <CodeInputModal closeModal={closeModal} codeState={props.codeState} setCode={props.setCodeState} />}
       </div>
 
     </div>

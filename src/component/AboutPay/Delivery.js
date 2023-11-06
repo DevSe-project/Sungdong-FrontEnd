@@ -2,10 +2,12 @@ import { useNavigate } from 'react-router-dom'
 import styles from './Delivery.module.css'
 import { useEffect, useState } from 'react';
 import CryptoJS from 'crypto-js';
+import { useDataStore } from '../../store/DataStore';
 export function Delivery(props){
   //로그인 정보 불러오기
+  const { orderData } = useDataStore();
   const inLogin = props.decryptData(JSON.parse(sessionStorage.getItem('saveLoginData')));
-  const filterOrderData = props.orderData && props.orderData.filter((item)=>item.userId === inLogin.id);
+  const filterOrderData = orderData && orderData.filter((item)=>item.userId === inLogin.id);
   const [filterSearch, setFilterSearch] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
   // 암호화와 복호화 키
@@ -67,7 +69,7 @@ export function Delivery(props){
     const startIndex = (currentPage - 1) * 5; // 한 페이지에 5개씩 표시
     return filteredItems.length > 0 
     ? filteredItems.slice(startIndex, startIndex + 5) 
-    : props.orderData && filterOrderData.slice(startIndex, startIndex + 5)
+    : orderData && filterOrderData.slice(startIndex, startIndex + 5)
   };
 
 
@@ -79,7 +81,7 @@ export function Delivery(props){
       <span style={{color: '#CC0000', fontWeight: '650', margin: '0.5em'}}>{filteredItems.length}건</span>
       이 검색 되었습니다.
       </h3>}
-      {props.orderData ?
+      {orderData ?
       getCurrentPagePosts().map((item, key)=> 
       <div key={key} className={styles.deliveryList}>
         <div className={styles.orderDate}>

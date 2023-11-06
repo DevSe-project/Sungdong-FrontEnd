@@ -18,9 +18,9 @@ export function TopBanner(props) {
           <img className={styles.image} onClick={() => navigate("/")} src={logo} alt="로고" height='70px' />
           <img className={styles.shortimage} onClick={() => navigate("/")} src={shortLogo} alt="로고" height='70px' />
           {/* 검색창 */}
-          <SearchBar data={props.data} setData={props.setData}/>
+          <SearchBar/>
           {/* 분리된 검색창 */}
-          <SeperateSearchBar data={props.data} setData={props.setData}/>
+          <SeperateSearchBar/>
           {/* 카테고리 아이콘 */}
           <li
             className='menu-item'
@@ -59,7 +59,7 @@ export function TopBanner(props) {
       {/* 클릭하면 나오는 카테고리바 */}
       <div style={{display: 'flex', justifyContent: 'flex-end', width: '100%'}}>
         <div className={styles.categoryBar}>
-          <CategoryBar selectedCategory={props.selectedCategory} setSelectedCategory={props.setSelectedCategory} selectedSubCategory={props.selectedSubCategory} setSelectedSubCategory={props.setSelectedSubCategory} data={props.data} setData={props.setData} categoryData={props.categoryData} setCategoryData={props.setCategoryData} category_dynamicStyle={props.category_dynamicStyle}/>
+          <CategoryBar selectedCategory={props.selectedCategory} setSelectedCategory={props.setSelectedCategory} selectedSubCategory={props.selectedSubCategory} setSelectedSubCategory={props.setSelectedSubCategory} category_dynamicStyle={props.category_dynamicStyle}/>
         </div>
       </div>
     </div>

@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import styles from './SeperateSearchBar.module.css';
 import { useNavigate } from 'react-router-dom';
+import { useDataStore } from '../../../store/DataStore';
 
-export function SeperateSearchBar(props) {
+export function SeperateSearchBar() {
+  const {data} = useDataStore();
+
   const navigate = useNavigate();
 
   const [selectedResult, setSelectedResult] = useState(null);
@@ -41,8 +44,8 @@ export function SeperateSearchBar(props) {
 
   // 검색 엔진 구현
   const handleSearch = () => {
-    if(props.data){
-    const filteredResults = props.data.filter(item => {
+    if(data){
+    const filteredResults = data.filter(item => {
       const productName = searchTerm.productName;
       const productCode = searchTerm.productCode;
       const productBrand = searchTerm.productBrand;

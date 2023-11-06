@@ -1,8 +1,9 @@
 import { React, useEffect, useState } from 'react';
 import styles from './Modal.module.css';
+import { useDataStore } from '../../store/DataStore';
 
 export default function FindModal(props) {
-
+    const {userData, setUserData} = useDataStore();
     // Input State
     const [inputForFind, setInputForFind] = useState({
         id: '',
@@ -13,7 +14,7 @@ export default function FindModal(props) {
     // 아이디 찾기 Input정보(대표명, 사업자등록번호) 일치 확인
     function checking_FindId() {
         // 일치하는 값 추출
-        const confirmIdFind = props.userData.find(userData => userData.corporationData.ceoName === inputForFind.ceoName && userData.corporationData.businessNum === inputForFind.biz_num);
+        const confirmIdFind = userData.find(userData => userData.corporationData.ceoName === inputForFind.ceoName && userData.corporationData.businessNum === inputForFind.biz_num);
         // 값이 있다면 조건문 실행
         if (confirmIdFind && confirmIdFind.corporationData.ceoName === inputForFind.ceoName && confirmIdFind.corporationData.businessNum === inputForFind.biz_num) {
             alert(`일치한 정보입니다. 아이디는 ${confirmIdFind.id}입니다.`);
@@ -25,7 +26,7 @@ export default function FindModal(props) {
     // 비밀번호 찾기 Input정보(아이디, 사업자등록번호) 일치 확인
     function checking_FindPw() {
         // 일치하는 값 추출
-        const confirmPwFind = props.userData.find(userData => userData.id === inputForFind.id && userData.corporationData.businessNum === inputForFind.biz_num);
+        const confirmPwFind = userData.find(userData => userData.id === inputForFind.id && userData.corporationData.businessNum === inputForFind.biz_num);
         // 값이 있다면 조건문 실행
         if (confirmPwFind && confirmPwFind.id === inputForFind.id && confirmPwFind.corporationData.businessNum === inputForFind.biz_num) {
             alert(`일치한 정보입니다. 비밀번호는 ${confirmPwFind.password}입니다.`);

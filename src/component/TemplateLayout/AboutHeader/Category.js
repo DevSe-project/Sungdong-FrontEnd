@@ -3,7 +3,9 @@ import { TopBanner } from "./TopBanner";
 import { useNavigate } from "react-router-dom";
 import styles from './Category.module.css'
 import React from 'react';
+import { useDataStore } from "../../../store/DataStore";
 export function Category(props){
+    const { data, categoryData } = useDataStore();
     // 카테고리
     const [selectedCategory, setSelectedCategory] = useState('전체'); //메인 카테고리
     const [selectedSubCategory, setSelectedSubCategory] = useState(null); //서브 카테고리
@@ -23,13 +25,13 @@ export function Category(props){
     // 카테고리 찾기 - mainCategory와 subCategory가 바뀔 때 마다 실행
     useEffect(() => {
       //props.categoryData가 있을 때만 진행
-      if (props.categoryData) {
+      if (categoryData) {
         if (mainCategory) {
           setSelectedCategory(mainCategory);
         }
         // 메인 카테고리와 함께 출력하기 위해 로직 구성
         if (subCategory) {
-          const findCategory = props.categoryData.find((item) =>
+          const findCategory = categoryData.find((item) =>
             item.subMenuItems.some((item) => item.item === subCategory)
           );
           // 상위 카테고리를 찾으면 표시
@@ -44,9 +46,9 @@ export function Category(props){
         // 검색 카테고리
       if (resultSearch) { 
           setFilterSearch(resultSearch);
-        if (props.data) { // 데이터가 로드되었는지 확인
+        if (data) { // 데이터가 로드되었는지 확인
           // 필터링 로직
-            const findCategory = props.data.find((item) => item.title.includes(resultSearch));
+            const findCategory = data.find((item) => item.title.includes(resultSearch));
             if(findCategory) {
               setSelectedCategory(findCategory.category.main);
             } else {
@@ -55,9 +57,9 @@ export function Category(props){
           }
         } else if (resultSearchBrand) {
           setFilterSearch(resultSearchBrand);
-          if (props.data) { // 데이터가 로드되었는지 확인
+          if (data) { // 데이터가 로드되었는지 확인
             // 필터링 로직
-              const findCategory = props.data.find((item) => item.brand.includes(resultSearchBrand));
+              const findCategory = data.find((item) => item.brand.includes(resultSearchBrand));
               if(findCategory) {
                 setSelectedCategory(findCategory.category.main);
               } else {
@@ -66,9 +68,9 @@ export function Category(props){
             }
         } else if (resultSearchCode) {
           setFilterSearch(resultSearchCode);
-          if (props.data) { // 데이터가 로드되었는지 확인
+          if (data) { // 데이터가 로드되었는지 확인
             // 필터링 로직
-              const findCategory = props.data.find((item) => item.id.toString().includes(resultSearchCode.toString()));
+              const findCategory = data.find((item) => item.id.toString().includes(resultSearchCode.toString()));
               if(findCategory) {
                 setSelectedCategory(findCategory.category.main);
               } else {
@@ -77,9 +79,9 @@ export function Category(props){
             }
           } else if (resultSearchOption) {
             setFilterSearch(resultSearchOption);
-            if (props.data) { // 데이터가 로드되었는지 확인
+            if (data) { // 데이터가 로드되었는지 확인
               // 필터링 로직
-                const findCategory = props.data.find((item) => item.option&& item.option.some((item) => item.value.includes(resultSearchOption)));
+                const findCategory = data.find((item) => item.option&& item.option.some((item) => item.value.includes(resultSearchOption)));
                 if(findCategory) {
                   setSelectedCategory(findCategory.category.main);
                 } else {
@@ -91,16 +93,16 @@ export function Category(props){
           setFilterSearch("");
         }
       }
-    }, [mainCategory, subCategory, resultSearch, resultSearchBrand, resultSearchCode, resultSearchOption, props.categoryData, props.data]);
+    }, [mainCategory, subCategory, resultSearch, resultSearchBrand, resultSearchCode, resultSearchOption, categoryData, data]);
 
     // 찾은 카테고리에 따라 아이템 필터링
     useEffect(() => {
       // 상품이 렌더링 되었을 때만 진행
   // 상품이 렌더링 되었을 때만 진행
-  if (props.data) {
+  if (data) {
     // 조건 - 상위 카테고리가 '전체' (기본 값) 일 때
     if (selectedCategory === '전체') {
-      const addCntList = props.data.map((item, index) => ({
+      const addCntList = data.map((item, index) => ({
         ...item,
         cnt: item.cnt ? item.cnt : 1,
         finprice: item.finprice ? item.finprice : item.price,
@@ -114,7 +116,7 @@ export function Category(props){
     if (filterSearch !== "") {
       // 데이터에서 검색결과를 포함하는 대상 찾기
       if (resultSearch) {
-        const findCategory = props.data.filter((item) => item.title.includes(resultSearch));
+        const findCategory = data.filter((item) => item.title.includes(resultSearch));
         const addCntList = findCategory.map((item, index) => ({
           ...item,
           cnt: item.cnt ? item.cnt : 1,
@@ -125,7 +127,7 @@ export function Category(props){
         setFilteredItems(addCntList);
         return;
         } else if (resultSearchBrand) {
-          const findCategory = props.data.filter((item) => item.brand.includes(resultSearchBrand));
+          const findCategory = data.filter((item) => item.brand.includes(resultSearchBrand));
           const addCntList = findCategory.map((item, index) => ({
             ...item,
             cnt: item.cnt ? item.cnt : 1,
@@ -136,7 +138,7 @@ export function Category(props){
           setFilteredItems(addCntList);
           return;
         } else if (resultSearchCode) {
-          const findCategory = props.data.filter((item) => item.id.toString().includes(resultSearchCode));
+          const findCategory = data.filter((item) => item.id.toString().includes(resultSearchCode));
           const addCntList = findCategory.map((item, index) => ({
             ...item,
             cnt: item.cnt ? item.cnt : 1,
@@ -147,7 +149,7 @@ export function Category(props){
           setFilteredItems(addCntList);
           return;
         } else if (resultSearchOption) {
-          const findCategory = props.data.filter((item) => item.option&& item.option.some((item)=>item.value.includes(resultSearchOption)));
+          const findCategory = data.filter((item) => item.option&& item.option.some((item)=>item.value.includes(resultSearchOption)));
           const addCntList = findCategory.map((item, index) => ({
             ...item,
             cnt: item.cnt ? item.cnt : 1,
@@ -161,7 +163,7 @@ export function Category(props){
       } else {
         // 조건(2) - 서브 카테고리를 null이 아닐때, 즉 서브 카테고리가 있을 때
         if(selectedSubCategory !== null){
-          const filtered = props.data.filter((item) => item.category.sub === selectedSubCategory);
+          const filtered = data.filter((item) => item.category.sub === selectedSubCategory);
           const addCntList = filtered.map((item,index) => ({
             ...item,
             cnt: item.cnt ? item.cnt : 1,
@@ -171,7 +173,7 @@ export function Category(props){
           setFilteredItems(addCntList);
         // 상위 카테고리만 선택했을 때
         } else if(selectedSubCategory === null){
-          const filtered = props.data.filter((item) => item.category.main === selectedCategory);
+          const filtered = data.filter((item) => item.category.main === selectedCategory);
           const addCntList = filtered.map((item,index) => ({
             ...item,
             cnt: item.cnt ? item.cnt : 1,
@@ -182,7 +184,7 @@ export function Category(props){
         } 
       }
     }
-  }, [props.data, selectedCategory, selectedSubCategory, filterSearch, resultSearch, resultSearchBrand, resultSearchCode, resultSearchOption]);
+  }, [data, selectedCategory, selectedSubCategory, filterSearch, resultSearch, resultSearchBrand, resultSearchCode, resultSearchOption]);
 
     const navigate = useNavigate();
 
@@ -415,7 +417,7 @@ export function Category(props){
 
     function prevContentClick(){
       if(selectedCategory === '전체'){
-        const addCntList = props.data.map((item,index) => ({
+        const addCntList = data.map((item,index) => ({
           ...item,
           cnt: item.cnt ? item.cnt : 1,
           finprice : item.finprice ? item.finprice : item.price,
@@ -424,7 +426,7 @@ export function Category(props){
         setFilteredItems(addCntList);
         return;
       }
-      const filtered = props.data.filter((item) => item.category.main === selectedCategory);
+      const filtered = data.filter((item) => item.category.main === selectedCategory);
       const addCntList = filtered.map((item,index) => ({
         ...item,
         cnt: item.cnt ? item.cnt : 1,
@@ -510,7 +512,7 @@ export function Category(props){
             </tr>
           </thead>
           <tbody>
-            {props.data 
+            {data 
             ? filteredItems.length > 0
             ? getCurrentPagePosts().map((item, index)=> (
             <React.Fragment key={index}>

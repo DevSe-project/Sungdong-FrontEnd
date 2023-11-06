@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import styles from './Pay.module.css'
 import { useEffect } from 'react';
+import { useDataStore } from '../../store/DataStore';
 export function Pay(props){
   const navigate = useNavigate();
   // submit 버튼

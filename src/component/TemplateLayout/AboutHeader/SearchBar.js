@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import styles from './SearchBar.module.css';
 import { useNavigate } from 'react-router-dom';
+import { useDataStore } from '../../../store/DataStore';
 
-export function SearchBar(props) {
+export function SearchBar() {
+  const {data} = useDataStore();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState([]);
@@ -24,25 +26,25 @@ export function SearchBar(props) {
       if(searchFilter === '상품명'){
         // 데이터 중 타이틀로들만 구성된 변수 생성 후 
         // 그 변수들 중 첫 글자와 입력값이 일치하는 것을 연관 검색어 목록에 띄워줌
-          const filteredtitle = props.data && props.data.map((item) => item.title);
+          const filteredtitle = data && data.map((item) => item.title);
           const filteredResults = filteredtitle.filter((word) =>
             word.includes(query)
           );
           setResults(filteredResults);
         } else if (searchFilter === '코드'){
-          const filteredtitle = props.data && props.data.map((item) => item.id);
+          const filteredtitle = data && data.map((item) => item.id);
           const filteredResults = filteredtitle.filter((word) =>
             word.toString().includes(query)
           );
           setResults(filteredResults);
         } else if (searchFilter === '브랜드'){
-          const filteredtitle = props.data && props.data.map((item) => item.brand);
+          const filteredtitle = data && data.map((item) => item.brand);
           const filteredResults = filteredtitle.filter((word) =>
             word.includes(query)
           );
           setResults(filteredResults);
         } else if (searchFilter === '옵션'){
-          const filteredResults = props.data && props.data.flatMap((item) =>
+          const filteredResults = data && data.flatMap((item) =>
           item.option && item.option.map((option) => option.value).filter((word) =>
             word.includes(query)
           )

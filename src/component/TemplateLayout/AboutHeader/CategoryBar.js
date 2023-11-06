@@ -1,8 +1,10 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './CategoryBar.module.css'
 import { useEffect, useState } from 'react';
+import { useDataStore } from '../../../store/DataStore';
 
 export function CategoryBar(props) {
+  const { categoryData } = useDataStore();
   // 선택된 카테고리 변경 핸들러 (우선순위 : 1. 소 카테고리 2. 대 카테고리)
   const handleCategoryChange = (category) => {
     // 큰 카테고리에 해당하는 탭만을 찾기위해 subCategory는 삭제
@@ -37,7 +39,7 @@ export function CategoryBar(props) {
 
   const navigate = useNavigate();
   //서브메뉴 열림창 변수 초기화
-  const [subMenuStates, setSubMenuStates] = useState(props.categoryData && props.categoryData.map(()=>false));
+  const [subMenuStates, setSubMenuStates] = useState(categoryData && categoryData.map(()=>false));
 
   const handleTabClick = (tabItem) => {
     sessionStorage.setItem('categoryTabState', JSON.stringify(tabItem.id));
@@ -64,8 +66,8 @@ export function CategoryBar(props) {
       style={{...props.category_dynamicStyle}}>
         {/* 아이콘 hovered */}
         {
-          props.categoryData
-          ? props.categoryData.map((item, index) => (
+          categoryData
+          ? categoryData.map((item, index) => (
             <li
               key={index}
               onMouseEnter={() => handleMouseEnter(index)}

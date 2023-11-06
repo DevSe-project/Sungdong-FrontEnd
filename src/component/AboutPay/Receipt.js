@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import styles from './Receipt.module.css'
 import { useNavigate } from 'react-router-dom';
 import CryptoJS from 'crypto-js';
+import { useDataStore } from '../../store/DataStore';
 
 export function Receipt(props){
   const navigate = useNavigate();
+  const { setData, data, setOrderData, orderData, userData } = useDataStore();
   const [address, setAddress] = useState("");
   const [inputUser, setInputUser] = useState("사업자정보");
   const inLogin = props.decryptData(JSON.parse(sessionStorage.getItem('saveLoginData')));
@@ -75,8 +77,8 @@ export function Receipt(props){
   })
 
   useEffect(() => {
-    if(props.userData){
-      const findUser = props.userData.find(userData => userData.id == inLogin.id);
+    if(userData){
+      const findUser = userData.find(userData => userData.id == inLogin.id);
       if (findUser) {
         if (inputUser === '사업자정보') {
           setAddress(findUser.address);
@@ -116,7 +118,7 @@ export function Receipt(props){
         }
       }
     }
-  }, [inputUser, props.userData, inLogin.id, address]);
+  }, [inputUser, userData, inLogin.id, address]);
 
   // Input란 유효성 검사
   const validateForm = () => {
@@ -204,7 +206,7 @@ export function Receipt(props){
   function gotoLink(){
     validateForm();
     const isValidSupply = props.orderList.every((orderItem) => {
-      const productMatchingId = props.data.find((item) => item.id === orderItem.productId);
+      const productMatchingId = data.find((item) => item.id === orderItem.productId);
       return productMatchingId && productMatchingId.supply > 0;
     });
     
@@ -214,7 +216,7 @@ export function Receipt(props){
     }
     if(props.activeTab===2 && isFormValid && isValidSupply) {
     // supply 수정
-      const productData = props.data.map((item) => {
+      const productData = data.map((item) => {
         const isProductInOrderList = props.orderList.some(
           (orderListItem) => orderListItem.productId === item.id
         );
@@ -226,11 +228,11 @@ export function Receipt(props){
       }
       return item;
     });
-      props.setData(productData);
+      setData(productData);
       // 현재 날짜와 시간을 가져오기
       const currentDate =  new Date();
       const formattedDate = currentDate.toLocaleString();
-      const newOrderId = props.orderData.length + 1;
+      const newOrderId = orderData.length + 1;
       const editedData = props.decryptData(JSON.parse(sessionStorage.getItem('orderData')));
       const newOrderData = editedData.map((item) => ({
         ...item,
@@ -242,9 +244,9 @@ export function Receipt(props){
       }));
         // 데이터 삽입
         //orderData (주문 진행 객체) 업데이트
-        const copyData = [...props.orderData];
+        const copyData = [...orderData];
         copyData.push(...newOrderData);
-        props.setOrderData(copyData);
+        setOrderData(copyData);
         // sessionStorage 변경
         sessionStorage.removeItem('orderData');
         const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(newOrderData), encryptionKey).toString();
