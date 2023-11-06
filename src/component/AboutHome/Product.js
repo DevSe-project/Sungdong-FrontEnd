@@ -1,12 +1,14 @@
+import { useDataStore } from '../../store/DataStore';
 import styles from './Product.module.css'; 
 import { useNavigate } from 'react-router-dom';
-export function Product(props){
+export function Product(){
   const navigate = useNavigate();
+  const { data } = useDataStore();
   return(
   <div className={styles.main}>
     <div className={styles.container}>
       <div className={styles.row}>
-        {props.data ? props.data.map((item,index)=>(
+        {data ? data.map((item,index)=>(
           <div onClick={()=>{navigate(`/detail/${item.id}`)}} key={index} className={styles.col}>            
             <div className={styles.frame}>
               <img className={styles.thumnail} src={item.image.original} alt="상품 이미지"/>

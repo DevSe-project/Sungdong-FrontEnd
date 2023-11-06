@@ -58,6 +58,7 @@ import AdminContact from './component/AboutAdmin/Contact/AdminContact';
 import { TopBanner } from './component/TemplateLayout/AboutHeader/TopBanner';
 import { MenuData } from './component/TemplateLayout/AboutMenuData/MenuData';
 import { Footer } from './component/TemplateLayout/AboutFooter/Footer';
+import { useDataStore } from "./store/DataStore";
 
 function App() {
   const navigate = useNavigate();
@@ -66,7 +67,7 @@ function App() {
   const [activeTab, setActiveTab] = useState(1); // 현재 활성화된 스탭을 추적하는 State 
 
   // 데이터 State
-  const [data, setData] = useState();
+  const {data, setData} = useDataStore();
   const [orderData, setOrderData] = useState();
   const [userData, setUserData] = useState([]);
   const [categoryData, setCategoryData] = useState([]);
@@ -260,7 +261,7 @@ function App() {
             <MainPage decryptData={decryptData} categoryData={categoryData} setCategoryData={setCategoryData} login={login} setLogin={setLogin}
               iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle}
               category_dynamicStyle={category_dynamicStyle} menuOnClick={menuOnClick} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle}
-              data={data} todayTopicData={todayTopicData} setTodayTopicData={setTodayTopicData} menu_dynamicStyle={menu_dynamicStyle} />
+              todayTopicData={todayTopicData} setTodayTopicData={setTodayTopicData} menu_dynamicStyle={menu_dynamicStyle} />
             <div
               className='topButton'
               onClick={() =>

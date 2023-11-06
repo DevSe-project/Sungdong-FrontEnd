@@ -1,11 +1,9 @@
-// Import the functions you need from the SDKs you need
-import firebase from "firebase/app";
-import "firebase/firestore";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { initializeApp } from 'firebase/app'; // 'app' 모듈에서 'initializeApp'을 가져옴
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Firebase의 다른 모듈을 필요에 따라 가져옴
+import { getFirestore } from 'firebase/firestore';
+
+// Firebase 앱 초기화
 const firebaseConfig = {
   apiKey: "AIzaSyAj1-LmumpYRZmWVQtu8awCRs6KGrxHGQg",
   authDomain: "sungdong-web.firebaseapp.com",
@@ -16,11 +14,9 @@ const firebaseConfig = {
   measurementId: "G-YNS80BXYN9"
 };
 
-// firebaseConfig 정보로 firebase 시작
-firebase.initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
-// firebase의 firestore 인스턴스를 변수에 저장
-const firestore = firebase.firestore();
+// Firebase 모듈 사용
+const db = getFirestore(app);
 
-// 필요한 곳에서 사용할 수 있도록 내보내기
-export { firestore };
+export { app, db }; // 다른 파일에서 Firebase 모듈을 가져올 수 있도록 내보내기

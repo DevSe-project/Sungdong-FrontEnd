@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import styles from './List.module.css'; 
 import { Product } from './Product';
-export function List(props){
+export function List(){
   const navigate = useNavigate();
   return(
     <div className={styles.head}>
@@ -11,7 +11,7 @@ export function List(props){
           더보기&nbsp;<i className="far fa-chevron-right"/>
         </div>
       </div>
-      <Product data={props.data}/>
+      <Product/>
     </div>
   )
 }
