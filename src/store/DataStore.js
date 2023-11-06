@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-
+import { persist } from 'zustand/middleware'
 export const useDataStore = create((set)=>({
   data : [],
   setData : (input) =>
