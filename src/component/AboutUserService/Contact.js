@@ -1,4 +1,4 @@
-export function Ask() {
+export function Contact() {
   
   return(
     <div>

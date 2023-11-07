@@ -21,7 +21,7 @@ import { Login } from './component/AboutLogin/Login';
 
 // 고객서비스 관련
 import { Notice } from './component/AboutUserService/Notice';
-import { Ask } from './component/AboutUserService/Ask';
+import { Contact } from './component/AboutUserService/Contact';
 
 // 상세보기, 장바구니, 찜하기
 import { Detail } from './component/AboutDetail/Detail';
@@ -188,7 +188,6 @@ function App() {
       setUserData(UserData);
       setTodayTopicData(TodayTopicPostObj);
       setCategoryData(CategoryDataObj);
-      setPostList(NoticeObj);
     }, 1000)
 
     return () => clearTimeout(dataload)
@@ -438,7 +437,7 @@ function App() {
             </div>
           </>
         } />
-        <Route path='/userservice/ask' element={<Ask />} />
+        <Route path='/userservice/contact' element={<Contact />} />
 
         {/* 마이페이지 */}
         <Route path='/mypages' element={
