@@ -12,7 +12,8 @@ export default function AdminNotice() {
   const [modal, setModal] = useState(false); // modal on / off
   const [modalName, setModalName] = useState(''); // what is modal?
   const [selectedItemIndex, setSelectedItemIndex] = useState(null); // 해당 인덱스의 모달을 찾기 위함
-  /* 추후
+
+  /* 추후 - 파일 업로드 로직
   const [selectedFile, setSelectedFile] = useState(null); // 파일 업로드 state
 
   const handleFileChange = (e) => {
@@ -41,7 +42,6 @@ export default function AdminNotice() {
 
   // 현재 시간을 얻기 위해 Date 객체 생성
   const currentDate = new Date();
-
   // 현재 날짜 및 시간 정보 얻기
   const currentYear = currentDate.getFullYear();
   const currentMonth = currentDate.getMonth() + 1; // 월은 0부터 시작하므로 +1
@@ -56,12 +56,10 @@ export default function AdminNotice() {
     setModalName('edit');
     setSelectedItemIndex(index);
   }
-
   const openWriteModal = () => {
     setModal(true);
     setModalName('write');
   }
-
   const closeWriteModal = () => {
     setTempList({
       id: '',
@@ -141,7 +139,7 @@ export default function AdminNotice() {
           <div className={styles.evnetHandleContainer}>
             {/* 코드 발급 블록 */}
             <div className={styles.leftModule}>
-              <div className={styles.writeNotice_icon}>Click <i class="fa-solid fa-arrow-down"></i></div>
+              <div className={styles.writeNotice_icon}>Click <i className="fa-solid fa-arrow-down"></i></div>
               <div className={styles.write} onClick={() => { openWriteModal() }}>글 작성</div>
             </div>
             {/* 뭐 넣을지 미정 */}
@@ -160,20 +158,17 @@ export default function AdminNotice() {
             <div className={styles.noticeList_post}>글 목록</div>
             {/* List */}
             {postList.map((item, index) => (
-              <div className={styles.noticeList_list} onClick={() => { onOpen(index) }}> {/* 선택 모달의 key를 글 수정으로 지정*/}
+              <div className={styles.noticeList_list} onClick={() => { onOpen(index) }} key={index}> {/* 선택 모달의 key를 글 수정으로 지정*/}
                 {/* No */}
-                <div className={styles.noticeList_no}
-                  key={index}>
+                <div className={styles.noticeList_no}>
                   {index + 1}
                 </div>
                 {/* Code */}
-                <div className={styles.noticeList_title}
-                  key={index}>
+                <div className={styles.noticeList_title}>
                   {item.title}
                 </div>
                 {/* Writer */}
-                <div className={styles.noticeList_writer}
-                  key={index}>
+                <div className={styles.noticeList_writer}>
                   작성자: {item.writer}
                 </div>
                 {/* Del */}

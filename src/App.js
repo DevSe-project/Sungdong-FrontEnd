@@ -77,7 +77,7 @@ function App() {
     data, setData, 
     orderData, setOrderData, 
     userData, setUserData, 
-    setCategoryData, setTodayTopicData
+    setCategoryData, setTodayTopicData,
   } = useDataStore();
   // 리스트 State 불러오기
   const { setWishList, setPostList } = useListStore();
