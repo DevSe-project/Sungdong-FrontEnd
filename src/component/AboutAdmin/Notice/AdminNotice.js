@@ -10,11 +10,13 @@ import { useListStore } from "../../../Store/DataStore";
 export default function AdminNotice() {
 
   const { postList, setPostList } = useListStore();
-  
+  const [isLoading, setIsLoading] = useState(true); // 로딩 중 여부 추가
+
   // 데이터 불러오기
   useEffect(() => {
     const dataload = setTimeout(() => {
       setPostList(NoticeObj);
+      setIsLoading(false);
     }, 1000)
 
     return () => clearTimeout(dataload)
@@ -169,40 +171,51 @@ export default function AdminNotice() {
             {/* Post Title */}
             <div className={styles.postList_container_title}>글 목록</div>
             {/* Post Map */}
-            {postList.map((item, index) => (
-              <div className={styles.post_container}>
-                <div className={styles.postInfo_container} onClick={() => { onOpen(index) }} key={index}> {/* 선택 모달의 key를 글 수정으로 지정*/}
-                  {/* No */}
-                  <div className={styles.post_no}>
-                    {index + 1}
-                  </div>
-                  {/* Code */}
-                  <div className={styles.post_title}>
-                    {item.title}
-                  </div>
-                  {/* Writer */}
-                  <div className={styles.post_writer}>
-                    {item.writer}
-                  </div>
-                  {/* WritedDate */}
-                  <div>
-                    {item.date}
-                  </div>
-                </div>
-                {/* Del */}
-                <div div className={styles.post_del_container} >
-                  <div className={styles.post_delButton}
-                    onClick={() => {
-                      const data = [...postList];
-                      data.splice(index, 1);
-                      setPostList(data);
-                    }
-                    }>
-                    삭제
-                  </div>
-                </div>
+            {isLoading ? ( // isLoading이 true일 때 스켈레톤 이미지 표시
+              <div className={styles.skeletonContainer}>
+                <div className={styles.skeletonItem}></div>
+                <div className={styles.skeletonItem}></div>
+                <div className={styles.skeletonItem}></div>
+                {/* 추가적인 스켈레톤 아이템 */}
               </div>
-            ))}
+            ) : (
+                postList.map((item, index) => (
+                  <div className={styles.post_container}>
+                    <div className={styles.postInfo_container} onClick={() => { onOpen(index) }} key={index}> {/* 선택 모달의 key를 글 수정으로 지정*/}
+                      {/* No */}
+                      <div className={styles.post_no}>
+                        {index + 1}
+                      </div>
+                      {/* Code */}
+                      <div className={styles.post_title}>
+                        {item.title}
+                      </div>
+                      {/* Writer */}
+                      <div className={styles.post_writer}>
+                        {item.writer}
+                      </div>
+                      {/* WritedDate */}
+                      <div>
+                        {item.date}
+                      </div>
+                    </div>
+                    {/* Del */}
+                    <div div className={styles.post_del_container} >
+                      <div className={styles.post_delButton}
+                        onClick={() => {
+                          const data = [...postList];
+                          data.splice(index, 1);
+                          setPostList(data);
+                        }
+                        }>
+                        삭제
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
+
+
           </div>
         </div>
       </div>
