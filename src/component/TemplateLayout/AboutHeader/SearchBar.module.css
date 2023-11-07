@@ -1,7 +1,7 @@
 /* Input 창 컨테이너 스타일 */
 .searchInputContainer {
   display: flex;
-  width: 20em;
+  width: 30em;
   height: 2em;
   align-items: center;
   justify-content: center;
