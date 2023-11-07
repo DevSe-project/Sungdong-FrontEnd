@@ -234,11 +234,6 @@ function App() {
   }
   // 카테고리 변하는 스타일 지정
   const transitionDurate = 350; // 애니메이션 지속 시간(ms)
-  const icon_dynamicStyle = {
-    transition: `color ${transitionDurate}ms, font-size ${transitionDurate}ms`,
-    color: menuClicked ? '#cc0000' : '#000',
-    fontSize: menuClicked ? '2.5em' : '2em',
-  };
   const text_dynamicStyle = {
     transition: `color ${transitionDurate}ms, font-size ${transitionDurate}ms, font-weight ${transitionDurate}ms`,
     color: iconClicked ? '#6d3535 ' : '#000',
@@ -266,7 +261,7 @@ function App() {
         <Route path='/' element={
           <>
             <MainPage decryptData={decryptData} login={login} setLogin={setLogin}
-              iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle}
+              iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}  
               category_dynamicStyle={category_dynamicStyle} menuOnClick={menuOnClick} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle}
               menu_dynamicStyle={menu_dynamicStyle} />
             <div
@@ -287,14 +282,14 @@ function App() {
           <TopBanner
           login={login} setLogin={setLogin} iconHovered={iconHovered} 
           iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} 
-          icon_dynamicStyle={icon_dynamicStyle} text_dynamicStyle={text_dynamicStyle} 
+            text_dynamicStyle={text_dynamicStyle} 
           category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
           menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
           <div className='main'>
             <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
             <div className='container'>
               <Category decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} navigate={navigate} setActiveTab={setActiveTab} activeTab={activeTab}
-              iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+              iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}   category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
               <footer className='footer'>
                 <Footer/>
               </footer>
@@ -310,14 +305,14 @@ function App() {
           <TopBanner 
           login={login} setLogin={setLogin} iconHovered={iconHovered} 
           iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} 
-          icon_dynamicStyle={icon_dynamicStyle} text_dynamicStyle={text_dynamicStyle} 
+            text_dynamicStyle={text_dynamicStyle} 
           category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
           menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
           <div className='main'>
             <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
             <div className='container'>
               <Detail decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} navigate={navigate} setActiveTab={setActiveTab} activeTab={activeTab}
-                iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}   category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
               <footer className='footer'>
                 <Footer/>
               </footer>
@@ -333,13 +328,13 @@ function App() {
           <TopBanner 
           login={login} setLogin={setLogin} iconHovered={iconHovered} 
           iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} 
-          icon_dynamicStyle={icon_dynamicStyle} text_dynamicStyle={text_dynamicStyle} 
+            text_dynamicStyle={text_dynamicStyle} 
           category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
           menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
           <div className='main'>
             <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
             <div className='container'>
-              <LikeItem menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin}  iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+              <LikeItem menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin}  iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}   category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
               <footer className='footer'>
                 <Footer/>
               </footer>
@@ -355,13 +350,13 @@ function App() {
           <TopBanner  
           login={login} setLogin={setLogin} iconHovered={iconHovered} 
           iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} 
-          icon_dynamicStyle={icon_dynamicStyle} text_dynamicStyle={text_dynamicStyle} 
+            text_dynamicStyle={text_dynamicStyle} 
           category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
           menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
           <div className='main'>
             <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
             <div className='container'>
-              <Basket decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} activeTab={activeTab} setActiveTab={setActiveTab} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+              <Basket decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} activeTab={activeTab} setActiveTab={setActiveTab} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}   category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
               <footer className='footer'>
                 <Footer/>
               </footer>
@@ -381,13 +376,13 @@ function App() {
           <TopBanner
           login={login} setLogin={setLogin} iconHovered={iconHovered} 
           iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} 
-          icon_dynamicStyle={icon_dynamicStyle} text_dynamicStyle={text_dynamicStyle} 
+            text_dynamicStyle={text_dynamicStyle} 
           category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
           menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
           <div className='main'>
             <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
             <div className='container'>       
-              <DeliveryMain  decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+              <DeliveryMain  decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}   category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
               <footer className='footer'>
                 <Footer/>
               </footer>
@@ -403,13 +398,13 @@ function App() {
           <TopBanner  
           login={login} setLogin={setLogin} iconHovered={iconHovered} 
           iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} 
-          icon_dynamicStyle={icon_dynamicStyle} text_dynamicStyle={text_dynamicStyle} 
+            text_dynamicStyle={text_dynamicStyle} 
           category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
           menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
           <div className='main'>
             <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
             <div className='container'>
-              <OrderDetail  decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+              <OrderDetail  decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}   category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
               <footer className='footer'>
                 <Footer/>
               </footer>
@@ -430,13 +425,13 @@ function App() {
           <TopBanner
           login={login} setLogin={setLogin} iconHovered={iconHovered} 
           iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} 
-          icon_dynamicStyle={icon_dynamicStyle} text_dynamicStyle={text_dynamicStyle} 
+            text_dynamicStyle={text_dynamicStyle} 
           category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
           menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
           <div className='main'>
             <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
             <div className='container'>        
-              <Notice decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+              <Notice decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}   category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
               <footer className='footer'>
                 <Footer/>
               </footer>
@@ -453,13 +448,13 @@ function App() {
           <TopBanner
           login={login} setLogin={setLogin} iconHovered={iconHovered} 
           iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} 
-          icon_dynamicStyle={icon_dynamicStyle} text_dynamicStyle={text_dynamicStyle} 
+            text_dynamicStyle={text_dynamicStyle} 
           category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
           menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
           <div className='main'>
             <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
             <div className='container'>           
-              <MyPage decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+              <MyPage decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}   category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
               <footer className='footer'>
                 <Footer/>
               </footer>
@@ -476,13 +471,13 @@ function App() {
           <TopBanner 
           login={login} setLogin={setLogin} iconHovered={iconHovered} 
           iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} 
-          icon_dynamicStyle={icon_dynamicStyle} text_dynamicStyle={text_dynamicStyle} 
+            text_dynamicStyle={text_dynamicStyle} 
           category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
           menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
           <div className='main'>
             <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
             <div className='container'>           
-              <Comeway decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+              <Comeway decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}   category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
               <footer className='footer'>
                 <Footer/>
               </footer>
@@ -497,13 +492,13 @@ function App() {
           <TopBanner
           login={login} setLogin={setLogin} iconHovered={iconHovered} 
           iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} 
-          icon_dynamicStyle={icon_dynamicStyle} text_dynamicStyle={text_dynamicStyle} 
+            text_dynamicStyle={text_dynamicStyle} 
           category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
           menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
           <div className='main'>
             <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
             <div className='container'>   
-              <TodayNews decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+              <TodayNews decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}   category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
               <footer className='footer'>
                 <Footer/>
               </footer>
@@ -517,13 +512,13 @@ function App() {
             <TopBanner 
             login={login} setLogin={setLogin} iconHovered={iconHovered} 
             iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} 
-            icon_dynamicStyle={icon_dynamicStyle} text_dynamicStyle={text_dynamicStyle} 
+              text_dynamicStyle={text_dynamicStyle} 
             category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
             menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
             <div className='main'>
               <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
               <div className='container'>             
-                <TodayNewsInner menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <TodayNewsInner menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}   category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
                   <Footer/>
                 </footer>
@@ -537,13 +532,13 @@ function App() {
           <TopBanner
           login={login} setLogin={setLogin} iconHovered={iconHovered} 
           iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} 
-          icon_dynamicStyle={icon_dynamicStyle} text_dynamicStyle={text_dynamicStyle} 
+            text_dynamicStyle={text_dynamicStyle} 
           category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
           menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
           <div className='main'>
             <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
             <div className='container'>           
-              <Event menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+              <Event menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}   category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
               <footer className='footer'>
                 <Footer/>
               </footer>
