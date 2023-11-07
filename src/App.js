@@ -56,7 +56,6 @@ import { AdminSoldList } from './component/AboutAdmin/AdminSoldList';
 import { AdminNotSoldList } from './component/AboutAdmin/AdminNotSoldList';
 import { AdminRefund } from './component/AboutAdmin/AdminRefund';
 import AdminNotice from './component/AboutAdmin/Notice/AdminNotice';
-import AdminContact from './component/AboutAdmin/Contact/AdminContact';
 
 // 템플릿 컴포넌트
 import { TopBanner } from './component/TemplateLayout/AboutHeader/TopBanner';
@@ -74,9 +73,9 @@ function App() {
 
   // 데이터 State 불러오기
   const {
-    data, setData, 
-    orderData, setOrderData, 
-    userData, setUserData, 
+    data, setData,
+    orderData, setOrderData,
+    userData, setUserData,
     setCategoryData, setTodayTopicData
   } = useDataStore();
   // 리스트 State 불러오기
@@ -100,15 +99,15 @@ function App() {
       return null;
     }
   };
-  
+
   useEffect(() => {
     // 세션 스토리지의 데이터 파싱
     const parseId = JSON.parse(sessionStorage.getItem('saveLoginData'))
-    if(parseId){ // 파싱된 데이터가 있으면
+    if (parseId) { // 파싱된 데이터가 있으면
       const inLogin = decryptData(parseId);  // 복호화 실행
       if (inLogin) {   //복호화 성공 시
         setLogin(true); //로그인상태유지
-        if (data) {   
+        if (data) {
           const findUser = userData.find((item) => item.id === inLogin.id); // 유저 아이디에 해당하는 데이터 찾기
           if (findUser) {
             // 등급별 할인율 적용
@@ -234,11 +233,6 @@ function App() {
   }
   // 카테고리 변하는 스타일 지정
   const transitionDurate = 350; // 애니메이션 지속 시간(ms)
-  const icon_dynamicStyle = {
-    transition: `color ${transitionDurate}ms, font-size ${transitionDurate}ms`,
-    color: menuClicked ? '#cc0000' : '#000',
-    fontSize: menuClicked ? '1em' : '1em',
-  };
   const text_dynamicStyle = {
     transition: `color ${transitionDurate}ms, font-size ${transitionDurate}ms, font-weight ${transitionDurate}ms`,
     color: iconClicked ? '#6d3535 ' : '#000',
@@ -266,7 +260,7 @@ function App() {
         <Route path='/' element={
           <>
             <MainPage decryptData={decryptData} login={login} setLogin={setLogin}
-              iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle}
+              iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
               category_dynamicStyle={category_dynamicStyle} menuOnClick={menuOnClick} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle}
               menu_dynamicStyle={menu_dynamicStyle} />
             <div
@@ -282,94 +276,94 @@ function App() {
 
         {/* 상품 카테고리 검색 결과 */}
         <Route path='/category' element={
-        <>
-          {/* 최상단배너 */}
-          <TopBanner
-          login={login} setLogin={setLogin} iconHovered={iconHovered} 
-          iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} 
-          icon_dynamicStyle={icon_dynamicStyle} text_dynamicStyle={text_dynamicStyle} 
-          category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-          menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
-          <div className='main'>
-            <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
-            <div className='container'>
-              <Category decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} navigate={navigate} setActiveTab={setActiveTab} activeTab={activeTab}
-              iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
-              <footer className='footer'>
-                <Footer/>
-              </footer>
+          <>
+            {/* 최상단배너 */}
+            <TopBanner
+              login={login} setLogin={setLogin} iconHovered={iconHovered}
+              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+              text_dynamicStyle={text_dynamicStyle}
+              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
+              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+            <div className='main'>
+              <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
+              <div className='container'>
+                <Category decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} navigate={navigate} setActiveTab={setActiveTab} activeTab={activeTab}
+                  iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <footer className='footer'>
+                  <Footer />
+                </footer>
+              </div>
             </div>
-          </div>
-        </>
+          </>
         } />
 
         {/* 상세 페이지 */}
         <Route path="/detail/:id" element={
           <>
-          {/* 최상단배너 */}
-          <TopBanner 
-          login={login} setLogin={setLogin} iconHovered={iconHovered} 
-          iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} 
-          icon_dynamicStyle={icon_dynamicStyle} text_dynamicStyle={text_dynamicStyle} 
-          category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-          menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
-          <div className='main'>
-            <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
-            <div className='container'>
-              <Detail decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} navigate={navigate} setActiveTab={setActiveTab} activeTab={activeTab}
-                iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
-              <footer className='footer'>
-                <Footer/>
-              </footer>
+            {/* 최상단배너 */}
+            <TopBanner
+              login={login} setLogin={setLogin} iconHovered={iconHovered}
+              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+              text_dynamicStyle={text_dynamicStyle}
+              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
+              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+            <div className='main'>
+              <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
+              <div className='container'>
+                <Detail decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} navigate={navigate} setActiveTab={setActiveTab} activeTab={activeTab}
+                  iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <footer className='footer'>
+                  <Footer />
+                </footer>
+              </div>
             </div>
-          </div>
           </>
         } />
 
         {/* 찜 목록 */}
         <Route path='/likeitem' element={
           <>
-          {/* 최상단배너 */}
-          <TopBanner 
-          login={login} setLogin={setLogin} iconHovered={iconHovered} 
-          iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} 
-          icon_dynamicStyle={icon_dynamicStyle} text_dynamicStyle={text_dynamicStyle} 
-          category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-          menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
-          <div className='main'>
-            <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
-            <div className='container'>
-              <LikeItem menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin}  iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
-              <footer className='footer'>
-                <Footer/>
-              </footer>
+            {/* 최상단배너 */}
+            <TopBanner
+              login={login} setLogin={setLogin} iconHovered={iconHovered}
+              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+              text_dynamicStyle={text_dynamicStyle}
+              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
+              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+            <div className='main'>
+              <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
+              <div className='container'>
+                <LikeItem menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <footer className='footer'>
+                  <Footer />
+                </footer>
+              </div>
             </div>
-          </div>
-        </>
+          </>
         } />
 
         {/* 장바구니 ~ 주문 */}
         <Route path='/basket' element={
           <>
-          {/* 최상단배너 */}
-          <TopBanner  
-          login={login} setLogin={setLogin} iconHovered={iconHovered} 
-          iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} 
-          icon_dynamicStyle={icon_dynamicStyle} text_dynamicStyle={text_dynamicStyle} 
-          category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-          menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
-          <div className='main'>
-            <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
-            <div className='container'>
-              <Basket decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} activeTab={activeTab} setActiveTab={setActiveTab} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
-              <footer className='footer'>
-                <Footer/>
-              </footer>
+            {/* 최상단배너 */}
+            <TopBanner
+              login={login} setLogin={setLogin} iconHovered={iconHovered}
+              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+              text_dynamicStyle={text_dynamicStyle}
+              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
+              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+            <div className='main'>
+              <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
+              <div className='container'>
+                <Basket decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} activeTab={activeTab} setActiveTab={setActiveTab} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <footer className='footer'>
+                  <Footer />
+                </footer>
+              </div>
             </div>
-          </div>
-        </>
+          </>
         }>
-          <Route path='receipt' element={<Receipt  decryptData={decryptData} activeTab={activeTab} setActiveTab={setActiveTab} />} />
+          <Route path='receipt' element={<Receipt decryptData={decryptData} activeTab={activeTab} setActiveTab={setActiveTab} />} />
           <Route path='pay' element={<Pay activeTab={activeTab} setActiveTab={setActiveTab} />} />
           <Route path='order' element={<Order decryptData={decryptData} activeTab={activeTab} setActiveTab={setActiveTab} />} />
         </Route>
@@ -377,204 +371,201 @@ function App() {
         {/* 주문 조회 */}
         <Route path='/delivery' element={
           <>
-          {/* 최상단배너 */}
-          <TopBanner
-          login={login} setLogin={setLogin} iconHovered={iconHovered} 
-          iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} 
-          icon_dynamicStyle={icon_dynamicStyle} text_dynamicStyle={text_dynamicStyle} 
-          category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-          menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
-          <div className='main'>
-            <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
-            <div className='container'>       
-              <DeliveryMain  decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
-              <footer className='footer'>
-                <Footer/>
-              </footer>
+            {/* 최상단배너 */}
+            <TopBanner
+              login={login} setLogin={setLogin} iconHovered={iconHovered}
+              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+              text_dynamicStyle={text_dynamicStyle}
+              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
+              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+            <div className='main'>
+              <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
+              <div className='container'>
+                <DeliveryMain decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <footer className='footer'>
+                  <Footer />
+                </footer>
+              </div>
             </div>
-          </div>
-        </>
+          </>
         } />
 
         {/* 배송 조회 */}
         <Route path='/orderDetail' element={
           <>
-          {/* 최상단배너 */}
-          <TopBanner  
-          login={login} setLogin={setLogin} iconHovered={iconHovered} 
-          iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} 
-          icon_dynamicStyle={icon_dynamicStyle} text_dynamicStyle={text_dynamicStyle} 
-          category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-          menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
-          <div className='main'>
-            <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
-            <div className='container'>
-              <OrderDetail  decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
-              <footer className='footer'>
-                <Footer/>
-              </footer>
+            {/* 최상단배너 */}
+            <TopBanner
+              login={login} setLogin={setLogin} iconHovered={iconHovered}
+              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+              text_dynamicStyle={text_dynamicStyle}
+              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
+              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+            <div className='main'>
+              <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
+              <div className='container'>
+                <OrderDetail decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <footer className='footer'>
+                  <Footer />
+                </footer>
+              </div>
             </div>
-          </div>
-        </>
+          </>
         } />
 
         {/* 로그인 */}
-        <Route path='/login' element={<Login/>} />
-        <Route path='/join' element={<Join/>} >
+        <Route path='/login' element={<Login />} />
+        <Route path='/join' element={<Join />} >
         </Route>
 
         {/* 고객센터 */}
         <Route path='/userservice/notice' element={
           <>
-          {/* 최상단배너 */}
-          <TopBanner
-          login={login} setLogin={setLogin} iconHovered={iconHovered} 
-          iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} 
-          icon_dynamicStyle={icon_dynamicStyle} text_dynamicStyle={text_dynamicStyle} 
-          category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-          menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
-          <div className='main'>
-            <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
-            <div className='container'>        
-              <Notice decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
-              <footer className='footer'>
-                <Footer/>
-              </footer>
+            {/* 최상단배너 */}
+            <TopBanner
+              login={login} setLogin={setLogin} iconHovered={iconHovered}
+              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+              text_dynamicStyle={text_dynamicStyle}
+              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
+              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+            <div className='main'>
+              <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
+              <div className='container'>
+                <Notice decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <footer className='footer'>
+                  <Footer />
+                </footer>
+              </div>
             </div>
-          </div>
-        </>
+          </>
         } />
         <Route path='/userservice/ask' element={<Ask />} />
 
         {/* 마이페이지 */}
         <Route path='/mypages' element={
           <>
-          {/* 최상단배너 */}
-          <TopBanner
-          login={login} setLogin={setLogin} iconHovered={iconHovered} 
-          iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} 
-          icon_dynamicStyle={icon_dynamicStyle} text_dynamicStyle={text_dynamicStyle} 
-          category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-          menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
-          <div className='main'>
-            <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
-            <div className='container'>           
-              <MyPage decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
-              <footer className='footer'>
-                <Footer/>
-              </footer>
+            {/* 최상단배너 */}
+            <TopBanner
+              login={login} setLogin={setLogin} iconHovered={iconHovered}
+              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+              text_dynamicStyle={text_dynamicStyle}
+              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
+              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+            <div className='main'>
+              <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
+              <div className='container'>
+                <MyPage decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <footer className='footer'>
+                  <Footer />
+                </footer>
+              </div>
             </div>
-          </div>
-        </>
+          </>
         }>
 
         </Route>
         {/* 회사 관련 */}
         <Route path='/comeway' element={
           <>
-          {/* 최상단배너 */}
-          <TopBanner 
-          login={login} setLogin={setLogin} iconHovered={iconHovered} 
-          iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} 
-          icon_dynamicStyle={icon_dynamicStyle} text_dynamicStyle={text_dynamicStyle} 
-          category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-          menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
-          <div className='main'>
-            <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
-            <div className='container'>           
-              <Comeway decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
-              <footer className='footer'>
-                <Footer/>
-              </footer>
-            </div> 
-          </div>
-        </>
+            {/* 최상단배너 */}
+            <TopBanner
+              login={login} setLogin={setLogin} iconHovered={iconHovered}
+              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+              text_dynamicStyle={text_dynamicStyle}
+              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
+              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+            <div className='main'>
+              <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
+              <div className='container'>
+                <Comeway decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <footer className='footer'>
+                  <Footer />
+                </footer>
+              </div>
+            </div>
+          </>
         } />
         {/* 오늘의 뉴스 */}
         <Route path='/todayTopic/:page' element={
           <>
-          {/* 최상단배너 */}
-          <TopBanner
-          login={login} setLogin={setLogin} iconHovered={iconHovered} 
-          iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} 
-          icon_dynamicStyle={icon_dynamicStyle} text_dynamicStyle={text_dynamicStyle} 
-          category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-          menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
-          <div className='main'>
-            <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
-            <div className='container'>   
-              <TodayNews decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
-              <footer className='footer'>
-                <Footer/>
-              </footer>
+            {/* 최상단배너 */}
+            <TopBanner
+              login={login} setLogin={setLogin} iconHovered={iconHovered}
+              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+              text_dynamicStyle={text_dynamicStyle}
+              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
+              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+            <div className='main'>
+              <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
+              <div className='container'>
+                <TodayNews decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <footer className='footer'>
+                  <Footer />
+                </footer>
+              </div>
             </div>
-          </div>
-        </>
+          </>
         } />
         <Route path='/todayTopicPost/:id' element={
           <>
             {/* 최상단배너 */}
-            <TopBanner 
-            login={login} setLogin={setLogin} iconHovered={iconHovered} 
-            iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} 
-            icon_dynamicStyle={icon_dynamicStyle} text_dynamicStyle={text_dynamicStyle} 
-            category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-            menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
+            <TopBanner
+              login={login} setLogin={setLogin} iconHovered={iconHovered}
+              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+              text_dynamicStyle={text_dynamicStyle}
+              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
+              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
             <div className='main'>
-              <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
-              <div className='container'>             
-                <TodayNewsInner menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+              <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
+              <div className='container'>
+                <TodayNewsInner menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
-                  <Footer/>
+                  <Footer />
                 </footer>
               </div>
             </div>
-          </>  
-          } />
+          </>
+        } />
         <Route path='/event' element={
           <>
-          {/* 최상단배너 */}
-          <TopBanner
-          login={login} setLogin={setLogin} iconHovered={iconHovered} 
-          iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} 
-          icon_dynamicStyle={icon_dynamicStyle} text_dynamicStyle={text_dynamicStyle} 
-          category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-          menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}/>
-          <div className='main'>
-            <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle}/>
-            <div className='container'>           
-              <Event menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} icon_dynamicStyle={icon_dynamicStyle} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
-              <footer className='footer'>
-                <Footer/>
-              </footer>
+            {/* 최상단배너 */}
+            <TopBanner
+              login={login} setLogin={setLogin} iconHovered={iconHovered}
+              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+              text_dynamicStyle={text_dynamicStyle}
+              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
+              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+            <div className='main'>
+              <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
+              <div className='container'>
+                <Event menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <footer className='footer'>
+                  <Footer />
+                </footer>
+              </div>
             </div>
-          </div>
-        </>
+          </>
         } />
 
         {/* 관리자페이지 - 메인 */}
         <Route path='/adminMain' element={<AdminMain />} />
         {/* 관리자페이지 - 코드관리 */}
-        <Route path='/adminMain/printCode' element={<ManageCode />}/>
+        <Route path='/adminMain/printCode' element={<ManageCode />} />
         {/* 관리자페이지 - 고객센터 */}
-        <Route path='/adminMain/customerCenter'>
-          <Route path='/adminMain/customerCenter/notice'element={<AdminNotice />}/>
-          <Route path='/adminMain/customerCenter/ask' element={<AdminContact/>}/>
-        </Route>
+        <Route path='/adminMain/customerCenter/notice' element={<AdminNotice />} />
         {/* 관리자페이지 - 상품등록 */}
-        <Route path='/adminMain/addProduct' element={<AdminDetail/>} />
+        <Route path='/adminMain/addProduct' element={<AdminDetail />} />
         {/* 관리자페이지 - 상품수정 */}
-        <Route path='/adminMain/editProduct' element={<AdminProductList data={data}/>}/>
+        <Route path='/adminMain/editProduct' element={<AdminProductList data={data} />} />
         {/* 관리자페이지 - 카테고리 */}
-        <Route path='/adminMain/category' element={<AdminCategory data={data}/>}/>
+        <Route path='/adminMain/category' element={<AdminCategory data={data} />} />
         {/* 관리자페이지 - 카테고리 수정 */}
-        <Route path='/adminMain/categoryEdit/:id' element={<AdminCategoryEdit data={data}/>}/>
+        <Route path='/adminMain/categoryEdit/:id' element={<AdminCategoryEdit data={data} />} />
         {/* 관리자페이지 - 주문 관리*/}
-        <Route path='/adminMain/sold' element={<AdminSoldList data={data} orderData={orderData}/>}/>
+        <Route path='/adminMain/sold' element={<AdminSoldList data={data} orderData={orderData} />} />
         {/* 관리자페이지 - 미결제 주문 관리 */}
-        <Route path='/adminMain/yetPay' element={<AdminNotSoldList orderData={orderData} />}/>
+        <Route path='/adminMain/yetPay' element={<AdminNotSoldList orderData={orderData} />} />
         {/* 관리자페이지 - 반품 관리 */}
-        <Route path='/adminMain/refund' element={<AdminRefund orderData={orderData}/>}/>
+        <Route path='/adminMain/refund' element={<AdminRefund orderData={orderData} />} />
       </Routes>
     </div>
   );

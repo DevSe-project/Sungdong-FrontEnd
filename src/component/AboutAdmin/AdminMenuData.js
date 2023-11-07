@@ -94,10 +94,6 @@ export function AdminMenuData(props){
           item: '공지사항',
           link: '/adminMain/customerCenter/notice'
         },
-        {
-        item: '문의 게시판',
-        link: '/adminMain/customerCenter/ask'
-        },
       ],
     },
     {
