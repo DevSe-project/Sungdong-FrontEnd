@@ -1,13 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./AdminNotice.module.css";
 import { AdminHeader } from "../AdminHeader";
 import { AdminMenuData } from "../AdminMenuData";
 import WrtieModal from "./WriteModal";
 import EditModal from "./EditModal";
+import { NoticeObj } from "../../Data/NoticeObj"; // 수정된 부분
 import { useListStore } from "../../../Store/DataStore";
 
 export default function AdminNotice() {
+
   const { postList, setPostList } = useListStore();
+  
+  // 데이터 불러오기
+  useEffect(() => {
+    const dataload = setTimeout(() => {
+      setPostList(NoticeObj);
+    }, 1000)
+
+    return () => clearTimeout(dataload)
+  }, [setPostList]);
+
   // State
   const [modal, setModal] = useState(false); // modal on / off
   const [modalName, setModalName] = useState(''); // what is modal?
