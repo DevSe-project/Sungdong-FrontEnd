@@ -76,13 +76,14 @@
 }
 /* ----------------------------------------- */
 /* 글 목록 */
-.noticeList_block {
-  /* 나눠진 비율로 너비 설정 */
+.postList_container {
+  margin: 10px;
+  margin-top: 0;
   display: flex;
   flex-direction: column;
 }
 /* Post */
-.noticeList_post {
+.postList_container_title {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -91,15 +92,13 @@
   color: white;
   font-size: 1.5em;
   font-weight: bold;
-  margin: 10px;
   margin-bottom: 0;
   border-radius: 1dvh;
   height: 50px;
 }
 /* List */
-.noticeList_list {
+.post_container {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   width: 100%; /* 100% 너비 */
   height: 30px;
@@ -109,51 +108,64 @@
   margin: 10px;
   margin-bottom: 0;
 }
+/* postInfo Container */
+.postInfo_container {
+  display: flex;
+  width: 100%;
+  cursor: pointer;
+}
 /* No */
-.noticeList_no {
+.post_no {
   width: 20%; /* 1:5 비율 */
 }
 /* Title */
-.noticeList_title {
+.post_title {
   width: 50%; /* 5:5 비율 */
 }
 /* Writer */
-.noticeList_writer {
+.post_writer {
   width: 20%; /* 2:5 비율 */
 }
 /* Del */
-.noticeList_del {
-  width: 20%; /* 2:5 비율 */
+.post_del_container {
+  width: 10%;
   display: flex;
   cursor: pointer;
-  border-radius: 1dvh;
+}
+.post_delButton {
+  display: flex;
+  width: 4em;
+  height: 30px;
+  border-radius: 0.1cm;
   background-color: #CC0000;
   color: white;
-  height: 30px;
   align-items: center;
   justify-content: center;
 }
 /* ----------------------------------------- */
-.noticeList_no {
-  width: 10%;  
-}
-.noticeList_title {
-  width: 60%;
-}
-.noticeList_wirter {
-  width: 20%;
-}
-.noticeList_del {
-  width: 10%;
-}
-.noticeList_delBox {
+/* 스켈레톤 컨테이너 스타일 */
+.skeletonContainer {
   display: flex;
-  cursor: pointer;
-  border-radius: 1dvh;
-  background-color: #CC0000;
-  color: white;
-  width: 70%;
-  height: 30px;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column; /* 수직으로 나열 */
+}
+
+/* 스켈레톤 아이템 스타일 */
+.skeletonItem {
+  width: 100%;
+  height: 30px; /* 스켈레톤 아이템의 높이 설정 */
+  border-radius: 1dvb;
+  margin-bottom: 10px; /* 스켈레톤 아이템 간의 간격 설정 */
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); /* 스켈레톤 효과 설정 */
+  background-size: 200% 100%; /* 배경 크기 설정 */
+  animation: loading 1.5s infinite; /* 로딩 애니메이션 적용 */
+}
+
+/* 스켈레톤 로딩 애니메이션 */
+@keyframes loading {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
