@@ -1,5 +1,6 @@
 /* 기본 셋팅 */
 @import url(https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css);
+iframe#webpack-dev-server-client-overlay{display:none!important}
 
 .App{
   width: 100%;
