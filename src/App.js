@@ -46,6 +46,8 @@ import ManageCode from './component/AboutAdmin/Code/ManageCode';
 
 import axios from 'axios';
 import UserContext, { UserProvider } from './component/AboutContext/UserContext';
+
+// 관리자 관련
 import { AdminDetail } from './component/AboutAdmin/AdminDetail';
 import { AdminProductList } from './component/AboutAdmin/AdminProductList';
 import { AdminCategory } from './component/AboutAdmin/AdminCategory';
@@ -55,9 +57,13 @@ import { AdminNotSoldList } from './component/AboutAdmin/AdminNotSoldList';
 import { AdminRefund } from './component/AboutAdmin/AdminRefund';
 import AdminNotice from './component/AboutAdmin/Notice/AdminNotice';
 import AdminContact from './component/AboutAdmin/Contact/AdminContact';
+
+// 템플릿 컴포넌트
 import { TopBanner } from './component/TemplateLayout/AboutHeader/TopBanner';
 import { MenuData } from './component/TemplateLayout/AboutMenuData/MenuData';
 import { Footer } from './component/TemplateLayout/AboutFooter/Footer';
+
+// State Management (Zustand) Store
 import { useDataStore, useListStore } from "./Store/DataStore";
 
 function App() {
