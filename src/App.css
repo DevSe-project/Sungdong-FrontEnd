@@ -309,8 +309,8 @@ input[type="checkbox"] {
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
-  margin-top: 5em;
-  gap: 3em;
+  margin-top: 1em;
+  gap: 1em;
 }
 
 .footer{
