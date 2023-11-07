@@ -77,7 +77,7 @@ function App() {
     data, setData, 
     orderData, setOrderData, 
     userData, setUserData, 
-    setCategoryData, setTodayTopicData,
+    setCategoryData, setTodayTopicData
   } = useDataStore();
   // 리스트 State 불러오기
   const { setWishList, setPostList } = useListStore();
@@ -237,12 +237,12 @@ function App() {
   const icon_dynamicStyle = {
     transition: `color ${transitionDurate}ms, font-size ${transitionDurate}ms`,
     color: menuClicked ? '#cc0000' : '#000',
-    fontSize: menuClicked ? '2.5em' : '2em',
+    fontSize: menuClicked ? '1em' : '1em',
   };
   const text_dynamicStyle = {
     transition: `color ${transitionDurate}ms, font-size ${transitionDurate}ms, font-weight ${transitionDurate}ms`,
     color: iconClicked ? '#6d3535 ' : '#000',
-    fontSize: '1.2em',
+    fontSize: '1.1em',
     fontWeight: iconClicked ? '800' : '600',
   }
   const category_dynamicStyle = {
