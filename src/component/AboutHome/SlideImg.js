@@ -1,56 +1,64 @@
-import { useEffect, useMemo, useState } from 'react';
-import styles from './SlideImg.module.css'
+import React, { useState } from "react";
 import image1 from '../../image/[이벤트]-오렌지방한장갑.png'
 import image2 from '../../image/[이벤트]-착착테이프.png'
 import image3 from '../../image/[이벤트]국산방진마스크.png'
 import { useNavigate } from 'react-router-dom';
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { Carousel } from "react-responsive-carousel";
+
 export function SlideImg() {
   const navigate = useNavigate();
-  //의존성 배열 Warning 메세지 해결 -
-  // useMemo사용 - 의존성이 변경될 때만 다시 계산
-    const images = useMemo(() => [
-      image1,
-      image2,
-      image3,
-    ], []);
+// StaylistSlider
 
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+const imageData = [
+  {
+    label: image1,
+    alt: "image1",
+  },
 
-    useEffect(() => {
-      const slideTimer = setInterval(() => {
-        // 이미지 인덱스를 변경하여 다음 이미지로 슬라이드
-        setCurrentImageIndex((indexZero) => ((indexZero + 1) % images.length)); //%(나머지)이므로 1%3 => 1반환, 2%3 => 2반환, 3%3 => 0반환
-      }, 3000);
-  
-      // 컴포넌트가 언마운트되면 타이머를 해제하여 메모리 누수 방지
-      return () => clearInterval(slideTimer);
-    }, [images]);
-  
-  return(
-  <div className={styles.container}>
-    <div className={styles.sliderContainer}>
-      {/* transform : translateX(-100%,-200%,-300%) -> x축방향으로 이동 */}
-      <div 
-      className={styles.sliderTrack} 
-      style={{ transform: `translateX(-${currentImageIndex * 100}%)`, cursor: 'pointer'}}
-      onClick={()=> navigate("/event")}>
-        {/* 이미지들을 옆으로 이동시키기 위해 slider-track */}
-        {images.map((url, index) => (
-          <img key={index} src={url} alt={`슬라이드 화면 ${index}번`} className={styles.slide} />
-        ))}
-      </div>
-    </div>
-    <div className={styles.sliderContainer}>
-      <div 
-      className={styles.sliderTrack} 
-      style={{ transform: `translateX(-${currentImageIndex * 100}%)`, cursor: 'pointer'}}
-      onClick={()=> navigate("/event")}>
-        {/* 이미지들을 옆으로 이동시키기 위해 slider-track */}
-        {images.map((url, index) => (
-          <img key={index} src={url} alt={`슬라이드 화면 ${index}번`} className={styles.slide} />
-        ))}
-      </div>
-    </div>
+  {
+    label: image2,
+    alt: "image2",
+  },
+
+  {
+    label: image3,
+    alt: "image3",
+  }
+];
+const renderSlides = imageData.map(image => (
+  <div key={image.alt} onClick={()=> navigate('/event')}>
+    <img src={image.label} alt={image.alt}/>
   </div>
+));
+
+const [currentIndex, setCurrentIndex] = useState();
+function handleChange(index) {
+  setCurrentIndex(index);
+}
+
+  return (
+    <div style={{display: 'flex', justifyContent:'center', gap:'1em'}}>
+      <Carousel
+      showArrows={true}
+      autoPlay={true}
+      infiniteLoop={true}
+      width={500}
+      showThumbs={false}
+      selectedItem={imageData[currentIndex]}
+      onChange={handleChange} >
+      {renderSlides}
+      </Carousel>
+      <Carousel
+      showArrows={true}
+      autoPlay={true}
+      infiniteLoop={true}
+      width={500}
+      showThumbs={false}
+      selectedItem={imageData[currentIndex]}
+      onChange={handleChange} >
+      {renderSlides}
+      </Carousel>
+    </div>
   );
 };
