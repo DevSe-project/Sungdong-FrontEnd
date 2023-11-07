@@ -1,11 +1,17 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 export const useDataStore = create((set)=>({
-  data : [],
-  setData : (input) =>
-   set({
-     data : input
-     }),
+  data : null,
+  error: null,
+  setData : async(input) => {
+    try {
+      set({
+        data : input
+        });
+    } catch (error) {
+      set({ data: null, error: error.message });
+    }
+  },
   orderData: [],
   setOrderData : (input) =>
   set( (prev) => ({
