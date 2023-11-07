@@ -1,7 +1,7 @@
 import { Tab } from './Tab'
 import styles from './Detail.module.css'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner'
 import { TabInfo } from './TabInfo'
 import CryptoJS from 'crypto-js';
@@ -10,7 +10,7 @@ import { useDataStore, useListStore } from '../../Store/DataStore'
 export function Detail(props) {
   // Usenavigate
   const navigate = useNavigate();
-  const {data, setData} = useDataStore();
+  const {data} = useDataStore();
   const {wishList, setWishList, setOrderList, basketList, setBasketList} = useListStore();
 
  //수량 개수 state
@@ -27,21 +27,26 @@ export function Detail(props) {
 
   //주소창 입력된 id값 받아오기
   let {id} = useParams();
+
+  //data값이 불러오면 loadData() 실행
+  useEffect(()=>{
+    if(data != null){
+      loadData();
+    }
+  }, [])
+
   const loadData = ()=> {
-    if(setData && data){
+    if(data != null){
       //입력된 id과 data내부의 id값 일치하는 값 찾아 변수 선언
-      const data = data.find((item)=>item.id==id);
-      return data;
+      const detaildata = data.find((item)=>item.id==id);
+      return detaildata;
     } else {
       return <div>데이터를 불러오는 중이거나 상품을 찾을 수 없습니다.</div>;
     }
   }
 
-
   //로딩된 데이터 불러오기
   const detailData = loadData();
-
-
 
 
   //수량 최대입력 글자(제한 길이 변수)
@@ -205,7 +210,7 @@ function basketThis(product, count){
 
             {/* 상품 이미지 부분 */}
             <div className={styles.headLeft}>
-              <img src={data && detailData.image.original} alt="이미지" 
+              <img src={data != null && detailData.image.original} alt="이미지" 
               className={styles.thumnail}/>
             </div>
 
@@ -214,12 +219,12 @@ function basketThis(product, count){
             {/* 상품 정보(상품 이름, 가격) 부분 (삼항연산자 : 스켈레톤 처리) */}
             <div className={styles.headRight}>
               <div className={styles.textBox}>
-                {data 
+                {data != null
                 ? detailData.title
                 : <div className={styles.skeleton}>&nbsp;</div>}
               </div>
               <h4 className={styles.h4}>
-                {data 
+                {data != null
                 ? detailData.discount !== 0
                 ? 
                 <div className={styles.priceTag}>
@@ -242,7 +247,7 @@ function basketThis(product, count){
 
               <div className={styles.textBox}>
                 {/* 상품 수량 및 옵션, 최종 결제금액 */}
-              {data ? 
+              {data != null ? 
               <>
                 <label>
                 수량 : <input value={count} className={styles.input} onChange={maxLengthCheck} type='number' placeholder='숫자만 입력'/> 개
@@ -267,7 +272,7 @@ function basketThis(product, count){
               : <div className={styles.skeleton}>&nbsp;</div>
               }
               </div>
-              {data ?
+              {data != null ?
                 <>
                 총 수량 {count ? count : 1}개 |
                 <h4 className={styles.finalprice}>

@@ -2,8 +2,11 @@ import { useEffect, useState } from 'react';
 import styles from './RelatedData.module.css'
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDataStore, useListStore } from '../../Store/DataStore';
 export function RelatedData(props) {
 
+  const {data} = useDataStore();
+  const {basketList, setBasketList} = useListStore();
   const navigate = useNavigate();
 
   //로그인 데이터 불러오기
@@ -31,15 +34,15 @@ export function RelatedData(props) {
   const [optionSelected, setOptionSelected] = useState(relatedList.map(() => ""));
 
   // 장바구니 복사
-  const copyList = [...props.basketList];
+  const copyList = [...basketList];
 
   // userId가 같은 항목만 필터링
   const onlyUserData = copyList.filter((item)=> item.userId === inLogin.id);
 
   // relatedList 데이터 삽입
   useEffect(() => {
-    if (props.data && props.detailData) {
-      const filterList = props.data.filter((item) =>
+    if (data && props.detailData) {
+      const filterList = data.filter((item) =>
       item.category.main === props.detailData.category.main);
       const addCntList = filterList.map((item,index) => ({
         ...item,
@@ -49,7 +52,7 @@ export function RelatedData(props) {
       }));
       setRelatedList(addCntList);
     }
-  }, [props.data, props.detailData]);
+  }, [data, props.detailData]);
 
   // 아이템 클릭 핸들러
   const handleItemClick = (itemId) => {
@@ -176,7 +179,7 @@ export function RelatedData(props) {
       return { ...item, userId: inLogin.id};
     });
   
-    props.setBasketList([...props.basketList, ...basketProductsToAdd]);
+    setBasketList([...basketList, ...basketProductsToAdd]);
   
     alert("해당 상품이 장바구니에 추가되었습니다.");
     setSelectedItems([]);
@@ -215,7 +218,7 @@ export function RelatedData(props) {
             </tr>
           </thead>
           <tbody>
-            {props.data 
+            {data 
             ? relatedList.length > 0
             ? getCurrentPagePosts().map((item, index)=> (
             <React.Fragment key={index}>

@@ -1,13 +1,17 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 export const useDataStore = create((set)=>({
-  // 상품
-  data : [],
-  setData : (input) =>
-   set({
-     data : input
-     }),
-  // 주문
+  data : null,
+  error: null,
+  setData : async(input) => {
+    try {
+      set({
+        data : input
+        });
+    } catch (error) {
+      set({ data: null, error: error.message });
+    }
+  },
   orderData: [],
   setOrderData : (input) =>
   set( (prev) => ({
