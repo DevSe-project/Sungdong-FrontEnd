@@ -7,7 +7,7 @@ import EditModal from "./EditModal";
 import { useListStore } from "../../../Store/DataStore";
 
 export default function AdminNotice() {
-  const {postList, setPostList} = useListStore();
+  const { postList, setPostList } = useListStore();
   // State
   const [modal, setModal] = useState(false); // modal on / off
   const [modalName, setModalName] = useState(''); // what is modal?
@@ -85,11 +85,11 @@ export default function AdminNotice() {
 
   const addPost = () => {
     const { title, writer, contents } = tempList; // 입력 값들을 자체 할당
-    const isInputValid = title.length > 2 && writer.length > 2 && contents.length > 10; // 입력 조건 부여
+    const isCheckInputLength = title.length > 2 && writer.length > 2 && contents.length > 10; // 입력 조건 부여
     // 조건에 부합한다면
-    if (isInputValid) {
+    if (isCheckInputLength) {
       const newPost = {
-        id: postList.length + 1,
+        id: `${currentYear}#${currentMonth}@${currentDay}*${currentHour}=${currentMinute}`,
         title,
         contents,
         writer,
@@ -111,19 +111,19 @@ export default function AdminNotice() {
       setModal(false);
       setModalName('');
     } else {
-      alert("제목, 작성자 명을 2글자 이상, 본문 내용을 10글자 이상 작성하십시오.");
+      alert("제목을 2글자 이상, 작성자 명을 2글자 이상, 본문 내용을 10글자 이상 작성하십시오.");
     }
 
   };
 
   // 공지사항 리스트 업데이트
-  const updateNotice = (index, updatedData) => {
+  const editNotice = (index, editData) => {
     // 현재 공지사항 리스트 복제
-    const updatedList = [...postList];
+    const editedList = [...postList];
     // 업데이트할 해당 공지사항에 새로운 데이터 할당
-    updatedList[index] = updatedData;
+    editedList[index] = editData;
     // 부모 컴포넌트에 업데이트된 리스트 전달
-    setPostList(updatedList);
+    setPostList(editedList);
   };
 
 
@@ -152,28 +152,34 @@ export default function AdminNotice() {
               </div>
             </div>
           </div>
-          {/* 글 목록 */}
-          <div className={styles.noticeList_block}>
-            {/* Title */}
-            <div className={styles.noticeList_post}>글 목록</div>
-            {/* List */}
+          {/* Post List */}
+          <div className={styles.postList_container}>
+            {/* Post Title */}
+            <div className={styles.postList_container_title}>글 목록</div>
+            {/* Post Map */}
             {postList.map((item, index) => (
-              <div className={styles.noticeList_list} onClick={() => { onOpen(index) }} key={index}> {/* 선택 모달의 key를 글 수정으로 지정*/}
-                {/* No */}
-                <div className={styles.noticeList_no}>
-                  {index + 1}
-                </div>
-                {/* Code */}
-                <div className={styles.noticeList_title}>
-                  {item.title}
-                </div>
-                {/* Writer */}
-                <div className={styles.noticeList_writer}>
-                  작성자: {item.writer}
+              <div className={styles.post_container}>
+                <div className={styles.postInfo_container} onClick={() => { onOpen(index) }} key={index}> {/* 선택 모달의 key를 글 수정으로 지정*/}
+                  {/* No */}
+                  <div className={styles.post_no}>
+                    {index + 1}
+                  </div>
+                  {/* Code */}
+                  <div className={styles.post_title}>
+                    {item.title}
+                  </div>
+                  {/* Writer */}
+                  <div className={styles.post_writer}>
+                    {item.writer}
+                  </div>
+                  {/* WritedDate */}
+                  <div>
+                    {item.date}
+                  </div>
                 </div>
                 {/* Del */}
-                <div className={styles.noticeList_del}>
-                  <div className={styles.noticeList_delBox}
+                <div div className={styles.post_del_container} >
+                  <div className={styles.post_delButton}
                     onClick={() => {
                       const data = [...postList];
                       data.splice(index, 1);
@@ -193,12 +199,12 @@ export default function AdminNotice() {
           <WrtieModal modalName={modalName} setModalName={setModalName} modal={modal} setModal={setModal} tempList={tempList} setTempList={setTempList} addPost={addPost} closeWriteModal={closeWriteModal} />
           :
           modal && modalName === 'edit' ?
-            <EditModal updateNotice={updateNotice} list={postList} modalName={modalName} setModalName={setModalName} modal={modal} setModal={setModal} tempList={tempList} setTempList={setTempList} selectedItemIndex={selectedItemIndex} setSelectedItemIndex={setSelectedItemIndex} closeWriteModal={closeWriteModal} />
+            <EditModal editNotice={editNotice} list={postList} modalName={modalName} setModalName={setModalName} modal={modal} setModal={setModal} tempList={tempList} setTempList={setTempList} selectedItemIndex={selectedItemIndex} setSelectedItemIndex={setSelectedItemIndex} closeWriteModal={closeWriteModal} />
             :
             null
       }
 
 
-    </div>
+    </div >
   )
 }

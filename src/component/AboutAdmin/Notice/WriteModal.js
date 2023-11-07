@@ -7,19 +7,19 @@ export default function WrtieModal(props) {
     // esc키를 누르면 모달창 닫기.
     useEffect(() => {
         const handleEscapeKey = (event) => {
-          if (event.key === 'Escape' && props.modal && props.modalName != '') {
-            props.closeWriteModal();
-          }
+            if (event.key === 'Escape' && props.modal && props.modalName != '') {
+                props.closeWriteModal();
+            }
         };
-    
-        window.addEventListener('keydown', handleEscapeKey);
-    
-        return () => {
-          window.removeEventListener('keydown', handleEscapeKey);
-        };
-      }, [props.modal, props.closeWriteModal]);
 
-    
+        window.addEventListener('keydown', handleEscapeKey);
+
+        return () => {
+            window.removeEventListener('keydown', handleEscapeKey);
+        };
+    }, [props.modal, props.closeWriteModal]);
+
+
 
     return (
         <div className={styles.modalContainer}>
@@ -44,26 +44,37 @@ export default function WrtieModal(props) {
                 </div>
                 {/* 작성자 */}
                 <div className={styles.writer}>
-                    작성자 : <input className={styles.inputWriter} type="text" value={props.tempList.writer} onChange={(e) => {
-                        props.setTempList((prevdata) => ({
-                            ...prevdata,
-                            writer: e.target.value
-                        }))
-                    }} required />
+                    작성자 : <input
+                        className={styles.inputWriter}
+                        type="text" value={props.tempList.writer}
+                        onChange={(e) => {
+                            props.setTempList(
+                                (prevdata) => ({
+                                    ...prevdata,
+                                    writer: e.target.value
+                                }))
+                        }} required />
                 </div>
                 {/* 글 내용 */}
                 <div className={styles.content}>
                     <textarea
                         className={styles.textarea}
-                        value={props.tempList.contents}>
-
+                        value={props.tempList.contents}
+                        onChange={(e) => {
+                            props.setTempList(
+                                (prevdata) => ({
+                                    ...prevdata,
+                                    contents: e.target.value
+                                })
+                            )
+                        }}>
                     </textarea>
                 </div>
             </div>
 
             {/* 첨부파일 */}
             <div>
-                <input type="file" onChange={ () => {} } />
+                <input type="file" onChange={() => { }} />
             </div>
 
             {/* 등록 버튼 */}
