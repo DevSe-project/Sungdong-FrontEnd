@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner'
 import { Delivery } from './Delivery'
 import styles from './DeliveryMain.module.css'
-import { useDataStore } from '../../Store/DataStore'
+import { useOrderData } from '../../Store/DataStore'
 export function DeliveryMain(props){
   //로그인 정보 불러오기
-  const {orderData} = useDataStore();
+  const orderData = useOrderData();
   const inLogin = props.decryptData(JSON.parse(sessionStorage.getItem('saveLoginData')));
   const filterOrderData = orderData && orderData.filter((item)=>item.userId === inLogin.id);
   

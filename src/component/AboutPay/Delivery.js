@@ -2,10 +2,10 @@ import { useNavigate } from 'react-router-dom'
 import styles from './Delivery.module.css'
 import { useEffect, useState } from 'react';
 import CryptoJS from 'crypto-js';
-import { useDataStore } from '../../Store/DataStore';
+import { useOrderData } from '../../Store/DataStore';
 export function Delivery(props){
   //로그인 정보 불러오기
-  const { orderData } = useDataStore();
+  const orderData = useOrderData();
   const inLogin = props.decryptData(JSON.parse(sessionStorage.getItem('saveLoginData')));
   const filterOrderData = orderData && orderData.filter((item)=>item.userId === inLogin.id);
   const [filterSearch, setFilterSearch] = useState("");

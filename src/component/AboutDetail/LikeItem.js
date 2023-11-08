@@ -1,10 +1,11 @@
-import { useListStore } from '../../Store/DataStore';
+import { useListActions, useListStore, useWishList } from '../../Store/DataStore';
 import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner'
 import styles from './LikeItem.module.css'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 export function LikeItem(){
-  const {wishList, setWishList} = useListStore();
+  const wishList = useWishList();
+  const {setWishList} = useListActions();
   const navigate = useNavigate();
 
   // 체크박스를 통해 선택한 상품들을 저장할 상태 변수

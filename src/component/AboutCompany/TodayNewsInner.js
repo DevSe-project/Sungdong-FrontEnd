@@ -1,9 +1,9 @@
 import styles from './TodayNewsInner.module.css'
 import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useDataStore } from '../../Store/DataStore';
+import { useTopicData } from '../../Store/DataStore';
 export function TodayNewsInner(props){
-  const {todayTopicData} = useDataStore();
+  const {todayTopicData} = useTopicData();
   const navigate = useNavigate();
   let {id} = useParams();
   const loadData = ()=> {

@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import styles from './SearchBar.module.css';
 import { useNavigate } from 'react-router-dom';
-import { useDataStore } from '../../../Store/DataStore';
+import { useData } from '../../../Store/DataStore';
 
 export function SearchBar() {
-  const {data} = useDataStore();
+  const data = useData();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState([]);

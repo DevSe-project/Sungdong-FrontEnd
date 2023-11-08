@@ -1,10 +1,10 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './CategoryBar.module.css'
 import { useEffect, useState } from 'react';
-import { useDataStore } from '../../../Store/DataStore';
+import { useCategoryData } from '../../../Store/DataStore';
 
 export function CategoryBar(props) {
-  const { categoryData } = useDataStore();
+  const categoryData  = useCategoryData();
   // 선택된 카테고리 변경 핸들러 (우선순위 : 1. 소 카테고리 2. 대 카테고리)
   const handleCategoryChange = (category) => {
     // 큰 카테고리에 해당하는 탭만을 찾기위해 subCategory는 삭제

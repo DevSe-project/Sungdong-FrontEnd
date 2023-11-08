@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react';
 import styles from './RelatedData.module.css'
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDataStore, useListStore } from '../../Store/DataStore';
+import { useBasketList, useData, useListActions } from '../../Store/DataStore';
 export function RelatedData(props) {
 
-  const {data} = useDataStore();
-  const {basketList, setBasketList} = useListStore();
+  const data = useData();
+  const basketList = useBasketList();
+  const { setBasketList } = useListActions();
   const navigate = useNavigate();
 
   //로그인 데이터 불러오기

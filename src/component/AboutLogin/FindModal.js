@@ -1,9 +1,10 @@
 import { React, useEffect, useState } from 'react';
 import styles from './Modal.module.css';
-import { useDataStore } from '../../Store/DataStore';
+import { useDataActions, useUserData } from '../../Store/DataStore';
 
 export default function FindModal(props) {
-    const {userData, setUserData} = useDataStore();
+    const userData = useUserData();
+    const { setUserData} = useDataActions();
     // Input State
     const [inputForFind, setInputForFind] = useState({
         id: '',

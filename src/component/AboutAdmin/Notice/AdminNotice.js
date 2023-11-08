@@ -5,11 +5,11 @@ import { AdminMenuData } from "../AdminMenuData";
 import WrtieModal from "./WriteModal";
 import EditModal from "./EditModal";
 import { NoticeObj } from "../../Data/NoticeObj"; // 수정된 부분
-import { useListStore } from "../../../Store/DataStore";
+import { useListActions, useListStore, usePostList } from "../../../Store/DataStore";
 
 export default function AdminNotice() {
-
-  const { postList, setPostList } = useListStore();
+  const postList = usePostList();
+  const { setPostList } = useListActions();
   const [isLoading, setIsLoading] = useState(true); // 로딩 중 여부 추가
 
   // 데이터 불러오기
