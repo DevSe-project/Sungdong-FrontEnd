@@ -2,10 +2,10 @@ import styles from './TodayNewsCard.module.css'
 import image from '../../image/page_ready.png'
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDataStore } from '../../Store/DataStore';
+import { useTopicData } from '../../Store/DataStore';
 export function TodayNewsCard(props){
   const navigate = useNavigate();
-  const {todayTopicData} = useDataStore();
+  const {todayTopicData} = useTopicData();
   // 게시물 데이터와 페이지 번호 상태 관리
   const [currentPage, setCurrentPage] = useState(1);
   const [filterSearch, setFilterSearch] = useState("");

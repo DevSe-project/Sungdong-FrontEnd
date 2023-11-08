@@ -63,7 +63,7 @@ import { MenuData } from './component/TemplateLayout/AboutMenuData/MenuData';
 import { Footer } from './component/TemplateLayout/AboutFooter/Footer';
 
 // State Management (Zustand) Store
-import { useDataStore, useListStore } from "./Store/DataStore";
+import { useData, useDataActions, useListActions } from "./Store/DataStore";
 
 function App() {
   const navigate = useNavigate();
@@ -71,15 +71,14 @@ function App() {
   // 주문 스탭 부분 State
   const [activeTab, setActiveTab] = useState(1); // 현재 활성화된 스탭을 추적하는 State 
 
-  // 데이터 State 불러오기
-  const {
-    data, setData,
-    orderData, setOrderData,
-    userData, setUserData,
-    setCategoryData, setTodayTopicData
-  } = useDataStore();
+  // 데이터액션 State 불러오기
+  const { setData, setOrderData, setUserData, setCategoryData, setTodayTopicData } = useDataActions();
+
+  // 상품 데이터 State
+  const data = useData();
+
   // 리스트 State 불러오기
-  const { setWishList, setPostList } = useListStore();
+  const { setWishList, setPostList } = useListActions();
 
   const [login, setLogin] = useState(false);
 

@@ -5,13 +5,16 @@ import { useEffect, useState } from 'react'
 import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner'
 import { TabInfo } from './TabInfo'
 import CryptoJS from 'crypto-js';
-import { useDataStore, useListStore } from '../../Store/DataStore'
+import { useBasketList, useDataStore, useListActions, useListStore, useWishList } from '../../Store/DataStore'
 
 export function Detail(props) {
   // Usenavigate
   const navigate = useNavigate();
   const {data} = useDataStore();
-  const {wishList, setWishList, setOrderList, basketList, setBasketList} = useListStore();
+  const wishList = useWishList();
+  const basketList = useBasketList();
+
+  const { setWishList, setOrderList, setBasketList} = useListActions();
 
  //수량 개수 state
   const [count, setCount] = useState("1");

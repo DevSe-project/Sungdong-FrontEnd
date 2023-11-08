@@ -4,9 +4,11 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner';
 import CryptoJS from 'crypto-js';
 import React from 'react';
-import { useListStore } from '../../Store/DataStore';
+import { useBasketList, useListActions, useOrderList } from '../../Store/DataStore';
 export function Basket(props){
-  const { basketList, setBasketList, orderList, setOrderList } = useListStore();
+  const orderList = useOrderList();
+  const basketList = useBasketList();
+  const { setBasketList, setOrderList } = useListActions();
   // 암호화와 복호화 키
   const encryptionKey = 'bigdev2023!';
 

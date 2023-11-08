@@ -2,12 +2,21 @@ import { useEffect, useState } from 'react';
 import styles from './Receipt.module.css'
 import { useNavigate } from 'react-router-dom';
 import CryptoJS from 'crypto-js';
-import { useDataStore, useListStore } from '../../Store/DataStore';
+import { useBasketList, useData, useDataActions, useListActions, useListStore, useOrderData, useOrderList, useUserData } from '../../Store/DataStore';
 
 export function Receipt(props){
   const navigate = useNavigate();
-  const { setData, data, setOrderData, orderData, userData } = useDataStore();
-  const { orderList, basketList, setBasketList} = useListStore();
+  const data = useData();
+  const orderData = useOrderData();
+  const userData = useUserData();
+
+  const { setData, setOrderData } = useDataActions();
+
+  const orderList = useOrderList();
+  const basketList = useBasketList();
+  
+  const { setBasketList } = useListActions();
+
   const [address, setAddress] = useState("");
   const [inputUser, setInputUser] = useState("사업자정보");
   const inLogin = props.decryptData(JSON.parse(sessionStorage.getItem('saveLoginData')));

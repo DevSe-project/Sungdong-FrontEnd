@@ -3,10 +3,14 @@ import { TopBanner } from "./TopBanner";
 import { useNavigate } from "react-router-dom";
 import styles from './Category.module.css'
 import React from 'react';
-import { useDataStore, useListStore } from "../../../Store/DataStore";
+import { useBasketList, useCategoryData, useData, useListActions } from "../../../Store/DataStore";
 export function Category(props){
-    const { data, categoryData } = useDataStore();
-    const { basketList, setBasketList } = useListStore();
+    // state 사용
+    const data = useData();
+    const categoryData = useCategoryData();
+    const basketList = useBasketList();
+    const { setBasketList } = useListActions();
+    
     // 카테고리
     const [selectedCategory, setSelectedCategory] = useState('전체'); //메인 카테고리
     const [selectedSubCategory, setSelectedSubCategory] = useState(null); //서브 카테고리

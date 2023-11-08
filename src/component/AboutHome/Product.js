@@ -1,9 +1,9 @@
-import { useDataStore } from '../../Store/DataStore';
+import { useData } from '../../Store/DataStore';
 import styles from './Product.module.css'; 
 import { useNavigate } from 'react-router-dom';
 export function Product(){
   const navigate = useNavigate();
-  const { data } = useDataStore();
+  const data = useData();
   return(
   <div className={styles.main}>
     <div className={styles.container}>

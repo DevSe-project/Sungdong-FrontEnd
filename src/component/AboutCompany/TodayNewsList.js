@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import styles from './TodayNewsList.module.css'
 import { useNavigate } from 'react-router-dom';
-import { useDataStore } from '../../Store/DataStore';
+import { useTopicData } from '../../Store/DataStore';
 export function TodayNewsList(props){
-    const {todayTopicData} = useDataStore();
+    const {todayTopicData} = useTopicData();
     const navigate = useNavigate();
     // 게시물 데이터와 페이지 번호 상태 관리
     const [currentPage, setCurrentPage] = useState(1);
