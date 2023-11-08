@@ -177,7 +177,7 @@ export function MenuData(props){
         },
         {
           item: '문의하기',
-          link: '/userservice/ask',
+          link: '/userservice/contact',
           require : props.login
         }
       ],
