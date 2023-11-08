@@ -5,12 +5,12 @@ import { useEffect, useState } from 'react'
 import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner'
 import { TabInfo } from './TabInfo'
 import CryptoJS from 'crypto-js';
-import { useBasketList, useDataStore, useListActions, useListStore, useWishList } from '../../Store/DataStore'
+import { useBasketList, useData, useListActions, useWishList } from '../../Store/DataStore'
 
 export function Detail(props) {
   // Usenavigate
   const navigate = useNavigate();
-  const {data} = useDataStore();
+  const data = useData();
   const wishList = useWishList();
   const basketList = useBasketList();
 

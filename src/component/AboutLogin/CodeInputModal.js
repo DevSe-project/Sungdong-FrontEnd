@@ -1,11 +1,11 @@
 import { React, useEffect, useState } from 'react';
 import styles from './Modal.module.css';
 import { useNavigate } from 'react-router-dom';
-import { useDataStore } from '../../Store/DataStore';
+import { useDataActions, useUserData } from '../../Store/DataStore';
 
 export default function CodeInputModal(props) {
-
-  const {userData, setUserData} = useDataStore();
+  const userData = useUserData();
+  const { setUserData } = useDataActions();
 
   const navigate = useNavigate();
 

@@ -7,11 +7,11 @@ import CodeInputModal from './CodeInputModal';
 import CryptoJS from 'crypto-js';
 import axios from 'axios';
 import UserContext from '../AboutContext/UserContext';
-import { useDataStore } from '../../Store/DataStore';
+import { useDataActions, useUserData } from '../../Store/DataStore';
 
 export function Login(props) {
-
-  const {userData, setUserData} = useDataStore(); //유저 데이터 불러오기
+  const userData = useUserData();
+  const { setUserData} = useDataActions(); //유저 데이터 불러오기
 
   const { isLogin, login, logout } = useContext(UserContext);
 

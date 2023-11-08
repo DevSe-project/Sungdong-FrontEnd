@@ -1,4 +1,4 @@
-import { firestore } from "./firebase"; // 파이어베이스 데이터베이스 임포트
+import { db, app } from "./firebase"; // 파이어베이스 데이터베이스 임포트
 import './App.css';
 import CryptoJS from 'crypto-js';
 import { useContext, useEffect, useState } from 'react';
@@ -63,9 +63,25 @@ import { MenuData } from './component/TemplateLayout/AboutMenuData/MenuData';
 import { Footer } from './component/TemplateLayout/AboutFooter/Footer';
 
 // State Management (Zustand) Store
-import { useData, useDataActions, useListActions } from "./Store/DataStore";
+import { useData, useDataActions, useListActions, useOrderData } from "./Store/DataStore";
+import { QueryClientProvider, useQuery } from "react-query";
+import { getDocs } from 'firebase/firestore'
 
 function App() {
+  const { query, isLoading, isError} = useQuery({queryKey:['data'],queryFn: getData});
+  if(isLoading){
+    return <p>Loading..</p>;
+  }
+  if(isError){
+    return <p>에러 : {isError.message}</p>;
+  }
+  setData(query);
+
+const getData = async () => {
+  const querySnapshot = await getDocs(app(db, 'ProductData'));
+  return querySnapshot.docs.map((doc) => ({id:doc.id,...doc.data()}));
+};
+
   const navigate = useNavigate();
   const location = useLocation();
   // 주문 스탭 부분 State
@@ -76,6 +92,8 @@ function App() {
 
   // 상품 데이터 State
   const data = useData();
+  const userData = UserData();
+  const orderData = useOrderData();
 
   // 리스트 State 불러오기
   const { setWishList, setPostList } = useListActions();
@@ -179,10 +197,11 @@ function App() {
     setWishList(savedwishList); //setWishList라는 State에 저장
   }, []);
 
+
+
   // 데이터 불러오기
   useEffect(() => {
     const dataload = setTimeout(() => {
-      setData(DataObj);
       setOrderData(OrderObj);
       setUserData(UserData);
       setTodayTopicData(TodayTopicPostObj);
@@ -254,6 +273,7 @@ function App() {
   // 
   return (
     <div className="App">
+      <QueryClientProvider>
       <Routes>
         {/* 메인페이지 */}
         <Route path='/' element={
@@ -566,6 +586,7 @@ function App() {
         {/* 관리자페이지 - 반품 관리 */}
         <Route path='/adminMain/refund' element={<AdminRefund orderData={orderData} />} />
       </Routes>
+      </QueryClientProvider>
     </div>
   );
 }

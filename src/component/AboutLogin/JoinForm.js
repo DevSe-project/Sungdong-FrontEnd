@@ -1,8 +1,10 @@
 import { useState } from "react";
 import styles from './RelativeJoin.module.css';
 import axios from 'axios';
+import { useData } from "../../Store/DataStore";
 
 export default function JoinForm(props) {
+    const data = useData();
 
     // 주소입력 API
     const [address, setAddress] = useState("");
