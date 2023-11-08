@@ -48,14 +48,15 @@ export default function EditModal(props) {
     };
 
     return (
-        <div className={styles.modalContainer}>
-            <div className={styles.closeButton}>
-                <span onClick={props.closeWriteModal}>
-                    <i className="fas fa-times"></i>
-                </span>
-            </div>
-            <div className={styles.modalContent}>
+        <div className={styles.modalOveray}>
+            <div className={styles.modalContainer}>
+                <div className={styles.closeButton}>
+                    <span onClick={props.closeWriteModal}>
+                        <i className="fas fa-times"></i>
+                    </span>
+                </div>
                 <div className={styles.contentsContainer}>
+                    {/* Title */}
                     <div className={styles.title}>
                         Title
                         <input
@@ -66,8 +67,9 @@ export default function EditModal(props) {
                             onChange={handleInputChange}
                         />
                     </div>
+                    {/* Writer */}
                     <div className={styles.writer}>
-                        <span className={styles.writerName}>작성자</span>
+                        작성자
                         <input
                             className={styles.inputWriter}
                             type="text"
@@ -76,6 +78,7 @@ export default function EditModal(props) {
                             onChange={handleInputChange}
                         />
                     </div>
+                    {/* Contents */}
                     <div className={styles.content}>
                         <textarea
                             className={styles.textarea}
@@ -85,11 +88,17 @@ export default function EditModal(props) {
                         />
                     </div>
                 </div>
+
+                {/* add Files */}
                 <div>
-                    <input type="file" onChange={() => {}} />
+                    <input type="file" onChange={() => { }} />
                 </div>
-                <div className={styles.printPost} onClick={handleSaveChanges}>
-                    <div>저장</div>
+
+                {/* Save Button */}
+                <div className={styles.buttonContainer}>
+                    <div className={styles.printPost} onClick={handleSaveChanges}>
+                        <div>저장</div>
+                    </div>
                 </div>
             </div>
         </div>
