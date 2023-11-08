@@ -90,7 +90,7 @@ export function Login(props) {
     }
   }
 
-  // 자동로그인 - 로그인정보 로컬스토리지 저장
+  // 자동로그인 - 로그인정보 로컬스토리지 저장 (아직 다른 곳에서 getItem하는 부분을 안 만든 상태라 적용 안 될 것)
   function autoLogin() {
     localStorage.setItem('autoLogin', )
   }
@@ -130,7 +130,7 @@ export function Login(props) {
               </div>
               <div className={styles.autoLoginCheckBox}>
                 <input type='checkbox' id='autoCheckbox' />
-                <label htmlFor="autoCheckbox">로그인 상태 유지</label>
+                <label htmlFor="autoCheckbox" onClick={autoLogin}>로그인 상태 유지</label>
               </div>
               {/* Login Button */}
               <div className={styles.goLogin}
