@@ -1,8 +1,8 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 const useDataStore = create((set)=>({
-  data : null,
-  error: null,
+  // data : null,
+  // error: null,
   orderData: null,
   categoryData: null,
   userData: null,
@@ -10,15 +10,10 @@ const useDataStore = create((set)=>({
 
 
   actions: {
-    setData : async(input) => {
-      try {
-        set({
-          data : input
-          });
-      } catch (error) {
-        set({ data: null, error: error.message });
-      }
-    },
+    // setData : (input) => 
+    // set(({
+    //   data : input
+    // })),
 
     setOrderData : (input) =>
     set( (prev) => ({
@@ -98,7 +93,7 @@ const useListStore = create((set)=>({
 export const useWishList = () => useListStore((state) => state.wishList);
 export const useBasketList = () => useListStore((state) => state.basketList);
 export const useOrderList = () => useListStore((state) => state.orderList);
-export const usePostList = () => useDataStore((state) => state.postList);
+export const usePostList = () => useListStore((state) => state.postList);
 
 // 🎉  모든 액션 상태를 위한 한개의 선택자 생성 -> 상태가 자주 변경되지 않기 때문에 모든 액션상태를 모음.
-export const useListActions = () => useListActions((state) => state.actions);
+export const useListActions = () => useListStore((state) => state.actions);

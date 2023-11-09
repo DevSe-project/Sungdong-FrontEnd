@@ -63,25 +63,11 @@ import { MenuData } from './component/TemplateLayout/AboutMenuData/MenuData';
 import { Footer } from './component/TemplateLayout/AboutFooter/Footer';
 
 // State Management (Zustand) Store
-import { useData, useDataActions, useListActions, useOrderData } from "./Store/DataStore";
-import { QueryClientProvider, useQuery } from "react-query";
-import { getDocs } from 'firebase/firestore'
+import { useData, useUserData, useDataActions, useListActions, useOrderData } from "./Store/DataStore";
+import { useQuery } from "@tanstack/react-query";
+import { getDocs,collection } from 'firebase/firestore'
 
 function App() {
-  const { query, isLoading, isError} = useQuery({queryKey:['data'],queryFn: getData});
-  if(isLoading){
-    return <p>Loading..</p>;
-  }
-  if(isError){
-    return <p>에러 : {isError.message}</p>;
-  }
-  setData(query);
-
-const getData = async () => {
-  const querySnapshot = await getDocs(app(db, 'ProductData'));
-  return querySnapshot.docs.map((doc) => ({id:doc.id,...doc.data()}));
-};
-
   const navigate = useNavigate();
   const location = useLocation();
   // 주문 스탭 부분 State
@@ -92,13 +78,21 @@ const getData = async () => {
 
   // 상품 데이터 State
   const data = useData();
-  const userData = UserData();
+  const userData = useUserData();
   const orderData = useOrderData();
 
   // 리스트 State 불러오기
   const { setWishList, setPostList } = useListActions();
 
   const [login, setLogin] = useState(false);
+
+  const fetchData = async () => {
+    const querySnapshot = await getDocs(collection(db, 'ProductData')); // 'ProductData'가 컬렉션 이름이라고 가정합니다.
+    return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  };
+
+
+  const { isLoading, isError, error } = useQuery({queryKey:['data'], queryFn: fetchData});
 
   // 세션 스토리지에서 데이터를 가져와서 복호화(백엔드에서 꽁꽁 숨기기 필요)
   const encryptionKey = 'bigdev2023!';
@@ -156,15 +150,14 @@ const getData = async () => {
                 break;
               default:
             }
-            // 상태 업데이트
             setData(newData);
-          } else {
+            } else {
             console.log("사용자를 찾을 수 없습니다.");
           }
         }
       }
     }
-  }, [setData, userData, setLogin]);
+  }, [ userData, setLogin]);
 
   // 특정 주소에서만 SessionStorage 사용하기
   useEffect(() => {
@@ -268,11 +261,15 @@ const getData = async () => {
     visibility: menuClicked ? 'visible' : 'hidden',
   }
   // (END) 아이콘 클릭 관련 객체, 함수, state //
-
-  // 
+  if(isLoading){
+    return <p>Loading..</p>;
+  }
+  if(isError){
+    return <p>에러 : {error.message}</p>;
+  }
+  // setData(query);
   return (
     <div className="App">
-      <QueryClientProvider>
       <Routes>
         {/* 메인페이지 */}
         <Route path='/' element={
@@ -585,7 +582,6 @@ const getData = async () => {
         {/* 관리자페이지 - 반품 관리 */}
         <Route path='/adminMain/refund' element={<AdminRefund orderData={orderData} />} />
       </Routes>
-      </QueryClientProvider>
     </div>
   );
 }
