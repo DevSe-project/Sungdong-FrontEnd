@@ -12,9 +12,6 @@ export function RelatedData(props) {
   const { setBasketList } = useListActions();
   const navigate = useNavigate();
 
-  //로그인 데이터 불러오기
-  const inLogin = props.decryptData(JSON.parse(sessionStorage.getItem('saveLoginData')));
-
   // 게시물 데이터와 페이지 번호 상태 관리    
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -36,11 +33,6 @@ export function RelatedData(props) {
   //옵션 선택 state
   const [optionSelected, setOptionSelected] = useState(relatedList.map(() => ""));
 
-  // 장바구니 복사
-  const copyList = [...basketList];
-
-  // userId가 같은 항목만 필터링
-  const onlyUserData = copyList.filter((item)=> item.userId === inLogin.id);
 
   // relatedList 데이터 삽입
   useEffect(() => {
@@ -154,14 +146,14 @@ export function RelatedData(props) {
     }));
   
     const isDuplicate = selectedItemsInfo.some((selectedItemsInfo) =>
-      onlyUserData.some((basketItem) =>
+      basketList.some((basketItem) =>
         basketItem.id === selectedItemsInfo.id &&
         basketItem.optionSelected === selectedItemsInfo.option
       )
     );
   
     if (isDuplicate) {
-      const findDuplicate = onlyUserData.filter((item) =>
+      const findDuplicate = basketList.filter((item) =>
         selectedItemsInfo.some((selectedItemInfo) =>
           item.id === selectedItemInfo.id &&
           item.optionSelected === selectedItemInfo.option
@@ -177,9 +169,9 @@ export function RelatedData(props) {
     // 옵션 선택한 경우에만 option 객체로 추가
     const basketProductsToAdd = selectedItems.map((item) => {
       if (item.option && optionSelected[item.listId] !== undefined) {
-        return { ...item, userId: inLogin.id, optionSelected: optionSelected[item.listId] };
+        return { ...item, optionSelected: optionSelected[item.listId] };
       }
-      return { ...item, userId: inLogin.id};
+      return { ...item };
     });
   
     setBasketList([...basketList, ...basketProductsToAdd]);

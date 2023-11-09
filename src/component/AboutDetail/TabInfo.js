@@ -76,7 +76,7 @@ export function TabInfo(props){
           <p>해당 상품과 관련된 상품입니다.</p>
         </div>
       </div>
-      <RelatedData decryptData={props.decryptData} login={props.login} setLogin={props.setLogin} basketList={props.basketList} setBasketList={props.setBasketList} detailData={props.detailData} data={props.data} setData={props.setData}/>
+      <RelatedData decryptData={props.decryptData} login={props.login} setLogin={props.setLogin} detailData={props.detailData}/>
     </div>
   </div>
   )

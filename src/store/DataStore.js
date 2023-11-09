@@ -4,7 +4,7 @@ const useDataStore = create((set)=>({
   // data : null,
   // error: null,
   orderData: null,
-  categoryData: null,
+  categoryData: [],
   userData: null,
   todayTopicData: null,
 

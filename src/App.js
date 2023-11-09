@@ -64,8 +64,8 @@ import { Footer } from './component/TemplateLayout/AboutFooter/Footer';
 
 // State Management (Zustand) Store
 import { useUserData, useDataActions, useListActions, useOrderData } from "./Store/DataStore";
-import { QueryClient, useQuery } from "@tanstack/react-query";
-import { getDocs,collection, query } from 'firebase/firestore'
+import { useQuery } from "@tanstack/react-query";
+import { getDocs,collection } from 'firebase/firestore'
 
 function App() {
   const navigate = useNavigate();
@@ -74,10 +74,11 @@ function App() {
   const [activeTab, setActiveTab] = useState(1); // 현재 활성화된 스탭을 추적하는 State 
 
   // 데이터액션 State 불러오기
-  const { setData, setOrderData, setUserData, setCategoryData, setTodayTopicData } = useDataActions();
+  const { setOrderData, setUserData, setCategoryData, setTodayTopicData } = useDataActions();
 
   // 상품 데이터 State
   const userData = useUserData();
+
   const orderData = useOrderData();
 
   // 리스트 State 불러오기
@@ -85,17 +86,18 @@ function App() {
 
   const [login, setLogin] = useState(false);
 
+  // Firebase의 데이터 불러오기
   const fetchData = async () => {
     const querySnapshot = await getDocs(collection(db, 'ProductData')); // 'ProductData'가 컬렉션 이름이라고 가정합니다.
     const result = querySnapshot.docs.map((doc) => ({...doc.data(), id:doc.id}))
     return result;
   };
 
+  // react-query : 서버에서 받아온 데이터 캐싱, 변수에 저장
   const { isLoading, isError, error, data } = useQuery({queryKey:['data'], queryFn: ()=>fetchData()});
   
-  // 세션 스토리지에서 데이터를 가져와서 복호화(백엔드에서 꽁꽁 숨기기 필요)
+  // 세션 스토리지에서 데이터를 가져와서 복호화(백엔드에서 꽁꽁 숨기기 필요) - 없앨예정
   const encryptionKey = 'bigdev2023!';
-
   // 복호화 함수
   const decryptData = (encryptedData) => {
     try {
@@ -117,46 +119,11 @@ function App() {
       const inLogin = decryptData(parseId);  // 복호화 실행
       if (inLogin) {   //복호화 성공 시
         setLogin(true); //로그인상태유지
-        if (data) {
-          const findUser = userData.find((item) => item.id === inLogin.id); // 유저 아이디에 해당하는 데이터 찾기
-          if (findUser) {
-            // 등급별 할인율 적용
-            let newData = data.map((item) => ({ ...item }));
-            switch (findUser.grade) {
-              case 'D':
-                newData = newData.map((item) => ({
-                  ...item,
-                  discount: 0,
-                }));
-                break;
-              case 'C':
-                newData = newData.map((item) => ({
-                  ...item,
-                  discount: 5,
-                }));
-                break;
-              case 'B':
-                newData = newData.map((item) => ({
-                  ...item,
-                  discount: 10,
-                }));
-                break;
-              case 'A':
-                newData = newData.map((item) => ({
-                  ...item,
-                  discount: 15,
-                }));
-                break;
-              default:
-            }
-            setData(newData);
-            } else {
-            console.log("사용자를 찾을 수 없습니다.");
+        } else {
+        console.log("사용자를 찾을 수 없습니다.");
           }
         }
-      }
-    }
-  }, [ userData, setLogin]);
+      }, [ userData, setLogin]);
 
   // 특정 주소에서만 SessionStorage 사용하기
   useEffect(() => {

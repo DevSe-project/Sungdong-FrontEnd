@@ -39,7 +39,7 @@ export function CategoryBar(props) {
 
   const navigate = useNavigate();
   //서브메뉴 열림창 변수 초기화
-  const [subMenuStates, setSubMenuStates] = useState(categoryData !== null && categoryData.map(()=>false));
+  const [subMenuStates, setSubMenuStates] = useState(categoryData.map(()=>false));
 
   const handleTabClick = (tabItem) => {
     sessionStorage.setItem('categoryTabState', JSON.stringify(tabItem.id));
