@@ -87,7 +87,7 @@ function App() {
 
   const fetchData = async () => {
     const querySnapshot = await getDocs(collection(db, 'ProductData')); // 'ProductData'가 컬렉션 이름이라고 가정합니다.
-    return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
   };
   const queryClient = new QueryClient();
   const data = queryClient.getQueryData('data');
@@ -262,7 +262,7 @@ function App() {
     visibility: menuClicked ? 'visible' : 'hidden',
   }
   // (END) 아이콘 클릭 관련 객체, 함수, state //
-  
+
   if(isLoading){
     return <p>Loading..</p>;
   }

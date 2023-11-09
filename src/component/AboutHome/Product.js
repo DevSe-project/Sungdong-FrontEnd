@@ -10,7 +10,7 @@ export function Product(){
   <div className={styles.main}>
     <div className={styles.container}>
       <div className={styles.row}>
-        {data ? data.map((item,index)=>(
+        {data !== null ? data.map((item,index)=>(
           <div onClick={()=>{navigate(`/detail/${item.id}`)}} key={index} className={styles.col}>            
             <div className={styles.frame}>
               <img className={styles.thumnail} src={item.image.original} alt="상품 이미지"/>
