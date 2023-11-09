@@ -2,16 +2,11 @@ import styles from './Contact.module.css';
 
 import { TopBanner } from "../TemplateLayout/AboutHeader/TopBanner"; // 최상단 배너
 import { Footer } from "../TemplateLayout/AboutFooter/Footer"; // 최하단 배너
-import { useDataStore } from "../../Store/DataStore"; // zustand스토어 import
+import { useData, useDataStore } from "../../Store/DataStore"; // zustand스토어 import
 import { MenuData } from "../TemplateLayout/AboutMenuData/MenuData";
 
 
 export function Contact(props) {
-
-  const { data, setData,
-    categoryData, setCategoryData,
-    login, setLogin
-  } = useDataStore();
 
   //로그인 정보 불러오기
   return (

@@ -1,9 +1,12 @@
+import { QueryClient } from '@tanstack/react-query';
 import { useData } from '../../Store/DataStore';
 import styles from './Product.module.css'; 
 import { useNavigate } from 'react-router-dom';
 export function Product(){
   const navigate = useNavigate();
-  const data = useData();
+  const queryClient = new QueryClient();
+  const data = queryClient.getQueryData('data');
+  // const data = useData();
   return(
   <div className={styles.main}>
     <div className={styles.container}>
