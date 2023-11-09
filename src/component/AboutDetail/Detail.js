@@ -5,13 +5,14 @@ import { useEffect, useState } from 'react'
 import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner'
 import { TabInfo } from './TabInfo'
 import CryptoJS from 'crypto-js';
-import { useBasketList, useData, useListActions, useWishList } from '../../Store/DataStore'
+import { useBasketList, useListActions, useWishList } from '../../Store/DataStore'
+import { QueryClient } from '@tanstack/react-query'
 
 export function Detail(props) {
   // Usenavigate
   const navigate = useNavigate();
-  const data = useData();
-  const wishList = useWishList();
+  const queryClient = new QueryClient();
+  const data = queryClient.getQueryData('data');  const wishList = useWishList();
   const basketList = useBasketList();
 
   const { setWishList, setOrderList, setBasketList} = useListActions();

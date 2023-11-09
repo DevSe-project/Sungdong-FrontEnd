@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react';
 import styles from './RelatedData.module.css'
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useBasketList, useData, useListActions } from '../../Store/DataStore';
+import { useBasketList, useListActions } from '../../Store/DataStore';
+import { QueryClient } from '@tanstack/react-query';
 export function RelatedData(props) {
 
-  const data = useData();
+  const queryClient = new QueryClient();
+  const data = queryClient.getQueryData('data');
   const basketList = useBasketList();
   const { setBasketList } = useListActions();
   const navigate = useNavigate();

@@ -63,8 +63,8 @@ import { MenuData } from './component/TemplateLayout/AboutMenuData/MenuData';
 import { Footer } from './component/TemplateLayout/AboutFooter/Footer';
 
 // State Management (Zustand) Store
-import { useData, useUserData, useDataActions, useListActions, useOrderData } from "./Store/DataStore";
-import { useQuery } from "@tanstack/react-query";
+import { useUserData, useDataActions, useListActions, useOrderData } from "./Store/DataStore";
+import { QueryClient, useQuery } from "@tanstack/react-query";
 import { getDocs,collection } from 'firebase/firestore'
 
 function App() {
@@ -77,7 +77,6 @@ function App() {
   const { setData, setOrderData, setUserData, setCategoryData, setTodayTopicData } = useDataActions();
 
   // 상품 데이터 State
-  const data = useData();
   const userData = useUserData();
   const orderData = useOrderData();
 
@@ -90,6 +89,8 @@ function App() {
     const querySnapshot = await getDocs(collection(db, 'ProductData')); // 'ProductData'가 컬렉션 이름이라고 가정합니다.
     return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
   };
+  const queryClient = new QueryClient();
+  const data = queryClient.getQueryData('data');
 
 
   const { isLoading, isError, error } = useQuery({queryKey:['data'], queryFn: fetchData});
@@ -261,6 +262,7 @@ function App() {
     visibility: menuClicked ? 'visible' : 'hidden',
   }
   // (END) 아이콘 클릭 관련 객체, 함수, state //
+  
   if(isLoading){
     return <p>Loading..</p>;
   }

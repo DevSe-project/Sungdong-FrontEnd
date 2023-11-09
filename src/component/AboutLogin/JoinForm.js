@@ -1,10 +1,11 @@
 import { useState } from "react";
 import styles from './RelativeJoin.module.css';
 import axios from 'axios';
-import { useData } from "../../Store/DataStore";
+import { QueryClient } from "@tanstack/react-query";
 
 export default function JoinForm(props) {
-    const data = useData();
+    const queryClient = new QueryClient();
+    const data = queryClient.getQueryData('data');
 
     // 주소입력 API
     const [address, setAddress] = useState("");

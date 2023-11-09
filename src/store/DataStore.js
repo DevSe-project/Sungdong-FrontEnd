@@ -43,7 +43,7 @@ const useDataStore = create((set)=>({
 // 💡 커스텀 훅 사용 -> 
 // 선택자 생성, 상태가 변경될 때마다 구성요소가 업데이트 되기 때문에 반복적 렌더링 방지, 
 // 실수로 전체 스토어를 렌더링 하는 일 방지.
-export const useData = () => useDataStore((state) => state.data);
+// export const useData = () => useDataStore((state) => state.data);
 export const useOrderData = () => useDataStore((state) => state.orderData);
 export const useCategoryData = () => useDataStore((state) => state.categoryData);
 export const useUserData = () => useDataStore((state) => state.userData);

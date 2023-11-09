@@ -6,7 +6,6 @@ export function Product(){
   const navigate = useNavigate();
   const queryClient = new QueryClient();
   const data = queryClient.getQueryData('data');
-  // const data = useData();
   return(
   <div className={styles.main}>
     <div className={styles.container}>
