@@ -3,11 +3,11 @@ import styles from './RelatedData.module.css'
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useBasketList, useListActions } from '../../Store/DataStore';
-import { QueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 export function RelatedData(props) {
 
-  const queryClient = new QueryClient();
-  const data = queryClient.getQueryData('data');
+  const { isLoading, isError, error, data } = useQuery({queryKey:['data']});
+
   const basketList = useBasketList();
   const { setBasketList } = useListActions();
   const navigate = useNavigate();
@@ -193,6 +193,13 @@ export function RelatedData(props) {
     newOptionSelected[index] = e.target.value;
     setOptionSelected(newOptionSelected);
   }
+  if(isLoading){
+    return <p>Loading..</p>;
+  }
+  if(isError){
+    return <p>에러 : {error.message}</p>;
+  }
+
 
   return(
     <div>

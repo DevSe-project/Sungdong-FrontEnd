@@ -65,7 +65,7 @@ import { Footer } from './component/TemplateLayout/AboutFooter/Footer';
 // State Management (Zustand) Store
 import { useUserData, useDataActions, useListActions, useOrderData } from "./Store/DataStore";
 import { QueryClient, useQuery } from "@tanstack/react-query";
-import { getDocs,collection } from 'firebase/firestore'
+import { getDocs,collection, query } from 'firebase/firestore'
 
 function App() {
   const navigate = useNavigate();
@@ -87,14 +87,12 @@ function App() {
 
   const fetchData = async () => {
     const querySnapshot = await getDocs(collection(db, 'ProductData')); // 'ProductData'가 컬렉션 이름이라고 가정합니다.
-    return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    const result = querySnapshot.docs.map((doc) => ({...doc.data(), id:doc.id}))
+    return result;
   };
-  const queryClient = new QueryClient();
-  const data = queryClient.getQueryData('data');
 
-
-  const { isLoading, isError, error } = useQuery({queryKey:['data'], queryFn: fetchData});
-
+  const { isLoading, isError, error, data } = useQuery({queryKey:['data'], queryFn: ()=>fetchData()});
+  
   // 세션 스토리지에서 데이터를 가져와서 복호화(백엔드에서 꽁꽁 숨기기 필요)
   const encryptionKey = 'bigdev2023!';
 

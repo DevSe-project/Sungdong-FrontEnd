@@ -6,13 +6,15 @@ import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner'
 import { TabInfo } from './TabInfo'
 import CryptoJS from 'crypto-js';
 import { useBasketList, useListActions, useWishList } from '../../Store/DataStore'
-import { QueryClient } from '@tanstack/react-query'
+import { QueryClient, useQuery } from '@tanstack/react-query'
 
 export function Detail(props) {
   // Usenavigate
   const navigate = useNavigate();
-  const queryClient = new QueryClient();
-  const data = queryClient.getQueryData('data');  const wishList = useWishList();
+  const { isLoading, isError, error, data } = useQuery({queryKey:['data']});
+
+  const wishList = useWishList();
+
   const basketList = useBasketList();
 
   const { setWishList, setOrderList, setBasketList} = useListActions();
@@ -150,7 +152,7 @@ function basketThis(product, count){
   }
 
   //중복 확인 (.some 함수 : basketList item.id 중 product.id와 같은 중복인 아이템이 있으면 true 반환)
-  const isDuplicate = basketList.some((basketItem) =>
+  const isDuplicate = basketList !== null && basketList.some((basketItem) =>
   product.option 
   ?
   basketItem.id === product.id &&
@@ -203,6 +205,12 @@ function basketThis(product, count){
       setWishList(unlikelist); // state에 새로운 list 삽입
       localStorage.setItem('likelist', JSON.stringify(unlikelist)); //새로고침하면 필터링 된 목록 표시
     }
+  }
+  if(isLoading){
+    return <p>Loading..</p>;
+  }
+  if(isError){
+    return <p>에러 : {error.message}</p>;
   }
 
   return(

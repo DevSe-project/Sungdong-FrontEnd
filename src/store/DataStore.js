@@ -55,10 +55,10 @@ export const useDataActions = () => useDataStore((state) => state.actions);
 
 
 const useListStore = create((set)=>({
-  wishList : null,
-  orderList : null,
-  basketList : null,
-  postList : null,
+  wishList : [],
+  orderList : [],
+  basketList : [],
+  postList : [],
 
 
   actions: {

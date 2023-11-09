@@ -1,11 +1,16 @@
-import { QueryClient } from '@tanstack/react-query';
+import { QueryClient, useQuery } from '@tanstack/react-query';
 import { useData } from '../../Store/DataStore';
 import styles from './Product.module.css'; 
 import { useNavigate } from 'react-router-dom';
 export function Product(){
   const navigate = useNavigate();
-  const queryClient = new QueryClient();
-  const data = queryClient.getQueryData('data');
+  const { isLoading, isError, error, data } = useQuery({queryKey:['data']});
+  if(isLoading){
+    return <p>Loading..</p>;
+  }
+  if(isError){
+    return <p>에러 : {error.message}</p>;
+  }
   return(
   <div className={styles.main}>
     <div className={styles.container}>

@@ -3,12 +3,11 @@ import { TopBanner } from "./TopBanner";
 import { useNavigate } from "react-router-dom";
 import styles from './Category.module.css'
 import React from 'react';
-import { useBasketList, useCategoryData, useData, useListActions } from "../../../Store/DataStore";
-import { QueryClient } from "@tanstack/react-query";
+import { useBasketList, useCategoryData, useListActions } from "../../../Store/DataStore";
+import { QueryClient, useQuery } from "@tanstack/react-query";
 export function Category(props){
     // state 사용
-    const queryClient = new QueryClient();
-    const data = queryClient.getQueryData('data');
+    const { isLoading, isError, error, data } = useQuery({queryKey:['data']});
     const categoryData = useCategoryData();
     const basketList = useBasketList();
     const { setBasketList } = useListActions();
@@ -441,6 +440,13 @@ export function Category(props){
         listId : index,
       }));
       setFilteredItems(addCntList);
+    }
+
+    if(isLoading){
+      return <p>Loading..</p>;
+    }
+    if(isError){
+      return <p>에러 : {error.message}</p>;
     }
   return(
     <div className={styles.main}>
