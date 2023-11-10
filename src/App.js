@@ -21,8 +21,6 @@ import { Login } from './component/AboutLogin/Login';
 
 // 고객서비스 관련
 import { Notice } from './component/AboutUserService/Notice';
-import { Contact } from './component/AboutUserService/Contact';
-
 // 상세보기, 장바구니, 찜하기
 import { Detail } from './component/AboutDetail/Detail';
 import { Basket } from './component/AboutDetail/Basket';
@@ -420,7 +418,6 @@ function App() {
             </div>
           </>
         } />
-        <Route path='/userservice/contact' element={<Contact />} />
 
         {/* 마이페이지 */}
         <Route path='/mypages' element={
