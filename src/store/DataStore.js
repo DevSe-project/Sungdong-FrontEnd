@@ -69,7 +69,7 @@ const useListStore = create((set)=>({
   wishList : [],
   orderList : [],
   basketList : [],
-  postList : [],
+  noticePostList : [],
 
 
   actions: {
@@ -91,9 +91,9 @@ const useListStore = create((set)=>({
       })),
     // 공지사항
 
-    setPostList : (val) =>
+    setNoticePostList : (val) =>
       set( (state) => ({
-        postList : val 
+        noticePostList : val 
       }))
   }
 }))
@@ -106,7 +106,7 @@ const useListStore = create((set)=>({
 export const useWishList = () => useListStore((state) => state.wishList);
 export const useBasketList = () => useListStore((state) => state.basketList);
 export const useOrderList = () => useListStore((state) => state.orderList);
-export const usePostList = () => useListStore((state) => state.postList);
+export const useNoticePostList = () => useListStore((state) => state.noticePostList);
 
 // 🎉  모든 액션 상태를 위한 한개의 선택자 생성 -> 상태가 자주 변경되지 않기 때문에 모든 액션상태를 모음.
 export const useListActions = () => useListStore((state) => state.actions);

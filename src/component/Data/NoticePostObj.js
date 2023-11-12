@@ -1,4 +1,4 @@
-export const NoticeObj = [
+export const NoticePostObj = [
   {
     id: 1,
     title: '성동물산 웹 쇼핑몰 출시',

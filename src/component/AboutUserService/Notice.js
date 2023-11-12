@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import styles from './Notice.module.css';
 import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner';
 import NoticeDetail from './NoticeDetail';
-import { NoticeObj } from '../Data/NoticeObj';
+import { NoticePostObj } from '../Data/NoticePostObj';
 
 export function Notice(props) {
-  const [list, setList] = useState(NoticeObj);
+  const [list, setList] = useState(NoticePostObj);
   const [isModal, setIsModal] = useState(false);
   const [selectedItemIndex, setSelectedItemIndex] = useState(null);
 

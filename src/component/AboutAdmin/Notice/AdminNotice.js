@@ -4,18 +4,18 @@ import { AdminHeader } from "../AdminHeader";
 import { AdminMenuData } from "../AdminMenuData";
 import WrtieModal from "./WriteModal";
 import EditModal from "./EditModal";
-import { NoticeObj } from "../../Data/NoticeObj"; // 수정된 부분
-import { useListActions, useListStore, usePostList } from "../../../Store/DataStore";
+import { NoticePostObj } from "../../Data/NoticePostObj"; // 수정된 부분
+import { useListActions, useListStore, useNoticePostList } from "../../../Store/DataStore";
 
 export default function AdminNotice() {
-  const postList = usePostList();
+  const postList = useNoticePostList();
   const { setPostList } = useListActions();
   const [isLoading, setIsLoading] = useState(true); // 로딩 중 여부 추가
 
   // 데이터 불러오기
   useEffect(() => {
     const dataload = setTimeout(() => {
-      setPostList(NoticeObj);
+      setPostList(NoticePostObj);
       setIsLoading(false);
     }, 1000)
 

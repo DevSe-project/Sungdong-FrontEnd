@@ -10,7 +10,7 @@ import { TodayTopicPostObj } from './component/Data/TodayTopicPostObj';
 import { UserData } from './component/Data/UserData';
 import { CategoryDataObj } from './component/Data/CategoryDataObj';
 import { Category } from './component/TemplateLayout/AboutHeader/Category';
-import { NoticeObj } from './component/Data/NoticeObj';
+import { NoticePostObj } from './component/Data/NoticePostObj';
 
 // 메인페이지
 import MainPage from './MainPage';
