@@ -1,0 +1,24 @@
+/* NoticeMini.module.css */
+.noticeMiniContainer {
+    width: 300px;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  
+  .noticeList {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .noticeItem {
+    margin-top: 10px;
+    border: 1px solid #eee;
+    padding: 10px;
+    border-radius: 8px;
+  }
+  
