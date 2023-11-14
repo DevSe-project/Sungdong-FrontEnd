@@ -16,54 +16,58 @@
   height: 6em;
   justify-content: center;
   align-items: center;
-  align-content: center;
   background-color: white;
   border-bottom: 1px solid lightgray;
 }
 
 .top_nav {
-  flex: 1;
-  /* 네비게이션 영역을 균등 영역으로 나누도록 설정 */
   display: flex;
-  justify-content: space-evenly;
-  /* 가로 가운데 정렬 */
+  width: 100%;
   align-items: center;
-  /* 세로 가운데 정렬 */
   list-style-type: none;
   white-space: nowrap;
 }
 
-.categoryBox {
-  cursor: pointer;
-  padding: 0.3em;
-  margin: 0;
+/* 로고 15% */
+.logo {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.2em;
+  flex: 15%; 
+  margin-left: 1em;
 }
 
-/* 카테고리 아이콘 */
-.categoryIcon {
-  font-size: 1em;
-  color: #000;
-}
-
-/* 카테고리 아이콘 양옆 텍스트 */
-.iconUnderText {
-  font-size: 0.7em;
-  font-weight: bold;
-  color: #000;
-}
-
-.shortimage {
+.inLogo_shortimg {
   display: none;
   cursor: pointer;
 }
 
-.image {
+.inLogo_img {
   cursor: pointer;
 }
+
+/* 검색창 30% */
+.searchBar {
+  flex: 40%; /* 수정 */
+  margin-right: 2em;
+}
+
+/* 분류 검색창 40% */
+.seperateSearchBar {
+  flex: 30%; /* 수정 */
+  margin-right: 1.5em;
+}
+
+/* 카테고리 아이콘 5% */
+.cate_icon {
+  flex: 5%;
+}
+
+/* 로그인 10% */
+.login {
+  flex: 10%;
+  margin-right: 1em;
+}
+
+/* -------------------------------------------------------- */
 
 /* 네비게이션 내부 링크 스타일링 (옵션) */
 .link {
@@ -120,7 +124,6 @@
     display: block;
   }
 }
-
 
 @media screen and (max-width: 1200px) and (min-width: 769px) {
   .text {
