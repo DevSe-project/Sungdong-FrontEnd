@@ -1,24 +1,40 @@
 /* NoticeMini.module.css */
 .noticeMiniContainer {
-    width: 300px;
-    height: 300px;
-    display: flex;
-    flex-direction: column;
-    border: 1px solid #ddd;
-    padding: 10px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-  }
-  
-  .noticeList {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .noticeItem {
-    margin-top: 10px;
-    border: 1px solid #eee;
-    padding: 10px;
-    border-radius: 8px;
-  }
-  
+  width: 100%;
+  max-width: fit-content;
+  max-width: -moz-fit-content;
+  max-height: 270px;
+  display: flex;
+  flex-direction: column;
+  background-color: #a9a9a9;
+  padding: 10px;
+  border-radius: 8px;
+  overflow-y: auto; /* 수직 스크롤바 표시 */
+}
+
+.noticeList {
+  border-radius: 1dvh;
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  padding: 0;
+}
+
+.noticeItem {
+  background-color: rgb(238, 238, 238);
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  max-height: 20px;
+  overflow-y: auto;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.view_all {
+  cursor: pointer;
+  color: white;
+} .view_all:hover {
+  color: #cc0000;
+  font-weight: bold;
+}
