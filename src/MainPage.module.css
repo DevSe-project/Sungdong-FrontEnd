@@ -1,7 +1,22 @@
+.body {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
 .main {
     display: flex;
+    
 }
-
+/* ---- 큰 틀 ---- */
+.left {
+}
+.center {
+}
+.right {
+    padding: 10px;
+}
+/* ---- 상세 ---- */
 .slideImg {
-    display: flex;
+    margin: 1em;
+    margin-right: 0;
 }

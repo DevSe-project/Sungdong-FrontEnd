@@ -43,7 +43,7 @@ function handleChange(index) {
       showArrows={true}
       autoPlay={true}
       infiniteLoop={true}
-      width={500}
+      width={550}
       showThumbs={false}
       selectedItem={imageData[currentIndex]}
       onChange={handleChange} >
@@ -53,7 +53,7 @@ function handleChange(index) {
       showArrows={true}
       autoPlay={true}
       infiniteLoop={true}
-      width={500}
+      width={550}
       showThumbs={false}
       selectedItem={imageData[currentIndex]}
       onChange={handleChange} >
