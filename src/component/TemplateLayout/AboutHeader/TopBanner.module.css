@@ -80,6 +80,7 @@
 
 .link_signIn {
   background-color: var(--background-color-set);
+  height: 45px;
   color: #FFF;
   font-size: 1.2em;
   font-weight: bold;
@@ -88,6 +89,14 @@
   padding-right: 0.9rem;
   border: none;
   border-radius: 1dvb;
+  justify-content: center;
+  align-items: center;
+}
+
+.align_iconNtext {
+  display: flex;
+  text-align: center;
+  align-items: center;
 }
 
 .sub_item {

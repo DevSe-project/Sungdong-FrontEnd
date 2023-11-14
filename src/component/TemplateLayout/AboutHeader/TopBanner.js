@@ -58,11 +58,11 @@ export function TopBanner(props) {
               }
             }}>
               {props.login
-                ? <div>
+                ? <div className={styles.align_iconNtext}>
                   <i style={{ fontSize: '1.2em' }} className="fas fa-sign-out" />
                   <span className={styles.text}>&nbsp;로그아웃</span>
                 </div>
-                : <div>
+                : <div className={styles.align_iconNtext}>
                   <i style={{ fontSize: '1.2em' }} className="fas fa-sign-in" />
                   <span className={styles.text}>&nbsp;로그인</span>
                 </div>
