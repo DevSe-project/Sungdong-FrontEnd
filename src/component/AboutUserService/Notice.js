@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import styles from './Notice.module.css';
 import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner';
 import NoticeDetail from './NoticeDetail';
-import { NoticeObj } from '../Data/NoticeObj';
+import { NoticePostObj } from '../Data/NoticePostObj';
 
 export function Notice(props) {
-  const [list, setList] = useState(NoticeObj);
+  const [list, setList] = useState(NoticePostObj);
   const [isModal, setIsModal] = useState(false);
   const [selectedItemIndex, setSelectedItemIndex] = useState(null);
 
@@ -52,7 +52,7 @@ export function Notice(props) {
                   onKeyPress={(event) => onOpen(event, index)} // Enter 키 이벤트 처리
                   tabIndex={0} // 이렇게 하면 포커스를 받을 수 있게 됩니다
                 >
-                  <td>{item.id}</td>
+                  <td>{index + 1}</td>
                   <td>{item.title}</td>
                   <td>{item.writer}</td>
                   <td>{item.date}</td>

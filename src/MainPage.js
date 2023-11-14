@@ -3,6 +3,7 @@ import { TopBanner } from './component/TemplateLayout/AboutHeader/TopBanner';
 import { List } from './component/AboutHome/List';
 import { MenuData } from './component/TemplateLayout/AboutMenuData/MenuData';
 import { Footer } from './component/TemplateLayout/AboutFooter/Footer';
+import NoticeMini from './component/AboutHome/NoticeMini';
 export default function MainPage(props) {
   return (
     <div>
@@ -19,6 +20,7 @@ export default function MainPage(props) {
         <div className="container">
           {/* 이벤트 등의 항목을 표시할 슬라이드이미지바 */}
           <SlideImg />
+          <NoticeMini />
           <List menu_dynamicStyle={props.menu_dynamicStyle}/>
           <footer className='footer'>
               <Footer/>

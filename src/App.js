@@ -10,7 +10,7 @@ import { TodayTopicPostObj } from './component/Data/TodayTopicPostObj';
 import { UserData } from './component/Data/UserData';
 import { CategoryDataObj } from './component/Data/CategoryDataObj';
 import { Category } from './component/TemplateLayout/AboutHeader/Category';
-import { NoticeObj } from './component/Data/NoticeObj';
+import { NoticePostObj } from './component/Data/NoticePostObj';
 
 // 메인페이지
 import MainPage from './MainPage';
@@ -64,7 +64,7 @@ import { Footer } from './component/TemplateLayout/AboutFooter/Footer';
 
 // State Management (Zustand) Store
 import { useUserData, useDataActions, useListActions, useOrderData } from "./Store/DataStore";
-import { useQuery } from "@tanstack/react-query";
+import { QueryClient, useQuery } from "@tanstack/react-query";
 import { getDocs,collection } from 'firebase/firestore'
 
 function App() {
@@ -74,11 +74,10 @@ function App() {
   const [activeTab, setActiveTab] = useState(1); // 현재 활성화된 스탭을 추적하는 State 
 
   // 데이터액션 State 불러오기
-  const { setOrderData, setUserData, setCategoryData, setTodayTopicData } = useDataActions();
+  const { setData, setOrderData, setUserData, setCategoryData, setTodayTopicData } = useDataActions();
 
   // 상품 데이터 State
   const userData = useUserData();
-
   const orderData = useOrderData();
 
   // 리스트 State 불러오기
@@ -86,11 +85,9 @@ function App() {
 
   const [login, setLogin] = useState(false);
 
-  // Firebase의 데이터 불러오기
   const fetchData = async () => {
     const querySnapshot = await getDocs(collection(db, 'ProductData')); // 'ProductData'가 컬렉션 이름이라고 가정합니다.
-    const result = querySnapshot.docs.map((doc) => ({...doc.data(), id:doc.id}))
-    return result;
+    return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
   };
 
   // react-query : 서버에서 받아온 데이터 캐싱, 변수에 저장
@@ -103,6 +100,7 @@ function App() {
         setLogin(true); //로그인상태유지
         } else {
         console.log("사용자를 찾을 수 없습니다.");
+          }
         }
       }, [ userData, setLogin]);
 
