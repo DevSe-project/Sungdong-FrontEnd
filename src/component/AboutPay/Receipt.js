@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import styles from './Receipt.module.css'
 import { useNavigate } from 'react-router-dom';
 import { useBasketList, useDataActions, useDeliveryInfo, useListActions, useListStore, useOrderActions, useOrderData, useOrderInfo, useOrderList, useUserData } from '../../Store/DataStore';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 export function Receipt(props){
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ export function Receipt(props){
   const orderData = useOrderData();
   const userData = useUserData();
 
-  const { setData, setOrderData } = useDataActions();
+  const { setOrderData } = useDataActions();
 
   const orderList = useOrderList();
   const basketList = useBasketList();
@@ -97,8 +97,6 @@ export function Receipt(props){
       );
     };
 
-    console.log(orderInformation);
-    console.log(deliveryInformation);
   //정도 자동 입력
   useEffect(() => {
     if(userData){
@@ -209,7 +207,17 @@ export function Receipt(props){
   // submit 버튼
   function submitReceipt(){
     validateForm();
-    const isValidSupply = orderList.every((orderItem) => {
+    // react-query : 서버에서 받아온 데이터 캐싱, 변수에 저장
+    // Mutations
+  //   const dataMutation = useMutation(postData, {
+  //   onSuccess: () => {
+  //     // Invalidate and refetch
+  //     queryClient.invalidateQueries('data')
+  //   },
+  // })
+      // dataMutation.mutate({ supply : supply - 1 });
+
+      const isValidSupply = orderList.every((orderItem) => {
       const productMatchingId = data.find((item) => item.id === orderItem.productId);
       return productMatchingId && productMatchingId.supply > 0;
     });
@@ -232,7 +240,6 @@ export function Receipt(props){
       }
       return item;
     });
-      setData(productData);
       // 현재 날짜와 시간을 가져오기
       const currentDate =  new Date();
       const formattedDate = currentDate.toLocaleString();

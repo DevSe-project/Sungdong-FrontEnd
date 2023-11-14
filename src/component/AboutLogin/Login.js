@@ -38,8 +38,7 @@ export function Login(props) {
       const response = await loginRequest();
       if (response.data && response.data.message === "success") {
         // 데이터를 암호화 (JSON 변환 2번 과정 거치기 (암호화 시 1번, 암호화 성공 후 세션스토리지 저장 시 1번))
-        const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(response.data), encryptionKey).toString();
-        sessionStorage.setItem('saveLoginData', JSON.stringify(encryptedData));
+        sessionStorage.setItem('saveLoginData', JSON.stringify(response.data));
         alert("성동물산에 오신 걸 환영합니다.")
         login()
         window.location.href = "/"
@@ -80,8 +79,7 @@ export function Login(props) {
       }
 
       // 데이터를 암호화 (JSON 변환 2번 과정 거치기 (암호화 시 1번, 암호화 성공 후 세션스토리지 저장 시 1번))
-      const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(LoginDataObj), encryptionKey).toString();
-      sessionStorage.setItem('saveLoginData', JSON.stringify(encryptedData));
+      sessionStorage.setItem('saveLoginData', JSON.stringify(LoginDataObj));
       navigate('/'); //메인페이지로 이동하면서
       alert('성동물산에 오신 걸 환영합니다!'); //환영문구 출력
       window.location.reload();
