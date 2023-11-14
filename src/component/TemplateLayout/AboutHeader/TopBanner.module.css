@@ -1,6 +1,6 @@
 /* -------------------- TopBanner -------------------- */
 
-  /* 상단바 고정 작업 */
+/* 상단바 고정 작업 */
 .body {
   width: 100%;
   top: 0;
@@ -22,10 +22,13 @@
 }
 
 .top_nav {
-  flex: 1; /* 네비게이션 영역을 균등 영역으로 나누도록 설정 */
+  flex: 1;
+  /* 네비게이션 영역을 균등 영역으로 나누도록 설정 */
   display: flex;
-  justify-content: space-evenly; /* 가로 가운데 정렬 */
-  align-items: center; /* 세로 가운데 정렬 */
+  justify-content: space-evenly;
+  /* 가로 가운데 정렬 */
+  align-items: center;
+  /* 세로 가운데 정렬 */
   list-style-type: none;
   white-space: nowrap;
 }
@@ -39,11 +42,13 @@
   align-items: center;
   gap: 0.2em;
 }
+
 /* 카테고리 아이콘 */
 .categoryIcon {
   font-size: 1em;
   color: #000;
 }
+
 /* 카테고리 아이콘 양옆 텍스트 */
 .iconUnderText {
   font-size: 0.7em;
@@ -51,12 +56,12 @@
   color: #000;
 }
 
-.shortimage{
+.shortimage {
   display: none;
   cursor: pointer;
 }
 
-.image{
+.image {
   cursor: pointer;
 }
 
@@ -69,7 +74,7 @@
   cursor: pointer;
 }
 
-.link_signIn  {
+.link_signIn {
   background-color: var(--background-color-set);
   color: #FFF;
   font-size: 1.2em;
@@ -81,17 +86,19 @@
   border-radius: 1dvb;
 }
 
-.sub_item{
+.sub_item {
   padding: 1em;
   font-size: large;
   word-wrap: wrap;
 }
-.sub_item:hover{
+
+.sub_item:hover {
   background-color: lightgray;
 }
 
-.categoryBar{
-  flex-grow: 1; /* 메인 콘텐츠가 남은 공간을 채우도록 설정합니다. */
+.categoryBar {
+  flex-grow: 1;
+  /* 메인 콘텐츠가 남은 공간을 채우도록 설정합니다. */
   height: 100%;
 }
 
@@ -101,12 +108,15 @@
 
 @media screen and (max-width: 768px) {
   .text {
-      display: none; /* 텍스트 숨김 */
+    display: none;
+    /* 텍스트 숨김 */
   }
-  .image{
+
+  .image {
     display: none;
   }
-  .shortimage{
+
+  .shortimage {
     display: block;
   }
 }
@@ -114,9 +124,12 @@
 
 @media screen and (max-width: 1200px) and (min-width: 769px) {
   .text {
-    display: none; /* 텍스트 숨김 */
-}
+    display: none;
+    /* 텍스트 숨김 */
+  }
+
   .searchInputContainer {
-    width: 10em; /* 텍스트 숨김 */
-}
+    width: 10em;
+    /* 텍스트 숨김 */
+  }
 }
