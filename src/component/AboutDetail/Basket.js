@@ -9,8 +9,6 @@ export function Basket(props){
   const orderList = useOrderList();
   const basketList = useBasketList();
   const { setBasketList, setOrderList } = useListActions();
-  // 암호화와 복호화 키
-  const encryptionKey = 'bigdev2023!';
 
   const navigate = useNavigate();
   //총 상품 금액
@@ -40,7 +38,7 @@ export function Basket(props){
   const [openDeliveryModal, setOpenDeliveryModal] = useState(true);
 
   // 로그인 정보 불러오기
-  const inLogin = props.decryptData(JSON.parse(sessionStorage.getItem('saveLoginData')));
+  const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'));
   // 게시물 데이터와 페이지 번호 상태 관리    
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -226,8 +224,7 @@ export function Basket(props){
       }));
       // sessionStoragerage에 저장
       // 데이터를 암호화 (JSON 변환 2번 과정 거치기 (암호화 시 1번, 암호화 성공 후 세션스토리지 저장 시 1번))
-      const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(editedData), encryptionKey).toString();
-      sessionStorage.setItem('orderData', JSON.stringify(encryptedData));
+      sessionStorage.setItem('orderData', JSON.stringify(editedData));
       setOrderList(editedData);
       navigate("/basket/receipt");
       props.setActiveTab(2);

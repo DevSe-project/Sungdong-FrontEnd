@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import styles from './Receipt.module.css'
 import { useNavigate } from 'react-router-dom';
-import CryptoJS from 'crypto-js';
-import { useBasketList, useDataActions, useListActions, useListStore, useOrderData, useOrderList, useUserData } from '../../Store/DataStore';
+import { useBasketList, useDataActions, useDeliveryInfo, useListActions, useListStore, useOrderActions, useOrderData, useOrderInfo, useOrderList, useUserData } from '../../Store/DataStore';
+import { useQuery } from '@tanstack/react-query';
 
 export function Receipt(props){
   const navigate = useNavigate();
 
+    // react-query : 서버에서 받아온 데이터 캐싱, 변수에 저장
+  const { isLoading, isError, error, data } = useQuery({queryKey:['data']});
   const orderData = useOrderData();
   const userData = useUserData();
 
@@ -17,18 +19,21 @@ export function Receipt(props){
   
   const { setBasketList } = useListActions();
 
+
+  // 데이터 항목 저장
+  const orderInformation = useOrderInfo();
+  const deliveryInformation = useDeliveryInfo();
+  const {setOrderInformation, setDeliveryInformation, setDetailInformation} = useOrderActions();
+
   const [address, setAddress] = useState("");
   const [inputUser, setInputUser] = useState("사업자정보");
-  const inLogin = props.decryptData(JSON.parse(sessionStorage.getItem('saveLoginData')));
+  const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'));
   // 유효성검사 State
   const [isFormValid, setIsFormValid] = useState(false);  
 
   // 성동 택배 날짜 계산 로직 ~
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date()); // 선택한 날짜를 Date 객체로 저장
-
-    // 암호화와 복호화 키
-    const encryptionKey = 'bigdev2023!';
 
   // 주소창으로 접근 등 잘못된 접근 시 경고창 표시 후 홈으로 이동 
   useEffect(()=>{ 
@@ -47,85 +52,74 @@ export function Receipt(props){
         new window.daum.Postcode({
           oncomplete: (data) => {
             setAddress(data);
-            setDeliveryInformation(prevdata=>
-              ({
-                ...prevdata,
-                address : {
-                  ...prevdata.address,
-                  address : data,
-                }
-              }))
+            setDetailInformation("address", "address", data);
           }
       }).open();
   }
   document.body.appendChild(script);
 }
+  
 
-// 데이터 항목 저장
-  const [orderInformation, setOrderInformation] = useState({
-    name : "",
-    tel : "",
-    email : "",
-    smtMessage: "",
-    payRoute : "",
-    moneyReceipt : "",
-    transAction : "",
-    fax : "",
-    checked : false,
-  })
-  const [deliveryInformation, setDeliveryInformation] = useState({
-    name : "",
-    tel : "",
-    address : {
-      address : "",
-      addressDetail : "",
-    },
-    deliveryType : "",
-    deliverySelect: "",
-    deliveryMessage : "",
-    deliveryDate : "",
-  })
+  const handleChangeOrderField = (fieldName, value) => {
+    // setOrderInformation 메서드를 사용하여 특정 필드를 변경
+    setOrderInformation(fieldName,value);
+  };
 
+  const handleChangeDeliveryField = (fieldName, value) => {
+    // setOrderInformation 메서드를 사용하여 특정 필드를 변경
+    setDeliveryInformation(fieldName,value);
+  };
+
+
+  //반복되는 인풋란(주문) 렌더링
+  const orderInputField = (fieldName, placeholder) => {
+    return (
+      <input
+        type="text"
+        className={styles.selectSize}
+        placeholder={placeholder}
+        value={orderInformation[fieldName]}
+        onChange={(e) => handleChangeOrderField(fieldName, e.target.value)}
+      />
+    );
+  };
+
+    //반복되는 인풋란(배송) 렌더링
+    const deliveryInputField = (fieldName, placeholder) => {
+      return (
+        <input
+          type="text"
+          className={styles.selectSize}
+          placeholder={placeholder}
+          value={deliveryInformation[fieldName]}
+          onChange={(e) => handleChangeDeliveryField(fieldName, e.target.value)}
+        />
+      );
+    };
+
+    console.log(orderInformation);
+    console.log(deliveryInformation);
+  //정도 자동 입력
   useEffect(() => {
     if(userData){
       const findUser = userData.find(userData => userData.id == inLogin.id);
       if (findUser) {
         if (inputUser === '사업자정보') {
           setAddress(findUser.address);
-          setOrderInformation(prevData => ({
-            ...prevData,
-            name: findUser.corporationData.ceoName,
-            tel: `${findUser.num1}-${findUser.num2}-${findUser.num3}`,
-            email: findUser.email,
-            fax: findUser.corporationData.FAX,
-          }));
-          setDeliveryInformation(prevData => ({
-            ...prevData,
-            name : findUser.corporationData.ceoName,
-            tel: `${findUser.num1}-${findUser.num2}-${findUser.num3}`,
-            address : {
-              address : address,
-              addressDetail : findUser.addressDetail,
-            },
-          }));
+          setOrderInformation("name",findUser.corporationData.ceoName);
+          setOrderInformation("tel", `${findUser.num1}-${findUser.num2}-${findUser.num3}`);
+          setOrderInformation("email", findUser.email);
+          setOrderInformation("fax",findUser.corporationData.FAX);
+          setDeliveryInformation("name",findUser.corporationData.ceoName);
+          setDeliveryInformation("tel",`${findUser.num1}-${findUser.num2}-${findUser.num3}`);
+          setDetailInformation("address", "address", address);
+          setDetailInformation("address","addressDetail",findUser.addressDetail);
         } else if (inputUser === '직접입력') {
           setAddress("")
-          setOrderInformation(prevData => ({
-            ...prevData,
-            name: findUser.corporationData.ceoName,
-            tel: `${findUser.num1}-${findUser.num2}-${findUser.num3}`,
-            email: findUser.email,
-          }));
-          setDeliveryInformation(prevData => ({
-            ...prevData,
-            name : "",
-            tel: "",
-            address : {
-              address : "",
-              addressDetail : "",
-            },
-          }));
-        }
+          setOrderInformation("name",findUser.corporationData.ceoName);
+          setOrderInformation("tel", `${findUser.num1}-${findUser.num2}-${findUser.num3}`);
+          setOrderInformation("email", findUser.email);
+        };
       }
     }
   }, [inputUser, userData, inLogin.id, address]);
@@ -213,7 +207,7 @@ export function Receipt(props){
 
 
   // submit 버튼
-  function gotoLink(){
+  function submitReceipt(){
     validateForm();
     const isValidSupply = orderList.every((orderItem) => {
       const productMatchingId = data.find((item) => item.id === orderItem.productId);
@@ -243,7 +237,7 @@ export function Receipt(props){
       const currentDate =  new Date();
       const formattedDate = currentDate.toLocaleString();
       const newOrderId = orderData.length + 1;
-      const editedData = props.decryptData(JSON.parse(sessionStorage.getItem('orderData')));
+      const editedData = JSON.parse(sessionStorage.getItem('orderData'));
       const newOrderData = editedData.map((item) => ({
         ...item,
         orderId: newOrderId,
@@ -259,8 +253,7 @@ export function Receipt(props){
         setOrderData(copyData);
         // sessionStorage 변경
         sessionStorage.removeItem('orderData');
-        const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(newOrderData), encryptionKey).toString();
-        sessionStorage.setItem('newOrderData', JSON.stringify(encryptedData));
+        sessionStorage.setItem('newOrderData', JSON.stringify(newOrderData));
         setBasketList(basketList.filter((item)=>!orderList.some((orderItem) =>
         orderItem.optionSelected 
         ? 
@@ -343,11 +336,6 @@ export function Receipt(props){
 }
 
 
-
-
-
-
-
   const handleDateChange = (event) => {
     const selectedDateStr = event.target.value;
   
@@ -369,6 +357,13 @@ export function Receipt(props){
       }))
     }
   };
+
+  if(isLoading){
+    return <p>Loading..</p>;
+  }
+  if(isError){
+    return <p>에러 : {error.message}</p>;
+  }
 
   return(
     <div>
@@ -406,22 +401,7 @@ export function Receipt(props){
               <label>성함</label>
             </div>
             <div className={styles.input}>
-              <input 
-              type="text" 
-              className={styles.inputSize}
-              placeholder="성함을 입력하세요"
-              value={orderInformation.name}
-              required 
-              onChange={(e)=>{
-                setOrderInformation(
-                prevdata=> ({
-                  ...prevdata,
-                  name : e.target.value,
-                })
-              )
-            }
-            }
-              />
+              {orderInputField("name","주문자의 성함을 입력해주세요")}
             </div>
           </div>
           <div className={styles.formInner}>
@@ -429,19 +409,7 @@ export function Receipt(props){
               <label>전화번호</label>
             </div>
             <div className={styles.input}>
-              <input 
-              type="tel" 
-              className={styles.inputSize} 
-              placeholder="전화번호를 입력하세요"
-              value={orderInformation.tel}
-              required 
-              onChange={(e)=>setOrderInformation(
-                prevdata=> ({
-                  ...prevdata,
-                  tel : e.target.value,
-                })
-              )}
-              />
+              {orderInputField("tel","주문자의 전화번호를 입력해주세요")}
             </div>
           </div>
           <div className={styles.formInner}>
@@ -449,19 +417,7 @@ export function Receipt(props){
               <label>이메일</label>
             </div>
             <div className={styles.input}>
-              <input 
-              type="email" 
-              className={styles.inputSize} 
-              placeholder="이메일을 입력하세요"
-              value={orderInformation.email}
-              required 
-              onChange={(e)=>setOrderInformation(
-                prevdata=> ({
-                  ...prevdata,
-                  email : e.target.value,
-                })
-              )}
-              />
+              {orderInputField("email","주문자의 이메일을 입력해주세요")}
             </div>
           </div>
           <div className={styles.formInner}>
@@ -472,39 +428,19 @@ export function Receipt(props){
               <input 
               style={{flexDirection: 'row', width: '50%'}}
               className={styles.inputSize} 
-              value={orderInformation.smtMessage}
+              value={orderInformation?.smtMessage}
               type="text" 
+              list="smtMessages"
               placeholder='성동물산에 남길 메세지를 적어주세요'
-              onChange={(e)=>setOrderInformation(
-                prevdata=> ({
-                  ...prevdata,
-                  smtMessage : e.target.value,
-                })
-              )}
+              onChange={(e)=>handleChangeOrderField("smtMessage", e.target.value)}
               />
-              <select
-              className={styles.selectSize}
-              name="orderMessage"
-              value={orderInformation.smtMessage || ""}              
-              onChange={(e)=>setOrderInformation(
-                prevdata=> ({
-                  ...prevdata,
-                  smtMessage : e.target.value,
-                })
-              )}
-              >
-                <option value="" disabled>
-                  /----메세지 선택----/
-                </option>
-                <option value="">
-                  직접 입력
-                </option>
-                {smtMessageExample.map((item, index) => 
-                <option key={index} value={item.value}>
-                  {item.value}
-                </option>
-                )}
-              </select>
+              <datalist id="smtMessages">
+                <option value="" label="/----메세지 선택----/" disabled/>
+                <option value="" label="직접 입력" />
+                {smtMessageExample.map((item, index) => (
+                  <option key={index} value={item.value} label={item.value} />
+                ))}
+              </datalist>
             </div>
           </div>
         </form>
@@ -516,19 +452,7 @@ export function Receipt(props){
               <label>성함</label>
             </div>
             <div className={styles.input}>
-              <input 
-              type="text" 
-              className={styles.inputSize} 
-              placeholder="성함을 입력하세요"
-              value={deliveryInformation.name}
-              required 
-              onChange={(e)=>setDeliveryInformation(
-                prevdata=> ({
-                  ...prevdata,
-                  name : e.target.value,
-                })
-              )}
-              />
+              {deliveryInputField("name","배송 받으실 분의 성함을 입력해주세요")}
             </div>
           </div>
           <div className={styles.formInner}>
@@ -536,19 +460,7 @@ export function Receipt(props){
               <label>전화번호</label>
             </div>
             <div className={styles.input}>
-              <input 
-              type="tel"
-              className={styles.inputSize} 
-              placeholder="전화번호를 입력하세요"
-              value={deliveryInformation.tel}
-              required 
-              onChange={(e)=>setDeliveryInformation(
-                prevdata=> ({
-                  ...prevdata,
-                  tel : e.target.value,
-                })
-              )}
-              />
+              {deliveryInputField("tel","배송 받으실 분의 전화번호를 입력해주세요")}
             </div>
           </div>
           <div className={styles.formInner}>
@@ -588,23 +500,14 @@ export function Receipt(props){
                 placeholder="건물 이름 또는 지번 주소"
                 required
                 readOnly
-              />
-              <input 
-              className={styles.inputSize} 
-              type="text" 
-              placeholder="상세주소를 입력해주세요."
-              value={deliveryInformation.address.addressDetail} 
-              required
-              onChange={(e)=>setDeliveryInformation(
-                prevdata=> ({
-                  ...prevdata,
-                  address : {
-                    ...prevdata.address,
-                    addressDetail : e.target.value,
-                  },
-                })
-              )}
-              />
+              />       
+              <input
+              type="text"
+              className={styles.inputSize}
+              placeholder="상세 주소를 입력하세요"
+              value={deliveryInformation.address.addressDetail}
+              onChange={(e) => setDetailInformation("address","addressDetail",e.target.value)}
+            />
             </div>
           </div>
           <div className={styles.formInner}>
@@ -617,14 +520,7 @@ export function Receipt(props){
               value="성동택배" 
               checked={deliveryInformation.deliveryType === '성동택배'} 
               type="radio"
-              onChange={(e)=>
-                setDeliveryInformation(prevdata=>
-                  ({
-                      ...prevdata,
-                      deliveryType : e.target.value, 
-                  })
-                )
-              }
+              onChange={(e)=>handleChangeDeliveryField("deliveryType", e.target.value)}
               />
               성동 택배
               <input 
@@ -632,14 +528,7 @@ export function Receipt(props){
               value="화물" 
               checked={deliveryInformation.deliveryType === '화물'} 
               type="radio"
-              onChange={(e)=>
-                setDeliveryInformation(prevdata=>
-                  ({
-                    ...prevdata,
-                    deliveryType : e.target.value, 
-                  })
-                )
-              }
+              onChange={(e)=>handleChangeDeliveryField("deliveryType", e.target.value)}
               />
               화물
               <input 
@@ -647,14 +536,7 @@ export function Receipt(props){
               value="일반택배" 
               checked={deliveryInformation.deliveryType === '일반택배'} 
               type="radio"
-              onChange={(e)=>
-                setDeliveryInformation(prevdata=>
-                  ({
-                    ...prevdata,
-                    deliveryType : e.target.value, 
-                  })
-                )
-              }
+              onChange={(e)=>handleChangeDeliveryField("deliveryType", e.target.value)}
               />
               일반택배
               <input 
@@ -662,14 +544,7 @@ export function Receipt(props){
               value="직접픽업" 
               checked={deliveryInformation.deliveryType === '직접픽업'} 
               type="radio"
-              onChange={(e)=>
-                setDeliveryInformation(prevdata=>
-                  ({
-                    ...prevdata,
-                    deliveryType : e.target.value, 
-                  })
-                )
-              }
+              onChange={(e)=>handleChangeDeliveryField("deliveryType", e.target.value)}
               />
               직접 픽업
             </div>
@@ -714,14 +589,7 @@ export function Receipt(props){
               value="kr.daesin" 
               checked={deliveryInformation.deliverySelect === 'kr.daesin'} 
               type="radio"
-              onChange={(e)=>
-                setDeliveryInformation(prevdata=>
-                  ({
-                    ...prevdata,
-                    deliverySelect : e.target.value, 
-                  })
-                )
-              }
+              onChange={(e)=>handleChangeDeliveryField("deliverySelect", e.target.value)}
               />
               대신화물
               <input 
@@ -729,14 +597,7 @@ export function Receipt(props){
               value="kr.kdexp" 
               checked={deliveryInformation.deliverySelect === 'kr.kdexp'} 
               type="radio"
-              onChange={(e)=>
-                setDeliveryInformation(prevdata=>
-                  ({
-                    ...prevdata,
-                    deliverySelect : e.target.value, 
-                  })
-                )
-              }
+              onChange={(e)=>handleChangeDeliveryField("deliverySelect", e.target.value)}
               />
               경동화물
             </div>
@@ -752,37 +613,17 @@ export function Receipt(props){
               className={styles.inputSize} 
               value={deliveryInformation.deliveryMessage}
               type="text" 
+              list="deliveryMessages"
               placeholder='택배 기사님께 남길 메세지를 적어주세요'
-              onChange={(e)=>setDeliveryInformation(
-                prevdata=> ({
-                  ...prevdata,
-                  deliveryMessage : e.target.value,
-                })
-              )}
+              onChange={(e)=>handleChangeDeliveryField("deliveryMessage", e.target.value)}
               />
-              <select
-              className={styles.selectSize}
-              name="deliveryMessage"
-              value={deliveryInformation.deliveryMessage || ""}              
-              onChange={(e)=>setDeliveryInformation(
-                prevdata=> ({
-                  ...prevdata,
-                  deliveryMessage : e.target.value,
-                })
-              )}
-              >
-                <option value="" disabled>
-                  /----배송 메세지 선택----/
-                </option>
-                <option value="">
-                  직접 입력
-                </option>
-                {deliveryMessageExample.map((item, index) => 
-                <option key={index} value={item.value}>
-                  {item.value}
-                </option>
-                )}
-              </select>
+              <datalist id="deliveryMessages">
+                <option value="" label="/----메세지 선택----/" disabled/>
+                <option value="" label="직접 입력" />
+                {deliveryMessageExample.map((item, index) => (
+                  <option key={index} value={item.value} label={item.value} />
+                ))}
+              </datalist>
             </div>
           </div>
         </form>
@@ -799,12 +640,7 @@ export function Receipt(props){
               type="radio"
               value="일반결제"
               checked={orderInformation.payRoute === '일반결제'} 
-              onChange={(e)=>setOrderInformation(
-                prevdata=> ({
-                  ...prevdata,
-                  payRoute : e.target.value,
-                })
-              )}
+              onChange={(e)=>handleChangeOrderField("payRoute", e.target.value)}
               />
               일반결제 (무통장 입금)
               <input 
@@ -812,12 +648,7 @@ export function Receipt(props){
               type="radio"
               value="CMS"
               checked={orderInformation.payRoute === 'CMS'} 
-              onChange={(e)=>setOrderInformation(
-                prevdata=> ({
-                  ...prevdata,
-                  payRoute : e.target.value,
-                })
-              )}
+              onChange={(e)=>handleChangeOrderField("payRoute", e.target.value)}
               />
               CMS (매달 정기일 자동 결제)
             </div>
@@ -832,12 +663,7 @@ export function Receipt(props){
               type="radio"
               value="발행안함"
               checked={orderInformation.moneyReceipt === '발행안함'} 
-              onChange={(e)=>setOrderInformation(
-                prevdata=> ({
-                  ...prevdata,
-                  moneyReceipt : e.target.value,
-                })
-              )}
+              onChange={(e)=>handleChangeOrderField("moneyReceipt", e.target.value)}
               /> 발행안함
               {/* <input 
               name='moneyreceipt' 
@@ -868,12 +694,7 @@ export function Receipt(props){
               type="radio"
               value="명세서"
               checked={orderInformation.moneyReceipt === '명세서'} 
-              onChange={(e)=>setOrderInformation(
-                prevdata=> ({
-                  ...prevdata,
-                  moneyReceipt : e.target.value,
-                })
-              )}
+              onChange={(e)=>handleChangeOrderField("moneyReceipt", e.target.value)}
               /> 명세서
             </div>
           </div>
@@ -888,24 +709,14 @@ export function Receipt(props){
               type="radio"
               value="명세서실물"
               checked={orderInformation.transAction === '명세서실물'} 
-              onChange={(e)=>setOrderInformation(
-                prevdata=> ({
-                  ...prevdata,
-                  transAction : e.target.value,
-                })
-              )}
+              onChange={(e)=>handleChangeOrderField("transAction", e.target.value)}
               /> 명세서 실물 동봉
               <input 
               name='transaction' 
               type="radio"
               value="명세서출력"
               checked={orderInformation.transAction === '명세서출력'} 
-              onChange={(e)=>setOrderInformation(
-                prevdata=> ({
-                  ...prevdata,
-                  transAction : e.target.value,
-                })
-              )}
+              onChange={(e)=>handleChangeOrderField("transAction", e.target.value)}
               /> 명세서 FAX 출력
             </div>
           </div>
@@ -916,19 +727,7 @@ export function Receipt(props){
               <label>FAX 번호</label>
             </div>
             <div className={styles.input}>
-              <input 
-              type="text" 
-              className={styles.inputSize} 
-              placeholder="FAX 번호를 입력하세요"
-              value={orderInformation.fax}
-              required 
-              onChange={(e)=>setOrderInformation(
-                prevdata=> ({
-                  ...prevdata,
-                  fax : e.target.value,
-                })
-              )}
-              />
+              {orderInputField("fax","fax 번호를 입력해주세요")}
             </div>
           </div>
           }
@@ -936,10 +735,9 @@ export function Receipt(props){
         <div className={styles.formInner}>
           <input 
           checked={orderInformation.checked} 
-          onChange={() => setOrderInformation(prevdata => ({
-          ...prevdata,
-          checked : !prevdata.checked
-          }))} 
+          onChange={(e) => setOrderInformation(
+            "checked",!orderInformation.checked
+          )} 
           type="checkbox"
           />
             구매동의 및 결제대행서비스 이용약관 등에 모두 동의합니다.
@@ -948,7 +746,7 @@ export function Receipt(props){
         <div>
           <button  
           onClick={()=> {
-            gotoLink()
+            submitReceipt()
           }} 
           className={styles.submitButton}
           >
