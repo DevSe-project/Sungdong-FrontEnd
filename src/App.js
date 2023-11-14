@@ -101,7 +101,6 @@ function App() {
         } else {
         console.log("사용자를 찾을 수 없습니다.");
           }
-        }
       }, [ userData, setLogin]);
 
   // 특정 주소에서만 SessionStorage 사용하기
