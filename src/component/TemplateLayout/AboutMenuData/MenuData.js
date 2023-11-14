@@ -123,12 +123,12 @@ export function MenuData(props){
       },
       subMenuItems: [{
         item: '견적함',
-        link: '/mypages',
+        link: '/receipt',
         require : props.login
       },
       {
         item: '견적관리',
-        link: '/mypages',
+        link: '/manageReceipt',
         require : props.login
       }
       ]
@@ -140,27 +140,27 @@ export function MenuData(props){
       },
       subMenuItems: [{
         item: '반품신청',
-        link: '/mypages',
+        link: '/refund/request',
         require : props.login
       },
       {
         item: '반품조회',
-        link: '/mypages',
+        link: '/refund/list',
         require : props.login
       },
       {
         item: '불량교환신청',
-        link: '/mypages',
+        link: '/error/request',
         require : props.login
       },
       {
         item: '불량교환조회',
-        link: '/mypages',
+        link: '/error/list',
         require : props.login
       },
       {
         item: 'A/S신청, 조회',
-        link: '/mypages',
+        link: '/listAs',
         require : props.login
       },
       ]

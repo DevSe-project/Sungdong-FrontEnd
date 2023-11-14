@@ -3,12 +3,10 @@ import styles from './Receipt.module.css'
 import { useNavigate } from 'react-router-dom';
 import CryptoJS from 'crypto-js';
 import { useBasketList, useDataActions, useListActions, useListStore, useOrderData, useOrderList, useUserData } from '../../Store/DataStore';
-import { QueryClient } from '@tanstack/react-query';
 
 export function Receipt(props){
   const navigate = useNavigate();
-  const queryClient = new QueryClient();
-  const data = queryClient.getQueryData('data');
+
   const orderData = useOrderData();
   const userData = useUserData();
 

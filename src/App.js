@@ -95,33 +95,14 @@ function App() {
 
   // react-query : 서버에서 받아온 데이터 캐싱, 변수에 저장
   const { isLoading, isError, error, data } = useQuery({queryKey:['data'], queryFn: ()=>fetchData()});
-  
-  // 세션 스토리지에서 데이터를 가져와서 복호화(백엔드에서 꽁꽁 숨기기 필요) - 없앨예정
-  const encryptionKey = 'bigdev2023!';
-  // 복호화 함수
-  const decryptData = (encryptedData) => {
-    try {
-      const bytes = CryptoJS.AES.decrypt(encryptedData, encryptionKey);
-      const decryptedDataString = bytes.toString(CryptoJS.enc.Utf8);
-      // 역직렬화하여 객체로 변환
-      const decryptedData = JSON.parse(decryptedDataString);
-      return decryptedData;
-    } catch (error) {
-      console.error('데이터를 복호화 하는데에 실패했습니다:', error);
-      return null;
-    }
-  };
 
   useEffect(() => {
     // 세션 스토리지의 데이터 파싱
-    const parseId = JSON.parse(sessionStorage.getItem('saveLoginData'))
-    if (parseId) { // 파싱된 데이터가 있으면
-      const inLogin = decryptData(parseId);  // 복호화 실행
+    const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'));
       if (inLogin) {   //복호화 성공 시
         setLogin(true); //로그인상태유지
         } else {
         console.log("사용자를 찾을 수 없습니다.");
-          }
         }
       }, [ userData, setLogin]);
 
@@ -241,7 +222,7 @@ function App() {
         {/* 메인페이지 */}
         <Route path='/' element={
           <>
-            <MainPage decryptData={decryptData} login={login} setLogin={setLogin}
+            <MainPage login={login} setLogin={setLogin}
               iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
               category_dynamicStyle={category_dynamicStyle} menuOnClick={menuOnClick} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle}
               menu_dynamicStyle={menu_dynamicStyle} />
@@ -269,7 +250,7 @@ function App() {
             <div className='main'>
               <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
               <div className='container'>
-                <Category decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} navigate={navigate} setActiveTab={setActiveTab} activeTab={activeTab}
+                <Category menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} navigate={navigate} setActiveTab={setActiveTab} activeTab={activeTab}
                   iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
                   <Footer />
@@ -292,7 +273,7 @@ function App() {
             <div className='main'>
               <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
               <div className='container'>
-                <Detail decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} navigate={navigate} setActiveTab={setActiveTab} activeTab={activeTab}
+                <Detail menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} navigate={navigate} setActiveTab={setActiveTab} activeTab={activeTab}
                   iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
                   <Footer />
@@ -345,9 +326,9 @@ function App() {
             </div>
           </>
         }>
-          <Route path='receipt' element={<Receipt decryptData={decryptData} activeTab={activeTab} setActiveTab={setActiveTab} />} />
+          <Route path='receipt' element={<Receipt activeTab={activeTab} setActiveTab={setActiveTab} />} />
           <Route path='pay' element={<Pay activeTab={activeTab} setActiveTab={setActiveTab} />} />
-          <Route path='order' element={<Order decryptData={decryptData} activeTab={activeTab} setActiveTab={setActiveTab} />} />
+          <Route path='order' element={<Order activeTab={activeTab} setActiveTab={setActiveTab} />} />
         </Route>
 
         {/* 주문 조회 */}
@@ -363,7 +344,7 @@ function App() {
             <div className='main'>
               <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
               <div className='container'>
-                <DeliveryMain decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <DeliveryMain menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
                   <Footer />
                 </footer>
@@ -385,7 +366,7 @@ function App() {
             <div className='main'>
               <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
               <div className='container'>
-                <OrderDetail decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <OrderDetail menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
                   <Footer />
                 </footer>
@@ -412,7 +393,7 @@ function App() {
             <div className='main'>
               <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
               <div className='container'>
-                <Notice decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <Notice menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
                   <Footer />
                 </footer>
