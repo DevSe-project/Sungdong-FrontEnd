@@ -2,19 +2,21 @@ import { useEffect, useState } from "react";
 import { TopBanner } from "../TemplateLayout/AboutHeader/TopBanner";
 import styles from "./Mypage.module.css";
 import ModifyPW from "./ModifyPW";
+import { useUserData } from "../../Store/DataStore";
 export default function MyPage(props) {
 
   // gather state 
   const [userProfile, setUserProfile] = useState([]);
   const [modifyModal, setModifyModal] = useState(false);
+  const userData = useUserData();
   
-  const inLogin = props.decryptData(JSON.parse(sessionStorage.getItem('saveLoginData')));
+  const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'));
 
   // 현재 로그인 된 유저의 데이터를 호출
   useEffect(() => {
     if (props.login) { //저장된 로그인Data가 존재
-      if (props.userData) { //데이터 로딩 시간을 1500ms로 지정해놨기 때문에 불러들였다면, 표
-        const findUser = props.userData.find(userData => userData.id == inLogin.id);
+      if (userData) { //데이터 로딩 시간을 1500ms로 지정해놨기 때문에 불러들였다면, 표
+        const findUser = userData.find(userData => userData.id == inLogin.id);
         if (findUser) {
           // 사용자 데이터를 state에 저장
           setUserProfile(findUser);
@@ -22,7 +24,7 @@ export default function MyPage(props) {
         }
       }
     }
-  }, [props, inLogin, props.userData])
+  }, [props, inLogin, userData])
 
   // 조건에 부합하는 해당 유저의 데이터를 호출
 
@@ -81,8 +83,6 @@ export default function MyPage(props) {
           {modifyModal
             ?
             <ModifyPW
-              userData={props.userData}
-              setUserData={props.setUserData}
               modifyModal={modifyModal}
               setModifyModal={setModifyModal}
             />

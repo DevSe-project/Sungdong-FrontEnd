@@ -1,8 +1,10 @@
 import { React, useEffect, useState } from 'react';
 import styles from './ModifyPW.module.css';
+import { useUserData } from '../../Store/DataStore';
 
 export default function ModifyPW(props) {
-
+    const userData = useUserData();
+    const {setUserData} = useUserData();
     // 현재비번, 재설정비번, 재설정비번확인 Input
     const [inputForModify, setInputForModify] = useState({
         now_password: null,
@@ -17,7 +19,7 @@ export default function ModifyPW(props) {
 
     // 비밀번호 수정 함수. 
     function goModify() {
-        const confirmPwFind = props.userData.find(userData => userData.password === inputForModify.now_password);
+        const confirmPwFind = userData.find(userData => userData.password === inputForModify.now_password);
 
         if (confirmPwFind && confirmPwFind.password === inputForModify.now_password) {
             if (isInputNull) { // 입력유무 감지
@@ -25,13 +27,13 @@ export default function ModifyPW(props) {
                     if (inputForModify.re_password.length >= 8 && inputForModify.confirm_re_password.length >= 8) {// 입력 값 8글자 이상
 
                         // 비밀번호 변경 로직 추가
-                        const updatedUserData = props.userData.map(userData => {
+                        const updatedUserData = userData.map(userData => {
                             if (userData.password === inputForModify.now_password) {
                                 return { ...userData, password: inputForModify.re_password };
                             }
                             return userData;
                         });
-                        props.setUserData(updatedUserData); // 사용자 데이터 업데이트
+                        setUserData(updatedUserData); // 사용자 데이터 업데이트
 
                         alert("변경 완료");
                     } else {
@@ -96,8 +98,6 @@ export default function ModifyPW(props) {
                         setInputForModify={setInputForModify}
                         goModify={goModify}
                         handleEnter_pwFind={handleEnter_pwFind}
-                        userData={props.userData}
-                        setUserData={props.setUserData}
                     />
                 </div>
             </div>
