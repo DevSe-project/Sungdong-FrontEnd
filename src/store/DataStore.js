@@ -1,26 +1,14 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-
-
-// --------------------------------------------------------------------//
-
-
-
-const useDataStore = create((set) => ({
-  // data : null,
-  // error: null,
+const useDataStore = create((set)=>({
   orderData: null,
   categoryData: [],
-  userData: null,
+  userData: [],
   todayTopicData: null,
 
 
   actions: {
-    // setData : (input) => 
-    // set(({
-    //   data : input
-    // })),
 
     setOrderData: (input) =>
       set((prev) => ({
@@ -162,3 +150,46 @@ export const useModal = () => {
     selectedModalClose
   };
 };
+
+/* -------------------------------- */
+
+const useOrderStore = create((set) => ({
+  orderInformation: {
+    name: '',
+    tel: '',
+    email: '',
+    smtMessage: '',
+    payRoute: '',
+    moneyReceipt: '',
+    transAction: '',
+    fax: '',
+    checked: false,
+  },
+  deliveryInformation: {
+    name : '',
+    tel : '',
+    address : {
+      address : [],
+      addressDetail : '',
+    },
+    deliveryType : '',
+    deliverySelect: '',
+    deliveryMessage : '',
+    deliveryDate : '',
+  },
+  actions :{
+    setOrderInformation: (fieldName, value) =>
+      set((state) => ({ orderInformation: { ...state.orderInformation, [fieldName]: value } })),
+
+    setDeliveryInformation: (fieldName, value) =>
+      set((state) => ({ deliveryInformation: { ...state.deliveryInformation,[fieldName]: value } })),
+
+    setDetailInformation: (first, fieldName, value) =>
+      set((state) => ({ deliveryInformation: { ...state.deliveryInformation, [first]: { ...state.deliveryInformation[first], [fieldName]: value } }})),     
+  }
+}));
+export const useOrderInfo = () => useOrderStore((state) => state.orderInformation);
+export const useDeliveryInfo = () => useOrderStore((state) => state.deliveryInformation);
+
+// 🎉  모든 액션 상태를 위한 한개의 선택자 생성 -> 상태가 자주 변경되지 않기 때문에 모든 액션상태를 모음.
+export const useOrderActions = () => useOrderStore((state) => state.actions);

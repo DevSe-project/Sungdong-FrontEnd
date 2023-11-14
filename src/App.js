@@ -7,7 +7,7 @@ import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { OrderObj } from './component/Data/OrderObj';
 import { DataObj } from './component/Data/DataObj'
 import { TodayTopicPostObj } from './component/Data/TodayTopicPostObj';
-import { UserData } from './component/Data/UserData';
+import { UserDataObj } from './component/Data/UserData';
 import { CategoryDataObj } from './component/Data/CategoryDataObj';
 import { Category } from './component/TemplateLayout/AboutHeader/Category';
 import { NoticePostObj } from './component/Data/NoticePostObj';
@@ -89,76 +89,19 @@ function App() {
     const querySnapshot = await getDocs(collection(db, 'ProductData')); // 'ProductData'가 컬렉션 이름이라고 가정합니다.
     return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
   };
-  const queryClient = new QueryClient();
-  const data = queryClient.getQueryData('data');
 
-
-  const { isLoading, isError, error } = useQuery({queryKey:['data'], queryFn: fetchData});
-
-  // 세션 스토리지에서 데이터를 가져와서 복호화(백엔드에서 꽁꽁 숨기기 필요)
-  const encryptionKey = 'bigdev2023!';
-
-  // 복호화 함수
-  const decryptData = (encryptedData) => {
-    try {
-      const bytes = CryptoJS.AES.decrypt(encryptedData, encryptionKey);
-      const decryptedDataString = bytes.toString(CryptoJS.enc.Utf8);
-      // 역직렬화하여 객체로 변환
-      const decryptedData = JSON.parse(decryptedDataString);
-      return decryptedData;
-    } catch (error) {
-      console.error('데이터를 복호화 하는데에 실패했습니다:', error);
-      return null;
-    }
-  };
+  // react-query : 서버에서 받아온 데이터 캐싱, 변수에 저장
+  const { isLoading, isError, error, data } = useQuery({queryKey:['data'], queryFn: ()=>fetchData()});
 
   useEffect(() => {
     // 세션 스토리지의 데이터 파싱
-    const parseId = JSON.parse(sessionStorage.getItem('saveLoginData'))
-    if (parseId) { // 파싱된 데이터가 있으면
-      const inLogin = decryptData(parseId);  // 복호화 실행
+    const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'));
       if (inLogin) {   //복호화 성공 시
         setLogin(true); //로그인상태유지
-        if (data) {
-          const findUser = userData.find((item) => item.id === inLogin.id); // 유저 아이디에 해당하는 데이터 찾기
-          if (findUser) {
-            // 등급별 할인율 적용
-            let newData = data.map((item) => ({ ...item }));
-            switch (findUser.grade) {
-              case 'D':
-                newData = newData.map((item) => ({
-                  ...item,
-                  discount: 0,
-                }));
-                break;
-              case 'C':
-                newData = newData.map((item) => ({
-                  ...item,
-                  discount: 5,
-                }));
-                break;
-              case 'B':
-                newData = newData.map((item) => ({
-                  ...item,
-                  discount: 10,
-                }));
-                break;
-              case 'A':
-                newData = newData.map((item) => ({
-                  ...item,
-                  discount: 15,
-                }));
-                break;
-              default:
-            }
-            setData(newData);
-            } else {
-            console.log("사용자를 찾을 수 없습니다.");
+        } else {
+        console.log("사용자를 찾을 수 없습니다.");
           }
-        }
-      }
-    }
-  }, [ userData, setLogin]);
+      }, [ userData, setLogin]);
 
   // 특정 주소에서만 SessionStorage 사용하기
   useEffect(() => {
@@ -197,7 +140,7 @@ function App() {
   useEffect(() => {
     const dataload = setTimeout(() => {
       setOrderData(OrderObj);
-      setUserData(UserData);
+      setUserData(UserDataObj);
       setTodayTopicData(TodayTopicPostObj);
       setCategoryData(CategoryDataObj);
     }, 1000)
@@ -276,7 +219,7 @@ function App() {
         {/* 메인페이지 */}
         <Route path='/' element={
           <>
-            <MainPage decryptData={decryptData} login={login} setLogin={setLogin}
+            <MainPage login={login} setLogin={setLogin}
               iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
               category_dynamicStyle={category_dynamicStyle} menuOnClick={menuOnClick} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle}
               menu_dynamicStyle={menu_dynamicStyle} />
@@ -304,7 +247,7 @@ function App() {
             <div className='main'>
               <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
               <div className='container'>
-                <Category decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} navigate={navigate} setActiveTab={setActiveTab} activeTab={activeTab}
+                <Category menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} navigate={navigate} setActiveTab={setActiveTab} activeTab={activeTab}
                   iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
                   <Footer />
@@ -327,7 +270,7 @@ function App() {
             <div className='main'>
               <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
               <div className='container'>
-                <Detail decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} navigate={navigate} setActiveTab={setActiveTab} activeTab={activeTab}
+                <Detail menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} navigate={navigate} setActiveTab={setActiveTab} activeTab={activeTab}
                   iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
                   <Footer />
@@ -372,7 +315,7 @@ function App() {
             <div className='main'>
               <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
               <div className='container'>
-                <Basket decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} activeTab={activeTab} setActiveTab={setActiveTab} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <Basket menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} activeTab={activeTab} setActiveTab={setActiveTab} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
                   <Footer />
                 </footer>
@@ -380,9 +323,9 @@ function App() {
             </div>
           </>
         }>
-          <Route path='receipt' element={<Receipt decryptData={decryptData} activeTab={activeTab} setActiveTab={setActiveTab} />} />
+          <Route path='receipt' element={<Receipt activeTab={activeTab} setActiveTab={setActiveTab} />} />
           <Route path='pay' element={<Pay activeTab={activeTab} setActiveTab={setActiveTab} />} />
-          <Route path='order' element={<Order decryptData={decryptData} activeTab={activeTab} setActiveTab={setActiveTab} />} />
+          <Route path='order' element={<Order activeTab={activeTab} setActiveTab={setActiveTab} />} />
         </Route>
 
         {/* 주문 조회 */}
@@ -398,7 +341,7 @@ function App() {
             <div className='main'>
               <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
               <div className='container'>
-                <DeliveryMain decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <DeliveryMain menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
                   <Footer />
                 </footer>
@@ -420,7 +363,7 @@ function App() {
             <div className='main'>
               <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
               <div className='container'>
-                <OrderDetail decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <OrderDetail menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
                   <Footer />
                 </footer>
@@ -447,7 +390,7 @@ function App() {
             <div className='main'>
               <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
               <div className='container'>
-                <Notice decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <Notice menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
                   <Footer />
                 </footer>
@@ -470,7 +413,7 @@ function App() {
             <div className='main'>
               <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
               <div className='container'>
-                <MyPage decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <MyPage menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
                   <Footer />
                 </footer>
@@ -493,7 +436,7 @@ function App() {
             <div className='main'>
               <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
               <div className='container'>
-                <Comeway decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <Comeway menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
                   <Footer />
                 </footer>
@@ -514,7 +457,7 @@ function App() {
             <div className='main'>
               <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
               <div className='container'>
-                <TodayNews decryptData={decryptData} menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <TodayNews menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
                   <Footer />
                 </footer>

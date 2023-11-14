@@ -1,4 +1,4 @@
-export let UserData = [
+export let UserDataObj = [
     {
         userType: 'corporation',
         id: 'bigdev2023',
