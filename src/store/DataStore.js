@@ -7,7 +7,7 @@ import { persist } from 'zustand/middleware'
 
 
 
-const useDataStore = create((set)=>({
+const useDataStore = create((set) => ({
   // data : null,
   // error: null,
   orderData: null,
@@ -22,27 +22,27 @@ const useDataStore = create((set)=>({
     //   data : input
     // })),
 
-    setOrderData : (input) =>
-    set( (prev) => ({
-      orderData : input
+    setOrderData: (input) =>
+      set((prev) => ({
+        orderData: input
       })),
     // 카테고리
 
-    setCategoryData : (input) =>
-    set( (prev) => ({
-      categoryData : input
+    setCategoryData: (input) =>
+      set((prev) => ({
+        categoryData: input
       })),
     // 고객정보
-  
-    setUserData : (input) =>
-    set( (prev) => ({
-      userData : input
+
+    setUserData: (input) =>
+      set((prev) => ({
+        userData: input
       })),
     // 오늘의 주제
 
-    setTodayTopicData : (input) =>
-    set( (prev) => ({
-      todayTopicData : input
+    setTodayTopicData: (input) =>
+      set((prev) => ({
+        todayTopicData: input
       }))
   }
 }));
@@ -63,38 +63,37 @@ export const useDataActions = () => useDataStore((state) => state.actions);
 
 // --------------------------------------------------------------------//
 
-
-
-const useListStore = create((set)=>({
-  wishList : [],
-  orderList : [],
-  basketList : [],
-  noticePostList : [],
+const useListStore = create((set) => ({
+  wishList: [],
+  orderList: [],
+  basketList: [],
+  noticePostList: [],
 
 
   actions: {
-    setWishList : (val) =>
-    set( (prev) => ({
-      wishList : val
+    setWishList: (val) =>
+      set((prev) => ({
+        wishList: val
       })),
     // 주문
 
-    setOrderList : (val) =>
-      set( (state) => ({
-        orderList : val 
+    setOrderList: (val) =>
+      set((state) => ({
+        orderList: val
       })),
     // 장바구니
 
-    setBasketList : (val) =>
-    set( (state) => ({
-      basketList : val 
+    setBasketList: (val) =>
+      set((state) => ({
+        basketList: val
       })),
     // 공지사항
-
-    setNoticePostList : (val) =>
-      set( (state) => ({
-        noticePostList : val 
+    // 공지사항
+    setNoticePostList: (val) => {
+      set((state) => ({
+        noticePostList: val,
       }))
+    },
   }
 }))
 
@@ -119,19 +118,47 @@ export const useListActions = () => useListStore((state) => state.actions);
 
 // Modal State
 const useModalStore = create((set) => ({
+  // 초기값: 모달이 열리지 않은 상태라는 뜻이로 false 할당
   isModalOpen: false,
-  openModal: () => set({ isModalOpen: true }),
-  closeModal: () => set({ isModalOpen: false }),
+  // 초기값: 모달의 이름이 없다는 뜻으로 공백을 할당
+  modalName: '',
+  // 초기값: 선택되지 않았다는 듯으로 null을 할당
+  selectedIndex: null,
+
+
+  // on/off만 있는 모달창을 오픈
+  openModal: (name) => set({ isModalOpen: true, modalName: name }),
+  // on/off만 있는 모달창을 클로즈
+  closeModal: () => set({ isModalOpen: false, modalName: '' }),
+  setSelectedIndex: (index) => set({ selectedIndex: index }),
+  // index에 해당하는 모달 창을 열어야 할 경우
+  selectedModalOpen: (name) => set({ isModalOpen: true, modalName: name }),
+  // index에 해당하는 모달 창을 닫아야 할 경우(추가로 close함수에 해당 모달 창의 내용을 초기화 하는 코드는 개별적으로 작성)
+  selectedModalClose: () => set({ isModalOpen: false, modalName: '' })
 }));
 
 
 // 커스텀하여 useModal로 사용
 export const useModal = () => {
-  const { isModalOpen, openModal, closeModal } = useModalStore();
+  const {
+    isModalOpen,
+    modalName,
+    selectedIndex,
+    openModal,
+    closeModal,
+    setSelectedIndex,
+    selectedModalOpen,
+    selectedModalClose
+  } = useModalStore();
 
   return {
     isModalOpen,
+    modalName,
+    selectedIndex,
     openModal,
     closeModal,
+    setSelectedIndex,
+    selectedModalOpen,
+    selectedModalClose
   };
 };

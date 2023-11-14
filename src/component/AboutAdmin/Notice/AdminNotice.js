@@ -5,27 +5,32 @@ import { AdminMenuData } from "../AdminMenuData";
 import WrtieModal from "./WriteModal";
 import EditModal from "./EditModal";
 import { NoticePostObj } from "../../Data/NoticePostObj"; // 수정된 부분
-import { useListActions, useListStore, useNoticePostList } from "../../../Store/DataStore";
+import { useListActions, useNoticePostList, useModal } from "../../../Store/DataStore";
 
 export default function AdminNotice() {
-  const postList = useNoticePostList();
-  const { setPostList } = useListActions();
+  const noticePostList = useNoticePostList();
+  const { setNoticePostList } = useListActions();
+  const {
+    isModalOpen,
+    openModal,
+    selectedIndex,
+    setSelectedIndex,
+    modalName,
+    selectedModalOpen,
+    selectedModalClose,
+    closeModal
+  } = useModal();
   const [isLoading, setIsLoading] = useState(true); // 로딩 중 여부 추가
 
   // 데이터 불러오기
   useEffect(() => {
     const dataload = setTimeout(() => {
-      setPostList(NoticePostObj);
+      setNoticePostList(NoticePostObj);
       setIsLoading(false);
     }, 1000)
 
     return () => clearTimeout(dataload)
-  }, [setPostList]);
-
-  // State
-  const [modal, setModal] = useState(false); // modal on / off
-  const [modalName, setModalName] = useState(''); // what is modal?
-  const [selectedItemIndex, setSelectedItemIndex] = useState(null); // 해당 인덱스의 모달을 찾기 위함
+  }, []);
 
   /* 추후 - 파일 업로드 로직
   const [selectedFile, setSelectedFile] = useState(null); // 파일 업로드 state
@@ -63,43 +68,22 @@ export default function AdminNotice() {
   const currentHour = currentDate.getHours();
   const currentMinute = currentDate.getMinutes();
 
-
-  // Enter key를 누를 시, 모달 창 오픈
-  const onOpen = (index) => {
-    setModal(true);
-    setModalName('edit');
-    setSelectedItemIndex(index);
-  }
-  const openWriteModal = () => {
-    setModal(true);
-    setModalName('write');
-  }
-  const closeWriteModal = () => {
-    setTempList({
-      id: '',
-      title: '',
-      contents: '',
-      writer: '',
-      date: '',
-      file: '',
-    });
-    setModal(false);
-    setModalName('');
-  }
-
   // 글 담기
   const [tempList, setTempList] = useState({
-    id: '', // length + 1로 지정할 것
+    id: '', 
     title: '',
     contents: '',
     writer: '', // 관리자 로그인 계정의 이름으로 자동 들어가도록
-    date: '', // 추후에 자동으로 날짜를 받아오는 api 구현
-    file: '',
+    date: '',
+    files: '',
   })
 
   const addPost = () => {
-    const { title, writer, contents } = tempList; // 입력 값들을 자체 할당
-    const isCheckInputLength = title.length > 2 && writer.length > 2 && contents.length > 10; // 입력 조건 부여
+    // 입력 값들을 자체 할당
+    const { title, writer, contents, files } = tempList;
+    // 입력 조건 부여
+    const isCheckInputLength = title.length > 2 && writer.length > 2 && contents.length > 10;
+
     // 조건에 부합한다면
     if (isCheckInputLength) {
       const newPost = {
@@ -107,37 +91,45 @@ export default function AdminNotice() {
         title,
         contents,
         writer,
-        date: `${currentYear}/${currentMonth}/${currentDay} ${currentHour}시 ${currentMinute}분`,
+        date: `${currentYear}/${currentMonth}/${currentDay} ${currentHour}:${currentMinute}`,
+        files,
       };
+      
+
       // 입력받은 정보 추가
-      setPostList((prevListData) => [...prevListData, newPost]);
-      alert("등록되었습니다.");
+      setNoticePostList((prevData) => [...prevData, newPost]);
       // 입력란 초기화
       setTempList({
-        id: '',
+        id: '', 
         title: '',
         contents: '',
-        writer: '',
+        writer: '', 
         date: '',
-        file: '',
+        files: '',
       });
 
-      setModal(false);
-      setModalName('');
+      console.log(noticePostList);
+      // 모달 닫기
+      closeModal();
+
+      alert("등록되었습니다.");
+
     } else {
       alert("제목을 2글자 이상, 작성자 명을 2글자 이상, 본문 내용을 10글자 이상 작성하십시오.");
     }
-
   };
+
 
   // 공지사항 리스트 업데이트
   const editNotice = (index, editData) => {
     // 현재 공지사항 리스트 복제
-    const editedList = [...postList];
+    const editedList = [...noticePostList];
     // 업데이트할 해당 공지사항에 새로운 데이터 할당
     editedList[index] = editData;
     // 부모 컴포넌트에 업데이트된 리스트 전달
-    setPostList(editedList);
+    setNoticePostList(editedList);
+    setSelectedIndex(null);
+    selectedModalClose();
   };
 
 
@@ -154,7 +146,7 @@ export default function AdminNotice() {
             {/* 코드 발급 블록 */}
             <div className={styles.leftModule}>
               <div className={styles.writeNotice_icon}>Click <i className="fa-solid fa-arrow-down"></i></div>
-              <div className={styles.write} onClick={() => { openWriteModal() }}>글 작성</div>
+              <div className={styles.write} onClick={() => { openModal('write') }}>글 작성</div>
             </div>
             {/* 뭐 넣을지 미정 */}
             <div className={styles.rightModule}>
@@ -179,52 +171,61 @@ export default function AdminNotice() {
                 {/* 추가적인 스켈레톤 아이템 */}
               </div>
             ) : (
-                postList.map((item, index) => (
-                  <div className={styles.post_container}>
-                    <div className={styles.postInfo_container} onClick={() => { onOpen(index) }} key={index}> {/* 선택 모달의 key를 글 수정으로 지정*/}
-                      {/* No */}
-                      <div className={styles.post_no}>
-                        {index + 1}
-                      </div>
-                      {/* Code */}
-                      <div className={styles.post_title}>
-                        {item.title}
-                      </div>
-                      {/* Writer */}
-                      <div className={styles.post_writer}>
-                        {item.writer}
-                      </div>
-                      {/* WritedDate */}
-                      <div>
-                        {item.date}
-                      </div>
+              noticePostList.map((item, index) => (
+                <div
+                  className={styles.post_container}
+                  key={index}>
+                  <div
+                    className={styles.postInfo_container}
+                    onClick={() => {
+                      setSelectedIndex(index);
+                      selectedModalOpen('edit');
+                      console.log(selectedIndex);
+                    }}
+                  >
+                    {/* No */}
+                    <div className={styles.post_no}>
+                      {index + 1}
                     </div>
-                    {/* Del */}
-                    <div div className={styles.post_del_container} >
-                      <div className={styles.post_delButton}
-                        onClick={() => {
-                          const data = [...postList];
-                          data.splice(index, 1);
-                          setPostList(data);
-                        }
-                        }>
-                        삭제
-                      </div>
+                    {/* Code */}
+                    <div className={styles.post_title}>
+                      {item.title}
+                    </div>
+                    {/* Writer */}
+                    <div className={styles.post_writer}>
+                      {item.writer}
+                    </div>
+                    {/* WritedDate */}
+                    <div className={styles.post_date}>
+                      {item.date}
                     </div>
                   </div>
-                ))
-              )}
+                  {/* Del */}
+                  <div div className={styles.post_del_container} >
+                    <div className={styles.post_delButton}
+                      onClick={() => {
+                        const data = [...noticePostList];
+                        data.splice(index, 1);
+                        setNoticePostList(data);
+                      }
+                      }>
+                      삭제
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
 
 
           </div>
         </div>
       </div>
       {
-        modal && modalName === 'write' ?
-          <WrtieModal modalName={modalName} setModalName={setModalName} modal={modal} setModal={setModal} tempList={tempList} setTempList={setTempList} addPost={addPost} closeWriteModal={closeWriteModal} />
+        isModalOpen && modalName === 'write' ?
+          <WrtieModal tempList={tempList} setTempList={setTempList} addPost={addPost} />
           :
-          modal && modalName === 'edit' ?
-            <EditModal editNotice={editNotice} list={postList} modalName={modalName} setModalName={setModalName} modal={modal} setModal={setModal} tempList={tempList} setTempList={setTempList} selectedItemIndex={selectedItemIndex} setSelectedItemIndex={setSelectedItemIndex} closeWriteModal={closeWriteModal} />
+          isModalOpen && modalName === 'edit' && selectedIndex != null ?
+            <EditModal editNotice={editNotice} list={noticePostList} tempList={tempList} setTempList={setTempList} />
             :
             null
       }

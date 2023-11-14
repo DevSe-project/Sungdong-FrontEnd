@@ -1,18 +1,30 @@
 import styles from './WriteEditModal.module.css';
 import { useEffect, useState } from 'react';
+import { useModal, useNoticePostList } from "../../../Store/DataStore";
 
 export default function EditModal(props) {
+    // call_글 목록
+    const noticePostList = useNoticePostList();
+    // call_modalZustand
+    const { 
+        selectedModalClose,
+        selectedIndex,
+        setSelectedIndex
+    } = useModal();
+    // setting_space_for_input
     const [tempData, setTempData] = useState({
-        title: props.list[props.selectedItemIndex].title,
-        writer: props.list[props.selectedItemIndex].writer,
-        contents: props.list[props.selectedItemIndex].contents,
+        title: noticePostList[selectedIndex]?.title || '',
+        writer: noticePostList[selectedIndex]?.writer || '',
+        contents: noticePostList[selectedIndex]?.contents || '',
+        files: noticePostList[selectedIndex]?.files || '',
     });
 
     // ESC 키로 모달 닫기
     useEffect(() => {
         const handleEscapeKey = (event) => {
             if (event.key === 'Escape') {
-                props.closeWriteModal();
+                setSelectedIndex(null);
+                selectedModalClose();
             }
         };
 
@@ -21,7 +33,12 @@ export default function EditModal(props) {
         return () => {
             window.removeEventListener('keydown', handleEscapeKey);
         };
-    }, [props]);
+    }, [selectedModalClose]);
+
+    // [임시]setSelectedIndex가 동작 후에 selectedIndex 값을 추적하기 위한 useEffect
+    useEffect(() => {
+        console.log(selectedIndex)
+    }, [selectedIndex])
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -32,26 +49,27 @@ export default function EditModal(props) {
     };
 
     const handleSaveChanges = () => {
-        // 수정된 내용을 저장하는 로직을 추가하세요.
-        // tempData에 있는 수정된 내용을 이용해 공지사항을 업데이트하도록 구현해야 합니다.
         const updatedData = {
             title: tempData.title,
             writer: tempData.writer,
             contents: tempData.contents,
+            files: tempData.files,
         };
 
         // 수정된 내용을 부모 컴포넌트로 전달
-        props.updateNotice(props.selectedItemIndex, updatedData);
+        props.editNotice(selectedIndex, updatedData);
 
+        // 선택 인덱스 초기화
+        setSelectedIndex(null);
         // 모달 닫기
-        props.closeWriteModal();
+        selectedModalClose();
     };
 
     return (
-        <div className={styles.modalOveray}>
+        <div className={styles.modalOverlay}>
             <div className={styles.modalContainer}>
                 <div className={styles.closeButton}>
-                    <span onClick={props.closeWriteModal}>
+                    <span onClick={selectedModalClose}>
                         <i className="fas fa-times"></i>
                     </span>
                 </div>

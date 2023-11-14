@@ -1,14 +1,16 @@
 import styles from "./WriteEditModal.module.css";
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useModal } from "../../../Store/DataStore";
 
 
 export default function WrtieModal(props) {
+    const { isModalOpen, closeModal, modalName } = useModal();
 
     // esc키를 누르면 모달창 닫기.
     useEffect(() => {
         const handleEscapeKey = (event) => {
-            if (event.key === 'Escape' && props.modal && props.modalName != '') {
-                props.closeWriteModal();
+            if (event.key === 'Escape' && isModalOpen && props.modalName !== '') {
+                closeModal();
             }
         };
 
@@ -17,7 +19,7 @@ export default function WrtieModal(props) {
         return () => {
             window.removeEventListener('keydown', handleEscapeKey);
         };
-    }, [props.modal, props.closeWriteModal]);
+    }, [isModalOpen, closeModal, modalName]);
 
 
 
@@ -27,7 +29,7 @@ export default function WrtieModal(props) {
                 {/* 종료 버튼 */}
                 <div className={styles.closeButton}>
                     <span onClick={() => {
-                        props.closeWriteModal();
+                        closeModal();
                     }}>
                         <i className="fas fa-times"></i>
                     </span>
@@ -46,7 +48,7 @@ export default function WrtieModal(props) {
                     </div>
                     {/* 작성자 */}
                     <div className={styles.writer}>
-                        작성자 : <input
+                        작성자 <input
                             className={styles.inputWriter}
                             type="text" value={props.tempList.writer}
                             onChange={(e) => {
@@ -75,12 +77,21 @@ export default function WrtieModal(props) {
                 </div>
 
                 {/* 첨부파일 */}
-                <div>
-                    <input type="file" onChange={() => { }} />
+                <div className={styles.addFiles}>
+                    <input type="file" onChange={ (e) => (
+                        props.setTempList(
+                            (prevData) => ({
+                                ...prevData,
+                                files: e.target.value
+                            })
+                        )
+                    ) } />
                 </div>
 
                 {/* 등록 버튼 */}
-                <div className={styles.printPost} onClick={() => { props.addPost() }}>
+                <div className={styles.printPost} onClick={ () => {
+                    props.addPost();
+                    }}>
                     <div>등록</div>
                 </div>
             </div>
