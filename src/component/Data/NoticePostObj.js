@@ -5,6 +5,7 @@ export const NoticePostObj = [
     contents: '2025 성동 SDC 컨퍼런스 개최 예정입니다.',
     writer: '엄지석',
     date: '2023-09-01',
+    files: null
   },
   {
     id: 2,
@@ -12,6 +13,7 @@ export const NoticePostObj = [
     contents: '2025 성동 SDC 컨퍼런스 개최 예정입니다.',
     writer: '엄지석',
     date: '2023-09-01',
+    files: null
   },
   {
     id: 3,
@@ -19,6 +21,7 @@ export const NoticePostObj = [
     contents: '2025 성동 SDC 컨퍼런스 개최 예정입니다.',
     writer: '엄지석',
     date: '2023-09-01',
+    files: null,
   },
   {
     id: 4,
@@ -26,5 +29,6 @@ export const NoticePostObj = [
     contents: '2025 성동 SDC 컨퍼런스 개최 예정입니다.',
     writer: '엄지석',
     date: '2023-09-01',
+    files: null,
   },
 ];
