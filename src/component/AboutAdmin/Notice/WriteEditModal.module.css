@@ -92,6 +92,12 @@
   border-radius: 1dvh;
   padding: 10px;
 }
+.addFiles {
+  width: auto;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
 /* ---------------------------------------------- */
 .buttonContainer {
   width: 100%;
@@ -101,13 +107,13 @@
 }
 
 .printPost {
+  width: auto;
   display: flex;
   background-color: #cc0000;
   justify-content: center;
   align-items: center;
   text-align: center;
   margin-top: 1.5em;
-  width: 90%;
   height: 40px;
   border-radius: 10px;
   padding: 0 10px;

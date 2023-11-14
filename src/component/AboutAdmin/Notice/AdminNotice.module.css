@@ -120,11 +120,14 @@
 }
 /* Title */
 .post_title {
-  width: 50%; /* 5:5 비율 */
+  width: 40%; /* 5:5 비율 */
 }
 /* Writer */
 .post_writer {
-  width: 20%; /* 2:5 비율 */
+  width: 10%; /* 2:5 비율 */
+}
+.post_date {
+  width: 20%;
 }
 /* Del */
 .post_del_container {
