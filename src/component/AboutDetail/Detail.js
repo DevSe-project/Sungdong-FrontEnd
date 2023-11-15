@@ -7,10 +7,12 @@ import { useBasketList, useListActions, useWishList } from '../../Store/DataStor
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
 
-export function Detail(props) {
+export async function Detail(props) {
   // Usenavigate
   const navigate = useNavigate();
+
   const { isLoading, isError, error, data } = useQuery({queryKey:['data']});
+
   const queryClient = useQueryClient();
 
   const wishList = useWishList();
@@ -39,7 +41,7 @@ export function Detail(props) {
   };
 
   // 서버 확인용
-  const isServerRunning = checkServerStatus();
+  const isServerRunning = await checkServerStatus();
 
   //장바구니 추가 함수
   const addToCart = async (product) => {
