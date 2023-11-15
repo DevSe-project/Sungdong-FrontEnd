@@ -100,7 +100,7 @@ export function Detail(props) {
         alert(cartData.message);
         console.log('상품이 장바구니에 추가되었습니다.', cartData);
         // 장바구니 상태를 다시 불러와 갱신합니다.
-        // queryClient.invalidateQueries(['cart']);
+        queryClient.invalidateQueries(['cart']);
         // 장바구니로 이동
         navigate("/basket");
       },
