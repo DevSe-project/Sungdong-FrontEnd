@@ -1,13 +1,16 @@
 import styles from './NoticeDetail.module.css';
 import { useEffect } from 'react';
+import { useModal, useNoticePostList } from '../../Store/DataStore';
 
-export default function NoticeDetail(props) {
+export default function NoticeDetail() {
+    const {setIsModal, selectedIndex, isModal, setSelectedIndex} = useModal();
+    const noticePostList = useNoticePostList();
 
     // esc키를 누르면 모달창 닫기.
     useEffect(() => {
         const onClose = (event) => {
             if (event.key === 'Escape') {
-                props.setIsModal(false); // "Esc" 키 누를 때 모달 닫기 함수 호출
+                setIsModal(false);
             }
         };
 
@@ -16,15 +19,15 @@ export default function NoticeDetail(props) {
         return () => {
             window.removeEventListener('keydown', onClose);
         };
-    }, []);
+    }, [setIsModal]);
 
     // 선택된 index가 있을 때만 렌더링
-    if (props.selectedItemIndex !== null && props.selectedItemIndex !== undefined) {
+    if (selectedIndex !== null && selectedIndex !== undefined) {
         return (
             <div className={styles.modalContainer}>
                 {/* 종료 버튼 */}
                 <div className={styles.closeButton}>
-                    <span onClick={() => props.setIsModal(false)}>
+                    <span onClick={() => setIsModal(false)}>
                         <i className="fas fa-times"></i>
                     </span>
                 </div>
@@ -32,20 +35,22 @@ export default function NoticeDetail(props) {
                 <div className={styles.contentContainer}>
                     {/* 제목 */}
                     <div className={styles.title}>
-                        {props.list[props.selectedItemIndex].title}
+                        {noticePostList[selectedIndex].title}
                     </div>
                     {/* 작성일과 작성자 */}
                     <div className={styles.details}>
                         <div className={styles.date}>
-                            작성일: {props.list[props.selectedItemIndex].date}
+                            작성일: {noticePostList[selectedIndex].date}
                         </div>
                         <div className={styles.writer}>
-                            작성자: {props.list[props.selectedItemIndex].writer}
+                            작성자: {noticePostList[selectedIndex].writer}
                         </div>
                     </div>
                     {/* 글 내용 */}
-                    <div className={styles.content}>
-                        {props.list[props.selectedItemIndex].contents}
+                    <div className={styles.contentsBox}>
+                        <div className={styles.contents}>
+                            {noticePostList[selectedIndex].contents}
+                        </div>
                     </div>
                 </div>
             </div>

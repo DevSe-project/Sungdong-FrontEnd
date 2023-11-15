@@ -1,80 +1,76 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import styles from './Notice.module.css';
-import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner';
 import NoticeDetail from './NoticeDetail';
 import { NoticePostObj } from '../Data/NoticePostObj';
+import { useListActions, useModal, useNoticePostList } from '../../Store/DataStore';
+import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner';
+import { Footer } from '../TemplateLayout/AboutFooter/Footer';
+import { MenuData } from '../TemplateLayout/AboutMenuData/MenuData';
 
-export function Notice(props) {
-  const [list, setList] = useState(NoticePostObj);
-  const [isModal, setIsModal] = useState(false);
-  const [selectedItemIndex, setSelectedItemIndex] = useState(null);
+export function Notice() {
+  const { isModal, setIsModal, setSelectedIndex } = useModal();
+  const { setNoticePostList } = useListActions();
+  const noticePostList = useNoticePostList();
 
-  // 글 위치에서 enter를 누르면 해당 페이지가 열림
-  const onOpen = (event, index) => {
-    if (event.key === 'Enter') {
-      setIsModal(true);
-      setSelectedItemIndex(index);
-    }
-  }
+  useEffect(() => {
+    setNoticePostList(NoticePostObj);
+  }, [setNoticePostList])
 
   return (
-    <div className={styles.body}>
-      <div className={styles.noticeContainer}>
-        {/* --------------header-------------- */}
-        <div className={styles.header}>
-          <h1 className={styles.title}>공지사항</h1>
-          <div className={styles.searchContainer}>
-            <label className={styles.search_label} htmlFor="search">검색:</label>
-            <input
-              className={styles.search_input}
-              type="text"
-              id="search"
-              placeholder="검색어를 입력하세요"
-            />
+    <div>
+      <TopBanner />
+      <div className={styles.flexBox}>
+        <MenuData />
+        <div className={styles.noticeContainer}>
+          {/* --------------header-------------- */}
+          <div className={styles.header}>
+            <h1 className={styles.title}>공지사항</h1>
+            <div className={styles.searchContainer}>
+              <label className={styles.search_label} htmlFor="search">검색:</label>
+              <input
+                className={styles.search_input}
+                type="text"
+                id="search"
+                placeholder="검색어를 입력하세요"
+              />
+            </div>
           </div>
-        </div>
-        {/* --------------listContainer-------------- */}
-        <div className={styles.listContainer}>
-          <table className={styles.listTable}>
-            <thead>
-              <tr>
-                <th>구분</th>
-                <th>제목</th>
-                <th>작성자</th>
-                <th>작성일</th>
-              </tr>
-            </thead>
-            <tbody>
-              {list.map((item, index) => (
-                <tr key={index}
-                  className={styles.row}
-                  onClick={() => { setIsModal(true); setSelectedItemIndex(index); }}
-                  onKeyPress={(event) => onOpen(event, index)} // Enter 키 이벤트 처리
-                  tabIndex={0} // 이렇게 하면 포커스를 받을 수 있게 됩니다
-                >
-                  <td>{index + 1}</td>
-                  <td>{item.title}</td>
-                  <td>{item.writer}</td>
-                  <td>{item.date}</td>
+          {/* --------------listContainer-------------- */}
+          <div className={styles.listContainer}>
+            <table className={styles.listTable}>
+              <thead>
+                <tr>
+                  <th>구분</th>
+                  <th>제목</th>
+                  <th>작성자</th>
+                  <th>작성일</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        {/* --------------Detail-Modal-------------- */}
-        {isModal ?
-          <div className={styles.modalOverlay}>
-            <NoticeDetail
-              list={list}
-              setList={setList}
-              isModal={isModal}
-              setIsModal={setIsModal}
-              onClose={() => setSelectedItemIndex(null)} // 모달이 닫힐 때 selectedItemIndex 초기화
-              selectedItemIndex={selectedItemIndex} // 선택된 항목 인덱스 전달
-            />
+              </thead>
+              <tbody>
+                {noticePostList.map((item, index) => (
+                  <tr key={index}
+                    className={styles.row}
+                    onClick={() => { setIsModal(true); setSelectedIndex(index) }}
+                    tabIndex={0} // 이렇게 하면 포커스를 받을 수 있게 됩니다
+                  >
+                    <td>{index + 1}</td>
+                    <td>{item.title}</td>
+                    <td>{item.writer}</td>
+                    <td>{item.date}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-          : null}
+          {/* --------------Detail-Modal-------------- */}
+          {isModal ?
+            <div className={styles.modalOverlay}>
+              <NoticeDetail />
+            </div>
+            : null}
+        </div>
       </div>
+      <Footer />
     </div>
   );
 }

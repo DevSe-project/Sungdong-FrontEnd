@@ -1,16 +1,13 @@
 import { db, app } from "./firebase"; // 파이어베이스 데이터베이스 임포트
 import './App.css';
-import CryptoJS from 'crypto-js';
 import { useContext, useEffect, useState } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 // Data 객체들 불러오기
 import { OrderObj } from './component/Data/OrderObj';
-import { DataObj } from './component/Data/DataObj'
 import { TodayTopicPostObj } from './component/Data/TodayTopicPostObj';
 import { UserDataObj } from './component/Data/UserData';
 import { CategoryDataObj } from './component/Data/CategoryDataObj';
 import { Category } from './component/TemplateLayout/AboutHeader/Category';
-import { NoticePostObj } from './component/Data/NoticePostObj';
 
 // 메인페이지
 import MainPage from './MainPage';
@@ -378,26 +375,7 @@ function App() {
         </Route>
 
         {/* 고객센터 */}
-        <Route path='/userservice/notice' element={
-          <>
-            {/* 최상단배너 */}
-            <TopBanner
-              login={login} setLogin={setLogin} iconHovered={iconHovered}
-              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
-              text_dynamicStyle={text_dynamicStyle}
-              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
-            <div className='main'>
-              <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
-              <div className='container'>
-                <Notice menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
-                <footer className='footer'>
-                  <Footer />
-                </footer>
-              </div>
-            </div>
-          </>
-        } />
+        <Route path='/userservice/notice' element={<Notice/>} />
         <Route path='/userservice/contact' element={<Contact />} />
 
         {/* 마이페이지 */}
