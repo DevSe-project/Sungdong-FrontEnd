@@ -1,16 +1,13 @@
-import { db, app } from "./firebase"; // 파이어베이스 데이터베이스 임포트
+import { db } from "./firebase"; // 파이어베이스 데이터베이스 임포트
 import './App.css';
-import CryptoJS from 'crypto-js';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 // Data 객체들 불러오기
 import { OrderObj } from './component/Data/OrderObj';
-import { DataObj } from './component/Data/DataObj'
 import { TodayTopicPostObj } from './component/Data/TodayTopicPostObj';
 import { UserDataObj } from './component/Data/UserData';
 import { CategoryDataObj } from './component/Data/CategoryDataObj';
 import { Category } from './component/TemplateLayout/AboutHeader/Category';
-import { NoticePostObj } from './component/Data/NoticePostObj';
 
 // 메인페이지
 import MainPage from './MainPage';
@@ -43,9 +40,6 @@ import { Event } from './component/AboutCompany/Event'
 import { AdminMain } from './component/AboutAdmin/AdminMain';
 import MyPage from './component/AboutMyPage/MyPage';
 import ManageCode from './component/AboutAdmin/Code/ManageCode';
-
-import axios from 'axios';
-import UserContext, { UserProvider } from './component/AboutContext/UserContext';
 
 // 관리자 관련
 import { AdminDetail } from './component/AboutAdmin/AdminDetail';
@@ -132,7 +126,7 @@ function App() {
     //localStorage에서 likelist를 파싱 
     const savedwishList = JSON.parse(localStorage.getItem('likelist')) || []; //localStorage의 likelist가 없으면 공백 배열로 변수 저장
     setWishList(savedwishList); //setWishList라는 State에 저장
-  }, []);
+  }, [setWishList]);
 
 
 
@@ -146,7 +140,7 @@ function App() {
     }, 1000)
 
     return () => clearTimeout(dataload)
-  }, [])
+  }, [setOrderData, setUserData, setTodayTopicData, setCategoryData])
 
 
   useEffect(() => {

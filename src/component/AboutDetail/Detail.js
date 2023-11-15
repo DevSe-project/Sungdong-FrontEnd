@@ -6,70 +6,47 @@ import { TabInfo } from './TabInfo'
 import { useBasketList, useListActions, useWishList } from '../../Store/DataStore'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
-
-export async function Detail(props) {
-  // Usenavigate
-  const navigate = useNavigate();
+export function Detail(props) {
 
   const { isLoading, isError, error, data } = useQuery({queryKey:['data']});
 
   const queryClient = useQueryClient();
 
-  const wishList = useWishList();
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!isLoading) {
+        await loadData();
+      }
+    };
+  
+    fetchData();
+  }, [isLoading]);
 
-  const basketList = useBasketList();
+    const navigate = useNavigate();
 
-  const { setWishList, setOrderList, setBasketList} = useListActions();
-
- //수량 개수 state
-  const [count, setCount] = useState("1");
-
-  //옵션 선택 state
-  const [optionSelected, setOptionSelected] = useState(null);
-
-  //로그인 정보 불러오기
-  const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'));
-
-  //서버 상태 체크하는 로직
-  const checkServerStatus = async () => {
-    try {
-      const response = await axios.get('/status');
-      return response.data.status === 'Server is running';
-    } catch (error) {
-      return false; // 서버에 연결할 수 없음
-    }
-  };
-
-  // 서버 확인용
-  const isServerRunning = await checkServerStatus();
-
-  //장바구니 추가 함수
-  const addToCart = async (product) => {
-    try {
-      const response = await axios.post("/cart", 
-        JSON.stringify({
-          productId: product.id,  // 예시: product가 객체이고 id 속성이 있는 경우
-          optionSelect: product.optionSelect,
-          count: product.count,
-        }),
-        {
-          headers : {
-            "Content-Type" : "application/json"
-          }
-        }
-      )
-      // 성공 시 추가된 상품 정보를 반환합니다.
-      return response.data;
-    } catch (error) {
-      // 실패 시 예외를 throw합니다.
-      throw new Error('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
-    }
-  };
+    const wishList = useWishList();
+  
+    const basketList = useBasketList();
+  
+    const { setWishList, setOrderList, setBasketList} = useListActions();
+  
+   //수량 개수 state
+    const [count, setCount] = useState("1");
+  
+    //옵션 선택 state
+    const [optionSelected, setOptionSelected] = useState(null);
+  
+    //로그인 정보 불러오기
+    const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'));
 
     //장바구니 추가 함수
-    const addToOrder = async (product) => {
+    const addToCart = async (product) => {
       try {
-        const response = await axios.post("/order", 
+        if (isLoading) {
+          // 데이터가 없으면 아무것도 하지 않고 종료
+          return;
+        }
+        const response = await axios.post("/cart", 
           JSON.stringify({
             productId: product.id,  // 예시: product가 객체이고 id 속성이 있는 경우
             optionSelect: product.optionSelect,
@@ -88,52 +65,85 @@ export async function Detail(props) {
         throw new Error('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
       }
     };
+  
+      //장바구니 추가 함수
+      const addToOrder = async (product) => {
+        try {
+          if (isLoading) {
+            // 데이터가 없으면 아무것도 하지 않고 종료
+            return;
+          }
+          const response = await axios.post("/order", 
+            JSON.stringify({
+              productId: product.id,  // 예시: product가 객체이고 id 속성이 있는 경우
+              optionSelect: product.optionSelect,
+              count: product.count,
+            }),
+            {
+              headers : {
+                "Content-Type" : "application/json"
+              }
+            }
+          )
+          // 성공 시 추가된 상품 정보를 반환합니다.
+          return response.data;
+        } catch (error) {
+          // 실패 시 예외를 throw합니다.
+          throw new Error('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
+        }
+      };
+  
+    //장바구니 추가 함수
+    const { cartMutate } = useMutation(addToCart, {
+      onSuccess: (cartData) => {
+        // 메세지 표시
+        alert(cartData.message);
+        console.log('상품이 장바구니에 추가되었습니다.', cartData);
+        // 장바구니 상태를 다시 불러와 갱신합니다.
+        // queryClient.invalidateQueries(['cart']);
+        // 장바구니로 이동
+        navigate("/basket");
+      },
+      onError: (error) => {
+        // 상품 추가 실패 시, 에러 처리를 수행합니다.
+        console.error('상품을 장바구니에 추가하는 중 오류가 발생했습니다.', error);
+      },
+    })
+  
+    //즉시구매 함수
+    const { orderMutate } = useMutation(addToOrder, {
+      onSuccess: (orderData) => {
+        // 메세지 표시
+        console.log('상품을 전달하였습니다.', orderData);
+        // 장바구니로 이동
+        setOrderList(orderData);
+        navigate("/basket/receipt");
+        props.setActiveTab(2);
+      },
+      onError: (error) => {
+        // 상품 추가 실패 시, 에러 처리를 수행합니다.
+        console.error('상품을 장바구니에 추가하는 중 오류가 발생했습니다.', error);
+      },
+    });
 
-  //장바구니 추가 함수
-  const { cartMutate } = useMutation(addToCart, {
-    onSuccess: (cartData) => {
-      // 메세지 표시
-      alert(cartData.message);
-      console.log('상품이 장바구니에 추가되었습니다.', cartData);
-      // 장바구니 상태를 다시 불러와 갱신합니다.
-      queryClient.invalidateQueries('cart');
-      // 장바구니로 이동
-      navigate("/basket");
-    },
-    onError: (error) => {
-      // 상품 추가 실패 시, 에러 처리를 수행합니다.
-      console.error('상품을 장바구니에 추가하는 중 오류가 발생했습니다.', error);
-    },
-  })
+  //서버 상태 체크하는 로직
+  const checkServerStatus = async () => {
+    try {
+      const response = await axios.get('/status');
+      return response.data.status === 'Server is running';
+    } catch (error) {
+      return false; // 서버에 연결할 수 없음
+    }
+  };
 
-  //즉시구매 함수
-  const { orderMutate } = useMutation(addToOrder, {
-    onSuccess: (orderData) => {
-      // 메세지 표시
-      console.log('상품을 전달하였습니다.', orderData);
-      // 장바구니로 이동
-      setOrderList(orderData);
-      navigate("/basket/receipt");
-      props.setActiveTab(2);
-    },
-    onError: (error) => {
-      // 상품 추가 실패 시, 에러 처리를 수행합니다.
-      console.error('상품을 장바구니에 추가하는 중 오류가 발생했습니다.', error);
-    },
-  })
+  // 서버 확인용
+  const isServerRunning = checkServerStatus();
 
   //주소창 입력된 id값 받아오기
   let {id} = useParams();
 
-  //data값이 불러오면 loadData() 실행
-  useEffect(()=>{
-    if(data != null){
-      loadData();
-    }
-  }, [])
-
-  const loadData = ()=> {
-    if(data != null){
+  const loadData = async()=> {
+    if(!isLoading){
       //입력된 id과 data내부의 id값 일치하는 값 찾아 변수 선언
       const detaildata = data.find((item)=>item.id==id);
       return detaildata;
