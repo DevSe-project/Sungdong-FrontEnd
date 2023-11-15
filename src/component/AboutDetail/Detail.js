@@ -14,7 +14,7 @@ export function Detail(props) {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!isLoading) {
+      if (data !== null) {
         await loadData();
       }
     };
@@ -94,7 +94,7 @@ export function Detail(props) {
       };
   
     //장바구니 추가 함수
-    const { cartMutate } = useMutation(addToCart, {
+    const { cartMutate } = useMutation({mutationFn: addToCart,
       onSuccess: (cartData) => {
         // 메세지 표시
         alert(cartData.message);
@@ -111,7 +111,7 @@ export function Detail(props) {
     })
   
     //즉시구매 함수
-    const { orderMutate } = useMutation(addToOrder, {
+    const { orderMutate } = useMutation({mutationFn : addToOrder,
       onSuccess: (orderData) => {
         // 메세지 표시
         console.log('상품을 전달하였습니다.', orderData);
@@ -143,7 +143,7 @@ export function Detail(props) {
   let {id} = useParams();
 
   const loadData = async()=> {
-    if(!isLoading){
+    if(data !== null){
       //입력된 id과 data내부의 id값 일치하는 값 찾아 변수 선언
       const detaildata = data.find((item)=>item.id==id);
       return detaildata;
@@ -310,6 +310,7 @@ function basketThis(product, count){
       localStorage.setItem('likelist', JSON.stringify(unlikelist)); //새로고침하면 필터링 된 목록 표시
     }
   }
+  console.log(detailData);
   if(isLoading){
     return <p>Loading..</p>;
   }
