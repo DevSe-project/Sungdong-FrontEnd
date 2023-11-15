@@ -127,9 +127,9 @@ export function Detail(props) {
     });
 
   //서버 상태 체크하는 로직
-  const checkServerStatus = async () => {
+  const checkServerStatus = () => {
     try {
-      const response = await axios.get('/status');
+      const response = axios.get('/status');
       return response.data.status === 'Server is running';
     } catch (error) {
       return false; // 서버에 연결할 수 없음
@@ -167,12 +167,11 @@ export function Detail(props) {
     } 
 }
 
-
 // 즉시구매 함수
 function buyThis(product, count){
-  if(isServerRunning)
+  if(isServerRunning != false) {
     orderMutate(product); // 상품을 장바구니에 추가하는 것을 호출
-  else {
+  } else {
     console.log(product)
     if(!props.login){
       alert("로그인 후 이용가능한 서비스입니다.")
@@ -238,9 +237,9 @@ function buyThis(product, count){
 // 장바구니 담기 함수
 function basketThis(product, count){
   // login 캐쉬값이 저장되어 있는 것이 확인이 되면 허용
-  if(isServerRunning)
+  if(isServerRunning != false) {
     cartMutate(product); // 상품을 장바구니에 추가하는 것을 호출
-  else {
+  } else {
     // 수량 0개 저장방지
     if(count <= 0){
       alert("수량은 0보다 커야합니다.")
