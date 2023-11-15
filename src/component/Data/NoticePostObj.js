@@ -9,7 +9,7 @@ export const NoticePostObj = [
   },
   {
     id: 2,
-    title: 'Demo2',
+    title: 'Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2Demo2',
     contents: '2025 성동 SDC 컨퍼런스 개최 예정입니다.',
     writer: '엄지석',
     date: '2023-09-01',
@@ -26,7 +26,7 @@ export const NoticePostObj = [
   {
     id: 4,
     title: '2025 성동 SDC 컨퍼런스 개최',
-    contents: '2025 성동 SDC 컨퍼런스 개최 예정입니다.',
+    contents: '2025 성동 SDC 컨퍼런스 개최.',
     writer: '엄지석',
     date: '2023-09-01',
     files: null,
@@ -58,7 +58,7 @@ export const NoticePostObj = [
   {
     id: 8,
     title: '2023 삼성 SDC 컨퍼런스 개최',
-    contents: '2025 성동 SDC 컨퍼런스 개최 예정입니다.',
+    contents: '2025 성동 SDC 컨퍼런스 개최.',
     writer: '엄지석',
     date: '2023-09-01',
     files: null,

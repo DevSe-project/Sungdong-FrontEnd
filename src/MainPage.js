@@ -18,33 +18,26 @@ export default function MainPage(props) {
         category_dynamicStyle={props.category_dynamicStyle} iconOnClick={props.iconOnClick}
         menuOnClick={props.menuOnClick} menu_dynamicStyle={props.menu_dynamicStyle} />
 
-      {/* MAIN */}
-      <div className={styles.main}>
-
-        {/* ❗️----LEFT----❗️ */}
+      <div className={styles.flexBox}>
+        {/* ❗️----SIDE----❗️ */}
         <div className={styles.left}>
           <MenuData login={props.login} menu_dynamicStyle={props.menu_dynamicStyle} />
         </div>
-
         {/* ❗️----CENTER----❗️ */}
         <div className="center">
-          
+          {/* 슬라이드 이미지 2개 */}
           <div className={styles.slideImg}>
             <SlideImg />
           </div>
-          
+          {/* 상품 목록 6개 */}
           <div>
             <List menu_dynamicStyle={props.menu_dynamicStyle} />
           </div>
-
         </div>
-
         {/* ❗️----RIGHT----❗️ */}
         <div className={styles.right}>
           <NoticeMini />
         </div>
-
-
       </div>
 
       {/* FOOTER */}

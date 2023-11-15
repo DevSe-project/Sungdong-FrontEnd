@@ -26,7 +26,7 @@ export default function NoticeMini() {
                     fontSize: "20px",
                     fontWeight: "bold",
                     textAlign: "left",
-                    color: "white"
+                    color: "black"
                 }}>공지사항</span>
                 <span
                     className={styles.view_all}
@@ -35,8 +35,7 @@ export default function NoticeMini() {
             <ol className={styles.noticeList}>
                 {latestNotices.map((item, index) => (
                     <li key={index} className={styles.noticeItem}>
-                        <span>{item.title}</span>
-                        <span>{item.date}</span>
+                        <span className={styles.itemTitle}>{item.title}</span>
                     </li>
                 ))}
             </ol>

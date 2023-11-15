@@ -3,18 +3,23 @@
     flex-direction: column;
     width: 100%;
 }
-.main {
+
+.flexBox {
     display: flex;
-    
 }
+
 /* ---- 큰 틀 ---- */
-.left {
-}
 .center {
+    flex: 70%
 }
+
 .right {
+    flex: 30%;
     padding: 10px;
+    margin-top: 5px;
+    overflow: hidden;
 }
+
 /* ---- 상세 ---- */
 .slideImg {
     margin: 1em;
