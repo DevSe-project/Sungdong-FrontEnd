@@ -34,7 +34,7 @@ export let UserDataObj = [
             jibunAddress: '(주)UlsanBigDev',
         },
         addressDetail: "1층",
-        basket: [],
-        order: [],
+        basketList: [],
+        orderList: [],
     },
 ]

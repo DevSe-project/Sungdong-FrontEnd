@@ -5,12 +5,15 @@ import { useEffect, useState } from 'react'
 import { TabInfo } from './TabInfo'
 import CryptoJS from 'crypto-js';
 import { useBasketList, useListActions, useWishList } from '../../Store/DataStore'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { trophy } from 'fontawesome'
+import axios from 'axios'
 
 export function Detail(props) {
   // Usenavigate
   const navigate = useNavigate();
   const { isLoading, isError, error, data } = useQuery({queryKey:['data']});
+  const queryClient = useQueryClient();
 
   const wishList = useWishList();
 
@@ -27,6 +30,49 @@ export function Detail(props) {
   //로그인 정보 불러오기
   const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'));
 
+  //서버 상태 체크하는 로직
+  const checkServerStatus = async () => {
+    try {
+      const response = await axios.get('/api/status');
+      return response.data.status === 'Server is running';
+    } catch (error) {
+      return false; // 서버에 연결할 수 없음
+    }
+  };
+
+  // 서버 확인용
+  const isServerRunning = checkServerStatus();
+
+  const addToCart = async (product, count) => {
+    try {
+      const response = await axios.post('/api/cart', {
+        productId: product.id,  // 예시: product가 객체이고 id 속성이 있는 경우
+        optionSelect: product.optionSelect,
+        count: product.count,
+      });
+  
+      // 성공 시 추가된 상품 정보를 반환합니다.
+      return response.data;
+    } catch (error) {
+      // 실패 시 예외를 throw합니다.
+      throw new Error('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
+    }
+  };
+
+  const { mutate } = useMutation(addToCart, {
+    onSuccess: (cartData) => {
+      // 메세지 표시
+      console.log('상품이 장바구니에 추가되었습니다.', cartData);
+      // 장바구니 상태를 다시 불러와 갱신합니다.
+      queryClient.invalidateQueries('cart');
+      // 장바구니로 이동
+      navigate("/basket");
+    },
+    onError: (error) => {
+      // 상품 추가 실패 시, 에러 처리를 수행합니다.
+      console.error('상품을 장바구니에 추가하는 중 오류가 발생했습니다.', error);
+    },
+  })
 
   //주소창 입력된 id값 받아오기
   let {id} = useParams();
@@ -120,8 +166,8 @@ function buyThis(product, count){
         discount : product.discount ? product.discount : 0,
       }
     }
-      // sessionStorage에 저장
-      sessionStorage.setItem('orderData', JSON.stringify([newBuyProduct]));
+      // // sessionStorage에 저장
+      // sessionStorage.setItem('orderData', JSON.stringify([newBuyProduct]));
       setOrderList([newBuyProduct()]);
       navigate("/basket/receipt");
       props.setActiveTab(2);
@@ -135,31 +181,32 @@ function basketThis(product, count){
     navigate("/login");
     return;
   }
-  // 수량 0개 저장방지
-  if(count <= 0){
-    alert("수량은 0보다 커야합니다.")
-    return;
-  }
+  if(isServerRunning){
+    mutate(product, count); // 상품을 장바구니에 추가하는 것을 호출
+  } else {
+    // 수량 0개 저장방지
+    if(count <= 0){
+      alert("수량은 0보다 커야합니다.")
+      return;
+    }
 
-  // 필수옵션 선택 조건
-  if (product.option && !optionSelected) {
-    alert("필수 옵션을 선택해주세요!");
-    return;
-  }
+    // 필수옵션 선택 조건
+    if (product.option && !optionSelected) {
+      alert("필수 옵션을 선택해주세요!");
+      return;
+    }
 
-  //중복 확인 (.some 함수 : basketList item.id 중 product.id와 같은 중복인 아이템이 있으면 true 반환)
-  const isDuplicate = basketList !== null && basketList.some((basketItem) =>
-  product.option 
-  ?
-  basketItem.id === product.id &&
-  basketItem.userId === inLogin.id &&
-  basketItem.optionSelected === optionSelected
-  :
-  basketItem.id === product.id &&
-  basketItem.userId === inLogin.id
-);
-  
-
+    //중복 확인 (.some 함수 : basketList item.id 중 product.id와 같은 중복인 아이템이 있으면 true 반환)
+    const isDuplicate = basketList !== null && basketList.some((basketItem) =>
+    product.option 
+    ?
+    basketItem.id === product.id &&
+    basketItem.userId === inLogin.id &&
+    basketItem.optionSelected === optionSelected
+    :
+    basketItem.id === product.id &&
+    basketItem.userId === inLogin.id
+  );
   const newBasketProduct = () => { 
     if(product.option && optionSelected){
       return {
@@ -181,12 +228,11 @@ function basketThis(product, count){
     alert("이미 장바구니에 추가된 상품입니다.");
   } else {
     // 중복 상품이 아닌 경우에만 추가
-    setBasketList([...basketList, newBasketProduct()]);
+    setBasketList([newBasketProduct()]);
     alert("해당 상품이 장바구니에 추가되었습니다.");
   }
 }
-
-
+}
   // 찜하기
   function likethis(product){
     //중복 확인 (.some 함수 : wishList의 item.id 중 product.id와 같은 중복인 아이템이 있으면 true 반환 | !some이니 false면..== 중복이 아니면..)

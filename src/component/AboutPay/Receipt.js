@@ -102,11 +102,11 @@ export function Receipt(props){
     if(userData){
       const findUser = userData.find(userData => userData.id == inLogin.id);
       if (findUser) {
+        setOrderInformation("name",findUser.corporationData.ceoName);
+        setOrderInformation("tel", `${findUser.num1}-${findUser.num2}-${findUser.num3}`);
+        setOrderInformation("email", findUser.email);
         if (inputUser === '사업자정보') {
           setAddress(findUser.address);
-          setOrderInformation("name",findUser.corporationData.ceoName);
-          setOrderInformation("tel", `${findUser.num1}-${findUser.num2}-${findUser.num3}`);
-          setOrderInformation("email", findUser.email);
           setOrderInformation("fax",findUser.corporationData.FAX);
           setDeliveryInformation("name",findUser.corporationData.ceoName);
           setDeliveryInformation("tel",`${findUser.num1}-${findUser.num2}-${findUser.num3}`);
@@ -114,9 +114,6 @@ export function Receipt(props){
           setDetailInformation("address","addressDetail",findUser.addressDetail);
         } else if (inputUser === '직접입력') {
           setAddress("")
-          setOrderInformation("name",findUser.corporationData.ceoName);
-          setOrderInformation("tel", `${findUser.num1}-${findUser.num2}-${findUser.num3}`);
-          setOrderInformation("email", findUser.email);
         };
       }
     }
@@ -209,7 +206,7 @@ export function Receipt(props){
     validateForm();
     // react-query : 서버에서 받아온 데이터 캐싱, 변수에 저장
     // Mutations
-  //   const dataMutation = useMutation(postData, {
+  //   const dataMutation = useMutation(postfetch, {
   //   onSuccess: () => {
   //     // Invalidate and refetch
   //     queryClient.invalidateQueries('data')
