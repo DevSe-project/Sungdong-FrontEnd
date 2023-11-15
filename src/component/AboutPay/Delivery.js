@@ -6,12 +6,10 @@ import { useOrderData } from '../../Store/DataStore';
 export function Delivery(props){
   //로그인 정보 불러오기
   const orderData = useOrderData();
-  const inLogin = props.decryptData(JSON.parse(sessionStorage.getItem('saveLoginData')));
+  const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'));
   const filterOrderData = orderData && orderData.filter((item)=>item.userId === inLogin.id);
   const [filterSearch, setFilterSearch] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
-  // 암호화와 복호화 키
-  const encryptionKey = 'bigdev2023!';
 
   useEffect(()=>{
     if(props.resultSearch){
@@ -40,8 +38,7 @@ export function Delivery(props){
 
   const navigate = useNavigate();
   function detailOrder(item){
-    const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(item), encryptionKey).toString();
-    sessionStorage.setItem('newOrderData', JSON.stringify(encryptedData));
+    sessionStorage.setItem('newOrderData', JSON.stringify(item));
     navigate('/orderDetail');
   }
 

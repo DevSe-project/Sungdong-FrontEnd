@@ -61,7 +61,7 @@ import { Footer } from './component/TemplateLayout/AboutFooter/Footer';
 
 // State Management (Zustand) Store
 import { useUserData, useDataActions, useListActions, useOrderData } from "./Store/DataStore";
-import { QueryClient, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getDocs,collection } from 'firebase/firestore'
 
 function App() {
@@ -71,7 +71,7 @@ function App() {
   const [activeTab, setActiveTab] = useState(1); // 현재 활성화된 스탭을 추적하는 State 
 
   // 데이터액션 State 불러오기
-  const { setData, setOrderData, setUserData, setCategoryData, setTodayTopicData } = useDataActions();
+  const { setOrderData, setUserData, setCategoryData, setTodayTopicData } = useDataActions();
 
   // 상품 데이터 State
   const userData = useUserData();
