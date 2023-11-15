@@ -3,10 +3,8 @@ import styles from './Detail.module.css'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { TabInfo } from './TabInfo'
-import CryptoJS from 'crypto-js';
 import { useBasketList, useListActions, useWishList } from '../../Store/DataStore'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { trophy } from 'fontawesome'
 import axios from 'axios'
 
 export function Detail(props) {
@@ -33,7 +31,7 @@ export function Detail(props) {
   //서버 상태 체크하는 로직
   const checkServerStatus = async () => {
     try {
-      const response = await axios.get('/api/status');
+      const response = await axios.get('/status');
       return response.data.status === 'Server is running';
     } catch (error) {
       return false; // 서버에 연결할 수 없음
@@ -43,14 +41,21 @@ export function Detail(props) {
   // 서버 확인용
   const isServerRunning = checkServerStatus();
 
-  const addToCart = async (product, count) => {
+  //장바구니 추가 함수
+  const addToCart = async (product) => {
     try {
-      const response = await axios.post('/api/cart', {
-        productId: product.id,  // 예시: product가 객체이고 id 속성이 있는 경우
-        optionSelect: product.optionSelect,
-        count: product.count,
-      });
-  
+      const response = await axios.post("/cart", 
+        JSON.stringify({
+          productId: product.id,  // 예시: product가 객체이고 id 속성이 있는 경우
+          optionSelect: product.optionSelect,
+          count: product.count,
+        }),
+        {
+          headers : {
+            "Content-Type" : "application/json"
+          }
+        }
+      )
       // 성공 시 추가된 상품 정보를 반환합니다.
       return response.data;
     } catch (error) {
@@ -59,14 +64,55 @@ export function Detail(props) {
     }
   };
 
-  const { mutate } = useMutation(addToCart, {
+    //장바구니 추가 함수
+    const addToOrder = async (product) => {
+      try {
+        const response = await axios.post("/order", 
+          JSON.stringify({
+            productId: product.id,  // 예시: product가 객체이고 id 속성이 있는 경우
+            optionSelect: product.optionSelect,
+            count: product.count,
+          }),
+          {
+            headers : {
+              "Content-Type" : "application/json"
+            }
+          }
+        )
+        // 성공 시 추가된 상품 정보를 반환합니다.
+        return response.data;
+      } catch (error) {
+        // 실패 시 예외를 throw합니다.
+        throw new Error('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
+      }
+    };
+
+  //장바구니 추가 함수
+  const { cartMutate } = useMutation(addToCart, {
     onSuccess: (cartData) => {
       // 메세지 표시
+      alert(cartData.message);
       console.log('상품이 장바구니에 추가되었습니다.', cartData);
       // 장바구니 상태를 다시 불러와 갱신합니다.
       queryClient.invalidateQueries('cart');
       // 장바구니로 이동
       navigate("/basket");
+    },
+    onError: (error) => {
+      // 상품 추가 실패 시, 에러 처리를 수행합니다.
+      console.error('상품을 장바구니에 추가하는 중 오류가 발생했습니다.', error);
+    },
+  })
+
+  //즉시구매 함수
+  const { orderMutate } = useMutation(addToOrder, {
+    onSuccess: (orderData) => {
+      // 메세지 표시
+      console.log('상품을 전달하였습니다.', orderData);
+      // 장바구니로 이동
+      setOrderList(orderData);
+      navigate("/basket/receipt");
+      props.setActiveTab(2);
     },
     onError: (error) => {
       // 상품 추가 실패 시, 에러 처리를 수행합니다.
@@ -112,6 +158,9 @@ export function Detail(props) {
 
 // 즉시구매 함수
 function buyThis(product, count){
+  if(isServerRunning)
+    orderMutate(product); // 상품을 장바구니에 추가하는 것을 호출
+  else {
     console.log(product)
     if(!props.login){
       alert("로그인 후 이용가능한 서비스입니다.")
@@ -172,21 +221,22 @@ function buyThis(product, count){
       navigate("/basket/receipt");
       props.setActiveTab(2);
     }
+  }
 
 // 장바구니 담기 함수
 function basketThis(product, count){
   // login 캐쉬값이 저장되어 있는 것이 확인이 되면 허용
-  if(!props.login){
-    alert("로그인 후 이용가능한 서비스입니다.")
-    navigate("/login");
-    return;
-  }
-  if(isServerRunning){
-    mutate(product, count); // 상품을 장바구니에 추가하는 것을 호출
-  } else {
+  if(isServerRunning)
+    cartMutate(product); // 상품을 장바구니에 추가하는 것을 호출
+  else {
     // 수량 0개 저장방지
     if(count <= 0){
       alert("수량은 0보다 커야합니다.")
+      return;
+    }
+    if(!props.login){
+      alert("로그인 후 이용가능한 서비스입니다.")
+      navigate("/login");
       return;
     }
 
