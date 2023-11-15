@@ -1,13 +1,11 @@
 /* NoticeMini.module.css */
 .noticeMiniContainer {
-  width: 100%;
-  max-width: fit-content;
-  max-width: -moz-fit-content;
+  width: 95%;
   max-height: 270px;
   display: flex;
   flex-direction: column;
-  background-color: #a9a9a9;
   padding: 10px;
+  border: 2px solid orangered;
   border-radius: 8px;
   overflow-y: auto; /* 수직 스크롤바 표시 */
 }
@@ -21,19 +19,28 @@
 }
 
 .noticeItem {
-  background-color: rgb(238, 238, 238);
+  background-color: rgb(250, 235, 230);
   display: flex;
-  justify-content: space-between;
   margin-top: 10px;
   max-height: 20px;
-  overflow-y: auto;
   padding: 10px;
   border-radius: 8px;
+}
+.noticeItem:hover {
+  background-color: rgb(247, 247, 247);
+  cursor: pointer;
+}
+
+.itemTitle {
+  display: -webkit-box;
+  -webkit-line-clamp: 1; /* 표시할 줄 수 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .view_all {
   cursor: pointer;
-  color: white;
+  color: rgb(0, 0, 0);
 } .view_all:hover {
   color: #cc0000;
   font-weight: bold;

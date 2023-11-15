@@ -13,20 +13,16 @@
   z-index: 9999;
   /* 모달을 위로 떠오르게 설정 */
 }
+
 /* ------------------------------- */
-.body {
-  width: 100%;
+.flexBox {
   display: flex;
-  flex-direction: column;
-  padding-bottom: 0.5em;
-  justify-content: center;
-  align-items: center;
+  width: 100%;
 }
 
 .noticeContainer {
-  width: 70em;
-  margin: 1em;
-  justify-content: center;
+  width: 100%;
+  margin: 2em;
   align-items: center;
 }
 
@@ -38,14 +34,15 @@
 
 .title {
   font-size: 24px;
-  margin: 0;
-  color: #000; /* 글자 색상을 검은색으로 변경 */
+  color: #000;
+  /* 글자 색상을 검은색으로 변경 */
 }
 
 .search_label {
   margin-right: 10px;
   font-weight: bold;
-  color: #000; /* 글자 색상을 검은색으로 변경 */
+  color: #000;
+  /* 글자 색상을 검은색으로 변경 */
 }
 
 .searchContainer {
@@ -53,7 +50,7 @@
   align-items: center;
 }
 
-.search_input [type="text"] {
+.search_input {
   padding: 5px;
   border: 1px solid #b1b1b1;
   border-radius: 5px;
@@ -62,7 +59,7 @@
 .listTable {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
+  margin-top: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
@@ -72,15 +69,21 @@ th {
   text-align: center;
   padding: 10px;
   font-weight: bold;
+  max-width: 1000px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .row {
   border-bottom: 1px solid #ccc;
   cursor: pointer;
 }
+
 .row:nth-child(even) {
   background-color: #f3f3f3;
 }
+
 .row:hover {
   background-color: #cacaca;
 }
@@ -88,5 +91,8 @@ th {
 td {
   padding: 10px;
   height: 30px;
+  max-width: 1000px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-

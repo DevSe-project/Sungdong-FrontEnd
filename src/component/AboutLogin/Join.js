@@ -4,19 +4,23 @@ import logo from '../../image/logo.jpeg'
 import { useEffect, useState } from "react";
 import PolicyObj from "../Data/PolicyObj";
 import JoinForm from "./JoinForm";
+import { useDataActions, useUserData } from "../../Store/DataStore";
 
-export default function Join(props) {
+export default function Join() {
     // link_navigate 
     let navigate = useNavigate();
+
+    const { setUserData } = useDataActions();
+    const userData = useUserData();
 
     // 액세스 권한 불러오기
     const inAccess = JSON.parse(sessionStorage.getItem('saveAllowAccess'));
 
     // 최초 접근 권한검사 -> 코드인증으로 액세스 혀용에 따른 접근 불/허용
     useEffect(() => {
-        if(inAccess) {
+        if (inAccess) {
             alert('인증이 완료되었습니다.');
-        }  else {
+        } else {
             alert('정상적인 접근이 아닙니다.')
             navigate('/login');
         }
@@ -31,33 +35,33 @@ export default function Join(props) {
             confirmPassword: '',
             email: '',
             emailService: '',
-            grade : 'D',
+            grade: 'D',
             name: '',
             num1: '',
             num2: '',
             num3: '',
-            smsService: '', 
+            smsService: '',
             CMS: '',
-            corporationData : {
-                ceoName : '',
-                companyName : '',
-                companyNum : {
-                    num1 : '',
-                    num2 : '',
-                    num3 : '',
+            corporationData: {
+                ceoName: '',
+                companyName: '',
+                companyNum: {
+                    num1: '',
+                    num2: '',
+                    num3: '',
                 },
-                businessNum : '', 
-                businessSector : '',
-                businessCategory : '',
-                FAX : '',
+                businessNum: '',
+                businessSector: '',
+                businessCategory: '',
+                FAX: '',
             },
             address: {
                 zonecode: '',
                 roadAddress: '',
-                bname : '',
+                bname: '',
                 buildingName: '',
-                jibunAddress : '',
-            }, 
+                jibunAddress: '',
+            },
             detailAddress: '',
             coupon: "",
             bonusMoney: "",
@@ -94,7 +98,7 @@ export default function Join(props) {
     useEffect(() => {
         if (areAllRequiredChecked === false) {
             setWarningMsg(true);
-        } else { 
+        } else {
             setWarningMsg(false);
         }
     }, [areAllRequiredChecked])
@@ -103,47 +107,32 @@ export default function Join(props) {
     let signUp_checkCondition = () => {
         // [필수]항목 체크확인
         if (areAllRequiredChecked) {
-            // 가입하기 버튼을 눌렀을 때, input받은 정보를 userData state에 저장하기 전 유효성 검사 실시.
-            // if(props.inputData && UserData.find(item => item.id === props.inputData.id)) {
-            //     console.log('중복된 아이디입니다.');
-            // } else {
-            //     console.log('사용가능한 아이디입니다.');
-            // }
-            const newUserData = {
-                userType: inputData.userType,
-                id: inputData.id,
-                password: inputData.password,
-                confirmPassword: inputData.confirmPassword,
-                email: inputData.email,
-                emailService: inputData.emailService,
-                grade: inputData.grade,
-                name: inputData.name,
-                num1: inputData.num1,
-                num2: inputData.num2,
-                num3: inputData.num3,
-                smsService: inputData.smsService,
-                CMS: inputData.CMS,
-                corporationData : {
-                    ceoName : inputData.corporationData.ceoName,
-                    companyName : inputData.corporationData.companyName,
-                    companyNum : {
-                        num1 : inputData.corporationData.companyNum.num1,
-                        num2 : inputData.corporationData.companyNum.num2,
-                        num3 : inputData.corporationData.companyNum.num3,
-                    },
-                    businessSector: inputData.corporationData.businessSector,
-                    businessCategory: inputData.corporationData.businessCategory,
-                    businessNum : inputData.corporationData.businessNum,
-                    FAX : inputData.corporationData.FAX,
-                },
-                address: inputData.address, 
-                detailAddress: inputData.detailAddress,
-                coupon: "",
-                bonusMoney: "",
-                basket: [],
-                order: [],
+            if (!areAllRequiredChecked) {
+                alert('이용약관에 모두 동의해야 가입이 가능합니다.');
+                return;
             }
-            props.setUserData(prevUserData => [...prevUserData, newUserData]);
+
+            if (userData.some((user) => user.id === inputData.id)) {
+                alert('이미 사용 중인 아이디입니다. 다른 아이디를 선택해주세요.');
+                return;
+            }
+
+            if (inputData.password !== inputData.confirmPassword) {
+                alert('비밀번호와 비밀번호 확인이 일치하지 않습니다. 다시 확인해주세요.');
+                return;
+            }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(inputData.email)) {
+                alert('올바른 이메일 형식이 아닙니다. 다시 확인해주세요.');
+                return;
+            }
+
+            if (!inputData.id || !inputData.password || !inputData.name) {
+                alert('필수 항목을 모두 입력해주세요.');
+                return;
+            }
+            setUserData(prevUserData => [...prevUserData, inputData]);
             setWarningMsg(false); // 경고 메시지를 지우고
             navigate('/login');
             alert('성동물산에 오신 걸 환영합니다! 이제 로그인을 진행할 수 있습니다.');
@@ -155,7 +144,7 @@ export default function Join(props) {
 
     return (
         <div className={styles.body}>
-            
+
             {/* 로고 */}
             <div className={styles.logo}>
                 <img
@@ -182,7 +171,7 @@ export default function Join(props) {
 
             {/* 이용약관 체크박스 컨테이너 */}
             <ul className={styles.policyContainer}>
-                {/* 약관 Container */ }
+                {/* 약관 Container */}
                 {PolicyObj.map((policy, index) => {
                     return <li key={index} className={styles.li_policy}>
                         <div className={styles.eachContent}>

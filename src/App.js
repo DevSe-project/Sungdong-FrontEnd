@@ -372,26 +372,7 @@ function App() {
         </Route>
 
         {/* 고객센터 */}
-        <Route path='/userservice/notice' element={
-          <>
-            {/* 최상단배너 */}
-            <TopBanner
-              login={login} setLogin={setLogin} iconHovered={iconHovered}
-              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
-              text_dynamicStyle={text_dynamicStyle}
-              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
-            <div className='main'>
-              <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
-              <div className='container'>
-                <Notice menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
-                <footer className='footer'>
-                  <Footer />
-                </footer>
-              </div>
-            </div>
-          </>
-        } />
+        <Route path='/userservice/notice' element={<Notice/>} />
         <Route path='/userservice/contact' element={<Contact />} />
 
         {/* 마이페이지 */}

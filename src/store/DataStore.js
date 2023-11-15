@@ -76,7 +76,6 @@ const useListStore = create((set) => ({
         basketList: val
       })),
     // 공지사항
-    // 공지사항
     setNoticePostList: (val) => {
       set((state) => ({
         noticePostList: val,
@@ -107,13 +106,14 @@ export const useListActions = () => useListStore((state) => state.actions);
 // Modal State
 const useModalStore = create((set) => ({
   // 초기값: 모달이 열리지 않은 상태라는 뜻이로 false 할당
-  isModalOpen: false,
+  isModal: false,
   // 초기값: 모달의 이름이 없다는 뜻으로 공백을 할당
   modalName: '',
   // 초기값: 선택되지 않았다는 듯으로 null을 할당
   selectedIndex: null,
 
 
+  setIsModal: (bool) => set({isModal: bool}),
   // on/off만 있는 모달창을 오픈
   openModal: (name) => set({ isModalOpen: true, modalName: name }),
   // on/off만 있는 모달창을 클로즈
@@ -129,9 +129,10 @@ const useModalStore = create((set) => ({
 // 커스텀하여 useModal로 사용
 export const useModal = () => {
   const {
-    isModalOpen,
+    isModal,
     modalName,
     selectedIndex,
+    setIsModal,
     openModal,
     closeModal,
     setSelectedIndex,
@@ -140,9 +141,10 @@ export const useModal = () => {
   } = useModalStore();
 
   return {
-    isModalOpen,
+    isModal,
     modalName,
     selectedIndex,
+    setIsModal,
     openModal,
     closeModal,
     setSelectedIndex,

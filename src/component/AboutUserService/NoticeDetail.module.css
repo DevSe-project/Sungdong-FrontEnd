@@ -1,18 +1,22 @@
+/* NoticeDetail.module.css */
+
 .modalContainer {
   position: fixed;
   top: 50%;
   left: 50%;
+  display: flex;
   transform: translate(-50%, -50%);
   background-color: #ffffff;
   width: 80%;
-  max-width: 800px;
+  max-width: 1000px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   border-radius: 8px;
   padding: 20px;
-  overflow-y: auto; /* 스크롤 가능한 영역 설정 */
-  max-height: 80vh; /* 모달 내용이 화면을 넘지 않도록 최대 높이 설정 */
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 70vh;
+  max-height: 80vh;
 }
-
 
 .closeButton {
   position: absolute;
@@ -22,6 +26,7 @@
   font-size: 24px;
   color: #888;
 }
+
 .closeButton:hover {
   color: #cc0000;
 }
@@ -30,7 +35,6 @@
   font-size: 24px;
   font-weight: bold;
   text-align: center;
-  margin-bottom: 10px;
 }
 
 .details {
@@ -43,7 +47,35 @@
   margin: 5px;
 }
 
+.contentsBox {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
 .contents {
+  border: 2px solid darkgray;
+  border-radius: 1dvh;
+  width: 95%;
+  height: 58vh;
+  padding: 1em;
   font-size: 16px;
-  margin-top: 20px;
+  text-align: left;
+  line-height: 1.6; /* 텍스트 줄 간격 설정 */
+}
+
+/* 추가된 스타일 */
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+}
+
+/* 모바일 화면에서 제목을 중앙 정렬 */
+@media screen and (max-width: 600px) {
+  .title {
+    text-align: center;
+  }
 }
