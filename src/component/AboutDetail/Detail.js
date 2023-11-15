@@ -41,11 +41,11 @@ export function Detail(props) {
 
     //장바구니 추가 함수
     const addToCart = async (product) => {
+      if (isLoading) {
+        // 데이터가 없으면 아무것도 하지 않고 종료
+        return;
+      }
       try {
-        if (isLoading) {
-          // 데이터가 없으면 아무것도 하지 않고 종료
-          return;
-        }
         const response = await axios.post("/cart", 
           JSON.stringify({
             productId: product.id,  // 예시: product가 객체이고 id 속성이 있는 경우
@@ -68,11 +68,11 @@ export function Detail(props) {
   
       //장바구니 추가 함수
       const addToOrder = async (product) => {
+        if (isLoading) {
+          // 데이터가 없으면 아무것도 하지 않고 종료
+          return;
+        }
         try {
-          if (isLoading) {
-            // 데이터가 없으면 아무것도 하지 않고 종료
-            return;
-          }
           const response = await axios.post("/order", 
             JSON.stringify({
               productId: product.id,  // 예시: product가 객체이고 id 속성이 있는 경우
@@ -142,8 +142,8 @@ export function Detail(props) {
   //주소창 입력된 id값 받아오기
   let {id} = useParams();
 
-  const loadData = async()=> {
-    if(data !== null){
+  const loadData = ()=> {
+    if(data != null){
       //입력된 id과 data내부의 id값 일치하는 값 찾아 변수 선언
       const detaildata = data.find((item)=>item.id==id);
       return detaildata;
@@ -310,14 +310,14 @@ function basketThis(product, count){
       localStorage.setItem('likelist', JSON.stringify(unlikelist)); //새로고침하면 필터링 된 목록 표시
     }
   }
-  console.log(detailData);
   if(isLoading){
     return <p>Loading..</p>;
   }
   if(isError){
     return <p>에러 : {error.message}</p>;
   }
-
+  console.log(detailData);
+  console.log(data);
   return(
     <div>
       <main className={styles.main}>
