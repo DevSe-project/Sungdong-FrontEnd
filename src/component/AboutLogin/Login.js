@@ -8,8 +8,10 @@ import CryptoJS from 'crypto-js';
 import axios from 'axios';
 import UserContext from '../AboutContext/UserContext';
 import { useDataActions, useUserData } from '../../Store/DataStore';
+import { useMutation } from '@tanstack/react-query';
 
 export function Login(props) {
+  
   const userData = useUserData();
   const { setUserData} = useDataActions(); //유저 데이터 불러오기
 
@@ -17,9 +19,6 @@ export function Login(props) {
 
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
-  // 암호화 키 (암호화와 복호화에 동일한 키를 사용해야 합니다.)
-  const encryptionKey = 'bigdev2023!';
-
 
   const navigate = useNavigate();
 
@@ -32,24 +31,35 @@ export function Login(props) {
   const closeModal = () => {
     setModalType(null); //초기화 시켜서 모달창을 닫음
   }
-  //로그인 요청
+
+    //로그인 요청 처리 로직
+    const { joinMutate } = useMutation({mutationFn: loginRequest,
+      onSuccess: (login) => {
+        // 메세지 표시
+        alert(login.message);
+        console.log('로그인 되었습니다.', login);
+        // 로그인 화면으로 이동
+        navigate("/login");
+      },
+      onError: (error) => {
+        // 회원 추가 실패 시, 에러 처리
+        console.error('회원가입 중 오류가 발생했습니다.', error);
+        alert('아이디 혹은 비밀번호를 확인주세요.'); //경고문구 출력
+      },
+    })
+
+
+  //로그인 요청 함수
   const goLogin = async () => {
     try {
-      const response = await loginRequest();
-      if (response.data && response.data.message === "success") {
-        // 데이터를 암호화 (JSON 변환 2번 과정 거치기 (암호화 시 1번, 암호화 성공 후 세션스토리지 저장 시 1번))
-        sessionStorage.setItem('saveLoginData', JSON.stringify(response.data));
-        alert("성동물산에 오신 걸 환영합니다.")
-        login()
-        window.location.href = "/"
-      } else {
-        alert("아이디 혹은 비밀번호를 확인주세요.")
-      }
+      const token = await joinMutate();
+      // 토큰을 쿠키에 저장
+      document.cookie = `jwt_token=${token}; path=/; secure; HttpOnly`;
     } catch { // 서버가 없는경우 기존 태훈, 지석 코드
       developLogin();
     }
-
   }
+  // 로그인 처리 로직
   async function loginRequest() {
     const response = await axios.post(
       "/user",
