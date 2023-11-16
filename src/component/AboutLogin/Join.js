@@ -5,10 +5,49 @@ import { useEffect, useState } from "react";
 import PolicyObj from "../Data/PolicyObj";
 import JoinForm from "./JoinForm";
 import { useDataActions, useUserData } from "../../Store/DataStore";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 
 export default function Join() {
     // link_navigate 
     let navigate = useNavigate();
+    const queryClient = useQueryClient();
+
+    //장바구니 추가 함수
+    const joinRequest = async (joinData) => {
+        try {
+            const response = await axios.post("/join", 
+            JSON.stringify(joinData),
+            {
+                headers : {
+                "Content-Type" : "application/json"
+                }
+            }
+            )
+            // 성공 시 추가된 상품 정보를 반환합니다.
+            return response.data;
+        } catch (error) {
+            // 실패 시 예외를 throw합니다.
+            throw new Error('회원가입 처리 중 오류가 발생했습니다.');
+        }
+        };
+        
+    //회원가입 요청 함수
+    const { joinMutate } = useMutation({mutationFn: joinRequest,
+    onSuccess: (join) => {
+      // 메세지 표시
+      alert(join.message);
+      console.log('새로운 유저가 회원가입 되었습니다.', join);
+      // 회원 상태를 다시 불러와 갱신합니다.
+      queryClient.invalidateQueries(['user']);
+      // 로그인 화면으로 이동
+      navigate("/login");
+    },
+    onError: (error) => {
+      // 회원 추가 실패 시, 에러 처리
+      console.error('회원가입 중 오류가 발생했습니다.', error);
+    },
+  })
 
     const { setUserData } = useDataActions();
     const userData = useUserData();
@@ -106,12 +145,13 @@ export default function Join() {
     // 가입하기 버튼 클릭 event(가입s조건 모두 충족됐는지)
     let signUp_checkCondition = () => {
         // [필수]항목 체크확인
-        if (areAllRequiredChecked) {
-            if (!areAllRequiredChecked) {
-                alert('이용약관에 모두 동의해야 가입이 가능합니다.');
-                return;
-            }
-
+        if (!areAllRequiredChecked) {
+            alert('이용약관에 모두 동의해야 가입이 가능합니다.');
+            return;
+        }
+        /* 
+        여기에 joinMutate(inputData) 
+        */
             if (userData.some((user) => user.id === inputData.id)) {
                 alert('이미 사용 중인 아이디입니다. 다른 아이디를 선택해주세요.');
                 return;
@@ -137,10 +177,6 @@ export default function Join() {
             navigate('/login');
             alert('성동물산에 오신 걸 환영합니다! 이제 로그인을 진행할 수 있습니다.');
         }
-        else {
-            setWarningMsg(false);
-        }
-    }
 
     return (
         <div className={styles.body}>
