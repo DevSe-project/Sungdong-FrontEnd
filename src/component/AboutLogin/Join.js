@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import PolicyObj from "../Data/PolicyObj";
 import JoinForm from "./JoinForm";
 import { useDataActions, useUserData } from "../../Store/DataStore";
+import { UserDataObj } from "../Data/UserData";
 
 export default function Join() {
     // link_navigate 
@@ -12,6 +13,11 @@ export default function Join() {
 
     const { setUserData } = useDataActions();
     const userData = useUserData();
+
+    useEffect( () => {
+        console.log("hello");
+        setUserData(UserDataObj);
+    }, [setUserData] )
 
     // 액세스 권한 불러오기
     const inAccess = JSON.parse(sessionStorage.getItem('saveAllowAccess'));
@@ -107,10 +113,6 @@ export default function Join() {
     let signUp_checkCondition = () => {
         // [필수]항목 체크확인
         if (areAllRequiredChecked) {
-            if (!areAllRequiredChecked) {
-                alert('이용약관에 모두 동의해야 가입이 가능합니다.');
-                return;
-            }
 
             if (userData.some((user) => user.id === inputData.id)) {
                 alert('이미 사용 중인 아이디입니다. 다른 아이디를 선택해주세요.');
