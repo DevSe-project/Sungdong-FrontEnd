@@ -57,7 +57,7 @@ import { MenuData } from './component/TemplateLayout/AboutMenuData/MenuData';
 import { Footer } from './component/TemplateLayout/AboutFooter/Footer';
 
 // State Management (Zustand) Store
-import { useUserData, useDataActions, useListActions, useOrderData } from "./Store/DataStore";
+import { useUserData, useDataActions, useListActions, useOrderData, useIsLogin, useSetLogin } from "./Store/DataStore";
 import { QueryClient, useQuery } from "@tanstack/react-query";
 import { getDocs,collection } from 'firebase/firestore'
 
@@ -68,19 +68,20 @@ function App() {
   const [activeTab, setActiveTab] = useState(1); // 현재 활성화된 스탭을 추적하는 State 
 
   // 데이터액션 State 불러오기
-  const { setData, setOrderData, setUserData, setCategoryData, setTodayTopicData } = useDataActions();
+  const { setOrderData, setUserData, setCategoryData, setTodayTopicData } = useDataActions();
 
   // 상품 데이터 State
   const userData = useUserData();
   const orderData = useOrderData();
+  const isLogin = useIsLogin();
 
+  const {setLogin} = useSetLogin();
   // 리스트 State 불러오기
   const { setWishList, setPostList } = useListActions();
 
-  const [login, setLogin] = useState(false);
-
+  //데이터 fetch
   const fetchData = async () => {
-    const querySnapshot = await getDocs(collection(db, 'ProductData')); // 'ProductData'가 컬렉션 이름이라고 가정합니다.
+    const querySnapshot = await getDocs(collection(db, 'ProductData')); // 'ProductData'는 컬렉션 이름
     return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
   };
 
@@ -88,14 +89,16 @@ function App() {
   const { isLoading, isError, error, data } = useQuery({queryKey:['data'], queryFn: ()=>fetchData()});
 
   useEffect(() => {
+    if(isLogin === false){
     // 세션 스토리지의 데이터 파싱
-    const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'));
-      if (inLogin) {   //복호화 성공 시
+      const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'));
+      if (inLogin) { 
         setLogin(true); //로그인상태유지
-        } else {
+      } else {
         console.log("사용자를 찾을 수 없습니다.");
-          }
-      }, [ userData, setLogin]);
+      }
+    }
+    }, []);
 
   // 특정 주소에서만 SessionStorage 사용하기
   useEffect(() => {
@@ -213,7 +216,7 @@ function App() {
         {/* 메인페이지 */}
         <Route path='/' element={
           <>
-            <MainPage login={login} setLogin={setLogin}
+            <MainPage
               iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
               category_dynamicStyle={category_dynamicStyle} menuOnClick={menuOnClick} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle}
               menu_dynamicStyle={menu_dynamicStyle} />
@@ -233,15 +236,15 @@ function App() {
           <>
             {/* 최상단배너 */}
             <TopBanner
-              login={login} setLogin={setLogin} iconHovered={iconHovered}
+              iconHovered={iconHovered}
               iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
               text_dynamicStyle={text_dynamicStyle}
               category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
               menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
             <div className='main'>
-              <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
+              <MenuData  menu_dynamicStyle={menu_dynamicStyle} />
               <div className='container'>
-                <Category menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} navigate={navigate} setActiveTab={setActiveTab} activeTab={activeTab}
+                <Category menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}  navigate={navigate} setActiveTab={setActiveTab} activeTab={activeTab}
                   iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
                   <Footer />
@@ -256,15 +259,15 @@ function App() {
           <>
             {/* 최상단배너 */}
             <TopBanner
-              login={login} setLogin={setLogin} iconHovered={iconHovered}
+              iconHovered={iconHovered}
               iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
               text_dynamicStyle={text_dynamicStyle}
               category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
               menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
             <div className='main'>
-              <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
+              <MenuData  menu_dynamicStyle={menu_dynamicStyle} />
               <div className='container'>
-                <Detail menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} navigate={navigate} setActiveTab={setActiveTab} activeTab={activeTab}
+                <Detail menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}  navigate={navigate} setActiveTab={setActiveTab} activeTab={activeTab}
                   iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
                   <Footer />
@@ -279,15 +282,15 @@ function App() {
           <>
             {/* 최상단배너 */}
             <TopBanner
-              login={login} setLogin={setLogin} iconHovered={iconHovered}
+              iconHovered={iconHovered}
               iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
               text_dynamicStyle={text_dynamicStyle}
               category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
               menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
             <div className='main'>
-              <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
+              <MenuData  menu_dynamicStyle={menu_dynamicStyle} />
               <div className='container'>
-                <LikeItem menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <LikeItem menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}  iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
                   <Footer />
                 </footer>
@@ -301,15 +304,15 @@ function App() {
           <>
             {/* 최상단배너 */}
             <TopBanner
-              login={login} setLogin={setLogin} iconHovered={iconHovered}
+              iconHovered={iconHovered}
               iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
               text_dynamicStyle={text_dynamicStyle}
               category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
               menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
             <div className='main'>
-              <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
+              <MenuData  menu_dynamicStyle={menu_dynamicStyle} />
               <div className='container'>
-                <Basket menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} activeTab={activeTab} setActiveTab={setActiveTab} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <Basket menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}  activeTab={activeTab} setActiveTab={setActiveTab} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
                   <Footer />
                 </footer>
@@ -327,15 +330,15 @@ function App() {
           <>
             {/* 최상단배너 */}
             <TopBanner
-              login={login} setLogin={setLogin} iconHovered={iconHovered}
+              iconHovered={iconHovered}
               iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
               text_dynamicStyle={text_dynamicStyle}
               category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
               menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
             <div className='main'>
-              <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
+              <MenuData  menu_dynamicStyle={menu_dynamicStyle} />
               <div className='container'>
-                <DeliveryMain menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <DeliveryMain menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}  iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
                   <Footer />
                 </footer>
@@ -349,15 +352,15 @@ function App() {
           <>
             {/* 최상단배너 */}
             <TopBanner
-              login={login} setLogin={setLogin} iconHovered={iconHovered}
+               iconHovered={iconHovered}
               iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
               text_dynamicStyle={text_dynamicStyle}
               category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
               menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
             <div className='main'>
-              <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
+              <MenuData  menu_dynamicStyle={menu_dynamicStyle} />
               <div className='container'>
-                <OrderDetail menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <OrderDetail menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}  iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
                   <Footer />
                 </footer>
@@ -380,15 +383,15 @@ function App() {
           <>
             {/* 최상단배너 */}
             <TopBanner
-              login={login} setLogin={setLogin} iconHovered={iconHovered}
+               iconHovered={iconHovered}
               iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
               text_dynamicStyle={text_dynamicStyle}
               category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
               menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
             <div className='main'>
-              <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
+              <MenuData  menu_dynamicStyle={menu_dynamicStyle} />
               <div className='container'>
-                <MyPage menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <MyPage menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}  iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
                   <Footer />
                 </footer>
@@ -403,15 +406,15 @@ function App() {
           <>
             {/* 최상단배너 */}
             <TopBanner
-              login={login} setLogin={setLogin} iconHovered={iconHovered}
+               iconHovered={iconHovered}
               iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
               text_dynamicStyle={text_dynamicStyle}
               category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
               menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
             <div className='main'>
-              <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
+              <MenuData  menu_dynamicStyle={menu_dynamicStyle} />
               <div className='container'>
-                <Comeway menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <Comeway menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}  iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
                   <Footer />
                 </footer>
@@ -424,15 +427,15 @@ function App() {
           <>
             {/* 최상단배너 */}
             <TopBanner
-              login={login} setLogin={setLogin} iconHovered={iconHovered}
+               iconHovered={iconHovered}
               iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
               text_dynamicStyle={text_dynamicStyle}
               category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
               menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
             <div className='main'>
-              <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
+              <MenuData  menu_dynamicStyle={menu_dynamicStyle} />
               <div className='container'>
-                <TodayNews menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <TodayNews menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}  iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
                   <Footer />
                 </footer>
@@ -444,15 +447,15 @@ function App() {
           <>
             {/* 최상단배너 */}
             <TopBanner
-              login={login} setLogin={setLogin} iconHovered={iconHovered}
+               iconHovered={iconHovered}
               iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
               text_dynamicStyle={text_dynamicStyle}
               category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
               menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
             <div className='main'>
-              <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
+              <MenuData  menu_dynamicStyle={menu_dynamicStyle} />
               <div className='container'>
-                <TodayNewsInner menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <TodayNewsInner menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}  iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
                   <Footer />
                 </footer>
@@ -464,15 +467,15 @@ function App() {
           <>
             {/* 최상단배너 */}
             <TopBanner
-              login={login} setLogin={setLogin} iconHovered={iconHovered}
+               iconHovered={iconHovered}
               iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
               text_dynamicStyle={text_dynamicStyle}
               category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
               menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
             <div className='main'>
-              <MenuData login={login} menu_dynamicStyle={menu_dynamicStyle} />
+              <MenuData  menu_dynamicStyle={menu_dynamicStyle} />
               <div className='container'>
-                <Event menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} login={login} setLogin={setLogin} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <Event menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}  iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
                   <Footer />
                 </footer>

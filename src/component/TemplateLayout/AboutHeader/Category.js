@@ -1,16 +1,38 @@
 import { useEffect, useState } from "react";
-import { TopBanner } from "./TopBanner";
 import { useNavigate } from "react-router-dom";
 import styles from './Category.module.css'
 import React from 'react';
-import { useBasketList, useCategoryData, useListActions } from "../../../Store/DataStore";
-import { QueryClient, useQuery } from "@tanstack/react-query";
+import { useBasketList, useCategoryActions, useCategoryData, useCount, useIsLogin, useListActions } from "../../../Store/DataStore";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { CategoryFilter } from "./CategoryFilter";
 export function Category(props){
+  //검색 결과 데이터 fetch
+    const fetchSearchData = async() => {
+      try{
+        const response = await axios.get("/search", 
+          {
+            headers : {
+              "Content-Type" : "application/json"
+            }
+          }
+        )
+        return response.data; //data.search & data.items & data.categories 전달받음.
+      } catch(error) {
+        throw new Error('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
+      }
+    }
+
     // state 사용
     const { isLoading, isError, error, data } = useQuery({queryKey:['data']});
+    //const { isLoading, isError, error, data:categoryData } = useQuery({queryKey:['search'], queryFn: ()=> fetchSearchData();});
+    
     const categoryData = useCategoryData();
+    const isLogin = useIsLogin();
     const basketList = useBasketList();
     const { setBasketList } = useListActions();
+    const count = useCount();
+    const {addCount, delCount, setCount} = useCategoryActions();
     
     // 카테고리
     const [selectedCategory, setSelectedCategory] = useState('전체'); //메인 카테고리
@@ -20,7 +42,7 @@ export function Category(props){
     // 필터된 항목을 저장할 상태 변수
     const [filteredItems, setFilteredItems] = useState([]);
 
-    const inLogin = props.decryptData(JSON.parse(sessionStorage.getItem('saveLoginData')));
+    const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'));
     const mainCategory = JSON.parse(sessionStorage.getItem('category'));
     const subCategory = JSON.parse(sessionStorage.getItem('subCategory'));
     const resultSearch = JSON.parse(sessionStorage.getItem('filterSearch'));
@@ -196,10 +218,7 @@ export function Category(props){
 
     // 게시물 데이터와 페이지 번호 상태 관리    
     const [currentPage, setCurrentPage] = useState(1);
-  
-    //수량
-    const [count, setCount] = useState(1);
-  
+    
     // 체크박스를 통해 선택한 상품들을 저장할 상태 변수
     const [selectedItems, setSelectedItems] = useState([]);
   
@@ -232,6 +251,7 @@ export function Category(props){
     // 현재 페이지에 해당하는 게시물 목록 가져오기
     const getCurrentPagePosts = () => {
       const startIndex = (currentPage - 1) * 5; // 한 페이지에 5개씩 표시
+      //return categoryData.items.slice(startIndex, startIndex + 5);
       return filteredItems.slice(startIndex, startIndex + 5);
     };
     
@@ -245,34 +265,33 @@ export function Category(props){
       };
   
     //수량 최대입력 글자(제한 길이 변수)
-    const maxLengthCheck = (e) => { 
+    const maxLengthCheck = (e, item) => { 
       const lengthTarget = e.target.value; 
       //target.value.length = input에서 받은 value의 길이 
       //target.maxLength = 제한 길이
-  
+
       if ( lengthTarget >= 0 && lengthTarget.length <= 3) { 
-          setCount(lengthTarget); 
+          item.cnt = parseInt(lengthTarget);
+          setSelectedItems({...selectedItems, item});
       } 
   }
-  
-    //수정하기 버튼을 눌렀을 때 함수 작동(개수 세는 함수)
-    function editItem(index){
-      const newEditStatus = [...editStatus]; 
-      newEditStatus[index] = true;
-      setEditStatus(newEditStatus);
-      setCount(filteredItems[index].cnt); 
-    }
-  
-    //수정완료 버튼 눌렀을 때 함수 작동(개수 저장 함수)
-    function updatedItem(index){
-      if(count > 0) {
-        filteredItems[index].cnt = count;
-        filteredItems[index].finprice = (filteredItems[index].price * count);
-        const newEditStatus = [...editStatus]; 
-        newEditStatus[index] = false;
-        setEditStatus(newEditStatus);
+  //수량 DOWN
+    function handleDelItem(item){
+      if(item.cnt > 1) {
+        item.cnt -= 1;
+        setSelectedItems({...selectedItems, item});
       } else {
-        alert("수량은 0보다 커야합니다.")
+        alert("수량은 1보다 커야합니다.")
+      }
+    }
+    
+    //수량 UP
+    function handleAddItem(item){
+      if(item.cnt < 999) {
+        item.cnt += 1;
+        setSelectedItems({...selectedItems, item});
+      } else {
+        alert("수량은 999보다 작아야합니다.")
       }
     }
   
@@ -280,7 +299,7 @@ export function Category(props){
     // 장바구니 담기 함수
     function basketRelatedData() {
       // 유효성 체크
-      if(!props.login){
+      if(!isLogin){
         alert("로그인 후 이용가능한 서비스입니다.")
         navigate("/login");
         return;
@@ -293,12 +312,6 @@ export function Category(props){
     
       if (count <= 0) {
         alert("수량은 0보다 커야합니다.");
-        return;
-      }
-    
-      const isEditStatus = selectedItems.some((item, index) => editStatus[index]);
-      if (isEditStatus) {
-        alert("수정완료 버튼을 누르고 장바구니에 담아주세요.")
         return;
       }
   
@@ -455,49 +468,15 @@ export function Category(props){
       </div>
       {(resultSearch || resultSearchBrand || resultSearchCode || resultSearchOption) &&
       <h3 style={{margin: '1em'}}>
+      {/* 상품명 : {categoryData.search.name}, 상품코드 : {categoryData.search.code}
+      , 브랜드 : {categoryData.search.brand} 옵션 : {categoryData.search.option}*/}
       "{resultSearch || resultSearchBrand || resultSearchCode || resultSearchOption}" 에 대해
+      {/* categoryData.items.length */}
       <span style={{color: '#CC0000', fontWeight: '650', margin: '0.5em'}}>{filteredItems.length}건</span>
       이 검색 되었습니다.
       </h3>}
       {/* 카테고리 필터 */}
-      <div className={styles.filterUI}>
-        {categoryFilter.map((item, key) =>
-        <React.Fragment key={key}>
-        {/* 필터 별 라벨 */}
-        <div className={styles.label}>
-          {item.label}
-        </div>
-        <div className={styles.content}>
-          {/* 상위 카테고리 항목 */}
-          {item.prevContent &&
-          <>
-          <span
-            className={styles.contentItem}
-            onClick={()=> {
-              prevContentClick();
-            }}>
-            {item.prevContent}
-          </span>
-          <i className="far fa-chevron-right"/>
-          </>
-          }
-          {/* 하위 카테고리 항목 */}
-          {item.content && Array.isArray(item.content)
-          ? item.content.map((contentItem, index) => 
-          <div 
-          key={index} 
-          className={styles.contentItem}
-          onClick={()=> {
-            handleCategoryClick(item, contentItem)
-          }}>
-            {contentItem.title}({contentItem.count})
-          </div>
-          ) 
-          : item.content }
-        </div>
-        </React.Fragment>
-        )}
-      </div>
+        <CategoryFilter categoryFilter={categoryFilter} prevContentClick={prevContentClick} handleCategoryClick={handleCategoryClick}/>
       {/* 카테고리 목록 TABLE */}
       <div className={styles.buttonBox}>
         <button className={styles.button} onClick={()=> navigate("/basket")}>
@@ -530,18 +509,25 @@ export function Category(props){
             ? getCurrentPagePosts().map((item, index)=> (
             <React.Fragment key={index}>
               <tr className={styles.list}>
+                {/* 이미지 */}
                 <td><img src={item.image.mini} alt='이미지'></img></td>
+                {/* 상품코드 */}
                 <td>{item.id}</td>
+                {/* 상세보기 */}
                 <td 
                   className={styles.detailView}
                   onClick={()=>navigate(`/detail/${item.id}`)}>
                   상세보기
                 </td>
+                {/* 상품명 */}
                 <td className={styles.detailView} onClick={()=>handleItemClick(item.id)}>
                   <h5 style={{fontSize: '1.1em', fontWeight: '550'}}>{item.title}</h5>
                 </td>
+                {/* 상품 수량 */}
                 <td>EA</td>
+                {/* 상품 표준가 */}
                 <td>\{item.price.toLocaleString()}</td>
+                {/* 상품 공급가 */}
                 <td style={{fontWeight: '750'}}>
                   {item.finprice
                   ? item.discount
@@ -549,6 +535,7 @@ export function Category(props){
                   : `\\${item.finprice.toLocaleString()}`
                   : `\\${item.price.toLocaleString()}`}
                 </td>
+                {/* 더보기 */}
                 <td 
                   className={styles.detailView}
                   onClick={()=>handleItemClick(item.id)}>
@@ -608,24 +595,21 @@ export function Category(props){
                             </select>
                           </div>  : '없음'}
                         </td>
+                        {/* 수량 변경 */}
                         <td>
-                        {!editStatus[index]
-                        ? item.cnt
-                        : <input value={count} className={styles.input} onChange={maxLengthCheck} minLength={1} maxLength={3} min={0} max={999} type='number' placeholder='숫자만 입력'/> }
-                        <br/>
-  
-                        {!editStatus[index] 
-                        ? <button
-                          onClick={()=>{editItem(index)}} 
+                          <button 
                           className={styles.editButton}
-                          >개수 수정
-                          </button> 
-                        : <button 
+                          onClick={()=>handleDelItem(item)}
+                          >
+                            -
+                          </button>                          
+                          <input value={item.cnt} className={styles.input} onChange={(e)=>maxLengthCheck(e, item)} type='text' placeholder='숫자만 입력'/>
+                          <button 
                           className={styles.editButton}
-                          onClick={()=>updatedItem(index)}
-                          >수정 완료
+                          onClick={()=>handleAddItem(item)}
+                          >
+                            +
                           </button>
-                        }
                         </td>
                         <td>
                           {item.discount}%
@@ -664,6 +648,8 @@ export function Category(props){
           </tbody>
         </table>
       </div>
+
+      {/* 페이지 컨테이너 */}
       <div className={styles.buttonContainer}>
         {/* 이전 페이지 */}
         <button

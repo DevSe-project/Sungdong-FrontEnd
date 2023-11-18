@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import styles from './SearchBar.module.css';
 import { useNavigate } from 'react-router-dom';
-import { QueryClient } from '@tanstack/react-query';
+import { QueryClient, useQuery } from '@tanstack/react-query';
 
 export function SearchBar() {
-  const queryClient = new QueryClient();
-  const data = queryClient.getQueryData('data');
+  const { isLoading, isError, error, data } = useQuery({queryKey:['data']});
+
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState([]);
@@ -159,6 +159,13 @@ export function SearchBar() {
       inputRef.current.focus();
     }
   }, [selectedResultIndex]);
+
+  if(isLoading){
+    return <p>Loading..</p>;
+  }
+  if(isError){
+    return <p>에러 : {error.message}</p>;
+  }
 
   return (
     <div>

@@ -4,9 +4,7 @@ import axios from 'axios';
 import { QueryClient } from "@tanstack/react-query";
 
 export default function JoinForm(props) {
-    const queryClient = new QueryClient();
-    const data = queryClient.getQueryData('data');
-
+    
     // 주소입력 API
     const [address, setAddress] = useState("");
     const openPopup = (setAddress) => {
