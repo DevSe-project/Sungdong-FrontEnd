@@ -3,7 +3,7 @@ import styles from './Detail.module.css'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { TabInfo } from './TabInfo'
-import { useBasketList, useListActions, useWishList } from '../../Store/DataStore'
+import { useBasketList, useIsLogin, useListActions, useSetLogin, useWishList } from '../../Store/DataStore'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
 export function Detail(props) {
@@ -28,6 +28,10 @@ export function Detail(props) {
   
     const basketList = useBasketList();
   
+    const isLogin = useIsLogin();
+
+    const { setLogin } = useSetLogin();
+
     const { setWishList, setOrderList, setBasketList} = useListActions();
   
    //수량 개수 state
@@ -173,7 +177,7 @@ function buyThis(product, count){
     orderMutate(product); // 상품을 장바구니에 추가하는 것을 호출
   } else {
     console.log(product)
-    if(!props.login){
+    if(!isLogin){
       alert("로그인 후 이용가능한 서비스입니다.")
       navigate("/login");
       return;
@@ -245,7 +249,7 @@ function basketThis(product, count){
       alert("수량은 0보다 커야합니다.")
       return;
     }
-    if(!props.login){
+    if(!isLogin){
       alert("로그인 후 이용가능한 서비스입니다.")
       navigate("/login");
       return;
@@ -432,7 +436,7 @@ function basketThis(product, count){
         <div className={styles.sticky} >
           <Tab navigate={props.navigate}/>
         </div>
-        <TabInfo decryptData={props.decryptData} login={props.login} setLogin={props.setLogin} detailData={detailData}/>       
+        <TabInfo decryptData={props.decryptData} login={isLogin} setLogin={props.setLogin} detailData={detailData}/>       
       </main>
     </div>
   )

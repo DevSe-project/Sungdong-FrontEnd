@@ -90,14 +90,14 @@ function App() {
   useEffect(() => {
     if(isLogin === false){
     // 세션 스토리지의 데이터 파싱
-    const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'));
+      const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'));
       if (inLogin) { 
         setLogin(true); //로그인상태유지
       } else {
         console.log("사용자를 찾을 수 없습니다.");
       }
     }
-    }, [ userData, setLogin]);
+    }, []);
 
   // 특정 주소에서만 SessionStorage 사용하기
   useEffect(() => {
