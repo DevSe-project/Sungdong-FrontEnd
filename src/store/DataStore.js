@@ -49,7 +49,7 @@ export const useDataActions = () => useDataStore((state) => state.actions);
 
 
 
-// --------------------------------------------------------------------//
+// ------------------------------리스트 STORE----------------------------//
 
 const useListStore = create((set) => ({
   wishList: [],
@@ -99,7 +99,7 @@ export const useListActions = () => useListStore((state) => state.actions);
 
 
 
-// --------------------------------------------------------------------//
+// --------------------------------MODAL STORE--------------------------------//
 
 
 
@@ -153,7 +153,7 @@ export const useModal = () => {
   };
 };
 
-/* -------------------------------- */
+/* ---------------ORDER STOREs----------------- */
 
 const useOrderStore = create((set) => ({
   orderInformation: {
@@ -196,7 +196,7 @@ export const useDeliveryInfo = () => useOrderStore((state) => state.deliveryInfo
 // 🎉  모든 액션 상태를 위한 한개의 선택자 생성 -> 상태가 자주 변경되지 않기 때문에 모든 액션상태를 모음.
 export const useOrderActions = () => useOrderStore((state) => state.actions);
 
-/* -------------------------------- */
+/* ----------------LOGIN STORE---------------- */
 
 export const useLoginStore = create((set)=>({
   isLogin : false,
@@ -207,4 +207,24 @@ export const useLoginStore = create((set)=>({
 }));
 export const useIsLogin = () => useLoginStore((state) => state.isLogin);
 export const useSetLogin = () => useLoginStore((state) => state.actions);
+
+
+/* ----------------Seperate SEARCH STORE---------------- */
+
+export const useSearchStore = create((set)=>({
+  seperateSearchTerm : {
+    productName: "",
+    productCode: "",
+    productBrand: "",
+    productOption: ""
+  },
+  actions : {
+    setSeperateSearchTerm: (fieldName, value) =>
+    set((state) => ({ seperateSearchTerm: { ...state.seperateSearchTerm, [fieldName]: value } })),
+    resetSeperateSearchTerm: () =>
+    set({ seperateSearchTerm: { productName: "", productCode: "", productBrand: "", productOption: "" } }),
+  }
+}));
+export const useSeperateSearchTerm = () => useSearchStore((state) => state.seperateSearchTerm);
+export const useSearchActions = () => useSearchStore((state) => state.actions);
 

@@ -14,7 +14,7 @@ export default function MyPage(props) {
 
   // 현재 로그인 된 유저의 데이터를 호출
   useEffect(() => {
-    if (props.login) { //저장된 로그인Data가 존재
+    if (inLogin) { //저장된 로그인Data가 존재
       if (userData) { //데이터 로딩 시간을 1500ms로 지정해놨기 때문에 불러들였다면, 표
         const findUser = userData.find(userData => userData.id == inLogin.id);
         if (findUser) {

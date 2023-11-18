@@ -80,7 +80,7 @@ function App() {
   const { setWishList, setPostList } = useListActions();
 
   const fetchData = async () => {
-    const querySnapshot = await getDocs(collection(db, 'ProductData')); // 'ProductData'가 컬렉션 이름이라고 가정합니다.
+    const querySnapshot = await getDocs(collection(db, 'ProductData')); // 'ProductData'는 컬렉션 이름
     return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
   };
 
@@ -91,7 +91,7 @@ function App() {
     if(isLogin === false){
     // 세션 스토리지의 데이터 파싱
     const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'));
-      if (inLogin) {   //복호화 성공 시
+      if (inLogin) { 
         setLogin(true); //로그인상태유지
       } else {
         console.log("사용자를 찾을 수 없습니다.");
