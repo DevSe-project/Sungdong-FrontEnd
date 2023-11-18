@@ -79,6 +79,7 @@ function App() {
   // 리스트 State 불러오기
   const { setWishList, setPostList } = useListActions();
 
+  //데이터 fetch
   const fetchData = async () => {
     const querySnapshot = await getDocs(collection(db, 'ProductData')); // 'ProductData'는 컬렉션 이름
     return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));

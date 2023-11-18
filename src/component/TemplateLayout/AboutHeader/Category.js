@@ -2,12 +2,33 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from './Category.module.css'
 import React from 'react';
-import { useBasketList, useCategoryData, useListActions } from "../../../Store/DataStore";
+import { useBasketList, useCategoryData, useIsLogin, useListActions } from "../../../Store/DataStore";
 import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { CategoryFilter } from "./CategoryFilter";
 export function Category(props){
+  //검색 결과 데이터 fetch
+    const fetchSearchData = async() => {
+      try{
+        const response = await axios.get("/search", 
+          {
+            headers : {
+              "Content-Type" : "application/json"
+            }
+          }
+        )
+        return response.data; //data.search & data.items & data.categories 전달받음.
+      } catch(error) {
+        throw new Error('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
+      }
+    }
+
     // state 사용
     const { isLoading, isError, error, data } = useQuery({queryKey:['data']});
+    //const { isLoading, isError, error, data:categoryData } = useQuery({queryKey:['search'], queryFn: ()=> fetchSearchData();});
+    
     const categoryData = useCategoryData();
+    const isLogin = useIsLogin();
     const basketList = useBasketList();
     const { setBasketList } = useListActions();
     
@@ -231,6 +252,7 @@ export function Category(props){
     // 현재 페이지에 해당하는 게시물 목록 가져오기
     const getCurrentPagePosts = () => {
       const startIndex = (currentPage - 1) * 5; // 한 페이지에 5개씩 표시
+      //return categoryData.items.slice(startIndex, startIndex + 5);
       return filteredItems.slice(startIndex, startIndex + 5);
     };
     
@@ -279,7 +301,7 @@ export function Category(props){
     // 장바구니 담기 함수
     function basketRelatedData() {
       // 유효성 체크
-      if(!props.login){
+      if(!isLogin){
         alert("로그인 후 이용가능한 서비스입니다.")
         navigate("/login");
         return;
@@ -454,49 +476,15 @@ export function Category(props){
       </div>
       {(resultSearch || resultSearchBrand || resultSearchCode || resultSearchOption) &&
       <h3 style={{margin: '1em'}}>
+      {/* 상품명 : {categoryData.search.name}, 상품코드 : {categoryData.search.code}
+      , 브랜드 : {categoryData.search.brand} 옵션 : {categoryData.search.option}*/}
       "{resultSearch || resultSearchBrand || resultSearchCode || resultSearchOption}" 에 대해
+      {/* categoryData.items.length */}
       <span style={{color: '#CC0000', fontWeight: '650', margin: '0.5em'}}>{filteredItems.length}건</span>
       이 검색 되었습니다.
       </h3>}
       {/* 카테고리 필터 */}
-      <div className={styles.filterUI}>
-        {categoryFilter.map((item, key) =>
-        <React.Fragment key={key}>
-        {/* 필터 별 라벨 */}
-        <div className={styles.label}>
-          {item.label}
-        </div>
-        <div className={styles.content}>
-          {/* 상위 카테고리 항목 */}
-          {item.prevContent &&
-          <>
-          <span
-            className={styles.contentItem}
-            onClick={()=> {
-              prevContentClick();
-            }}>
-            {item.prevContent}
-          </span>
-          <i className="far fa-chevron-right"/>
-          </>
-          }
-          {/* 하위 카테고리 항목 */}
-          {item.content && Array.isArray(item.content)
-          ? item.content.map((contentItem, index) => 
-          <div 
-          key={index} 
-          className={styles.contentItem}
-          onClick={()=> {
-            handleCategoryClick(item, contentItem)
-          }}>
-            {contentItem.title}({contentItem.count})
-          </div>
-          ) 
-          : item.content }
-        </div>
-        </React.Fragment>
-        )}
-      </div>
+        <CategoryFilter categoryFilter={categoryFilter} prevContentClick={prevContentClick} handleCategoryClick={handleCategoryClick}/>
       {/* 카테고리 목록 TABLE */}
       <div className={styles.buttonBox}>
         <button className={styles.button} onClick={()=> navigate("/basket")}>
@@ -663,6 +651,8 @@ export function Category(props){
           </tbody>
         </table>
       </div>
+
+      {/* 페이지 컨테이너 */}
       <div className={styles.buttonContainer}>
         {/* 이전 페이지 */}
         <button

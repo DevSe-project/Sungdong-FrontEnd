@@ -7,11 +7,11 @@ import { useBasketList, useIsLogin, useListActions, useSetLogin, useWishList } f
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
 export function Detail(props) {
-
+  //데이터 불러오기
   const { isLoading, isError, error, data } = useQuery({queryKey:['data']});
-
+  //Mutate를 위한 queryClient 사용
   const queryClient = useQueryClient();
-
+  //데이터 불러오기 이전 loadData()함수 실행 금지
   useEffect(() => {
     const fetchData = async () => {
       if (data !== null) {
@@ -23,24 +23,22 @@ export function Detail(props) {
   }, [isLoading]);
 
     const navigate = useNavigate();
-
+    //리스트 불러오기
     const wishList = useWishList();
-  
     const basketList = useBasketList();
-  
-    const isLogin = useIsLogin();
-
-    const { setLogin } = useSetLogin();
-
     const { setWishList, setOrderList, setBasketList} = useListActions();
+
+    //로그인 유지
+    const isLogin = useIsLogin();
+    const { setLogin } = useSetLogin();
   
-   //수량 개수 state
+    //수량 개수 state
     const [count, setCount] = useState("1");
   
     //옵션 선택 state
     const [optionSelected, setOptionSelected] = useState(null);
-  
-    //로그인 정보 불러오기
+
+    //로그인 정보 불러오기 - 삭제예정
     const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'));
 
     //장바구니 추가 함수
@@ -70,7 +68,7 @@ export function Detail(props) {
       }
     };
   
-      //장바구니 추가 함수
+      //결제하기 함수
       const addToOrder = async (product) => {
         if (isLoading) {
           // 데이터가 없으면 아무것도 하지 않고 종료
@@ -130,19 +128,6 @@ export function Detail(props) {
       },
     });
 
-  //서버 상태 체크하는 로직
-  const checkServerStatus = () => {
-    try {
-      const response = axios.get('/status');
-      return response.data.status === 'Server is running';
-    } catch (error) {
-      return false; // 서버에 연결할 수 없음
-    }
-  };
-
-  // 서버 확인용
-  const isServerRunning = checkServerStatus();
-
   //주소창 입력된 id값 받아오기
   let {id} = useParams();
 
@@ -173,9 +158,9 @@ export function Detail(props) {
 
 // 즉시구매 함수
 function buyThis(product, count){
-  if(isServerRunning != false) {
+  try {
     orderMutate(product); // 상품을 장바구니에 추가하는 것을 호출
-  } else {
+  } catch(error) {
     console.log(product)
     if(!isLogin){
       alert("로그인 후 이용가능한 서비스입니다.")
@@ -241,9 +226,9 @@ function buyThis(product, count){
 // 장바구니 담기 함수
 function basketThis(product, count){
   // login 캐쉬값이 저장되어 있는 것이 확인이 되면 허용
-  if(isServerRunning != false) {
+  try {
     cartMutate(product); // 상품을 장바구니에 추가하는 것을 호출
-  } else {
+  } catch(error) {
     // 수량 0개 저장방지
     if(count <= 0){
       alert("수량은 0보다 커야합니다.")
