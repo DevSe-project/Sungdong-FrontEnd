@@ -195,3 +195,16 @@ export const useDeliveryInfo = () => useOrderStore((state) => state.deliveryInfo
 
 // 🎉  모든 액션 상태를 위한 한개의 선택자 생성 -> 상태가 자주 변경되지 않기 때문에 모든 액션상태를 모음.
 export const useOrderActions = () => useOrderStore((state) => state.actions);
+
+/* -------------------------------- */
+
+export const useLoginStore = create((set)=>({
+  isLogin : false,
+
+  actions : {
+  setLogin : (val) => set( (state) => ({ isLogin : val }) )
+  }
+}));
+export const useIsLogin = () => useLoginStore((state) => state.isLogin);
+export const useSetLogin = () => useLoginStore((state) => state.actions);
+

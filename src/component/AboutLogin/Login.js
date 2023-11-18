@@ -6,16 +6,13 @@ import FindModal from './FindModal';
 import CodeInputModal from './CodeInputModal';
 import CryptoJS from 'crypto-js';
 import axios from 'axios';
-import UserContext from '../AboutContext/UserContext';
-import { useDataActions, useUserData } from '../../Store/DataStore';
+import { useDataActions, useIsLogin, useSetLogin, useUserData } from '../../Store/DataStore';
 import { useMutation } from '@tanstack/react-query';
 
 export function Login(props) {
   
+  const {setLogin} = useSetLogin();
   const userData = useUserData();
-  const { setUserData} = useDataActions(); //유저 데이터 불러오기
-
-  const { isLogin, login, logout } = useContext(UserContext);
 
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
@@ -38,8 +35,11 @@ export function Login(props) {
         // 메세지 표시
         alert(login.message);
         console.log('로그인 되었습니다.', login);
-        // 로그인 화면으로 이동
-        navigate("/login");
+        // 홈 화면으로 이동
+        navigate("/");
+        // 로그인 상태 TRUE
+        setLogin(true);
+        return login.token;
       },
       onError: (error) => {
         // 회원 추가 실패 시, 에러 처리
@@ -55,6 +55,8 @@ export function Login(props) {
       const token = await joinMutate();
       // 토큰을 쿠키에 저장
       document.cookie = `jwt_token=${token}; path=/; secure; HttpOnly`;
+      // 동시에 로컬 스토리지나 세션 스토리지에도 저장
+      JSON.stringify(sessionStorage.setItem('saveLoginData', token));
     } catch { // 서버가 없는경우 기존 태훈, 지석 코드
       developLogin();
     }
@@ -87,9 +89,8 @@ export function Login(props) {
         id: id,
         pw: pw,
       }
-
-      // 데이터를 암호화 (JSON 변환 2번 과정 거치기 (암호화 시 1번, 암호화 성공 후 세션스토리지 저장 시 1번))
       sessionStorage.setItem('saveLoginData', JSON.stringify(LoginDataObj));
+      setLogin(true);
       navigate('/'); //메인페이지로 이동하면서
       alert('성동물산에 오신 걸 환영합니다!'); //환영문구 출력
       window.location.reload();

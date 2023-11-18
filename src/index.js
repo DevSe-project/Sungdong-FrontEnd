@@ -9,7 +9,7 @@ import { QueryClientProvider,QueryClient } from '@tanstack/react-query';
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: Infinity,
+      staleTime: Infinity, //적용 캐시 무한으로 설정
       // ...
     },
   },

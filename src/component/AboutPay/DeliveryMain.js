@@ -6,7 +6,7 @@ import { useOrderData } from '../../Store/DataStore'
 export function DeliveryMain(props){
   //로그인 정보 불러오기
   const orderData = useOrderData();
-  const inLogin = props.decryptData(JSON.parse(sessionStorage.getItem('saveLoginData')));
+  const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'));
   const filterOrderData = orderData && orderData.filter((item)=>item.userId === inLogin.id);
   
   const [searchTerm, setSearchTerm] = useState('');

@@ -1,10 +1,10 @@
 import { React, useEffect, useState } from 'react';
 import styles from './ModifyPW.module.css';
-import { useUserData } from '../../Store/DataStore';
+import { useDataActions, useUserData } from '../../Store/DataStore';
 
 export default function ModifyPW(props) {
     const userData = useUserData();
-    const {setUserData} = useUserData();
+    const {setUserData} = useDataActions();
     // 현재비번, 재설정비번, 재설정비번확인 Input
     const [inputForModify, setInputForModify] = useState({
         now_password: null,

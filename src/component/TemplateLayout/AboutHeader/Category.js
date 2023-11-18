@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import { TopBanner } from "./TopBanner";
 import { useNavigate } from "react-router-dom";
 import styles from './Category.module.css'
 import React from 'react';
 import { useBasketList, useCategoryData, useListActions } from "../../../Store/DataStore";
-import { QueryClient, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 export function Category(props){
     // state 사용
     const { isLoading, isError, error, data } = useQuery({queryKey:['data']});
@@ -20,7 +19,7 @@ export function Category(props){
     // 필터된 항목을 저장할 상태 변수
     const [filteredItems, setFilteredItems] = useState([]);
 
-    const inLogin = props.decryptData(JSON.parse(sessionStorage.getItem('saveLoginData')));
+    const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'));
     const mainCategory = JSON.parse(sessionStorage.getItem('category'));
     const subCategory = JSON.parse(sessionStorage.getItem('subCategory'));
     const resultSearch = JSON.parse(sessionStorage.getItem('filterSearch'));

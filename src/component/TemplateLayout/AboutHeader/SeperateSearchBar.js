@@ -1,14 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import styles from './SeperateSearchBar.module.css';
 import { useNavigate } from 'react-router-dom';
-import { useData } from '../../../Store/DataStore';
-import { QueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
 export function SeperateSearchBar() {
-  const queryClient = new QueryClient();
-  const data = queryClient.getQueryData('data');
-
   const navigate = useNavigate();
+  const { isLoading, isError, error, data } = useQuery({queryKey:['data']});
 
   const [selectedResult, setSelectedResult] = useState(null);
 
@@ -155,6 +152,13 @@ export function SeperateSearchBar() {
       inputRef.current.focus();
     }
   }, [selectedResultIndex]);
+
+  if(isLoading){
+    return <p>Loading..</p>;
+  }
+  if(isError){
+    return <p>에러 : {error.message}</p>;
+  }
 
   return (
     <div>

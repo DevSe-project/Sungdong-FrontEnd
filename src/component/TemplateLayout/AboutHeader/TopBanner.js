@@ -6,9 +6,12 @@ import styles from './TopBanner.module.css';
 import { SearchBar } from './SearchBar';
 import { SeperateSearchBar } from './SeperateSearchBar';
 import { CategoryBar } from './CategoryBar';
+import { useIsLogin, useSetLogin } from '../../../Store/DataStore';
 //상단 메뉴 리스트 
 export function TopBanner(props) {
   const navigate = useNavigate();
+  const isLogin = useIsLogin();
+  const {setLogin} = useSetLogin();
 
   return (
     <div className={styles.body}>
@@ -49,15 +52,15 @@ export function TopBanner(props) {
           {/* 5_로그인/로그아웃 */}
           <div className={styles.login}>
             <button className={styles.link_signIn} onClick={() => {
-              if (props.login) {
+              if (isLogin) {
                 sessionStorage.removeItem('saveLoginData');
-                props.setLogin(false);
+                setLogin(false);
                 window.location.reload();
               } else {
                 navigate("/login");
               }
             }}>
-              {props.login
+              {isLogin
                 ? <div className={styles.align_iconNtext}>
                   <i style={{ fontSize: '1.2em' }} className="fas fa-sign-out" />
                   <span className={styles.text}>&nbsp;로그아웃</span>
