@@ -1,12 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import styles from './SeperateSearchBar.module.css';
 import { useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
 import { useSearchActions, useSeperateSearchTerm } from '../../../Store/DataStore';
 
 export function SeperateSearchBar() {
   const navigate = useNavigate();
-  const { isLoading, isError, error, data } = useQuery({queryKey:['data']});
   const seperateSearchTerm = useSeperateSearchTerm();
   const {setSeperateSearchTerm,resetSeperateSearchTerm} = useSearchActions();
 
@@ -41,13 +39,6 @@ export function SeperateSearchBar() {
     }
   };
   
-
-  if(isLoading){
-    return <p>Loading..</p>;
-  }
-  if(isError){
-    return <p>에러 : {error.message}</p>;
-  }
 
   return (
     <div>

@@ -30,11 +30,18 @@
 .searchInput {
   width: 25%;
   height: 100%;
-  border: none;
   font-size: 1em;
-  border-radius: 10vw;
   padding: 0.3em;
   padding-left: 0.5em;
+  border: 2px solid var(--background-color-set);
+  border-top: none;
+  border-bottom: none;
+  border-right: none;
+}
+
+.searchInput:first-child{
+  border-left: none;
+  border-radius: 10dvb;
 }
 
 
