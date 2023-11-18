@@ -1,5 +1,6 @@
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+
+// ------------------------------데이터 STORE----------------------------//
 
 const useDataStore = create((set)=>({
   orderData: null,
@@ -209,7 +210,7 @@ export const useIsLogin = () => useLoginStore((state) => state.isLogin);
 export const useSetLogin = () => useLoginStore((state) => state.actions);
 
 
-/* ----------------Seperate SEARCH STORE---------------- */
+/* ----------------SEARCH STORE---------------- */
 
 export const useSearchStore = create((set)=>({
   seperateSearchTerm : {
@@ -228,3 +229,14 @@ export const useSearchStore = create((set)=>({
 export const useSeperateSearchTerm = () => useSearchStore((state) => state.seperateSearchTerm);
 export const useSearchActions = () => useSearchStore((state) => state.actions);
 
+/* ----------------CATEGORY STORE---------------- */
+export const useCategoryStore = create((set)=>({
+  count : 1,
+  actions : {
+    addCount : (val) => set( (state) => ({ count : state.count + 1 }) ),
+    delCount : (val) => set( (state) => ({ count : state.count - 1 }) ),
+    setCount : (val) => set( (state) => ({ count : val }) )
+  }
+}))
+export const useCount = () => useCategoryStore((state) => state.count);
+export const useCategoryActions = () => useCategoryStore((state) => state.actions);
