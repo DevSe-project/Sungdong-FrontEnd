@@ -10,7 +10,8 @@
 
 /* ---- 큰 틀 ---- */
 .center {
-    flex: 70%
+    flex-grow: 1;
+    padding: 20px;
 }
 
 .right {
@@ -23,5 +24,9 @@
 /* ---- 상세 ---- */
 .slideImg {
     margin: 1em;
-    margin-right: 0;
 }
+
+  /* Flex Container for Product and SlideImg */
+  .flexContainer {
+    display: flex;
+  }
