@@ -272,7 +272,7 @@ const maxLengthCheck = (e, prevItem) => {
   if (lengthTarget >= 0 && lengthTarget.length <= 3) {
     const updatedItems = filteredItems.map((item) => {
       if (item.id === prevItem.id) {  
-        return { ...item, cnt: item.cnt - 1 };
+        return { ...item, cnt: lengthTarget };
       }
     return item; // 다른 아이템은 그대로 반환
     });
