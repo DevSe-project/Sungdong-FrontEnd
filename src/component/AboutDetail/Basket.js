@@ -6,25 +6,27 @@ import CryptoJS from 'crypto-js';
 import React from 'react';
 import { useBasketList, useListActions, useOrderList } from '../../Store/DataStore';
 import axios from 'axios';
+import { GetCookie } from '../../customFn/GetCookie';
 export function Basket(props){
 
   //장바구니 데이터 fetch
   const fetchCartData = async() => {
     try{
+      const token = GetCookie('jwt_token');
       const response = await axios.get("/cart", 
         {
           headers : {
             "Content-Type" : "application/json",
-            "Authorization" : ""
+            'Authorization': `Bearer ${token}`,
           }
         }
       )
-      return response.data; //data.search & data.items & data.categories 전달받음.
+      return response.data;
     } catch(error) {
       throw new Error('장바구니를 불러오던 중 오류가 발생했습니다.');
     }
   }
-
+  // 장바구니 데이터 불러오기
   //const { isLoading, isError, error, data:basketList } = useQuery({queryKey:['cart'], queryFn: ()=> fetchCartData();});
 
   const orderList = useOrderList();
@@ -332,7 +334,8 @@ export function Basket(props){
                   </div>
                 </td>
                 {/* 수량 변경 */}
-                <td className={styles.countTd}>
+                <td>
+                  <div className={styles.countTd}>
                   <button 
                   className={styles.editButton}
                   onClick={()=>handleDelItem(item)}
@@ -346,6 +349,7 @@ export function Basket(props){
                   >
                     +
                   </button>
+                  </div>
                 </td>
                 <td className={styles.price}>
                   {item.discount
