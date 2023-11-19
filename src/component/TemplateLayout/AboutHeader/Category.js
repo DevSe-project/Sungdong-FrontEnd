@@ -144,14 +144,12 @@ export function Category(props){
 
     // 찾은 카테고리에 따라 아이템 필터링
     useEffect(() => {
-      // 상품이 렌더링 되었을 때만 진행
   // 상품이 렌더링 되었을 때만 진행
   if (data) {
     // 조건 - 상위 카테고리가 '전체' (기본 값) 일 때
     if (selectedCategory === '전체') {
       const addCntList = data.map((item, index) => ({
         ...item,
-        cnt: item.cnt ? item.cnt : 1,
         listId: index,
       }));
       setFilteredItems(addCntList);
@@ -165,7 +163,6 @@ export function Category(props){
         const findCategory = data.filter((item) => item.title.includes(resultSearch));
         const addCntList = findCategory.map((item, index) => ({
           ...item,
-          cnt: item.cnt ? item.cnt : 1,
           listId: index,
         }));
         // 필터링 된 아이템 표시
@@ -175,7 +172,6 @@ export function Category(props){
           const findCategory = data.filter((item) => item.brand.includes(resultSearchBrand));
           const addCntList = findCategory.map((item, index) => ({
             ...item,
-            cnt: item.cnt ? item.cnt : 1,
             listId: index,
           }));
           // 필터링 된 아이템 표시
@@ -185,7 +181,6 @@ export function Category(props){
           const findCategory = data.filter((item) => item.id.toString().includes(resultSearchCode));
           const addCntList = findCategory.map((item, index) => ({
             ...item,
-            cnt: item.cnt ? item.cnt : 1,
             listId: index,
           }));
           // 필터링 된 아이템 표시
@@ -195,7 +190,6 @@ export function Category(props){
           const findCategory = data.filter((item) => item.option&& item.option.some((item)=>item.value.includes(resultSearchOption)));
           const addCntList = findCategory.map((item, index) => ({
             ...item,
-            cnt: item.cnt ? item.cnt : 1,
             listId: index,
           }));
           // 필터링 된 아이템 표시
@@ -208,7 +202,6 @@ export function Category(props){
           const filtered = data.filter((item) => item.category.sub === selectedSubCategory);
           const addCntList = filtered.map((item,index) => ({
             ...item,
-            cnt: item.cnt ? item.cnt : 1,
             listId : index,
           }));
           setFilteredItems(addCntList);
@@ -217,7 +210,6 @@ export function Category(props){
           const filtered = data.filter((item) => item.category.main === selectedCategory);
           const addCntList = filtered.map((item,index) => ({
             ...item,
-            cnt: item.cnt ? item.cnt : 1,
             listId : index,
           }));
           setFilteredItems(addCntList);
@@ -246,65 +238,65 @@ export function Category(props){
       return filteredItems.slice(startIndex, startIndex + 5);
     };
     
-      // 체크박스 클릭 시 호출되는 함수
-      function checkedBox(product) {
-        if (selectedItems.includes(product)) { //productID가 중복이면 true == 이미 체크박스가 클릭되어 있으면
-          setSelectedItems(selectedItems.filter((item) => item !== product)); //체크박스를 해제함 == 선택한 상품 저장 변수에서 제외
-        } else {
-          setSelectedItems([...selectedItems, product]); //selectedItems의 배열과 productID 배열을 합쳐 다시 selectedItems에 저장
-        }
-      };
+    // 체크박스 클릭 시 호출되는 함수
+    function checkedBox(product) {
+      if (selectedItems.includes(product)) { //productID가 중복이면 true == 이미 체크박스가 클릭되어 있으면
+        setSelectedItems(selectedItems.filter((item) => item !== product)); //체크박스를 해제함 == 선택한 상품 저장 변수에서 제외
+      } else {
+        setSelectedItems([...selectedItems, product]); //selectedItems의 배열과 productID 배열을 합쳐 다시 selectedItems에 저장
+      }
+    };
 // --------- 수량 변경 부분 ----------
   
-// 수량 최대입력 글자(제한 길이 변수)
-const maxLengthCheck = (e, prevItem) => {
-  const lengthTarget = e.target.value;
+  // 수량 최대입력 글자(제한 길이 변수)
+  const maxLengthCheck = (e, prevItem) => {
+    const lengthTarget = e.target.value;
 
-  if (lengthTarget >= 0 && lengthTarget.length <= 3) {
+    if (lengthTarget >= 0 && lengthTarget.length <= 3) {
+      const updatedItems = filteredItems.map((item) => {
+        if (item.id === prevItem.id) {  
+          return { ...item, cnt: lengthTarget };
+        }
+      return item; // 다른 아이템은 그대로 반환
+      });
+      setFilteredItems(updatedItems);
+    }
+  };
+
+  // 수량 DOWN
+  function handleDelItem(prevItem) {
     const updatedItems = filteredItems.map((item) => {
-      if (item.id === prevItem.id) {  
-        return { ...item, cnt: lengthTarget };
+      if (item.id === prevItem.id) {
+        if (item.cnt > 1) {
+          return { ...item, cnt: parseInt(item.cnt) - 1 };
+        } else {
+          alert("수량은 1보다 커야합니다.");
+          return item; // 1이하로 내릴 수 없으면 기존 아이템 반환
+        }
       }
-    return item; // 다른 아이템은 그대로 반환
+      return item; // 다른 아이템은 그대로 반환
     });
+
     setFilteredItems(updatedItems);
   }
-};
+    
 
-// 수량 DOWN
-function handleDelItem(prevItem) {
-  const updatedItems = filteredItems.map((item) => {
-    if (item.id === prevItem.id) {
-      if (item.cnt > 1) {
-        return { ...item, cnt: item.cnt - 1 };
-      } else {
-        alert("수량은 1보다 커야합니다.");
-        return item; // 1이하로 내릴 수 없으면 기존 아이템 반환
+  // 수량 UP
+  function handleAddItem(prevItem) {
+    const updatedItems = filteredItems.map((item) => {
+      if (item.id === prevItem.id) {
+        if (item.cnt < 999) {
+          return { ...item, cnt: parseInt(item.cnt) + 1 };
+        } else {
+          alert("수량은 999보다 작아야합니다.");
+          return item; // 999 이상으로 올릴 수 없으면 기존 아이템 반환
+        }
       }
-    }
-    return item; // 다른 아이템은 그대로 반환
-  });
+      return item; // 다른 아이템은 그대로 반환
+    });
 
-  setFilteredItems(updatedItems);
-}
-  
-
-// 수량 UP
-function handleAddItem(prevItem) {
-  const updatedItems = filteredItems.map((item) => {
-    if (item.id === prevItem.id) {
-      if (item.cnt < 999) {
-        return { ...item, cnt: item.cnt + 1 };
-      } else {
-        alert("수량은 999보다 작아야합니다.");
-        return item; // 999 이상으로 올릴 수 없으면 기존 아이템 반환
-      }
-    }
-    return item; // 다른 아이템은 그대로 반환
-  });
-
-  setFilteredItems(updatedItems);
-}
+    setFilteredItems(updatedItems);
+  }
   //-------------------장바구니 담기------------------------
     function basketRelatedData() {
       // 유효성 체크
@@ -366,7 +358,7 @@ function handleAddItem(prevItem) {
       alert("해당 상품이 장바구니에 추가되었습니다.");
       setSelectedItems([]);
     }
-//----------------------------------------------------------------
+  //----------------------------------------------------------------
 
     // 옵션 변경 함수
     function optionChange(e, index) {
@@ -432,8 +424,6 @@ function handleAddItem(prevItem) {
   
       const addCntList = filtered.map((item, index) => ({
         ...item,
-        cnt: item.cnt ? item.cnt : 1,
-        finprice : item.finprice ? item.finprice : item.price,
         listId : index,
       }));
   
@@ -444,8 +434,6 @@ function handleAddItem(prevItem) {
       if(selectedCategory === '전체'){
         const addCntList = data.map((item,index) => ({
           ...item,
-          cnt: item.cnt ? item.cnt : 1,
-          finprice : item.finprice ? item.finprice : item.price,
           listId : index,
         }));
         setFilteredItems(addCntList);
@@ -454,8 +442,6 @@ function handleAddItem(prevItem) {
       const filtered = data.filter((item) => item.category.main === selectedCategory);
       const addCntList = filtered.map((item,index) => ({
         ...item,
-        cnt: item.cnt ? item.cnt : 1,
-        finprice : item.finprice ? item.finprice : item.price,
         listId : index,
       }));
       setFilteredItems(addCntList);
@@ -505,7 +491,7 @@ function handleAddItem(prevItem) {
               <th>상품명</th>
               <th>단위</th>
               <th>표준가</th>
-              <th style={{fontWeight: '650'}}>공급가</th>
+              <th style={{fontWeight: '650'}}>공급단가</th>
               <th>더보기</th>
             </tr>
           </thead>
@@ -533,7 +519,7 @@ function handleAddItem(prevItem) {
                 <td>EA</td>
                 {/* 상품 표준가 */}
                 <td>\{item.price.toLocaleString()}</td>
-                {/* 상품 공급가 */}
+                {/* 상품 공급단가 */}
                 <td style={{fontWeight: '750'}}>
                   {item.discount
                   ? `\\${ (item.price - (((item.price/100)*item.discount))).toLocaleString()}`
@@ -552,7 +538,7 @@ function handleAddItem(prevItem) {
               {selectedData === item.id && (
               <tr>
                 <td colSpan="8">
-                  <table className={styles.colTable}>
+                  <table className={styles.modalTr}>
                     <thead style={{ backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.6)'}}>
                       <tr>
                         <th style={{width: '25%'}}>
@@ -600,7 +586,7 @@ function handleAddItem(prevItem) {
                           </div>  : '없음'}
                         </td>
                         {/* 수량 변경 */}
-                        <td>
+                        <td className={styles.countTd}>
                           <button 
                           className={styles.editButton}
                           onClick={()=>handleDelItem(item)}

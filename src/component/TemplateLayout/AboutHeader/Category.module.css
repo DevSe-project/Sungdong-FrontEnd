@@ -31,10 +31,6 @@
   border-bottom: 3px solid #cc0000;
 }
 
-.colTable{
-  width: 100%;
-  text-align: center;
-}
 
 .buttonContainer{
   font-size: 1.2em;
@@ -67,19 +63,38 @@
   border: 1px solid lightgray;
 }
 
-.editButton{
-  border: none;
-  border-radius: 1em;
-  background-color: #ff3333;
-  color: white;
-  font-weight: 550;
-  font-size: 1.2em;
-  cursor : pointer;
+.modalTr{
+  width: 100%;
+}
+
+.countTd{
+  display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
+}
+
+.input{
+  border: 2px solid lightgray;
+  border-radius: 0.5em;
+  width: 5em;
+  height: 2.7em;
+}
+
+.editButton{
+  display: flex;
+  border: none;
+  width: 1.1em;
+  border-radius: 0.2em;
+  background-color: var(--background-color-set);
+  color: white;
+  font-weight: 550;
+  font-size: 2em;
+  cursor : pointer;
+  align-items: center;
   text-align: center;
-  margin: 0.5em;
-  padding: 0.5em;
+  justify-content: center;
+  margin: 0.1em;
 }
 
 .selectSize{
