@@ -69,7 +69,19 @@ thead{
   color: white;
 }
 
-td{
+th {
+  background-color: rgb(223, 190, 178)
+}
+
+tr:nth-child(even) {
+  background-color: rgb(251, 244, 242);
+}
+
+tr:hover {
+  background-color: rgb(241, 225, 219);
+}
+
+td {
   height: 5em;
   border-bottom: 1px solid lightgray;
 }
