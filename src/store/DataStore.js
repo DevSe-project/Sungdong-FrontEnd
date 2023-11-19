@@ -115,15 +115,16 @@ const useModalStore = create((set) => ({
 
 
   setIsModal: (bool) => set({isModal: bool}),
+  setModalName : (name) => set({modalName: name}),
   // on/off만 있는 모달창을 오픈
-  openModal: (name) => set({ isModalOpen: true, modalName: name }),
+  openModal: () => set({ isModal: true}),
   // on/off만 있는 모달창을 클로즈
-  closeModal: () => set({ isModalOpen: false, modalName: '' }),
+  closeModal: () => set({ isModal: false}),
   setSelectedIndex: (index) => set({ selectedIndex: index }),
   // index에 해당하는 모달 창을 열어야 할 경우
-  selectedModalOpen: (name) => set({ isModalOpen: true, modalName: name }),
+  selectedModalOpen: (name) => set({ isModal: true, modalName: name }),
   // index에 해당하는 모달 창을 닫아야 할 경우(추가로 close함수에 해당 모달 창의 내용을 초기화 하는 코드는 개별적으로 작성)
-  selectedModalClose: () => set({ isModalOpen: false, modalName: '' })
+  selectedModalClose: () => set({ isModal: false, modalName: '' })
 }));
 
 
@@ -134,6 +135,7 @@ export const useModal = () => {
     modalName,
     selectedIndex,
     setIsModal,
+    setModalName,
     openModal,
     closeModal,
     setSelectedIndex,
@@ -146,6 +148,7 @@ export const useModal = () => {
     modalName,
     selectedIndex,
     setIsModal,
+    setModalName,
     openModal,
     closeModal,
     setSelectedIndex,

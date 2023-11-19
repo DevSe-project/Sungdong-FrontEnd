@@ -6,12 +6,14 @@ import FindModal from './FindModal';
 import CodeInputModal from './CodeInputModal';
 import CryptoJS from 'crypto-js';
 import axios from 'axios';
-import { useDataActions, useIsLogin, useSetLogin, useUserData } from '../../Store/DataStore';
+import { useDataActions, useIsLogin, useModal, useSetLogin, useUserData } from '../../Store/DataStore';
 import { useMutation } from '@tanstack/react-query';
 
 export function Login(props) {
-  
-  const {setLogin} = useSetLogin();
+
+  const { isModal, modalName, selectedIndex, openModal, closeModal, selectedModalOpen, selectedModalClose } = useModal();
+
+  const { setLogin } = useSetLogin();
   const userData = useUserData();
 
   const [id, setId] = useState('');
@@ -19,34 +21,25 @@ export function Login(props) {
 
   const navigate = useNavigate();
 
-  const [modalType, setModalType] = useState(null); //modal type이 id? pw?
-
-  const openModal = (type) => {
-    setModalType(type) //onClick에서 type을 넣어 id면 idModal이 pw면 pwModal이 나타나도록.
-  }
-
-  const closeModal = () => {
-    setModalType(null); //초기화 시켜서 모달창을 닫음
-  }
-
-    //로그인 요청 처리 로직
-    const { joinMutate } = useMutation({mutationFn: loginRequest,
-      onSuccess: (login) => {
-        // 메세지 표시
-        alert(login.message);
-        console.log('로그인 되었습니다.', login);
-        // 홈 화면으로 이동
-        navigate("/");
-        // 로그인 상태 TRUE
-        setLogin(true);
-        return login.token;
-      },
-      onError: (error) => {
-        // 회원 추가 실패 시, 에러 처리
-        console.error('회원가입 중 오류가 발생했습니다.', error);
-        alert('아이디 혹은 비밀번호를 확인주세요.'); //경고문구 출력
-      },
-    })
+  //로그인 요청 처리 로직
+  const { joinMutate } = useMutation({
+    mutationFn: loginRequest,
+    onSuccess: (login) => {
+      // 메세지 표시
+      alert(login.message);
+      console.log('로그인 되었습니다.', login);
+      // 홈 화면으로 이동
+      navigate("/");
+      // 로그인 상태 TRUE
+      setLogin(true);
+      return login.token;
+    },
+    onError: (error) => {
+      // 회원 추가 실패 시, 에러 처리
+      console.error('회원가입 중 오류가 발생했습니다.', error);
+      alert('아이디 혹은 비밀번호를 확인주세요.'); //경고문구 출력
+    },
+  })
 
 
   //로그인 요청 함수
@@ -66,12 +59,12 @@ export function Login(props) {
     const response = await axios.post(
       "/user",
       JSON.stringify({
-        id : id,
-        password : pw
+        id: id,
+        password: pw
       }),
       {
-        headers : {
-          "Content-Type" : "application/json"
+        headers: {
+          "Content-Type": "application/json"
         }
       }
     )
@@ -101,7 +94,7 @@ export function Login(props) {
 
   // 자동로그인 - 로그인정보 로컬스토리지 저장 (아직 다른 곳에서 getItem하는 부분을 안 만든 상태라 적용 안 될 것)
   function autoLogin() {
-    localStorage.setItem('autoLogin', )
+    localStorage.setItem('autoLogin',)
   }
 
   const handleKeyDown = (event) => {
@@ -152,22 +145,23 @@ export function Login(props) {
 
           {/* Find Id&PW Button | join Button */}
           <div className={styles.findDiv}>
-            <div className={styles.findId} onClick={() => { openModal('id') }}>아이디 찾기</div>
+            <div className={styles.findId}
+              onClick={() => { selectedModalOpen('find_id'); }}>아이디/비밀번호 찾기</div>
             <div>|</div>
-            <div className={styles.findPW} onClick={() => { openModal('pw') }}>비밀번호 찾기</div>
-            <div>|</div>
-            <div className={styles.join} onClick={() => { openModal('code') }}>회원가입</div>
+            <div className={styles.join}
+              onClick={() => { selectedModalOpen('code') }}>회원가입</div>
           </div>
         </div>
 
         {/* 아이디or비밀번호 둘 중 하나를 누르기만 하면 찾기창 오픈 
          ->오픈했을 때 나타나는 화면은 openModal의 state에 따라 FindModal.js에서 결정 */}
-        {modalType &&
-          <FindModal modalType={modalType} closeModal={closeModal} openModal={openModal} />}
-
+        {isModal && modalName === 'find_id' &&
+          <FindModal />}
+        {isModal && modalName === 'find_pw' &&
+          <FindModal />}
         {/* 회원가입을 눌러야만 코드입력창 오픈 */}
-        {modalType === 'code' &&
-          <CodeInputModal closeModal={closeModal} codeState={props.codeState} setCode={props.setCodeState} />}
+        {isModal && modalName === 'code' &&
+          <CodeInputModal codeState={props.codeState} setCode={props.setCodeState} />}
       </div>
 
     </div>
