@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from './Category.module.css'
 import React from 'react';
-import { useBasketList, useCategoryActions, useCategoryData, useCount, useIsLogin, useListActions } from "../../../Store/DataStore";
-import { useQuery } from "@tanstack/react-query";
+import { useBasketList, useCategoryData, useIsLogin, useListActions } from "../../../Store/DataStore";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { CategoryFilter } from "./CategoryFilter";
 export function Category(props){
@@ -27,6 +27,57 @@ export function Category(props){
     const { isLoading, isError, error, data } = useQuery({queryKey:['data']});
     //const { isLoading, isError, error, data:categoryData } = useQuery({queryKey:['search'], queryFn: ()=> fetchSearchData();});
     
+    const queryClient = useQueryClient();
+
+    //장바구니 추가 함수
+    const addToCart = async (product) => {
+      if (isLoading) {
+        // 데이터가 없으면 아무것도 하지 않고 종료
+        return;
+      }
+      try {
+        const response = await axios.post("/cart", 
+          JSON.stringify({
+            productId: product.id,  // 예시: product가 객체이고 id 속성이 있는 경우
+            optionSelect: product.optionSelect,
+            cnt: product.cnt,
+          }),
+          {
+            headers : {
+              "Content-Type" : "application/json"
+            }
+          }
+        )
+        // 성공 시 추가된 상품 정보를 반환합니다.
+        return response.data;
+      } catch (error) {
+        // 실패 시 예외를 throw합니다.
+        throw new Error('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
+      }
+    };
+  
+
+
+    //장바구니 추가 함수
+    const { basketMutation } = useMutation({mutationFn: addToCart,
+      onSuccess: (cartData) => {
+        // 메세지 표시
+        alert(cartData.message);
+        console.log('상품이 장바구니에 추가되었습니다.', cartData);
+        // 장바구니 상태를 다시 불러와 갱신합니다.
+        queryClient.invalidateQueries(['cart']);
+        // 선택된 아이템들 초기화
+        setSelectedItems([]);
+        // 장바구니로 이동
+        navigate("/basket");
+      },
+      onError: (error) => {
+        // 상품 추가 실패 시, 에러 처리를 수행합니다.
+        console.error('상품을 장바구니에 추가하는 중 오류가 발생했습니다.', error);
+      },
+    })
+
+
     const categoryData = useCategoryData();
     const isLogin = useIsLogin();
     const basketList = useBasketList();
@@ -299,64 +350,68 @@ export function Category(props){
   }
   //-------------------장바구니 담기------------------------
     function basketRelatedData() {
-      // 유효성 체크
-      if(!isLogin){
-        alert("로그인 후 이용가능한 서비스입니다.")
-        navigate("/login");
+      try{
+        basketMutation(selectedItems);
+      } catch(error) {
+        // 유효성 체크
+        if(!isLogin){
+          alert("로그인 후 이용가능한 서비스입니다.")
+          navigate("/login");
+          return;
+        }
+    
+        if (selectedItems.length === 0) {
+          alert("먼저 담을 상품을 체크해주세요!");
+          return;
+        }
+    
+      
+        if (selectedItems.some((item) => 
+        item.option && (optionSelected[item.listId] === undefined || optionSelected.length === 0))) {
+        alert("필수 옵션을 선택해주세요!");
         return;
-      }
-  
-      if (selectedItems.length === 0) {
-        alert("먼저 담을 상품을 체크해주세요!");
-        return;
-      }
-  
-    
-      if (selectedItems.some((item) => 
-      item.option && (optionSelected[item.listId] === undefined || optionSelected.length === 0))) {
-      alert("필수 옵션을 선택해주세요!");
-      return;
-  }
-    
-      // 중복확인
-      const selectedItemsInfo = selectedItems.map((item) => ({
-        id: item.id,
-        option: optionSelected[item.listId],
-      }));
-    
-      const isDuplicate = selectedItemsInfo.some((selectedItemsInfo) =>
-        onlyUserData.some((basketItem) =>
-          basketItem.id === selectedItemsInfo.id &&
-          basketItem.optionSelected === selectedItemsInfo.option
-        )
-      );
-    
-      if (isDuplicate) {
-        const findDuplicate = onlyUserData.filter((item) =>
-          selectedItemsInfo.some((selectedItemInfo) =>
-            item.id === selectedItemInfo.id &&
-            item.optionSelected === selectedItemInfo.option
+    }
+      
+        // 중복확인
+        const selectedItemsInfo = selectedItems.map((item) => ({
+          id: item.id,
+          option: optionSelected[item.listId],
+        }));
+      
+        const isDuplicate = selectedItemsInfo.some((selectedItemsInfo) =>
+          onlyUserData.some((basketItem) =>
+            basketItem.id === selectedItemsInfo.id &&
+            basketItem.optionSelected === selectedItemsInfo.option
           )
         );
-    
-        const duplicateTitles = findDuplicate.map((item) => item.title).join(", ");
-        alert(`이미 장바구니에 추가된 상품이 있습니다. 
-          (중복된 상품 : ${duplicateTitles})`);
-        return;
-      }
-    
-      // 옵션 선택한 경우에만 option 객체로 추가
-      const basketProductsToAdd = selectedItems.map((item) => {
-        if (item.option && optionSelected[item.listId] !== undefined) {
-          return { ...item, userId: inLogin.id, optionSelected: optionSelected[item.listId] };
+      
+        if (isDuplicate) {
+          const findDuplicate = onlyUserData.filter((item) =>
+            selectedItemsInfo.some((selectedItemInfo) =>
+              item.id === selectedItemInfo.id &&
+              item.optionSelected === selectedItemInfo.option
+            )
+          );
+      
+          const duplicateTitles = findDuplicate.map((item) => item.title).join(", ");
+          alert(`이미 장바구니에 추가된 상품이 있습니다. 
+            (중복된 상품 : ${duplicateTitles})`);
+          return;
         }
-        return {...item, userId: inLogin.id };
-      });
-    
-      setBasketList([...basketList, ...basketProductsToAdd]);
-    
-      alert("해당 상품이 장바구니에 추가되었습니다.");
-      setSelectedItems([]);
+      
+        // 옵션 선택한 경우에만 option 객체로 추가
+        const basketProductsToAdd = selectedItems.map((item) => {
+          if (item.option && optionSelected[item.listId] !== undefined) {
+            return { ...item, userId: inLogin.id, optionSelected: optionSelected[item.listId] };
+          }
+          return {...item, userId: inLogin.id };
+        });
+      
+        setBasketList([...basketList, ...basketProductsToAdd]);
+      
+        alert("해당 상품이 장바구니에 추가되었습니다.");
+        setSelectedItems([]);
+      }
     }
   //----------------------------------------------------------------
 
