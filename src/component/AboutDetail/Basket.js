@@ -413,14 +413,18 @@ export function Basket(props){
                   </h2>
                   <div className={styles.price}>
                     <h5>
-                    \{orderList.length !== 0 ?
-                    orderList.map((item) =>
-                    ((item.price * item.cnt) - (((item.price/100)*item.discount)*item.cnt)).toLocaleString())
-                    :
-                    selectedItems.length !== 0 ?
-                    selectedItems.map((item) => 
-                    ((item.price * item.cnt) - ((item.price/100)*item.discount)*item.cnt).toLocaleString())
-                    : 0}
+                    \{
+                    orderList.length !== 0 ?
+                      orderList.reduce((sum, item) => //reduce 사용하여 배열 객체의 합계 계산, 0으로 초기화
+                        sum + ((item.price * item.cnt) - (((item.price / 100) * item.discount) * item.cnt))
+                      , 0).toLocaleString()
+                      :
+                      selectedItems.length !== 0 ?
+                        selectedItems.reduce((sum, item) =>
+                          sum + ((item.price * item.cnt) - ((item.price / 100) * item.discount) * item.cnt)
+                        , 0).toLocaleString()
+                        : 0
+                      }
                     </h5>
                   </div>
                 </div>
@@ -435,14 +439,18 @@ export function Basket(props){
                 <div className={styles.finalBox}>
                   <h2>최종 결제 금액</h2>
                   <div className={styles.price}>
-                    <h5>\{orderList.length !== 0 ?
-                    orderList.map((item) =>
-                    (parseInt(((item.price * item.cnt) - (((item.price/100)*item.discount)*item.cnt))) + parseInt(delivery)).toLocaleString())
-                    :
-                    selectedItems.length !== 0 ?
-                    selectedItems.map((item) => 
-                    (parseInt(((item.price * item.cnt) - (((item.price/100)*item.discount)*item.cnt))) + parseInt(delivery)).toLocaleString())
-                    : 0}
+                    <h5>\{
+                    orderList.length !== 0 ?
+                      orderList.reduce((sum, item) => //reduce 함수사용하여 배열 객체의 합계 계산, delivery값으로 sum을 초기화
+                        sum + ((item.price * item.cnt) - (((item.price / 100) * item.discount) * item.cnt))
+                      , delivery).toLocaleString()
+                      :
+                      selectedItems.length !== 0 ?
+                        selectedItems.reduce((sum, item) =>
+                          sum + ((item.price * item.cnt) - ((item.price / 100) * item.discount) * item.cnt)
+                        , delivery).toLocaleString()
+                        : 0
+                      }
                     </h5>
                   </div>
                 </div>

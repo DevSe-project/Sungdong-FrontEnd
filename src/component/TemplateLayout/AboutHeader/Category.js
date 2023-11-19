@@ -17,7 +17,7 @@ export function Category(props){
             }
           }
         )
-        return response.data; //data.search & data.items & data.categories 전달받음.
+        return response.data; //data.search & data.items & data.categories 전달받음. 
       } catch(error) {
         throw new Error('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
       }
