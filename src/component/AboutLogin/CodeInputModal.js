@@ -1,11 +1,12 @@
 import { React, useEffect, useState } from 'react';
 import styles from './Modal.module.css';
 import { useNavigate } from 'react-router-dom';
-import { useDataActions, useUserData } from '../../Store/DataStore';
+import { useDataActions, useModal, useUserData } from '../../Store/DataStore';
 
-export default function CodeInputModal(props) {
+export default function CodeInputModal() {
   const userData = useUserData();
   const { setUserData } = useDataActions();
+  const { selectedModalClose } = useModal();
 
   const navigate = useNavigate();
 
@@ -13,7 +14,7 @@ export default function CodeInputModal(props) {
   useEffect(() => {
     const exit_esc = (event) => {
       if (event.key === 'Escape') {
-        props.closeModal(); // "Esc" 키 누를 때 모달 닫기 함수 호출
+        selectedModalClose(); // "Esc" 키 누를 때 모달 닫기 함수 호출
       }
     };
 
@@ -22,7 +23,7 @@ export default function CodeInputModal(props) {
     return () => {
       window.removeEventListener('keydown', exit_esc);
     };
-  }, [props.closeModal]);
+  }, [selectedModalClose]);
 
   // 인증코드 입력 state
   const [inputCode, setInputCode] = useState('');
@@ -46,7 +47,7 @@ export default function CodeInputModal(props) {
       <div className={styles.modalContainer}>
         {/* Exit Button */}
         <div className={styles.exitButton}>
-          <span onClick={() => { props.closeModal() }}>
+          <span onClick={() => { closeModal() }}>
             <i className="fas fa-times"></i>
           </span>
         </div>
