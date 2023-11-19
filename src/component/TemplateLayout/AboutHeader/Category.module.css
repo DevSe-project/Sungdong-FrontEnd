@@ -57,7 +57,6 @@
   flex-direction: column;
   margin-bottom: 15em;
 }
-
 .formInner{
   width: 100%;
   display: flex;
@@ -70,10 +69,11 @@
 
 .editButton{
   border: none;
-  border-radius: 3em;
+  border-radius: 1em;
   background-color: #ff3333;
   color: white;
   font-weight: 550;
+  font-size: 1.2em;
   cursor : pointer;
   justify-content: center;
   align-items: center;

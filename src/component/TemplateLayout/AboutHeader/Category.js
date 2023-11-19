@@ -31,8 +31,6 @@ export function Category(props){
     const isLogin = useIsLogin();
     const basketList = useBasketList();
     const { setBasketList } = useListActions();
-    const count = useCount();
-    const {addCount, delCount, setCount} = useCategoryActions();
     
     // 카테고리
     const [selectedCategory, setSelectedCategory] = useState('전체'); //메인 카테고리
@@ -50,7 +48,28 @@ export function Category(props){
     const resultSearchCode = JSON.parse(sessionStorage.getItem('filterSearchCode'));
     const resultSearchOption = JSON.parse(sessionStorage.getItem('filterSearchOption'));
 
-    // 카테고리 찾기 - mainCategory와 subCategory가 바뀔 때 마다 실행
+    const navigate = useNavigate();
+
+    // 게시물 데이터와 페이지 번호 상태 관리    
+    const [currentPage, setCurrentPage] = useState(1);
+    
+    // 체크박스를 통해 선택한 상품들을 저장할 상태 변수
+    const [selectedItems, setSelectedItems] = useState([]);
+  
+    //Td 선택시 Modal State 변수
+    const [selectedData, setSelectedData] = useState(null);
+    
+    //옵션 선택 state
+    const [optionSelected, setOptionSelected] = useState(filteredItems.map(() => ""));
+    
+    // 장바구니 복사
+    const copyList = [...basketList];
+
+    // userId가 같은 항목만 필터링
+    const onlyUserData = copyList.filter((item)=> item.userId === inLogin.id);
+  
+
+    // ------------------카테고리 찾기 - mainCategory와 subCategory가 바뀔 때 마다 실행
     useEffect(() => {
       //categoryData가 있을 때만 진행
       if (categoryData) {
@@ -133,7 +152,6 @@ export function Category(props){
       const addCntList = data.map((item, index) => ({
         ...item,
         cnt: item.cnt ? item.cnt : 1,
-        finprice: item.finprice ? item.finprice : item.price,
         listId: index,
       }));
       setFilteredItems(addCntList);
@@ -148,7 +166,6 @@ export function Category(props){
         const addCntList = findCategory.map((item, index) => ({
           ...item,
           cnt: item.cnt ? item.cnt : 1,
-          finprice: item.finprice ? item.finprice : item.price,
           listId: index,
         }));
         // 필터링 된 아이템 표시
@@ -159,7 +176,6 @@ export function Category(props){
           const addCntList = findCategory.map((item, index) => ({
             ...item,
             cnt: item.cnt ? item.cnt : 1,
-            finprice: item.finprice ? item.finprice : item.price,
             listId: index,
           }));
           // 필터링 된 아이템 표시
@@ -170,7 +186,6 @@ export function Category(props){
           const addCntList = findCategory.map((item, index) => ({
             ...item,
             cnt: item.cnt ? item.cnt : 1,
-            finprice: item.finprice ? item.finprice : item.price,
             listId: index,
           }));
           // 필터링 된 아이템 표시
@@ -181,7 +196,6 @@ export function Category(props){
           const addCntList = findCategory.map((item, index) => ({
             ...item,
             cnt: item.cnt ? item.cnt : 1,
-            finprice: item.finprice ? item.finprice : item.price,
             listId: index,
           }));
           // 필터링 된 아이템 표시
@@ -195,7 +209,6 @@ export function Category(props){
           const addCntList = filtered.map((item,index) => ({
             ...item,
             cnt: item.cnt ? item.cnt : 1,
-            finprice : item.finprice ? item.finprice : item.price,
             listId : index,
           }));
           setFilteredItems(addCntList);
@@ -205,7 +218,6 @@ export function Category(props){
           const addCntList = filtered.map((item,index) => ({
             ...item,
             cnt: item.cnt ? item.cnt : 1,
-            finprice : item.finprice ? item.finprice : item.price,
             listId : index,
           }));
           setFilteredItems(addCntList);
@@ -214,30 +226,9 @@ export function Category(props){
     }
   }, [data, selectedCategory, selectedSubCategory, filterSearch, resultSearch, resultSearchBrand, resultSearchCode, resultSearchOption]);
 
-    const navigate = useNavigate();
+//------------------------------------------------------
 
-    // 게시물 데이터와 페이지 번호 상태 관리    
-    const [currentPage, setCurrentPage] = useState(1);
-    
-    // 체크박스를 통해 선택한 상품들을 저장할 상태 변수
-    const [selectedItems, setSelectedItems] = useState([]);
-  
-    //Td 선택시 Modal State 변수
-    const [selectedData, setSelectedData] = useState(null);
-  
-    //수정하기 state
-    const [editStatus, setEditStatus] = useState(filteredItems.map(()=>false));
-  
-    //옵션 선택 state
-    const [optionSelected, setOptionSelected] = useState(filteredItems.map(() => ""));
-    
-    // 장바구니 복사
-    const copyList = [...basketList];
-
-    // userId가 같은 항목만 필터링
-    const onlyUserData = copyList.filter((item)=> item.userId === inLogin.id);
-  
-    // 아이템 클릭 핸들러
+    // 아이템 클릭 모달 핸들러
     const handleItemClick = (itemId) => {
       if (selectedData === itemId) {
         // 이미 선택된 아이템을 클릭한 경우 모달을 닫음
@@ -263,40 +254,58 @@ export function Category(props){
           setSelectedItems([...selectedItems, product]); //selectedItems의 배열과 productID 배열을 합쳐 다시 selectedItems에 저장
         }
       };
+// --------- 수량 변경 부분 ----------
   
-    //수량 최대입력 글자(제한 길이 변수)
-    const maxLengthCheck = (e, item) => { 
-      const lengthTarget = e.target.value; 
-      //target.value.length = input에서 받은 value의 길이 
-      //target.maxLength = 제한 길이
+// 수량 최대입력 글자(제한 길이 변수)
+const maxLengthCheck = (e, prevItem) => {
+  const lengthTarget = e.target.value;
 
-      if ( lengthTarget >= 0 && lengthTarget.length <= 3) { 
-          item.cnt = parseInt(lengthTarget);
-          setSelectedItems({...selectedItems, item});
-      } 
+  if (lengthTarget >= 0 && lengthTarget.length <= 3) {
+    const updatedItems = filteredItems.map((item) => {
+      if (item.id === prevItem.id) {  
+        return { ...item, cnt: lengthTarget };
+      }
+    return item; // 다른 아이템은 그대로 반환
+    });
+    setFilteredItems(updatedItems);
   }
-  //수량 DOWN
-    function handleDelItem(item){
-      if(item.cnt > 1) {
-        item.cnt -= 1;
-        setSelectedItems({...selectedItems, item});
+};
+
+// 수량 DOWN
+function handleDelItem(prevItem) {
+  const updatedItems = filteredItems.map((item) => {
+    if (item.id === prevItem.id) {
+      if (item.cnt > 1) {
+        return { ...item, cnt: item.cnt - 1 };
       } else {
-        alert("수량은 1보다 커야합니다.")
+        alert("수량은 1보다 커야합니다.");
+        return item; // 1이하로 내릴 수 없으면 기존 아이템 반환
       }
     }
-    
-    //수량 UP
-    function handleAddItem(item){
-      if(item.cnt < 999) {
-        item.cnt += 1;
-        setSelectedItems({...selectedItems, item});
-      } else {
-        alert("수량은 999보다 작아야합니다.")
-      }
-    }
+    return item; // 다른 아이템은 그대로 반환
+  });
+
+  setFilteredItems(updatedItems);
+}
   
 
-    // 장바구니 담기 함수
+// 수량 UP
+function handleAddItem(prevItem) {
+  const updatedItems = filteredItems.map((item) => {
+    if (item.id === prevItem.id) {
+      if (item.cnt < 999) {
+        return { ...item, cnt: item.cnt + 1 };
+      } else {
+        alert("수량은 999보다 작아야합니다.");
+        return item; // 999 이상으로 올릴 수 없으면 기존 아이템 반환
+      }
+    }
+    return item; // 다른 아이템은 그대로 반환
+  });
+
+  setFilteredItems(updatedItems);
+}
+  //-------------------장바구니 담기------------------------
     function basketRelatedData() {
       // 유효성 체크
       if(!isLogin){
@@ -307,11 +316,6 @@ export function Category(props){
   
       if (selectedItems.length === 0) {
         alert("먼저 담을 상품을 체크해주세요!");
-        return;
-      }
-    
-      if (count <= 0) {
-        alert("수량은 0보다 커야합니다.");
         return;
       }
   
@@ -362,6 +366,8 @@ export function Category(props){
       alert("해당 상품이 장바구니에 추가되었습니다.");
       setSelectedItems([]);
     }
+//----------------------------------------------------------------
+
     // 옵션 변경 함수
     function optionChange(e, index) {
       const newOptionSelected = [...optionSelected];
@@ -369,7 +375,7 @@ export function Category(props){
       setOptionSelected(newOptionSelected);
     }
 
-  // 카테고리 필터 부분
+  // -------------------카테고리 필터 부분----------------------
   
     // 중복 처리
     const isIncludeCategory = [...new Set(filteredItems.map((item) => item.category.sub ? item.category.sub : item.category.main))];
@@ -506,7 +512,7 @@ export function Category(props){
           <tbody>
             {data 
             ? filteredItems.length > 0
-            ? getCurrentPagePosts().map((item, index)=> (
+            ? getCurrentPagePosts().map((item, index)=> ( // 현재 filteredItems로 맵핑중
             <React.Fragment key={index}>
               <tr className={styles.list}>
                 {/* 이미지 */}
@@ -529,10 +535,8 @@ export function Category(props){
                 <td>\{item.price.toLocaleString()}</td>
                 {/* 상품 공급가 */}
                 <td style={{fontWeight: '750'}}>
-                  {item.finprice
-                  ? item.discount
-                  ? `\\${ (item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}`
-                  : `\\${item.finprice.toLocaleString()}`
+                  {item.discount
+                  ? `\\${ (item.price - (((item.price/100)*item.discount))).toLocaleString()}`
                   : `\\${item.price.toLocaleString()}`}
                 </td>
                 {/* 더보기 */}
@@ -603,7 +607,7 @@ export function Category(props){
                           >
                             -
                           </button>                          
-                          <input value={item.cnt} className={styles.input} onChange={(e)=>maxLengthCheck(e, item)} type='text' placeholder='숫자만 입력'/>
+                          <input value={item.cnt} className={styles.input} onChange={(e)=>maxLengthCheck(e,item)} type='text' placeholder='숫자만 입력'/>
                           <button 
                           className={styles.editButton}
                           onClick={()=>handleAddItem(item)}
@@ -616,15 +620,13 @@ export function Category(props){
                         </td>
                         <td style={{fontWeight: '750'}}>
                           {item.discount
-                          ? `\\${(((item.price/100)*item.discount)*item.cnt).toLocaleString()}`
+                          ? `\\${(((item.price/100)*item.discount)*item.cnt.toLocaleString())}`
                           : 0}
                         </td>
                         <td style={{fontWeight: '750'}}>
-                        {item.finprice
-                        ? item.discount
-                        ? `\\${ (item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}`
-                        : `\\${item.finprice.toLocaleString()}`
-                        : `\\${item.price.toLocaleString()}`}
+                        {item.discount
+                        ? `\\${ ((item.price * item.cnt) - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}`
+                        : `\\${(item.price * item.cnt).toLocaleString()}`}
                         </td>
                         <td>
                           <input 
