@@ -62,6 +62,11 @@ input:focus {
   outline: none;
 }
 
+table {
+  border-collapse: collapse;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
 thead{
   width: 100%;
   height: 3em;
@@ -70,7 +75,15 @@ thead{
 }
 
 th {
-  background-color: rgb(223, 190, 178)
+  background-color: rgb(223, 190, 178);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+
+tr {
+  cursor: pointer;
 }
 
 tr:nth-child(even) {
@@ -84,6 +97,10 @@ tr:hover {
 td {
   height: 5em;
   border-bottom: 1px solid lightgray;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
 }
 
 textarea{

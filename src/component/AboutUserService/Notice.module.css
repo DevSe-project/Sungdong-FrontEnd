@@ -58,41 +58,22 @@
 
 .listTable {
   width: 100%;
-  border-collapse: collapse;
   margin-top: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
-th {
-  background-color: #b6b6b6;
+.th {
   color: #000;
-  text-align: center;
   padding: 10px;
   font-weight: bold;
   max-width: 1000px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .row {
   border-bottom: 1px solid #ccc;
-  cursor: pointer;
-}
-
-.row:nth-child(even) {
-  background-color: #f3f3f3;
-}
-
-.row:hover {
-  background-color: #cacaca;
 }
 
 td {
   padding: 10px;
   height: 30px;
   max-width: 1000px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }

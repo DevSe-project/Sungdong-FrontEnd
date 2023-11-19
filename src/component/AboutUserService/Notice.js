@@ -40,10 +40,10 @@ export function Notice() {
             <table className={styles.listTable}>
               <thead>
                 <tr>
-                  <th>구분</th>
-                  <th>제목</th>
-                  <th>작성자</th>
-                  <th>작성일</th>
+                  <th className={styles.th}>구분</th>
+                  <th className={styles.th}>제목</th>
+                  <th className={styles.th}>작성자</th>
+                  <th className={styles.th}>작성일</th>
                 </tr>
               </thead>
               <tbody>
