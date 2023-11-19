@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import styles from './Basket.module.css'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner';
-import CryptoJS from 'crypto-js';
 import React from 'react';
 import { useBasketList, useListActions, useOrderList } from '../../Store/DataStore';
 import axios from 'axios';
