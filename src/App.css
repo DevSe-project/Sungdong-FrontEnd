@@ -76,6 +76,7 @@ thead{
 
 th {
   background-color: rgb(239, 233, 233);
+  color: black;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

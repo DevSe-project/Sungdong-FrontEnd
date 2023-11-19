@@ -33,7 +33,7 @@ export function Detail(props) {
     const { setLogin } = useSetLogin();
   
     //수량 개수 state
-    const [count, setCount] = useState("1");
+    const [count, setCount] = useState(1);
   
     //옵션 선택 state
     const [optionSelected, setOptionSelected] = useState(null);
@@ -51,8 +51,8 @@ export function Detail(props) {
         const response = await axios.post("/cart", 
           JSON.stringify({
             productId: product.id,  // 예시: product가 객체이고 id 속성이 있는 경우
-            optionSelect: product.optionSelect,
-            count: product.count,
+            optionSelect: product.optionSelect ? product.optionSelect : null,
+            cnt: count,
           }),
           {
             headers : {
@@ -78,8 +78,8 @@ export function Detail(props) {
           const response = await axios.post("/order", 
             JSON.stringify({
               productId: product.id,  // 예시: product가 객체이고 id 속성이 있는 경우
-              optionSelect: product.optionSelect,
-              count: product.count,
+              optionSelect: product.optionSelect ? product.optionSelect : null,
+              cnt: count,
             }),
             {
               headers : {
@@ -91,7 +91,7 @@ export function Detail(props) {
           return response.data;
         } catch (error) {
           // 실패 시 예외를 throw합니다.
-          throw new Error('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
+          throw new Error('상품을 결제항목에 작성하는 중 오류가 발생했습니다.');
         }
       };
   
@@ -185,34 +185,15 @@ function buyThis(product, count){
     const newBuyProduct = () => {
       if(product.option && optionSelected){
         return {
-          productId : product.id,
-          userId: inLogin.id, 
-          image : {
-            mini : product.image.mini,
-            original : product.image.original,
-          },
-          productName : product.title,
-          cnt : Number(count), 
-          supply: product.supply,
-          price: product.price,
-          finprice : product.price * count, //총 계산액
-          discount : product.discount ? product.discount : 0,
+          ...product,
+          userId: inLogin.id,
+          cnt : count,
           optionSelected : optionSelected,
         }
       } return {
-        productId : product.id,
+        ...product,
         userId: inLogin.id,
-        image : {
-          mini : product.image.mini,
-          original : product.image.original,
-        },
-        productName : product.title,
-        cnt : Number(count), 
-        supply: product.supply,
-        price: product.price,
-        finprice : product.price * count, //총 계산액
-        // 이후 discount 값 수정 필요 (등급에 따라)
-        discount : product.discount ? product.discount : 0,
+        cnt : count,
       }
     }
       // // sessionStorage에 저장
@@ -263,14 +244,12 @@ function basketThis(product, count){
         ...product,
         userId: inLogin.id,
         cnt : count,
-        finprice : product.price * count, //총 계산액
         optionSelected : optionSelected,
       }
     } return {
       ...product,
       userId: inLogin.id,
       cnt : count,
-      finprice : product.price * count
     }
   }
 
@@ -304,8 +283,7 @@ function basketThis(product, count){
   if(isError){
     return <p>에러 : {error.message}</p>;
   }
-  console.log(detailData);
-  console.log(data);
+
   return(
     <div>
       <main className={styles.main}>

@@ -5,26 +5,36 @@ import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner';
 import CryptoJS from 'crypto-js';
 import React from 'react';
 import { useBasketList, useListActions, useOrderList } from '../../Store/DataStore';
+import axios from 'axios';
 export function Basket(props){
+
+  //장바구니 데이터 fetch
+  const fetchCartData = async() => {
+    try{
+      const response = await axios.get("/cart", 
+        {
+          headers : {
+            "Content-Type" : "application/json",
+            "Authorization" : ""
+          }
+        }
+      )
+      return response.data; //data.search & data.items & data.categories 전달받음.
+    } catch(error) {
+      throw new Error('장바구니를 불러오던 중 오류가 발생했습니다.');
+    }
+  }
+
+  //const { isLoading, isError, error, data:basketList } = useQuery({queryKey:['cart'], queryFn: ()=> fetchCartData();});
+
   const orderList = useOrderList();
   const basketList = useBasketList();
   const { setBasketList, setOrderList } = useListActions();
 
   const navigate = useNavigate();
-  //총 상품 금액
-  const [sum, setSum] = useState(0);
 
   // 배송가
   const delivery = 3000;
-
-  //최종 주문 금액
-  const [resultOrderPrice, setOrderPrice] = useState(0);
-
-  //수량
-  const [count, setCount] = useState("");
-
-  //수정하기 state
-  const [editStatus, setEditStatus] = useState(basketList.map(()=>false));
 
   // 체크박스를 통해 선택한 상품들을 저장할 상태 변수
   const [selectedItems, setSelectedItems] = useState([]);
@@ -66,8 +76,6 @@ export function Basket(props){
       e.preventDefault();
       alert("주문서 작성, 결제 중 뒤로가기 시 결제 정보가 초기화 됩니다.")
       props.setActiveTab(1);
-      setSum(0);
-      setOrderPrice(0);
       setSelectedItems([]);
       setSelectAll(false);
       navigate('/basket');
@@ -87,8 +95,6 @@ export function Basket(props){
       location.pathname !== '/basket/pay'
     ) {
       // 필요한 상태 초기화 로직을 여기에 추가
-      setSum(0);
-      setOrderPrice(0);
       setSelectedItems([]);
       setSelectAll(false);
       props.setActiveTab(1);
@@ -97,11 +103,6 @@ export function Basket(props){
       sessionStorage.removeItem('newOrderData')
     }
   }, [location]);
-
-  //selectedItems의 변화가 일어날 때마다 totalPrice(selectedItems)를 작동함 (전체 합계 계산)
-  useEffect(() => {
-    totalPrice(selectedItems);
-  }, [selectedItems]);
 
   // 전체 선택 체크박스 클릭 시 호출되는 함수
   function handleSelectAllChange() {
@@ -144,55 +145,56 @@ export function Basket(props){
     alert("선택된 항목이 없습니다.")
   }
 };
-  //수량 최대입력 글자(제한 길이 변수)
-  const maxLengthCheck = (e) => { 
-    const lengthTarget = e.target.value; 
-    //target.value.length = input에서 받은 value의 길이 
-    //target.maxLength = 제한 길이
+// --------- 수량 변경 부분 ----------
+  
+  // 수량 최대입력 글자(제한 길이 변수)
+  const maxLengthCheck = (e, prevItem) => {
+    const lengthTarget = e.target.value;
 
-    if ( lengthTarget >= 0 && lengthTarget.length <= 3) { 
-        setCount(lengthTarget); 
-    } 
-}
-//수정하기 버튼을 눌렀을 때 함수 작동(개수 세는 함수)
-  function editItem(index){
-    const newEditStatus = [...editStatus]; 
-    newEditStatus[index] = true;
-    setEditStatus(newEditStatus);
-    setCount(basketList[index].cnt); 
-  }
-  //수정완료 버튼 눌렀을 때 함수 작동(개수 저장 함수)
-  function updatedItem(index){
-    if(count > 0) {
-      basketList[index].cnt = count;
-      basketList[index].finprice = (basketList[index].price * count);
-      const newEditStatus = [...editStatus]; 
-      newEditStatus[index] = false;
-      setEditStatus(newEditStatus);
-    } else {
-      alert("수량은 0보다 커야합니다.")
+    if (lengthTarget >= 0 && lengthTarget.length <= 3) {
+      const updatedItems = basketList.map((item) => {
+        if (item.id === prevItem.id) {  
+          return { ...item, cnt: lengthTarget };
+        }
+      return item; // 다른 아이템은 그대로 반환
+      });
+      setBasketList(updatedItems);
     }
-    totalPrice(selectedItems);
-  }
-  //때마다 selectedItems를 불러와서 총 계산을 계산하는 함수
-  function totalPrice(item){
-    let sum = 0;
-    let totalDiscount = 0;
-    item.forEach(itemId => {
-      const calculate = basketList.find((item)=>item.id === itemId.id);
-      if(calculate){
-        sum += calculate.finprice;
-        if (typeof calculate.discount === 'number') {
-        totalDiscount += (Number((calculate.finprice / 100) * calculate.discount));
+  };
+
+  // 수량 DOWN
+  function handleDelItem(prevItem) {
+    const updatedItems = basketList.map((item) => {
+      if (item.id === prevItem.id) {
+        if (item.cnt > 1) {
+          return { ...item, cnt: parseInt(item.cnt) - 1 };
+        } else {
+          alert("수량은 1보다 커야합니다.");
+          return item; // 1이하로 내릴 수 없으면 기존 아이템 반환
         }
       }
+      return item; // 다른 아이템은 그대로 반환
     });
-    // 할인 금액이 총 가격을 넘지 않도록 보정
-    totalDiscount = Math.min(totalDiscount, sum);
-    const prevOrderSum = sum - totalDiscount;
-    setSum(prevOrderSum);
-    const orderSum = sum + delivery - totalDiscount;
-    setOrderPrice(orderSum);
+
+    setBasketList(updatedItems);
+  }
+    
+
+  // 수량 UP
+  function handleAddItem(prevItem) {
+    const updatedItems = basketList.map((item) => {
+      if (item.id === prevItem.id) {
+        if (item.cnt < 999) {
+          return { ...item, cnt: parseInt(item.cnt) + 1 };
+        } else {
+          alert("수량은 999보다 작아야합니다.");
+          return item; // 999 이상으로 올릴 수 없으면 기존 아이템 반환
+        }
+      }
+      return item; // 다른 아이템은 그대로 반환
+    });
+
+    setBasketList(updatedItems);
   }
 
   // 주문서 작성창 링크 함수(receipt에 넘어가면 해당 객체의 키와 값만 가지고 감(주의))
@@ -217,7 +219,6 @@ export function Basket(props){
         supply: item.supply,
         cnt : Number(item.cnt), 
         price: item.price,
-        finprice: item.finprice,
         // 이후 discount 값 수정 필요 (등급에 따라)
         discount : item.discount ? item.discount : 0, 
         optionSelected: item.option && item.optionSelected,
@@ -245,7 +246,6 @@ export function Basket(props){
       const startIndex = (currentPage - 1) * 10; // 한 페이지에 5개씩 표시
       return onlyUserData.slice(startIndex, startIndex + 5);
     };
-
   return(
     <div>
       {/* 스탭 모듈 */}
@@ -331,16 +331,21 @@ export function Basket(props){
                   <p>상품 표준가 : <span className={styles.price}>\{item.price.toLocaleString()}</span></p>
                   </div>
                 </td>
-                <td>{editStatus[index]===false 
-                ? item.cnt 
-                : <input value={count} className={styles.input} onChange={maxLengthCheck} minLength={1} maxLength={3} min={0} max={999} type='number' placeholder='숫자만 입력'/> }
-                <br/>
-                {editStatus[index]===false 
-                ? <button
-                onClick={()=>{editItem(index)}} 
-                className={styles.editButton}
-                >주문 수정</button> 
-                : <button className={styles.editButton} onClick={()=>updatedItem(index)}>수정 완료</button>}
+                {/* 수량 변경 */}
+                <td className={styles.countTd}>
+                  <button 
+                  className={styles.editButton}
+                  onClick={()=>handleDelItem(item)}
+                  >
+                    -
+                  </button>                          
+                  <input value={item.cnt} className={styles.input} onChange={(e)=>maxLengthCheck(e,item)} type='text' placeholder='숫자만 입력'/>
+                  <button 
+                  className={styles.editButton}
+                  onClick={()=>handleAddItem(item)}
+                  >
+                    +
+                  </button>
                 </td>
                 <td className={styles.price}>
                   {item.discount
@@ -350,9 +355,9 @@ export function Basket(props){
                     ({item.discount}%)
                   </span>
                   &nbsp;<i className="fal fa-long-arrow-right"/>&nbsp;
-                  \{(item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}
+                  \{((item.price * item.cnt) - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}
                   </>
-                  : `\\${item.finprice.toLocaleString()}`}
+                  : `\\${(item.price * item.cnt).toLocaleString()}`}
                 </td>
               </tr>
               ))
@@ -388,9 +393,9 @@ export function Basket(props){
                     ({item.discount}%)
                   </span>
                   &nbsp;<i className="fal fa-long-arrow-right"/>&nbsp;
-                  \{(item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}
+                  \{((item.price * item.cnt) - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}
                   </>
-                  : `\\${item.finprice.toLocaleString()}`}
+                  : `\\${(item.price * item.cnt).toLocaleString()}`}
                 </td>
               </tr>
             ))}
@@ -406,9 +411,14 @@ export function Basket(props){
                   </h2>
                   <div className={styles.price}>
                     <h5>
-                    \{sum ? sum.toLocaleString() : orderList !== null || []
-                    ? orderList.map((item) =>
-                    (item.finprice - ((item.price/100)*item.discount)*item.cnt).toLocaleString()) : 0}
+                    \{orderList.length !== 0 ?
+                    orderList.map((item) =>
+                    ((item.price * item.cnt) - (((item.price/100)*item.discount)*item.cnt)).toLocaleString())
+                    :
+                    selectedItems.length !== 0 ?
+                    selectedItems.map((item) => 
+                    ((item.price * item.cnt) - ((item.price/100)*item.discount)*item.cnt).toLocaleString())
+                    : 0}
                     </h5>
                   </div>
                 </div>
@@ -423,9 +433,15 @@ export function Basket(props){
                 <div className={styles.finalBox}>
                   <h2>최종 결제 금액</h2>
                   <div className={styles.price}>
-                    <h5>\{sum ? resultOrderPrice.toLocaleString() : orderList !== null || []
-                    ? orderList.map((item) =>
-                    (item.finprice + delivery - ((item.price/100)*item.discount)*item.cnt).toLocaleString()) : 0}</h5>
+                    <h5>\{orderList.length !== 0 ?
+                    orderList.map((item) =>
+                    (parseInt(((item.price * item.cnt) - (((item.price/100)*item.discount)*item.cnt))) + parseInt(delivery)).toLocaleString())
+                    :
+                    selectedItems.length !== 0 ?
+                    selectedItems.map((item) => 
+                    (parseInt(((item.price * item.cnt) - (((item.price/100)*item.discount)*item.cnt))) + parseInt(delivery)).toLocaleString())
+                    : 0}
+                    </h5>
                   </div>
                 </div>
             </div>
