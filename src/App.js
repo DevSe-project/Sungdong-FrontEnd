@@ -379,26 +379,7 @@ function App() {
         <Route path='/userservice/contact' element={<Contact />} />
 
         {/* 마이페이지 */}
-        <Route path='/mypages' element={
-          <>
-            {/* 최상단배너 */}
-            <TopBanner
-               iconHovered={iconHovered}
-              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
-              text_dynamicStyle={text_dynamicStyle}
-              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
-            <div className='main'>
-              <MenuData  menu_dynamicStyle={menu_dynamicStyle} />
-              <div className='container'>
-                <MyPage menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle}  iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
-                <footer className='footer'>
-                  <Footer />
-                </footer>
-              </div>
-            </div>
-          </>
-        }>
+        <Route path='/mypages' element={<MyPage menu_dynamicStyle={menu_dynamicStyle}/>}>
 
         </Route>
         {/* 회사 관련 */}

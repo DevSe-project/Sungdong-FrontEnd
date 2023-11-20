@@ -11,9 +11,10 @@ import { useMutation } from '@tanstack/react-query';
 
 export function Login(props) {
 
-  const { isModal, modalName, selectedIndex, openModal, closeModal, selectedModalOpen, selectedModalClose } = useModal();
+  const { isModal, modalName, selectedModalOpen } = useModal();
 
   const { setLogin } = useSetLogin();
+  const { isLogin } = useIsLogin();
   const userData = useUserData();
 
   const [id, setId] = useState('');
@@ -155,11 +156,16 @@ export function Login(props) {
 
         {/* 아이디or비밀번호 둘 중 하나를 누르기만 하면 찾기창 오픈 
          ->오픈했을 때 나타나는 화면은 openModal의 state에 따라 FindModal.js에서 결정 */}
+
+        {/* 아이디 찾기 */}
         {isModal && modalName === 'find_id' &&
           <FindModal />}
+
+        {/* 비밀번호 찾기 */}
         {isModal && modalName === 'find_pw' &&
           <FindModal />}
-        {/* 회원가입을 눌러야만 코드입력창 오픈 */}
+
+        {/* join.js로 이동하기 전 인증코드 입력 */}
         {isModal && modalName === 'code' &&
           <CodeInputModal codeState={props.codeState} setCode={props.setCodeState} />}
       </div>

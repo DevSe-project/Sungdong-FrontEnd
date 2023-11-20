@@ -1,10 +1,14 @@
 import { React, useEffect, useState } from 'react';
 import styles from './ModifyPW.module.css';
-import { useDataActions, useUserData } from '../../Store/DataStore';
+import { useDataActions, useModal, useUserData } from '../../Store/DataStore';
 
 export default function ModifyPW(props) {
+    
+    const { closeModal } = useModal();
     const userData = useUserData();
     const {setUserData} = useDataActions();
+
+
     // 현재비번, 재설정비번, 재설정비번확인 Input
     const [inputForModify, setInputForModify] = useState({
         now_password: null,
@@ -17,7 +21,7 @@ export default function ModifyPW(props) {
     // 입력유무 확인
     const isInputNull = inputForModify.re_password !== null && inputForModify.confirm_re_password != null;
 
-    // 비밀번호 수정 함수. 
+    // 비밀번호 수정 함수. => 백앤드로 편입할 함수
     function goModify() {
         const confirmPwFind = userData.find(userData => userData.password === inputForModify.now_password);
 
@@ -64,7 +68,7 @@ export default function ModifyPW(props) {
     useEffect(() => {
         const exit_esc = (event) => {
             if (event.key === 'Escape') {
-                props.setModifyModal(false); // "Esc" 키 누를 때 모달 닫기 함수 호출
+                closeModal(); // "Esc" 키 누를 때 모달 닫기 함수 호출
             }
         };
 
@@ -73,16 +77,14 @@ export default function ModifyPW(props) {
         return () => {
             window.removeEventListener('keydown', exit_esc);
         };
-    }, [props.closeModal]);
+    }, [closeModal]);
 
 
     return (
         <div className={styles.modalOverlay}>
             <div className={styles.modalContainer}>
                 <div className={styles.exitButton}>
-                    <span onClick={() => {
-                        props.setModifyModal(false);
-                    }}>
+                    <span onClick={closeModal}>
                         <i class="fas fa-times"></i>
                     </span>
                 </div>

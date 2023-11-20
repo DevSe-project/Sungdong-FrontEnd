@@ -79,7 +79,7 @@ export default function FindModal(props) {
             <div className={styles.modalContainer}>
                 <div className={styles.exitButton}>
                     <span onClick={() => { selectedModalClose() }}>
-                        <i class="fas fa-times"></i>
+                        <i className="fas fa-times"></i>
                     </span>
                 </div>
                 <div className={styles.modalContent}>

@@ -23,8 +23,8 @@
   border: 1.5px solid #808080;
   border-radius: 1dvb;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  width: 35em;
-  height: 23em;
+  width: 40em;
+  height: 25em;
 }
 
 /* ------------공통 className------------ */
@@ -49,7 +49,7 @@
 .modalContent {
   padding: 1em;
   padding-top: 0;
-  margin-top: 0;
+  width: 100%;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -64,6 +64,7 @@
 .titleBox {
   display: flex;
   justify-content: center;
+  margin-bottom: 10px;
 }
 
 .title {
@@ -71,11 +72,6 @@
   font-weight: bold;
   padding: 1rem 1rem;
   padding-top: 0;
-}
-
-.title:hover {
-  color: #CC0000;
-  cursor: pointer;
 }
 
 .label {
@@ -125,7 +121,7 @@
 /* 비밀번호 변경하기 Button */
 .goModify {
   border: none;
-  border-radius: 1dvw;
+  border-radius: 1dvh;
   background-color: #CC0000;
   color: white;
   height: 200px;
