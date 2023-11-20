@@ -6,6 +6,7 @@ import { TabInfo } from './TabInfo'
 import { useBasketList, useIsLogin, useListActions, useSetLogin, useWishList } from '../../Store/DataStore'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
+import { busSchool } from 'fontawesome'
 export function Detail(props) {
   //데이터 불러오기
   const { isLoading, isError, error, data } = useQuery({queryKey:['data']});
@@ -257,7 +258,7 @@ function basketThis(product, count){
     alert("이미 장바구니에 추가된 상품입니다.");
   } else {
     // 중복 상품이 아닌 경우에만 추가
-    setBasketList([newBasketProduct()]);
+    setBasketList([...basketList, newBasketProduct()]);
     alert("해당 상품이 장바구니에 추가되었습니다.");
   }
 }

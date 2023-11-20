@@ -12,11 +12,10 @@ export function RelatedData(props) {
   const { setBasketList } = useListActions();
   const navigate = useNavigate();
 
+  const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'));
+
   // 게시물 데이터와 페이지 번호 상태 관리    
   const [currentPage, setCurrentPage] = useState(1);
-
-  //수량
-  const [count, setCount] = useState(1);
 
   // 체크박스를 통해 선택한 상품들을 저장할 상태 변수
   const [selectedItems, setSelectedItems] = useState([]);
@@ -27,12 +26,13 @@ export function RelatedData(props) {
   //Td 선택시 Modal State 변수
   const [selectRelatedData, setSelectRelatedData] = useState(null);
 
-  //수정하기 state
-  const [editStatus, setEditStatus] = useState(relatedList.map(()=>false));
-
   //옵션 선택 state
   const [optionSelected, setOptionSelected] = useState(relatedList.map(() => ""));
+  // 장바구니 복사
+  const copyList = [...basketList];
 
+  // userId가 같은 항목만 필터링
+  const onlyUserData = copyList.filter((item)=> item.userId === inLogin.id);
 
   // relatedList 데이터 삽입
   useEffect(() => {
@@ -41,8 +41,6 @@ export function RelatedData(props) {
       item.category.main === props.detailData.category.main);
       const addCntList = filterList.map((item,index) => ({
         ...item,
-        cnt: item.cnt ? item.cnt : 1,
-        finprice : item.finprice ? item.finprice : item.price,
         listId : index,
       }));
       setRelatedList(addCntList);
@@ -75,38 +73,58 @@ export function RelatedData(props) {
       }
     };
 
-  //수량 최대입력 글자(제한 길이 변수)
-  const maxLengthCheck = (e) => { 
-    const lengthTarget = e.target.value; 
-    //target.value.length = input에서 받은 value의 길이 
-    //target.maxLength = 제한 길이
+// --------- 수량 변경 부분 ----------
+  
+  // 수량 최대입력 글자(제한 길이 변수)
+  const maxLengthCheck = (e, prevItem) => {
+    const lengthTarget = e.target.value;
 
-    if ( lengthTarget >= 0 && lengthTarget.length <= 3) { 
-        setCount(lengthTarget); 
-    } 
-}
-
-  //수정하기 버튼을 눌렀을 때 함수 작동(개수 세는 함수)
-  function editItem(index){
-    const newEditStatus = [...editStatus]; 
-    newEditStatus[index] = true;
-    setEditStatus(newEditStatus);
-    setCount(relatedList[index].cnt); 
-  }
-
-  //수정완료 버튼 눌렀을 때 함수 작동(개수 저장 함수)
-  function updatedItem(index){
-    if(count > 0) {
-      relatedList[index].cnt = count;
-      relatedList[index].finprice = relatedList[index].price * count;
-      const newEditStatus = [...editStatus]; 
-      newEditStatus[index] = false;
-      setEditStatus(newEditStatus);
-    } else {
-      alert("수량은 0보다 커야합니다.")
+    if (lengthTarget >= 0 && lengthTarget.length <= 3) {
+      const updatedItems = relatedList.map((item) => {
+        if (item.id === prevItem.id) {  
+          return { ...item, cnt: lengthTarget };
+        }
+      return item; // 다른 아이템은 그대로 반환
+      });
+      setRelatedList(updatedItems);
     }
-  }
+  };
 
+  // 수량 DOWN
+  function handleDelItem(prevItem) {
+    const updatedItems = relatedList.map((item) => {
+      if (item.id === prevItem.id) {
+        if (item.cnt > 1) {
+          return { ...item, cnt: parseInt(item.cnt) - 1 };
+        } else {
+          alert("수량은 1보다 커야합니다.");
+          return item; // 1이하로 내릴 수 없으면 기존 아이템 반환
+        }
+      }
+      return item; // 다른 아이템은 그대로 반환
+    });
+
+    setRelatedList(updatedItems);
+  }
+    
+
+  // 수량 UP
+  function handleAddItem(prevItem) {
+    const updatedItems = relatedList.map((item) => {
+      if (item.id === prevItem.id) {
+        if (item.cnt < 999) {
+          return { ...item, cnt: parseInt(item.cnt) + 1 };
+        } else {
+          alert("수량은 999보다 작아야합니다.");
+          return item; // 999 이상으로 올릴 수 없으면 기존 아이템 반환
+        }
+      }
+      return item; // 다른 아이템은 그대로 반환
+    });
+
+    setRelatedList(updatedItems);
+  }
+//-------------------------------------------
   // 장바구니 담기 함수
   function basketRelatedData() {
     // 유효성 체크
@@ -121,18 +139,6 @@ export function RelatedData(props) {
       return;
     }
   
-    if (count <= 0) {
-      alert("수량은 0보다 커야합니다.");
-      return;
-    }
-  
-    const isEditStatus = selectedItems.some((item, index) => editStatus[index]);
-    if (isEditStatus) {
-      alert("수정완료 버튼을 누르고 장바구니에 담아주세요.")
-      return;
-    }
-
-  
     if (selectedItems.some((item) => 
     item.option && (optionSelected[item.listId] === undefined || optionSelected.length === 0))) {
     alert("필수 옵션을 선택해주세요!");
@@ -146,14 +152,14 @@ export function RelatedData(props) {
     }));
   
     const isDuplicate = selectedItemsInfo.some((selectedItemsInfo) =>
-      basketList.some((basketItem) =>
+    onlyUserData.some((basketItem) =>
         basketItem.id === selectedItemsInfo.id &&
         basketItem.optionSelected === selectedItemsInfo.option
       )
     );
   
     if (isDuplicate) {
-      const findDuplicate = basketList.filter((item) =>
+      const findDuplicate = onlyUserData.filter((item) =>
         selectedItemsInfo.some((selectedItemInfo) =>
           item.id === selectedItemInfo.id &&
           item.optionSelected === selectedItemInfo.option
@@ -168,10 +174,10 @@ export function RelatedData(props) {
   
     // 옵션 선택한 경우에만 option 객체로 추가
     const basketProductsToAdd = selectedItems.map((item) => {
-      if (item.option && optionSelected[item.listId] !== undefined) {
-        return { ...item, optionSelected: optionSelected[item.listId] };
+      if (item.option && optionSelected[item.listId] !== (undefined || null)) {
+        return { ...item, userId: inLogin.id, optionSelected: optionSelected[item.listId] };
       }
-      return { ...item };
+      return { ...item,  userId: inLogin.id };
     });
   
     setBasketList([...basketList, ...basketProductsToAdd]);
@@ -215,7 +221,7 @@ export function RelatedData(props) {
               <th>상품명</th>
               <th>단위</th>
               <th>표준가</th>
-              <th>공급가</th>
+              <th>공급단가</th>
               <th>더보기</th>
             </tr>
           </thead>
@@ -238,11 +244,9 @@ export function RelatedData(props) {
                 <td>EA</td>
                 <td>\{item.price.toLocaleString()}</td>
                 <td style={{fontWeight: '750'}}>
-                {item.finprice
-                  ? item.discount
-                  ? `\\${ (item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}`
-                  : `\\${item.finprice.toLocaleString()}`
-                  : item.price.toLocaleString()}
+                {item.discount
+                  ? `\\${ (item.price - ((item.price/100)*item.discount)).toLocaleString()}`
+                  : `\\${item.price.toLocaleString()}`}
                 </td>
                 <td 
                   className={styles.detailView}
@@ -303,24 +307,21 @@ export function RelatedData(props) {
                             </select>
                           </div>  : '없음'}
                         </td>
-                        <td>
-                        {!editStatus[index]
-                        ? item.cnt
-                        : <input value={count} className={styles.input} onChange={maxLengthCheck} minLength={1} maxLength={3} min={0} max={999} type='number' placeholder='숫자만 입력'/> }
-                        <br/>
-  
-                        {!editStatus[index] 
-                        ? <button
-                          onClick={()=>{editItem(index)}} 
+                        {/* 수량 변경 */}
+                        <td className={styles.countTd}>
+                          <button 
                           className={styles.editButton}
-                          >개수 수정
-                          </button> 
-                        : <button 
+                          onClick={()=>handleDelItem(item)}
+                          >
+                            -
+                          </button>                          
+                          <input value={item.cnt} className={styles.input} onChange={(e)=>maxLengthCheck(e,item)} type='text' placeholder='숫자만 입력'/>
+                          <button 
                           className={styles.editButton}
-                          onClick={()=>updatedItem(index)}
-                          >수정 완료
+                          onClick={()=>handleAddItem(item)}
+                          >
+                            +
                           </button>
-                        }
                         </td>
                         <td>
                           {item.discount}%
@@ -331,11 +332,10 @@ export function RelatedData(props) {
                           : 0}
                         </td>
                         <td style={{fontWeight: '750'}}> 
-                        {item.finprice
-                        ? item.discount
-                        ? `\\${ (item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}`
-                        : `\\${item.finprice.toLocaleString()}`
-                        : item.price.toLocaleString()}
+                        {item.discount
+                        ? `\\${ ((item.price * item.cnt) - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}`
+                        : `\\${(item.price * item.cnt).toLocaleString()}`
+                        }
                         </td>
                         <td>
                           <input 

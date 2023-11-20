@@ -355,10 +355,9 @@ export function Receipt(props){
     // 날짜 파싱이 올바르게 되었는지 확인하기 위해 콘솔에 출력합니다.
     if (!isNaN(selectedDateObj)) {
       setSelectedDate(selectedDateObj);
-      setDeliveryInformation(prevData => ({
-        ...prevData,
-        deliveryDate : selectedDateStr,
-      }))
+      setDeliveryInformation(
+        "deliveryDate",selectedDateStr
+      )
     }
   };
 
@@ -431,7 +430,7 @@ export function Receipt(props){
             <div style={{flexDirection: 'row', width: '60%'}} className={styles.searchResult}>
               <input 
               style={{flexDirection: 'row', width: '50%'}}
-              className={styles.inputSize} 
+              className={styles.selectSize} 
               value={orderInformation?.smtMessage}
               type="text" 
               list="smtMessages"
@@ -614,7 +613,7 @@ export function Receipt(props){
             <div style={{flexDirection: 'row', width: '60%'}} className={styles.searchResult}>
               <input 
               style={{flexDirection: 'row', width: '50%'}}
-              className={styles.inputSize} 
+              className={styles.selectSize} 
               value={deliveryInformation.deliveryMessage}
               type="text" 
               list="deliveryMessages"
