@@ -17,13 +17,13 @@ export default function Join() {
     //장바구니 추가 함수
     const joinRequest = async (joinData) => {
         try {
-            const response = await axios.post("/join", 
-            JSON.stringify(joinData),
-            {
-                headers : {
-                "Content-Type" : "application/json"
+            const response = await axios.post("/join",
+                JSON.stringify(joinData),
+                {
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
                 }
-            }
             )
             // 성공 시 추가된 상품 정보를 반환합니다.
             return response.data;
@@ -31,32 +31,33 @@ export default function Join() {
             // 실패 시 예외를 throw합니다.
             throw new Error('회원가입 처리 중 오류가 발생했습니다.');
         }
-        };
-        
+    };
+
     //회원가입 요청 함수
-    const { joinMutate } = useMutation({mutationFn: joinRequest,
-    onSuccess: (join) => {
-      // 메세지 표시
-      alert(join.message);
-      console.log('새로운 유저가 회원가입 되었습니다.', join);
-      // 회원 상태를 다시 불러와 갱신합니다.
-      queryClient.invalidateQueries(['user']);
-      // 로그인 화면으로 이동
-      navigate("/login");
-    },
-    onError: (error) => {
-      // 회원 추가 실패 시, 에러 처리
-      console.error('회원가입 중 오류가 발생했습니다.', error);
-    },
-  })
+    const { joinMutate } = useMutation({
+        mutationFn: joinRequest,
+        onSuccess: (join) => {
+            // 메세지 표시
+            alert(join.message);
+            console.log('새로운 유저가 회원가입 되었습니다.', join);
+            // 회원 상태를 다시 불러와 갱신합니다.
+            queryClient.invalidateQueries(['user']);
+            // 로그인 화면으로 이동
+            navigate("/login");
+        },
+        onError: (error) => {
+            // 회원 추가 실패 시, 에러 처리
+            console.error('회원가입 중 오류가 발생했습니다.', error);
+        },
+    })
 
     const { setUserData } = useDataActions();
     const userData = useUserData();
 
-    useEffect( () => {
+    useEffect(() => {
         console.log("hello");
         setUserData(UserDataObj);
-    }, [setUserData] )
+    }, [setUserData])
 
     // 액세스 권한 불러오기
     const inAccess = JSON.parse(sessionStorage.getItem('saveAllowAccess'));
@@ -155,9 +156,11 @@ export default function Join() {
             alert('이용약관에 모두 동의해야 가입이 가능합니다.');
             return;
         }
-        /* 
-        여기에 joinMutate(inputData) 
-        */
+
+        try {
+            joinMutate(inputData)
+        }
+        catch (error) {
             if (userData.some((user) => user.id === inputData.id)) {
                 alert('이미 사용 중인 아이디입니다. 다른 아이디를 선택해주세요.');
                 return;
@@ -183,6 +186,7 @@ export default function Join() {
             navigate('/login');
             alert('성동물산에 오신 걸 환영합니다! 이제 로그인을 진행할 수 있습니다.');
         }
+    }
 
     return (
         <div className={styles.body}>
@@ -196,7 +200,7 @@ export default function Join() {
                 />
             </div>
 
-            {/* IndivisualMembers Form */}
+            {/* 가입정보 입력 폼 */}
             <JoinForm inputData={inputData} setInputData={setInputData} />
 
             {/* 전체 동의하기 */}
