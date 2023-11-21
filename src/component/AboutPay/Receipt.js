@@ -49,9 +49,8 @@ export function Receipt(props){
     try {
       const filteredData = data.filter((item) => item.id === orderList.id);
       const token = GetCookie('jwt_token');
-      const response = await axios.put("/data", 
+      const response = await axios.put(`/data/${filteredData.id}`, 
         JSON.stringify({
-          id: filteredData.id,
           supply: filteredData.supply - orderList.cnt,
         }),
         {
