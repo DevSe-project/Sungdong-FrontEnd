@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react'
-import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner'
 import { Delivery } from './Delivery'
 import styles from './DeliveryMain.module.css'
 import { useOrderData } from '../../Store/DataStore'

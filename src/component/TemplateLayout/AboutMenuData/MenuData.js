@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from './MenuData.module.css'
+import { useIsLogin } from "../../../Store/DataStore";
 export function MenuData(props){
   const navigate = useNavigate();
   const location = useLocation();
   const [topTab, setTopTab] = useState(null); // 현재 활성화된 탭을 추적
-
+  const isLogin = useIsLogin();
   useEffect(() => {
     const tabstate = JSON.parse(sessionStorage.getItem('tabState'));
     setTopTab(tabstate);
@@ -49,22 +50,22 @@ export function MenuData(props){
         {
           item: '내 정보 관리',
           link: '/mypages',
-          require : props.login
+          require : isLogin === true
         },
         {
           item: '원장조회',
           link: '/mypages',
-          require : props.login
+          require : isLogin === true
         },
         {
           item: '입금내역',
           link: '/mypages',
-          require : props.login
+          require : isLogin === true
         },
         {
           item: '세금계산서',
           link: '/mypages',
-          require : props.login
+          require : isLogin === true
         }
       ],
     },
@@ -82,12 +83,12 @@ export function MenuData(props){
         {
           item: '장바구니 목록',
           link: '/basket',
-          require : props.login
+          require : isLogin === true
         },
         {
           item: '주문/배송 현황',
           link: '/delivery',
-          require : props.login
+          require : isLogin === true
         },
       ],
     },
@@ -101,17 +102,17 @@ export function MenuData(props){
         {
           item: '주문/배송 현황',
           link: '/delivery',
-          require : props.login
+          require : isLogin === true
         },
         {
           item: '배송 조회',
           link: '/delivery',
-          require : props.login
+          require : isLogin === true
         },
         {
           item: '미발송 조회',
           link: '/delivery',
-          require : props.login
+          require : isLogin === true
         },
 
       ],
@@ -124,12 +125,12 @@ export function MenuData(props){
       subMenuItems: [{
         item: '견적함',
         link: '/receipt',
-        require : props.login
+        require : isLogin === true
       },
       {
         item: '견적관리',
         link: '/manageReceipt',
-        require : props.login
+        require : isLogin === true
       }
       ]
     },
@@ -141,27 +142,27 @@ export function MenuData(props){
       subMenuItems: [{
         item: '반품신청',
         link: '/refund/request',
-        require : props.login
+        require : isLogin === true
       },
       {
         item: '반품조회',
         link: '/refund/list',
-        require : props.login
+        require : isLogin === true
       },
       {
         item: '불량교환신청',
         link: '/error/request',
-        require : props.login
+        require : isLogin === true
       },
       {
         item: '불량교환조회',
         link: '/error/list',
-        require : props.login
+        require : isLogin === true
       },
       {
         item: 'A/S신청, 조회',
         link: '/listAs',
-        require : props.login
+        require : isLogin === true
       },
       ]
     },
@@ -178,7 +179,7 @@ export function MenuData(props){
         {
           item: '문의하기',
           link: '/userservice/contact',
-          require : props.login
+          require : isLogin === true
         }
       ],
     },

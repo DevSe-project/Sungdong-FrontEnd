@@ -2,13 +2,106 @@ import { useEffect, useState } from 'react';
 import styles from './Receipt.module.css'
 import { useNavigate } from 'react-router-dom';
 import { useBasketList, useDataActions, useDeliveryInfo, useListActions, useListStore, useOrderActions, useOrderData, useOrderInfo, useOrderList, useUserData } from '../../Store/DataStore';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
 
 export function Receipt(props){
   const navigate = useNavigate();
 
-    // react-query : 서버에서 받아온 데이터 캐싱, 변수에 저장
+  // react-query : 서버에서 받아온 데이터 캐싱, 변수에 저장
   const { isLoading, isError, error, data } = useQuery({queryKey:['data']});
+
+  const queryClient = useQueryClient();
+
+  //주문 목록 추가 요청 함수
+  const orderTo = async () => {
+    if (isLoading) {
+      // 데이터가 없으면 아무것도 하지 않고 종료
+      return;
+    }
+    try {
+      const token = GetCookie('jwt_token');
+      const response = await axios.post("/order", 
+        JSON.stringify({
+          productId: orderList.id,  // 예시: product가 객체이고 id 속성이 있는 경우
+          optionSelect: orderList.optionSelect ? orderList.optionSelect : null,
+          cnt: orderList.cnt,
+          order: orderInformation,
+          delivery: deliveryInformation,
+          orderState: orderInformation.payRoute === 'CMS' ? 2 : 0, //0 => 결제대기, 1 => 결제완료 2 => 배송준비중 3 => 배송중 4 => 배송완료 
+        }),
+        {
+          headers : {
+            "Content-Type" : "application/json",
+            'Authorization': `Bearer ${token}`,
+          }
+        }
+      )
+      // 성공 시 추가된 상품 정보를 반환합니다.
+      return response.data;
+    } catch (error) {
+      // 실패 시 예외를 throw합니다.
+      throw new Error('상품을 주문 목록에 요청하던 중 오류가 발생했습니다.');
+    }
+  };
+  //재고 감소 요청
+  const lowSupply = async () => {
+    try {
+      const filteredData = data.filter((item) => item.id === orderList.id);
+      const token = GetCookie('jwt_token');
+      const response = await axios.put("/data", 
+        JSON.stringify({
+          id: filteredData.id,
+          supply: filteredData.supply - orderList.cnt,
+        }),
+        {
+          headers : {
+            "Content-Type" : "application/json",
+            'Authorization': `Bearer ${token}`,
+          }
+        }
+      )
+      // 성공 시 추가된 상품 정보를 반환합니다.
+      return response.data;
+    } catch (error) {
+      // 실패 시 예외를 throw합니다.
+      throw new Error('재고를 변경하던 중 오류가 발생했습니다.');
+    }
+  };
+  //데이터 재고 감소 요청 함수
+  const { supplyMutation } = useMutation({mutationFn: lowSupply,
+    onSuccess: (success) => {
+      console.log("재고 상태를 업데이트 하였습니다.", success);
+      queryClient.invalidateQueries(['data']);
+    },
+    onError: (error) => {
+      // 상품 추가 실패 시, 에러 처리를 수행합니다.
+      console.error('상품을 수정하던 중 오류가 발생했습니다.', error);
+    }
+  });
+
+  //주문 신청 함수
+  const { orderMutation } = useMutation({mutationFn: orderTo,
+    onSuccess: (success) => {
+      // 메세지 표시
+      alert(success.message);
+      console.log('주문이 완료되었습니다.', success);
+      // 주문 상태를 다시 불러와 갱신합니다.
+      queryClient.invalidateQueries(['order']);
+      supplyMutation.mutate();
+      // 선택된 아이템들 초기화
+      if(orderInformation.payRoute === 'CMS'){
+        navigate("/basket/order");
+      } else {
+        navigate("/basket/pay");
+      }
+    },
+    onError: (error) => {
+      // 상품 추가 실패 시, 에러 처리를 수행합니다.
+      console.error('상품을 주문목록에 넣는 중 오류가 발생했습니다.', error);
+    },
+  })
+
   const orderData = useOrderData();
   const userData = useUserData();
 
@@ -204,16 +297,9 @@ export function Receipt(props){
   // submit 버튼
   function submitReceipt(){
     validateForm();
-    // react-query : 서버에서 받아온 데이터 캐싱, 변수에 저장
-    // Mutations
-  //   const dataMutation = useMutation(postfetch, {
-  //   onSuccess: () => {
-  //     // Invalidate and refetch
-  //     queryClient.invalidateQueries('data')
-  //   },
-  // })
-      // dataMutation.mutate({ supply : supply - 1 });
-
+    try{
+      orderMutation.mutate();
+    } catch(error) {
       const isValidSupply = orderList.every((orderItem) => {
       const productMatchingId = data.find((item) => item.id === orderItem.productId);
       return productMatchingId && productMatchingId.supply > 0;
@@ -277,6 +363,7 @@ export function Receipt(props){
         props.setActiveTab(3);
         navigate("/basket/pay");
         }
+      }
     }
   }
 

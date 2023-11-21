@@ -76,7 +76,7 @@ export function Detail(props) {
           return;
         }
         try {
-          const response = await axios.post("/order", 
+          const response = await axios.post("/order/req", 
             JSON.stringify({
               productId: product.id,  // 예시: product가 객체이고 id 속성이 있는 경우
               optionSelect: product.optionSelect ? product.optionSelect : null,
