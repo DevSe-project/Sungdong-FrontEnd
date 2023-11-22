@@ -60,6 +60,7 @@ import { Footer } from './component/TemplateLayout/AboutFooter/Footer';
 import { useUserData, useDataActions, useListActions, useOrderData, useIsLogin, useSetLogin } from "./Store/DataStore";
 import { QueryClient, useQuery } from "@tanstack/react-query";
 import { getDocs,collection } from 'firebase/firestore'
+import { AccountBook } from "./component/AboutMyPage/AccountBook/AccountBook";
 
 function App() {
   const navigate = useNavigate();
@@ -379,9 +380,27 @@ function App() {
         <Route path='/userservice/contact' element={<Contact />} />
 
         {/* 마이페이지 */}
-        <Route path='/mypages' element={<MyPage menu_dynamicStyle={menu_dynamicStyle}/>}>
+        <Route path='/mypages' element={<MyPage menu_dynamicStyle={menu_dynamicStyle}/>}/>
+        <Route path='/accountBook' element={
+            <>
+            {/* 최상단배너 */}
+            <TopBanner
+                iconHovered={iconHovered}
+              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+              text_dynamicStyle={text_dynamicStyle}
+              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
+              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+            <div className='main'>
+              <MenuData  menu_dynamicStyle={menu_dynamicStyle} />
+              <div className='container'>
+                <AccountBook/>
+                <footer className='footer'>
+                  <Footer />
+                </footer>
+              </div>
+            </div>
+            </>}/>
 
-        </Route>
         {/* 회사 관련 */}
         <Route path='/comeway' element={
           <>

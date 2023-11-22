@@ -54,7 +54,7 @@ export function MenuData(props){
         },
         {
           item: '원장조회',
-          link: '/mypages',
+          link: '/accountBook',
           require : isLogin === true
         },
         {
