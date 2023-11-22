@@ -64,8 +64,7 @@ export function MenuData(props){
         },
         {
           item: '세금계산서',
-          link: '/mypages',
-          require : isLogin === true
+          link: 'outLink',
         }
       ],
     },
@@ -231,6 +230,10 @@ export function MenuData(props){
                       navigate("/login");
                       return;
                     } 
+                    if(subMenuItem.link === 'outLink'){
+                      window.open(`https://www.sendbill.co.kr/RESTful/purchase/taxBill/inquire`, '_blank', 'width=1000,height=800');
+                      return;
+                    }
                     navigate(`${subMenuItem.link}`)
                   }}
                   className={styles.sub_item}
