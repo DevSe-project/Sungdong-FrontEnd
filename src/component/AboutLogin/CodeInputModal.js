@@ -40,7 +40,9 @@ export default function CodeInputModal() {
       alert('유효하지 않은 코드입니다.');
     }
   }
-
+  function closeModal(){
+    
+  }
 
   return (
     <div className={styles.modalOverlay}>

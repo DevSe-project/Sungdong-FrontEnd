@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
 import logo from '../../../image/logo.jpeg'
 import shortLogo from '../../../image/shortLogo.png'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import styles from './TopBanner.module.css';
 import { SearchBar } from './SearchBar';
 import { SeperateSearchBar } from './SeperateSearchBar';

@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { useBasketList, useDataActions, useDeliveryInfo, useListActions, useListStore, useOrderActions, useOrderData, useOrderInfo, useOrderList, useUserData } from '../../Store/DataStore';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
+import { GetCookie } from '../../customFn/GetCookie';
+
 
 export function Receipt(props){
   const navigate = useNavigate();
@@ -48,7 +50,6 @@ export function Receipt(props){
   const lowSupply = async () => {
     try {
       const filteredData = data.filter((item) => item.id === orderList.id);
-      const token = GetCookie('jwt_token');
       const response = await axios.put(`/data/${filteredData.id}`, 
         JSON.stringify({
           supply: filteredData.supply - orderList.cnt,
@@ -56,7 +57,6 @@ export function Receipt(props){
         {
           headers : {
             "Content-Type" : "application/json",
-            'Authorization': `Bearer ${token}`,
           }
         }
       )

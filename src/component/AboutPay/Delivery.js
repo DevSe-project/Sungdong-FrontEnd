@@ -3,6 +3,9 @@ import styles from './Delivery.module.css'
 import { useEffect, useState } from 'react';
 import CryptoJS from 'crypto-js';
 import { useOrderData } from '../../Store/DataStore';
+import axios from 'axios';
+import { GetCookie } from '../../customFn/GetCookie';
+
 export function Delivery(props){
   //로그인 정보 불러오기
   const orderData = useOrderData();
@@ -11,7 +14,7 @@ export function Delivery(props){
   const [filterSearch, setFilterSearch] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
 
-  //주문 데이터 fetch
+  //주문 데이터 fetch 
   const fetchOrderData = async() => {
     try{
       const token = GetCookie('jwt_token');

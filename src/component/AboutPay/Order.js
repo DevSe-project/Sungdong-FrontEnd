@@ -1,6 +1,10 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './Order.module.css'
 import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { GetCookie } from '../../customFn/GetCookie';
+
+
 export function Order(props){
   const [orderProductData, setOrderProductData] = useState({});
   const navigate = useNavigate();

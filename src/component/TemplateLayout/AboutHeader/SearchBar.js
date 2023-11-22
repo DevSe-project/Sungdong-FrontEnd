@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import styles from './SearchBar.module.css';
 import { useNavigate } from 'react-router-dom';
-import { QueryClient, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
 export function SearchBar() {
   const { isLoading, isError, error, data } = useQuery({queryKey:['data']});
