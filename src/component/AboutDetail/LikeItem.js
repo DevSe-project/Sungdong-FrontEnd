@@ -55,7 +55,7 @@ export function LikeItem(){
     }
   };
   return(
-    <div>
+    <div style={{width:'90%'}}>
       <div className={styles.body}>
         {/* 헤드라인 */}
         <div className={styles.head}>

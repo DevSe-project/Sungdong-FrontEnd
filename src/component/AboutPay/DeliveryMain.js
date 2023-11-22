@@ -80,7 +80,7 @@ export function DeliveryMain(props){
     <div>
       <div className={styles.container}>
         <div className={styles.title}>
-          <h1>주문 목록</h1>
+          <h1>주문/배송</h1>
         </div>
         <div className={styles.searchContainer}>
           <div className={styles.searchInputContainer}>

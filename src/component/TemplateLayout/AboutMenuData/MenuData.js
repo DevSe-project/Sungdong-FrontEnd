@@ -93,31 +93,6 @@ export function MenuData(props){
     },
     {
       id: 4,
-      icon : <i style={{fontSize: '1.2em'}} className="fas fa-boxes"></i>,
-      title: {
-        item: '배송관련',
-      },
-      subMenuItems: [        
-        {
-          item: '주문/배송 현황',
-          link: '/delivery',
-          require : isLogin === true
-        },
-        {
-          item: '배송 조회',
-          link: '/delivery',
-          require : isLogin === true
-        },
-        {
-          item: '미발송 조회',
-          link: '/delivery',
-          require : isLogin === true
-        },
-
-      ],
-    },
-    {
-      id: 5,
       title: {
         item: '견적하기',
       },
@@ -134,7 +109,7 @@ export function MenuData(props){
       ]
     },
     {
-      id: 6,
+      id: 5,
       title: {
         item: '반품/수리/AS',
       },

@@ -1,9 +1,8 @@
 /* 큰 컨테이너 */
 .container{
-  margin-top: 2em;
-  width: 80%;
-  margin-left: 10%;
+  width: 90%;
   display: flex;
+  margin-left: 5%;
   flex-direction: column;
   gap: 1em;
 }
