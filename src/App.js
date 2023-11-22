@@ -61,6 +61,7 @@ import { useUserData, useDataActions, useListActions, useOrderData, useIsLogin, 
 import { QueryClient, useQuery } from "@tanstack/react-query";
 import { getDocs,collection } from 'firebase/firestore'
 import { AccountBook } from "./component/AboutMyPage/AccountBook/AccountBook";
+import { DepositHistory } from "./component/AboutMyPage/AccountBook/DepositHistory";
 
 function App() {
   const navigate = useNavigate();
@@ -394,6 +395,25 @@ function App() {
               <MenuData  menu_dynamicStyle={menu_dynamicStyle} />
               <div className='container'>
                 <AccountBook/>
+                <footer className='footer'>
+                  <Footer />
+                </footer>
+              </div>
+            </div>
+            </>}/>
+        <Route path='/depositHistory' element={
+            <>
+            {/* 최상단배너 */}
+            <TopBanner
+                iconHovered={iconHovered}
+              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+              text_dynamicStyle={text_dynamicStyle}
+              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
+              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+            <div className='main'>
+              <MenuData  menu_dynamicStyle={menu_dynamicStyle} />
+              <div className='container'>
+                <DepositHistory/>
                 <footer className='footer'>
                   <Footer />
                 </footer>

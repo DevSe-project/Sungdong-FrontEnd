@@ -59,7 +59,7 @@ export function MenuData(props){
         },
         {
           item: '입금내역',
-          link: '/mypages',
+          link: '/depositHistory',
           require : isLogin === true
         },
         {
