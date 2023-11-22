@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import styles from '../Filter.module.css'
+import { addMonths, subMonths, format } from 'date-fns';
+
 export function AccountBookFilter(){
   const filterList = [
-    { label : '조회일자', content : dateFilter()},
+    { label : '조회일자', content : DateFilter()},
     { label : '출력', content : detailSearch()},
   ]
   return(
@@ -29,18 +32,49 @@ export function AccountBookFilter(){
   )
 }
 
-function dateFilter(){
+function DateFilter(){
+  const today = new Date();
+  const [startDate, setStartDate] = useState(today);
+  const [endDate, setEndDate] = useState(addMonths(startDate, 1));
+  const handleMonthChange = (event) => {
+    setStartDate(new Date(2023,event.target.value,1));
+    setEndDate(new Date(2023,event.target.value,31));
+  };
+
+  const dateList = () => {
+    return Array.from({ length: 12 }, (_, index) => (
+      <option key={index} value={index}>{index + 1}월</option>
+    ));
+  };
+
+  const handleStartDateChange = (event) => {
+    const newStartDate = new Date(event.target.value);
+    setStartDate(newStartDate);
+  };
+  
+  const handleEndDateChange = (event) => {
+    const newStartDate = new Date(event.target.value);
+    setEndDate(newStartDate);
+  };
   return(
-    <div style={{display: 'flex', gap: '1em'}}>
+    <div style={{ display: 'flex', gap: '1em' }}>
+      <select onChange={(e)=>handleMonthChange(e)}>
+        {dateList()}
+      </select>
       <div>
-        <input type='date'></input> 
+        <input 
+        className={styles.button}
+        type='date' 
+        value={format(startDate, 'yyyy-MM-dd')}
+        onChange={(e)=>handleStartDateChange(e)}
+        />
         &nbsp;~&nbsp;
-        <input type='date'></input>
-      </div>
-      <div>
-        <button className={styles.button}>1개월</button>
-        <button className={styles.button}>2개월</button>
-        <button className={styles.button}>3개월</button>
+        <input 
+        className={styles.button}
+        type='date' 
+        value={format(endDate, 'yyyy-MM-dd')}
+        onChange={(e)=>handleEndDateChange(e)}
+        />
       </div>
     </div>
   )
