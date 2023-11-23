@@ -128,8 +128,8 @@ export function Delivery(props){
               <div className={styles.deliveryNowInformation}>
                 <span style={{fontWeight: '650'}}>{item.productName}{item.optionSelected && `(${item.optionSelected})`}, {item.cnt}개 </span>
                 <span style={{fontWeight: '650'}}>{item.discount 
-                ? (item.finprice - item.finprice/100*item.discount).toLocaleString()
-                : item.finprice.toLocaleString()}원</span>
+                ? (item.price * item.cnt) - ((item.price * item.cnt)/100*item.discount).toLocaleString()
+                : (item.price * item.cnt).toLocaleString()}원</span>
               </div>
             </div>
           </div>
