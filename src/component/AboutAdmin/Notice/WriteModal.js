@@ -4,13 +4,13 @@ import { useModal } from "../../../Store/DataStore";
 
 
 export default function WrtieModal(props) {
-    const { isModalOpen, closeModal, modalName } = useModal();
+    const { isModal, selectedModalClose, modalName } = useModal();
 
     // esc키를 누르면 모달창 닫기.
     useEffect(() => {
         const handleEscapeKey = (event) => {
-            if (event.key === 'Escape' && isModalOpen && props.modalName !== '') {
-                closeModal();
+            if (event.key === 'Escape' && isModal && props.modalName !== '') {
+                selectedModalClose();
             }
         };
 
@@ -19,7 +19,7 @@ export default function WrtieModal(props) {
         return () => {
             window.removeEventListener('keydown', handleEscapeKey);
         };
-    }, [isModalOpen, closeModal, modalName]);
+    }, [isModal, selectedModalClose, modalName]);
 
 
 
@@ -29,7 +29,7 @@ export default function WrtieModal(props) {
                 {/* 종료 버튼 */}
                 <div className={styles.closeButton}>
                     <span onClick={() => {
-                        closeModal();
+                        selectedModalClose();
                     }}>
                         <i className="fas fa-times"></i>
                     </span>

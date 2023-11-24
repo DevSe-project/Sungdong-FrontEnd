@@ -11,7 +11,7 @@ export default function AdminNotice() {
   const noticePostList = useNoticePostList();
   const { setNoticePostList } = useListActions();
   const {
-    isModalOpen,
+    isModal,
     openModal,
     selectedIndex,
     setSelectedIndex,
@@ -70,7 +70,7 @@ export default function AdminNotice() {
 
   // 글 담기
   const [tempList, setTempList] = useState({
-    id: '', 
+    id: '',
     title: '',
     contents: '',
     writer: '', // 관리자 로그인 계정의 이름으로 자동 들어가도록
@@ -94,16 +94,16 @@ export default function AdminNotice() {
         date: `${currentYear}/${currentMonth}/${currentDay} ${currentHour}:${currentMinute}`,
         files,
       };
-      
+
 
       // 입력받은 정보 추가
       setNoticePostList((prevData) => [...prevData, newPost]);
       // 입력란 초기화
       setTempList({
-        id: '', 
+        id: '',
         title: '',
         contents: '',
-        writer: '', 
+        writer: '',
         date: '',
         files: '',
       });
@@ -146,7 +146,7 @@ export default function AdminNotice() {
             {/* 코드 발급 블록 */}
             <div className={styles.leftModule}>
               <div className={styles.writeNotice_icon}>Click <i className="fa-solid fa-arrow-down"></i></div>
-              <div className={styles.write} onClick={() => { openModal('write') }}>글 작성</div>
+              <div className={styles.write} onClick={() => { selectedModalOpen('write') }}>글 작성</div>
             </div>
             {/* 뭐 넣을지 미정 */}
             <div className={styles.rightModule}>
@@ -158,73 +158,82 @@ export default function AdminNotice() {
               </div>
             </div>
           </div>
+
           {/* Post List */}
           <div className={styles.postList_container}>
+
             {/* Post Title */}
             <div className={styles.postList_container_title}>글 목록</div>
+
             {/* Post Map */}
-            {isLoading ? ( // isLoading이 true일 때 스켈레톤 이미지 표시
-              <div className={styles.skeletonContainer}>
-                <div className={styles.skeletonItem}></div>
-                <div className={styles.skeletonItem}></div>
-                <div className={styles.skeletonItem}></div>
-                {/* 추가적인 스켈레톤 아이템 */}
-              </div>
-            ) : (
-              noticePostList.map((item, index) => (
-                <div
-                  className={styles.post_container}
-                  key={index}>
-                  <div
-                    className={styles.postInfo_container}
-                    onClick={() => {
-                      setSelectedIndex(index);
-                      selectedModalOpen('edit');
-                      console.log(selectedIndex);
-                    }}
-                  >
-                    {/* No */}
-                    <div className={styles.post_no}>
-                      {index + 1}
-                    </div>
-                    {/* Code */}
-                    <div className={styles.post_title}>
-                      {item.title}
-                    </div>
-                    {/* Writer */}
-                    <div className={styles.post_writer}>
-                      {item.writer}
-                    </div>
-                    {/* WritedDate */}
-                    <div className={styles.post_date}>
-                      {item.date}
-                    </div>
-                  </div>
-                  {/* Del */}
-                  <div div className={styles.post_del_container} >
-                    <div className={styles.post_delButton}
-                      onClick={() => {
-                        const data = [...noticePostList];
-                        data.splice(index, 1);
-                        setNoticePostList(data);
-                      }
-                      }>
-                      삭제
-                    </div>
-                  </div>
+            {isLoading
+              ?
+              ( // isLoading이 true일 때 스켈레톤 이미지 표시 ( 20개 )
+                <div className={styles.skeletonContainer}>
+                  {/* 15짜리 배열 생성 -> 반복 */}
+                  {[...Array(15)].map((_, index) => (
+                    <div key={index} className={styles.skeletonItem}></div>
+                  ))}
                 </div>
-              ))
-            )}
+
+              )
+              :
+              (
+                noticePostList.map((item, index) => (
+                  <div className={styles.post_container} key={index}>
+                    <div
+                      className={styles.postInfo_container}
+                      onClick={() => {
+                        setSelectedIndex(index);
+                        selectedModalOpen('edit');
+                        console.log(selectedIndex);
+                      }}>
+                      {/* No */}
+                      <div className={styles.post_no}>
+                        {index + 1}
+                      </div>
+
+                      {/* Code */}
+                      <div className={styles.post_title}>
+                        {item.title}
+                      </div>
+
+                      {/* Writer */}
+                      <div className={styles.post_writer}>
+                        {item.writer}
+                      </div>
+
+                      {/* WritedDate */}
+                      <div className={styles.post_date}>
+                        {item.date}
+                      </div>
+                    </div>
+
+                    {/* Del */}
+                    <div div className={styles.post_del_container} >
+                      <div className={styles.post_delButton}
+                        onClick={() => {
+                          const data = [...noticePostList];
+                          data.splice(index, 1);
+                          setNoticePostList(data);
+                        }
+                        }>
+                        삭제
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
 
 
           </div>
         </div>
       </div>
       {
-        isModalOpen && modalName === 'write' ?
+        isModal && modalName === 'write' ?
           <WrtieModal tempList={tempList} setTempList={setTempList} addPost={addPost} />
           :
-          isModalOpen && modalName === 'edit' && selectedIndex != null ?
+          isModal && modalName === 'edit' && selectedIndex != null ?
             <EditModal editNotice={editNotice} list={noticePostList} tempList={tempList} setTempList={setTempList} />
             :
             null
