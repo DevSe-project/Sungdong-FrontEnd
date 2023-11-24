@@ -7,7 +7,7 @@ import JoinForm from "./JoinForm";
 import { useDataActions, useUserData } from "../../Store/DataStore";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { UserDataObj } from "../Data/UserData";
+import { UserDataObj } from "../Data/UserDataObj";
 
 export default function Join() {
     // link_navigate 
