@@ -1,0 +1,15 @@
+.body {
+    display: flex;
+}
+
+.mainConainter {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.filtSort_container {
+    margin: 1em;
+    display: flex;
+    gap: 1em;
+}
