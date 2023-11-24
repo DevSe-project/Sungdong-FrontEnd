@@ -440,6 +440,46 @@ export default function App() {
             </div>
             </>}/>
 
+        <Route path='/estimateBox' element={
+          <>
+            {/* 최상단배너 */}
+            <TopBanner
+              iconHovered={iconHovered}
+              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+              text_dynamicStyle={text_dynamicStyle}
+              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
+              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+            <div className='main'>
+              <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              <div className='container'>
+                <EstimateBox />
+                <footer className='footer'>
+                  <Footer />
+                </footer>
+              </div>
+            </div>
+            </>}/>
+
+        <Route path='/estimateManager' element={
+          <>
+            {/* 최상단배너 */}
+            <TopBanner
+              iconHovered={iconHovered}
+              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+              text_dynamicStyle={text_dynamicStyle}
+              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
+              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+            <div className='main'>
+              <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              <div className='container'>
+                <EstimateManager />
+                <footer className='footer'>
+                  <Footer />
+                </footer>
+              </div>
+            </div>
+            </>}/>
+
         {/* 회사 관련 */}
         <Route path='/comeway' element={
           <>

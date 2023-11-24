@@ -1,11 +1,12 @@
 import React from 'react';
 import { db } from '../../../firebase';
-import { useQuery } from 'react-query';
 import { AdminHeader } from '../AdminHeader';
 import { AdminMenuData } from '../AdminMenuData';
 import FilterSearch_User from './FilterSearch_User';
 import styles from './Manage_Users.module.css';
 import Sort_UserList from './Sort_UserList';
+import { useQuery } from '@tanstack/react-query';
+
 
 export default function Manage_Users() {
     
