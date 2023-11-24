@@ -98,12 +98,12 @@ export function MenuData(props){
       },
       subMenuItems: [{
         item: '견적함',
-        link: '/receipt',
+        link: '/estimateBox',
         require : isLogin === true
       },
       {
         item: '견적관리',
-        link: '/manageReceipt',
+        link: '/estimateManager',
         require : isLogin === true
       }
       ]

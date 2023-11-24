@@ -1,0 +1,60 @@
+.body{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.head{
+  width: 100%;
+  margin: 2em;
+  padding-bottom: 1%;
+  margin-right: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 3px solid #cc0000;
+}
+
+.tablebody{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+  overflow-x: hidden;
+  align-items: center;
+}
+
+.table{
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  border-top: 3px solid gray;
+  border-bottom: 1px solid lightgray;
+}
+
+.name{
+  width: 50%;
+}
+.button{
+  border: none;
+  border-radius: 10em;
+  background-color: orangered;
+  color: white;
+  font-weight: 550;
+  cursor : pointer;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 10px;
+  padding: 10px;
+}
+
+.submitButton{
+  border: 1px solid lightgray;
+  background-color: white;
+  padding: 0.5em;
+  padding-left: 1.5em;
+  padding-right: 1.5em;
+  cursor: pointer;
+}

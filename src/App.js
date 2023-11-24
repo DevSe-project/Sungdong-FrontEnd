@@ -64,6 +64,8 @@ import { getDocs, collection } from 'firebase/firestore'
 import { AccountBook } from "./component/AboutMyPage/AccountBook/AccountBook";
 import { DepositHistory } from "./component/AboutMyPage/AccountBook/DepositHistory";
 import Manage_Users from "./component/AboutAdmin/Users/Manage_Users";
+import { EstimateBox } from "./component/AboutEstimate/EstimateBox";
+import { EstimateManager } from "./component/AboutEstimate/EstimateManager";
 
 export default function App() {
   const navigate = useNavigate();
@@ -436,7 +438,7 @@ export default function App() {
                 </footer>
               </div>
             </div>
-          </>} />
+            </>}/>
 
         {/* 회사 관련 */}
         <Route path='/comeway' element={
