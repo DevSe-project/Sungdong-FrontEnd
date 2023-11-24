@@ -6,7 +6,7 @@ import { useDataActions, useModal, useUserData } from '../../Store/DataStore';
 export default function CodeInputModal() {
   const userData = useUserData();
   const { setUserData } = useDataActions();
-  const { selectedModalClose } = useModal();
+  const { selectedModalClose, closeModal} = useModal();
 
   const navigate = useNavigate();
 
@@ -39,9 +39,6 @@ export default function CodeInputModal() {
       sessionStorage.setItem('saveAllowAccess', JSON.stringify(false)); //세션에 해당상태 저장
       alert('유효하지 않은 코드입니다.');
     }
-  }
-  function closeModal(){
-    
   }
 
   return (

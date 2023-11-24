@@ -12,7 +12,6 @@ export default function AdminNotice() {
   const { setNoticePostList } = useListActions();
   const {
     isModal,
-    openModal,
     selectedIndex,
     setSelectedIndex,
     modalName,

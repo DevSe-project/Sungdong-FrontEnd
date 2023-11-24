@@ -50,7 +50,7 @@ import { AdminCategoryEdit } from './component/AboutAdmin/AdminCategoryEdit';
 import { AdminSoldList } from './component/AboutAdmin/AdminSoldList';
 import { AdminNotSoldList } from './component/AboutAdmin/AdminNotSoldList';
 import { AdminRefund } from './component/AboutAdmin/AdminRefund';
-import { AdminNotice } from './component/AboutAdmin/Notice/AdminNotice';
+import AdminNotice from './component/AboutAdmin/Notice/AdminNotice';
 
 // 템플릿 컴포넌트
 import { TopBanner } from './component/TemplateLayout/AboutHeader/TopBanner';
@@ -65,7 +65,7 @@ import { AccountBook } from "./component/AboutMyPage/AccountBook/AccountBook";
 import { DepositHistory } from "./component/AboutMyPage/AccountBook/DepositHistory";
 import Manage_Users from "./component/AboutAdmin/Users/Manage_Users";
 
-function App() {
+export default function App() {
   const navigate = useNavigate();
   const location = useLocation();
   // 주문 스탭 부분 State
@@ -547,5 +547,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
