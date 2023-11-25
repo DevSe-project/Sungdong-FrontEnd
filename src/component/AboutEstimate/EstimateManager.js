@@ -39,6 +39,8 @@ export function EstimateManager(){
               <th>견적번호</th>
               <th>견적일자</th>
               <th>품명 및 규격</th>
+              <th>수량</th>
+              <th>단위</th>
               <th>금액</th>
               <th>주문하기</th>
               <th>견적서 엑셀</th>
@@ -52,6 +54,8 @@ export function EstimateManager(){
               <td>번호</td>
               <td>일자</td>
               <td>품명 및 규격</td>
+              <td>수량</td>
+              <td>EA</td>
               <td>금액</td>
               <td>주문하기</td>
               <td>견적서 엑셀</td>
