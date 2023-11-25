@@ -26,7 +26,7 @@ export function EstimateManager(){
     <div style={{width:'90%'}}>
       {/* 헤드라인 */}
       <div className={styles.head}>
-        <h1><i className="fa-solid fa-heart"/> 견적함</h1>
+        <h1><i className="fa-solid fa-heart"/> 견적관리</h1>
       </div>
       {/* 필터 */}
       <EstimateFilter/>
