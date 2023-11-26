@@ -1,6 +1,10 @@
 import styles from './Table.module.css';
 import { ErrorTradeFilter } from './ErrorTradeFilter';
+import ErrorTradeModal from './ErrorTradeModal';
+import { useModalActions, useModalState } from '../../Store/DataStore';
 export function ErrorTrade(){
+  const { isModal } = useModalState();
+  const { setIsModal } = useModalActions();
   return(
     <div style={{width:'90%'}}>
       {/* 헤드라인 */}
@@ -43,7 +47,12 @@ export function ErrorTrade(){
               <td>판매액</td>
               <td>입금액</td>
               <td>잔액</td>
-              <td><button className={styles.button}>작성</button></td>
+              <td>
+                <button 
+                className={styles.button}
+                onClick={() => { setIsModal(true) }}
+                >작성</button>
+              </td>
             </tr>
           </tbody>
           <tfoot>
@@ -66,6 +75,11 @@ export function ErrorTrade(){
           </tfoot>
         </table>
       </div>
+      {/* --------------TakeBack-Modal-------------- */}
+      {isModal &&
+        <div className={styles.modalOverlay}>
+          <ErrorTradeModal />
+        </div>}
     </div>
   )
 }

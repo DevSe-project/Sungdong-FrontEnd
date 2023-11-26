@@ -191,14 +191,16 @@ function buyThis(product, count){
           cnt : count,
           optionSelected : optionSelected,
         }
-      } return {
+      } else {
+        return {
         ...product,
         userId: inLogin.id,
         cnt : count,
+        }
       }
     }
       // // sessionStorage에 저장
-      // sessionStorage.setItem('orderData', JSON.stringify([newBuyProduct]));
+      sessionStorage.setItem('orderData', JSON.stringify([newBuyProduct()]));
       setOrderList([newBuyProduct()]);
       navigate("/basket/receipt");
       props.setActiveTab(2);

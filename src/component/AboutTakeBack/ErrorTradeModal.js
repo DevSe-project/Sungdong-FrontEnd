@@ -2,7 +2,7 @@ import styles from './Modal.module.css';
 import { useEffect } from 'react';
 import { useModalActions } from '../../Store/DataStore';
 
-export default function TakeBackModal() {
+export default function ErrorTradeModal() {
     const {closeModal} = useModalActions();
 
     // esc키를 누르면 모달창 닫기.
@@ -32,7 +32,7 @@ export default function TakeBackModal() {
     const takeBackList = [
         { label : '작성자', content : <input className={styles.inputStyle} style={{width: '100%'}} type='text'/>},
         { label : '포장상태', content : wrapStatus()},
-        { label : '처리사항', content : '반품처리'},
+        { label : '처리사항', content : tradeStatus()},
         { label : '상품상태', content : productStatus()},
         { label : '반품수량', 
           content : 
@@ -61,7 +61,7 @@ export default function TakeBackModal() {
             <div className={styles.contentContainer}>
                 {/* 제목 */}
                 <div className={styles.title}>
-                    반품증 작성 작업
+                    불량 교환증 작성 작업
                 </div>
                 {/* 작성일과 반품상담자 */}
                 <div className={styles.details}>
@@ -101,7 +101,7 @@ export default function TakeBackModal() {
                         </div>
                         <div className={styles.buttonContainer}>
                           <label>최종 환불금액 : <input className={styles.inputStyle} type='text' disabled/> 원</label>
-                          <button className={styles.button}>반품 신청</button>
+                          <button className={styles.button}>불량/교환 신청</button>
                         </div>
                     </div>
                 </div>
@@ -110,7 +110,7 @@ export default function TakeBackModal() {
     );
 }
 
-// 상품 상태 옵션
+// 포장 상태 옵션
 function wrapStatus(){
     return(
       <div style={{display: 'flex', gap: '0.5em'}}>
@@ -123,6 +123,20 @@ function wrapStatus(){
         </div>
       </div>
     )
+}
+
+// 교환 상태 옵션
+function tradeStatus(){
+  return(
+    <div style={{display: 'flex', gap: '0.5em'}}>
+      <div>
+        <select className={styles.inputStyle}  name="tradeStatus">
+          <option name="tradeStatus" type="교환반품">교환반품</option>
+          <option name="tradeStatus" type="불량교환">불량교환</option>
+        </select>
+      </div>
+    </div>
+  )
 }
 
 // 상품 상태 옵션

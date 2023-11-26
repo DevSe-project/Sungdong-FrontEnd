@@ -39,7 +39,8 @@ const Sort_UserList = (props) => {
                         <select
                             className={styles.sortSelect}
                             value={props.sortBy[priority - 1]}
-                            onChange={(e) => onSort(e.target.value, priority - 1)}>
+                            //onChange={(e) => onSort(e.target.value, priority - 1)}
+                            >
                             {/* 옵션 배열의 객체들을 map으로 풂. */}
                             {optionsArr.map((item, index) => (
                                 <option key={index} value={item.value}>{item.key}</option>

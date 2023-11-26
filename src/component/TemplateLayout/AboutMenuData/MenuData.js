@@ -23,10 +23,7 @@ export function MenuData(props){
       title: {
         item: '성동물산 소개',
       },
-      subMenuItems: [{
-        item: '기업 소개',
-        link: '/introduceCompany'
-      },
+      subMenuItems: [
       {
         item: '오시는 길',
         link: '/comeway',
