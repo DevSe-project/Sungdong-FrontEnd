@@ -127,6 +127,7 @@ export function Receipt(props){
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date()); // 선택한 날짜를 Date 객체로 저장
 
+
   // 주소창으로 접근 등 잘못된 접근 시 경고창 표시 후 홈으로 이동 
   useEffect(()=>{ 
     if (props.activeTab !== 2) {
@@ -295,12 +296,12 @@ export function Receipt(props){
 
   // submit 버튼
   function submitReceipt(){
-    validateForm();
     try{
       orderMutation.mutate();
     } catch(error) {
+      validateForm();
       const isValidSupply = orderList.every((orderItem) => {
-      const productMatchingId = data.find((item) => item.id === orderItem.productId);
+      const productMatchingId = data.find((item) => item.id === orderItem.id);
       return productMatchingId && productMatchingId.supply > 0;
     });
     

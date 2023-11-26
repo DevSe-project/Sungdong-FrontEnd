@@ -126,7 +126,7 @@ export function Delivery(props){
             <div className={styles.deliveryNowItem}>
               <img className={styles.img} src={item.image.mini} alt="주문상품"/>
               <div className={styles.deliveryNowInformation}>
-                <span style={{fontWeight: '650'}}>{item.productName}{item.optionSelected && `(${item.optionSelected})`}, {item.cnt}개 </span>
+                <span style={{fontWeight: '650'}}>{item.title}{item.optionSelected && `(${item.optionSelected})`}, {item.cnt}개 </span>
                 <span style={{fontWeight: '650'}}>{item.discount 
                 ? (item.price * item.cnt) - ((item.price * item.cnt)/100*item.discount).toLocaleString()
                 : (item.price * item.cnt).toLocaleString()}원</span>
@@ -139,7 +139,10 @@ export function Delivery(props){
             handleDeliveryAPI(item, 111111111111)
           }}
             className={styles.button}>배송 조회</button>
-            <button className={styles.button}>교환, 반품 신청</button>
+            <button
+            onClick={()=>navigate("/return/request")} 
+            className={styles.button}
+            >교환, 반품 신청</button>
           </div>
         </div>
       </div>
