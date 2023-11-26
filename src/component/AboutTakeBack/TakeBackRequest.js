@@ -1,6 +1,10 @@
+import { useModal } from '../../Store/DataStore';
 import styles from './Table.module.css';
 import { TackBackFilter } from './TakeBackFilter';
+import TakeBackModal from './TakeBackModal';
 export function TackBackRequest(){
+  const { isModal, setIsModal, setSelectedIndex } = useModal();
+
   return(
     <div style={{width:'90%'}}>
       {/* 헤드라인 */}
@@ -43,7 +47,12 @@ export function TackBackRequest(){
               <td>판매액</td>
               <td>입금액</td>
               <td>잔액</td>
-              <td><button className={styles.button}>작성</button></td>
+              <td>
+                <button 
+                className={styles.button}
+                onClick={() => { setIsModal(true) }}
+                >작성</button>
+              </td>
             </tr>
           </tbody>
           <tfoot>
@@ -66,6 +75,11 @@ export function TackBackRequest(){
           </tfoot>
         </table>
       </div>
+      {/* --------------TakeBack-Modal-------------- */}
+        {isModal &&
+        <div className={styles.modalOverlay}>
+          <TakeBackModal />
+        </div>}
     </div>
   )
 }
