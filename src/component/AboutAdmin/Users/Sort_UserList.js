@@ -21,7 +21,8 @@ const Sort_UserList = (props) => {
                         <select 
                             className={styles.sortSelect}
                             value={props.sortBy[priority - 1]}
-                            onChange={(e) => onSort(e.target.value, priority - 1)}>
+                            // onChange={(e) => onSort(e.target.value, priority - 1)}
+                            >
                             <option value="usertype">구분</option>
                             <option value="bizname">업체명ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</option>
                             <option value="grade">등급</option>
