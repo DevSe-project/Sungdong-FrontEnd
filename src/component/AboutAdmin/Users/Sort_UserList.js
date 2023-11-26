@@ -1,13 +1,30 @@
+// Sort_UserList.js
 import React from 'react';
 import styles from './Sort_UserList.module.css';
 
 const Sort_UserList = (props) => {
-
     const handleSort = () => {
         props.onSort();
     };
 
-    // 추가 예정 기능 - 정렬이 2개 이상 선택되면 경고문구 표시
+    const optionsArr = [
+        {
+            value: "",
+            key: "선택없음",
+        },
+        {
+            value: "userType",
+            key: "고객유형",
+        },
+        {
+            value: "bizname",
+            key: "업체명(상호명)",
+        },
+        {
+            value: "grade",
+            key: "회원등급",
+        },
+    ];
 
     return (
         <div className={styles.body}>
@@ -15,28 +32,24 @@ const Sort_UserList = (props) => {
             <div className={styles.title}>정렬 우선순위</div>
 
             <div className={styles.sortItems}>
+                {/* 정렬은 3개까지만 */}
                 {[1, 2, 3].map((priority) => (
                     <label key={priority}>
-                        {priority}순위
-                        <select 
+                        {priority + 1}순위
+                        <select
                             className={styles.sortSelect}
                             value={props.sortBy[priority - 1]}
                             onChange={(e) => onSort(e.target.value, priority - 1)}>
-                            <option value="usertype">구분</option>
-                            <option value="bizname">업체명ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</option>
-                            <option value="grade">등급</option>
+                            {/* 옵션 배열의 객체들을 map으로 풂. */}
+                            {optionsArr.map((item, index) => (
+                                <option key={index} value={item.value}>{item.key}</option>
+                            ))}
                         </select>
                     </label>
                 ))}
-
-                {/* 다음 미팅: 고객 리스트 중 하나를 클릭하면 고객 상세 정보를 볼 수 있다. 
-                        리스트에서 바로 보이도록 하고 싶은 데이터가 무엇이 있는지 취합하고, 
-                        이 데이터를 option으로 추가 예정 */}
-
             </div>
 
             <button className={styles.button} onClick={handleSort}>정렬하기</button>
-
         </div>
     );
 };
