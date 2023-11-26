@@ -1,12 +1,28 @@
-.button {
-    margin-right: 10px;
-    padding: 10px;
-    background-color: #3498db;
-    color: #fff;
-    border: none;
-    cursor: pointer;
+.filtSortContainer {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
 }
 
-.button:hover {
-    background-color: #2980b9;
+.sortContainer {
+    margin-bottom: 20px;
 }
+
+.sortItems {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    height: 40px;
+}
+
+.button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
