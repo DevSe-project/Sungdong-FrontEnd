@@ -3,14 +3,13 @@ import { useEffect } from 'react';
 import { useModal, useNoticePostList } from '../../Store/DataStore';
 
 export default function TakeBackModal() {
-    const {setIsModal, isModal} = useModal();
-    const noticePostList = useNoticePostList();
+    const {closeModal} = useModal();
 
     // esc키를 누르면 모달창 닫기.
     useEffect(() => {
         const onClose = (event) => {
             if (event.key === 'Escape') {
-                setIsModal(false);
+                closeModal();
             }
         };
 
@@ -19,13 +18,13 @@ export default function TakeBackModal() {
         return () => {
             window.removeEventListener('keydown', onClose);
         };
-    }, [setIsModal]);
+    }, [closeModal]);
 
     return (
         <div className={styles.modalContainer}>
             {/* 종료 버튼 */}
             <div className={styles.closeButton}>
-                <span onClick={() => setIsModal(false)}>
+                <span onClick={() => closeModal()}>
                     <i className="fas fa-times"></i>
                 </span>
             </div>
@@ -33,21 +32,21 @@ export default function TakeBackModal() {
             <div className={styles.contentContainer}>
                 {/* 제목 */}
                 <div className={styles.title}>
-                    {noticePostList[selectedIndex].title}
+                    반품증 작성 작업
                 </div>
-                {/* 작성일과 작성자 */}
+                {/* 작성일과 반품상담자 */}
                 <div className={styles.details}>
                     <div className={styles.date}>
-                        작성일: {noticePostList[selectedIndex].date}
+                        작성일: 
                     </div>
                     <div className={styles.writer}>
-                        작성자: {noticePostList[selectedIndex].writer}
+                        반품상담자: 성동물산(주)
                     </div>
                 </div>
                 {/* 글 내용 */}
                 <div className={styles.contentsBox}>
                     <div className={styles.contents}>
-                        {noticePostList[selectedIndex].contents}
+                        일단 나눠보자.
                     </div>
                 </div>
             </div>

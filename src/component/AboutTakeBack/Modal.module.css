@@ -7,14 +7,14 @@
   display: flex;
   transform: translate(-50%, -50%);
   background-color: #ffffff;
-  width: 80%;
-  max-width: 1000px;
+  width: 100%;
+  max-width: 1500px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   border-radius: 8px;
   padding: 20px;
   overflow-x: hidden;
   overflow-y: auto;
-  height: 70vh;
+  height: 80vh;
   max-height: 80vh;
 }
 
@@ -32,15 +32,18 @@
 }
 
 .title {
-  font-size: 24px;
-  font-weight: bold;
+  font-size: 2em;
+  font-weight: bolder;
   text-align: center;
 }
 
 .details {
+  display: flex;
   text-align: center;
-  font-size: 14px;
+  font-size: 1.3em;
+  font-weight: 600;
   color: #888;
+  justify-content: space-between;
 }
 
 .date, .writer {
@@ -51,11 +54,11 @@
   display: flex;
   width: 100%;
   justify-content: center;
+  margin-top: 0.5em;
 }
 
 .contents {
   border: 2px solid darkgray;
-  border-radius: 1dvh;
   width: 95%;
   height: 58vh;
   padding: 1em;
