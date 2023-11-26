@@ -2,13 +2,14 @@ import React, { useEffect } from 'react';
 import styles from './Notice.module.css';
 import NoticeDetail from './NoticeDetail';
 import { NoticePostObj } from '../Data/NoticePostObj';
-import { useListActions, useModal, useNoticePostList } from '../../Store/DataStore';
+import { useListActions, useModalActions, useModalState, useNoticePostList } from '../../Store/DataStore';
 import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner';
 import { Footer } from '../TemplateLayout/AboutFooter/Footer';
 import { MenuData } from '../TemplateLayout/AboutMenuData/MenuData';
 
 export function Notice() {
-  const { isModal, setIsModal, setSelectedIndex } = useModal();
+  const { isModal} = useModalState();
+  const { setIsModal, setSelectedIndex } = useModalActions();
   const { setNoticePostList } = useListActions();
   const noticePostList = useNoticePostList();
 

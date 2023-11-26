@@ -6,13 +6,13 @@ import FindModal from './FindModal';
 import CodeInputModal from './CodeInputModal';
 import CryptoJS from 'crypto-js';
 import axios from 'axios';
-import { useDataActions, useIsLogin, useModal, useSetLogin, useUserData } from '../../Store/DataStore';
+import { useDataActions, useIsLogin, useModal, useModalActions, useModalState, useSetLogin, useUserData } from '../../Store/DataStore';
 import { useMutation } from '@tanstack/react-query';
 
 export function Login(props) {
 
-  const { isModal, modalName, selectedModalOpen } = useModal();
-
+  const { isModal, modalName } = useModalState();
+  const {selectedModalOpen} = useModalActions();
   const { setLogin } = useSetLogin();
   const { isLogin } = useIsLogin();
   const userData = useUserData();
