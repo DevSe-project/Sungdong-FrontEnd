@@ -67,6 +67,9 @@ import Manage_Users from "./component/AboutAdmin/Users/Manage_Users";
 import { EstimateBox } from "./component/AboutEstimate/EstimateBox";
 import { EstimateManager } from "./component/AboutEstimate/EstimateManager";
 import { TackBackRequest } from "./component/AboutTakeBack/TakeBackRequest";
+import { TakeBackList } from "./component/AboutTakeBack/TakeBackList";
+import { ErrorTrade } from "./component/AboutTakeBack/ErrorTradeRequest";
+import { ErrorTradeList } from "./component/AboutTakeBack/ErrorTradeList";
 
 export default function App() {
   const navigate = useNavigate();
@@ -482,6 +485,7 @@ export default function App() {
             </>}/>
         
         {/* 반품 관련 */}
+        {/* 반품 신청 */}
         <Route path='/return/request' element={
           <>
             {/* 최상단배너 */}
@@ -495,6 +499,67 @@ export default function App() {
               <MenuData menu_dynamicStyle={menu_dynamicStyle} />
               <div className='container'>
                 <TackBackRequest />
+                <footer className='footer'>
+                  <Footer />
+                </footer>
+              </div>
+            </div>
+            </>}/>
+
+        {/* 반품조회 */}
+        <Route path='/return/list' element={
+          <>
+            {/* 최상단배너 */}
+            <TopBanner
+              iconHovered={iconHovered}
+              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+              text_dynamicStyle={text_dynamicStyle}
+              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
+              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+            <div className='main'>
+              <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              <div className='container'>
+                <TakeBackList />
+                <footer className='footer'>
+                  <Footer />
+                </footer>
+              </div>
+            </div>
+            </>}/>
+
+        {/* 불량 교환 관련 */}
+        <Route path='/error/request' element={
+          <>
+            {/* 최상단배너 */}
+            <TopBanner
+              iconHovered={iconHovered}
+              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+              text_dynamicStyle={text_dynamicStyle}
+              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
+              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+            <div className='main'>
+              <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              <div className='container'>
+                <ErrorTrade/>
+                <footer className='footer'>
+                  <Footer />
+                </footer>
+              </div>
+            </div>
+            </>}/>
+        <Route path='/error/list' element={
+          <>
+            {/* 최상단배너 */}
+            <TopBanner
+              iconHovered={iconHovered}
+              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+              text_dynamicStyle={text_dynamicStyle}
+              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
+              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+            <div className='main'>
+              <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              <div className='container'>
+                <ErrorTradeList />
                 <footer className='footer'>
                   <Footer />
                 </footer>

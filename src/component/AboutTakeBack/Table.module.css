@@ -4,6 +4,8 @@
   justify-content: center;
 }
 
+/* 헤드라인 */
+
 .head{
   width: 100%;
   margin: 2em;
@@ -15,6 +17,8 @@
   align-items: center;
   border-bottom: 3px solid #cc0000;
 }
+
+/* 표 */
 
 .tablebody{
   width: 100%;
@@ -36,6 +40,9 @@
 .name{
   width: 50%;
 }
+
+/* 버튼 */
+
 .button{
   border: none;
   border-radius: 10em;
@@ -48,4 +55,30 @@
   text-align: center;
   margin: 10px;
   padding: 10px;
+}
+
+.submitButton{
+  border: 1px solid lightgray;
+  background-color: white;
+  padding: 0.5em;
+  padding-left: 1.5em;
+  padding-right: 1.5em;
+  cursor: pointer;
+}
+
+.buttonContainer{
+  font-size: 1.2em;
+  margin-top: 1em;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 0.5em;
+}
+
+.pageButton{
+  border: 1px solid lightgray;
+  background-color: white;
+  padding: 0.5em;
+  padding-left: 1.5em;
+  padding-right: 1.5em;
 }

@@ -13,8 +13,8 @@ export function EstimateFilter(){
         <div style={{ width: '90%', textAlign: 'left', padding: '1.5em', borderBottom: '1px solid lightgray'}}>
           <h4 style={{fontSize: '1.2em', fontWeight: '650'}}>필터</h4>
         </div>
-        {filterList.map((item) => (
-        <div className={styles.container}>
+        {filterList.map((item, key) => (
+        <div key={key} className={styles.container}>
           <div className={styles.label}>
             {item.label}
           </div>

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styles from './Filter.module.css'
 import { addMonths, subMonths, format } from 'date-fns';
 
-export function TackBackFilter(){
+export function ErrorTradeListFilter(){
   const filterList = [
     { label : '조회일자', content : DateFilter()},
     { label : '출력', content : detailSearch()},

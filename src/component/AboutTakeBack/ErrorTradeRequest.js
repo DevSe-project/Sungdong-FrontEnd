@@ -1,14 +1,14 @@
 import styles from './Table.module.css';
-import { TackBackFilter } from './TakeBackFilter';
-export function TackBackRequest(){
+import { ErrorTradeFilter } from './ErrorTradeFilter';
+export function ErrorTrade(){
   return(
     <div style={{width:'90%'}}>
       {/* 헤드라인 */}
       <div className={styles.head}>
-        <h1><i className="fa-solid fa-heart"/> 반품신청</h1>
+        <h1><i className="fa-solid fa-heart"/> 불량교환신청</h1>
       </div>
       {/* 필터 */}
-      <TackBackFilter/>
+      <ErrorTradeFilter/>
       {/* 테이블 */}
       <div className={styles.tablebody}>
         <table className={styles.table}>
@@ -23,7 +23,7 @@ export function TackBackRequest(){
               <th>판매액</th>
               <th>할인 및 입금액</th>
               <th>잔액</th>
-              <th>반품증 작성</th>
+              <th>불량 교환증 작성</th>
             </tr>
             <tr>
               <th colSpan="2">전월이월</th>
