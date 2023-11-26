@@ -9,6 +9,7 @@
 
 .filtSortContainer {
     display: flex;
+    gap: 10px;
     height: max-content;
 }
 .FilterSearch_User {

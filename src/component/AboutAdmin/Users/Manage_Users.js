@@ -55,8 +55,10 @@ export default function Manage_Users() {
                         <thead>
                             <tr>
                                 <th>구분</th>
-                                <th>업체명</th>
+                                <th>업체명(상호명)</th>
                                 <th>등급</th>
+                                <th>주소</th>
+                                <th>연락처</th>
                                 <th>CMS 여부</th>
                                 <th>작업</th>
                             </tr>
@@ -64,9 +66,11 @@ export default function Manage_Users() {
                         <tbody>
                             {sortedData.map((user, index) => (
                                 <tr key={index}>
-                                    <td>{user.usertype}</td>
+                                    <td>{user.userType}</td>
                                     <td>{user.bizname}</td>
                                     <td>{user.grade}</td>
+                                    <td>{user.address.bname} {user.address.roadAddress}({user.address.zonecode})</td>
+                                    <td>{user.corporatioData.companyNum.num1}-{user.corporatioData.companyNum.num2}-{user.corporatioData.companyNum.num3}</td>
                                     <td>{user.CMS ? "동의" : "비동의"}</td>
                                     <td>
                                         <button className={styles.button}
