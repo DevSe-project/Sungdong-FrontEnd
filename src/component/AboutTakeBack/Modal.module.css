@@ -8,7 +8,7 @@
   transform: translate(-50%, -50%);
   background-color: #ffffff;
   width: 100%;
-  max-width: 1500px;
+  max-width: 1400px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   border-radius: 8px;
   padding: 20px;
@@ -67,19 +67,79 @@
   line-height: 1.6; /* 텍스트 줄 간격 설정 */
 }
 
-.productInfo{
-  height: 20%;
+/* 상품 정보 */
+.productInfo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-wrap: wrap;
+  width: 100%;
+  padding-bottom: 1em;
   border-bottom: 1px solid lightgray;
+}
+
+.container {
+  width: 50%;
+  display: flex;  
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding-top: 0.7em;
+  padding-bottom: 0.7em;
+}
+
+.label {
+  flex: 1; /* 레이블의 크기를 자동으로 조절 */
+  max-width: 30%; /* 최대 너비를 설정하여 너무 확장되지 않도록 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content {
+  flex: 2; /* 내용의 크기를 자동으로 조절 */
+  max-width: 70%; /* 최대 너비를 설정하여 너무 확장되지 않도록 */
+  display: flex;
+  justify-content: center;
 }
 
 
 /* 추가된 스타일 */
+.inputStyle{
+  border: 1px solid lightgray;
+  background-color: white;
+  padding: 0.5em;
+  padding-left: 1.5em;
+  padding-right: 1.5em;
+}
 .contentContainer {
   display: flex;
   flex-direction: column;
   justify-content: center;
   position: relative;
   width: 100%;
+}
+.buttonContainer{
+  width: 100%;
+  margin-top: 1em;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.button{
+  border: none;
+  border-radius: 10em;
+  background-color: orangered;
+  color: white;
+  font-weight: 550;
+  cursor : pointer;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 10px;
+  padding: 10px;
 }
 
 /* 모바일 화면에서 제목을 중앙 정렬 */
