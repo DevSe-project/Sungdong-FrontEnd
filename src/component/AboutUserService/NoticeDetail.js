@@ -1,9 +1,10 @@
 import styles from './NoticeDetail.module.css';
 import { useEffect } from 'react';
-import { useModal, useNoticePostList } from '../../Store/DataStore';
+import { useModal, useModalActions, useModalState, useNoticePostList } from '../../Store/DataStore';
 
 export default function NoticeDetail() {
-    const {setIsModal, selectedIndex, isModal, setSelectedIndex} = useModal();
+    const {selectedIndex} = useModalState();
+    const {setIsModal} = useModalActions();
     const noticePostList = useNoticePostList();
 
     // esc키를 누르면 모달창 닫기.

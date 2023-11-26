@@ -5,20 +5,13 @@ import { AdminMenuData } from "../AdminMenuData";
 import WrtieModal from "./WriteModal";
 import EditModal from "./EditModal";
 import { NoticePostObj } from "../../Data/NoticePostObj"; // 수정된 부분
-import { useListActions, useNoticePostList, useModal } from "../../../Store/DataStore";
+import { useListActions, useNoticePostList, useModalActions, useModalState } from "../../../Store/DataStore";
 
 export default function AdminNotice() {
   const noticePostList = useNoticePostList();
   const { setNoticePostList } = useListActions();
-  const {
-    isModal,
-    selectedIndex,
-    setSelectedIndex,
-    modalName,
-    selectedModalOpen,
-    selectedModalClose,
-    closeModal
-  } = useModal();
+  const {isModal, selectedIndex, modalName} = useModalState();
+  const {setSelectedIndex,closeModal, selectedModalOpen, selectedModalClose } = useModalActions();
   const [isLoading, setIsLoading] = useState(true); // 로딩 중 여부 추가
 
   // 데이터 불러오기

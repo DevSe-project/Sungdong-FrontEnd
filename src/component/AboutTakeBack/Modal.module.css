@@ -67,6 +67,12 @@
   line-height: 1.6; /* 텍스트 줄 간격 설정 */
 }
 
+.productInfo{
+  height: 20%;
+  border-bottom: 1px solid lightgray;
+}
+
+
 /* 추가된 스타일 */
 .contentContainer {
   display: flex;

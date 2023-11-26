@@ -1,9 +1,10 @@
-import { useModal } from '../../Store/DataStore';
+import { useModalActions, useModalState } from '../../Store/DataStore';
 import styles from './Table.module.css';
 import { TackBackFilter } from './TakeBackFilter';
 import TakeBackModal from './TakeBackModal';
 export function TackBackRequest(){
-  const { isModal, setIsModal, setSelectedIndex } = useModal();
+  const { isModal } = useModalState();
+  const { setIsModal } = useModalActions();
 
   return(
     <div style={{width:'90%'}}>

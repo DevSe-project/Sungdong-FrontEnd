@@ -1,9 +1,9 @@
 import styles from './Modal.module.css';
 import { useEffect } from 'react';
-import { useModal, useNoticePostList } from '../../Store/DataStore';
+import { useModalActions } from '../../Store/DataStore';
 
 export default function TakeBackModal() {
-    const {closeModal} = useModal();
+    const {closeModal} = useModalActions();
 
     // esc키를 누르면 모달창 닫기.
     useEffect(() => {
@@ -19,6 +19,16 @@ export default function TakeBackModal() {
             window.removeEventListener('keydown', onClose);
         };
     }, [closeModal]);
+
+    const productList = [
+        { label : '상품정보', content : '상품정보입니다.'},
+        { label : '배송구분', content : '배송구분입니다.'},
+        { label : '승인시간', content : '배송구분입니다.'},
+        { label : '판매일자', content : '배송구분입니다.'},
+        { label : '전표번호', content : '배송구분입니다.'},
+        { label : '경과일', content : '배송구분입니다.'},
+      ]
+
 
     return (
         <div className={styles.modalContainer}>
@@ -46,7 +56,24 @@ export default function TakeBackModal() {
                 {/* 글 내용 */}
                 <div className={styles.contentsBox}>
                     <div className={styles.contents}>
-                        일단 나눠보자.
+                        <div className={styles.productInfo}>
+                            {productList.map((item,key) => 
+                            <div className={styles.pleft}>
+                                <div className={styles.label}>
+                                    {item.label}
+                                </div>
+                                <div className={styles.content}>
+                                    {item.content}
+                                </div>
+                            </div>
+                            )}
+                            <div className={styles.pright}>
+                                <div className={styles.label}>
+                                </div>
+                                <div className={styles.content}>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
