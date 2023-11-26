@@ -1,11 +1,12 @@
 import { React, useEffect, useState } from 'react';
 import styles from './Modal.module.css';
-import { useDataActions, useModal, useUserData } from '../../Store/DataStore';
+import { useDataActions, useModalActions, useModalState, useUserData } from '../../Store/DataStore';
 import FindId from './FindId';
 import FindPw from './FindPw';
 
 export default function FindModal(props) {
-    const { modalName, isModal, selectedModalOpen, selectedModalClose, setModalName } = useModal();
+    const { modalName, isModal } = useModalState();
+    const {selectedModalOpen, selectedModalClose, setModalName} = useModalActions();
     const userData = useUserData();
     const { setUserData } = useDataActions();
     // Input State

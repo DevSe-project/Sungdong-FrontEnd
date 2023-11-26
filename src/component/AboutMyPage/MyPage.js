@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { TopBanner } from "../TemplateLayout/AboutHeader/TopBanner";
 import styles from "./Mypage.module.css";
 import ModifyPW from "./ModifyPW";
-import { useIsLogin, useModal, useUserData } from "../../Store/DataStore";
+import { useIsLogin, useModalState, useUserData } from "../../Store/DataStore";
 import { useNavigate } from "react-router-dom";
 import { MenuData } from "../TemplateLayout/AboutMenuData/MenuData";
 import { Footer } from "../TemplateLayout/AboutFooter/Footer";
 export default function MyPage(props) {
 
-  const { isModal, openModal } = useModal();
+  const { isModal, openModal } = useModalState();
   const { isLogin } = useIsLogin()
 
   const navigate = useNavigate();

@@ -1,16 +1,13 @@
 import styles from './WriteEditModal.module.css';
 import { useEffect, useState } from 'react';
-import { useModal, useNoticePostList } from "../../../Store/DataStore";
+import { useModalActions, useModalState, useNoticePostList } from "../../../Store/DataStore";
 
 export default function EditModal(props) {
     // call_글 목록
     const noticePostList = useNoticePostList();
     // call_modalZustand
-    const { 
-        selectedModalClose,
-        selectedIndex,
-        setSelectedIndex
-    } = useModal();
+    const { selectedModalClose, setSelectedIndex } = useModalActions();
+    const {selectedIndex} = useModalState();
     // setting_space_for_input
     const [tempData, setTempData] = useState({
         title: noticePostList[selectedIndex]?.title || '',

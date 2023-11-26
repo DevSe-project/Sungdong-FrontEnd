@@ -1,11 +1,11 @@
 import styles from "./WriteEditModal.module.css";
 import { useEffect } from 'react';
-import { useModal } from "../../../Store/DataStore";
+import { useModalActions, useModalState } from "../../../Store/DataStore";
 
 
 export default function WrtieModal(props) {
-    const { isModal, selectedModalClose, modalName } = useModal();
-
+    const { isModal, modalName } = useModalState();
+    const {selectedModalClose} = useModalActions();
     // esc키를 누르면 모달창 닫기.
     useEffect(() => {
         const handleEscapeKey = (event) => {

@@ -1,12 +1,12 @@
 import { React, useEffect, useState } from 'react';
 import styles from './Modal.module.css';
 import { useNavigate } from 'react-router-dom';
-import { useDataActions, useModal, useUserData } from '../../Store/DataStore';
+import { useDataActions, useModal, useModalActions, useUserData } from '../../Store/DataStore';
 
 export default function CodeInputModal() {
   const userData = useUserData();
   const { setUserData } = useDataActions();
-  const { selectedModalClose, closeModal} = useModal();
+  const { selectedModalClose, closeModal} = useModalActions();
 
   const navigate = useNavigate();
 
