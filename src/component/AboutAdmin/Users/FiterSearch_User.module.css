@@ -1,33 +1,52 @@
-/* FiterSearch_User.module.css */
-
-.searchbar {
+.body {
     width: 100%;
-    max-width: 600px; /* 예시로 600px로 제한 */
-    margin: 0 auto;
-  }
-  
-  .searchRow {
+    padding: 1em;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.searchRow {
     display: flex;
     justify-content: space-between;
     margin-bottom: 15px;
-  }
-  
-  .searchGroup {
+}
+
+.searchGroup {
     flex: 1;
     margin-right: 10px;
-  }
-  
-  .label {
+}
+
+.label {
     display: block;
     margin-bottom: 5px;
-  }
-  
-  .input,
-  .select {
+}
+
+.input,
+.select {
     width: 100%;
     padding: 8px;
     box-sizing: border-box;
-  }
-  
-  /* 예시로 모든 입력 요소에는 같은 스타일을 적용했지만, 필요에 따라 스타일을 조정할 수 있습니다. */
-  
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.input:hover,
+.select:hover {
+    border-color: #3498db;
+}
+
+.select {
+    margin-left: 1em;
+    overflow: hidden;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding-right: 25px;
+}

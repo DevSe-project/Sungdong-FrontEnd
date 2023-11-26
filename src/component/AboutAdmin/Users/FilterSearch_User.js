@@ -3,8 +3,13 @@ import styles from './FiterSearch_User.module.css';
 
 export default function FilterSearch_User() {
     return (
-        <div className={styles.searchbar}>
-            {/* Filter options */}
+        <div className={styles.body}>
+            {/* TITLE */}
+            <div className={styles.title}>
+                검색필터
+            </div>
+
+            {/* FILTER OPTIONS */}
             <div className={styles.searchRow}>
                 <div className={styles.searchGroup}>
                     <label htmlFor="bizName">기업명</label>

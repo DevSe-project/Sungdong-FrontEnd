@@ -47,9 +47,10 @@ export default function Manage_Users() {
                 <AdminMenuData />
                 <div className={styles.mainContainer}>
                     <div className={styles.filtSortContainer}>
-                        <FilterSearch_User />
-                        <Sort_UserList sortBy={sortBy} onSort={handleSort} />
+                        <FilterSearch_User className={styles.FilterSearch_User} />
+                        <Sort_UserList sortBy={sortBy} onSort={handleSort} className={styles.Sort_UserList} />
                     </div>
+
                     <table className={styles.userTable}>
                         <thead>
                             <tr>

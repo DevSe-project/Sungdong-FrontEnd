@@ -10,19 +10,20 @@ const Sort_UserList = (props) => {
     // 추가 예정 기능 - 정렬이 2개 이상 선택되면 경고문구 표시
 
     return (
-        <div className={styles.sortContainer}>
+        <div className={styles.body}>
 
-            <h3>정렬 우선순위 설정</h3>
+            <div className={styles.title}>정렬 우선순위</div>
 
             <div className={styles.sortItems}>
                 {[1, 2, 3].map((priority) => (
                     <label key={priority}>
-                        {priority}
-                        <select
+                        {priority}순위
+                        <select 
+                            className={styles.sortSelect}
                             value={props.sortBy[priority - 1]}
                             onChange={(e) => onSort(e.target.value, priority - 1)}>
                             <option value="usertype">구분</option>
-                            <option value="bizname">업체명</option>
+                            <option value="bizname">업체명ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</option>
                             <option value="grade">등급</option>
                         </select>
                     </label>
@@ -33,9 +34,9 @@ const Sort_UserList = (props) => {
                         이 데이터를 option으로 추가 예정 */}
 
             </div>
-            <div>
-                <button className={styles.button} onClick={handleSort}>정렬하기</button>
-            </div>
+
+            <button className={styles.button} onClick={handleSort}>정렬하기</button>
+
         </div>
     );
 };

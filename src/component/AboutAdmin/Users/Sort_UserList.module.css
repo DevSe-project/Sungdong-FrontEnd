@@ -1,28 +1,53 @@
-.filtSortContainer {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
+.body {
+    width: 100%;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.sortContainer {
-    margin-bottom: 20px;
+.title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
 }
 
 .sortItems {
     display: flex;
     flex-direction: column;
+    gap: 1.5em;
+}
+
+.labelContainer {
+    display: flex;
     gap: 1em;
-    height: 40px;
+    align-items: center;
+}
+
+.sortItems select {
+    margin-left: 1em;
+    width: 150px;
+    overflow: hidden;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding-right: 25px;
 }
 
 .button {
-    background-color: #4caf50;
+    margin: 1em;
+    background-color: #3498db;
     color: white;
     border: none;
-    padding: 8px 16px;
+    padding: 10px;
     text-align: center;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 16px;
     cursor: pointer;
-  }
-  
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #2980b9;
+}

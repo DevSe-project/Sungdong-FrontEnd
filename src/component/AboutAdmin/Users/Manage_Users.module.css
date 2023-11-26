@@ -1,56 +1,38 @@
-/* .body {
-    display: flex;
-    width: 100%;
-}
-
-.mainConainter {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-}
-
-.filtSort_container {
-    margin: 1em;
-    display: flex;
-    width: 100%;
-    gap: 1em;
-}
-
-.user_table {
-} */
-
-/* Manage_Users.module.css */
-
 .body {
     display: flex;
-  }
-  
-  .mainContainer {
+}
+
+.mainContainer {
     margin: 1em;
     flex: 1;
-  }
-  
-  .filtSortContainer {
+}
+
+.filtSortContainer {
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  
-  .userTable {
+    height: max-content;
+}
+.FilterSearch_User {
+    flex: 50%;
+}
+.Sort_UserList {
+    flex: 50%;
+}
+
+.userTable {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
-  }
-  
-  .button {
-    background-color: #4caf50;
+}
+
+.button {
+    background-color: #3498db;
     color: white;
     border: none;
-    padding: 8px 16px;
+    padding: 10px;
     text-align: center;
     text-decoration: none;
-    display: inline-block;
-    font-size: 14px;
+    font-size: 16px;
     cursor: pointer;
-  }
-  
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
