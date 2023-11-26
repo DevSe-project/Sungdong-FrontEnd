@@ -1,5 +1,6 @@
-.body {
+/* .body {
     display: flex;
+    width: 100%;
 }
 
 .mainConainter {
@@ -11,5 +12,45 @@
 .filtSort_container {
     margin: 1em;
     display: flex;
+    width: 100%;
     gap: 1em;
 }
+
+.user_table {
+} */
+
+/* Manage_Users.module.css */
+
+.body {
+    display: flex;
+  }
+  
+  .mainContainer {
+    margin: 1em;
+    flex: 1;
+  }
+  
+  .filtSortContainer {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .userTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
