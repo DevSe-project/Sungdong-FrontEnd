@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { EstimateFilter } from './EstimateFilter';
-import styles from './Table.module.css';
 import { useQuery } from '@tanstack/react-query';
+import styles from './Table.module.css';
+import { TakeBackListFilter } from './TakeBackListFilter';
+import { useState } from 'react';
 
-export function EstimateManager(){
+export function TakeBackList(){
   const { data, isLoading, isError, error } = useQuery({queryKey: ['data']});
   // 게시물 데이터와 페이지 번호 상태 관리    
   const [currentPage, setCurrentPage] = useState(1);
@@ -22,45 +22,42 @@ export function EstimateManager(){
     return <p>에러 : {error.message}</p>;
   }
   return(
-  <div>
     <div style={{width:'90%'}}>
       {/* 헤드라인 */}
       <div className={styles.head}>
-        <h1><i className="fa-solid fa-heart"/> 견적관리</h1>
+        <h1><i className="fa-solid fa-heart"/> 반품조회</h1>
       </div>
       {/* 필터 */}
-      <EstimateFilter/>
+      <TakeBackListFilter/>
       {/* 테이블 */}
       <div className={styles.tablebody}>
         <table className={styles.table}>
           <thead>
             <tr>
-              <th>순번</th>
-              <th>견적번호</th>
-              <th>견적일자</th>
+              <th>일자</th>
+              <th>구분</th>
               <th>품명 및 규격</th>
+              <th>사유</th>
               <th>수량</th>
-              <th>단위</th>
               <th>금액</th>
-              <th>주문하기</th>
-              <th>견적서 엑셀</th>
-              <th>작성자</th>
-              <th><input type='checkbox'></input></th>
+              <th>처리일</th>
+              <th>진행</th>
+              <th>담당자</th>
+              <th>입력자</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>순번</td>
-              <td>번호</td>
               <td>일자</td>
+              <td>구분</td>
               <td>품명 및 규격</td>
+              <td>사유</td>
               <td>수량</td>
-              <td>EA</td>
               <td>금액</td>
-              <td>주문하기</td>
-              <td>견적서 엑셀</td>
-              <td>작성자</td>
-              <td><button className={styles.button}>삭제</button></td>
+              <td>처리일</td>
+              <td>진행</td>
+              <td>담당자</td>
+              <td>입력자</td>
             </tr>
           </tbody>
         </table>
@@ -93,6 +90,5 @@ export function EstimateManager(){
         </button>
       </div>
     </div>
-  </div>
   )
 }

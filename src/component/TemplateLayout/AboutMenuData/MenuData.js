@@ -111,16 +111,16 @@ export function MenuData(props){
     {
       id: 5,
       title: {
-        item: '반품/수리/AS',
+        item: '반품/교환',
       },
       subMenuItems: [{
         item: '반품신청',
-        link: '/refund/request',
+        link: '/return/request',
         require : isLogin === true
       },
       {
         item: '반품조회',
-        link: '/refund/list',
+        link: '/return/list',
         require : isLogin === true
       },
       {
@@ -131,11 +131,6 @@ export function MenuData(props){
       {
         item: '불량교환조회',
         link: '/error/list',
-        require : isLogin === true
-      },
-      {
-        item: 'A/S신청, 조회',
-        link: '/listAs',
         require : isLogin === true
       },
       ]
@@ -157,6 +152,14 @@ export function MenuData(props){
         }
       ],
     },
+    {
+      id: 8,
+      title: {
+        item: '장바구니',
+        link: '/basket'
+      },
+      require: isLogin === true
+    }
   ];
 
   //서브메뉴 열림창 변수 초기화
@@ -186,8 +189,17 @@ export function MenuData(props){
           className={`menu-item
           menutab-item ${topTab === item.id ? 'active' : ''}`}
           onClick={() => { 
-            saveTab(item.id)
-            toggleSubMenu(index) 
+            if(item.require && item.require == false){
+              alert("로그인이 필요한 서비스입니다.");
+              navigate("/login");
+              return;
+            } 
+            if(item.title.link){
+              navigate(`${item.title.link}`)
+              return;
+            }
+            saveTab(item.id);
+            toggleSubMenu(index);
           }}
         >
           <span className={styles.link}>

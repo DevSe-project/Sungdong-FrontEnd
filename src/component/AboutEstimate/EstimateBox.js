@@ -50,8 +50,8 @@ export function EstimateBox(){
           </tfoot>
         </table>
       </div>
-      <div>
-        <button className={styles.submitButton}>견적하기</button>
+      <div className={styles.buttonContainer}>
+        <button className={styles.pageButton}>견적하기</button>
       </div>
     </div>
   )
