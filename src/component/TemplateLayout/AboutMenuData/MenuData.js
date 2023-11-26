@@ -115,12 +115,12 @@ export function MenuData(props){
       },
       subMenuItems: [{
         item: '반품신청',
-        link: '/refund/request',
+        link: '/return/request',
         require : isLogin === true
       },
       {
         item: '반품조회',
-        link: '/refund/list',
+        link: '/return/list',
         require : isLogin === true
       },
       {
