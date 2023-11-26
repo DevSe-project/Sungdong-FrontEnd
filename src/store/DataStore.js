@@ -2,7 +2,7 @@ import { create } from 'zustand'
 
 // ------------------------------데이터 STORE----------------------------//
 
-const useDataStore = create((set)=>({
+const useDataStore = create((set) => ({
   orderData: null,
   categoryData: [],
   userData: [],
@@ -104,58 +104,51 @@ export const useListActions = () => useListStore((state) => state.actions);
 
 
 
-// Modal State
+// Modal State (사용법 주석 추가 예정)
 const useModalStore = create((set) => ({
-  // 초기값: 모달이 열리지 않은 상태라는 뜻이로 false 할당
   isModal: false,
-  // 초기값: 모달의 이름이 없다는 뜻으로 공백을 할당
   modalName: '',
-  // 초기값: 선택되지 않았다는 듯으로 null을 할당
   selectedIndex: null,
 
-
-  setIsModal: (bool) => set({isModal: bool}),
-  setModalName : (name) => set({modalName: name}),
-  // on/off만 있는 모달창을 오픈
-  openModal: () => set({ isModal: true}),
-  // on/off만 있는 모달창을 클로즈
-  closeModal: () => set({ isModal: false}),
-  setSelectedIndex: (index) => set({ selectedIndex: index }),
-  // index에 해당하는 모달 창을 열어야 할 경우
-  selectedModalOpen: (name) => set({ isModal: true, modalName: name }),
-  // index에 해당하는 모달 창을 닫아야 할 경우(추가로 close함수에 해당 모달 창의 내용을 초기화 하는 코드는 개별적으로 작성)
-  selectedModalClose: () => set({ isModal: false, modalName: '' })
+  actions: {
+    setIsModal: (bool) => set({ isModal: bool }),
+    setModalName: (name) => set({ modalName: name }),
+    openModal: () => set({ isModal: true }),
+    closeModal: () => set({ isModal: false }),
+    setSelectedIndex: (index) => set({ selectedIndex: index }),
+    selectedModalOpen: (name) => set({ isModal: true, modalName: name }),
+    selectedModalClose: () => set({ isModal: false, modalName: '' }),
+  },
 }));
 
-
-// 커스텀하여 useModal로 사용
-export const useModal = () => {
-  const {
-    isModal,
-    modalName,
-    selectedIndex,
-    setIsModal,
-    setModalName,
-    openModal,
-    closeModal,
-    setSelectedIndex,
-    selectedModalOpen,
-    selectedModalClose
-  } = useModalStore();
-
-  return {
-    isModal,
-    modalName,
-    selectedIndex,
-    setIsModal,
-    setModalName,
-    openModal,
-    closeModal,
-    setSelectedIndex,
-    selectedModalOpen,
-    selectedModalClose
-  };
+// useModalState 커스텀 훅
+export const useModalState = () => {
+  const { isModal, modalName, selectedIndex } = useModalStore();
+  return { isModal, modalName, selectedIndex };
 };
+
+// useModalActions 커스텀 훅
+export const useModalActions = () => {
+  const { setIsModal, setModalName, setSelectedIndex, openModal, closeModal, selectedModalOpen, selectedModalClose } = useModalStore.getState().actions;
+  return { setIsModal, setModalName, setSelectedIndex, openModal, closeModal, selectedModalOpen, selectedModalClose };
+};
+
+/* ---------------SELECT SOTRE----------------- */
+const selectStore = create((set) => ({
+  select: false,
+  value: '',
+
+  actions: {
+    isSelect: () => set((state) => ({ select: !state.select })),
+    setValue: (val) => set((state) => ({
+      value: val
+    }))
+  }
+}));
+// Custum zustand
+export const useSelect = () => selectStore((state) => ({ select: state.select, value: state.value }));
+export const useSelectActions = () => selectStore((state) => ({ actions: state.actions }));
+
 
 /* ---------------ORDER STOREs----------------- */
 
@@ -172,26 +165,26 @@ const useOrderStore = create((set) => ({
     checked: false,
   },
   deliveryInformation: {
-    name : '',
-    tel : '',
-    address : {
-      address : [],
-      addressDetail : '',
+    name: '',
+    tel: '',
+    address: {
+      address: [],
+      addressDetail: '',
     },
-    deliveryType : '',
+    deliveryType: '',
     deliverySelect: '',
-    deliveryMessage : '',
-    deliveryDate : '',
+    deliveryMessage: '',
+    deliveryDate: '',
   },
-  actions :{
+  actions: {
     setOrderInformation: (fieldName, value) =>
       set((state) => ({ orderInformation: { ...state.orderInformation, [fieldName]: value } })),
 
     setDeliveryInformation: (fieldName, value) =>
-      set((state) => ({ deliveryInformation: { ...state.deliveryInformation,[fieldName]: value } })),
+      set((state) => ({ deliveryInformation: { ...state.deliveryInformation, [fieldName]: value } })),
 
     setDetailInformation: (first, fieldName, value) =>
-      set((state) => ({ deliveryInformation: { ...state.deliveryInformation, [first]: { ...state.deliveryInformation[first], [fieldName]: value } }})),     
+      set((state) => ({ deliveryInformation: { ...state.deliveryInformation, [first]: { ...state.deliveryInformation[first], [fieldName]: value } } })),
   }
 }));
 export const useOrderInfo = () => useOrderStore((state) => state.orderInformation);
@@ -202,11 +195,11 @@ export const useOrderActions = () => useOrderStore((state) => state.actions);
 
 /* ----------------LOGIN STORE---------------- */
 
-export const useLoginStore = create((set)=>({
-  isLogin : false,
+export const useLoginStore = create((set) => ({
+  isLogin: false,
 
-  actions : {
-  setLogin : (val) => set( (state) => ({ isLogin : val }) )
+  actions: {
+    setLogin: (val) => set((state) => ({ isLogin: val }))
   }
 }));
 export const useIsLogin = () => useLoginStore((state) => state.isLogin);
@@ -215,18 +208,18 @@ export const useSetLogin = () => useLoginStore((state) => state.actions);
 
 /* ----------------SEARCH STORE---------------- */
 
-export const useSearchStore = create((set)=>({
-  seperateSearchTerm : {
+export const useSearchStore = create((set) => ({
+  seperateSearchTerm: {
     productName: "",
     productCode: "",
     productBrand: "",
     productOption: ""
   },
-  actions : {
+  actions: {
     setSeperateSearchTerm: (fieldName, value) =>
-    set((state) => ({ seperateSearchTerm: { ...state.seperateSearchTerm, [fieldName]: value } })),
+      set((state) => ({ seperateSearchTerm: { ...state.seperateSearchTerm, [fieldName]: value } })),
     resetSeperateSearchTerm: () =>
-    set({ seperateSearchTerm: { productName: "", productCode: "", productBrand: "", productOption: "" } }),
+      set({ seperateSearchTerm: { productName: "", productCode: "", productBrand: "", productOption: "" } }),
   }
 }));
 export const useSeperateSearchTerm = () => useSearchStore((state) => state.seperateSearchTerm);
