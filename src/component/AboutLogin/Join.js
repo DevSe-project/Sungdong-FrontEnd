@@ -75,19 +75,19 @@ export default function Join() {
     // [JoinForm.js에서 사용]입력받을 1회성 회원 정보
     let [inputData, setInputData] = useState(
         {
-            userType: '',
+            userType: "",
             id: '',
             password: '',
             confirmPassword: '',
             email: '',
-            emailService: '',
+            emailService: true,
             grade: 'D',
             name: '',
             num1: '',
             num2: '',
             num3: '',
-            smsService: '',
-            CMS: '',
+            smsService: true,
+            CMS: true,
             corporationData: {
                 ceoName: '',
                 companyName: '',
@@ -177,7 +177,22 @@ export default function Join() {
                 return;
             }
 
-            if (!inputData.id || !inputData.password || !inputData.name) {
+            if (!inputData.id || // 아아디
+                !inputData.password || // 비밀번호
+                !inputData.confirmPassword || // 비밀번호 재확인(일치검사를 했지만 혹시 몰라 중복검사)
+                !inputData.name || // 이름
+                !inputData.userType || // 고객타입
+                !inputData.address || // 회사 주소
+                !inputData.emailService || // 이메일 동의란
+                !inputData.smsService || // 문자 동의란
+                !inputData.corporationData.businessCategory || //
+                !inputData.corporationData.businessNum ||
+                !inputData.corporationData.businessSector ||
+                !inputData.corporationData.ceoName ||
+                !inputData.corporationData.companyName ||
+                !inputData.corporationData.companyNum.num1 ||
+                !inputData.corporationData.companyNum.num2 ||
+                !inputData.corporationData.companyNum.num3)  {
                 alert('필수 항목을 모두 입력해주세요.');
                 return;
             }

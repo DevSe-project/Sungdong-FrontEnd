@@ -80,7 +80,7 @@ export default function JoinForm(props) {
     };
 
 
-    //data 일치유무 체크
+    //비밀번호, 비빈번호 재입력 일치유무 체크
     let confirmPassword = props.inputData.password === props.inputData.confirmPassword;
 
     // 기업 정보
@@ -131,14 +131,14 @@ export default function JoinForm(props) {
                                     id="indivisualMember"
                                     name="userType"
                                     value={props.inputData.userType}
-                                    checked={props.inputData.userType === "indivisual"}
-                                    onChange={(e) => {
+                                    checked={props.inputData.userType === "end_user"}
+                                    onChange={() => {
                                         props.setInputData(
-                                            (prevData) => ({ ...prevData, userType: 'indivisual' })
+                                            (prevData) => ({ ...prevData, userType: 'end_user' })
                                         )
                                     }}
                                 />
-                                <label htmlFor="indivisualMember">개인사업자</label>
+                                <label htmlFor="endUser">실사용자</label>
                             </div>
                             <div className={styles.typeMember}>
                                 <input
@@ -147,13 +147,13 @@ export default function JoinForm(props) {
                                     name="userType"
                                     value={props.inputData.userType}
                                     checked={props.inputData.userType === "corporation"}
-                                    onChange={(e) => {
+                                    onChange={() => {
                                         props.setInputData(
                                             (prevData) => ({ ...prevData, userType: 'corporation' })
                                         )
                                     }}
                                 />
-                                <label htmlFor="corporateMember">법인사업자</label>
+                                <label htmlFor="corporateMember">납품</label>
                             </div>
                         </div>
                     </div>
