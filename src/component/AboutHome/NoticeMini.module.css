@@ -35,7 +35,7 @@
   display: -webkit-box;
   -webkit-line-clamp: 1; /* 표시할 줄 수 */
   -webkit-box-orient: vertical;
-  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .view_all {

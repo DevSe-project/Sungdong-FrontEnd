@@ -36,6 +36,7 @@
   font-size: 24px;
   color: #000;
   /* 글자 색상을 검은색으로 변경 */
+  text-overflow: ellipsis;
 }
 
 .search_label {
