@@ -128,7 +128,7 @@ export default function Join() {
 
     // 약관상세보기, 개별동작하도록
     const [clauseState, setClauseState] = useState(() => PolicyObj.map(() => false)); //false로 초기값 통일
-    function clause(index) {
+    function openDetailClause(index) {
         const newClause = [...clauseState];
         newClause[index] = !clauseState[index];
         setClauseState(newClause);
@@ -176,7 +176,7 @@ export default function Join() {
                 alert('올바른 이메일 형식이 아닙니다. 다시 확인해주세요.');
                 return;
             }
-
+            // 모든 유효성 검사처리 (프론트단)
             if (!inputData.id || // 아아디
                 !inputData.password || // 비밀번호
                 !inputData.confirmPassword || // 비밀번호 재확인(일치검사를 했지만 혹시 몰라 중복검사)
@@ -192,7 +192,7 @@ export default function Join() {
                 !inputData.corporationData.companyName ||
                 !inputData.corporationData.companyNum.num1 ||
                 !inputData.corporationData.companyNum.num2 ||
-                !inputData.corporationData.companyNum.num3)  {
+                !inputData.corporationData.companyNum.num3) {
                 alert('필수 항목을 모두 입력해주세요.');
                 return;
             }
@@ -258,14 +258,18 @@ export default function Join() {
                             {/* 오른쪽 Content */}
                             <div className={styles.rightContent}>
                                 {/* 이용약관 상세보기 */}
-                                <div className={styles.clause} onClick={() => clause(index)}>
+                                <div className={styles.clause} onClick={() => openDetailClause(index)}>
                                     {clauseState[index] ? "▼약관 상세보기" : "▶약관 상세보기"}
                                 </div>
                             </div>
                         </div>
                         {/* 보기를 클릭했을 때 나타나는 이용약관 */}
                         <div>
-                            {clauseState[index] ? <div className={styles.policyDetail}>{policy.policyDetail}</div> : <div className={styles.policyDetail_null} />}
+                            {clauseState[index] ?
+                                <div className={styles.policyDetail}>
+                                    {policy.policyDetail}</div> :
+                                <div className={styles.policyDetail_null}
+                                />}
                         </div>
                     </li>
                 })}

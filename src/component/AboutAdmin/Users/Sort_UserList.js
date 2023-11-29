@@ -35,7 +35,7 @@ const Sort_UserList = (props) => {
                 {/* 정렬은 3개까지만 */}
                 {[1, 2, 3].map((priority) => (
                     <label key={priority}>
-                        {priority + 1}순위
+                        {priority}순위
                         <select
                             className={styles.sortSelect}
                             value={props.sortBy[priority - 1]}
