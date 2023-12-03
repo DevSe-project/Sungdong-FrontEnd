@@ -70,6 +70,7 @@ import { TackBackRequest } from "./component/AboutTakeBack/TakeBackRequest";
 import { TakeBackList } from "./component/AboutTakeBack/TakeBackList";
 import { ErrorTrade } from "./component/AboutTakeBack/ErrorTradeRequest";
 import { ErrorTradeList } from "./component/AboutTakeBack/ErrorTradeList";
+import TotalCal_Manage from "./component/AboutAdmin/SD_Account/TotalCal_Manage";
 
 export default function App() {
   const navigate = useNavigate();
@@ -658,6 +659,8 @@ export default function App() {
         <Route path='/adminMain/customerCenter/notice' element={<AdminNotice />} />
         {/* 관리자페이지 - 고객관리 */}
         <Route path='/adminMain/user' element={<Manage_Users />} />
+        {/* 관리자페이지 - 누적정산 */}
+        <Route path='/adminMain/SD_account/total' element={<TotalCal_Manage />} />
         {/* 관리자페이지 - 상품등록 */}
         <Route path='/adminMain/addProduct' element={<AdminDetail />} />
         {/* 관리자페이지 - 상품수정 */}

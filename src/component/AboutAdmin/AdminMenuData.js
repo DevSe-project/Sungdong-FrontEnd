@@ -77,11 +77,11 @@ export function AdminMenuData(props){
       },
       subMenuItems: [{
         item: 'CMS 정산',
-        link: '/adminMain/cms'
+        link: '/adminMain/SD_account/cms'
       },
       {
         item: '누적 정산',
-        link: '/adminMain/total'
+        link: '/adminMain/SD_account/total'
       }],
     },
     {

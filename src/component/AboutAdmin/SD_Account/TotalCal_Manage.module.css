@@ -1,0 +1,33 @@
+.container {
+    display: flex;
+}
+
+.mainContainer {
+    width: 100%;
+}
+
+.header {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
+.main {
+    padding: 20px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.btn {
+    display: block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #CC0000;
+    color: #fff;
+    border-radius: 5px;
+}
