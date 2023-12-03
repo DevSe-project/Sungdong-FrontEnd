@@ -1,8 +1,7 @@
-.container {
+.flex_container {
     display: flex;
 }
-
-.mainContainer {
+.main_container {
     width: 100%;
 }
 
@@ -11,6 +10,9 @@
     color: #fff;
     padding: 20px;
     text-align: center;
+}
+.totalAccount {
+    color: orangered;
 }
 
 .main {
@@ -23,11 +25,17 @@
     margin-top: 20px;
 }
 
-.btn {
-    display: block;
+.btn_container {
+    display: flex;
+    justify-content: flex-end;
     margin-top: 20px;
+}
+
+.btn {
+    margin-left: 10px;
     padding: 10px 20px;
-    background-color: #CC0000;
+    text-decoration: none;
+    background-color: #4caf50;
     color: #fff;
     border-radius: 5px;
 }
