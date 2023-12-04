@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './TotalCal_Manage.module.css';
 import { AdminHeader } from '../AdminHeader';
 import { AdminMenuData } from '../AdminMenuData';
 
-export default function TotalCal_Manage() {
+const TotalCal_Manage = () => {
     // 임시 총 주문 데이터 30개
     const transactionData = [
         { id: 1, name: '회원1', date: '2023-01-01', description: '상품 구매', amount: 100000, status: '완료' },
@@ -38,17 +38,27 @@ export default function TotalCal_Manage() {
         { id: 30, name: '회원30', date: '2023-01-30', description: '상품 구매', amount: 95000, status: '취소' },
     ];
 
-    // -----------------삽입 예상 기능----------------- //
+    // ----------------- 삽입 예상 기능 ----------------- //
     // 총 정산 완료 기대 금액
     const totalAmount = transactionData.reduce((acc, transaction) => acc + transaction.amount, 0);
+    const formated_num = totalAmount.toLocaleString(); // 천 단위로 구분
     // 정산 완료 금액
 
     // 정산 대기 금액
 
     // 정상 예정 금액
+    // -------------------------------------------------- //
 
-    // 
-    // -------------------------------------------- //
+    const [filter, setFilter] = useState('모두');
+
+    const handleFilter = (status) => {
+        setFilter(status);
+    };
+
+    const filteredData = transactionData.filter((transaction) => {
+        if (filter === '모두') return true;
+        return transaction.status === filter;
+    });
 
     return (
         <div>
@@ -57,42 +67,84 @@ export default function TotalCal_Manage() {
                 <AdminMenuData />
                 <div className={styles.main_container}>
                     <header className={styles.header}>
-                        {/* 누적 정산 금액 */}
-                        <h3>누적 정산 금액: <span className={styles.totalAccount}>{totalAmount}</span>원</h3>
+                        <h3>누적 정산 금액:
+                            <span className={styles.totalAccount}>
+                                {formated_num}
+                            </span>
+                            원
+                        </h3>
                     </header>
                     <main className={styles.main}>
-                        {/* 정산 내용을 표시하는 테이블 */}
-                        <table className={styles.table}>
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>회원 이름</th>
-                                    <th>날짜</th>
-                                    <th>거래 내역</th>
-                                    <th>금액</th>
-                                    <th>상태</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {transactionData.map((transaction) => (
-                                    <tr key={transaction.id}>
-                                        <td>{transaction.id}</td>
-                                        <td>{transaction.name}</td>
-                                        <td>{transaction.date}</td>
-                                        <td>{transaction.description}</td>
-                                        <td>{transaction.amount}</td>
-                                        <td>{transaction.status}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                        {/* 정산 버튼 */}
-                        <div className={styles.btn_container}>
-                            <button className={styles.btn}>정산하기</button>
+                        <div className={styles.filter_buttons}>
+                            <button onClick={() => handleFilter('모두')}
+                                className={
+                                    filter === '모두'
+                                        ?
+                                        `${styles.filter_button} ${styles.active}`
+                                        :
+                                        styles.filter_button
+                                }>
+                                모두 보기
+                            </button>
+                            <button onClick={() => handleFilter('완료')}
+                                className={
+                                    filter === '완료'
+                                        ?
+                                        `${styles.filter_button} ${styles.active}`
+                                        :
+                                        styles.filter_button
+                                }>
+                                정산 완료
+                            </button>
+                            <button onClick={() => handleFilter('처리 중')}
+                                className={
+                                    filter === '처리 중'
+                                        ?
+                                        `${styles.filter_button} ${styles.active}`
+                                        :
+                                        styles.filter_button
+                                }>
+                                처리 중
+                            </button>
+                            {/* 필터 버튼 추가 */}
+                            {/* ... */}
                         </div>
+
+                        <section>
+                            <h4>정산 내용</h4>
+                            <table className={styles.table}>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>회원 이름</th>
+                                        <th>날짜</th>
+                                        <th>거래 내역</th>
+                                        <th>금액</th>
+                                        <th>상태</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {filteredData.map((transaction) => (
+                                        <tr key={transaction.id}>
+                                            <td>{transaction.id}</td>
+                                            <td>{transaction.name}</td>
+                                            <td>{transaction.date}</td>
+                                            <td>{transaction.description}</td>
+                                            <td>{transaction.amount}</td>
+                                            <td>{transaction.status}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                            <div className={styles.btn_container}>
+                                <button className={styles.btn}>정산하기</button>
+                            </div>
+                        </section>
                     </main>
                 </div>
             </div>
         </div>
     );
-}
+};
+
+export default TotalCal_Manage;
