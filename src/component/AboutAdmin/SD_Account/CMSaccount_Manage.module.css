@@ -1,0 +1,50 @@
+.flex_container {
+    display: flex;
+}
+
+.main_container {
+    flex: 1;
+    padding: 1em;
+}
+
+.header {
+    background-color: #333;
+    color: white;
+    border-radius: 1dvh;
+    padding: 1em;
+    text-align: center;
+}
+
+.main {
+    padding: 1em;
+}
+
+.filter_buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1em;
+}
+
+.filter_buttons button {
+    background-color: rgb(204, 94, 53);
+    color: white;
+    border: none;
+    border-radius: 1dvh;
+    padding: 0.7em 1.5em;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 0.3s;
+}
+
+.filter_buttons button:hover {
+    background-color: rgb(174, 79, 44);
+}
+
+.active {
+    background-color: #CC0000;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
