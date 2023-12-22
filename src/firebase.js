@@ -7,6 +7,7 @@ import { getFirestore } from 'firebase/firestore';
 const firebaseConfig = {
   apiKey: "AIzaSyAj1-LmumpYRZmWVQtu8awCRs6KGrxHGQg",
   authDomain: "sungdong-web.firebaseapp.com",
+  databaseURL: "https://sungdong-web-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "sungdong-web",
   storageBucket: "sungdong-web.appspot.com",
   messagingSenderId: "377033696380",
