@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './CMSaccount_Manage.module.css';
-import { AdminHeader } from '../AdminHeader';
-import { AdminMenuData } from '../AdminMenuData';
+import { AdminHeader } from '../Layout/Header/AdminHeader';
+import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
 
 const CMSaccount_Manage = () => {
     const [accounts, setAccounts] = useState([

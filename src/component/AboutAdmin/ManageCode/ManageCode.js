@@ -2,8 +2,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from './ManageCode.module.css';
-import { AdminHeader } from "../AdminHeader";
-import { AdminMenuData } from "../AdminMenuData";
+import { AdminHeader } from "../Layout/Header/AdminHeader";
+import { AdminMenuData } from "../Layout/SideBar/AdminMenuData";
 
 export default function Managecode() {
 

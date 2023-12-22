@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styles from "./AdminNotice.module.css";
-import { AdminHeader } from "../AdminHeader";
-import { AdminMenuData } from "../AdminMenuData";
+import { AdminHeader } from '../Layout/Header/AdminHeader';
+import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
 import WrtieModal from "./WriteModal";
 import EditModal from "./EditModal";
 import { NoticePostObj } from "../../Data/NoticePostObj"; // 수정된 부분

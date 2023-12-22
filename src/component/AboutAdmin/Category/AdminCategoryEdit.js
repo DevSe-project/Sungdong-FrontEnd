@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import styles from './AdminCategoryEdit.module.css'
-import { AdminHeader } from './AdminHeader'
-import { AdminMenuData } from './AdminMenuData'
+import { AdminHeader } from '../Layout/Header/AdminHeader'
+import { AdminMenuData } from '../Layout/SideBar/AdminMenuData'
 export function AdminCategoryEdit(props){
     //주소창 입력된 id값 받아오기
     let {id} = useParams();

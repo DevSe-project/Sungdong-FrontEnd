@@ -1,5 +1,5 @@
-import { AdminHeader } from './AdminHeader'
-import { AdminMenuData } from './AdminMenuData'
+import { AdminHeader } from '../Layout/Header/AdminHeader'
+import { AdminMenuData } from '../Layout/SideBar/AdminMenuData'
 import styles from './AdminMain.module.css'
 export function AdminMain() {
   return (

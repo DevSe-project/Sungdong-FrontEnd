@@ -1,8 +1,8 @@
-import { useState } from 'react'
-import styles from './AdminDetail.module.css'
-import { AdminHeader } from './AdminHeader'
-import { AdminMenuData } from './AdminMenuData'
-import { AdminTabInfo } from './AdminTabInfo'
+import { useState } from 'react';
+import styles from './AdminDetail.module.css';
+import { AdminHeader } from '../Layout/Header/AdminHeader';
+import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
+import { AdminTabInfo } from '../TabInfo/AdminTabInfo';
 
 export function AdminDetail(props) {
   const [isDiscount, setIsDiscount] = useState(false);

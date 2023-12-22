@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './TotalCal_Manage.module.css';
-import { AdminHeader } from '../AdminHeader';
-import { AdminMenuData } from '../AdminMenuData';
+import { AdminHeader } from '../Layout/Header/AdminHeader';
+import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
 
 const TotalCal_Manage = () => {
     // 임시 총 주문 데이터 30개

@@ -38,18 +38,18 @@ import { Comeway } from './component/AboutCompany/Comeway';
 import { TodayNews } from './component/AboutCompany/TodayNews';
 import { TodayNewsInner } from './component/AboutCompany/TodayNewsInner';
 import { Event } from './component/AboutCompany/Event'
-import { AdminMain } from './component/AboutAdmin/AdminMain';
+import { AdminMain } from './component/AboutAdmin/Main/AdminMain';
 import MyPage from './component/AboutMyPage/MyPage';
-import ManageCode from './component/AboutAdmin/Code/ManageCode';
+import ManageCode from './component/AboutAdmin/ManageCode/ManageCode';
 
 // 관리자 관련
-import { AdminDetail } from './component/AboutAdmin/AdminDetail';
-import { AdminProductList } from './component/AboutAdmin/AdminProductList';
-import { AdminCategory } from './component/AboutAdmin/AdminCategory';
-import { AdminCategoryEdit } from './component/AboutAdmin/AdminCategoryEdit';
-import { AdminSoldList } from './component/AboutAdmin/AdminSoldList';
-import { AdminNotSoldList } from './component/AboutAdmin/AdminNotSoldList';
-import { AdminRefund } from './component/AboutAdmin/AdminRefund';
+import { AdminDetail } from './component/AboutAdmin/Detail/AdminDetail';
+import { AdminProductList } from './component/AboutAdmin/Product/AdminProductList';
+import { AdminCategory } from './component/AboutAdmin/Category/AdminCategory';
+import { AdminCategoryEdit } from './component/AboutAdmin/Category/AdminCategoryEdit';
+import { AdminSoldList } from './component/AboutAdmin/Sold/AdminSoldList';
+import { AdminNotSoldList } from './component/AboutAdmin/Sold/AdminNotSoldList';
+import { AdminRefund } from './component/AboutAdmin/Refund/AdminRefund';
 import AdminNotice from './component/AboutAdmin/Notice/AdminNotice';
 
 // 템플릿 컴포넌트

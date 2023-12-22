@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { AdminHeader } from './AdminHeader'
-import { AdminMenuData } from './AdminMenuData'
-import { AdminProductFilter}  from './AdminProductFilter'
+import { AdminHeader } from '../Layout/Header/AdminHeader';
+import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
+import { AdminProductFilter}  from '../Product/AdminProductFilter';
 import React from 'react';
-import styles from './AdminProductList.module.css'
+import styles from './AdminProductList.module.css';
 import { useNavigate } from 'react-router-dom';
 export function AdminProductList(props){
   

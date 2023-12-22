@@ -1,11 +1,11 @@
-import { AdminHeader } from './AdminHeader';
-import { AdminMenuData } from './AdminMenuData';
+import { AdminHeader } from '../Layout/Header/AdminHeader';
+import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
 import styles from './AdminRefund.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import React from 'react';
-import { AdminRefundFilter } from './AdminRefundFilter';
-import AdminSoldModal from './AdminSoldModal';
+import { AdminRefundFilter } from '../Refund/AdminRefundFilter';
+import AdminSoldModal from '../Sold/AdminSoldModal';
 export function AdminRefund(props){
 
     // 필터된 항목을 저장할 상태 변수

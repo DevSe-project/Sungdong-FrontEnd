@@ -1,6 +1,6 @@
 import styles from './AdminSoldList.module.css';
-import { AdminHeader } from './AdminHeader';
-import { AdminMenuData } from './AdminMenuData';
+import { AdminHeader } from '../Layout/Header/AdminHeader';
+import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import React from 'react';

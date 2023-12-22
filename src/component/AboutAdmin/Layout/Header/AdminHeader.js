@@ -1,5 +1,5 @@
 import styles from './AdminHeader.module.css'
-import logo from '../../image/logo.jpeg'
+import logo from '../../../../image/MainLogo.jpeg';
 import { AdminHeaderSearchBar } from './AdminHeaderSearchBar'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
