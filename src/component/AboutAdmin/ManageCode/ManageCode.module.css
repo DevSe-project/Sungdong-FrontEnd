@@ -38,11 +38,12 @@
 }
 
 .printCode_button {
-  background-color: #CC0000;
+  background-color: rgb(204, 94, 53);
   color: white;
   margin-top: 1em;
-  width: 100px;
-  height: 50px;
+  border: none;
+  border-radius: 1dvh;
+  padding: 0.5em 1.3em;
   font-size: 1.1em;
   font-weight: bold;
   display: flex;
@@ -52,7 +53,7 @@
   cursor: pointer;
 }
 .printCode_button:hover {
-  background-color: #fa5757;
+  background-color: rgb(174, 79, 44);
 }
 
 .none_block {
@@ -76,7 +77,7 @@
 }
 
 .none_code {
-  background-color: #CC0000;
+  background-color: rgb(204, 94, 53);
   color: white;
   margin-top: 1em;
   width: 300px;

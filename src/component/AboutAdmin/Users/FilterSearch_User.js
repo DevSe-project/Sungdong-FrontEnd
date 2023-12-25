@@ -1,7 +1,8 @@
 import React from 'react';
 import styles from './FiterSearch_User.module.css';
 
-export default function FilterSearch_User() {
+export default function FilterSearch_User(props) {
+
     return (
         <div className={styles.body}>
             {/* TITLE */}
@@ -56,6 +57,11 @@ export default function FilterSearch_User() {
                         <option value="grade">등급</option>
                     </select>
                 </div>
+            </div>
+
+            {/* Button */}
+            <div>
+                <button className={styles.button} onClick={props.onFiltering}>검색하기</button>
             </div>
         </div>
     );

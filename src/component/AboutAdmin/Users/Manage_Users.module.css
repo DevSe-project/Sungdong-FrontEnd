@@ -26,14 +26,17 @@
 }
 
 .button {
-    background-color: #3498db;
+    background-color: rgb(204, 94, 53);
     color: white;
     border: none;
-    padding: 10px;
-    text-align: center;
-    text-decoration: none;
-    font-size: 16px;
+    border-radius: 1dvh;
+    padding: 0.7em 1.5em;
     cursor: pointer;
-    border-radius: 4px;
+    font-size: 18px;
     transition: background-color 0.3s;
+}
+
+
+.button:hover {
+    background-color: rgb(174, 79, 44);
 }

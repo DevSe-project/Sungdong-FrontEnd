@@ -11,6 +11,12 @@ export default function Manage_Users() {
         queryKey: ['users']
     });
 
+    const onFiltering = () => {
+        // 여기에 검색을 위한 로직을 추가하면 됩니다.
+        console.log("필터링이 완료되었습니다.")
+        // 추가로 필요한 검색 로직을 작성하십시오.
+    };
+
     const [sortedData, setSortedData] = useState(data);
     const [sortBy, setSortBy] = useState([]);
 
@@ -45,7 +51,7 @@ export default function Manage_Users() {
                 <AdminMenuData />
                 <div className={styles.mainContainer}>
                     <div className={styles.filtSortContainer}>
-                        <FilterSearch_User className={styles.FilterSearch_User} />
+                        <FilterSearch_User className={styles.FilterSearch_User} onFiltering={onFiltering} />
                         <Sort_UserList sortBy={sortBy} onSort={handleSort} className={styles.Sort_UserList} />
                     </div>
 
