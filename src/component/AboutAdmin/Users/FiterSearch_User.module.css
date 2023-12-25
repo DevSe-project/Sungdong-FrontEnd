@@ -39,7 +39,7 @@
 
 .input:hover,
 .select:hover {
-    border-color: #3498db;
+    border-color: rgb(174, 79, 44);
 }
 
 .select {
@@ -49,4 +49,19 @@
     border: 1px solid #ddd;
     border-radius: 4px;
     padding-right: 25px;
+}
+
+.button {
+    background-color: rgb(204, 94, 53);
+    color: white;
+    border: none;
+    border-radius: 1dvh;
+    padding: 0.5em 1.3em;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: rgb(174, 79, 44);
 }

@@ -3,9 +3,6 @@ import React from 'react';
 import styles from './Sort_UserList.module.css';
 
 const Sort_UserList = (props) => {
-    const handleSort = () => {
-        props.onSort();
-    };
 
     const optionsArr = [
         {
@@ -50,7 +47,7 @@ const Sort_UserList = (props) => {
                 ))}
             </div>
 
-            <button className={styles.button} onClick={handleSort}>정렬하기</button>
+            <button className={styles.button} onClick={props.onSort}>정렬하기</button>
         </div>
     );
 };
