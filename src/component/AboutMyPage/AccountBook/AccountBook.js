@@ -1,6 +1,26 @@
+import axios from 'axios';
 import styles from '../Table.module.css';
 import { AccountBookFilter } from './AccountBookFilter';
+import { GetCookie } from '../../../customFn/GetCookie';
 export function AccountBook(){
+    //데이터 fetch 
+    const fetchData = async() => {
+      try{
+        const token = GetCookie('jwt_token');
+        const response = await axios.get("/accountBook", 
+          {
+            headers : {
+              "Content-Type" : "application/json",
+              'Authorization': `Bearer ${token}`,
+            }
+          }
+        )
+        return response.data;
+      } catch(error) {
+        throw new Error('원장 내역을 불러오던 중 오류가 발생했습니다.');
+      }
+    }
+    //const { isLoading, isError, error, data:abData } = useQuery({queryKey:['accountBook'], queryFn: ()=> fetchData();});
   return(
     <div style={{width:'90%'}}>
       {/* 헤드라인 */}
