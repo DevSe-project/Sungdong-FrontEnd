@@ -1,6 +1,25 @@
 import styles from '../Table.module.css';
 import { DepositHistoryFilter } from './DepositHistoryFilter';
+import { GetCookie } from '../../../customFn/GetCookie';
+import axios from 'axios';
 export function DepositHistory(){
+  const fetchData = async() => {
+    try{
+      const token = GetCookie('jwt_token');
+      const response = await axios.get("/deposit", 
+        {
+          headers : {
+            "Content-Type" : "application/json",
+            'Authorization': `Bearer ${token}`,
+          }
+        }
+      )
+      return response.data;
+    } catch(error) {
+      throw new Error('원장 내역을 불러오던 중 오류가 발생했습니다.');
+    }
+  }
+  //const { isLoading, isError, error, data:depositData } = useQuery({queryKey:['deposit'], queryFn: ()=> fetchData();});
   return(
     <div style={{width:'90%'}}>
       {/* 헤드라인 */}

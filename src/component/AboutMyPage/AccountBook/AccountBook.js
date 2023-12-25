@@ -54,7 +54,7 @@ export function AccountBook(){
           </thead>
           <tbody>
             <tr>
-              <td>date</td>
+              <td>abData.date</td>
               <td>id값</td>
               <td>상품명/코드/브랜드/규격</td>
               <td>EA</td>

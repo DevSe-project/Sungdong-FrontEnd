@@ -63,7 +63,7 @@ export function AccountBookFilter(){
   
   const queryClient = useQueryClient();
 
-    //재고 감소 요청
+    //날짜 데이터 fetch
     const dateData = async () => {
       try {
         const response = await axios.put(`/accountBook`, 
