@@ -2,8 +2,28 @@ import { useQuery } from '@tanstack/react-query';
 import styles from './Table.module.css';
 import { ErrorTradeListFilter } from './ErrorTradeListFilter';
 import { useState } from 'react';
+import axios from 'axios';
+import { GetCookie } from '../../customFn/GetCookie';
 
 export function ErrorTradeList(){
+  //fetch
+  const fetchData = async() => {
+    try{
+      const token = GetCookie('jwt_token');
+      const response = await axios.get("/errTrade", 
+        {
+          headers : {
+            "Content-Type" : "application/json",
+            'Authorization': `Bearer ${token}`,
+          }
+        }
+      )
+      return response.data;
+    } catch(error) {
+      throw new Error('불량/교환 내역을 불러오던 중 오류가 발생했습니다.');
+    }
+  }
+  //const { isLoading, isError, error, data:errTradeData } = useQuery({queryKey:['errTrade'], queryFn: ()=> fetchData();});
   const { data, isLoading, isError, error } = useQuery({queryKey: ['data']});
   // 게시물 데이터와 페이지 번호 상태 관리    
   const [currentPage, setCurrentPage] = useState(1);
@@ -13,7 +33,6 @@ export function ErrorTradeList(){
     return data.length > 0 
     ? data.slice(startIndex, startIndex + 5)
     : data.slice(startIndex, startIndex + 5)
-    
   };
   if (isLoading) {
     return <p>Loading..</p>;
