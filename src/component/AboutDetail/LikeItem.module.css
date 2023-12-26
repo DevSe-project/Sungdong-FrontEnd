@@ -1,7 +1,9 @@
 .body{
+  width: 90%;
   display: flex;
+  margin-left: 5%;
   flex-direction: column;
-  justify-content: center;
+  gap: 1em;
 }
 
 .head{

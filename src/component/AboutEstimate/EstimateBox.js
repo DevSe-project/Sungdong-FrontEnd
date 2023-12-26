@@ -21,7 +21,7 @@ export function EstimateBox(){
   }
   //const { isLoading, isError, error, data:estiData } = useQuery({queryKey:['estimateBox'], queryFn: ()=> fetchData();});
   return(
-    <div style={{width:'90%'}}>
+    <div className={styles.body}>
       {/* 헤드라인 */}
       <div className={styles.head}>
         <h1><i className="fa-solid fa-heart"/> 견적함</h1>

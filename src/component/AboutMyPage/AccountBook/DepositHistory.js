@@ -21,7 +21,7 @@ export function DepositHistory(){
   }
   //const { isLoading, isError, error, data:depositData } = useQuery({queryKey:['deposit'], queryFn: ()=> fetchData();});
   return(
-    <div style={{width:'90%'}}>
+    <div className={styles.body}>
       {/* 헤드라인 */}
       <div className={styles.head}>
         <h1><i className="fa-solid fa-heart"/> 입금내역 조회</h1>

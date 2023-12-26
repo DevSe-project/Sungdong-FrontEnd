@@ -22,7 +22,7 @@ export function AccountBook(){
     }
     //const { isLoading, isError, error, data:abData } = useQuery({queryKey:['accountBook'], queryFn: ()=> fetchData();});
   return(
-    <div style={{width:'90%'}}>
+    <div className={styles.body}>
       {/* 헤드라인 */}
       <div className={styles.head}>
         <h1><i className="fa-solid fa-heart"/> 원장조회</h1>

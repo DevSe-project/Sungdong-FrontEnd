@@ -1,7 +1,9 @@
 .body{
+  width: 90%;
   display: flex;
+  margin-left: 5%;
   flex-direction: column;
-  justify-content: center;
+  gap: 1em;
 }
 
 /* 헤드라인 */
@@ -21,6 +23,7 @@
 /* 표 */
 
 .tablebody{
+  margin-left: 1%;
   width: 100%;
   display: flex;
   flex-direction: column;
