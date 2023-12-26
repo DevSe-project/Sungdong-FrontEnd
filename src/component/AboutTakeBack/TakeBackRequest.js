@@ -7,7 +7,7 @@ export function TackBackRequest(){
   const { setIsModal } = useModalActions();
 
   return(
-    <div style={{width:'90%'}}>
+    <div className={styles.body}>
       {/* 헤드라인 */}
       <div className={styles.head}>
         <h1><i className="fa-solid fa-heart"/> 반품신청</h1>

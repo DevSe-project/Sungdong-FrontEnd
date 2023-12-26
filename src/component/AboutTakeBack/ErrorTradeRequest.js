@@ -6,7 +6,7 @@ export function ErrorTrade(){
   const { isModal } = useModalState();
   const { setIsModal } = useModalActions();
   return(
-    <div style={{width:'90%'}}>
+    <div className={styles.body}>
       {/* 헤드라인 */}
       <div className={styles.head}>
         <h1><i className="fa-solid fa-heart"/> 불량교환신청</h1>
