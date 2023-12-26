@@ -10,6 +10,7 @@ export function TackBackRequest(){
   const { data, isLoading, isError, error } = useQuery({queryKey: ['data']});
   // 게시물 데이터와 페이지 번호 상태 관리    
   const [currentPage, setCurrentPage] = useState(1);
+  const [modalItem, setModalItem] = useState([]);
   //현재 페이지에 해당하는 게시물 목록 가져오기
   const getCurrentPagePosts = () => {
     const startIndex = (currentPage - 1) * 5; // 한 페이지에 5개씩 표시
@@ -18,6 +19,12 @@ export function TackBackRequest(){
     : data.slice(startIndex, startIndex + 5)
     
   };
+
+  function addRequest(item) {
+    setIsModal(true);
+    setModalItem(item);
+  }
+
   if (isLoading) {
     return <p>Loading..</p>;
   }
@@ -56,7 +63,7 @@ export function TackBackRequest(){
             </tr>
           </thead>
           {getCurrentPagePosts().map((item,index) => (
-          <tbody>
+          <tbody key={index}>
             <tr>
               <td>date</td>
               <td>id값</td>
@@ -70,7 +77,7 @@ export function TackBackRequest(){
               <td>
                 <button 
                 className={styles.button}
-                onClick={() => { setIsModal(true) }}
+                onClick={() => { addRequest(item) }}
                 >작성</button>
               </td>
             </tr>
@@ -126,7 +133,7 @@ export function TackBackRequest(){
       {/* --------------TakeBack-Modal-------------- */}
         {isModal &&
         <div className={styles.modalOverlay}>
-          <TakeBackModal />
+          <TakeBackModal modalItem={modalItem}/>
         </div>}
     </div>
   )

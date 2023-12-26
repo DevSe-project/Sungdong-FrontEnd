@@ -2,9 +2,9 @@ import styles from './Modal.module.css';
 import { useEffect } from 'react';
 import { useModalActions } from '../../Store/DataStore';
 
-export default function TakeBackModal() {
+export default function TakeBackModal({modalItem}) {
     const {closeModal} = useModalActions();
-
+    console.log(modalItem);
     // esc키를 누르면 모달창 닫기.
     useEffect(() => {
         const onClose = (event) => {
@@ -21,12 +21,12 @@ export default function TakeBackModal() {
     }, [closeModal]);
 
     const productList = [
-        { label : '상품정보', content : '상품정보입니다.'},
-        { label : '배송구분', content : '배송구분입니다.'},
-        { label : '승인시간', content : '배송구분입니다.'},
-        { label : '판매일자', content : '배송구분입니다.'},
-        { label : '전표번호', content : '배송구분입니다.'},
-        { label : '경과일', content : '배송구분입니다.'},
+        { label : '상품정보', content : modalItem.title},
+        { label : '배송구분', content : '배송구분'},
+        { label : '승인시간', content : '미정'},
+        { label : '판매일자', content : '구매한 일자'},
+        { label : '전표번호', content : modalItem.id},
+        { label : '경과일', content : '구매일로부터 n일'},
       ];
 
     const takeBackList = [
@@ -39,9 +39,9 @@ export default function TakeBackModal() {
           <>
           <input style={{width: '20%'}} className={styles.inputStyle} type='number'/>
           <span style={{width: '10%', background: 'lightgray'}} className={styles.inputStyle}>단가</span>
-          <input style={{width: '20%'}} className={styles.inputStyle} type='text' disabled/>
+          <input style={{width: '20%'}} value={modalItem.price} className={styles.inputStyle} type='text' disabled/>
           <span style={{width: '10%', background: 'lightgray'}} className={styles.inputStyle}>금액</span>
-          <input style={{width: '20%'}} className={styles.inputStyle} type='text' disabled/>          
+          <input style={{width: '20%'}} value={modalItem.price} className={styles.inputStyle} type='text' disabled/>          
           </>},
         { label : '바코드상태', content : barcodeStatus() },
         { label : '반품사유', content : <input className={styles.inputStyle} style={{width: '100%'}} type='text'/>},
@@ -100,7 +100,7 @@ export default function TakeBackModal() {
                             )}
                         </div>
                         <div className={styles.buttonContainer}>
-                          <label>최종 환불금액 : <input className={styles.inputStyle} type='text' disabled/> 원</label>
+                          <label>최종 환불금액 : <input className={styles.inputStyle} value={modalItem.price} type='text' disabled/> 원</label>
                           <button className={styles.button}>반품 신청</button>
                         </div>
                     </div>
