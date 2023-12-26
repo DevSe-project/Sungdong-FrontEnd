@@ -106,6 +106,7 @@
   border-radius: 5dvw;
   border: none;
   cursor: pointer;
+  white-space: pre;
   transition: background-color 0.3s ease;
   margin-top: 0.5em;
   margin-right: 0.3em;

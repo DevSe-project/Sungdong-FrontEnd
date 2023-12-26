@@ -7,6 +7,7 @@ import { useBasketList, useIsLogin, useListActions, useSetLogin, useWishList } f
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
 import { busSchool } from 'fontawesome'
+import { GetCookie } from '../../customFn/GetCookie'
 export function Detail(props) {
   //데이터 불러오기
   const { isLoading, isError, error, data } = useQuery({queryKey:['data']});
@@ -69,32 +70,61 @@ export function Detail(props) {
       }
     };
   
-      //결제하기 함수
-      const addToOrder = async (product) => {
-        if (isLoading) {
-          // 데이터가 없으면 아무것도 하지 않고 종료
-          return;
-        }
-        try {
-          const response = await axios.post("/order/req", 
-            JSON.stringify({
-              productId: product.id,  // 예시: product가 객체이고 id 속성이 있는 경우
-              optionSelect: product.optionSelect ? product.optionSelect : null,
-              cnt: count,
-            }),
-            {
-              headers : {
-                "Content-Type" : "application/json"
-              }
+    //결제하기 함수
+    const addToOrder = async (product) => {
+      if (isLoading) {
+        // 데이터가 없으면 아무것도 하지 않고 종료
+        return;
+      }
+      try {
+        const response = await axios.post("/order/req", 
+          JSON.stringify({
+            productId: product.id,  // 예시: product가 객체이고 id 속성이 있는 경우
+            optionSelect: product.optionSelect ? product.optionSelect : null,
+            cnt: count,
+          }),
+          {
+            headers : {
+              "Content-Type" : "application/json"
             }
-          )
-          // 성공 시 추가된 상품 정보를 반환합니다.
-          return response.data;
-        } catch (error) {
-          // 실패 시 예외를 throw합니다.
-          throw new Error('상품을 결제항목에 작성하는 중 오류가 발생했습니다.');
-        }
-      };
+          }
+        )
+        // 성공 시 추가된 상품 정보를 반환합니다.
+        return response.data;
+      } catch (error) {
+        // 실패 시 예외를 throw합니다.
+        throw new Error('상품을 결제항목에 작성하는 중 오류가 발생했습니다.');
+      }
+    };
+
+    //결제하기 함수
+    const addToEstimate = async (product) => {
+      if (isLoading) {
+        // 데이터가 없으면 아무것도 하지 않고 종료
+        return;
+      }
+      try {
+        const token = GetCookie('jwt_token');
+        const response = await axios.post("/estimate/box", 
+          JSON.stringify({
+            productId: product.id,  // 예시: product가 객체이고 id 속성이 있는 경우
+            optionSelect: product.optionSelect ? product.optionSelect : null,
+            cnt: count,
+          }),
+          {
+            headers : {
+              "Content-Type" : "application/json",
+              'Authorization': `Bearer ${token}`
+            }
+          }
+        )
+        // 성공 시 추가된 상품 정보를 반환합니다.
+        return response.data;
+      } catch (error) {
+        // 실패 시 예외를 throw합니다.
+        throw new Error('상품을 견적함에 추가하는 중 오류가 발생했습니다.');
+      }
+    };
   
     //장바구니 추가 함수
     const { cartMutate } = useMutation({mutationFn: addToCart,
@@ -122,6 +152,20 @@ export function Detail(props) {
         setOrderList(orderData);
         navigate("/basket/receipt");
         props.setActiveTab(2);
+      },
+      onError: (error) => {
+        // 상품 추가 실패 시, 에러 처리를 수행합니다.
+        console.error('상품을 장바구니에 추가하는 중 오류가 발생했습니다.', error);
+      },
+    });
+
+    //견적함 추가 함수
+    const { addEstimateBox } = useMutation({mutationFn : addToEstimate,
+      onSuccess: (ebData) => {
+        // 메세지 표시
+        console.log('상품을 견적함에 추가하였습니다.', ebData);
+        // 추가 안내 메세지
+        alert("견적함에 해당 상품을 추가하였습니다.");
       },
       onError: (error) => {
         // 상품 추가 실패 시, 에러 처리를 수행합니다.
@@ -390,6 +434,9 @@ function basketThis(product, count){
                   : <i className="fa-regular fa-heart"/>} 
                   &nbsp;찜하기
                   </button>
+                  <button 
+                  onClick={()=>{addEstimateBox.mutate(detailData)}}
+                  className={styles.sideButton}>견적함</button>
                 </div>
               </div>
             </div>

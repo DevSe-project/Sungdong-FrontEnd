@@ -29,6 +29,15 @@
   align-items: center;
 }
 
+.deleteBox{
+  width: 90%;
+  display: flex;
+  gap: 2em;
+  overflow-x: hidden;
+  align-items: center;
+  justify-content: flex-end;
+}
+
 .table{
   justify-content: center;
   align-items: center;
