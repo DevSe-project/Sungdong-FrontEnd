@@ -4,12 +4,38 @@ import ErrorTradeModal from './ErrorTradeModal';
 import { useModalActions, useModalState } from '../../Store/DataStore';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
+import { GetCookie } from '../../customFn/GetCookie';
+import axios from 'axios';
 export function ErrorTrade(){
   const { isModal } = useModalState();
   const { setIsModal } = useModalActions();
+  const fetchOrderData = async() => {
+    try{
+      const token = GetCookie('jwt_token');
+      const response = await axios.get("/order", 
+        {
+          headers : {
+            "Content-Type" : "application/json",
+            'Authorization': `Bearer ${token}`,
+          }
+        }
+      )
+      return response.data;
+    } catch(error) {
+      throw new Error('주문 내역을 불러오던 중 오류가 발생했습니다.');
+    }
+  }
+  //const { isLoading, isError, error, data:orderData } = useQuery({queryKey:['order'], queryFn: ()=> fetchOrderData();});
   const { data, isLoading, isError, error } = useQuery({queryKey: ['data']});
   // 게시물 데이터와 페이지 번호 상태 관리    
   const [currentPage, setCurrentPage] = useState(1);
+  const [modalItem, setModalItem] = useState([]);
+
+  function addRequest(item) {
+    setIsModal(true);
+    setModalItem(item);
+  }
+
   //현재 페이지에 해당하는 게시물 목록 가져오기
   const getCurrentPagePosts = () => {
     const startIndex = (currentPage - 1) * 5; // 한 페이지에 5개씩 표시
@@ -70,7 +96,7 @@ export function ErrorTrade(){
               <td>
                 <button 
                 className={styles.button}
-                onClick={() => { setIsModal(true) }}
+                onClick={() => { addRequest(item) }}
                 >작성</button>
               </td>
             </tr>
@@ -126,7 +152,7 @@ export function ErrorTrade(){
       {/* --------------TakeBack-Modal-------------- */}
       {isModal &&
         <div className={styles.modalOverlay}>
-          <ErrorTradeModal />
+          <ErrorTradeModal modalItem={modalItem}/>
         </div>}
     </div>
   )

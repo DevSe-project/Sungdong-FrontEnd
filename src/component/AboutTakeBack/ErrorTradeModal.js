@@ -1,9 +1,54 @@
 import styles from './Modal.module.css';
 import { useEffect } from 'react';
 import { useModalActions } from '../../Store/DataStore';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
+import { GetCookie } from '../../customFn/GetCookie';
 
-export default function ErrorTradeModal() {
+export default function ErrorTradeModal({modalItem}) {
     const {closeModal} = useModalActions();
+
+  const queryClient = useQueryClient();
+  
+  //fetch 함수
+  const tradeFetch = async () => {
+    try {
+      const token = GetCookie('jwt_token');
+      const response = await axios.post("/order", 
+        JSON.stringify({
+          productId: modalItem.id,  // 예시: product가 객체이고 id 속성이 있는 경우
+          optionSelect: modalItem.optionSelect ? modalItem.optionSelect : null,
+          cnt: modalItem.cnt
+        }),
+        {
+          headers : {
+            "Content-Type" : "application/json",
+            'Authorization': `Bearer ${token}`,
+          }
+        }
+      )
+      // 성공 시 추가된 상품 정보를 반환합니다.
+      return response.data;
+    } catch (error) {
+      // 실패 시 예외를 throw합니다.
+      throw new Error('상품을 주문 목록에 요청하던 중 오류가 발생했습니다.');
+    }
+  };
+
+  //교환 신청 함수
+  const { requestTradeMutation } = useMutation({mutationFn: tradeFetch,
+    onSuccess: (success) => {
+      // 메세지 표시
+      alert(success.message);
+      console.log('불량교환 신청이 완료되었습니다.', success);
+      // 상태를 다시 불러와 갱신합니다.
+      queryClient.invalidateQueries(['errTrade']);
+    },
+    onError: (error) => {
+      // 상품 추가 실패 시, 에러 처리를 수행합니다.
+      console.error('상품을 주문목록에 넣는 중 오류가 발생했습니다.', error);
+    },
+  })
 
     // esc키를 누르면 모달창 닫기.
     useEffect(() => {
@@ -21,12 +66,12 @@ export default function ErrorTradeModal() {
     }, [closeModal]);
 
     const productList = [
-        { label : '상품정보', content : '상품정보입니다.'},
-        { label : '배송구분', content : '배송구분입니다.'},
-        { label : '승인시간', content : '배송구분입니다.'},
-        { label : '판매일자', content : '배송구분입니다.'},
-        { label : '전표번호', content : '배송구분입니다.'},
-        { label : '경과일', content : '배송구분입니다.'},
+      { label : '상품정보', content : modalItem.title},
+      { label : '배송구분', content : '배송구분'},
+      { label : '승인시간', content : '미정'},
+      { label : '판매일자', content : '구매한 일자'},
+      { label : '전표번호', content : modalItem.id},
+      { label : '경과일', content : '구매일로부터 n일'},
       ];
 
     const takeBackList = [
@@ -39,9 +84,9 @@ export default function ErrorTradeModal() {
           <>
           <input style={{width: '20%'}} className={styles.inputStyle} type='number'/>
           <span style={{width: '10%', background: 'lightgray'}} className={styles.inputStyle}>단가</span>
-          <input style={{width: '20%'}} className={styles.inputStyle} type='text' disabled/>
+          <input style={{width: '20%'}} value={modalItem.price} className={styles.inputStyle} type='text' disabled/>
           <span style={{width: '10%', background: 'lightgray'}} className={styles.inputStyle}>금액</span>
-          <input style={{width: '20%'}} className={styles.inputStyle} type='text' disabled/>          
+          <input style={{width: '20%'}} value={modalItem.price} className={styles.inputStyle} type='text' disabled/>          
           </>},
         { label : '바코드상태', content : barcodeStatus() },
         { label : '반품사유', content : <input className={styles.inputStyle} style={{width: '100%'}} type='text'/>},
@@ -100,8 +145,8 @@ export default function ErrorTradeModal() {
                             )}
                         </div>
                         <div className={styles.buttonContainer}>
-                          <label>최종 환불금액 : <input className={styles.inputStyle} type='text' disabled/> 원</label>
-                          <button className={styles.button}>불량/교환 신청</button>
+                          <label>최종 환불금액 : <input className={styles.inputStyle} value={modalItem.price} type='text' disabled/> 원</label>
+                          <button onClick={()=> requestTradeMutation.mutate()} className={styles.button}>불량/교환 신청</button>
                         </div>
                     </div>
                 </div>
