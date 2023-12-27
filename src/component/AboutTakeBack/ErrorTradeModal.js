@@ -14,7 +14,7 @@ export default function ErrorTradeModal({modalItem}) {
   const tradeFetch = async () => {
     try {
       const token = GetCookie('jwt_token');
-      const response = await axios.post("/order", 
+      const response = await axios.post("/errTrade", 
         JSON.stringify({
           productId: modalItem.id,  // 예시: product가 객체이고 id 속성이 있는 경우
           optionSelect: modalItem.optionSelect ? modalItem.optionSelect : null,
@@ -46,7 +46,7 @@ export default function ErrorTradeModal({modalItem}) {
     },
     onError: (error) => {
       // 상품 추가 실패 시, 에러 처리를 수행합니다.
-      console.error('상품을 주문목록에 넣는 중 오류가 발생했습니다.', error);
+      console.error('반품을 신청하는 중 오류가 발생했습니다.', error);
     },
   })
 

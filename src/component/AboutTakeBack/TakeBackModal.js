@@ -13,7 +13,7 @@ export default function TakeBackModal({modalItem}) {
   const tradeFetch = async () => {
     try {
       const token = GetCookie('jwt_token');
-      const response = await axios.post("/order", 
+      const response = await axios.post("/takeBack", 
         JSON.stringify({
           productId: modalItem.id,  // 예시: product가 객체이고 id 속성이 있는 경우
           optionSelect: modalItem.optionSelect ? modalItem.optionSelect : null,
@@ -39,13 +39,13 @@ export default function TakeBackModal({modalItem}) {
     onSuccess: (success) => {
       // 메세지 표시
       alert(success.message);
-      console.log('불량교환 신청이 완료되었습니다.', success);
+      console.log('반품 신청이 완료되었습니다.', success);
       // 상태를 다시 불러와 갱신합니다.
-      queryClient.invalidateQueries(['errTrade']);
+      queryClient.invalidateQueries(['takeBack']);
     },
     onError: (error) => {
       // 상품 추가 실패 시, 에러 처리를 수행합니다.
-      console.error('상품을 주문목록에 넣는 중 오류가 발생했습니다.', error);
+      console.error('반품을 신청하는 중 오류가 발생했습니다.', error);
     },
   })
 
