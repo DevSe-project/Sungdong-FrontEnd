@@ -231,7 +231,9 @@ export const useTakeBackStore = create((set) => ({
     returnStatus: "",
     barcodeStatus: "",
     wrapStatus: "",
-    productStatus: ""
+    productStatus: "",
+    name: "",
+    reason: "",
   },
   actions: {
     setTakeBackOption: (fieldName, value) =>
@@ -249,7 +251,9 @@ export const useErrTradeStore = create((set) => ({
     returnStatus: "",
     barcodeStatus: "",
     wrapStatus: "",
-    productStatus: ""
+    productStatus: "",
+    name: "",
+    reason: "",
   },
   actions: {
     setErrTradeOption: (fieldName, value) =>

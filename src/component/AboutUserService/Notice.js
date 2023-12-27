@@ -17,6 +17,8 @@ export function Notice() {
     setNoticePostList(NoticePostObj);
   }, [setNoticePostList])
 
+  
+
   return (
     <div>
       <TopBanner />

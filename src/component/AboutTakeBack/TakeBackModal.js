@@ -19,7 +19,8 @@ export default function TakeBackModal({modalItem}) {
         JSON.stringify({
           productId: modalItem.id,  // 예시: product가 객체이고 id 속성이 있는 경우
           optionSelect: modalItem.optionSelect ? modalItem.optionSelect : null,
-          cnt: modalItem.cnt
+          cnt: modalItem.cnt,
+          takeBackOption: takeBackOption
         }),
         {
           headers : {
@@ -160,7 +161,7 @@ export default function TakeBackModal({modalItem}) {
       ];
 
     const takeBackList = [
-        { label : '작성자', content : <input className={styles.inputStyle} style={{width: '100%'}} type='text'/>},
+        { label : '작성자', content : <input className={styles.inputStyle} value={takeBackOption.name} onChange={(e)=> setTakeBackOption("name", e.target.value)} style={{width: '100%'}} type='text'/>},
         { label : '포장상태', content : wrapStatusOption()},
         { label : '처리사항', content : '반품처리'},
         { label : '상품상태', content : productStatusOption()},
@@ -174,7 +175,7 @@ export default function TakeBackModal({modalItem}) {
           <input style={{width: '20%'}} value={modalItem.price} className={styles.inputStyle} type='text' disabled/>          
           </>},
         { label : '바코드상태', content : barcodeStatusOption() },
-        { label : '반품사유', content : <input className={styles.inputStyle} style={{width: '100%'}} type='text'/>},
+        { label : '반품사유', content : <input className={styles.inputStyle} value={takeBackOption.reason} onChange={(e)=> setTakeBackOption("reason", e.target.value)} style={{width: '100%'}} type='text'/>},
         { label : '반품배송', content : returnStatusOption()}
     ]
 
