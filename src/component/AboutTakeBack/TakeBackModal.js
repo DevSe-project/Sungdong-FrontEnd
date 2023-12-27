@@ -1,12 +1,14 @@
 import styles from './Modal.module.css';
-import { useEffect } from 'react';
-import { useModalActions } from '../../Store/DataStore';
+import { useEffect, useState } from 'react';
+import { useModalActions, useTakeBack, useTakeBackActions } from '../../Store/DataStore';
 import { GetCookie } from '../../customFn/GetCookie';
 import axios from 'axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export default function TakeBackModal({modalItem}) {
   const {closeModal} = useModalActions();
+  const takeBackOption = useTakeBack();
+  const {setTakeBackOption, resetTakeBackOption} = useTakeBackActions();
   const queryClient = useQueryClient();
 
   //fetch 함수
@@ -54,6 +56,7 @@ export default function TakeBackModal({modalItem}) {
         const onClose = (event) => {
             if (event.key === 'Escape') {
                 closeModal();
+                resetTakeBackOption();
             }
         };
 
@@ -63,6 +66,89 @@ export default function TakeBackModal({modalItem}) {
             window.removeEventListener('keydown', onClose);
         };
     }, [closeModal]);
+
+  // 반품 상태 옵션
+  function returnStatusOption(){
+    return(
+      <div style={{display: 'flex', gap: '0.5em'}}>
+        <div>
+          <select 
+            className={styles.inputStyle}
+            value={takeBackOption.returnStatus}              
+            onChange={(e)=>setTakeBackOption("returnStatus", e.target.value)}
+            name="returnStatus"
+          >
+            <option name="returnStatus" value="영업직원">영업직원</option>
+            <option name="returnStatus" value="용차회수">용차회수</option>
+            <option name="returnStatus" value="매장방문">매장방문</option>
+            <option name="returnStatus" value="화물발송">화물발송</option>
+          </select>
+        </div>
+      </div>
+    )
+  }
+
+  // 바코드 상태 옵션
+  function barcodeStatusOption(){
+    return(
+      <div style={{display: 'flex', gap: '0.5em'}}>
+        <div>
+          <select 
+          className={styles.inputStyle} 
+          name="barcodeStatus"
+          value={takeBackOption.barcodeStatus}              
+          onChange={(e)=>setTakeBackOption("barcodeStatus", e.target.value)}
+          >
+            <option name="barcodeStatus" value="정상부착">정상부착</option>
+            <option name="barcodeStatus" value="미부착">미부착</option>
+            <option name="barcodeStatus" value="바코드훼손">바코드 훼손</option>
+            <option name="barcodeStatus" value="입고시미부착">입고시 미 부착</option>
+          </select>
+        </div>
+      </div>
+    )
+  }
+  // 포장 상태 옵션
+  function wrapStatusOption(){
+    return(
+      <div style={{display: 'flex', gap: '0.5em'}}>
+        <div>
+          <select 
+          className={styles.inputStyle}  
+          name="wrapStatus"
+          value={takeBackOption.wrapStatus}              
+          onChange={(e)=>setTakeBackOption("wrapStatus", e.target.value)}
+          >
+            <option name="wrapStatus" value="정상포장">정상포장</option>
+            <option name="wrapStatus" value="포장개봉">포장개봉</option>
+            <option name="wrapStatus" value="포장훼손">포장훼손</option>
+          </select>
+        </div>
+      </div>
+    )
+  }
+
+  // 상품 상태 옵션
+  function productStatusOption(){
+    return(
+      <div style={{display: 'flex', gap: '0.5em'}}>
+        <div>
+          <select 
+          className={styles.inputStyle}  
+          name="productStatus"
+          value={takeBackOption.productStatus}              
+          onChange={(e)=>setTakeBackOption("productStatus", e.target.value)}
+          >
+            <option name="productStatus" value="정상작동">정상작동</option>
+            <option name="productStatus" value="불량작동">불량작동</option>
+            <option name="productStatus" value="A/S수리">A/S 수리</option>
+          </select>
+        </div>
+      </div>
+    )
+  }
+
+
 
     const productList = [
         { label : '상품정보', content : modalItem.title},
@@ -75,9 +161,9 @@ export default function TakeBackModal({modalItem}) {
 
     const takeBackList = [
         { label : '작성자', content : <input className={styles.inputStyle} style={{width: '100%'}} type='text'/>},
-        { label : '포장상태', content : wrapStatus()},
+        { label : '포장상태', content : wrapStatusOption()},
         { label : '처리사항', content : '반품처리'},
-        { label : '상품상태', content : productStatus()},
+        { label : '상품상태', content : productStatusOption()},
         { label : '반품수량', 
           content : 
           <>
@@ -87,9 +173,9 @@ export default function TakeBackModal({modalItem}) {
           <span style={{width: '10%', background: 'lightgray'}} className={styles.inputStyle}>금액</span>
           <input style={{width: '20%'}} value={modalItem.price} className={styles.inputStyle} type='text' disabled/>          
           </>},
-        { label : '바코드상태', content : barcodeStatus() },
+        { label : '바코드상태', content : barcodeStatusOption() },
         { label : '반품사유', content : <input className={styles.inputStyle} style={{width: '100%'}} type='text'/>},
-        { label : '반품배송', content : returnStatus()}
+        { label : '반품배송', content : returnStatusOption()}
     ]
 
 
@@ -154,64 +240,3 @@ export default function TakeBackModal({modalItem}) {
     );
 }
 
-// 상품 상태 옵션
-function wrapStatus(){
-    return(
-      <div style={{display: 'flex', gap: '0.5em'}}>
-        <div>
-          <select className={styles.inputStyle}  name="wrapStatus">
-            <option name="wrapStatus" type="정상포장">정상포장</option>
-            <option name="wrapStatus" type="포장개봉">포장개봉</option>
-            <option name="wrapStatus" type="포장훼손">포장훼손</option>
-          </select>
-        </div>
-      </div>
-    )
-}
-
-// 상품 상태 옵션
-function productStatus(){
-    return(
-      <div style={{display: 'flex', gap: '0.5em'}}>
-        <div>
-          <select className={styles.inputStyle}  name="productStatus">
-            <option name="productStatus" type="정상작동">정상작동</option>
-            <option name="productStatus" type="불량작동">불량작동</option>
-            <option name="productStatus" type="A/S수리">A/S 수리</option>
-          </select>
-        </div>
-      </div>
-    )
-  }
-
-  // 바코드 상태 옵션
-function barcodeStatus(){
-    return(
-      <div style={{display: 'flex', gap: '0.5em'}}>
-        <div>
-          <select className={styles.inputStyle} name="barcodeStatus">
-            <option name="barcodeStatus" type="정상부착">정상부착</option>
-            <option name="barcodeStatus" type="미부착">미부착</option>
-            <option name="barcodeStatus" type="바코드훼손">바코드 훼손</option>
-            <option name="barcodeStatus" type="입고시미부착">입고시 미 부착</option>
-          </select>
-        </div>
-      </div>
-    )
-  }
-
-    // 반품 상태 옵션
-function returnStatus(){
-    return(
-      <div style={{display: 'flex', gap: '0.5em'}}>
-        <div>
-          <select className={styles.inputStyle} name="returnStatus">
-            <option name="returnStatus" type="영업직원">영업직원</option>
-            <option name="returnStatus" type="용차회수">용차회수</option>
-            <option name="returnStatus" type="매장방문">매장방문</option>
-            <option name="returnStatus" type="화물발송">화물발송</option>
-          </select>
-        </div>
-      </div>
-    )
-  }

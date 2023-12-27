@@ -225,6 +225,21 @@ export const useSearchStore = create((set) => ({
 export const useSeperateSearchTerm = () => useSearchStore((state) => state.seperateSearchTerm);
 export const useSearchActions = () => useSearchStore((state) => state.actions);
 
-/* ----------------CATEGORY STORE---------------- */
-
+/* ----------------TAKEBACK STORE---------------- */
+export const useTakeBackStore = create((set) => ({
+  takeBackOption: {
+    returnStatus: "",
+    barcodeStatus: "",
+    wrapStatus: "",
+    productStatus: ""
+  },
+  actions: {
+    setTakeBackOption: (fieldName, value) =>
+      set((state) => ({ takeBackOption: { ...state.takeBackOption, [fieldName]: value } })),
+    resetTakeBackOption: () =>
+      set({ takeBackOption: { returnStatus: "", barcodeStatus: "", wrapStatus: "", productStatus: "" } }),
+  }
+}));
+export const useTakeBack = () => useTakeBackStore((state) => state.takeBackOption);
+export const useTakeBackActions = () => useTakeBackStore((state) => state.actions);
 
