@@ -196,7 +196,7 @@ export default function TakeBackModal({modalItem}) {
                 {/* 작성일과 반품상담자 */}
                 <div className={styles.details}>
                     <div className={styles.date}>
-                        작성일: 
+                        작성일: date
                     </div>
                     <div className={styles.writer}>
                         반품상담자: 성동물산(주)
