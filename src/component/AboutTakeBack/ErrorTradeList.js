@@ -53,8 +53,8 @@ export function ErrorTradeList(){
         <table className={styles.table}>
           <thead>
             <tr>
-              <th>일자</th>
               <th>구분</th>
+              <th>일자</th>
               <th>품명 및 규격</th>
               <th>사유</th>
               <th>수량</th>
@@ -62,13 +62,12 @@ export function ErrorTradeList(){
               <th>처리일</th>
               <th>진행</th>
               <th>담당자</th>
-              <th>입력자</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>일자</td>
               <td>구분</td>
+              <td>일자</td>
               <td>품명 및 규격</td>
               <td>사유</td>
               <td>수량</td>
@@ -76,7 +75,6 @@ export function ErrorTradeList(){
               <td>처리일</td>
               <td>진행</td>
               <td>담당자</td>
-              <td>입력자</td>
             </tr>
           </tbody>
         </table>
