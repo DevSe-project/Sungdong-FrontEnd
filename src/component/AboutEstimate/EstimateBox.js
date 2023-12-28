@@ -1,7 +1,27 @@
+import axios from 'axios';
 import styles from './Table.module.css';
+import { GetCookie } from '../../customFn/GetCookie';
 export function EstimateBox(){
+  //fetch
+  const fetchData = async() => {
+    try{
+      const token = GetCookie('jwt_token');
+      const response = await axios.get("/estimate/box", 
+        {
+          headers : {
+            "Content-Type" : "application/json",
+            'Authorization': `Bearer ${token}`,
+          }
+        }
+      )
+      return response.data;
+    } catch(error) {
+      throw new Error('원장 내역을 불러오던 중 오류가 발생했습니다.');
+    }
+  }
+  //const { isLoading, isError, error, data:estiData } = useQuery({queryKey:['estimateBox'], queryFn: ()=> fetchData();});
   return(
-    <div style={{width:'90%'}}>
+    <div className={styles.body}>
       {/* 헤드라인 */}
       <div className={styles.head}>
         <h1><i className="fa-solid fa-heart"/> 견적함</h1>
@@ -36,7 +56,7 @@ export function EstimateBox(){
               <td>수량</td>
               <td>공급가</td>
               <td>EA</td>
-              <td><button className={styles.button}>삭제</button></td>
+              <td><input type='checkbox'></input></td>
             </tr>
           </tbody>
           <tfoot>
@@ -52,6 +72,7 @@ export function EstimateBox(){
       </div>
       <div className={styles.buttonContainer}>
         <button className={styles.pageButton}>견적하기</button>
+        <button className={styles.pageButton}>삭제</button>
       </div>
     </div>
   )

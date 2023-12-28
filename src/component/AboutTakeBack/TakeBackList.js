@@ -2,8 +2,28 @@ import { useQuery } from '@tanstack/react-query';
 import styles from './Table.module.css';
 import { TakeBackListFilter } from './TakeBackListFilter';
 import { useState } from 'react';
+import axios from 'axios';
+import { GetCookie } from '../../customFn/GetCookie';
 
 export function TakeBackList(){
+  //fetch
+  const fetchData = async() => {
+    try{
+      const token = GetCookie('jwt_token');
+      const response = await axios.get("/takeBack", 
+        {
+          headers : {
+            "Content-Type" : "application/json",
+            'Authorization': `Bearer ${token}`,
+          }
+        }
+      )
+      return response.data;
+    } catch(error) {
+      throw new Error('원장 내역을 불러오던 중 오류가 발생했습니다.');
+    }
+  }
+  //const { isLoading, isError, error, data:takeBackData } = useQuery({queryKey:['takeBack'], queryFn: ()=> fetchData();});
   const { data, isLoading, isError, error } = useQuery({queryKey: ['data']});
   // 게시물 데이터와 페이지 번호 상태 관리    
   const [currentPage, setCurrentPage] = useState(1);
@@ -22,7 +42,7 @@ export function TakeBackList(){
     return <p>에러 : {error.message}</p>;
   }
   return(
-    <div style={{width:'90%'}}>
+    <div className={styles.body}>
       {/* 헤드라인 */}
       <div className={styles.head}>
         <h1><i className="fa-solid fa-heart"/> 반품조회</h1>

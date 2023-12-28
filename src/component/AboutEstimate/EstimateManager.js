@@ -2,8 +2,28 @@ import { useState } from 'react';
 import { EstimateFilter } from './EstimateFilter';
 import styles from './Table.module.css';
 import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import { GetCookie } from '../../customFn/GetCookie';
 
 export function EstimateManager(){
+  //fetch
+  const fetchData = async() => {
+    try{
+      const token = GetCookie('jwt_token');
+      const response = await axios.get("/estimate/manager", 
+        {
+          headers : {
+            "Content-Type" : "application/json",
+            'Authorization': `Bearer ${token}`,
+          }
+        }
+      )
+      return response.data;
+    } catch(error) {
+      throw new Error('원장 내역을 불러오던 중 오류가 발생했습니다.');
+    }
+  }
+  //const { isLoading, isError, error, data:estiMangData } = useQuery({queryKey:['estimateManager'], queryFn: ()=> fetchData();});
   const { data, isLoading, isError, error } = useQuery({queryKey: ['data']});
   // 게시물 데이터와 페이지 번호 상태 관리    
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,13 +43,13 @@ export function EstimateManager(){
   }
   return(
   <div>
-    <div style={{width:'90%'}}>
+    <div className={styles.body}>
       {/* 헤드라인 */}
       <div className={styles.head}>
         <h1><i className="fa-solid fa-heart"/> 견적관리</h1>
       </div>
       {/* 필터 */}
-      <EstimateFilter/>
+        <EstimateFilter/>
       {/* 테이블 */}
       <div className={styles.tablebody}>
         <table className={styles.table}>
@@ -45,24 +65,26 @@ export function EstimateManager(){
               <th>주문하기</th>
               <th>견적서 엑셀</th>
               <th>작성자</th>
-              <th><input type='checkbox'></input></th>
+              <th><button className={styles.button}>선택 삭제</button></th>
             </tr>
           </thead>
+          {data.map((item) => (
           <tbody>
             <tr>
-              <td>순번</td>
+              <td>{item.id}</td>
               <td>번호</td>
               <td>일자</td>
               <td>품명 및 규격</td>
               <td>수량</td>
               <td>EA</td>
-              <td>금액</td>
+              <td>{item.price}</td>
               <td>주문하기</td>
               <td>견적서 엑셀</td>
               <td>작성자</td>
-              <td><button className={styles.button}>삭제</button></td>
+              <td><input type='checkbox'></input></td>
             </tr>
           </tbody>
+          ))}
         </table>
       </div>
       <div className={styles.buttonContainer}>

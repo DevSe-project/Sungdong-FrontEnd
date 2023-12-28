@@ -225,6 +225,43 @@ export const useSearchStore = create((set) => ({
 export const useSeperateSearchTerm = () => useSearchStore((state) => state.seperateSearchTerm);
 export const useSearchActions = () => useSearchStore((state) => state.actions);
 
-/* ----------------CATEGORY STORE---------------- */
+/* ----------------TAKEBACK STORE---------------- */
+export const useTakeBackStore = create((set) => ({
+  takeBackOption: {
+    returnStatus: "",
+    barcodeStatus: "",
+    wrapStatus: "",
+    productStatus: "",
+    name: "",
+    reason: "",
+  },
+  actions: {
+    setTakeBackOption: (fieldName, value) =>
+      set((state) => ({ takeBackOption: { ...state.takeBackOption, [fieldName]: value } })),
+    resetTakeBackOption: () =>
+      set({ takeBackOption: { returnStatus: "", barcodeStatus: "", wrapStatus: "", productStatus: "" } }),
+  }
+}));
+export const useTakeBack = () => useTakeBackStore((state) => state.takeBackOption);
+export const useTakeBackActions = () => useTakeBackStore((state) => state.actions);
 
+/* ----------------ERRORTRADE STORE---------------- */
+export const useErrTradeStore = create((set) => ({
+  errTradeOption: {
+    returnStatus: "",
+    barcodeStatus: "",
+    wrapStatus: "",
+    productStatus: "",
+    name: "",
+    reason: "",
+  },
+  actions: {
+    setErrTradeOption: (fieldName, value) =>
+      set((state) => ({ errTradeOption: { ...state.errTradeOption, [fieldName]: value } })),
+    resetErrTradeOption: () =>
+      set({ errTradeOption: { returnStatus: "", barcodeStatus: "", wrapStatus: "", productStatus: "" } }),
+  }
+}));
+export const useErrTrade = () => useErrTradeStore((state) => state.errTradeOption);
+export const useErrTradeActions = () => useErrTradeStore((state) => state.actions);
 

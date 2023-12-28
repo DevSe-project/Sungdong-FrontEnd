@@ -6,6 +6,7 @@ import { useListActions, useModalActions, useModalState, useNoticePostList } fro
 import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner';
 import { Footer } from '../TemplateLayout/AboutFooter/Footer';
 import { MenuData } from '../TemplateLayout/AboutMenuData/MenuData';
+import axios from 'axios';
 
 export function Notice() {
   const { isModal} = useModalState();
@@ -16,6 +17,24 @@ export function Notice() {
   useEffect(() => {
     setNoticePostList(NoticePostObj);
   }, [setNoticePostList])
+
+  //공지 데이터 fetch
+  const fetchData = async() => {
+    try{
+      const response = await axios.get("/post", 
+        {
+          headers : {
+            "Content-Type" : "application/json",
+          }
+        }
+      )
+      return response.data;
+    } catch(error) {
+      throw new Error('공지사항을 불러오던 중 오류가 발생했습니다.');
+    }
+  }
+  //const { isLoading, isError, error, data:postData } = useQuery({queryKey:['post'], queryFn: ()=> fetchData();});
+
 
   return (
     <div>
