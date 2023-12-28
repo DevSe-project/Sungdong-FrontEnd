@@ -62,6 +62,7 @@ export function ErrorTradeList(){
               <th>처리일</th>
               <th>진행</th>
               <th>담당자</th>
+              <th>입력자</th>
             </tr>
           </thead>
           <tbody>
@@ -75,6 +76,7 @@ export function ErrorTradeList(){
               <td>처리일</td>
               <td>진행</td>
               <td>담당자</td>
+              <td>입력자</td>
             </tr>
           </tbody>
         </table>
