@@ -5,6 +5,7 @@ import image3 from '../../image/[이벤트]국산방진마스크.png'
 import { useNavigate } from 'react-router-dom';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
+import styles from './SlideImg.module.css';
 
 export function SlideImg() {
   const navigate = useNavigate();
@@ -38,12 +39,11 @@ function handleChange(index) {
 }
 
   return (
-    <div style={{display: 'flex', justifyContent:'center', gap:'1em'}}>
+    <div className={styles.img}>
       <Carousel
       showArrows={true}
       autoPlay={true}
       infiniteLoop={true}
-      width={550}
       showThumbs={false}
       selectedItem={imageData[currentIndex]}
       onChange={handleChange} >
@@ -53,7 +53,6 @@ function handleChange(index) {
       showArrows={true}
       autoPlay={true}
       infiniteLoop={true}
-      width={550}
       showThumbs={false}
       selectedItem={imageData[currentIndex]}
       onChange={handleChange} >

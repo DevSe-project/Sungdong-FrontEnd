@@ -1,13 +1,11 @@
 /* NoticeMini.module.css */
 .noticeMiniContainer {
-  width: 95%;
-  max-height: 270px;
   display: flex;
   flex-direction: column;
   padding: 10px;
-  border: 3px solid rgb(121, 121, 121);
-  border-radius: 8px;
-  overflow-y: auto; /* 수직 스크롤바 표시 */
+  border-radius: 1vh;
+  background-color: #f8eeee;
+  box-shadow: black;
 }
 
 .noticeList {
@@ -19,15 +17,16 @@
 }
 
 .noticeItem {
-  background-color: rgb(245, 245, 245);
+  background-color: rgb(255, 255, 255);
   display: flex;
   margin-top: 10px;
   max-height: 20px;
   padding: 10px;
-  border-radius: 8px;
+  border-radius: 1vh;
+  overflow: hidden;
 }
 .noticeItem:hover {
-  background-color: rgb(215, 215, 215);
+  border-left: 2px solid rgb(255, 168, 168);
   cursor: pointer;
 }
 
@@ -35,8 +34,6 @@
   display: -webkit-box;
   -webkit-line-clamp: 1; /* 표시할 줄 수 */
   -webkit-box-orient: vertical;
-  text-overflow: ellipsis;
-  overflow: hidden;
 }
 
 .view_all {

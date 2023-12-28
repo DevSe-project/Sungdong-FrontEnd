@@ -22,26 +22,26 @@ export default function MainPage(props) {
         menuOnClick={props.menuOnClick}
         menu_dynamicStyle={props.menu_dynamicStyle} />
         
-      <div className={styles.flexBox}>
-        {/* ❗️----SIDE----❗️ */}
-        <div className={styles.left}>
-          <MenuData login={props.login} menu_dynamicStyle={props.menu_dynamicStyle} />
-        </div>
-        {/* ❗️----CENTER----❗️ */}
-        <div className={styles.center}>
-          {/* 슬라이드 이미지 2개 */}
-          <div className={styles.slideImg}>
-            <SlideImg />
+        <div className={styles.flexBox}>
+          {/* ❗️----SIDE----❗️ */}
+          <div className={styles.left}>
+            <MenuData login={props.login} menu_dynamicStyle={props.menu_dynamicStyle} />
           </div>
-          {/* 상품 목록 Grid */}
-          <div className={styles.flexContainer}>
-            <Product />
+          {/* ❗️----CENTER----❗️ */}
+          <div className={styles.center}>
+            {/* 슬라이드 이미지 2개 */}
+            <div className={styles.slideImg_container}>
+              <SlideImg />
+            </div>
+            {/* 상품 목록 Grid */}
+            <div className={styles.product_container}>
+              <Product />
+            </div>
           </div>
-        </div>
-        {/* ❗️----RIGHT----❗️ */}
-        <div className={styles.right}>
-          <NoticeMini />
-        </div>
+          {/* ❗️----RIGHT----❗️ */}
+          <div className={styles.right}>
+            <NoticeMini />
+          </div>
       </div>
 
       {/* FOOTER */}

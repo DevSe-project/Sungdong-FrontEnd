@@ -1,0 +1,20 @@
+.img {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+@media (min-width: 1100px) {
+
+    /* 1100px 이상일 때 */
+    .img {
+        flex-direction: row;
+    }
+}
+
+@media (max-width: 1099px) {
+
+    /* 1100px 미만일 때 */
+    .img {
+        flex-direction: column;
+    }
+}

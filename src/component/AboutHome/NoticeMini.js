@@ -25,8 +25,6 @@ export default function NoticeMini() {
                 <span style={{
                     fontSize: "20px",
                     fontWeight: "bold",
-                    textAlign: "left",
-                    color: "black"
                 }}>공지사항</span>
                 <span
                     className={styles.view_all}
