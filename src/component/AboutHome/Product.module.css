@@ -1,12 +1,12 @@
-/* Product.module.css */
-
-/* Grid Container */
+/* 상품 전체 컨테이너 */
 .gridContainer {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: left;
+  gap: 10px;
 }
 
+/* 각 상품 블럭 */
 .gridItem {
   flex: 0 0 calc(33.333% - 20px);
   width: 60em;
@@ -14,40 +14,36 @@
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
 }
-
 .gridItem:hover {
   transform: scale(1.05);
 }
 
-
-/* Product Image */
-.frame {
+/* 상품 이미지 컨테이너 */
+.thumnail_container {
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: 1vh;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
+/* 이미지 썸네일 */
 .thumnail {
   width: 100%;
   height: auto;
   display: block;
 }
 
-/* Product Details */
-.product {
+.product_title {
   margin-top: 10px;
 }
 
-/* Price Section */
-.price {
+.product_price {
   margin-top: 10px;
 }
 
-.price h3 {
+.product_price h3 {
   margin: 0;
 }
 
-/* Additional Style for Discount Section */
 .discountSection {
   display: flex;
   align-items: center;
@@ -67,7 +63,7 @@
 }
 
 .discountedPrice {
-  color: black; /* You can adjust the color as needed */
+  color: black; 
   font-weight: bold;
   margin: 0;
 }
