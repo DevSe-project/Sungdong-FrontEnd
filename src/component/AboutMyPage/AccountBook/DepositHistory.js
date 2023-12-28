@@ -33,20 +33,20 @@ export function DepositHistory(){
         <table className={styles.table}>
           <thead>
             <tr>
-              <th>일자</th>
+              <th>구분</th>
               <th>입금유형</th>
-              <th>증빙</th>
-              <th>적요</th>
+              <th>입금일자</th>
+              <th>실제입금일</th>
               <th>입금액</th>
               <th>비고</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>date</td>
+              <td>구분</td>
               <td>입금유형</td>
-              <td>증빙</td>
-              <td>적요</td>
+              <td>date</td>
+              <td>date</td>
               <td>입금액</td>
               <td>비고내역</td>
             </tr>

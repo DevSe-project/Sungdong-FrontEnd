@@ -34,15 +34,14 @@ export function AccountBook(){
         <table className={styles.table}>
           <thead>
             <tr>
+              <th>명세번호</th>
               <th>일자</th>
-              <th>증빙</th>
+              <th>수불구분</th>
+              <th>배송구분</th>
               <th>적요</th>
-              <th>단위</th>
               <th>수량</th>
-              <th>단가</th>
-              <th>판매액</th>
-              <th>입금액</th>
-              <th>잔액</th>
+              <th>매출금액</th>
+              <th>입금금액</th>
               <th>명세서</th>
             </tr>
             <tr>
@@ -54,15 +53,14 @@ export function AccountBook(){
           </thead>
           <tbody>
             <tr>
-              <td>abData.date</td>
-              <td>id값</td>
+              <td>명세번호</td>
+              <td>일자</td>
+              <td>매출/~</td>
+              <td>성동택배/화물/대한통운</td>
               <td>상품명/코드/브랜드/규격</td>
-              <td>EA</td>
               <td>수량</td>
-              <td>단가</td>
-              <td>판매액</td>
+              <td>매출금액</td>
               <td>입금액</td>
-              <td>잔액</td>
               <td><button className={styles.button}>출력</button></td>
             </tr>
           </tbody>
