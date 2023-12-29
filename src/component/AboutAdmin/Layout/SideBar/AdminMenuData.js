@@ -38,7 +38,7 @@ export function AdminMenuData(props){
     {
       id: 1,
       title: {
-        item: '판매 및 발송 관리',
+        item: '주문 관리',
       },
       subMenuItems: [
         {
