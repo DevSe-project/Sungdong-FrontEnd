@@ -54,8 +54,8 @@ export function TakeBackList(){
         <table className={styles.table}>
           <thead>
             <tr>
-              <th>일자</th>
               <th>구분</th>
+              <th>일자</th>
               <th>품명 및 규격</th>
               <th>사유</th>
               <th>수량</th>
@@ -68,8 +68,8 @@ export function TakeBackList(){
           </thead>
           <tbody>
             <tr>
-              <td>일자</td>
               <td>구분</td>
+              <td>일자</td>
               <td>품명 및 규격</td>
               <td>사유</td>
               <td>수량</td>
