@@ -51,6 +51,10 @@ import { AdminSoldList } from './component/AboutAdmin/Sold/AdminSoldList';
 import { AdminNotSoldList } from './component/AboutAdmin/Sold/AdminNotSoldList';
 import { AdminRefund } from './component/AboutAdmin/Refund/AdminRefund';
 import AdminNotice from './component/AboutAdmin/Notice/AdminNotice';
+import Deli_ing from "./component/AboutAdmin/SD_Delivery/Deli_ing";
+import Deli_ed from "./component/AboutAdmin/SD_Delivery/Deli_ed";
+import TotalCal_Manage from "./component/AboutAdmin/SD_Account/TotalCal_Manage";
+import CMSaccount_Manage from "./component/AboutAdmin/SD_Account/CMSaccount_Manage";
 
 // 템플릿 컴포넌트
 import { TopBanner } from './component/TemplateLayout/AboutHeader/TopBanner';
@@ -70,8 +74,6 @@ import { TackBackRequest } from "./component/AboutTakeBack/TakeBackRequest";
 import { TakeBackList } from "./component/AboutTakeBack/TakeBackList";
 import { ErrorTrade } from "./component/AboutTakeBack/ErrorTradeRequest";
 import { ErrorTradeList } from "./component/AboutTakeBack/ErrorTradeList";
-import TotalCal_Manage from "./component/AboutAdmin/SD_Account/TotalCal_Manage";
-import CMSaccount_Manage from "./component/AboutAdmin/SD_Account/CMSaccount_Manage";
 
 export default function App() {
   const navigate = useNavigate();
@@ -654,29 +656,41 @@ export default function App() {
 
         {/* 관리자페이지 - 메인 */}
         <Route path='/adminMain' element={<AdminMain />} />
-        {/* 관리자페이지 - 코드관리 */}
-        <Route path='/adminMain/printCode' element={<ManageCode />} />
-        {/* 관리자페이지 - 고객센터 */}
-        <Route path='/adminMain/customerCenter/notice' element={<AdminNotice />} />
-        {/* 관리자페이지 - 고객관리 */}
-        <Route path='/adminMain/user' element={<Manage_Users />} />
-        {/* 관리자페이지 - 누적정산 */}
-        <Route path='/adminMain/SD_account/total' element={<TotalCal_Manage />} />
-        <Route path='/adminMain/SD_account/cms' element={<CMSaccount_Manage />} />
-        {/* 관리자페이지 - 상품등록 */}
+
+        {/* 상품관리 - 상품등록 */}
         <Route path='/adminMain/addProduct' element={<AdminDetail />} />
-        {/* 관리자페이지 - 상품수정 */}
+        {/* 상품관리 - 상품수정 */}
         <Route path='/adminMain/editProduct' element={<AdminProductList data={data} />} />
-        {/* 관리자페이지 - 카테고리 */}
+        {/* 상품관리 - 카테고리 */}
         <Route path='/adminMain/category' element={<AdminCategory data={data} />} />
-        {/* 관리자페이지 - 카테고리 수정 */}
+        {/* 상품관리 - 카테고리 수정 */}
         <Route path='/adminMain/categoryEdit/:id' element={<AdminCategoryEdit data={data} />} />
-        {/* 관리자페이지 - 주문 관리*/}
+
+        {/* 주문관리 - 주문 관리*/}
         <Route path='/adminMain/sold' element={<AdminSoldList data={data} orderData={orderData} />} />
-        {/* 관리자페이지 - 미결제 주문 관리 */}
+        {/* 주문관리 - 미결제 주문 관리 */}
         <Route path='/adminMain/yetPay' element={<AdminNotSoldList orderData={orderData} />} />
-        {/* 관리자페이지 - 반품 관리 */}
+        {/* 주문관리 - 반품 관리 */}
         <Route path='/adminMain/refund' element={<AdminRefund orderData={orderData} />} />
+
+        {/* 배송관리 - 배송 상태 관리 */}
+        <Route path='/adminMain/SD_delivery/deli_ing' element={<Deli_ing />}/> 
+        {/* 배송관리 - 배송 완료건 관리 */}
+        <Route path='/adminMain/SD_delivery/deli_ed' element={<Deli_ed />} />
+
+        {/* 정산관리 - 누적정산 */}
+        <Route path='/adminMain/SD_account/total' element={<TotalCal_Manage />} />
+        {/* 정산관리 - CMS정산 */}
+        <Route path='/adminMain/SD_account/cms' element={<CMSaccount_Manage />} />
+
+        {/* 고객센터 - 공지사항 */}
+        <Route path='/adminMain/customerCenter/notice' element={<AdminNotice />} />
+
+        {/* 회원관리 - 고객관리 */}
+        <Route path='/adminMain/user' element={<Manage_Users />} />
+        {/* 회원관리 - 회원가입 코드 관리 */}
+        <Route path='/adminMain/printCode' element={<ManageCode />} />
+        
       </Routes>
     </div>
   );
