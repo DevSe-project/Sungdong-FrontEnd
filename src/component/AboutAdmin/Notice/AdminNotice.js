@@ -10,8 +10,8 @@ import { useListActions, useNoticePostList, useModalActions, useModalState } fro
 export default function AdminNotice() {
   const noticePostList = useNoticePostList();
   const { setNoticePostList } = useListActions();
-  const {isModal, selectedIndex, modalName} = useModalState();
-  const {setSelectedIndex,closeModal, selectedModalOpen, selectedModalClose } = useModalActions();
+  const { isModal, selectedIndex, modalName } = useModalState();
+  const { setSelectedIndex, closeModal, selectedModalOpen, selectedModalClose } = useModalActions();
   const [isLoading, setIsLoading] = useState(true); // 로딩 중 여부 추가
 
   // 데이터 불러오기
@@ -131,31 +131,41 @@ export default function AdminNotice() {
     <div>
       <AdminHeader />
       <div className={styles.body}>
-        <AdminMenuData />
-        <div className={styles.mainContents}>
+
+        {/* 사이드바 */}
+        <div className={styles.sidebar}>
+          <AdminMenuData />
+        </div>
+
+
+        {/* 메인 */}
+        <div className={styles.main}>
           {/* 코드발급 | 최신코드 묶음 */}
-          <div className={styles.evnetHandleContainer}>
+          <div className={styles.flex_container}>
             {/* 코드 발급 블록 */}
-            <div className={styles.leftModule}>
-              <div className={styles.writeNotice_icon}>Click <i className="fa-solid fa-arrow-down"></i></div>
-              <div className={styles.write} onClick={() => { selectedModalOpen('write') }}>글 작성</div>
+            <div className={styles.left}>
+              <div className={styles.left_inner}>
+                <div className={styles.writeNotice_icon}>Click <i className="fa-solid fa-arrow-down"></i></div>
+                <div className={styles.write} onClick={() => { selectedModalOpen('write') }}>글 작성</div>
+              </div>
             </div>
             {/* 뭐 넣을지 미정 */}
-            <div className={styles.rightModule}>
+            <div className={styles.right}>
               <div className={styles.none_title}>
-                custom title
+                Custom Title
               </div>
               <div className={styles.none_contents}>
-                custom contents
+                Custom Contents
               </div>
             </div>
           </div>
 
+
           {/* Post List */}
-          <div className={styles.postList_container}>
+          <div className={styles.post_container}>
 
             {/* Post Title */}
-            <div className={styles.postList_container_title}>글 목록</div>
+            <div className={styles.post_title}>글 목록</div>
 
             {/* Post Map */}
             {isLoading
@@ -172,38 +182,34 @@ export default function AdminNotice() {
               :
               (
                 noticePostList.map((item, index) => (
-                  <div className={styles.post_container} key={index}>
-                    <div
-                      className={styles.postInfo_container}
-                      onClick={() => {
-                        setSelectedIndex(index);
-                        selectedModalOpen('edit');
-                        console.log(selectedIndex);
-                      }}>
-                      {/* No */}
-                      <div className={styles.post_no}>
-                        {index + 1}
-                      </div>
+                  <div className={styles.post_list_container} key={index} onClick={() => {
+                    setSelectedIndex(index);
+                    selectedModalOpen('edit');
+                    console.log(selectedIndex);
+                  }}>
+                    {/* No */}
+                    <div className={styles.post_list_info_no}>
+                      {index + 1}
+                    </div>
 
-                      {/* Code */}
-                      <div className={styles.post_title}>
-                        {item.title}
-                      </div>
+                    {/* Code */}
+                    <div className={styles.post_list_info_title}>
+                      {item.title}
+                    </div>
 
-                      {/* Writer */}
-                      <div className={styles.post_writer}>
-                        {item.writer}
-                      </div>
+                    {/* Writer */}
+                    <div className={styles.post_list_info_writer}>
+                      {item.writer}
+                    </div>
 
-                      {/* WritedDate */}
-                      <div className={styles.post_date}>
-                        {item.date}
-                      </div>
+                    {/* WritedDate */}
+                    <div className={styles.post_list_info_date}>
+                      {item.date}
                     </div>
 
                     {/* Del */}
                     <div div className={styles.post_del_container} >
-                      <div className={styles.post_delButton}
+                      <div className={styles.post_del_button}
                         onClick={() => {
                           const data = [...noticePostList];
                           data.splice(index, 1);
@@ -221,6 +227,9 @@ export default function AdminNotice() {
           </div>
         </div>
       </div>
+
+
+      {/* 모달 영역 */}
       {
         isModal && modalName === 'write' ?
           <WrtieModal tempList={tempList} setTempList={setTempList} addPost={addPost} />

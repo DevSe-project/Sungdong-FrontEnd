@@ -1,20 +1,23 @@
 .body {
   display: flex;
 }
-.mainContents {
-  width: 100%;
+.main {
+  margin: 16px;
   display: flex;
   flex-direction: column;
 }
-/* ----------------------------------------- */
-.evnetHandleContainer {
-  display: flex;
+.sidebar {
+  width: fit-content;
 }
-.leftModule {
-  background-color: rgb(43, 43, 43);
-  margin: 10px;
+/* ----------------------------------------- */
+.flex_container {
+  display: flex;
+  gap: 10px;
+}
+.left {
+  background-color: var(--main-color-middle);
   border-radius: 1dvh;
-  width: 20%;
+  width: 25vw;
   height: 160px;
   display: flex;
   flex-direction: column;
@@ -23,16 +26,17 @@
 }
 .writeNotice_icon {
   width: 100%;
-  font-size: 1.5em;
+  font-size: 24px;
   font-weight: bold;
   color: white;
 }
 .write {
-  background-color: #CC0000;
+  background-color: var(--main-color-original);
   color: white;
   margin-top: 1em;
-  width: 100px;
-  height: 50px;
+  border: none;
+  border-radius: 1vh;
+  padding: 0.7em 1.5em;
   font-size: 1.1em;
   font-weight: bold;
   display: flex;
@@ -41,13 +45,15 @@
   border-radius: 1dvh;
   cursor: pointer;
 }
+
+.write:hover {
+  background-color: var(--main-color-original-hover);
+}
 /* ----------------------------------------- */
-.rightModule {
-  background-color: rgb(217, 205, 205);
-  margin: 10px;
-  margin-left: 0;
-  border-radius: 1dvh;
-  width: 80%;
+.right {
+  background-color: var(--main-color-light);
+  border-radius: 1vh;
+  width: 62.1vw;
   height: 160px;
   display: flex;
   flex-direction: column;
@@ -56,12 +62,12 @@
 }
 .none_title {
   width: 100%;
-  font-size: 2em;
+  font-size: 24px;
   font-weight: bold;
   color: black;
 }
 .none_contents {
-  background-color: #CC0000;
+  background-color: var(--main-color-original);
   color: white;
   margin-top: 1em;
   width: 300px;
@@ -76,76 +82,83 @@
 }
 /* ----------------------------------------- */
 /* 글 목록 */
-.postList_container {
-  margin: 10px;
-  margin-top: 0;
+.post_container {
+  margin-top: 10px;
   display: flex;
   flex-direction: column;
-  width: 100%;
 }
 /* Post */
-.postList_container_title {
+.post_title {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: rgb(43, 43, 43);
+  background-color: var(--main-color-heavy);
   color: white;
-  font-size: 1.5em;
+  font-size: 24px;
   font-weight: bold;
   margin-bottom: 0;
-  border-radius: 1dvh;
+  border-radius: 1vh;
   height: 50px;
 }
 /* List */
-.post_container {
+.post_list_container {
   display: flex;
+  justify-content: space-evenly;
   align-items: center;
-  height: 40px;
-  font-size: 1em;
+  font-size: 16px;
   font-weight: bold;
   border-bottom: 2px solid gray;
-  margin: 10px;
-  margin-bottom: 0;
+  margin: var(--list-margin);
+  padding: var(--list-padding);
 }
-/* postInfo Container */
-.postInfo_container {
-  display: flex;
-  cursor: pointer;
-  width: 100%;
-}
+
 /* No */
-.post_no {
-  flex: 10%;
+.post_list_info_no {
+  width: 2vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 /* Title */
-.post_title {
-  flex: 40%; /* 5:5 비율 */
+.post_list_info_title {
+  width: 50vw;
+  text-overflow: ellipsis;
   overflow: hidden;
+  cursor: pointer;
+} .post_list_info_title:hover {
+  color: orangered;
 }
 /* Writer */
-.post_writer {
-  flex: 10%; /* 2:5 비율 */
+.post_list_info_writer {
+  width: 10vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
   overflow: hidden;
 }
-.post_date {
-  flex: 20%;
+.post_list_info_date {
+  width: 10vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 /* Del */
 .post_del_container {
-  flex: 10%;
   display: flex;
   cursor: pointer;
+  overflow: hidden;
 }
-.post_delButton {
+.post_del_button {
   display: flex;
-  width: 4em;
   height: 40px;
-  border-radius: 0.1cm;
+  width: 4vw;
+  border-radius: 1vh;
   background-color: #CC0000;
   color: white;
   align-items: center;
   justify-content: center;
+}
+.post_del_button:hover {
+  background-color: var(--main-red-hover);
 }
 /* ----------------------------------------- */
 /* 스켈레톤 컨테이너 스타일 */
@@ -156,13 +169,12 @@
 
 /* 스켈레톤 아이템 스타일 */
 .skeletonItem {
-  width: 100%;
-  height: 40px; /* 스켈레톤 아이템의 높이 설정 */
   border-radius: 1dvh;
-  margin-bottom: 1em; /* 스켈레톤 아이템 간의 간격 설정 */
+  margin-bottom: 1em;
+  height: 45px;
   background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); /* 스켈레톤 효과 설정 */
   background-size: 200% 100%; /* 배경 크기 설정 */
-  animation: loading 1s infinite; /* 로딩 애니메이션 적용 */
+  animation: loading 2s infinite; /* 로딩 애니메이션 적용 */
 }
 
 /* 스켈레톤 로딩 애니메이션 */
