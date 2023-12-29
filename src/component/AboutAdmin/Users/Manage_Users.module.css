@@ -26,7 +26,7 @@
 }
 
 .button {
-    background-color: rgb(204, 94, 53);
+    background-color: var(--main-color-original);
     color: white;
     border: none;
     border-radius: 1dvh;
@@ -38,5 +38,5 @@
 
 
 .button:hover {
-    background-color: rgb(174, 79, 44);
+    background-color: var(--main-color-original-hover);
 }

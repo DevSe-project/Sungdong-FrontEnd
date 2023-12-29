@@ -36,7 +36,7 @@
 
 .button {
     margin-top: 10px;
-    background-color: rgb(204, 94, 53);
+    background-color: var(--button-background-color);
     color: white;
     border: none;
     border-radius: 1dvh;
@@ -47,5 +47,5 @@
 }
 
 .button:hover {
-    background-color: rgb(174, 79, 44);
+    background-color: var(--button-hover-background-color);
 }

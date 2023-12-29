@@ -8,7 +8,7 @@
 }
 
 .header {
-    background-color: #333;
+    background-color: var(--post-background-color-set);
     color: white;
     border-radius: 1dvh;
     padding: 1em;
