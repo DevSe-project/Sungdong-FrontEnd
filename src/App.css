@@ -114,9 +114,9 @@ textarea{
   --background-color-set: rgb(207, 27, 27);
   --background-color-clicked: rgb(165, 10, 10);
   --background-color-active: rgb(180, 8, 8);
-  --main-color-light: rgb(217, 205, 205);
-  --main-color-middle: rgb(88, 30, 8);
-  --main-color-heavy: rgb(49, 17, 4);
+  --main-color-light: rgb(231, 223, 223);
+  --main-color-middle: rgb(59, 20, 5);
+  --main-color-heavy: rgb(31, 10, 2);
   --main-color-original: rgb(204, 94, 53);
   --main-color-original-hover: rgb(174, 79, 44);
   --text-hover-color: orangered;
