@@ -182,18 +182,18 @@ export default function AdminNotice() {
               :
               (
                 noticePostList.map((item, index) => (
-                  <div className={styles.post_list_container} key={index} onClick={() => {
-                    setSelectedIndex(index);
-                    selectedModalOpen('edit');
-                    console.log(selectedIndex);
-                  }}>
+                  <div className={styles.post_list_container} key={index} >
                     {/* No */}
                     <div className={styles.post_list_info_no}>
                       {index + 1}
                     </div>
 
                     {/* Code */}
-                    <div className={styles.post_list_info_title}>
+                    <div className={styles.post_list_info_title} onClick={() => {
+                    setSelectedIndex(index);
+                    selectedModalOpen('edit');
+                    console.log(selectedIndex);
+                  }}>
                       {item.title}
                     </div>
 
