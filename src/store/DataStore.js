@@ -265,3 +265,88 @@ export const useErrTradeStore = create((set) => ({
 export const useErrTrade = () => useErrTradeStore((state) => state.errTradeOption);
 export const useErrTradeActions = () => useErrTradeStore((state) => state.actions);
 
+
+/* ----------------=========== ADMIN ==========---------------- */
+
+
+/* ----------------Product STORE---------------- */
+export const useProductStore = create((set) => ({
+  product: {
+    productId: '',
+    title: '',
+    content: '',
+    price: '',
+    supply: 1,
+    image_original: '',
+    image_mini: '',
+    option: {
+      option0: '',
+      option1: '',
+      option2: '',
+      option3: '',
+      option4: '',
+      option5: '',
+      option6: '',
+      option7: '',
+      option8: '',
+      option9: '',
+    },
+    category: {
+      id: '',
+      highId: '',
+      lowId: '',
+      name: '',
+    },
+    brand: '',
+    madeIn: '',
+    state: '',
+  },
+  actions: {
+    setProduct: (fieldName, value) =>
+      set((state) => ({ product: { ...state.product, [fieldName]: value } })),
+    resetProduct: () =>
+      set({ product: {
+        productId: '',
+        title: '',
+        content: '',
+        price: 0,
+        supply: 0,
+        discount: 0,
+        image_original: '',
+        image_mini: '',
+        option: {
+            option0: '',
+            option1: '',
+            option2: '',
+            option3: '',
+            option4: '',
+            option5: '',
+            option6: '',
+            option7: '',
+            option8: '',
+            option9: '',
+          },
+        category: {
+            id: '',
+            highId: '',
+            lowId: '',
+            name: '',
+          },
+        brand: '',
+        madeIn: '',
+        state: '',
+      }}),
+      setProductOption: (fieldName, value) =>
+      set((state) => ({
+        product: {
+          ...state.product,
+          option: {
+            ...state.product.option,
+            [fieldName]: value,
+          },
+        },
+      })),
+  }
+}));
+export const useProduct = () => useProductStore((state) => state.product);
+export const useProductActions = () => useProductStore((state) => state.actions);

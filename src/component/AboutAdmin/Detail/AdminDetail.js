@@ -3,16 +3,59 @@ import styles from './AdminDetail.module.css';
 import { AdminHeader } from '../Layout/Header/AdminHeader';
 import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
 import { AdminTabInfo } from '../TabInfo/AdminTabInfo';
+import { useProduct, useProductActions } from '../../../Store/DataStore';
 
-export function AdminDetail(props) {
+export function AdminDetail() {
   const [isDiscount, setIsDiscount] = useState(false);
   const [isOption, setIsOption] = useState(false);
+  const product = useProduct();
+  const {setProduct, resetProduct, setProductOption} = useProductActions();
   const [addInputOption, setAddInputOption] = useState(0);
+  
+  const handleInputChange = (event) => {
+    // 입력 값에서 쉼표를 제외하고 저장
+    const formattedValue = event.target.value.replace(/,/g, '');
+    
+    // 숫자가 아닌 문자를 제외하고 저장
+    const numericValue = formattedValue.replace(/\D/g, '');
 
+    // 숫자를 천 단위로 구분자를 추가하여 저장
+    const numberWithCommas = new Intl.NumberFormat('ko-KR').format(numericValue);
 
-  function AddInputOptionFunc(){
-    if(addInputOption > 3) return;
-    setAddInputOption(addInputOption+1);
+    setProduct("price", numberWithCommas);
+  }
+
+  function AddDiscountFunc(discount){
+    const numericValue = discount.replace(/\D/g, '');
+    if(numericValue > -1 && numericValue <= 100) {
+      setProduct("discount", discount);
+    }
+    else{
+      alert("할인율은 최소 0부터 100%까지 설정 가능합니다.");
+      return;
+    }
+  }
+
+  function AddInputOptionFunc(optionCnt){
+    const numericValue = optionCnt.replace(/\D/g, '');
+    if(numericValue > -1 && numericValue <= 10) {
+      setAddInputOption(optionCnt);
+    } 
+    else {
+      alert("옵션 수량 최소 0개부터, 최대 10개까지만 가능하도록 설정되어 있습니다.");
+      return;
+    }
+  }
+
+  function AddSupplyFunc(supplyCnt){
+    const numericValue = supplyCnt.replace(/\D/g, '');
+    if(numericValue > -1 && numericValue <= 999) {
+      setProduct("supply", supplyCnt);
+    }
+    else {
+      alert("최소 1개부터 999개까지 재고 설정이 가능합니다.");
+      return;
+    }
   }
 
   // <input> 요소를 렌더링하는 함수
@@ -24,6 +67,8 @@ export function AdminDetail(props) {
           key={i}
           className={styles.input}
           type='text'
+          value={product.option[`option${i}`]}
+          onChange={(e)=>setProductOption(`option${i}`, e.target.value)}
           placeholder='상품의 옵션을 입력해주세요'
         />
       );
@@ -82,16 +127,30 @@ export function AdminDetail(props) {
                         </span>
                       </div>
                       {isDiscount &&
-                      <label style={{display:'flex'}}>
-                        <input className={styles.input} type='text' placeholder='할인율을 입력해주세요'/>
-                        <span className={styles.spanStyle}>%</span>
-                      </label>
+                      <div style={{display:'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5em'}}>
+                        <label style={{display: 'flex'}}>
+                          <input 
+                          className={styles.input} 
+                          type='text' 
+                          placeholder='할인율을 입력해주세요'
+                          value={product.discount}
+                          onChange={(e)=>AddDiscountFunc(e.target.value)} 
+                          />
+                          <span className={styles.spanStyle}>%</span>
+                        </label>
+                      </div>
                       }
                     </div>
                     <div style={{display: 'flex', alignItems: 'center', gap: '0.5em'}}>
                       <label style={{display:'flex'}}>
-                        <input className={styles.input} type='text' placeholder='판매가를 입력해주세요'/>
-                        <span className={styles.spanStyle}>원</span>
+                      <input
+                        className={styles.input}
+                        type='text'  // type을 'text'로 변경하여 숫자와 쉼표만 표시되도록 함
+                        placeholder='판매가를 입력해주세요'
+                        value={product.price}
+                        onChange={handleInputChange}
+                      />                       
+                      <span className={styles.spanStyle}>원</span>
                       </label>
                     </div>
                   </div>
@@ -103,9 +162,17 @@ export function AdminDetail(props) {
                 <div className={styles.textBox}>
                   {/* 상품 수량 및 옵션, 최종 결제금액 */}
                   <label style={{display:'flex'}}>
-                      <input className={styles.input} type='number' placeholder='재고수량을 입력해주세요'
-                      min={1}
-                      max={1000}/>
+                      <input 
+                      className={styles.input} 
+                      type='text' 
+                      placeholder='재고수량을 입력해주세요'
+                      value={product.supply}
+                      onChange={
+                        (e)=> {
+                          AddSupplyFunc(e.target.value);
+                        }
+                      }
+                      />
                       <span className={styles.spanStyle}>개</span>
                   </label>
                   <br/>
@@ -121,8 +188,14 @@ export function AdminDetail(props) {
                   {isOption &&
                   <>
                     <label style={{display: 'flex'}}>
-                      <input className={styles.input} type='text'placeholder='상품의 옵션을 입력해주세요'/>
-                      <button className={styles.spanStyle} onClick={()=>AddInputOptionFunc()}>+</button>
+                      <input 
+                      className={styles.input} 
+                      type='text' 
+                      value={addInputOption} 
+                      onChange={(e)=> AddInputOptionFunc(e.target.value)}
+                      placeholder='상품의 옵션 개수를 입력하세요'
+                      />
+                      <button className={styles.spanStyle}>개</button>
                     </label>
                     <div style={{display: 'flex', flexDirection: 'column'}}>
                       {renderInputs()}
