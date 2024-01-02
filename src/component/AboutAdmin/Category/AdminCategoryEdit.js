@@ -14,7 +14,7 @@ export function AdminCategoryEdit(props){
         return <div>데이터를 불러오는 중이거나 상품을 찾을 수 없습니다.</div>;
       }
     }
-    
+  
     const navigate = useNavigate();
   
     //로딩된 데이터 불러오기
@@ -75,13 +75,19 @@ export function AdminCategoryEdit(props){
             <div style={{display: 'flex', gap: '1em', marginTop: '1em', alignItems: 'center'}}>
               <div className={styles.categoryContainer}>
                 <div className={styles.categoryInner}>
-                  메인 카테고리
+                  대 카테고리
                   <i className="far fa-chevron-right" style={{color: 'gray'}}/>
                 </div>
               </div>
               <div className={styles.categoryContainer}>
                 <div className={styles.categoryInner}>
-                  서브 카테고리
+                  중 카테고리
+                  <i className="far fa-chevron-right" style={{color: 'gray'}}/>
+                </div>
+              </div>
+              <div className={styles.categoryContainer}>
+                <div className={styles.categoryInner}>
+                  소 카테고리
                 </div>
               </div>
             </div>

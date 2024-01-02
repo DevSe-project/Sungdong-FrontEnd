@@ -7,9 +7,6 @@ import styles from './AdminProductList.module.css';
 import { useNavigate } from 'react-router-dom';
 export function AdminProductList(props){
   
-  // 필터된 항목을 저장할 상태 변수
-  const [filteredItems, setFilteredItems] = useState([]);
-
   //Td 선택시 Modal State 변수
   const [selectedData, setSelectedData] = useState(null);
 
@@ -31,9 +28,7 @@ export function AdminProductList(props){
   // 현재 페이지에 해당하는 게시물 목록 가져오기
   const getCurrentPagePosts = () => {
     const startIndex = (currentPage - 1) * 5; // 한 페이지에 5개씩 표시
-    return filteredItems.length > 0 
-    ? filteredItems.slice(startIndex, startIndex + 5) 
-    : props.data.slice(startIndex, startIndex + 5);
+    return props.data.slice(startIndex, startIndex + 5);
   };
   return(
     <div>
@@ -190,8 +185,8 @@ export function AdminProductList(props){
             <button
             className={styles.button}
             onClick={()=> {
-              if(filteredItems.length > 5){
-                setCurrentPage(currentPage + 1)
+              if(props.data.length > (currentPage * 5)){
+                setCurrentPage(currentPage + 1);
               } else {
                 alert("다음 페이지가 없습니다.")
               }}}>

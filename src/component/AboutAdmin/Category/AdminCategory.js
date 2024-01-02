@@ -5,9 +5,6 @@ import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
 export function AdminCategory(props){
-    
-    // 필터된 항목을 저장할 상태 변수
-    const [filteredItems, setFilteredItems] = useState([]);
   
     const navigate = useNavigate();
       
@@ -16,9 +13,7 @@ export function AdminCategory(props){
     // 현재 페이지에 해당하는 게시물 목록 가져오기
     const getCurrentPagePosts = () => {
       const startIndex = (currentPage - 1) * 5; // 한 페이지에 5개씩 표시
-      return filteredItems.length > 0 
-      ? filteredItems.slice(startIndex, startIndex + 5) 
-      : props.data.slice(startIndex, startIndex + 5);
+      return props.data.slice(startIndex, startIndex + 5);
     }; 
   return(
     <div>
@@ -33,7 +28,7 @@ export function AdminCategory(props){
           <div style={{display: 'flex', gap: '2em'}}>
             <div className={styles.categoryContainer}>
               <div className={styles.categoryInner}>
-                메인 카테고리
+                대 카테고리
                 <i className="far fa-chevron-right" style={{color: 'gray'}}/>
               </div>
               <div className={styles.buttonBox}>
@@ -43,7 +38,16 @@ export function AdminCategory(props){
             </div>
             <div className={styles.categoryContainer}>
               <div className={styles.categoryInner}>
-                서브 카테고리
+                중 카테고리
+              </div>
+              <div className={styles.buttonBox}>
+                <button className={styles.button}>수정</button>
+                <button className={styles.button}>추가</button>
+              </div>
+            </div>
+            <div className={styles.categoryContainer}>
+              <div className={styles.categoryInner}>
+                소 카테고리
               </div>
               <div className={styles.buttonBox}>
                 <button className={styles.button}>수정</button>
@@ -117,7 +121,7 @@ export function AdminCategory(props){
             <button
             className={styles.button}
             onClick={()=> {
-              if(filteredItems.length > 5){
+              if(props.data.length > (currentPage * 5)){
                 setCurrentPage(currentPage + 1)
               } else {
                 alert("다음 페이지가 없습니다.")

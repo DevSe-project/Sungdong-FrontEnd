@@ -17,7 +17,7 @@ export let OrderObj = [
         image : {
             mini: image2_mini,
             original : image2_original,
-          },
+        },
         userId: "", 
         productName :"안전화",
         optionSelected : "260",

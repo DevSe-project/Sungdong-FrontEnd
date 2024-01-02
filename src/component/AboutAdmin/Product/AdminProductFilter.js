@@ -1,5 +1,105 @@
 import styles from './AdminProductFilter.module.css'
 export function AdminProductFilter(){
+  
+  function categoryFilter(){
+    return(
+      <div style={{display: 'flex', gap: '0.5em'}}>
+        <select className={styles.select}>
+          <option>대분류</option>
+          <option></option>
+        </select>
+        <select className={styles.select}>
+          <option>중분류</option>
+          <option></option>
+        </select>
+        <select className={styles.select}>
+          <option>소분류</option>
+          <option></option>
+        </select> 
+      </div>
+    )
+  }
+  
+  function dateFilter(){
+    return(
+      <div style={{display: 'flex', gap: '1em'}}>
+        <select className={styles.select}>
+          <option>상품 등록일</option>
+          <option>판매 시작일</option>
+          <option>판매 종료일</option>
+          <option>최종 수정일</option>
+        </select>
+        <div>
+          <input className={styles.select} type='date'></input> 
+          &nbsp;~&nbsp;
+          <input className={styles.select} type='date'></input>
+        </div>
+      </div>
+    )
+  }
+  
+  function detailSearch(){
+    return(
+      <div style={{display: 'flex', gap: '1em'}}>
+        <select className={styles.select}>
+          <option>재고</option>
+          <option></option>
+        </select>
+        <select className={styles.select}>
+          <option>배송 속성</option>
+          <option></option>
+        </select>
+        <select className={styles.select}>
+          <option>배송사</option>
+          <option></option>
+        </select> 
+        <select className={styles.select}>
+          <option>옵션 유무</option>
+          <option></option>
+        </select> 
+      </div>
+    )
+  }
+
+  function saleStatus(){
+    return(
+      <div style={{display: 'flex', gap: '0.5em'}}>
+        <div>
+          <label style={{display:'flex', alignItems:'center'}}><input type='checkbox' name='sale'/>전체</label>
+        </div>
+        <div>
+          <label style={{display:'flex', alignItems:'center'}}><input type='checkbox' name='sale'/>판매중</label>
+        </div>
+        <div>
+          <label style={{display:'flex', alignItems:'center'}}><input type='checkbox' name='sale'/>품절</label>
+        </div>
+        <div>
+          <label style={{display:'flex', alignItems:'center'}}><input type='checkbox' name='sale'/>판매중지</label>
+        </div>
+        <div>
+          <label style={{display:'flex', alignItems:'center'}}><input type='checkbox' name='sale'/>판매종료</label>
+        </div>
+      </div>
+    )
+  }
+
+
+  function searchWord(){
+    return (
+      <div style={{display: 'flex', gap: '1em'}}>
+        <div className={styles.searchFilterList}>
+          <input className={styles.input} type='text' placeholder='상품명을 입력해주세요'/>
+        </div>
+        <div className={styles.searchFilterList}>
+          <input className={styles.input} type='text' placeholder='브랜드명을 입력해주세요'/>
+        </div>
+        <div className={styles.searchFilterList}>
+          <input className={styles.input} type='text' placeholder='상품번호를 입력해주세요'/>
+        </div>
+      </div>
+    )
+  }
+
   const filterList = [
     { label : '검색어', content : searchWord()},
     { label : '판매상태', content : saleStatus()},
@@ -14,7 +114,7 @@ export function AdminProductFilter(){
           <h4 style={{fontSize: '1.2em', fontWeight: '650'}}>필터</h4>
         </div>
         {filterList.map((item, index) => (
-        <div className={styles.container}>
+        <div key={index} className={styles.container}>
           <div className={styles.label}>
             {item.label}
           </div>
@@ -32,103 +132,4 @@ export function AdminProductFilter(){
   )
 }
 
-function searchWord(){
-  return (
-    <div style={{display: 'flex', gap: '1em'}}>
-      <div className={styles.searchFilterList}>
-        <input type='text' placeholder='상품명을 입력해주세요'/>
-      </div>
-      <div className={styles.searchFilterList}>
-        <input type='text' placeholder='브랜드명을 입력해주세요'/>
-      </div>
-      <div className={styles.searchFilterList}>
-        <input type='text' placeholder='상품번호를 입력해주세요'/>
-      </div>
-    </div>
-  )
-}
 
-function saleStatus(){
-  return(
-    <div style={{display: 'flex', gap: '0.5em'}}>
-      <div>
-        <label style={{display:'flex', alignItems:'center'}}><input type='checkbox' name='sale'/>전체</label>
-      </div>
-      <div>
-        <label style={{display:'flex', alignItems:'center'}}><input type='checkbox' name='sale'/>판매대기</label>
-      </div>
-      <div>
-        <label style={{display:'flex', alignItems:'center'}}><input type='checkbox' name='sale'/>판매중</label>
-      </div>
-      <div>
-        <label style={{display:'flex', alignItems:'center'}}><input type='checkbox' name='sale'/>품절</label>
-      </div>
-      <div>
-        <label style={{display:'flex', alignItems:'center'}}><input type='checkbox' name='sale'/>판매중지</label>
-      </div>
-      <div>
-        <label style={{display:'flex', alignItems:'center'}}><input type='checkbox' name='sale'/>판매종료</label>
-      </div>
-    </div>
-  )
-}
-
-function categoryFilter(){
-  return(
-    <div style={{display: 'flex', gap: '0.5em'}}>
-      <select>
-        <option>대분류</option>
-        <option></option>
-      </select>
-      <select>
-        <option>중분류</option>
-        <option></option>
-      </select>
-      <select>
-        <option>소분류</option>
-        <option></option>
-      </select> 
-    </div>
-  )
-}
-
-function dateFilter(){
-  return(
-    <div style={{display: 'flex', gap: '1em'}}>
-      <select>
-        <option>상품 등록일</option>
-        <option>판매 시작일</option>
-        <option>판매 종료일</option>
-        <option>최종 수정일</option>
-      </select>
-      <div>
-        <input type='date'></input> 
-        &nbsp;~&nbsp;
-        <input type='date'></input>
-      </div>
-    </div>
-  )
-}
-
-function detailSearch(){
-  return(
-    <div style={{display: 'flex', gap: '1em'}}>
-      <select>
-        <option>재고</option>
-        <option></option>
-      </select>
-      <select>
-        <option>배송 속성</option>
-        <option></option>
-      </select>
-      <select>
-        <option>배송사</option>
-        <option></option>
-      </select> 
-      <select>
-        <option>옵션 유무</option>
-        <option></option>
-      </select> 
-    </div>
-  )
-}

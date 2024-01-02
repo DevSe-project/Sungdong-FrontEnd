@@ -10,7 +10,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 export function AdminTabInfo(){
   const product = useProduct();
   const {setProduct, resetProduct} = useProductActions();
-
   const queryClient = useQueryClient();
   //등록 fetch 함수
   const fetchAddData = async () => {
@@ -54,7 +53,14 @@ export function AdminTabInfo(){
     {label: '상품코드', value: <input className={styles.input} value={product.productId} onChange={(e)=>setProduct("productId", e.target.value)} type='text' placeholder='A001-10001'/>},
     {label: '브랜드', value: <input className={styles.input} value={product.brand} onChange={(e)=>setProduct("brand", e.target.value)} type='text' placeholder='한국브랜드'/>},
     {label: '원산지', value: <input className={styles.input} value={product.madeIn} onChange={(e)=>setProduct("madeIn", e.target.value)} type='text' placeholder='국산'/>},
-    {label: '상품상태',value: <input className={styles.input} value={product.state} onChange={(e)=>setProduct("state", e.target.value)} type='text' placeholder='새 상품 / 중고'/>},
+    {label: '판매상태',value: 
+    <select className={styles.input} value={product.state} onChange={(e)=>setProduct("state", e.target.value)}>
+      <option>판매대기</option>
+      <option>판매중</option>
+      <option>판매중단</option>
+      <option>판매종료</option>
+      <option>품절</option>
+    </select>}
   ]
 
   return(
