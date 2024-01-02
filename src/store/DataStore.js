@@ -277,6 +277,7 @@ export const useProductStore = create((set) => ({
     content: '',
     price: '',
     supply: 1,
+    discount: 0,
     image_original: '',
     image_mini: '',
     option: {
@@ -292,10 +293,9 @@ export const useProductStore = create((set) => ({
       option9: '',
     },
     category: {
-      id: '',
       highId: '',
+      middleId: '',
       lowId: '',
-      name: '',
     },
     brand: '',
     madeIn: '',
@@ -309,8 +309,8 @@ export const useProductStore = create((set) => ({
         productId: '',
         title: '',
         content: '',
-        price: 0,
-        supply: 0,
+        price: '',
+        supply: 1,
         discount: 0,
         image_original: '',
         image_mini: '',
@@ -330,7 +330,6 @@ export const useProductStore = create((set) => ({
             id: '',
             highId: '',
             lowId: '',
-            name: '',
           },
         brand: '',
         madeIn: '',
@@ -350,3 +349,111 @@ export const useProductStore = create((set) => ({
 }));
 export const useProduct = () => useProductStore((state) => state.product);
 export const useProductActions = () => useProductStore((state) => state.actions);
+
+/* ----------------ProductFilter STORE---------------- */
+export const useProductFilterStore = create((set) => ({
+  productFilter: {
+    title: '',
+    brand: '',
+    productId: '',
+    state: {
+      전체: false,
+      판매대기: false,
+      판매중: false,
+      판매중단: false,
+      판매종료: false
+    },
+    category: {
+      highId: '',
+      middleId: '',
+      lowId: ''
+    },
+    dateType: '',
+    date: {
+      start: '',
+      end: ''
+    },
+    supply: '',
+    option: '',
+  },
+  actions: {
+    setProductFilter: (fieldName, value) =>
+      set((state) => ({ productFilter: { ...state.productFilter, [fieldName]: value } })),
+    resetProductFilter: () =>
+      set({   
+      productFilter: {
+        title: '',
+        brand: '',
+        productId: '',
+        state: {
+          전체: false,
+          판매대기: false,
+          판매중: false,
+          판매중단: false,
+          판매종료: false
+        },
+        category: {
+          highId: '',
+          middleId: '',
+          lowId: ''
+        },
+        dateType: '',
+        date: {
+          start: '',
+          end: ''
+        },
+        supply: '',
+        option: '',
+      }
+    }),
+    setProductCategory: (fieldName, value) =>
+      set((state) => ({
+        productFilter: {
+          ...state.productFilter,
+          category: {
+            ...state.productFilter.category,
+            [fieldName]: value,
+          },
+        },
+      })),
+    setProductDate: (fieldName, value) =>
+      set((state) => ({
+        productFilter: {
+          ...state.productFilter,
+          date: {
+            ...state.productFilter.date,
+            [fieldName]: value,
+          },
+        },
+      })),
+    setCheckboxState: (fieldName) =>
+      set((state) => ({
+        productFilter: {
+          ...state.productFilter,
+          state: {
+            ...state.productFilter.state,
+            [fieldName]: !state[fieldName],
+          },
+        },
+      })),    
+    setAllCheckboxState: () =>
+      set((state) => {
+        const allChecked = Object.values(state.productFilter.state).every((value) => value);
+        const updatedState = {};
+        
+        Object.keys(state.productFilter.state).forEach((key) => {
+          updatedState[key] = !allChecked;
+        });
+    
+        return {
+          ...state,
+          productFilter: {
+            ...state.productFilter,
+            state: updatedState,
+          },
+        };
+      }),
+  }
+}));
+export const useProductFilter = () => useProductFilterStore((state) => state.productFilter);
+export const useProductFilterActions = () => useProductFilterStore((state) => state.actions);
