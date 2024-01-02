@@ -4,6 +4,7 @@ import { AdminHeader } from '../Layout/Header/AdminHeader';
 import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
 import { AdminTabInfo } from '../TabInfo/AdminTabInfo';
 import { useProduct, useProductActions } from '../../../Store/DataStore';
+import axios from 'axios';
 
 export function AdminDetail() {
   const [isDiscount, setIsDiscount] = useState(false);
@@ -12,6 +13,25 @@ export function AdminDetail() {
   const {setProduct, resetProduct, setProductOption} = useProductActions();
   const [addInputOption, setAddInputOption] = useState(0);
   
+  //카테고리 데이터 fetch
+  const fetchCategoryData = async() => {
+    try{
+      const response = await axios.get("/category", 
+        {
+          headers : {
+            "Content-Type" : "application/json"
+          }
+        }
+      )
+      return response.data;
+    } catch(error) {
+      throw new Error('카테고리를 불러오던 중 오류가 발생했습니다.');
+    }
+  }
+  // 카테고리 데이터 불러오기
+  //const { isLoading, isError, error, data:categoryData } = useQuery({queryKey:['category'], queryFn: ()=> fetchCategoryData();});
+
+
   const handleInputChange = (event) => {
     // 입력 값에서 쉼표를 제외하고 저장
     const formattedValue = event.target.value.replace(/,/g, '');
@@ -88,14 +108,20 @@ export function AdminDetail() {
         <div style={{display: 'flex', gap: '1em', marginTop: '1em', alignItems: 'center'}}>
           <div className={styles.categoryContainer}>
             <div className={styles.categoryInner}>
-              메인 카테고리
+              대 카테고리
               <i className="far fa-chevron-right" style={{color: 'gray'}}/>
             </div>
           </div>
           <i className="fas fa-chevron-right"/>
           <div className={styles.categoryContainer}>
             <div className={styles.categoryInner}>
-              서브 카테고리
+              중 카테고리
+            </div>
+          </div>
+          <i className="fas fa-chevron-right"/>
+          <div className={styles.categoryContainer}>
+            <div className={styles.categoryInner}>
+              소 카테고리
             </div>
           </div>
         </div>
