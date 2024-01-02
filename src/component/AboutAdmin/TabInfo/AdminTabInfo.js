@@ -2,15 +2,17 @@ import styles from './AdminTabInfo.module.css'
 import React, { useState } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { useProduct, useProductActions } from '../../../Store/DataStore';
 
 export function AdminTabInfo(){
-  const [editorData, setEditorData] = useState('');
+  const product = useProduct();
+  const {setProduct} = useProductActions();
   // 상품정보 데이터
   const productInfo = [
-    {label: '상품코드', value: <input className={styles.input} type='text'/>},
-    {label: '브랜드', value: <input className={styles.input} type='text'/>},
-    {label: '원산지', value: <input className={styles.input} type='text'/>},
-    {label: '상품상태',value: <input className={styles.input} type='text'/>},
+    {label: '상품코드', value: <input className={styles.input} value={product.productId} onChange={(e)=>setProduct("productId", e.target.value)} type='text' placeholder='A001-10001'/>},
+    {label: '브랜드', value: <input className={styles.input} value={product.brand} onChange={(e)=>setProduct("brand", e.target.value)} type='text' placeholder='한국브랜드'/>},
+    {label: '원산지', value: <input className={styles.input} value={product.madeIn} onChange={(e)=>setProduct("madeIn", e.target.value)} type='text' placeholder='국산'/>},
+    {label: '상품상태',value: <input className={styles.input} value={product.state} onChange={(e)=>setProduct("state", e.target.value)} type='text' placeholder='새 상품 / 중고'/>},
   ]
 
   return(
@@ -40,13 +42,13 @@ export function AdminTabInfo(){
           {/* 에디터 훅 사용 */}
           <CKEditor
           editor={ ClassicEditor }
-          data={editorData}
+          data={product.content}
           onReady={ ( editor ) => {
             console.log( "CKEditor5 React Component is ready to use!", editor );
           } }
           onChange={ ( event, editor ) => {
             const data = editor.getData();
-            setEditorData(data);
+            setProduct('content', data);
             console.log( { event, editor, data } );
           } }
           />
