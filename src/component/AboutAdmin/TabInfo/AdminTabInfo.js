@@ -37,22 +37,21 @@ export function AdminTabInfo(){
     {/* 탭 상품 설명 */}
     <div id='1' className="tab-content">
       <div className={styles.reviewHeader}>
-      <h3 style={{borderBottom: '3px solid #cc0000', marginBottom: '1em'}}>상품 설명</h3>
-        <p>
-          {/* 에디터 훅 사용 */}
-          <CKEditor
-          editor={ ClassicEditor }
-          data={product.content}
-          onReady={ ( editor ) => {
-            console.log( "CKEditor5 React Component is ready to use!", editor );
-          } }
-          onChange={ ( event, editor ) => {
-            const data = editor.getData();
-            setProduct('content', data);
-            console.log( { event, editor, data } );
-          } }
-          />
-        </p>
+        <h3 style={{borderBottom: '3px solid #cc0000', marginBottom: '1em'}}>상품 설명</h3>
+        {/* 에디터 훅 사용 */}
+        <CKEditor
+        style={{whiteSpace: 'pre'}}
+        editor={ ClassicEditor }
+        data={product.content}
+        onReady={ ( editor ) => {
+          console.log( "CKEditor5 React Component is ready to use!", editor );
+        } }
+        onChange={ ( event, editor ) => {
+          const data = editor.getData();
+          setProduct('content', data);
+          console.log( { event, editor, data } );
+        } }
+        />
       </div>
     </div>
 

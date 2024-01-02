@@ -25,7 +25,7 @@ export function AdminCategory(props){
       <AdminHeader/>
       <div className={styles.main}>
         <AdminMenuData/>
-        <div className={styles.listContainer}>
+        <div className={styles.container}>
           <div className={styles.bodyHeader}>
             <h1>카테고리 관리</h1>
           </div>
