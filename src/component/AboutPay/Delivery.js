@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import styles from './Delivery.module.css'
 import { useEffect, useState } from 'react';
-import CryptoJS from 'crypto-js';
 import { useOrderData } from '../../Store/DataStore';
 import axios from 'axios';
 import { GetCookie } from '../../customFn/GetCookie';

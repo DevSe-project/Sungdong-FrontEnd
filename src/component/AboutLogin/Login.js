@@ -1,10 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import styles from './Login.module.css';
 import MainLogo from '../../image/sungdonglogo.svg';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import FindModal from './FindModal';
 import CodeInputModal from './CodeInputModal';
-import CryptoJS from 'crypto-js';
 import axios from 'axios';
 import { useDataActions, useIsLogin, useModal, useModalActions, useModalState, useSetLogin, useUserData } from '../../Store/DataStore';
 import { useMutation } from '@tanstack/react-query';
