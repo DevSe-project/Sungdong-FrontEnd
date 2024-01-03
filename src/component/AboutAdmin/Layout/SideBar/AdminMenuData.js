@@ -63,12 +63,8 @@ export function AdminMenuData(props){
       subMenuItems: [
       {
         item: '배송 상태 관리',
-        link: '/adminMain/Deli_ing',
-      },
-      {
-        item: '배송 완료건 관리',
-        link: '/adminMain/Deli_ed'
-      }],
+        link: '/adminMain/SD_Delivery/DeliveryManager',
+      },],
     },
     {
       id: 3,
