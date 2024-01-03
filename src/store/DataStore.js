@@ -304,6 +304,8 @@ export const useProductStore = create((set) => ({
   actions: {
     setProduct: (fieldName, value) =>
       set((state) => ({ product: { ...state.product, [fieldName]: value } })),
+    editProduct: (data) =>
+      set((state) => ({ product: data })),
     resetProduct: () =>
       set({ product: {
         productId: '',
