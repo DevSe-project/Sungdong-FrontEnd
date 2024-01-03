@@ -17,36 +17,44 @@ export function AdminProductList(props){
 
   const productFilter = useProductFilter();
 
-    // 아이템 클릭 핸들러
-    const handleItemClick = (itemId) => {
-      if (selectedData === itemId) {
-        // 이미 선택된 아이템을 클릭한 경우 모달을 닫음
-        setSelectedData(null);
-      } else {
-        setSelectedData(itemId);
-      }
-    };
-    
-    // 게시물 데이터와 페이지 번호 상태 관리    
-    const [currentPage, setCurrentPage] = useState(1);
-    // 현재 페이지에 해당하는 게시물 목록 가져오기
-    const getCurrentPagePosts = () => {
-      const startIndex = (currentPage - 1) * 5; // 한 페이지에 5개씩 표시
-      return props.data.slice(startIndex, startIndex + 5);
-    };
+  // 아이템 수정 핸들러
+  function handleEditItem(item) {
+    navigate(`/adminMain/editProduct/${item.id}`);
+  }
+
+
+  // 아이템 클릭 핸들러
+  const handleItemClick = (itemId) => {
+    if (selectedData === itemId) {
+      // 이미 선택된 아이템을 클릭한 경우 모달을 닫음
+      setSelectedData(null);
+    } else {
+      setSelectedData(itemId);
+    }
+  };
+  
+  // 게시물 데이터와 페이지 번호 상태 관리    
+  const [currentPage, setCurrentPage] = useState(1);
+  // 현재 페이지에 해당하는 게시물 목록 가져오기
+  const getCurrentPagePosts = () => {
+    const startIndex = (currentPage - 1) * 5; // 한 페이지에 5개씩 표시
+    return props.data.slice(startIndex, startIndex + 5);
+  };
 
   const fetchFilteredProducts = async (filter) => {
     try {
-      const queryString = Object.entries(filter)
-        .map(([key, value]) => `${key}=${encodeURIComponent(value)}`) //URI에 맞는 인코딩
-        .join('&');
-  
-      const response = await axios.get(`/data?${queryString}`);
+      const response = await axios.get(`/data`, { params: filter });
       return response.data;
     } catch (error) {
       throw new Error('상품 데이터를 불러오던 중 오류가 발생했습니다.');
     }
   };
+
+  const handleSearch = () => {
+    // 검색 버튼 클릭 시에만 서버에 요청
+    fetchFilteredProducts(productFilter);
+  };
+
 
 
   // const { data:filteredData, isLoading, isError } = useQuery(['filteredProducts', productFilter], () => fetchFilteredProducts(productFilter));
@@ -68,7 +76,7 @@ export function AdminProductList(props){
           <div className={styles.bodyHeader}>
             <h1>상품 조회</h1>
           </div>
-          <AdminProductFilter/>
+          <AdminProductFilter handleSearch={handleSearch}/>
           <div className={styles.tableLocation}>
             <table className={styles.table}>
               <thead 
@@ -179,7 +187,7 @@ export function AdminProductList(props){
                             : `\\${item.price.toLocaleString()}`}
                             </td>
                             <td>
-                              <button className={styles.button}>수정</button>
+                              <button className={styles.button} onClick={()=>handleEditItem(item)}>수정</button>
                             </td>
                           </tr>
                         </tbody>

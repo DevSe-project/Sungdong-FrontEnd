@@ -28,7 +28,7 @@ export function AdminMenuData(props){
       },
       {
         item: '상품 조회/수정',
-        link: '/adminMain/editProduct'
+        link: '/adminMain/searchProduct'
       },
       {
         item: '카테고리 관리',

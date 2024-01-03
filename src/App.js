@@ -74,6 +74,7 @@ import { TackBackRequest } from "./component/AboutTakeBack/TakeBackRequest";
 import { TakeBackList } from "./component/AboutTakeBack/TakeBackList";
 import { ErrorTrade } from "./component/AboutTakeBack/ErrorTradeRequest";
 import { ErrorTradeList } from "./component/AboutTakeBack/ErrorTradeList";
+import { AdminEditDetail } from "./component/AboutAdmin/Detail/AdminEditDetail";
 
 export default function App() {
   const navigate = useNavigate();
@@ -659,8 +660,10 @@ export default function App() {
 
         {/* 상품관리 - 상품등록 */}
         <Route path='/adminMain/addProduct' element={<AdminDetail />} />
+        {/* 상품관리 - 상품조회 */}
+        <Route path='/adminMain/searchProduct' element={<AdminProductList data={data} />} />
         {/* 상품관리 - 상품수정 */}
-        <Route path='/adminMain/editProduct' element={<AdminProductList data={data} />} />
+        <Route path='/adminMain/editProduct/:id' element={<AdminEditDetail />} />
         {/* 상품관리 - 카테고리 */}
         <Route path='/adminMain/category' element={<AdminCategory data={data} />} />
         {/* 상품관리 - 카테고리 수정 */}

@@ -1,18 +1,47 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './AdminDetail.module.css';
 import { AdminHeader } from '../Layout/Header/AdminHeader';
 import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
 import { AdminTabInfo } from '../TabInfo/AdminTabInfo';
 import { useProduct, useProductActions } from '../../../Store/DataStore';
 import axios from 'axios';
+import { useQuery } from '@tanstack/react-query';
+import { useParams } from 'react-router-dom';
 
-export function AdminDetail() {
+export function AdminEditDetail() {
   const [isDiscount, setIsDiscount] = useState(false);
   const [isOption, setIsOption] = useState(false);
   const product = useProduct();
-  const {setProduct, resetProduct, setProductOption} = useProductActions();
+  const {setProduct, resetProduct, setProductOption, editProduct} = useProductActions();
   const [addInputOption, setAddInputOption] = useState(0);
+
+  //데이터 불러오기
+  const { isLoading, isError, error, data } = useQuery({queryKey:['data']});
+
+  //데이터 불러오기 이전 loadData()함수 실행 금지
+  useEffect(() => {
+    const fetchData = async () => {
+      if (data !== null) {
+        await editProduct(loadData());
+      }
+    };
   
+    fetchData();
+  }, [isLoading]);
+
+  //주소창 입력된 id값 받아오기
+  let {id} = useParams();
+
+  const loadData = ()=> {
+    if(data != null){
+      //입력된 id과 data내부의 id값 일치하는 값 찾아 변수 선언
+      const detaildata = data.find((item)=>item.id===id);
+      return detaildata;
+    } else {
+      return <div>데이터를 불러오는 중이거나 상품을 찾을 수 없습니다.</div>;
+    }
+  }
+
   //카테고리 데이터 fetch
   const fetchCategoryData = async() => {
     try{
@@ -47,8 +76,9 @@ export function AdminDetail() {
 
   function AddDiscountFunc(discount){
     const numericValue = discount.replace(/\D/g, '');
-    if(numericValue > -1 && numericValue <= 100) {
-      setProduct("discount", discount);
+    const numberWithCommas = new Intl.NumberFormat('ko-KR').format(numericValue);
+    if(numberWithCommas > -1 && numberWithCommas <= 100) {
+      setProduct("discount", numberWithCommas);
     }
     else{
       alert("할인율은 최소 0부터 100%까지 설정 가능합니다.");
@@ -58,8 +88,9 @@ export function AdminDetail() {
 
   function AddInputOptionFunc(optionCnt){
     const numericValue = optionCnt.replace(/\D/g, '');
-    if(numericValue > -1 && numericValue <= 10) {
-      setAddInputOption(optionCnt);
+    const numberWithCommas = new Intl.NumberFormat('ko-KR').format(numericValue);
+    if(numberWithCommas > -1 && numberWithCommas <= 10) {
+      setAddInputOption(numberWithCommas);
     } 
     else {
       alert("옵션 수량 최소 0개부터, 최대 10개까지만 가능하도록 설정되어 있습니다.");
@@ -69,8 +100,9 @@ export function AdminDetail() {
 
   function AddSupplyFunc(supplyCnt){
     const numericValue = supplyCnt.replace(/\D/g, '');
-    if(numericValue > -1 && numericValue <= 999) {
-      setProduct("supply", supplyCnt);
+    const numberWithCommas = new Intl.NumberFormat('ko-KR').format(numericValue);
+    if(numberWithCommas > -1 && numberWithCommas <= 999) {
+      setProduct("supply", numberWithCommas);
     }
     else {
       alert("최소 1개부터 999개까지 재고 설정이 가능합니다.");
@@ -96,6 +128,13 @@ export function AdminDetail() {
     return inputs;
   };
 
+  if(isLoading){
+    return <p>Loading..</p>;
+  }
+  if(isError){
+    return <p>에러 : {error.message}</p>;
+  }
+
   return(
     <div>
       <AdminHeader/>
@@ -103,7 +142,7 @@ export function AdminDetail() {
         <AdminMenuData/>
         <main className={styles.container}>
           <div className={styles.bodyHeader}>
-            <h1>상품 등록</h1>
+            <h1>상품 수정</h1>
           </div>
         <div style={{display: 'flex', gap: '1em', marginTop: '1em', alignItems: 'center'}}>
           <div className={styles.categoryContainer}>
@@ -139,7 +178,7 @@ export function AdminDetail() {
               {/* 상품 정보(상품 이름, 가격) 부분 (삼항연산자 : 스켈레톤 처리) */}
               <div className={styles.headRight}>
                 <div className={styles.textBox}>
-                  <input style={{width: '20em'}}className={styles.input} onChange={(e)=>setProduct("title", e.target.value)} type='text' placeholder='상품명을 입력해주세요'/>
+                  <input style={{width: '20em'}} className={styles.input} value={product.title} onChange={(e)=>setProduct("title", e.target.value)} type='text' placeholder='상품명을 입력해주세요'/>
                 </div>
                 <h4 className={styles.h4}>
                   <div className={styles.priceTag}>
