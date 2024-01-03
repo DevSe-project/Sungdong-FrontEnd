@@ -661,7 +661,7 @@ export default function App() {
         {/* 상품관리 - 상품등록 */}
         <Route path='/adminMain/addProduct' element={<AdminDetail />} />
         {/* 상품관리 - 상품조회 */}
-        <Route path='/adminMain/searchProduct' element={<AdminProductList data={data} />} />
+        <Route path='/adminMain/searchProduct' element={<AdminProductList />} />
         {/* 상품관리 - 상품수정 */}
         <Route path='/adminMain/editProduct/:id' element={<AdminEditDetail />} />
         {/* 상품관리 - 카테고리 */}

@@ -5,10 +5,10 @@ import { AdminProductFilter}  from '../Product/AdminProductFilter';
 import React from 'react';
 import styles from './AdminProductList.module.css';
 import { useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useProductFilter } from '../../../Store/DataStore';
 import axios from 'axios';
-export function AdminProductList(props){
+export function AdminProductList(){
   
   //Td 선택시 Modal State 변수
   const [selectedData, setSelectedData] = useState(null);
@@ -16,6 +16,11 @@ export function AdminProductList(props){
   const navigate = useNavigate();
 
   const productFilter = useProductFilter();
+
+  const queryClient = useQueryClient();
+
+  //데이터 불러오기
+  const { isLoading, isError, error, data } = useQuery({queryKey:['data']});
 
   // 아이템 수정 핸들러
   function handleEditItem(item) {
@@ -38,7 +43,7 @@ export function AdminProductList(props){
   // 현재 페이지에 해당하는 게시물 목록 가져오기
   const getCurrentPagePosts = () => {
     const startIndex = (currentPage - 1) * 5; // 한 페이지에 5개씩 표시
-    return props.data.slice(startIndex, startIndex + 5);
+    return data.slice(startIndex, startIndex + 5);
   };
 
   const fetchFilteredProducts = async (filter) => {
@@ -50,22 +55,46 @@ export function AdminProductList(props){
     }
   };
 
+  const fetchDeletedProducts = async(productId) => {
+    try {
+      const response = await axios.delete(`/data/${productId}`);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // 상품 삭제를 처리하는 뮤테이션
+  const deleteProductMutation = useMutation({mutationFn: fetchDeletedProducts,
+    onSuccess: () => {
+      // 상품 삭제 성공 시 상품 목록을 다시 불러옴
+      queryClient.invalidateQueries(['data']);
+    },
+    onError: (error) => {
+      // 상품 삭제 실패 시, 에러 처리를 수행합니다.
+      console.error('상품을 삭제 처리하는 중 오류가 발생했습니다.', error);
+    },
+  });
+
+
   const handleSearch = () => {
     // 검색 버튼 클릭 시에만 서버에 요청
     fetchFilteredProducts(productFilter);
   };
 
+  const handleDeleted = (item) => {
+    deleteProductMutation.mutate(item.id);
+  }
 
 
   // const { data:filteredData, isLoading, isError } = useQuery(['filteredProducts', productFilter], () => fetchFilteredProducts(productFilter));
 
-  // if (isLoading) {
-  //   return <div>Loading...</div>;
-  // }
-
-  // if (isError) {
-  //   return <div>Error fetching data</div>;
-  // }
+  if(isLoading){
+    return <p>Loading..</p>;
+  }
+  if(isError){
+    return <p>에러 : {error.message}</p>;
+  }
 
   return(
     <div>
@@ -94,8 +123,7 @@ export function AdminProductList(props){
                 </tr>
               </thead>
               <tbody>
-                {props.data 
-                ? getCurrentPagePosts().map((item, index)=> (
+                {data && getCurrentPagePosts().map((item, index)=> (
                 <React.Fragment key={index}>
                   <tr className={styles.list}>
                     <td><img src={item.image.mini} alt='이미지'></img></td>
@@ -151,7 +179,7 @@ export function AdminProductList(props){
                               공급가
                             </th>
                             <th>
-                              <button className={styles.button}>삭제</button>
+                              <button className={styles.button} onClick={()=>handleDeleted()}>삭제</button>
                             </th>
                           </tr>
                         </thead>
@@ -198,7 +226,6 @@ export function AdminProductList(props){
                   )}
                   </React.Fragment>
                   ))
-                : <tr><td>로딩중</td></tr>
                 }
               </tbody>
             </table>
@@ -222,7 +249,7 @@ export function AdminProductList(props){
             <button
             className={styles.button}
             onClick={()=> {
-              if(props.data.length > (currentPage * 5)){
+              if(data.length > (currentPage * 5)){
                 setCurrentPage(currentPage + 1);
               } else {
                 alert("다음 페이지가 없습니다.")
