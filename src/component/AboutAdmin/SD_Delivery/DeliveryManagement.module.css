@@ -1,0 +1,21 @@
+.body {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.main {
+    flex-grow: 1; /* 남은 공간 모두 차지 */
+    display: flex;
+    flex-direction: column;
+    margin: 3em;
+    justify-content: center;
+    align-items: center;
+}
+
+.main_post {
+    width: 100%;
+    text-align: left;
+    padding: 5px;
+    border-bottom: 3px solid var(--background-color-set);
+}
