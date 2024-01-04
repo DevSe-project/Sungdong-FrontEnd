@@ -68,17 +68,13 @@ export function AdminEditDetail() {
     // 숫자가 아닌 문자를 제외하고 저장
     const numericValue = formattedValue.replace(/\D/g, '');
 
-    // 숫자를 천 단위로 구분자를 추가하여 저장
-    const numberWithCommas = new Intl.NumberFormat('ko-KR').format(numericValue);
-
-    setProduct("price", numberWithCommas);
+    setProduct("price", numericValue);
   }
 
   function AddDiscountFunc(discount){
     const numericValue = discount.replace(/\D/g, '');
-    const numberWithCommas = new Intl.NumberFormat('ko-KR').format(numericValue);
-    if(numberWithCommas > -1 && numberWithCommas <= 100) {
-      setProduct("discount", numberWithCommas);
+    if(numericValue > -1 && numericValue <= 100) {
+      setProduct("discount", numericValue);
     }
     else{
       alert("할인율은 최소 0부터 100%까지 설정 가능합니다.");
@@ -88,9 +84,8 @@ export function AdminEditDetail() {
 
   function AddInputOptionFunc(optionCnt){
     const numericValue = optionCnt.replace(/\D/g, '');
-    const numberWithCommas = new Intl.NumberFormat('ko-KR').format(numericValue);
-    if(numberWithCommas > -1 && numberWithCommas <= 10) {
-      setAddInputOption(numberWithCommas);
+    if(numericValue > -1 && numericValue <= 10) {
+      setAddInputOption(numericValue);
     } 
     else {
       alert("옵션 수량 최소 0개부터, 최대 10개까지만 가능하도록 설정되어 있습니다.");
@@ -100,9 +95,8 @@ export function AdminEditDetail() {
 
   function AddSupplyFunc(supplyCnt){
     const numericValue = supplyCnt.replace(/\D/g, '');
-    const numberWithCommas = new Intl.NumberFormat('ko-KR').format(numericValue);
-    if(numberWithCommas > -1 && numberWithCommas <= 999) {
-      setProduct("supply", numberWithCommas);
+    if(numericValue > -1 && numericValue <= 999) {
+      setProduct("supply", numericValue);
     }
     else {
       alert("최소 1개부터 999개까지 재고 설정이 가능합니다.");
@@ -218,6 +212,14 @@ export function AdminEditDetail() {
                       <span className={styles.spanStyle}>원</span>
                       </label>
                     </div>
+                    <h4 style={{color: 'red', fontWeight: '750'}}>
+                    적용가 : 
+                    {product.discount !== null && product.discount !== undefined
+                      ? isNaN(product.price - (product.price * (product.discount / 100)))
+                        ? '할인율이 잘못 설정되었습니다.'
+                        : `${((product.price - (product.price * (product.discount / 100))).toLocaleString())}원`
+                      : `${product.price.toLocaleString()}원`}
+                    </h4>
                   </div>
                 </h4>
 

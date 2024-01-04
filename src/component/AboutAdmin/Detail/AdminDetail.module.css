@@ -105,6 +105,11 @@
   border-bottom: 1px solid lightgray;
 }
 
+.finalprice{
+  font-size: 1.1em;
+  font-weight: 650;
+}
+
 /* 버튼 CSS */
 
 .selectButton{

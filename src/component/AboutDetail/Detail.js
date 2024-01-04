@@ -383,7 +383,7 @@ function basketThis(product, count){
                 수량 : <input value={count} className={styles.input} onChange={maxLengthCheck} type='number' placeholder='숫자만 입력'/> 개
                 </label>
                 <br/>
-                  {detailData.option &&
+                  {detailData.option && detailData.option.option0 !== "" &&
                   <div style={{display: 'flex', alignItems:'center', gap:'0.5em'}}>
                     옵션 :
                     <select 
