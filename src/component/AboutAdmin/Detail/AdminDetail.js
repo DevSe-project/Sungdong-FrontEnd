@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './AdminDetail.module.css';
 import { AdminHeader } from '../Layout/Header/AdminHeader';
 import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
@@ -6,6 +6,7 @@ import { AdminTabInfo } from '../TabInfo/AdminTabInfo';
 import { useProduct, useProductActions } from '../../../Store/DataStore';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export function AdminDetail() {
   const [isDiscount, setIsDiscount] = useState(false);
@@ -17,6 +18,15 @@ export function AdminDetail() {
   const [middleCategory, setMiddleCategory] = useState([]);
   const [lowCategory, setLowCategory] = useState([]);
   const { isLoading, isError, error, data:categoryData } = useQuery({queryKey:['category']});
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    return () => {
+      resetProduct();
+      // 컴포넌트가 언마운트될 때 Product 상태 리셋
+    };
+  }, []);
 
   const handleCategoryClick = (categoryType, category) => {
     setSelectedCategory(prevState => ({
@@ -118,6 +128,12 @@ export function AdminDetail() {
             <h1>상품 등록</h1>
           </div>
           <div style={{display: 'flex', flexDirection: 'column'}}>
+            <h4 style={{fontSize: '1.1em', fontWeight: '750', marginTop: '1em'}}>
+              선택된 카테고리 : 
+              <span style={{color: '#CC0000', fontWeight: '650', margin: '0.5em'}}>
+              {[categoryData.find((item) => item.id === product.category.highId)?.name, categoryData.find((item) => item.id === product.category.middleId)?.name, categoryData.find((item) => item.id === product.category.lowId)?.name].filter(Boolean).join(' - ')}
+              </span>
+            </h4>
             <div style={{display: 'flex', flexDirection: 'row', gap: '1em', marginTop: '1em', alignItems: 'center'}}>
               <div className={styles.categoryContainer}>
                   <div style={{overflowY: 'auto'}}>
@@ -178,9 +194,6 @@ export function AdminDetail() {
                   </div>
                 </div>
               </div>
-              <h4 style={{fontSize: '1.1em', color: 'red', fontWeight: '750'}}>
-                선택된 카테고리 : {product.category.highId} - {product.category.middleId} - {product.category.lowId}
-              </h4>
             </div>
           <section className={styles.head}>
             <div className={styles.headTop}>
@@ -236,13 +249,15 @@ export function AdminDetail() {
                       <span className={styles.spanStyle}>원</span>
                       </label>
                     </div>
-                    <h4 style={{color: 'red', fontWeight: '750'}}>
+                    <h4 style={{fontSize: '1.1em', fontWeight: '750'}}>
                     적용가 : 
+                    <span style={{color: '#CC0000', fontWeight: '750', margin: '0.5em'}}>
                     {product.discount !== null && product.discount !== undefined
                       ? isNaN(product.price - (product.price * (product.discount / 100)))
                         ? '할인율이 잘못 설정되었습니다.'
                         : `${((product.price - (product.price * (product.discount / 100))).toLocaleString())}원`
                       : `${product.price.toLocaleString()}원`}
+                    </span>
                     </h4>
                   </div>
                 </h4>
@@ -300,7 +315,7 @@ export function AdminDetail() {
 
 
           {/* 탭 부분 */}
-          <AdminTabInfo/>
+          <AdminTabInfo setMiddleCategory={setMiddleCategory} setLowCategory={setLowCategory} setSelectedCategory={setSelectedCategory}/>
         </main>
       </div>
     </div>

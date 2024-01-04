@@ -7,11 +7,11 @@ import axios from 'axios';
 import { GetCookie } from '../../../customFn/GetCookie';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-export function AdminTabInfo(){
+export function AdminTabInfo({setMiddleCategory, setLowCategory, setSelectedCategory}){
   const product = useProduct();
   const {setProduct, resetProduct} = useProductActions();
   const queryClient = useQueryClient();
-
+  
   //데이터 불러오기
   const { data } = useQuery({queryKey:['data']});
 
@@ -139,7 +139,12 @@ export function AdminTabInfo(){
       <div className={styles.sideTextButton}>
         <button 
         className={styles.sideButton}
-        onClick={()=>resetProduct()}
+        onClick={()=>{
+          resetProduct()
+          setMiddleCategory([]);
+          setLowCategory([]);
+          setSelectedCategory({ big: null, medium: null, small: null });
+        }}
         >
           초기화
         </button>
