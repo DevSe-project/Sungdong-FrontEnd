@@ -4,10 +4,17 @@ import { AdminHeader } from '../Layout/Header/AdminHeader';
 import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
+import { useQuery } from '@tanstack/react-query';
 export function AdminCategory(props){
   
     const navigate = useNavigate();
+
+    const [middleCategory, setMiddleCategory] = useState([]);
+    const [lowCategory, setLowCategory] = useState([]);
+
       
+    const { isLoading, isError, error, data:categoryData } = useQuery({queryKey:['category']});
+
     // 게시물 데이터와 페이지 번호 상태 관리    
     const [currentPage, setCurrentPage] = useState(1);
     // 현재 페이지에 해당하는 게시물 목록 가져오기
@@ -15,6 +22,27 @@ export function AdminCategory(props){
       const startIndex = (currentPage - 1) * 5; // 한 페이지에 5개씩 표시
       return props.data.slice(startIndex, startIndex + 5);
     }; 
+
+    function FilteredHighCategoryData() {
+      return categoryData.filter(element => /^[A-Z]$/.test(element.id))
+    }
+
+    function FilteredMiddleCategoryData(itemId) {
+      const newData = categoryData.filter(element => new RegExp(`^${itemId}[a-z]$`).test(element.id));
+      setMiddleCategory(newData);
+    }
+
+    function FilteredLowCategoryData(itemId) {
+      const newData = categoryData.filter(element => new RegExp(`^${itemId}[1-9]|[1-9][0-9]|100.{3,}$`).test(element.id));
+      setLowCategory(newData);
+    }
+
+    if (isLoading) {
+      return <p>Loading..</p>;
+    }
+    if (isError) {
+      return <p>에러 : {error.message}</p>;
+    }
   return(
     <div>
       <AdminHeader/>
@@ -27,9 +55,20 @@ export function AdminCategory(props){
           {/* 카테고리 목록 추가, 변경, 삭제 (대분류) -> (중분류) -> (소분류) */}
           <div style={{display: 'flex', gap: '2em'}}>
             <div className={styles.categoryContainer}>
-              <div className={styles.categoryInner}>
-                대 카테고리
-                <i className="far fa-chevron-right" style={{color: 'gray'}}/>
+              <div style={{overflowY: 'auto'}}>
+                {categoryData
+                && FilteredHighCategoryData().map((item, index)=> (
+                <div onClick={()=> {
+                  setLowCategory([]);
+                  FilteredMiddleCategoryData(item.id)
+                }} 
+                key={index} 
+                className={styles.categoryInner}
+                >
+                  {item.name}
+                  <i className="far fa-chevron-right" style={{color: 'gray'}}/>
+                </div>
+                ))}
               </div>
               <div className={styles.buttonBox}>
                 <button className={styles.button}>수정</button>
@@ -37,8 +76,13 @@ export function AdminCategory(props){
               </div>
             </div>
             <div className={styles.categoryContainer}>
-              <div className={styles.categoryInner}>
-                중 카테고리
+              <div style={{overflowY: 'auto'}}>
+                {middleCategory != null && middleCategory.map((item, index) => (
+                  <div onClick={()=> FilteredLowCategoryData(item.id)} key={index} className={styles.categoryInner}>
+                  {item.name}
+                  <i className="far fa-chevron-right" style={{color: 'gray'}}/>
+                </div>
+                ))}
               </div>
               <div className={styles.buttonBox}>
                 <button className={styles.button}>수정</button>
@@ -46,8 +90,12 @@ export function AdminCategory(props){
               </div>
             </div>
             <div className={styles.categoryContainer}>
-              <div className={styles.categoryInner}>
-                소 카테고리
+              <div style={{overflowY: 'auto'}}>
+                {lowCategory != null && lowCategory.map((item, index) => (
+                  <div key={index} className={styles.categoryInner}>
+                  {item.name}
+                </div>
+                ))}
               </div>
               <div className={styles.buttonBox}>
                 <button className={styles.button}>수정</button>
