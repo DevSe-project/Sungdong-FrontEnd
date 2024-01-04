@@ -1,10 +1,17 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useProductFilter, useProductFilterActions } from '../../../Store/DataStore'
 import styles from './AdminProductFilter.module.css'
 export function AdminProductFilter({handelSearch}){
   const productFilter = useProductFilter();
   const {setProductFilter, resetProductFilter, setProductDate, setProductCategory, setCheckboxState, setAllCheckboxState} = useProductFilterActions();
   
+  useEffect(() => {
+    return () => {
+      resetProductFilter();
+      // 컴포넌트가 언마운트될 때 Product 필터 상태 리셋
+    };
+  }, []);
+
     const handleCheckboxChange = (name) => {
       setCheckboxState(name);
     };

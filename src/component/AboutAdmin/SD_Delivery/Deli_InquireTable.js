@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import styles from './Deli_InquireTable.module.css';
 import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';

@@ -15,6 +15,13 @@ export function AdminEditDetail() {
   const {setProduct, resetProduct, setProductOption, editProduct} = useProductActions();
   const [addInputOption, setAddInputOption] = useState(0);
 
+  useEffect(() => {
+    return () => {
+      resetProduct();
+      // 컴포넌트가 언마운트될 때 Product 상태 리셋
+    };
+  }, []);
+
   //데이터 불러오기
   const { isLoading, isError, error, data } = useQuery({queryKey:['data']});
 
@@ -192,13 +199,15 @@ export function AdminEditDetail() {
                       <span className={styles.spanStyle}>원</span>
                       </label>
                     </div>
-                    <h4 style={{color: 'red', fontWeight: '750'}}>
+                    <h4 style={{fontSize: '1.1em', fontWeight: '750'}}>
                     적용가 : 
+                    <span style={{color: '#CC0000', fontWeight: '750', margin: '0.5em'}}>
                     {product.discount !== null && product.discount !== undefined
                       ? isNaN(product.price - (product.price * (product.discount / 100)))
                         ? '할인율이 잘못 설정되었습니다.'
                         : `${((product.price - (product.price * (product.discount / 100))).toLocaleString())}원`
                       : `${product.price.toLocaleString()}원`}
+                    </span>
                     </h4>
                   </div>
                 </h4>

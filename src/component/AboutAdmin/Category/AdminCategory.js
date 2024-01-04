@@ -11,12 +11,20 @@ export function AdminCategory(props){
 
     const [middleCategory, setMiddleCategory] = useState([]);
     const [lowCategory, setLowCategory] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState({ big: null, medium: null, small: null });
 
-      
     const { isLoading, isError, error, data:categoryData } = useQuery({queryKey:['category']});
 
     // 게시물 데이터와 페이지 번호 상태 관리    
     const [currentPage, setCurrentPage] = useState(1);
+
+    const handleCategoryClick = (categoryType, category) => {
+      setSelectedCategory(prevState => ({
+        ...prevState,
+        [categoryType]: category,
+      }));
+    };
+
     // 현재 페이지에 해당하는 게시물 목록 가져오기
     const getCurrentPagePosts = () => {
       const startIndex = (currentPage - 1) * 5; // 한 페이지에 5개씩 표시
@@ -53,53 +61,81 @@ export function AdminCategory(props){
             <h1>카테고리 관리</h1>
           </div>
           {/* 카테고리 목록 추가, 변경, 삭제 (대분류) -> (중분류) -> (소분류) */}
-          <div style={{display: 'flex', gap: '2em'}}>
-            <div className={styles.categoryContainer}>
-              <div style={{overflowY: 'auto'}}>
-                {categoryData
-                && FilteredHighCategoryData().map((item, index)=> (
-                <div onClick={()=> {
-                  setLowCategory([]);
-                  FilteredMiddleCategoryData(item.id)
-                }} 
-                key={index} 
-                className={styles.categoryInner}
-                >
-                  {item.name}
-                  <i className="far fa-chevron-right" style={{color: 'gray'}}/>
+          <div style={{display: 'flex', flexDirection: 'column', gap: '1em'}}>
+            <h4 style={{fontSize: '1.1em', fontWeight: '750', marginTop: '1em'}}>
+                선택된 카테고리 : 
+                <span style={{color: '#CC0000', fontWeight: '650', margin: '0.5em'}}>
+                {[categoryData.find((item) => item.id === selectedCategory.big)?.name, categoryData.find((item) => item.id === selectedCategory.medium)?.name, categoryData.find((item) => item.id === selectedCategory.low)?.name].filter(Boolean).join(' - ')}
+                </span>
+            </h4>
+            <div style={{display: 'flex', gap: '2em'}}>
+              <div className={styles.categoryContainer}>
+                <div style={{overflowY: 'auto'}}>
+                  {categoryData
+                  && FilteredHighCategoryData().map((item, index)=> (
+                  <div onClick={()=> {
+                    setLowCategory([]);
+                    handleCategoryClick('big', item.id);
+                    handleCategoryClick('medium', '');
+                    handleCategoryClick('low', '');
+                    FilteredMiddleCategoryData(item.id)
+                  }} 
+                  key={index} 
+                  className={styles.categoryInner}
+                  style={{backgroundColor: selectedCategory.big === item.id && 'lightgray'}}
+                  >
+                    {item.name}
+                    <i className="far fa-chevron-right" style={{color: 'gray'}}/>
+                  </div>
+                  ))}
                 </div>
-                ))}
-              </div>
-              <div className={styles.buttonBox}>
-                <button className={styles.button}>수정</button>
-                <button className={styles.button}>추가</button>
-              </div>
-            </div>
-            <div className={styles.categoryContainer}>
-              <div style={{overflowY: 'auto'}}>
-                {middleCategory != null && middleCategory.map((item, index) => (
-                  <div onClick={()=> FilteredLowCategoryData(item.id)} key={index} className={styles.categoryInner}>
-                  {item.name}
-                  <i className="far fa-chevron-right" style={{color: 'gray'}}/>
+                <div className={styles.buttonBox}>
+                  <button className={styles.button}>수정</button>
+                  <button className={styles.button}>추가</button>
                 </div>
-                ))}
               </div>
-              <div className={styles.buttonBox}>
-                <button className={styles.button}>수정</button>
-                <button className={styles.button}>추가</button>
-              </div>
-            </div>
-            <div className={styles.categoryContainer}>
-              <div style={{overflowY: 'auto'}}>
-                {lowCategory != null && lowCategory.map((item, index) => (
-                  <div key={index} className={styles.categoryInner}>
-                  {item.name}
+              <div className={styles.categoryContainer}>
+                <div style={{overflowY: 'auto'}}>
+                  {middleCategory != null && middleCategory.map((item, index) => (
+                    <div 
+                      onClick={()=> {
+                      FilteredLowCategoryData(item.id)
+                      handleCategoryClick('medium', item.id);
+                      handleCategoryClick('low', '');
+                      }} 
+                      key={index} 
+                      className={styles.categoryInner}
+                      style={{backgroundColor: selectedCategory.medium === item.id && 'lightgray'}}
+                    >
+                    {item.name}
+                    <i className="far fa-chevron-right" style={{color: 'gray'}}/>
+                  </div>
+                  ))}
                 </div>
-                ))}
+                <div className={styles.buttonBox}>
+                  <button className={styles.button}>수정</button>
+                  <button className={styles.button}>추가</button>
+                </div>
               </div>
-              <div className={styles.buttonBox}>
-                <button className={styles.button}>수정</button>
-                <button className={styles.button}>추가</button>
+              <div className={styles.categoryContainer}>
+                <div style={{overflowY: 'auto'}}>
+                  {lowCategory != null && lowCategory.map((item, index) => (
+                    <div 
+                    key={index}
+                    className={styles.categoryInner}
+                    style={{backgroundColor: selectedCategory.low === item.id && 'lightgray'}}
+                    onClick={()=> {
+                      handleCategoryClick('low', item.id);
+                    }}
+                    >
+                    {item.name}
+                  </div>
+                  ))}
+                </div>
+                <div className={styles.buttonBox}>
+                  <button className={styles.button}>수정</button>
+                  <button className={styles.button}>추가</button>
+                </div>
               </div>
             </div>
           </div>
