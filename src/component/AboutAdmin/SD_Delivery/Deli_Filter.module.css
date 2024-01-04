@@ -3,7 +3,6 @@
 .main {
     display: flex;
     flex-direction: column;
-    width: 93%;
     border: 1px solid lightgray;
     align-items: center;
     justify-content: flex-start;
@@ -49,6 +48,10 @@
     padding-right: 1.5em;
     cursor: pointer;
 }
+.button:hover {
+    background-color: var(--main-color-light);
+    transition: background-color 0.3s;
+}
 
 .input,
 .select {
@@ -89,9 +92,12 @@
     gap: 10px;
 }
 .dateButton {
-    border: 1px solid gray;
+    border: 1px solid rgb(188, 188, 188);
     border-radius: 1vh;
-    padding: 5px;
+    padding: 0.5em;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    font-size: 14px;
 }
 .dateButton:hover {
     background-color: #ddd;
