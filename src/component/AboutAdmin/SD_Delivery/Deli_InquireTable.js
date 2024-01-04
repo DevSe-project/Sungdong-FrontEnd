@@ -1,11 +1,12 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import styles from './Deli_InquireTable.module.css';
+import { useState, React } from 'react';
 
 export default function Deli_InquireTable() {
 
 
     const queryClient = useQueryClient();
-    const { isLoading, isError, data: delivery } = useQuery({ queryKey: ['delivey'] })
+    const { isLoading, isError, error, data: delivery } = useQuery({ queryKey: ['delivey'] })
     const { data: ordered } = useQuery({ queryKey: ['ordered'] });
 
     // 주문번호를 기준으로 delivery와 order를 매칭하는 함수
@@ -21,7 +22,7 @@ export default function Deli_InquireTable() {
     // 현재 페이지에 해당하는 게시물 목록 가져오기
     const getCurrentPagePosts = () => {
         const startIndex = (currentPage - 1) * 5; // 한 페이지에 5개씩 표시
-        return data.slice(startIndex, startIndex + 5);
+        return delivery.slice(startIndex, startIndex + 5);
     };
 
 
@@ -84,7 +85,7 @@ export default function Deli_InquireTable() {
                 <div className={styles.button}> {currentPage} </div>
                 {/* 다음 페이지 */}
                 <button className={styles.button} onClick={() => {
-                    if (data.length > (currentPage * 5)) {
+                    if (delivery.length > (currentPage * 5)) {
                         setCurrentPage(currentPage + 1);
                     }
                     else {
