@@ -1,0 +1,17 @@
+.body {
+    width: 95%;
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+}
+
+.header_txt {
+    font-size: 20px;
+    font-weight: bold;
+
+}
+
+.denoteNumber_select {
+    font-size: 16px;
+    padding: 2px 5px 2px 5px;
+}
