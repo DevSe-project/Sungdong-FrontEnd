@@ -3,12 +3,15 @@ import styles from './Detail.module.css'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { TabInfo } from './TabInfo'
-import { useBasketList, useIsLogin, useListActions, useSetLogin, useWishList } from '../../Store/DataStore'
+import { useBasketList, useDataActions, useDetailData, useIsLogin, useListActions, useSetLogin, useWishList } from '../../Store/DataStore'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import axios from 'axios'
-import { busSchool } from 'fontawesome'
 import { GetCookie } from '../../customFn/GetCookie'
 export function Detail(props) {
+
+  const detailData = useDetailData();
+
+  const {setDetailData} = useDataActions();
   //데이터 불러오기
   const { isLoading, isError, error, data } = useQuery({queryKey:['data']});
   //Mutate를 위한 queryClient 사용
@@ -17,12 +20,25 @@ export function Detail(props) {
   useEffect(() => {
     const fetchData = async () => {
       if (data !== null) {
-        await loadData();
+        await setDetailData(loadData());
       }
     };
   
     fetchData();
   }, [isLoading]);
+
+    //주소창 입력된 id값 받아오기
+    let {id} = useParams();
+
+    const loadData = ()=> {
+      if(data != null){
+        //입력된 id과 data내부의 id값 일치하는 값 찾아 변수 선언
+        const detaildata = data.find((item)=>item.id===id);
+        return detaildata;
+      } else {
+        return <div>데이터를 불러오는 중이거나 상품을 찾을 수 없습니다.</div>;
+      }
+    }
 
     const navigate = useNavigate();
     //리스트 불러오기
@@ -172,22 +188,6 @@ export function Detail(props) {
         console.error('상품을 장바구니에 추가하는 중 오류가 발생했습니다.', error);
       },
     });
-
-  //주소창 입력된 id값 받아오기
-  let {id} = useParams();
-
-  const loadData = ()=> {
-    if(data != null){
-      //입력된 id과 data내부의 id값 일치하는 값 찾아 변수 선언
-      const detaildata = data.find((item)=>item.id==id);
-      return detaildata;
-    } else {
-      return <div>데이터를 불러오는 중이거나 상품을 찾을 수 없습니다.</div>;
-    }
-  }
-
-  //로딩된 데이터 불러오기
-  const detailData = loadData();
 
 
   //수량 최대입력 글자(제한 길이 변수)
@@ -340,7 +340,7 @@ function basketThis(product, count){
 
             {/* 상품 이미지 부분 */}
             <div className={styles.headLeft}>
-              <img src={data != null && detailData.image.original} alt="이미지" 
+              <img src={detailData.image.original} alt="이미지" 
               className={styles.thumnail}/>
             </div>
 
@@ -383,7 +383,7 @@ function basketThis(product, count){
                 수량 : <input value={count} className={styles.input} onChange={maxLengthCheck} type='number' placeholder='숫자만 입력'/> 개
                 </label>
                 <br/>
-                  {detailData.option &&
+                  {detailData.option && detailData.option.option0 !== "" &&
                   <div style={{display: 'flex', alignItems:'center', gap:'0.5em'}}>
                     옵션 :
                     <select 
@@ -392,8 +392,8 @@ function basketThis(product, count){
                     className={styles.selectSize}
                     >
                       <option value="" disabled>옵션 선택</option>
-                      {detailData.option.map((item, index) =>
-                      <option key={index} value={item.value}>{item.value}</option>
+                      {Object.values(detailData.option).map((item, index) =>
+                      <option key={index} value={item[`option${index}`]}>{item[`option${index}`]}</option>
                       )}
                     </select>
                   </div>

@@ -7,10 +7,44 @@ const useDataStore = create((set) => ({
   categoryData: [],
   userData: [],
   todayTopicData: null,
-
+  detailData: {
+    productId: '',
+    title: '',
+    content: '',
+    price: '',
+    supply: 1,
+    discount: 0,
+    image: {
+      original: "",
+      mini: "",
+    },
+    option: {
+        option0: '',
+        option1: '',
+        option2: '',
+        option3: '',
+        option4: '',
+        option5: '',
+        option6: '',
+        option7: '',
+        option8: '',
+        option9: '',
+      },
+    category: {
+        id: '',
+        highId: '',
+        lowId: '',
+      },
+    brand: '',
+    madeIn: '',
+    state: '',
+  },
 
   actions: {
-
+    setDetailData: (input) =>
+      set((prev) => ({
+        detailData: input
+      })),
     setOrderData: (input) =>
       set((prev) => ({
         orderData: input
@@ -40,6 +74,7 @@ const useDataStore = create((set) => ({
 // 선택자 생성, 상태가 변경될 때마다 구성요소가 업데이트 되기 때문에 반복적 렌더링 방지, 
 // 실수로 전체 스토어를 렌더링 하는 일 방지.
 // export const useData = () => useDataStore((state) => state.data);
+export const useDetailData = () => useDataStore((state) => state.detailData);
 export const useOrderData = () => useDataStore((state) => state.orderData);
 export const useCategoryData = () => useDataStore((state) => state.categoryData);
 export const useUserData = () => useDataStore((state) => state.userData);
@@ -329,9 +364,9 @@ export const useProductStore = create((set) => ({
             option9: '',
           },
         category: {
-            id: '',
-            highId: '',
-            lowId: '',
+          highId: '',
+          middleId: '',
+          lowId: '',
           },
         brand: '',
         madeIn: '',
@@ -343,6 +378,16 @@ export const useProductStore = create((set) => ({
           ...state.product,
           option: {
             ...state.product.option,
+            [fieldName]: value,
+          },
+        },
+      })),
+      setProductCategory: (fieldName, value) =>
+      set((state) => ({
+        product: {
+          ...state.product,
+          category: {
+            ...state.product.category,
             [fieldName]: value,
           },
         },

@@ -2,7 +2,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import styles from './AdminCategoryEdit.module.css'
 import { AdminHeader } from '../Layout/Header/AdminHeader'
 import { AdminMenuData } from '../Layout/SideBar/AdminMenuData'
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 export function AdminCategoryEdit(props){
+  const [middleCategory, setMiddleCategory] = useState([]);
+  const [lowCategory, setLowCategory] = useState([]);
+  const { isLoading, isError, error, data:categoryData } = useQuery({queryKey:['category']});
     //주소창 입력된 id값 받아오기
     let {id} = useParams();
     const loadData = ()=> {
@@ -14,12 +19,32 @@ export function AdminCategoryEdit(props){
         return <div>데이터를 불러오는 중이거나 상품을 찾을 수 없습니다.</div>;
       }
     }
-  
-    const navigate = useNavigate();
-  
     //로딩된 데이터 불러오기
     const detailData = loadData();
 
+    function FilteredHighCategoryData() {
+      return categoryData.filter(element => /^[A-Z]$/.test(element.id))
+    }
+
+    function FilteredMiddleCategoryData(itemId) {
+      const newData = categoryData.filter(element => new RegExp(`^${itemId}[a-z]$`).test(element.id));
+      setMiddleCategory(newData);
+    }
+
+    function FilteredLowCategoryData(itemId) {
+      const newData = categoryData.filter(element => new RegExp(`^${itemId}[1-9]|[1-9][0-9]|100.{3,}$`).test(element.id));
+      setLowCategory(newData);
+    }
+
+  
+    const navigate = useNavigate();
+  
+    if (isLoading) {
+      return <p>Loading..</p>;
+    }
+    if (isError) {
+      return <p>에러 : {error.message}</p>;
+    }
   return(
     <div>
       <AdminHeader/>
@@ -74,20 +99,39 @@ export function AdminCategoryEdit(props){
             <h1>변경할 카테고리</h1>
             <div style={{display: 'flex', gap: '1em', marginTop: '1em', alignItems: 'center'}}>
               <div className={styles.categoryContainer}>
-                <div className={styles.categoryInner}>
-                  대 카테고리
-                  <i className="far fa-chevron-right" style={{color: 'gray'}}/>
+                <div style={{overflowY: 'auto'}}>
+                  {categoryData
+                  && FilteredHighCategoryData().map((item, index)=> (
+                  <div onClick={()=> {
+                    setLowCategory([]);
+                    FilteredMiddleCategoryData(item.id)
+                  }} 
+                  key={index} 
+                  className={styles.categoryInner}
+                  >
+                    {item.name}
+                    <i className="far fa-chevron-right" style={{color: 'gray'}}/>
+                  </div>
+                  ))}
                 </div>
               </div>
               <div className={styles.categoryContainer}>
-                <div className={styles.categoryInner}>
-                  중 카테고리
-                  <i className="far fa-chevron-right" style={{color: 'gray'}}/>
+                <div style={{overflowY: 'auto'}}>
+                  {middleCategory != null && middleCategory.map((item, index) => (
+                    <div onClick={()=> FilteredLowCategoryData(item.id)} key={index} className={styles.categoryInner}>
+                    {item.name}
+                    <i className="far fa-chevron-right" style={{color: 'gray'}}/>
+                  </div>
+                  ))}
                 </div>
               </div>
               <div className={styles.categoryContainer}>
-                <div className={styles.categoryInner}>
-                  소 카테고리
+                <div style={{overflowY: 'auto'}}>
+                  {lowCategory != null && lowCategory.map((item, index) => (
+                    <div key={index} className={styles.categoryInner}>
+                    {item.name}
+                  </div>
+                  ))}
                 </div>
               </div>
             </div>
