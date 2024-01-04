@@ -24,7 +24,7 @@ export function AdminCategory(props){
     }; 
 
     function FilteredHighCategoryData() {
-      return categoryData.filter(element => /^[A-Z]$/.test(element.id))
+      return categoryData.filter(element => /^[A-Z]$/.test(element.id));
     }
 
     function FilteredMiddleCategoryData(itemId) {

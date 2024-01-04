@@ -138,26 +138,6 @@ export function AdminEditDetail() {
           <div className={styles.bodyHeader}>
             <h1>상품 수정</h1>
           </div>
-        <div style={{display: 'flex', gap: '1em', marginTop: '1em', alignItems: 'center'}}>
-          <div className={styles.categoryContainer}>
-            <div className={styles.categoryInner}>
-              대 카테고리
-              <i className="far fa-chevron-right" style={{color: 'gray'}}/>
-            </div>
-          </div>
-          <i className="fas fa-chevron-right"/>
-          <div className={styles.categoryContainer}>
-            <div className={styles.categoryInner}>
-              중 카테고리
-            </div>
-          </div>
-          <i className="fas fa-chevron-right"/>
-          <div className={styles.categoryContainer}>
-            <div className={styles.categoryInner}>
-              소 카테고리
-            </div>
-          </div>
-        </div>
           <section className={styles.head}>
             <div className={styles.headTop}>
 

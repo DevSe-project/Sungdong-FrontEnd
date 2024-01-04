@@ -364,9 +364,9 @@ export const useProductStore = create((set) => ({
             option9: '',
           },
         category: {
-            id: '',
-            highId: '',
-            lowId: '',
+          highId: '',
+          middleId: '',
+          lowId: '',
           },
         brand: '',
         madeIn: '',
@@ -378,6 +378,16 @@ export const useProductStore = create((set) => ({
           ...state.product,
           option: {
             ...state.product.option,
+            [fieldName]: value,
+          },
+        },
+      })),
+      setProductCategory: (fieldName, value) =>
+      set((state) => ({
+        product: {
+          ...state.product,
+          category: {
+            ...state.product.category,
             [fieldName]: value,
           },
         },

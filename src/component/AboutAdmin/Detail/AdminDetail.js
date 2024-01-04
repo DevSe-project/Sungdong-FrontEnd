@@ -5,31 +5,40 @@ import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
 import { AdminTabInfo } from '../TabInfo/AdminTabInfo';
 import { useProduct, useProductActions } from '../../../Store/DataStore';
 import axios from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
 export function AdminDetail() {
   const [isDiscount, setIsDiscount] = useState(false);
   const [isOption, setIsOption] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState({ big: null, medium: null, small: null });
   const product = useProduct();
-  const {setProduct, resetProduct, setProductOption} = useProductActions();
+  const {setProduct, resetProduct, setProductOption, setProductCategory} = useProductActions();
   const [addInputOption, setAddInputOption] = useState(0);
-  
-  //카테고리 데이터 fetch
-  const fetchCategoryData = async() => {
-    try{
-      const response = await axios.get("/category", 
-        {
-          headers : {
-            "Content-Type" : "application/json"
-          }
-        }
-      )
-      return response.data;
-    } catch(error) {
-      throw new Error('카테고리를 불러오던 중 오류가 발생했습니다.');
-    }
+  const [middleCategory, setMiddleCategory] = useState([]);
+  const [lowCategory, setLowCategory] = useState([]);
+  const { isLoading, isError, error, data:categoryData } = useQuery({queryKey:['category']});
+
+  const handleCategoryClick = (categoryType, category) => {
+    setSelectedCategory(prevState => ({
+      ...prevState,
+      [categoryType]: category,
+    }));
+  };
+
+
+  function FilteredHighCategoryData() {
+    return categoryData.filter(element => /^[A-Z]$/.test(element.id));
   }
-  // 카테고리 데이터 불러오기
-  //const { isLoading, isError, error, data:categoryData } = useQuery({queryKey:['category'], queryFn: ()=> fetchCategoryData();});
+
+  function FilteredMiddleCategoryData(itemId) {
+    const newData = categoryData.filter(element => new RegExp(`^${itemId}[a-z]$`).test(element.id));
+    setMiddleCategory(newData);
+  }
+
+  function FilteredLowCategoryData(itemId) {
+    const newData = categoryData.filter(element => new RegExp(`^${itemId}[1-9]|[1-9][0-9]|100.{3,}$`).test(element.id));
+    setLowCategory(newData);
+  }
 
 
   const handleInputChange = (event) => {
@@ -93,6 +102,12 @@ export function AdminDetail() {
     return inputs;
   };
 
+  if (isLoading) {
+    return <p>Loading..</p>;
+  }
+  if (isError) {
+    return <p>에러 : {error.message}</p>;
+  }
   return(
     <div>
       <AdminHeader/>
@@ -102,26 +117,71 @@ export function AdminDetail() {
           <div className={styles.bodyHeader}>
             <h1>상품 등록</h1>
           </div>
-        <div style={{display: 'flex', gap: '1em', marginTop: '1em', alignItems: 'center'}}>
-          <div className={styles.categoryContainer}>
-            <div className={styles.categoryInner}>
-              대 카테고리
-              <i className="far fa-chevron-right" style={{color: 'gray'}}/>
+          <div style={{display: 'flex', flexDirection: 'column'}}>
+            <div style={{display: 'flex', flexDirection: 'row', gap: '1em', marginTop: '1em', alignItems: 'center'}}>
+              <div className={styles.categoryContainer}>
+                  <div style={{overflowY: 'auto'}}>
+                    {categoryData
+                    && FilteredHighCategoryData().map((item, index)=> (
+                    <div onClick={()=> {
+                      setLowCategory([]);
+                      handleCategoryClick('big', item.id);
+                      FilteredMiddleCategoryData(item.id);
+                      setProductCategory('highId', item.id);
+                      setProductCategory('middleId', '');
+                      setProductCategory('lowId', '');
+                    }} 
+                    style={{backgroundColor: selectedCategory.big === item.id && 'lightgray'}}
+                    key={index} 
+                    className={styles.categoryInner}
+                    >
+                      {item.name}
+                      <i className="far fa-chevron-right" style={{color: 'gray'}}/>
+                    </div>
+                    ))}
+                  </div>
+                </div>
+                <div className={styles.categoryContainer}>
+                  <div style={{overflowY: 'auto'}}>
+                    {middleCategory != null && middleCategory.map((item, index) => (
+                      <div onClick={()=> {
+                        FilteredLowCategoryData(item.id)
+                        handleCategoryClick('medium', item.id);
+                        setProductCategory('middleId', item.id);
+                        setProductCategory('lowId', '');
+                        }} 
+                        key={index} 
+                        style={{backgroundColor: selectedCategory.medium === item.id && 'lightgray'}}
+                        className={styles.categoryInner}
+                        >
+                        {item.name}
+                      <i className="far fa-chevron-right" style={{color: 'gray'}}/>
+                    </div>
+                    ))}
+                  </div>
+                </div>
+                <div className={styles.categoryContainer}>
+                  <div style={{overflowY: 'auto'}}>
+                    {lowCategory != null && lowCategory.map((item, index) => (
+                      <div 
+                        key={index} 
+                        style={{backgroundColor: selectedCategory.small === item.id && 'lightgray'}}
+                        onClick={()=> {
+                          handleCategoryClick('small', item.id);
+                          setProductCategory('lowId', item.id);
+                        }}
+                        className={styles.categoryInner}
+                        >
+                        {item.name}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <h4 style={{fontSize: '1.1em', color: 'red', fontWeight: '750'}}>
+                선택된 카테고리 : {product.category.highId} - {product.category.middleId} - {product.category.lowId}
+              </h4>
             </div>
-          </div>
-          <i className="fas fa-chevron-right"/>
-          <div className={styles.categoryContainer}>
-            <div className={styles.categoryInner}>
-              중 카테고리
-            </div>
-          </div>
-          <i className="fas fa-chevron-right"/>
-          <div className={styles.categoryContainer}>
-            <div className={styles.categoryInner}>
-              소 카테고리
-            </div>
-          </div>
-        </div>
           <section className={styles.head}>
             <div className={styles.headTop}>
 
