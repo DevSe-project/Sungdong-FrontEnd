@@ -1,38 +1,39 @@
 import { useQuery } from '@tanstack/react-query';
 import styles from './Deli_InquireTable.module.css';
+import { useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 
 export default function Deli_InquireTable() {
-
-
     const queryClient = useQueryClient();
-    const { isLoading, isError, data: delivery } = useQuery({ queryKey: ['delivey'] })
-    const { data: ordered } = useQuery({ queryKey: ['ordered'] });
 
-    // 주문번호를 기준으로 delivery와 order를 매칭하는 함수
-    const getMatchedData = (orderID) => {
-        const matchedData = ordered.filter(item => item.ordered.orderID === orderID);
-        return matchedData;
-    };
+    const { isLoading: deliveryLoading, isError: deliveryError, data: delivery } = useQuery({ queryKey: ['delivery'] });
+    const { isLoading: orderedLoading, isError: orderedError, data: ordered } = useQuery({ queryKey: ['ordered'] });
 
+    // 데이터 로딩 중 또는 에러 발생 시 처리
+    if (deliveryLoading || orderedLoading) {
+        return <p>Loading...</p>;
+    }
+
+    if (deliveryError || orderedError) {
+        return <p>Error fetching data</p>;
+    }
+
+    // orderID를 기준으로 두 데이터를 매칭
+    const matchedData = ordered.map(orderItem => {
+        const deliveryItem = delivery.find(deliveryItem => deliveryItem.orderID === orderItem.orderID);
+
+        // orderData와 deliveryData의 항목을 합침
+        return { ...orderItem, ...deliveryItem };
+    });
 
     // 게시물 데이터와 페이지 번호 상태 관리    
     const [currentPage, setCurrentPage] = useState(1);
 
     // 현재 페이지에 해당하는 게시물 목록 가져오기
     const getCurrentPagePosts = () => {
-        const startIndex = (currentPage - 1) * 5; // 한 페이지에 5개씩 표시
-        return data.slice(startIndex, startIndex + 5);
+        const startIndex = (currentPage - 1) * 5;
+        return matchedData.slice(startIndex, startIndex + 5);
     };
-
-
-    // 로딩 | 에러
-    if (isLoading) {
-        return <p>Loading..</p>;
-    }
-    if (isError) {
-        return <p>에러 : {error.message}</p>;
-    }
-
 
     return (
         <div>
@@ -54,29 +55,28 @@ export default function Deli_InquireTable() {
                     </tr>
                 </thead>
                 <tbody>
-                    {delivery && getCurrentPagePosts().map((item, index) => (
-                        <React.Fragment key={index}>
-                            {/* orderID를 기준으로 delivery와 order를 매칭하여 데이터 가져오기 */}
-                            {getMatchedData(item.orderID).map((matchedItem, matchedIndex) => (
-                                <tr key={matchedIndex}>
-                                    <td>{matchedItem.orderID}</td>
-                                    <td>{matchedItem.status}</td>
-                                </tr>
-                            ))}
-                        </React.Fragment>
+                    {getCurrentPagePosts().map((item, index) => (
+                        <tr key={index}>
+                            <td>{item.orderID}</td>
+                            <td>{item.deliveryType}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
                     ))}
                 </tbody>
             </table>
-
 
             <div className={styles.buttonContainer}>
                 {/* 이전 페이지 */}
                 <button className={styles.button} onClick={() => {
                     if (currentPage !== 1) {
-                        setCurrentPage(currentPage - 1)
-                    }
-                    else {
-                        alert("해당 페이지가 가장 첫 페이지 입니다.")
+                        setCurrentPage(currentPage - 1);
+                    } else {
+                        alert("해당 페이지가 가장 첫 페이지 입니다.");
                     }
                 }}>
                     <i className="far fa-angle-left" />
@@ -84,16 +84,15 @@ export default function Deli_InquireTable() {
                 <div className={styles.button}> {currentPage} </div>
                 {/* 다음 페이지 */}
                 <button className={styles.button} onClick={() => {
-                    if (data.length > (currentPage * 5)) {
+                    if (matchedData.length > currentPage * 5) {
                         setCurrentPage(currentPage + 1);
-                    }
-                    else {
-                        alert("다음 페이지가 없습니다.")
+                    } else {
+                        alert("다음 페이지가 없습니다.");
                     }
                 }}>
                     <i className="far fa-angle-right" />
                 </button>
             </div>
-        </div >
-    )
+        </div>
+    );
 }
