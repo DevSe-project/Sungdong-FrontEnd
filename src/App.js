@@ -51,7 +51,7 @@ import { AdminSoldList } from './component/AboutAdmin/Sold/AdminSoldList';
 import { AdminNotSoldList } from './component/AboutAdmin/Sold/AdminNotSoldList';
 import { AdminRefund } from './component/AboutAdmin/Refund/AdminRefund';
 import AdminNotice from './component/AboutAdmin/Notice/AdminNotice';
-import DeliveryManagement from "./component/AboutAdmin/SD_Delivery/DeliveryManagement";
+import DeliveryManagement from "./component/AboutAdmin/SD_Delivery/State_M/DeliveryManagement";
 import TotalCal_Manage from "./component/AboutAdmin/SD_Account/TotalCal_Manage";
 import CMSaccount_Manage from "./component/AboutAdmin/SD_Account/CMSaccount_Manage";
 
@@ -711,7 +711,7 @@ export default function App() {
         {/* 주문관리 - 반품 관리 */}
         <Route path='/adminMain/refund' element={<AdminRefund orderData={orderData} />} />
 
-        {/* 배송관리 - 배송 관리 */}
+        {/* 배송관리 - 배송 상태 관리 */}
         <Route path='/adminMain/SD_delivery/DeliveryManager' element={<DeliveryManagement />}/> 
 
         {/* 정산관리 - 누적정산 */}
