@@ -35,18 +35,36 @@ export function AdminCategory(props){
       return props.data.slice(startIndex, startIndex + 5);
     }; 
 
+    //대 카테고리 필터링
     function FilteredHighCategoryData() {
       return categoryData.filter(element => /^[A-Z]$/.test(element.id));
     }
 
+    //중 카테고리 필터링
     function FilteredMiddleCategoryData(itemId) {
       const newData = categoryData.filter(element => new RegExp(`^${itemId}[a-z]$`).test(element.id));
       setMiddleCategory(newData);
     }
 
+    //소 카테고리 필터링
     function FilteredLowCategoryData(itemId) {
       const newData = categoryData.filter(element => new RegExp(`^${itemId}[1-9]|[1-9][0-9]|100.{3,}$`).test(element.id));
       setLowCategory(newData);
+    }
+
+    function handleOpenMediumModal(){
+      if(selectedCategory.big !== null && selectedCategory.big !== ""){
+        selectedModalOpen("중");
+      } else {
+        alert("대 카테고리를 선택 후 추가해주세요!");
+      }
+    }
+    function handleOpenLowModal(){
+      if(selectedCategory.medium !== null && selectedCategory.medium !== ""){
+        selectedModalOpen("소");
+      } else {
+        alert("중 카테고리를 선택 후 추가해주세요!");
+      }
     }
 
     if (isLoading) {
@@ -118,7 +136,9 @@ export function AdminCategory(props){
                 </div>
                 <div className={styles.buttonBox}>
                   <button className={styles.button}>수정</button>
-                  <button className={styles.button} onClick={()=> selectedModalOpen("중")}>추가</button>
+                  <button className={styles.button} onClick={()=> {
+                    handleOpenMediumModal();
+                  }}>추가</button>
                 </div>
               </div>
               <div className={styles.categoryContainer}>
@@ -138,7 +158,7 @@ export function AdminCategory(props){
                 </div>
                 <div className={styles.buttonBox}>
                   <button className={styles.button}>수정</button>
-                  <button className={styles.button} onClick={()=> selectedModalOpen("소")}>추가</button>
+                  <button className={styles.button} onClick={()=> handleOpenLowModal()}>추가</button>
                 </div>
               </div>
             </div>
@@ -219,7 +239,7 @@ export function AdminCategory(props){
           </div>
         </div>
         {isModal &&
-        <AdminCategoryAddedModal/>
+        <AdminCategoryAddedModal selectedCategory={selectedCategory} categoryData={categoryData}/>
         }
       </div>
     </div>

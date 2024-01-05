@@ -2,14 +2,58 @@ import { React, useEffect, useState } from 'react';
 import styles from './AdminCategoryAddedModal.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useModalActions, useModalState } from '../../../Store/DataStore';
+import { GetCookie } from '../../../customFn/GetCookie';
+import axios from 'axios';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-export default function AdminCategoryAddedModal(props) {
+export default function AdminCategoryAddedModal({selectedCategory, categoryData}) {
+
+  const [inputs, setInputs] = useState([]);
 
   const navigate = useNavigate();
 
-  const { isModal, modalName } = useModalState();
+  const { modalName } = useModalState();
 
-  const {selectedModalOpen, selectedModalClose, setModalName, closeModal} = useModalActions();
+  const {selectedModalOpen, selectedModalClose} = useModalActions();
+
+  const queryClient = useQueryClient();
+
+  const sendCategoriesToServer = async(category) => {
+    try {
+      const token = GetCookie('jwt_token');
+      const response = await axios.put("/category", 
+        JSON.stringify(
+          category
+        ),
+        {
+          headers : {
+            "Content-Type" : "application/json",
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      )
+      // 성공 시 추가된 상품 정보를 반환합니다.
+      return response.data;
+    } catch (error) {
+      // 실패 시 예외를 throw합니다.
+      throw new Error('상품을 추가하는 중 오류가 발생했습니다.');
+    }
+  }
+
+    //상품 등록 함수
+    const { addCategoryMutation } = useMutation({mutationFn: sendCategoriesToServer,
+      onSuccess: (data) => {
+        // 메세지 표시
+        alert(data.message);
+        console.log('카테고리가 추가/변경 되었습니다.', data);
+        // 상태를 다시 불러와 갱신합니다.
+        queryClient.invalidateQueries(['category']);
+      },
+      onError: (error) => {
+        // 상품 추가 실패 시, 에러 처리를 수행합니다.
+        console.error('카테고리를 추가/변경 하는 중 오류가 발생했습니다.', error);
+      },
+    })
 
   // esc키를 누르면 모달창 닫기.
   useEffect(() => {
@@ -26,23 +70,42 @@ export default function AdminCategoryAddedModal(props) {
     };
   }, [selectedModalClose]);
 
-  function InputForm() {
-    const [inputs, setInputs] = useState([]);
-  
+  // 카테고리 내부 인풋란 추가하는 함수
+  function InputForm() {  
     const handleAddInput = () => {
-      if(inputs.length > 18){
-        alert("카테고리는 최대 19개까지만 생성 가능합니다.");
-        return;
+      switch(modalName){
+        case "대": 
+          if(inputs.length >= 15){
+            alert("대 카테고리는 한 번에 최대 15개까지만 생성 가능합니다.");
+            return;
+          } else {
+            setInputs([...inputs, '']);
+          }
+          break;
+        case "중":
+          if(inputs.length >= 20){
+            alert("중 카테고리는 한 번에 최대 20개까지만 생성 가능합니다.");
+            return;
+          } else {
+            setInputs([...inputs, '']);
+          }
+          break;
+        case "소":
+          if(inputs.length >= 30){
+            alert("소 카테고리는 한 번에 최대 30개까지만 생성 가능합니다.");
+            return;
+          } else {
+            setInputs([...inputs, '']);
+          }
+          break;
+        default:
       }
-      setInputs([...inputs, '']);
     };
-  
     const handleRemoveInput = (index) => {
       const newInputs = [...inputs];
       newInputs.splice(index, 1);
       setInputs(newInputs);
     };
-  
     return (
       <div>
         {inputs.map((input, index) => (
@@ -67,6 +130,32 @@ export default function AdminCategoryAddedModal(props) {
     );
   }
 
+  function handleAddCategory(){
+    switch(modalName){
+      case "대":
+        const bigCategories = inputs.map((item) => ({
+          name: item
+        }))
+        addCategoryMutation.mutate(bigCategories)
+        break;
+      case "중":
+        const mediumCategories = inputs.map((item) => ({
+          pid: selectedCategory.big,
+          name: item
+        }))
+        addCategoryMutation.mutate(mediumCategories);
+        break;
+      case "소":
+        const lowCategories = inputs.map((item) => ({
+          pid: selectedCategory.medium,
+          name: item
+        }))
+        addCategoryMutation.mutate(lowCategories);
+      break;
+      default:
+    }
+  }
+
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContainer}>
@@ -80,7 +169,10 @@ export default function AdminCategoryAddedModal(props) {
         <div className={styles.modalContent}>
           <div className={styles.titleBox}>
             <div className={styles.title}>
-              {modalName} 카테고리 추가
+              <span style={{color: 'darkred', fontWeight: '650'}}>
+              {modalName === "대" ? modalName : 
+              modalName === "중" ? categoryData.find((item) => item.id === selectedCategory.big)?.name :
+              modalName === "소" && categoryData.find((item) => item.id === selectedCategory.medium)?.name}</span> 카테고리 추가
             </div>
           </div>
         </div>
@@ -90,7 +182,7 @@ export default function AdminCategoryAddedModal(props) {
         </div>
         <div className={styles.buttonBox}>
           <button onClick={()=> selectedModalClose(modalName)} className={styles.selectButton}>취소</button>
-          <button className={styles.selectedButton}>추가</button>
+          <button onClick={()=> handleAddCategory()} className={styles.selectedButton}>추가</button>
         </div>
       </div>
     </div>
