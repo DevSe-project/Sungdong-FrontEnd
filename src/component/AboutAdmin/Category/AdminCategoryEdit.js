@@ -177,7 +177,7 @@ export function AdminCategoryEdit(props){
               </h4>
               <div style={{display: 'flex', gap: '1em', marginTop: '1em', alignItems: 'center'}}>
                 <div className={styles.categoryContainer}>
-                  <div style={{overflowY: 'auto'}}>
+                  <div style={{overflowY: 'auto', overflowX: 'hidden'}}>
                     {categoryData
                     && FilteredHighCategoryData().map((item, index)=> (
                     <div onClick={()=> {
