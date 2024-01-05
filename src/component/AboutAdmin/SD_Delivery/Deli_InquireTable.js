@@ -1,22 +1,16 @@
+import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import styles from './Deli_InquireTable.module.css';
-import { useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
-
 export default function Deli_InquireTable() {
+    
     const queryClient = useQueryClient();
+
+
+    // 게시물 데이터와 페이지 번호 상태 관리    
+    const [currentPage, setCurrentPage] = useState(1);
 
     const { isLoading: deliveryLoading, isError: deliveryError, data: delivery } = useQuery({ queryKey: ['delivery'] });
     const { isLoading: orderedLoading, isError: orderedError, data: ordered } = useQuery({ queryKey: ['ordered'] });
-
-    // 데이터 로딩 중 또는 에러 발생 시 처리
-    if (deliveryLoading || orderedLoading) {
-        return <p>Loading...</p>;
-    }
-
-    if (deliveryError || orderedError) {
-        return <p>Error fetching data</p>;
-    }
 
     // orderID를 기준으로 두 데이터를 매칭
     const matchedData = ordered.map(orderItem => {
@@ -26,14 +20,20 @@ export default function Deli_InquireTable() {
         return { ...orderItem, ...deliveryItem };
     });
 
-    // 게시물 데이터와 페이지 번호 상태 관리    
-    const [currentPage, setCurrentPage] = useState(1);
-
     // 현재 페이지에 해당하는 게시물 목록 가져오기
     const getCurrentPagePosts = () => {
         const startIndex = (currentPage - 1) * 5;
         return matchedData.slice(startIndex, startIndex + 5);
     };
+    
+    // 데이터 로딩 중 또는 에러 발생 시 처리
+    if (deliveryLoading || orderedLoading) {
+        return <p>Loading...</p>;
+    }
+
+    if (deliveryError || orderedError) {
+        return <p>Error fetching data</p>;
+    }
 
     return (
         <div>
