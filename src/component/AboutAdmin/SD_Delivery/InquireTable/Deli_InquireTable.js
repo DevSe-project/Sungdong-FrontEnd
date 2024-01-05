@@ -8,6 +8,8 @@ export default function Deli_InquireTable() {
     // 게시물 데이터와 페이지 번호 상태 관리    
     const [currentPage, setCurrentPage] = useState(1);
     const [matchedData, setMatchedData] = useState([]);
+    const [itemsPerPage, setItemsPerPage] = useState(5);
+
 
 
     // Fetch
@@ -16,19 +18,32 @@ export default function Deli_InquireTable() {
     const { isLoading: productLoading, isError: productError, data: product } = useQuery({ queryKey: ['data'] });
 
 
+    // ConvertState
+    const convertState = (num) => {
+        if (num == 1) {
+            return '배송 준비'
+        }
+        else if (num == 2) {
+            return '배송 중'
+        }
+        else if (num == 3) {
+            return '배송 완료'
+        }
+    }
+
 
     // 업데이트 함수 호출
     useEffect(() => {
         updateMatchedData();
-    }, [ordered, delivery, product]);
-
+    }, [currentPage, ordered, delivery, product]);
 
 
     // 현재 페이지에 해당하는 게시물 목록 가져오기
     const getCurrentPagePosts = () => {
-        const startIndex = (currentPage - 1) * 5;
-        return matchedData.slice(startIndex, startIndex + 5);
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        return matchedData.slice(startIndex, startIndex + itemsPerPage);
     };
+    
 
 
     // 상태 업데이트를 위한 함수
@@ -72,10 +87,13 @@ export default function Deli_InquireTable() {
                     목록
                 </div>
                 {/* Number of Denote */}
-                <select className={styles.denoteNumber_select}>
-                    <option>10</option>
-                    <option>30</option>
-                    <option>50</option>
+                <select className={styles.denoteNumber_select}
+                    value={itemsPerPage}
+                    onChange={(e) => setItemsPerPage(Number(e.target.value))}
+                >
+                    <option value={10}>10</option>
+                    <option value={30}>30</option>
+                    <option value={50}>50</option>
                 </select>
             </div>
             {/* main */}
@@ -92,23 +110,21 @@ export default function Deli_InquireTable() {
                         <th>상품명</th>
                         <th>옵션명</th>
                         <th>표준가</th>
-                        <th style={{ fontWeight: '650' }}>공급가</th>
-                        <th>더보기</th>
+                        <th>공급가</th>
                     </tr>
                 </thead>
                 <tbody>
                     {getCurrentPagePosts().map((item, index) => (
                         <tr key={index}>
-                            <td>{item.orderID}</td> {/* 주문번호 */}
-                            <td>{item.deliveryType}</td> {/* 처리상태 */}
+                            <td>{item.orderID}</td> {/* 주문번호 */} {/* get으로 불러오기 */}
+                            <td>{convertState(item.deliveryType)}</td> {/* 처리상태 */}
                             <td>{item.order_Date}</td> {/* 주문일자 */}
                             <td>{item.ProductId}</td> {/* 상품코드 */}
                             <td>{item.image.mini}</td> {/* 이미지 */}
                             <td>{item.title}</td> {/* 상품명 */}
                             <td>{item.option ? item.option : "-"}</td> {/* 옵션명 */}
                             <td>{item.price}</td> {/* 표준가 */}
-                            <td>{item.discount == 0 ? item.price : item.price - (item.price * item.discount/100)}</td> {/* 공급가 */}
-                            <td>더보기</td> {/* 더보기 */}
+                            <td>{item.discount === 0 ? item.price : item.price - (item.price * item.discount / 100)}</td> {/* 공급가 */}
                         </tr>
                     ))}
                 </tbody>
