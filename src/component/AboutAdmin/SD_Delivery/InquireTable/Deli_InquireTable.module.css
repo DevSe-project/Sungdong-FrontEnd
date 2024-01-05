@@ -1,11 +1,11 @@
-/* --------body-------- */
+/* --------Body-------- */
 .body {
     width: 100%;
     display: flex;
     flex-direction: column;
 }
 
-/* --------header-------- */
+/* --------Header-------- */
 .header {
     width: 100%;
     display: flex;
@@ -25,7 +25,10 @@
 }
 
 
-/* --------main-------- */
+/* --------Main-------- */
+
+
+/* --------PageMoveHandler-------- */
 .pageMoveHandler {
     display: flex;
     margin: 10px;

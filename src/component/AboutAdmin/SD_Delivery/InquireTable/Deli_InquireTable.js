@@ -43,7 +43,7 @@ export default function Deli_InquireTable() {
         const startIndex = (currentPage - 1) * itemsPerPage;
         return matchedData.slice(startIndex, startIndex + itemsPerPage);
     };
-    
+
 
 
     // 상태 업데이트를 위한 함수
@@ -117,7 +117,10 @@ export default function Deli_InquireTable() {
                     {getCurrentPagePosts().map((item, index) => (
                         <tr key={index}>
                             <td>{item.orderID}</td> {/* 주문번호 */} {/* get으로 불러오기 */}
-                            <td>{convertState(item.deliveryType)}</td> {/* 처리상태 */}
+                            <td> {/* 처리상태 */}
+                                {convertState(item.deliveryType)}
+                                <i class="fa-solid fa-pen" className={styles.modify_deliveryType} onChange={ () => {} }></i>
+                            </td>
                             <td>{item.order_Date}</td> {/* 주문일자 */}
                             <td>{item.ProductId}</td> {/* 상품코드 */}
                             <td>{item.image.mini}</td> {/* 이미지 */}
