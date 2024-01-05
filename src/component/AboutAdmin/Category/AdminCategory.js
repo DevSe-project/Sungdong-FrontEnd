@@ -5,6 +5,8 @@ import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useModalActions, useModalState } from '../../../Store/DataStore';
+import AdminCategoryAddedModal from './AdminCategoryAddedModal';
 export function AdminCategory(props){
   
     const navigate = useNavigate();
@@ -12,6 +14,8 @@ export function AdminCategory(props){
     const [middleCategory, setMiddleCategory] = useState([]);
     const [lowCategory, setLowCategory] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState({ big: null, medium: null, small: null });
+    const { isModal, modalName } = useModalState();
+    const {selectedModalOpen, setModalName, closeModal} = useModalActions();
 
     const { isLoading, isError, error, data:categoryData } = useQuery({queryKey:['category']});
 
@@ -91,7 +95,7 @@ export function AdminCategory(props){
                 </div>
                 <div className={styles.buttonBox}>
                   <button className={styles.button}>수정</button>
-                  <button className={styles.button}>추가</button>
+                  <button onClick={()=> selectedModalOpen("대")} className={styles.button}>추가</button>
                 </div>
               </div>
               <div className={styles.categoryContainer}>
@@ -114,7 +118,7 @@ export function AdminCategory(props){
                 </div>
                 <div className={styles.buttonBox}>
                   <button className={styles.button}>수정</button>
-                  <button className={styles.button}>추가</button>
+                  <button className={styles.button} onClick={()=> selectedModalOpen("중")}>추가</button>
                 </div>
               </div>
               <div className={styles.categoryContainer}>
@@ -134,7 +138,7 @@ export function AdminCategory(props){
                 </div>
                 <div className={styles.buttonBox}>
                   <button className={styles.button}>수정</button>
-                  <button className={styles.button}>추가</button>
+                  <button className={styles.button} onClick={()=> selectedModalOpen("소")}>추가</button>
                 </div>
               </div>
             </div>
@@ -214,6 +218,9 @@ export function AdminCategory(props){
             </button>
           </div>
         </div>
+        {isModal &&
+        <AdminCategoryAddedModal/>
+        }
       </div>
     </div>
   )
