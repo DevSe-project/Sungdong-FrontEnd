@@ -1,6 +1,87 @@
 
+import { useEffect, useState } from 'react';
+import { useOrderFilter, useOrderFilterActions } from '../../../Store/DataStore';
 import styles from './AdminSoldFilter.module.css';
-export function AdminSoldFilter(){
+export function AdminSoldFilter({handelSearch}){
+
+  const orderFilter = useOrderFilter();
+  const {setOrderFilter, resetOrderFilter, setOrderDetailFilter, setOrderFilterDate} = useOrderFilterActions();
+  const [detailKey, setDetailKey] = useState('');
+
+
+  useEffect(() => {
+    return () => {
+      resetOrderFilter();
+      // 컴포넌트가 언마운트될 때 order 필터 상태 리셋
+    };
+  }, []);
+
+  function orderStatus(){
+    return(
+      <div style={{display: 'flex', gap: '0.5em'}}>
+        <div>
+          <select className={styles.select} value={orderFilter.orderState} onChange={(e)=>setOrderFilter("orderState", e.target.value)} name="orderState">
+            <option name="orderState" value={1}>신규 주문</option>
+            <option name="orderState" value={2}>발송 완료(배송 대기중)</option>
+          </select>
+        </div>
+      </div>
+    )
+  }
+  
+  function deliveryFilter(){
+    return(
+      <div style={{display: 'flex', gap: '0.5em'}}>
+        <select className={styles.select} value={orderFilter.deliveryType} onChange={(e)=>setOrderFilter("deliveryType", e.target.value)} name='deliveryFilter'>
+          <option name='deliveryFilter' value="">전체</option>
+          <option name='deliveryFilter' value="성동택배">성동택배</option>
+          <option name='deliveryFilter' value="일반택배">일반택배</option>
+          <option name='deliveryFilter' value="화물">화물</option>
+          <option name='deliveryFilter' value="직접수령">직접수령</option>
+        </select>
+      </div>
+    )
+  }
+  
+  function detailFilter(){
+    return(
+      <div style={{display: 'flex', gap: '1em'}}>
+        <select className={styles.select} value={detailKey} onChange={(e)=>setDetailKey(e.target.value)} name='detailSearch'>
+          <option name="detailSearch" value=''>전체</option>
+          <option name="detailSearch" value="companyName">기업명</option>
+          <option name="detailSearch" value="name">구매자명</option>
+          <option name="detailSearch" value="tel">구매자연락처</option>
+          <option name="detailSearch" value="userId">구매자ID</option>
+          <option name="detailSearch" value="orderId">주문번호</option>
+          <option name="detailSearch" value="productId">상품번호</option>
+          <option name="detailSearch" value="deliveryNum">송장번호</option>
+        </select>
+        <div>
+          <input className={styles.input} type='text' value={orderFilter.detailFilter[detailKey]} onChange={(e)=>setOrderDetailFilter(detailKey, e.target.value)} />
+        </div>
+      </div>
+    )
+  }
+
+  
+function searchTerm(){
+  return (
+    <div style={{display: 'flex', gap: '1em'}}>
+      <div className={styles.searchFilterList}>
+        <select className={styles.select} name='filterDate' value={orderFilter.deliveryType} onChange={(e)=>setOrderFilter("deliveryType", e.target.value)} >
+          <option name='filterDate' value="orderDate">결제일</option>
+          <option name='filterDate' value="delivery_addDate">발송처리일</option>
+        </select>
+      </div>
+      <div className={styles.searchFilterList}>
+        <input className={styles.input} type='date' value={orderFilter.date.start} onChange={(e)=>setOrderFilterDate("start", e.target.value)} />
+        &nbsp;~&nbsp;
+        <input className={styles.input} type='date' value={orderFilter.date.end} onChange={(e)=>setOrderFilterDate("end", e.target.value)} />
+      </div>
+    </div>
+  )
+}
+
   const filterList = [
     { label : '조회기간', content : searchTerm()},
     { label : '주문상태', content : orderStatus()},
@@ -14,7 +95,7 @@ export function AdminSoldFilter(){
           <h4 style={{fontSize: '1.2em', fontWeight: '650'}}>필터</h4>
         </div>
         {filterList.map((item, index) => (
-        <div className={styles.container}>
+        <div key={index} className={styles.container}>
           <div className={styles.label}>
             {item.label}
           </div>
@@ -24,77 +105,10 @@ export function AdminSoldFilter(){
         </div>
         ))}
         <div style={{display: 'flex', gap: '0.5em'}}>
-          <input className={styles.button} type='submit' value='검색'/>
-          <input className={styles.button} type='reset'/>
+          <input className={styles.button} type='submit' value='검색' onClick={() => handelSearch() }/>
+          <input className={styles.button} type='reset' onClick={()=> resetOrderFilter()}/>
         </div>
       </form>
-    </div>
-  )
-}
-
-function searchTerm(){
-  return (
-    <div style={{display: 'flex', gap: '1em'}}>
-      <div className={styles.searchFilterList}>
-        <select name='filterDate'>
-          <option name='filterDate' value="결제일">결제일</option>
-          <option name='filterDate' value="발주확인일">발주확인일</option>
-          <option name='filterDate' value="발송처리일">발송처리일</option>
-        </select>
-      </div>
-      <div className={styles.searchFilterList}>
-        <input type='date'/>
-        &nbsp;~&nbsp;
-        <input type='date'/>
-      </div>
-    </div>
-  )
-}
-
-function orderStatus(){
-  return(
-    <div style={{display: 'flex', gap: '0.5em'}}>
-      <div>
-        <select name="orderState">
-          <option name="orderState" type="신규주문">신규 주문</option>
-          <option name="orderState" type="발주확인">발주 확인</option>
-          <option name="orderState" type="배송대기중">발송 완료(배송 대기중)</option>
-        </select>
-      </div>
-    </div>
-  )
-}
-
-function deliveryFilter(){
-  return(
-    <div style={{display: 'flex', gap: '0.5em'}}>
-      <select name='deliveryFilter'>
-        <option name='deliveryFilter' value="전체">전체</option>
-        <option name='deliveryFilter' value="성동택배">성동택배</option>
-        <option name='deliveryFilter' value="일반택배">일반택배</option>
-        <option name='deliveryFilter' value="화물">화물</option>
-        <option name='deliveryFilter' value="직접수령">직접수령</option>
-      </select>
-    </div>
-  )
-}
-
-function detailFilter(){
-  return(
-    <div style={{display: 'flex', gap: '1em'}}>
-      <select name='detailSearch'>
-        <option name="detailSearch" value="전체">전체</option>
-        <option name="detailSearch" value="수취인명">수취인명</option>
-        <option name="detailSearch" value="구매자명">구매자명</option>
-        <option name="detailSearch" value="구매자연락처">구매자연락처</option>
-        <option name="detailSearch" value="구매자ID">구매자ID</option>
-        <option name="detailSearch" value="주문번호">주문번호</option>
-        <option name="detailSearch" value="상품번호">상품번호</option>
-        <option name="detailSearch" value="송장번호">송장번호</option>
-      </select>
-      <div>
-        <input type='text'/>
-      </div>
     </div>
   )
 }
