@@ -7,13 +7,14 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useModalActions, useModalState } from '../../../Store/DataStore';
 import AdminCategoryAddedModal from './AdminCategoryAddedModal';
+import AdminCategoryEditedModal from './AdminCategoryEditedModal';
 export function AdminCategory(props){
   
     const navigate = useNavigate();
 
     const [middleCategory, setMiddleCategory] = useState([]);
     const [lowCategory, setLowCategory] = useState([]);
-    const [selectedCategory, setSelectedCategory] = useState({ big: null, medium: null, small: null });
+    const [selectedCategory, setSelectedCategory] = useState({ big: null, medium: null, low: null });
     const { isModal, modalName } = useModalState();
     const {selectedModalOpen, setModalName, closeModal} = useModalActions();
 
@@ -23,6 +24,21 @@ export function AdminCategory(props){
     const [currentPage, setCurrentPage] = useState(1);
 
     const handleCategoryClick = (categoryType, category) => {
+      if(categoryType === "big"){
+        setSelectedCategory(prevState => ({
+          ...prevState,
+          medium: null,
+        }));
+        setSelectedCategory(prevState => ({
+          ...prevState,
+          low: null,
+        }));
+      } else if(categoryType === "medium") {
+        setSelectedCategory(prevState => ({
+          ...prevState,
+          low: null,
+        }));
+      }
       setSelectedCategory(prevState => ({
         ...prevState,
         [categoryType]: category,
@@ -35,18 +51,53 @@ export function AdminCategory(props){
       return props.data.slice(startIndex, startIndex + 5);
     }; 
 
+    //대 카테고리 필터링
     function FilteredHighCategoryData() {
       return categoryData.filter(element => /^[A-Z]$/.test(element.id));
     }
 
+    //중 카테고리 필터링
     function FilteredMiddleCategoryData(itemId) {
       const newData = categoryData.filter(element => new RegExp(`^${itemId}[a-z]$`).test(element.id));
       setMiddleCategory(newData);
     }
 
+    //소 카테고리 필터링
     function FilteredLowCategoryData(itemId) {
       const newData = categoryData.filter(element => new RegExp(`^${itemId}[1-9]|[1-9][0-9]|100.{3,}$`).test(element.id));
       setLowCategory(newData);
+    }
+
+    //카테고리 추가에 필요한 함수
+    function handleOpenMediumModal(){
+      if(selectedCategory.big !== null && selectedCategory.big !== ""){
+        selectedModalOpen("중");
+      } else {
+        alert("대 카테고리를 선택 후 추가해주세요!");
+      }
+    }
+    function handleOpenLowModal(){
+      if(selectedCategory.medium !== null && selectedCategory.medium !== ""){
+        selectedModalOpen("소");
+      } else {
+        alert("중 카테고리를 선택 후 추가해주세요!");
+      }
+    }
+
+    // 카테고리 수정에 필요한 함수
+    function handleEditMediumModal(){
+      if(selectedCategory.big !== null && selectedCategory.big !== ""){
+        selectedModalOpen("수정 : 중");
+      } else {
+        alert("대 카테고리를 선택 후 추가해주세요!");
+      }
+    }
+    function handleEditLowModal(){
+      if(selectedCategory.medium !== null && selectedCategory.medium !== ""){
+        selectedModalOpen("수정 : 소");
+      } else {
+        alert("중 카테고리를 선택 후 추가해주세요!");
+      }
     }
 
     if (isLoading) {
@@ -74,14 +125,12 @@ export function AdminCategory(props){
             </h4>
             <div style={{display: 'flex', gap: '2em'}}>
               <div className={styles.categoryContainer}>
-                <div style={{overflowY: 'auto'}}>
+                <div style={{overflowY: 'auto', overflowX: 'hidden'}}>
                   {categoryData
                   && FilteredHighCategoryData().map((item, index)=> (
                   <div onClick={()=> {
                     setLowCategory([]);
                     handleCategoryClick('big', item.id);
-                    handleCategoryClick('medium', '');
-                    handleCategoryClick('low', '');
                     FilteredMiddleCategoryData(item.id)
                   }} 
                   key={index} 
@@ -94,7 +143,7 @@ export function AdminCategory(props){
                   ))}
                 </div>
                 <div className={styles.buttonBox}>
-                  <button className={styles.button}>수정</button>
+                  <button onClick={()=> selectedModalOpen("수정 : 대")} className={styles.button}>수정</button>
                   <button onClick={()=> selectedModalOpen("대")} className={styles.button}>추가</button>
                 </div>
               </div>
@@ -105,7 +154,6 @@ export function AdminCategory(props){
                       onClick={()=> {
                       FilteredLowCategoryData(item.id)
                       handleCategoryClick('medium', item.id);
-                      handleCategoryClick('low', '');
                       }} 
                       key={index} 
                       className={styles.categoryInner}
@@ -117,8 +165,12 @@ export function AdminCategory(props){
                   ))}
                 </div>
                 <div className={styles.buttonBox}>
-                  <button className={styles.button}>수정</button>
-                  <button className={styles.button} onClick={()=> selectedModalOpen("중")}>추가</button>
+                  <button className={styles.button} onClick={()=> {
+                    handleEditMediumModal();
+                  }}>수정</button>
+                  <button className={styles.button} onClick={()=> {
+                    handleOpenMediumModal();
+                  }}>추가</button>
                 </div>
               </div>
               <div className={styles.categoryContainer}>
@@ -137,8 +189,8 @@ export function AdminCategory(props){
                   ))}
                 </div>
                 <div className={styles.buttonBox}>
-                  <button className={styles.button}>수정</button>
-                  <button className={styles.button} onClick={()=> selectedModalOpen("소")}>추가</button>
+                  <button className={styles.button} onClick={()=> handleEditLowModal()}>수정</button>
+                  <button className={styles.button} onClick={()=> handleOpenLowModal()}>추가</button>
                 </div>
               </div>
             </div>
@@ -218,8 +270,12 @@ export function AdminCategory(props){
             </button>
           </div>
         </div>
-        {isModal &&
-        <AdminCategoryAddedModal/>
+        {(modalName === "대" || modalName === "중" || modalName === "소") 
+        ? isModal &&
+        <AdminCategoryAddedModal selectedCategory={selectedCategory} categoryData={categoryData}/>
+        : (modalName === "수정 : 대" || modalName === "수정 : 중" || modalName === "수정 : 소") 
+        && isModal &&
+        <AdminCategoryEditedModal selectedCategory={selectedCategory} categoryData={categoryData}/>
         }
       </div>
     </div>

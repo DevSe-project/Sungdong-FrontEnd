@@ -6,7 +6,7 @@ import { GetCookie } from '../../../customFn/GetCookie';
 import axios from 'axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-export default function AdminCategoryAddedModal({selectedCategory, categoryData}) {
+export default function AdminCategoryEditedModal({selectedCategory, categoryData}) {
 
   const [inputs, setInputs] = useState([]);
 
@@ -21,7 +21,7 @@ export default function AdminCategoryAddedModal({selectedCategory, categoryData}
   const sendCategoriesToServer = async(category) => {
     try {
       const token = GetCookie('jwt_token');
-      const response = await axios.post("/category", 
+      const response = await axios.patch("/category", 
         JSON.stringify(
           category
         ),
@@ -40,8 +40,9 @@ export default function AdminCategoryAddedModal({selectedCategory, categoryData}
     }
   }
 
-    //상품 등록 함수
-    const { addCategoryMutation } = useMutation({mutationFn: sendCategoriesToServer,
+  
+    //카테고리 수정 함수
+    const { editCategoryMutation } = useMutation({mutationFn: sendCategoriesToServer,
       onSuccess: (data) => {
         // 메세지 표시
         alert(data.message);
@@ -70,42 +71,45 @@ export default function AdminCategoryAddedModal({selectedCategory, categoryData}
     };
   }, [selectedModalClose]);
 
-  // 카테고리 내부 인풋란 추가하는 함수
-  function InputForm() {  
-    const handleAddInput = () => {
-      switch(modalName){
-        case "대": 
-          if(inputs.length >= 15){
-            alert("대 카테고리는 한 번에 최대 15개까지만 생성 가능합니다.");
-            return;
-          } else {
-            setInputs([...inputs, '']);
-          }
-          break;
-        case "중":
-          if(inputs.length >= 20){
-            alert("중 카테고리는 한 번에 최대 20개까지만 생성 가능합니다.");
-            return;
-          } else {
-            setInputs([...inputs, '']);
-          }
-          break;
-        case "소":
-          if(inputs.length >= 30){
-            alert("소 카테고리는 한 번에 최대 30개까지만 생성 가능합니다.");
-            return;
-          } else {
-            setInputs([...inputs, '']);
-          }
-          break;
-        default:
-      }
-    };
+
+  //필터링 함수 호출
+  useEffect(() => {
+    if (modalName === "수정 : 대") {
+      FilteredHighCategoryData();
+    } else if (modalName === "수정 : 중") {
+      FilteredMiddleCategoryData(selectedCategory.big);
+    } else if (modalName === "수정 : 소") {
+      FilteredLowCategoryData(selectedCategory.medium);
+    }
+  }, [modalName, selectedCategory]);
+
+    //대 카테고리 필터링
+    function FilteredHighCategoryData() {
+      const newData = categoryData.filter(element => /^[A-Z]$/.test(element.id));
+      setInputs(newData);
+    }
+
+    //중 카테고리 필터링
+    function FilteredMiddleCategoryData(itemId) {
+      const newData = categoryData.filter(element => new RegExp(`^${itemId}[a-z]$`).test(element.id));
+      setInputs(newData);
+    }
+
+    //소 카테고리 필터링
+    function FilteredLowCategoryData(itemId) {
+      const newData = categoryData.filter(element => new RegExp(`^${itemId}[1-9]|[1-9][0-9]|100.{3,}$`).test(element.id));
+      setInputs(newData);
+    }
+
+
+  // 카테고리 인풋 함수
+  function InputForm() { 
     const handleRemoveInput = (index) => {
       const newInputs = [...inputs];
       newInputs.splice(index, 1);
       setInputs(newInputs);
     };
+
     return (
       <div>
         {inputs.map((input, index) => (
@@ -113,7 +117,7 @@ export default function AdminCategoryAddedModal({selectedCategory, categoryData}
             <input
               type='text'
               placeholder='카테고리를 입력하세요'
-              value={input}
+              value={input.name}
               style={{marginBottom: '0.5em'}}
               className={styles.input}
               onChange={(e) => {
@@ -125,32 +129,34 @@ export default function AdminCategoryAddedModal({selectedCategory, categoryData}
             <button className={styles.button} style={{marginBottom: '0.5em'}} onClick={() => handleRemoveInput(index)}>X</button>
           </div>
         ))}
-        <button className={styles.addedButton} onClick={handleAddInput}>카테고리 추가</button>
       </div>
     );
   }
 
-  function handleAddCategory(){
+  function handleConfirmCategory(){
     switch(modalName){
       case "대":
         const bigCategories = inputs.map((item) => ({
-          name: item
+          id: item.id,
+          name: item.name
         }))
-        addCategoryMutation.mutate(bigCategories)
+        editCategoryMutation.mutate(bigCategories)
         break;
       case "중":
         const mediumCategories = inputs.map((item) => ({
           pid: selectedCategory.big,
-          name: item
+          id: item.id,
+          name: item.name
         }))
-        addCategoryMutation.mutate(mediumCategories);
+        editCategoryMutation.mutate(mediumCategories);
         break;
       case "소":
         const lowCategories = inputs.map((item) => ({
           pid: selectedCategory.medium,
-          name: item
+          id: item.id,
+          name: item.name            
         }))
-        addCategoryMutation.mutate(lowCategories);
+        editCategoryMutation.mutate(lowCategories);
       break;
       default:
     }
@@ -170,19 +176,19 @@ export default function AdminCategoryAddedModal({selectedCategory, categoryData}
           <div className={styles.titleBox}>
             <div className={styles.title}>
               <span style={{color: 'darkred', fontWeight: '650'}}>
-              {modalName === "대" ? modalName : 
-              modalName === "중" ? categoryData.find((item) => item.id === selectedCategory.big)?.name :
-              modalName === "소" && categoryData.find((item) => item.id === selectedCategory.medium)?.name}</span> 카테고리 추가
+              {modalName === "수정 : 대" ? '대' : 
+              modalName === "수정 : 중" ? categoryData.find((item) => item.id === selectedCategory.big)?.name :
+              modalName === "수정 : 소" && categoryData.find((item) => item.id === selectedCategory.medium)?.name}</span> 카테고리 수정
             </div>
           </div>
         </div>
-        {/* 카테고리 추가 인풋란 생성 */}
+        {/* 카테고리 인풋란 생성 */}
         <div className={styles.codeContainer}>
             {InputForm()}
         </div>
         <div className={styles.buttonBox}>
           <button onClick={()=> selectedModalClose(modalName)} className={styles.selectButton}>취소</button>
-          <button onClick={()=> handleAddCategory()} className={styles.selectedButton}>추가</button>
+          <button onClick={()=> handleConfirmCategory()} className={styles.selectedButton}>적용</button>
         </div>
       </div>
     </div>

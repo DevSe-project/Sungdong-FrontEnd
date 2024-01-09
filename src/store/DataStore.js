@@ -504,3 +504,92 @@ export const useProductFilterStore = create((set) => ({
 }));
 export const useProductFilter = () => useProductFilterStore((state) => state.productFilter);
 export const useProductFilterActions = () => useProductFilterStore((state) => state.actions);
+
+/* ----------------OrderFilter STORE---------------- */
+export const useOrderFilterStore = create((set) => ({
+  orderFilter: {
+    orderState: '',
+    dateType: '',
+    date: {
+      start: '',
+      end: ''
+    },
+    deliveryType: '',
+    deliveryNum: '',
+    detailFilter: {
+      userId: '',
+      orderId: '',
+      productId: '',
+      deliveryNum: '',
+      companyName: '',
+      name: '',
+      tel: '',
+    }
+  },
+  actions: {
+    setOrderFilter: (fieldName, value) =>
+      set((state) => ({ orderFilter: { ...state.orderFilter, [fieldName]: value } })),
+    resetOrderFilter: () =>
+      set({   
+      orderFilter: {
+        orderState: '',
+        dateType: '',
+        date: {
+          start: '',
+          end: ''
+        },
+        deliveryType: '',
+        detailFilter: {
+          userId: '',
+          orderId: '',
+          productId: '',
+          deliveryNum: '',
+          companyName: '',
+          name: '',
+          tel: '',
+        }
+      }
+    }),
+    setOrderDetailFilter: (fieldName, value) =>
+      set((state) => ({
+        orderFilter: {
+          ...state.orderFilter,
+          detailFilter: {
+            ...state.orderFilter.detailFilter,
+            [fieldName]: value,
+          },
+        },
+      })),
+    setOrderFilterDate: (fieldName, value) =>
+      set((state) => ({
+        orderFilter: {
+          ...state.orderFilter,
+          date: {
+            ...state.orderFilter.date,
+            [fieldName]: value,
+          },
+        },
+      })),
+  }
+}));
+export const useOrderFilter = () => useOrderFilterStore((state) => state.orderFilter);
+export const useOrderFilterActions = () => useOrderFilterStore((state) => state.actions);
+
+/* ----------------OrderList STORE---------------- */
+export const useOrderListStore = create((set) => ({
+  selectList:[],
+  actions: {
+    toggleSelectList: (value) =>
+    set((state) => ({
+      selectList: state.selectList.includes(value)
+        ? state.selectList.filter((item) => item !== value)
+        : [...state.selectList, value],
+    })),
+    resetSelectList: () =>
+      set({   
+      selectList: []
+    })
+  }
+}));
+export const useOrderSelectList = () => useOrderListStore((state) => state.selectList);
+export const useOrderSelectListActions = () => useOrderListStore((state) => state.actions);

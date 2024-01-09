@@ -9,6 +9,7 @@
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   z-index: 9999;
@@ -26,6 +27,7 @@
   width: 35em;
   height: 45em;
 }
+
 
 /* ------------공통 className------------ */
 .inputContainer {
@@ -99,9 +101,14 @@
 
 .codeContainer {
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+  gap: 0.2em;
+  overflow-y: auto;
+  overflow-x: auto;
 }
 
 .codeInputContainer {
@@ -110,4 +117,88 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
+}
+
+.buttonBox{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 3em;
+  margin-bottom: 3em;
+}
+
+.addedButton{
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+  border: 1px solid lightgray;
+  background-color: lightgrey;
+  padding: 0.5em;
+  padding-left: 1.5em;
+  padding-right: 1.5em;
+  cursor: pointer;
+}
+
+.button{
+  border: 1px solid lightgray;
+  background-color: white;
+  padding: 0.5em;
+  padding-left: 1.5em;
+  padding-right: 1.5em;
+  cursor: pointer;
+}
+
+.selectButton{
+  width: 30%;
+  font-size: 0.8em;
+  font-weight: bold;
+  padding: 0.7rem 1rem;
+  color: #000;
+  background-color: #ccc;
+  border-radius: 5dvw;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 0.5em;
+  margin-right: 0.3em;
+  margin-left: 0.3em;
+}
+
+.selectedButton{
+  width: 30%;
+  font-size: 0.8em;
+  font-weight: bold;
+  padding: 0.7rem 1rem;
+  color: #ffffff;
+  background-color: var(--background-color-set);
+  border-radius: 5dvw;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 0.5em;
+  margin-right: 0.3em;
+  margin-left: 0.3em;
+}
+
+/* 관련상품 탭 */
+.table{
+  width: 80%;
+  border-bottom: 1px solid lightgray;
+  text-align: center;
+  align-items: center;
+}
+
+.tableLocation{
+  display: flex;
+  flex-direction: column;
+  padding: 2em;
+  border: 1px solid lightgray;
+}
+
+.listContainer{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-bottom: 1px solid lightgray;
+  padding: 1em;
 }

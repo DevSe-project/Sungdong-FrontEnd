@@ -4,8 +4,6 @@ import { useNavigate } from 'react-router-dom';
 
 export default function AdminSoldModal(props) {
 
-
-
   const navigate = useNavigate();
 
   // esc키를 누르면 모달창 닫기.

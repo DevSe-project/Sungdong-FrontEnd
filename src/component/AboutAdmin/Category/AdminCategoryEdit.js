@@ -3,15 +3,18 @@ import styles from './AdminCategoryEdit.module.css'
 import { AdminHeader } from '../Layout/Header/AdminHeader'
 import { AdminMenuData } from '../Layout/SideBar/AdminMenuData'
 import { useEffect, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useProduct, useProductActions } from '../../../Store/DataStore';
+import { GetCookie } from '../../../customFn/GetCookie';
+import axios from 'axios';
 export function AdminCategoryEdit(props){
   const [middleCategory, setMiddleCategory] = useState([]);
   const [lowCategory, setLowCategory] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState({ big: null, medium: null, small: null });
+  const [selectedCategory, setSelectedCategory] = useState({ big: null, medium: null, low: null });
   const { isLoading, isError, error, data:categoryData } = useQuery({queryKey:['category']});
   const product = useProduct();
   const {editProduct} = useProductActions();
+  const queryClient = useQueryClient();
     //주소창 입력된 id값 받아오기
     let {id} = useParams();
     const loadData = ()=> {
@@ -34,6 +37,54 @@ export function AdminCategoryEdit(props){
     
       fetchData();
     }, [isLoading]);
+
+    const sendCategoryToServer = async() => {
+      try {
+        const token = GetCookie('jwt_token');
+        const response = await axios.put("/product", 
+          JSON.stringify({
+            category: {
+              id: categoryData.low,
+              pid: categoryData.medium,
+              name: categoryData.find((item) => item.id === selectedCategory.low)?.name
+            }
+          }),
+          {
+            headers : {
+              "Content-Type" : "application/json",
+              'Authorization': `Bearer ${token}`
+            }
+          }
+        )
+        // 성공 시 추가된 상품 정보를 반환합니다.
+        return response.data;
+      } catch (error) {
+        // 실패 시 예외를 throw합니다.
+        throw new Error('상품을 추가하는 중 오류가 발생했습니다.');
+      }
+    }
+    //상품 수정 함수
+    const { editCategoryMutation } = useMutation({mutationFn: sendCategoryToServer,
+      onSuccess: (data) => {
+        // 메세지 표시
+        alert(data.message);
+        console.log('카테고리가 추가/변경 되었습니다.', data);
+        // 상태를 다시 불러와 갱신합니다.
+        queryClient.invalidateQueries(['data']);
+      },
+      onError: (error) => {
+        // 상품 추가 실패 시, 에러 처리를 수행합니다.
+        console.error('카테고리를 추가/변경 하는 중 오류가 발생했습니다.', error);
+      },
+    })
+
+    function handleConfirmCategory(){
+      if(selectedCategory.low !== null && selectedCategory.low !== ""){
+        editCategoryMutation.mutate();
+      } else {
+        alert("소 카테고리까지 모두 선택 후 변경하여 주십시오!")
+      }
+    }
 
     const handleCategoryClick = (categoryType, category) => {
       setSelectedCategory(prevState => ({
@@ -126,7 +177,7 @@ export function AdminCategoryEdit(props){
               </h4>
               <div style={{display: 'flex', gap: '1em', marginTop: '1em', alignItems: 'center'}}>
                 <div className={styles.categoryContainer}>
-                  <div style={{overflowY: 'auto'}}>
+                  <div style={{overflowY: 'auto', overflowX: 'hidden'}}>
                     {categoryData
                     && FilteredHighCategoryData().map((item, index)=> (
                     <div onClick={()=> {
@@ -183,7 +234,7 @@ export function AdminCategoryEdit(props){
               </div>
             </div>
             <div className={styles.buttonBox}>
-              <button className={styles.selectedButton}>변경</button>
+              <button onClick={()=> handleConfirmCategory()} className={styles.selectedButton}>변경</button>
               <button onClick={()=> navigate("/adminMain/category")} className={styles.selectButton}>취소</button>
             </div>
           </div>
