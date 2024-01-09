@@ -6,10 +6,14 @@ import { useEffect, useState } from 'react';
 import React from 'react';
 import { AdminSoldFilter } from './AdminSoldFilter';
 import AdminSoldModal from './AdminSoldModal';
-import { useOrderFilter } from '../../../Store/DataStore';
+import { useModalActions, useModalState, useOrderFilter } from '../../../Store/DataStore';
 import axios from 'axios';
+import AdminDelNumModal from './AdminDelNumModal';
+import AdminCancelModal from './AdminCancelModal';
 export function AdminSoldList(props){
 
+  const { isModal, modalName } = useModalState();
+  const {selectedModalOpen} = useModalActions();
   const [sortOrder, setSortOrder] = useState('asc'); // 초기값으로 오름차순 설정
   const [itemsPerPage, setItemsPerPage] = useState(5);
 
@@ -109,9 +113,8 @@ export function AdminSoldList(props){
             </div>
             {/* 발주, 발송, 취소 처리 박스 */}
             <div className={styles.manageBox}>
-              <button className={styles.button}>발주확인</button>
-              <button className={styles.button}>발송처리</button>
-              <button className={styles.button}>취소처리</button>
+              <button onClick={()=> selectedModalOpen("발송")} className={styles.button}>발송처리</button>
+              <button onClick={()=> selectedModalOpen("취소")} className={styles.button}>취소처리</button>
             </div>
             {/* 리스트 출력 */}
             <table className={styles.table}>
@@ -200,6 +203,12 @@ export function AdminSoldList(props){
             </div>
           </div>
         </main>
+        {modalName === "발송" 
+        ?
+          isModal && <AdminDelNumModal/>
+        : modalName === "취소" &&
+          isModal && <AdminCancelModal/>
+        }
       </div>
     </div>
   )
