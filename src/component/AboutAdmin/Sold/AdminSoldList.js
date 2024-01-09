@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import React from 'react';
 import { AdminSoldFilter } from './AdminSoldFilter';
 import AdminSoldModal from './AdminSoldModal';
-import { useModalActions, useModalState, useOrderFilter } from '../../../Store/DataStore';
+import { useModalActions, useModalState, useOrderFilter, useOrderSelectList, useOrderSelectListActions } from '../../../Store/DataStore';
 import axios from 'axios';
 import AdminDelNumModal from './AdminDelNumModal';
 import AdminCancelModal from './AdminCancelModal';
@@ -14,6 +14,9 @@ export function AdminSoldList(props){
 
   const { isModal, modalName } = useModalState();
   const {selectedModalOpen} = useModalActions();
+  const selectList = useOrderSelectList();
+  const {toggleSelectList, resetSelectList} = useOrderSelectListActions();
+  
   const [sortOrder, setSortOrder] = useState('asc'); // 초기값으로 오름차순 설정
   const [itemsPerPage, setItemsPerPage] = useState(5);
 
@@ -84,6 +87,22 @@ export function AdminSoldList(props){
     setItemsPerPage(parseInt(e.target.value, 10));
   };
 
+const handleDelNumInput = () => {
+  if(selectList.length !== 0){
+    selectedModalOpen("발송");
+  } else {
+    alert("주문이 한 개라도 체크가 되어 있어야 발송처리가 가능합니다.");
+  }
+}
+
+const handleCancel = () => {
+  if(selectList.length !== 0){
+    selectedModalOpen("취소");
+  } else {
+    alert("주문이 한 개라도 체크가 되어 있어야 취소처리가 가능합니다.");
+  }
+}
+
   return(
     <div>
       <AdminHeader/>
@@ -113,8 +132,8 @@ export function AdminSoldList(props){
             </div>
             {/* 발주, 발송, 취소 처리 박스 */}
             <div className={styles.manageBox}>
-              <button onClick={()=> selectedModalOpen("발송")} className={styles.button}>발송처리</button>
-              <button onClick={()=> selectedModalOpen("취소")} className={styles.button}>취소처리</button>
+              <button onClick={()=> handleDelNumInput()} className={styles.button}>발송처리</button>
+              <button onClick={()=> handleCancel()} className={styles.button}>취소처리</button>
             </div>
             {/* 리스트 출력 */}
             <table className={styles.table}>
@@ -140,7 +159,7 @@ export function AdminSoldList(props){
                 ? getCurrentPagePosts().map((item, index)=> (
                 <React.Fragment key={index}>
                   <tr className={styles.list}>
-                    <td><input type="checkbox" name="list"/></td>
+                    <td><input type="checkbox" name="list" checked={selectList.find((filter) => filter === item)} onChange={(e)=> toggleSelectList(item)}/></td>
                     <td><img src={item.image.mini} alt='이미지'></img></td>
                     <td>{item.productId}</td>
                     <td>

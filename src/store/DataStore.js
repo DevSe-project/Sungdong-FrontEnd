@@ -574,3 +574,22 @@ export const useOrderFilterStore = create((set) => ({
 }));
 export const useOrderFilter = () => useOrderFilterStore((state) => state.orderFilter);
 export const useOrderFilterActions = () => useOrderFilterStore((state) => state.actions);
+
+/* ----------------OrderList STORE---------------- */
+export const useOrderListStore = create((set) => ({
+  selectList:[],
+  actions: {
+    toggleSelectList: (value) =>
+    set((state) => ({
+      selectList: state.selectList.includes(value)
+        ? state.selectList.filter((item) => item !== value)
+        : [...state.selectList, value],
+    })),
+    resetSelectList: () =>
+      set({   
+      selectList: []
+    })
+  }
+}));
+export const useOrderSelectList = () => useOrderListStore((state) => state.selectList);
+export const useOrderSelectListActions = () => useOrderListStore((state) => state.actions);
