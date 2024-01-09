@@ -4,17 +4,13 @@ import styles from './Deli_InquireTable.module.css';
 import axios from 'axios';
 
 
+// ❗️❗️❗️ 전체적인 상태 관리를 하는 stateManager 필요
+// ❗️❗️❗️ 서버 연결 전, 임시 데이터를 업데이트할 state 필요
 
 
 export default function Deli_InquireTable() {
 
     const queryClient = useQueryClient();
-
-    // 게시물 데이터와 페이지 번호 상태 관리    
-    const [currentPage, setCurrentPage] = useState(1);
-    const [matchedData, setMatchedData] = useState([]);
-    const [itemsPerPage, setItemsPerPage] = useState(5);
-
 
     // Fetch
     const { isLoading: deliveryLoading, isError: deliveryError, data: delivery } = useQuery({ queryKey: ['delivery'] });
@@ -26,6 +22,14 @@ export default function Deli_InquireTable() {
     useEffect(() => {
         updateMatchedData();
     }, [currentPage, ordered, delivery, product]);
+
+
+
+    // 게시물 데이터와 페이지 번호 상태 관리    
+    const [currentPage, setCurrentPage] = useState(1);
+    const [matchedData, setMatchedData] = useState([]);
+    const [itemsPerPage, setItemsPerPage] = useState(5);
+
 
 
     // 현재 페이지에 해당하는 게시물 목록 가져오기
@@ -97,6 +101,7 @@ export default function Deli_InquireTable() {
                     style={{ backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)' }}
                 >
                     <tr>
+                        {/*  */}
                         <th><input type='checkbox' /></th>
                         <th>주문번호</th>
                         <th>처리상태</th>
