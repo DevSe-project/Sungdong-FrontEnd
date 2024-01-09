@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import styles from './Deli_InquireTable.module.css';
+import axios from 'axios';
+
+
+
+
 export default function Deli_InquireTable() {
 
     const queryClient = useQueryClient();
@@ -11,25 +16,10 @@ export default function Deli_InquireTable() {
     const [itemsPerPage, setItemsPerPage] = useState(5);
 
 
-
     // Fetch
     const { isLoading: deliveryLoading, isError: deliveryError, data: delivery } = useQuery({ queryKey: ['delivery'] });
     const { isLoading: orderedLoading, isError: orderedError, data: ordered } = useQuery({ queryKey: ['ordered'] });
     const { isLoading: productLoading, isError: productError, data: product } = useQuery({ queryKey: ['data'] });
-
-
-    // ConvertState
-    const convertState = (num) => {
-        if (num == 1) {
-            return '배송 준비'
-        }
-        else if (num == 2) {
-            return '배송 중'
-        }
-        else if (num == 3) {
-            return '배송 완료'
-        }
-    }
 
 
     // 업데이트 함수 호출
@@ -44,6 +34,11 @@ export default function Deli_InquireTable() {
         return matchedData.slice(startIndex, startIndex + itemsPerPage);
     };
 
+
+    // deliveryType을 수정하기 위한 함수
+    const updateFirebaseDelivery = () => {
+
+    };
 
 
     // 상태 업데이트를 위한 함수
@@ -102,6 +97,7 @@ export default function Deli_InquireTable() {
                     style={{ backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)' }}
                 >
                     <tr>
+                        <th><input type='checkbox' /></th>
                         <th>주문번호</th>
                         <th>처리상태</th>
                         <th>주문일자</th>
@@ -116,10 +112,17 @@ export default function Deli_InquireTable() {
                 <tbody>
                     {getCurrentPagePosts().map((item, index) => (
                         <tr key={index}>
+                            <td><input type='checkbox' /></td>
                             <td>{item.orderID}</td> {/* 주문번호 */} {/* get으로 불러오기 */}
                             <td> {/* 처리상태 */}
-                                {convertState(item.deliveryType)}
-                                <i class="fa-solid fa-pen" className={styles.modify_deliveryType} onChange={ () => {} }></i>
+                                <select
+                                    value={item.deliveryType}
+                                    onChange={() => { }}
+                                >
+                                    <option value={1}>배송 준비</option>
+                                    <option value={2}>배송 중</option>
+                                    <option value={3}>배송 완료</option>
+                                </select>
                             </td>
                             <td>{item.order_Date}</td> {/* 주문일자 */}
                             <td>{item.ProductId}</td> {/* 상품코드 */}
@@ -156,6 +159,43 @@ export default function Deli_InquireTable() {
                     <i className="far fa-angle-right" />
                 </button>
             </div>
+
+
+
+            {/* HandlerPost */}
+            <div className={styles.checkedAllProcessingPost}>
+                선택 항목 일괄처리
+            </div>
+            {/* Checkedbox */}
+            <table className={styles.checkedboxHandleTable}>
+                {/* Processing CheckedAll - deliveryType */}
+                <tr>
+                    <th>배송 상태</th>
+                    <td>
+                        <select
+                            className={styles.handler}
+                            value=''
+                            onChange={() => { }}
+                        >
+                            <option value={1}>배송 준비</option>
+                            <option value={2}>배송 중</option>
+                            <option value={3}>배송 완료</option>
+                        </select>
+                    </td>
+                </tr>
+                {/* Processing CheckedAll - Transportation */}
+                <tr>
+                    <th>정보 수정</th>
+                    <td><button className={styles.handler}>송장 수정</button></td>
+                </tr>
+                {/* Processing CheckedAll - Cancel */}
+                <tr>
+                    <th>취소 처리</th>
+                    <td>
+                        <button className={styles.handler}>일괄 취소</button>
+                    </td>
+                </tr>
+            </table>
         </div>
     );
 }
