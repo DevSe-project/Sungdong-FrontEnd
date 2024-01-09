@@ -108,6 +108,7 @@
   align-items: center;
   gap: 0.2em;
   overflow-y: auto;
+  overflow-x: auto;
 }
 
 .codeInputContainer {
@@ -116,14 +117,6 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
-}
-
-.roundedBox {
-  width: 50%;
-  border-radius: 10px; /* 모서리를 둥글게 만듭니다. */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과를 추가합니다. */
-  background-color: #ffffff; /* 배경색 설정 */
-  /* 추가적인 스타일을 필요에 따라 설정합니다. */
 }
 
 .buttonBox{
@@ -185,4 +178,27 @@
   margin-top: 0.5em;
   margin-right: 0.3em;
   margin-left: 0.3em;
+}
+
+/* 관련상품 탭 */
+.table{
+  width: 80%;
+  border-bottom: 1px solid lightgray;
+  text-align: center;
+  align-items: center;
+}
+
+.tableLocation{
+  display: flex;
+  flex-direction: column;
+  padding: 2em;
+  border: 1px solid lightgray;
+}
+
+.listContainer{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-bottom: 1px solid lightgray;
+  padding: 1em;
 }

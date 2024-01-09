@@ -48,11 +48,44 @@ export default function AdminCancelModal() {
         </div>
         {/* 정보 */}
         <div className={styles.codeContainer}>
-        {selectList.map((item)=> (
-          <div className={styles.roundedBox}>
-            {item.productName}
-          </div>
-        ))}
+          <table className={styles.table}>
+            <thead 
+            style={{backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)'}}
+            >
+              <tr>
+                <th style={{width:'10%'}}>상품코드</th>
+                <th style={{width:'10%'}}>주문번호</th>
+                <th style={{width:'10%'}}>상품명</th>
+                <th style={{width:'10%'}}>옵션</th>
+                <th style={{width:'10%'}}>주문량</th>
+                <th style={{width:'10%'}}>공급가</th>
+                <th style={{width:'10%', fontWeight: '650'}}>주문가</th>
+              </tr>
+            </thead>
+            <tbody>
+            {selectList.map((item)=> (
+              <tr className={styles.list}>
+                <td>{item.productId}</td>
+                <td>
+                  {item.orderId}
+                </td>
+                <td>
+                  <h5 style={{fontSize: '1.1em', fontWeight: '550'}}>{item.productName}</h5>
+                </td>
+                <td>{item.optionSelected}</td>
+                <td>{item.cnt}</td>
+                <td>\{item.price.toLocaleString()}</td>
+                <td style={{fontWeight: '750'}}>
+                  {item.finprice
+                  ? item.discount
+                  ? `\\${ (item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}`
+                  : `\\${item.finprice.toLocaleString()}`
+                  : `\\${item.price.toLocaleString()}`}
+                </td>
+              </tr>
+            ))}
+            </tbody>
+          </table>
         </div>
         <div className={styles.buttonBox}>
           <button onClick={()=> selectedModalClose(modalName)} className={styles.selectButton}>취소</button>
