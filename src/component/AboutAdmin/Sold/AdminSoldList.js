@@ -141,7 +141,7 @@ const handleCancel = () => {
               style={{backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)'}}
               >
                 <tr>
-                  <th><input type='checkbox'/></th>
+                  <th><input type='checkbox' disabled/></th>
                   <th>이미지</th>
                   <th style={{width:'10%'}}>상품코드</th>
                   <th style={{width:'10%'}}>주문번호</th>

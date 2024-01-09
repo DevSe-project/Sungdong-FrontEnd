@@ -1,9 +1,11 @@
 import { React, useEffect, useState } from 'react';
 import styles from './AdminSoldModal.module.css';
 import { useNavigate } from 'react-router-dom';
-import { useModalActions, useModalState } from '../../../Store/DataStore';
+import { useModalActions, useModalState, useOrderSelectList } from '../../../Store/DataStore';
 
 export default function AdminDelNumModal() {
+
+  const selectList = useOrderSelectList();
 
   const { modalName } = useModalState();
   const {selectedModalOpen, selectedModalClose} = useModalActions();
@@ -47,6 +49,10 @@ export default function AdminDelNumModal() {
         {/* 주문자 정보 */}
         <div className={styles.codeContainer}>
 
+        </div>
+        <div className={styles.buttonBox}>
+          <button onClick={()=> selectedModalClose(modalName)} className={styles.selectButton}>취소</button>
+          <button  className={styles.selectedButton}>{selectList.length}건 일괄처리</button>
         </div>
       </div>
     </div>
