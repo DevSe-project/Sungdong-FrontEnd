@@ -6,7 +6,8 @@ import styles from './Deli_InquireTable.module.css';
 
 // ❗️❗️❗️ 전체적인 상태 관리를 하는 stateManager 필요
 // ❗️❗️❗️ 서버 연결 전, 임시 데이터를 업데이트할 state 필요
-
+// ❗️❗️❗️ 표시항목개수 select-option과 itemPerPage개수 연동
+// ❗️❗️❗️ 필터와 표시하는 항목 연동
 
 export default function Deli_InquireTable() {
 
@@ -23,7 +24,7 @@ export default function Deli_InquireTable() {
     // order, delivery, product에서 동일한 id로 매칭된 데이터를 담는다.
     const [matchedData, setMatchedData] = useState([]);
     // 페이지당 표시할 목록의 개수를 담는다.
-    const [itemsPerPage, setItemsPerPage] = useState(5);
+    const [itemsPerPage, setItemsPerPage] = useState(1);
     // 전체 체크박스의 선택 상태를 담는다.
     const [isEveryCheckbox, setIsEveryCheckbox] = useState(false);
     // 개별 체크박스의 선택 상태를 담는다.
@@ -69,7 +70,7 @@ export default function Deli_InquireTable() {
 
     // 개별 선택
     function selectPerCheckbox() {
-
+        
     }
 
 
@@ -136,9 +137,9 @@ export default function Deli_InquireTable() {
                     value={itemsPerPage}
                     onChange={(e) => setItemsPerPage(Number(e.target.value))}
                 >
-                    <option value={10}>10</option>
-                    <option value={30}>30</option>
-                    <option value={50}>50</option>
+                    <option value={1}>1</option>
+                    <option value={3}>3</option>
+                    <option value={5}>5</option>
                 </select>
             </div>
             {/* main */}
