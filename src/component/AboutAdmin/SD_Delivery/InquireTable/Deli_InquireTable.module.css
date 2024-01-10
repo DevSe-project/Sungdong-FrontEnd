@@ -22,6 +22,9 @@
 .denoteNumber_select {
     font-size: 16px;
     padding: 2px 5px 2px 5px;
+    border: 1px solid lightgray;
+    background-color: white;
+    border-radius: 1vh;
 }
 
 
@@ -75,6 +78,7 @@
 }
 .handler {
     border: 1px solid lightgray;
+    border-radius: 1vh;
     background-color: white;
     padding: 0.5em;
     padding-left: 1.5em;
