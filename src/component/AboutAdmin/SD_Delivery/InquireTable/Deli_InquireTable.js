@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import styles from './Deli_InquireTable.module.css';
-import axios from 'axios';
+
 
 
 // ❗️❗️❗️ 전체적인 상태 관리를 하는 stateManager 필요
@@ -18,18 +18,59 @@ export default function Deli_InquireTable() {
     const { isLoading: productLoading, isError: productError, data: product } = useQuery({ queryKey: ['data'] });
 
 
+    // 게시물 데이터와 페이지 번호 상태 관리    
+    const [currentPage, setCurrentPage] = useState(1);
+    // order, delivery, product에서 동일한 id로 매칭된 데이터를 담는다.
+    const [matchedData, setMatchedData] = useState([]);
+    // 페이지당 표시할 목록의 개수를 담는다.
+    const [itemsPerPage, setItemsPerPage] = useState(5);
+    // 전체 체크박스의 선택 상태를 담는다.
+    const [isEveryCheckbox, setIsEveryCheckbox] = useState(false);
+    // 개별 체크박스의 선택 상태를 담는다.
+    const [selectedItems, setSelectedItems] = useState([]); //여러 객체의 선택을 관리하므로 - 배열
+
+
+
     // 업데이트 함수 호출
     useEffect(() => {
         updateMatchedData();
     }, [currentPage, ordered, delivery, product]);
 
 
+    // 전체 체크박스를 검사하고 값이 모두 있다면 true, 하나라도 비면 false
+    useEffect(() => {
 
-    // 게시물 데이터와 페이지 번호 상태 관리    
-    const [currentPage, setCurrentPage] = useState(1);
-    const [matchedData, setMatchedData] = useState([]);
-    const [itemsPerPage, setItemsPerPage] = useState(5);
+    });
 
+
+    // 전체 선택
+    function selectEveryCheckbox() {
+
+        const item = getCurrentPagePosts();
+        const value = [];
+
+        // 체크박스 중 하나라도 선택되어 있지 않다면 -> 전체 선택
+        if (isEveryCheckbox == false) {
+            for (let j = 0; j < item.length; j++) {
+                value.push(item[j].orderID);
+            }
+            setIsEveryCheckbox(true);
+            setSelectedItems(value);
+        }
+        // 체크박스 전체가 선택되어 있다면 -> 전체 선택 해제
+        if (isEveryCheckbox == true) {
+            setIsEveryCheckbox(false);
+            setSelectedItems([]);
+        }
+
+        console.log(isEveryCheckbox);
+    }
+
+
+    // 개별 선택
+    function selectPerCheckbox() {
+
+    }
 
 
     // 현재 페이지에 해당하는 게시물 목록 가져오기
@@ -53,17 +94,22 @@ export default function Deli_InquireTable() {
 
         // orderID를 기준으로 ordered와 delivery를 매칭
         const matchedDelivery = ordered.map(orderItem => {
-            const deliveryItem = delivery.find(deliveryItem => deliveryItem.orderID === orderItem.orderID);
+            const deliveryItem = delivery.find(
+                deliveryItem => deliveryItem.orderID === orderItem.orderID
+            );
             return { ...orderItem, ...deliveryItem };
         });
 
         // productId를 기준으로 matchedDelivery와 product를 매칭
         const finalMatchedData = matchedDelivery.map(matchedItem => {
-            const productItem = product.find(productItem => productItem.productId === matchedItem.productId);
+            const productItem = product.find(
+                productItem => productItem.productId === matchedItem.productId
+            );
             return { ...matchedItem, ...productItem };
         });
 
         setMatchedData(finalMatchedData);
+        console.log("render");
     };
 
 
@@ -98,11 +144,19 @@ export default function Deli_InquireTable() {
             {/* main */}
             <table>
                 <thead
-                    style={{ backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)' }}
+                    style={{
+                        backgroundColor: 'white',
+                        color: 'black',
+                        boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)'
+                    }}
                 >
                     <tr>
                         {/*  */}
-                        <th><input type='checkbox' /></th>
+                        <th>
+                            <input type='checkbox'
+                                checked={isEveryCheckbox}
+                                onChange={() => selectEveryCheckbox()} />
+                        </th>
                         <th>주문번호</th>
                         <th>처리상태</th>
                         <th>주문일자</th>
@@ -117,7 +171,11 @@ export default function Deli_InquireTable() {
                 <tbody>
                     {getCurrentPagePosts().map((item, index) => (
                         <tr key={index}>
-                            <td><input type='checkbox' /></td>
+                            <td>
+                                <input type='checkbox'
+                                    checked={selectedItems.includes(item.orderID)}
+                                    onChange={() => selectPerCheckbox(item.orderID)} />
+                            </td>
                             <td>{item.orderID}</td> {/* 주문번호 */} {/* get으로 불러오기 */}
                             <td> {/* 처리상태 */}
                                 <select
