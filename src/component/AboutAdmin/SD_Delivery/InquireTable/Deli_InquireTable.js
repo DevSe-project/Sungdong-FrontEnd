@@ -21,10 +21,12 @@ export default function Deli_InquireTable() {
 
     // 게시물 데이터와 페이지 번호 상태 관리    
     const [currentPage, setCurrentPage] = useState(1);
-    // order, delivery, product에서 동일한 id로 매칭된 데이터를 담는다.
-    const [matchedData, setMatchedData] = useState([]);
     // 페이지당 표시할 목록의 개수를 담는다.
     const [itemsPerPage, setItemsPerPage] = useState(1);
+
+    // order, delivery, product에서 동일한 id로 매칭된 데이터를 담는다.
+    const [matchedData, setMatchedData] = useState([]);
+
     // 전체 체크박스의 선택 상태를 담는다.
     const [isEveryCheckbox, setIsEveryCheckbox] = useState(false);
     // 개별 체크박스의 선택 상태를 담는다.
@@ -69,8 +71,12 @@ export default function Deli_InquireTable() {
 
 
     // 개별 선택
-    function selectPerCheckbox() {
-        
+    function selectPerCheckbox(item) {
+        if(item) {
+
+        } else {
+            
+        }
     }
 
 
@@ -126,7 +132,8 @@ export default function Deli_InquireTable() {
 
     return (
         <div className={styles.body}>
-            {/* header */}
+
+            {/* Header */}
             <div className={styles.header}>
                 {/* Post */}
                 <div className={styles.header_txt}>
@@ -142,8 +149,12 @@ export default function Deli_InquireTable() {
                     <option value={5}>5</option>
                 </select>
             </div>
-            {/* main */}
+
+
+
+            {/* Main : List Of Delivery Status */}
             <table>
+                {/* Column Names */}
                 <thead
                     style={{
                         backgroundColor: 'white',
@@ -169,6 +180,8 @@ export default function Deli_InquireTable() {
                         <th>공급가</th>
                     </tr>
                 </thead>
+
+                {/* onDisplay */}
                 <tbody>
                     {getCurrentPagePosts().map((item, index) => (
                         <tr key={index}>
@@ -200,6 +213,7 @@ export default function Deli_InquireTable() {
                 </tbody>
             </table>
 
+            {/* Page Move */}
             <div className={styles.pageMoveHandler}>
                 {/* 이전 페이지 */}
                 <button className={styles.moveButton} onClick={() => {
@@ -261,5 +275,96 @@ export default function Deli_InquireTable() {
                 </tr>
             </table>
         </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     );
 }
