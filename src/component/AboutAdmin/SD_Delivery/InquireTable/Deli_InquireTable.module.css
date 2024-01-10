@@ -9,22 +9,23 @@
 .header {
     width: 100%;
     display: flex;
-    justify-content: space-between;
     margin-bottom: 10px;
+    justify-content:space-between;
 }
 
 .header_txt {
+    display: flex;
     font-size: 20px;
     font-weight: bold;
-
 }
 
 .denoteNumber_select {
     font-size: 16px;
-    padding: 2px 5px 2px 5px;
+    padding: 5px 10px 5px 10px;
     border: 1px solid lightgray;
     background-color: white;
     border-radius: 1vh;
+    cursor: pointer;
 }
 
 
@@ -48,9 +49,7 @@
 .moveButton {
     border: 1px solid lightgray;
     background-color: white;
-    padding: 0.5em;
-    padding-left: 1.5em;
-    padding-right: 1.5em;
+    padding: 0.5em 1em 0.5em 1em;
     cursor: pointer;
 }
 
