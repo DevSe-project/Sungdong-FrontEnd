@@ -15,59 +15,82 @@ export default function Deli_InquireTable() {
     const [itemsPerPage, setItemsPerPage] = useState(3);
     const [matchedData, setMatchedData] = useState([]);
 
-    // 전체 체크박스의 선택 상태를 담는다.
-    const [isEveryCheckbox, setIsEveryCheckbox] = useState(false);
-
     // 업데이트된 데이터의 체크 상태를 관리하는 state
-    const [checkedItems, setCheckedItems] = useState({});
+    const [checkedItems, setCheckedItems] = useState([]);
+
+    // 선택된 배송상태를 담는다
+    const [selectedDeliveryStatus, setSelectedDeliveryStatus] = useState(0);
+
+
 
     // 업데이트 함수 호출
     useEffect(() => {
         updateMatchedData();
     }, [currentPage, ordered, delivery, product]);
 
-    // 페이지가 마운트될 때 초기화
-    useEffect(() => {
-        if (!isEveryCheckbox) {
-            const initialCheckedState = matchedData.reduce((acc, item) => {
-                acc[item.orderID] = false;
-                return acc;
-            }, {});
-            setCheckedItems(initialCheckedState);
-        }
-    }, [isEveryCheckbox, matchedData]);
 
-    // 전체 선택
-    function selectEveryCheckbox() {
-        const item = getCurrentPagePosts();
-        const value = {};
 
-        if (!isEveryCheckbox) {
-            item.forEach((j) => {
-                value[j.orderID] = true;
-            });
-            setIsEveryCheckbox(true);
+    // 전체 체크박스 업데이트
+    function handleAllCheckbox(e) {
+        const checked = e.target.checked;
+
+        if (checked) {
+            // 전체 선택 클릭 시 데이터의 모든 아이템(id)를 담은 배열로 checkItems 상태 업데이트
+            let idArray = getCurrentPagePosts()?.map((item) => item.orderID);
+            setCheckedItems(idArray);
         } else {
-            setIsEveryCheckbox(false);
+            // 모두 체킹 해제
+            setCheckedItems([]);
         }
-
-        setCheckedItems(value);
     }
 
-    // 개별 선택
-    function selectPerCheckbox(orderID) {
-        setCheckedItems((prev) => {
-            const updatedCheckedItems = { ...prev, [orderID]: !prev[orderID] };
 
-            // 모든 개별 항목이 선택되었는지 확인
-            const allItemsSelected = getCurrentPagePosts().every((item) => updatedCheckedItems[item.orderID]);
 
-            // 전체 선택 상태 업데이트
-            setIsEveryCheckbox(allItemsSelected);
-
-            return updatedCheckedItems;
-        });
+    // 체크박스 개별 업데이트
+    function handlePerCheckbox(checked, orderID) {
+        if (checked) {
+            // 단일 선택 시 체크된 아이템을 배열에 추가
+            setCheckedItems(prev => [...prev, orderID]);
+        } else {
+            // 단일 선택 해제 시 체크된 아이템을 제외한 배열 (필터)
+            setCheckedItems(checkedItems.filter((el) => el !== orderID));
+        }
     }
+
+
+
+    // 선택된 항목의 배송상태를 일괄 변경
+    function handleChangeDeliveryStatus(e) {
+        const updateStatus = parseInt(e.target.value, 10);
+
+        // 1, 2, 3 중에 값이 있어야 함수 동작
+        if (updateStatus === 1 || updateStatus === 2 || updateStatus === 3) {
+            if (window.confirm("변경하시겠습니까?")) {
+                // 선택된 항목들에 대해 새로운 배송 상태 설정
+                const updatedData = matchedData.map(item => {
+                    if (checkedItems.includes(item.orderID)) {
+                        return {
+                            ...item,
+                            deliveryStatus: updateStatus
+                        };
+                    }
+                    return item;
+                });
+
+                // 일괄 변경된 데이터로 상태 업데이트
+                setMatchedData(updatedData);
+            } else {
+                setSelectedDeliveryStatus(0); // initialize
+                alert("수정이 취소되었습니다.");
+            }
+        }
+        else {
+            alert("잘못된 선택입니다.");
+            setSelectedDeliveryStatus(0);
+        }
+    }
+
+
 
     // 현재 페이지에 해당하는 게시물 목록 가져오기
     const getCurrentPagePosts = () => {
@@ -75,12 +98,16 @@ export default function Deli_InquireTable() {
         return matchedData.slice(startIndex, startIndex + itemsPerPage);
     };
 
+
+
     // 상태 업데이트를 위한 함수
     const updateMatchedData = () => {
+        // 해당 데이터가 모두 불러와졌을 때만 함수 실행, 하나라도 데이터가 로딩되지 않았다면 함수 종료
         if (!ordered || !delivery || !product) {
             return;
         }
 
+        // delivery와 ordered 매칭
         const matchedDelivery = ordered.map(orderItem => {
             const deliveryItem = delivery.find(
                 deliveryItem => deliveryItem.orderID === orderItem.orderID
@@ -88,19 +115,21 @@ export default function Deli_InquireTable() {
             return { ...orderItem, ...deliveryItem };
         });
 
+        // 매칭된 것(delivery + ordered)와 product 매칭
         const finalMatchedData = matchedDelivery.map(matchedItem => {
             const productItem = product.find(
                 productItem => productItem.productId === matchedItem.productId
             );
 
-            const isChecked = checkedItems[matchedItem.orderID] || false;
-
-            return { ...matchedItem, ...productItem, isChecked };
+            console.log("update");
+            return { ...matchedItem, ...productItem };
         });
 
         setMatchedData(finalMatchedData);
         console.log("render");
     };
+
+
 
     // 데이터 로딩 중 또는 에러 발생 시 처리
     if (deliveryLoading || orderedLoading || productLoading) {
@@ -109,6 +138,8 @@ export default function Deli_InquireTable() {
     if (deliveryError || orderedError || productError) {
         return <p>Error fetching data</p>;
     }
+
+
 
     return (
         <div className={styles.body}>
@@ -140,8 +171,8 @@ export default function Deli_InquireTable() {
                     <tr>
                         <th>
                             <input type='checkbox'
-                                checked={isEveryCheckbox}
-                                onChange={() => selectEveryCheckbox()} />
+                                checked={checkedItems.length === getCurrentPagePosts().length ? true : false}
+                                onChange={(e) => handleAllCheckbox(e)} />
                         </th>
                         <th>주문번호</th>
                         <th>처리상태</th>
@@ -157,18 +188,21 @@ export default function Deli_InquireTable() {
 
                 {/* onDisplay */}
                 <tbody>
-                    {getCurrentPagePosts().map((item, index) => (
+                    {getCurrentPagePosts()?.map((item, index) => (
                         <tr key={index}>
                             <td>
                                 <input type='checkbox'
-                                    checked={checkedItems[item.orderID]}
-                                    onChange={() => selectPerCheckbox(item.orderID)} />
+                                    checked={checkedItems.includes(item.orderID) ? true : false}
+                                    onChange={(e) => handlePerCheckbox(e.target.checked, item.orderID)} />
                             </td>
                             <td>{item.orderID}</td>
                             <td>
                                 <select
                                     value={item.deliveryStatus}
-                                    onChange={() => { }}
+                                    onChange={(e) => { 
+                                        item.deliveryStatus = e.target.value;
+                                        console.log(item.deliveryStatus);
+                                     }}
                                 >
                                     <option value={1}>배송 준비</option>
                                     <option value={2}>배송 중</option>
@@ -222,13 +256,18 @@ export default function Deli_InquireTable() {
                     <td>
                         <select
                             className={styles.handler}
-                            value=''
-                            onChange={() => { }}
+                            value={selectedDeliveryStatus}
+                            onChange={(e) => { setSelectedDeliveryStatus(e.target.value) }}
                         >
+                            <option value={0}>선택</option>
                             <option value={1}>배송 준비</option>
                             <option value={2}>배송 중</option>
                             <option value={3}>배송 완료</option>
                         </select>
+
+                        <button className={styles.applyButton} value={selectedDeliveryStatus} onClick={(e) => handleChangeDeliveryStatus(e)}>
+                            적용
+                        </button>
                     </td>
                 </tr>
                 {/* Processing CheckedAll - Transportation */}
