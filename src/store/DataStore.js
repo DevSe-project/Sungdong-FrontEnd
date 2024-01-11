@@ -1,3 +1,4 @@
+import { otter } from 'fontawesome';
 import { create } from 'zustand'
 
 // ------------------------------데이터 STORE----------------------------//
@@ -582,8 +583,18 @@ export const useOrderListStore = create((set) => ({
     toggleSelectList: (value) =>
     set((state) => ({
       selectList: state.selectList.includes(value)
-        ? state.selectList.filter((item) => item !== value)
+        ? state.selectList.filter((item) => item.orderId !== value.orderId)
         : [...state.selectList, value],
+    })),
+    setDeliveryNum: (item, fieldName, value) =>
+    set((state) => ({
+      selectList: {
+        ...state.selectList.some(list => list.orderId === item.orderId),
+        delivery: {
+          ...state.selectList.delivery,
+          [fieldName]: value,
+        },
+      },
     })),
     resetSelectList: () =>
       set({   

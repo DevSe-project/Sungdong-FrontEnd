@@ -1,11 +1,12 @@
 import { React, useEffect, useState } from 'react';
 import styles from './AdminSoldModal.module.css';
 import { useNavigate } from 'react-router-dom';
-import { useModalActions, useModalState, useOrderSelectList } from '../../../Store/DataStore';
+import { useModalActions, useModalState, useOrderDeliverySet, useOrderSelectList, useOrderSelectListActions } from '../../../Store/DataStore';
 
 export default function AdminDelNumModal() {
 
   const selectList = useOrderSelectList();
+  const { setDeliveryNum } = useOrderSelectListActions();
 
   const { modalName } = useModalState();
   const {selectedModalOpen, selectedModalClose} = useModalActions();
@@ -28,10 +29,9 @@ export default function AdminDelNumModal() {
     };
   }, [selectedModalClose]);
 
-
   return (
     <div className={styles.modalOverlay}>
-      <div className={styles.modalContainer}>
+      <div style={{width: '60em'}} className={styles.modalContainer}>
         {/* Exit Button */}
         <div className={styles.exitButton}>
           <span onClick={() => { selectedModalClose(modalName) }}>
@@ -48,7 +48,56 @@ export default function AdminDelNumModal() {
         </div>
         {/* 주문자 정보 */}
         <div className={styles.codeContainer}>
-
+        <table className={styles.table}>
+          <thead 
+            style={{backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)'}}
+            >
+              <tr>
+                <th style={{width:'10%'}}>상품코드</th>
+                <th style={{width:'10%'}}>주문번호</th>
+                <th style={{width:'10%'}}>상품명</th>
+                <th style={{width:'10%'}}>옵션</th>
+                <th style={{width:'10%'}}>주문량</th>
+                <th style={{width:'10%'}}>공급가</th>
+                <th style={{width:'10%'}}>주문가</th>
+                <th style={{width:'10%', fontWeight: '850'}}>배송사</th>
+                <th style={{width:'10%', fontWeight: '850'}}>송장번호</th>
+              </tr>
+            </thead>
+            <tbody>
+            {selectList.map((item, key)=> (
+              <tr key={key} className={styles.list}>
+                <td>{item.productId}</td>
+                <td>
+                  {item.orderId}
+                </td>
+                <td>
+                  <h5 style={{fontSize: '1.1em', fontWeight: '550'}}>{item.productName}</h5>
+                </td>
+                <td>{item.optionSelected}</td>
+                <td>{item.cnt}</td>
+                <td>\{item.price.toLocaleString()}</td>
+                <td style={{fontWeight: '750'}}>
+                  {item.finprice
+                  ? item.discount
+                  ? `\\${ (item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}`
+                  : `\\${item.finprice.toLocaleString()}`
+                  : `\\${item.price.toLocaleString()}`}
+                </td>
+                <td>
+                  {item.delivery.deliverySelect}
+                </td>
+                <td>
+                  {(item.delivery.deliveryType !== "직접수령" && item.delivery.deliveryType !== "성동택배") ?
+                  <input type='text' value={item.delivery.deliveryNum} onChange={(e)=>setDeliveryNum(item,"deliveryNum", e.target.value)}/>
+                  :
+                  <input disabled/>
+                  }
+                </td>
+              </tr>
+            ))}
+            </tbody>
+          </table>
         </div>
         <div className={styles.buttonBox}>
           <button onClick={()=> selectedModalClose(modalName)} className={styles.selectButton}>취소</button>

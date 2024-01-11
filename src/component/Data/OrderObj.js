@@ -37,6 +37,7 @@ export let OrderObj = [
         delivery: {
             deliverySelect : "대한통운",
             deliveryType : "일반택배",
+            deliveryNum: "",
             deliveryDate : "2023년 08월 14일",
             address : {
                 address : {
@@ -76,6 +77,7 @@ export let OrderObj = [
         delivery: {
             deliverySelect : "대한통운",
             deliveryType : "일반택배",
+            deliveryNum: "",
             deliveryDate : "2023년 08월 14일",
             address : {
                 address : {
@@ -116,6 +118,7 @@ export let OrderObj = [
         delivery: {
             deliverySelect : "대한통운",
             deliveryType : "일반택배",
+            deliveryNum: "",
             deliveryDate : "2023년 08월 14일",
             address : {
                 address : {
@@ -155,6 +158,7 @@ export let OrderObj = [
         delivery: {
             deliverySelect : "대한통운",
             deliveryType : "일반택배",
+            deliveryNum: "",
             deliveryDate : "2023년 08월 14일",
             address : {
                 address : {
@@ -194,6 +198,7 @@ export let OrderObj = [
         delivery: {
             deliverySelect : "대한통운",
             deliveryType : "일반택배",
+            deliveryNum: "",
             deliveryDate : "2023년 08월 14일",
             address : {
                 address : {
@@ -233,6 +238,7 @@ export let OrderObj = [
         delivery: {
             deliverySelect : "대한통운",
             deliveryType : "일반택배",
+            deliveryNum: "",
             deliveryDate : "2023년 08월 14일",
             address : {
                 address : {
@@ -272,6 +278,7 @@ export let OrderObj = [
         delivery: {
             deliverySelect : "대한통운",
             deliveryType : "일반택배",
+            deliveryNum: "",
             deliveryDate : "2023년 08월 14일",
             address : {
                 address : {
