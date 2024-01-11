@@ -1,16 +1,21 @@
 import { React, useEffect, useState } from 'react';
 import styles from './AdminSoldModal.module.css';
 import { useNavigate } from 'react-router-dom';
+import { useModalActions, useModalState } from '../../../Store/DataStore';
 
-export default function AdminSoldModal(props) {
+
+export default function AdminSoldModal({item}) {
 
   const navigate = useNavigate();
+
+  const { modalName } = useModalState();
+  const {selectedModalOpen, selectedModalClose} = useModalActions();
 
   // esc키를 누르면 모달창 닫기.
   useEffect(() => {
     const exit_esc = (event) => {
       if (event.key === 'Escape') {
-        props.setModal(false); // "Esc" 키 누를 때 모달 닫기 함수 호출
+        selectedModalClose(modalName); // "Esc" 키 누를 때 모달 닫기 함수 호출
       }
     };
 
@@ -19,7 +24,7 @@ export default function AdminSoldModal(props) {
     return () => {
       window.removeEventListener('keydown', exit_esc);
     };
-  }, [props.setModal]);
+  }, [selectedModalClose]);
 
 
   // 주문자 정보가 들어있는 객체
@@ -27,79 +32,79 @@ export default function AdminSoldModal(props) {
     { 
       id : 0, 
       title : '성함', 
-      value : props.item.order && props.item.order.name,
+      value : item.order && item.order.name,
     },
     { 
       id : 1, 
       title : '전화번호', 
-      value : props.item.order && props.item.order.tel,
+      value : item.order && item.order.tel,
     },
     { 
       id : 2, 
       title : '주소', 
       value : 
-      props.item.delivery &&
-      props.item.delivery.address &&
-      props.item.delivery.address.address 
+      item.delivery &&
+      item.delivery.address &&
+      item.delivery.address.address 
       ?
-      `${props.item.delivery.address.address.roadAddress} 
-      (${props.item.delivery.address.address.bname}, 
-        ${props.item.delivery.address.address.buildingName 
-      ? props.item.delivery.address.address.buildingName
-      : props.item.delivery.address.address.jibunAddress})
-      ${props.item.delivery.address.addressDetail}` 
+      `${item.delivery.address.address.roadAddress} 
+      (${item.delivery.address.address.bname}, 
+        ${item.delivery.address.address.buildingName 
+      ? item.delivery.address.address.buildingName
+      : item.delivery.address.address.jibunAddress})
+      ${item.delivery.address.addressDetail}` 
       : '',
     },
     { 
       id : 3, 
       title : '배송방식', 
-      value : props.item.delivery &&
-      props.item.delivery.deliveryType &&
-      props.item.delivery.deliveryType === '화물'
+      value : item.delivery &&
+      item.delivery.deliveryType &&
+      item.delivery.deliveryType === '화물'
 
-      ? props.item.delivery.deliverySelect === 'kr.daesin' 
-      ? `${props.item.delivery && props.item.delivery.deliveryType} (배송 업체 : 대신화물)` 
-      : `${props.item.delivery && props.item.delivery.deliveryType} (배송 업체 : 경동화물)`
+      ? item.delivery.deliverySelect === 'kr.daesin' 
+      ? `${item.delivery && item.delivery.deliveryType} (배송 업체 : 대신화물)` 
+      : `${item.delivery && item.delivery.deliveryType} (배송 업체 : 경동화물)`
 
-      : props.item.delivery &&
-      props.item.delivery.deliveryType &&
-      props.item.delivery.deliveryType === '성동택배'
+      : item.delivery &&
+      item.delivery.deliveryType &&
+      item.delivery.deliveryType === '성동택배'
 
-      ? `${props.item.delivery && props.item.delivery.deliveryType} 
-      (배송 예정일 : ${props.item.delivery && props.item.delivery.deliveryDate})`
-      : props.item.delivery && props.item.delivery.deliveryType === '일반택배'
-      ? `${props.item.delivery.deliveryType} (배송사 : 대한통운)`
+      ? `${item.delivery && item.delivery.deliveryType} 
+      (배송 예정일 : ${item.delivery && item.delivery.deliveryDate})`
+      : item.delivery && item.delivery.deliveryType === '일반택배'
+      ? `${item.delivery.deliveryType} (배송사 : 대한통운)`
       : '없음'
     },
     { 
       id : 4, 
       title : '배송 메세지', 
-      value : props.item.delivery && props.item.delivery.deliveryMessage ? props.item.delivery.deliveryMessage : '없음',
+      value : item.delivery && item.delivery.deliveryMessage ? item.delivery.deliveryMessage : '없음',
     },
     { 
       id : 5, 
       title : '성동 메세지', 
-      value : props.item.order && props.item.order.smtMessage ? props.item.order.smtMessage : '없음',
+      value : item.order && item.order.smtMessage ? item.order.smtMessage : '없음',
     },
     { 
       id : 6, 
       title : '결제 방법', 
-      value : props.item.order && props.item.order.payRoute,
+      value : item.order && item.order.payRoute,
     },
     {
       id : 7, 
       title : '증빙 서류 발급', 
-      value : props.item.order && props.item.order.moneyReceipt,
+      value : item.order && item.order.moneyReceipt,
     },
     {
       id: 8,
       title : '명세서',
-      value : props.item.order
-      && props.item.order.moneyReceipt 
-      && props.item.order.transAction
-      ? props.item.order.transAction === '명세서출력'
-      ? `${props.item.order.transAction} (Fax 번호 : ${props.item.order.fax})`
-      : props.item.order.transAction
+      value : item.order
+      && item.order.moneyReceipt 
+      && item.order.transAction
+      ? item.order.transAction === '명세서출력'
+      ? `${item.order.transAction} (Fax 번호 : ${item.order.fax})`
+      : item.order.transAction
       : '발행안함'
     }
   ];
@@ -109,7 +114,7 @@ export default function AdminSoldModal(props) {
       <div className={styles.modalContainer}>
         {/* Exit Button */}
         <div className={styles.exitButton}>
-          <span onClick={() => { props.setModal(false) }}>
+          <span onClick={() => { selectedModalClose(modalName) }}>
             <i className="fas fa-times"></i>
           </span>
         </div>
@@ -123,8 +128,8 @@ export default function AdminSoldModal(props) {
         </div>
         {/* 주문자 정보 */}
         <div className={styles.codeContainer}>
-          {orderInputValue.map((item) => 
-          <div className={styles.codeInputContainer}>
+          {orderInputValue.map((item, key) => 
+          <div key={key} className={styles.codeInputContainer}>
             <div className={styles.label}>
               {item.title}
             </div>

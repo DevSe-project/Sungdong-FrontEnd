@@ -25,9 +25,6 @@ export function AdminSoldList(props){
   // 필터된 항목을 저장할 상태 변수
   const [filteredItems, setFilteredItems] = useState([]);
 
-  //모달 창 생성 state
-  const [modal, setModal] = useState(false);
-
   const navigate = useNavigate();
 
   //결제완료인 목록만 필터링
@@ -159,7 +156,7 @@ const handleCancel = () => {
                 ? getCurrentPagePosts().map((item, index)=> (
                 <React.Fragment key={index}>
                   <tr className={styles.list}>
-                    <td><input type="checkbox" name="list" checked={selectList.find((filter) => filter === item)} onChange={(e)=> toggleSelectList(item)}/></td>
+                    <td><input type="checkbox" name="list" checked={selectList.find((filter) => filter === item) || ''} onChange={(e)=> toggleSelectList(item)}/></td>
                     <td><img src={item.image.mini} alt='이미지'></img></td>
                     <td>{item.productId}</td>
                     <td>
@@ -180,12 +177,12 @@ const handleCancel = () => {
                     </td>
                     <td 
                       className={styles.detailView}
-                      onClick={()=>setModal(!modal)}>
+                      onClick={() => selectedModalOpen(item.orderId)}>
                       보기
                     </td>
                   </tr>
                   {/* 모달 State가 true일때 생성됨 */}
-                  {modal && <AdminSoldModal setModal={setModal} item={item}/>}
+                  {modalName === item.orderId && <AdminSoldModal item={item} />}
                   </React.Fragment>
                   ))
                 : <tr><td colSpan="10">불러들일 데이터가 없습니다.</td></tr>

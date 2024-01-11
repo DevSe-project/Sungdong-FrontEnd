@@ -63,8 +63,8 @@ export default function AdminCancelModal() {
               </tr>
             </thead>
             <tbody>
-            {selectList.map((item)=> (
-              <tr className={styles.list}>
+            {selectList.map((item, key)=> (
+              <tr key={key} className={styles.list}>
                 <td>{item.productId}</td>
                 <td>
                   {item.orderId}
