@@ -51,7 +51,7 @@ export let OrderObj = [
     {
         // 1. userId 일치 여부 확인 ( 주문목록 진입 시 )
         // 2. 주문상품의 id와 전체 상품 데이터의 id를 find, 주문 목록에 불러옴
-        orderId : 0,
+        orderId : 1,
         productId : 1,
         image : {
             mini: image2_mini,
@@ -91,7 +91,7 @@ export let OrderObj = [
     {
         // 1. userId 일치 여부 확인 ( 주문목록 진입 시 )
         // 2. 주문상품의 id와 전체 상품 데이터의 id를 find, 주문 목록에 불러옴
-        orderId : 0,
+        orderId : 2,
         productId : 1,
         image : {
             mini: image2_mini,
@@ -130,7 +130,7 @@ export let OrderObj = [
     {
         // 1. userId 일치 여부 확인 ( 주문목록 진입 시 )
         // 2. 주문상품의 id와 전체 상품 데이터의 id를 find, 주문 목록에 불러옴
-        orderId : 0,
+        orderId : 3,
         productId : 1,
         image : {
             mini: image2_mini,
@@ -169,7 +169,7 @@ export let OrderObj = [
     {
         // 1. userId 일치 여부 확인 ( 주문목록 진입 시 )
         // 2. 주문상품의 id와 전체 상품 데이터의 id를 find, 주문 목록에 불러옴
-        orderId : 0,
+        orderId : 4,
         productId : 1,
         image : {
             mini: image2_mini,
@@ -208,7 +208,7 @@ export let OrderObj = [
     {
         // 1. userId 일치 여부 확인 ( 주문목록 진입 시 )
         // 2. 주문상품의 id와 전체 상품 데이터의 id를 find, 주문 목록에 불러옴
-        orderId : 0,
+        orderId : 5,
         productId : 1,
         image : {
             mini: image2_mini,
@@ -247,7 +247,7 @@ export let OrderObj = [
     {
         // 1. userId 일치 여부 확인 ( 주문목록 진입 시 )
         // 2. 주문상품의 id와 전체 상품 데이터의 id를 find, 주문 목록에 불러옴
-        orderId : 0,
+        orderId : 6,
         productId : 1,
         image : {
             mini: image2_mini,
@@ -286,7 +286,7 @@ export let OrderObj = [
     {
         // 1. userId 일치 여부 확인 ( 주문목록 진입 시 )
         // 2. 주문상품의 id와 전체 상품 데이터의 id를 find, 주문 목록에 불러옴
-        orderId : 0,
+        orderId : 7,
         productId : 1,
         image : {
             mini: image2_mini,
