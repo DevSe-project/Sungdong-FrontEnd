@@ -18,6 +18,9 @@ export default function Deli_InquireTable() {
     // 업데이트된 데이터의 체크 상태를 관리하는 state
     const [checkedItems, setCheckedItems] = useState([]);
 
+    // 선택된 배송상태를 담는다
+    const [selectedDeliveryStatus, setSelectedDeliveryStatus] = useState(0);
+
 
 
     // 업데이트 함수 호출
@@ -43,7 +46,6 @@ export default function Deli_InquireTable() {
 
 
 
-
     // 체크박스 개별 업데이트
     function handlePerCheckbox(checked, orderID) {
         if (checked) {
@@ -52,6 +54,39 @@ export default function Deli_InquireTable() {
         } else {
             // 단일 선택 해제 시 체크된 아이템을 제외한 배열 (필터)
             setCheckedItems(checkedItems.filter((el) => el !== orderID));
+        }
+    }
+
+
+
+    // 선택된 항목의 배송상태를 일괄 변경
+    function handleChangeDeliveryStatus(e) {
+        const updateStatus = parseInt(e.target.value, 10);
+
+        // 1, 2, 3 중에 값이 있어야 함수 동작
+        if (updateStatus === 1 || updateStatus === 2 || updateStatus === 3) {
+            if (window.confirm("변경하시겠습니까?")) {
+                // 선택된 항목들에 대해 새로운 배송 상태 설정
+                const updatedData = matchedData.map(item => {
+                    if (checkedItems.includes(item.orderID)) {
+                        return {
+                            ...item,
+                            deliveryStatus: updateStatus
+                        };
+                    }
+                    return item;
+                });
+
+                // 일괄 변경된 데이터로 상태 업데이트
+                setMatchedData(updatedData);
+            } else {
+                setSelectedDeliveryStatus(0); // initialize
+                alert("수정이 취소되었습니다.");
+            }
+        }
+        else {
+            alert("잘못된 선택입니다.");
+            setSelectedDeliveryStatus(0);
         }
     }
 
@@ -164,7 +199,10 @@ export default function Deli_InquireTable() {
                             <td>
                                 <select
                                     value={item.deliveryStatus}
-                                    onChange={() => { }}
+                                    onChange={(e) => { 
+                                        item.deliveryStatus = e.target.value;
+                                        console.log(item.deliveryStatus);
+                                     }}
                                 >
                                     <option value={1}>배송 준비</option>
                                     <option value={2}>배송 중</option>
@@ -218,13 +256,18 @@ export default function Deli_InquireTable() {
                     <td>
                         <select
                             className={styles.handler}
-                            value=''
-                            onChange={() => { }}
+                            value={selectedDeliveryStatus}
+                            onChange={(e) => { setSelectedDeliveryStatus(e.target.value) }}
                         >
+                            <option value={0}>선택</option>
                             <option value={1}>배송 준비</option>
                             <option value={2}>배송 중</option>
                             <option value={3}>배송 완료</option>
                         </select>
+
+                        <button className={styles.applyButton} value={selectedDeliveryStatus} onClick={(e) => handleChangeDeliveryStatus(e)}>
+                            적용
+                        </button>
                     </td>
                 </tr>
                 {/* Processing CheckedAll - Transportation */}
