@@ -198,11 +198,12 @@ export default function Deli_InquireTable() {
                             <td>{item.orderID}</td>
                             <td>
                                 <select
+                                    className={styles.handler}
                                     value={item.deliveryStatus}
-                                    onChange={(e) => { 
+                                    onChange={(e) => {
                                         item.deliveryStatus = e.target.value;
                                         console.log(item.deliveryStatus);
-                                     }}
+                                    }}
                                 >
                                     <option value={1}>배송 준비</option>
                                     <option value={2}>배송 중</option>
@@ -265,7 +266,7 @@ export default function Deli_InquireTable() {
                             <option value={3}>배송 완료</option>
                         </select>
 
-                        <button className={styles.applyButton} value={selectedDeliveryStatus} onClick={(e) => handleChangeDeliveryStatus(e)}>
+                        <button className={styles.button} value={selectedDeliveryStatus} onClick={(e) => handleChangeDeliveryStatus(e)}>
                             적용
                         </button>
                     </td>
