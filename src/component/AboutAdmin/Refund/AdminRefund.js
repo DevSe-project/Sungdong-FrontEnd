@@ -36,7 +36,7 @@ export function AdminRefund(props){
           <AdminMenuData/>
           <main className={styles.container}>
             <div className={styles.bodyHeader}>
-              <h1>반품 관리</h1>
+              <h1>반품/교환/취소 관리</h1>
             </div>
             {/* 필터 */}
             <AdminRefundFilter/>
@@ -58,9 +58,9 @@ export function AdminRefund(props){
               </div>
               {/* 발주, 발송, 취소 처리 박스 */}
               <div className={styles.manageBox}>
-                <button className={styles.button}>반품 완료처리</button>
-                <button className={styles.button}>반품 거부(철회)처리</button>
-                <button className={styles.button}>교환으로 변경</button>
+                <button className={styles.button}>반품/교환/취소 완료처리</button>
+                <button className={styles.button}>반품/교환/취소 거부(철회)처리</button>
+                <button className={styles.button}>요청 상태 변경</button>
               </div>
               {/* 리스트 출력 */}
               <table className={styles.table}>

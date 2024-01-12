@@ -580,26 +580,30 @@ export const useOrderFilterActions = () => useOrderFilterStore((state) => state.
 export const useOrderListStore = create((set) => ({
   selectList:[],
   actions: {
-    toggleSelectList: (value) =>
+    toggleSelectList: (valueID, value) =>
     set((state) => ({
-      selectList: state.selectList.includes(value)
-        ? state.selectList.filter((item) => item.orderId !== value.orderId)
-        : [...state.selectList, value],
+      selectList: state.selectList.some(item => item.orderId === valueID)
+        ? state.selectList.filter(item => item.orderId !== valueID)
+        : [...state.selectList, { orderId: valueID, value: value }],
     })),
-    setDeliveryNum: (item, fieldName, value) =>
+    setDeliveryNum: (item, value) =>
     set((state) => ({
       selectList: state.selectList.map((list) => {
         if (list.orderId === item.orderId) {
           return {
             ...list,
-            delivery: {
-              ...list.delivery,
-              [fieldName]: value,
-            },
+            deliveryNum: value,
           };
         }
         return list;
       }),
+    })),
+    resetDeliveryNum: () =>
+    set((state) => ({
+      selectList: state.selectList.map((list) => ({
+        ...list,
+        deliveryNum: '',
+      })),
     })),
     resetSelectList: () =>
       set({   

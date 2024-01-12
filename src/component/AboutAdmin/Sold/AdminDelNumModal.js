@@ -2,15 +2,19 @@ import { React, useEffect, useState } from 'react';
 import styles from './AdminSoldModal.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useModalActions, useModalState, useOrderDeliverySet, useOrderSelectList, useOrderSelectListActions } from '../../../Store/DataStore';
+import { useQuery } from '@tanstack/react-query';
 
 export default function AdminDelNumModal() {
 
   const selectList = useOrderSelectList();
-  const { setDeliveryNum } = useOrderSelectListActions();
+  const { setDeliveryNum, resetDeliveryNum } = useOrderSelectListActions();
 
   const { modalName } = useModalState();
   const {selectedModalOpen, selectedModalClose} = useModalActions();
 
+  const { data, isLoading, isError, error } = useQuery({queryKey: ['data']});
+
+  const { data:deliveryData } = useQuery({queryKey: ['delivery']});
 
   const navigate = useNavigate();
 
@@ -19,6 +23,7 @@ export default function AdminDelNumModal() {
     const exit_esc = (event) => {
       if (event.key === 'Escape') {
         selectedModalClose(modalName); // "Esc" 키 누를 때 모달 닫기 함수 호출
+        resetDeliveryNum();
       }
     };
 
@@ -28,6 +33,13 @@ export default function AdminDelNumModal() {
       window.removeEventListener('keydown', exit_esc);
     };
   }, [selectedModalClose]);
+
+  if (isLoading) {
+    return <p>Loading..</p>;
+  }
+  if (isError) {
+    return <p>에러 : {error.message}</p>;
+  }
 
   return (
     <div className={styles.modalOverlay}>
@@ -67,29 +79,39 @@ export default function AdminDelNumModal() {
             <tbody>
             {selectList.map((item, key)=> (
               <tr key={key} className={styles.list}>
-                <td>{item.productId}</td>
+                <td>{item.value.ProductId}</td>
                 <td>
                   {item.orderId}
                 </td>
                 <td>
-                  <h5 style={{fontSize: '1.1em', fontWeight: '550'}}>{item.productName}</h5>
+                <h5 style={{fontSize: '1.1em', fontWeight: '550'}}>
+                  {data.some((data)=> (data.id === item.value.ProductId))
+                    ? data.find((data) => data.id === item.value.ProductId).title
+                    : '상품제목없음'
+                  }
+                </h5>
                 </td>
-                <td>{item.optionSelected}</td>
-                <td>{item.cnt}</td>
-                <td>\{item.price.toLocaleString()}</td>
+                <td>{data.some((data)=> (data.id === item.value.ProductId)).option
+                    ? "옵션있음"
+                    : '옵션없음'
+                  }</td>
+                <td>{item.value.order_cnt}</td>
+                <td>\{item.value.order_productPrice.toLocaleString()}</td>
                 <td style={{fontWeight: '750'}}>
-                  {item.finprice
-                  ? item.discount
-                  ? `\\${ (item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}`
-                  : `\\${item.finprice.toLocaleString()}`
-                  : `\\${item.price.toLocaleString()}`}
+                  \{item.value.order_payAmount.toLocaleString()}
                 </td>
                 <td>
-                  {item.delivery.deliverySelect}
+                  {deliveryData.some((data)=> (data.orderId === item.orderId))
+                    ? deliveryData.find((data) => data.orderId === item.orderId).deliverySelect
+                    : '배송사미정'
+                  }                  
                 </td>
                 <td>
-                  {(item.delivery.deliveryType !== "직접수령" && item.delivery.deliveryType !== "성동택배") ?
-                  <input type='text' value={item.delivery.deliveryNum} onChange={(e)=>setDeliveryNum(item,"deliveryNum", e.target.value)}/>
+                  {deliveryData.some((data)=> (data.orderId === item.orderId))
+                    && (deliveryData.find((data) => data.orderId === item.orderId).deliverySelect !== "성동택배" 
+                    && deliveryData.find((data) => data.orderId === item.orderId).deliverySelect !== "직접수령") 
+                  ?
+                  <input type='text' value={item.deliveryNum} onChange={(e)=>setDeliveryNum(item, e.target.value)}/>
                   :
                   <input disabled/>
                   }
@@ -100,7 +122,10 @@ export default function AdminDelNumModal() {
           </table>
         </div>
         <div className={styles.buttonBox}>
-          <button onClick={()=> selectedModalClose(modalName)} className={styles.selectButton}>취소</button>
+          <button onClick={()=> {
+            selectedModalClose(modalName)
+            resetDeliveryNum();
+            }} className={styles.selectButton}>취소</button>
           <button  className={styles.selectedButton}>{selectList.length}건 일괄처리</button>
         </div>
       </div>

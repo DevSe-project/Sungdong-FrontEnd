@@ -60,6 +60,7 @@ export default function AdminCancelModal() {
                 <th style={{width:'10%'}}>주문량</th>
                 <th style={{width:'10%'}}>공급가</th>
                 <th style={{width:'10%', fontWeight: '650'}}>주문가</th>
+                <th style={{width:'10%'}}>취소사유</th>
               </tr>
             </thead>
             <tbody>
@@ -82,6 +83,7 @@ export default function AdminCancelModal() {
                   : `\\${item.finprice.toLocaleString()}`
                   : `\\${item.price.toLocaleString()}`}
                 </td>
+                <td><input type='text'/></td>
               </tr>
             ))}
             </tbody>

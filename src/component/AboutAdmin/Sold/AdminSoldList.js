@@ -10,6 +10,7 @@ import { useModalActions, useModalState, useOrderFilter, useOrderSelectList, use
 import axios from 'axios';
 import AdminDelNumModal from './AdminDelNumModal';
 import AdminCancelModal from './AdminCancelModal';
+import { useQuery } from '@tanstack/react-query';
 export function AdminSoldList(props){
 
   const { isModal, modalName } = useModalState();
@@ -69,7 +70,9 @@ export function AdminSoldList(props){
   };
 
     // const { data:filteredItems, isLoading, isError } = useQuery(['filteredOrder', orderFilter], () => fetchFilteredProducts(orderFilter));
+    const { data, isLoading, isError, error } = useQuery({queryKey: ['data']});
 
+    const { data:deliveryData } = useQuery({queryKey: ['delivery']});
 
   const handleSearch = () => {
     // 검색 버튼 클릭 시에만 서버에 요청
@@ -98,6 +101,13 @@ const handleCancel = () => {
   } else {
     alert("주문이 한 개라도 체크가 되어 있어야 취소처리가 가능합니다.");
   }
+}
+
+if (isLoading) {
+  return <p>Loading..</p>;
+}
+if (isError) {
+  return <p>에러 : {error.message}</p>;
 }
 
   return(
@@ -143,7 +153,7 @@ const handleCancel = () => {
                   <th style={{width:'10%'}}>상품코드</th>
                   <th style={{width:'10%'}}>주문번호</th>
                   <th style={{width:'10%'}}>배송사</th>
-                  <th style={{width:'10%'}}>발송여부</th>
+                  <th style={{width:'10%'}}>주문상태</th>
                   <th style={{width:'10%'}}>상품명</th>
                   <th style={{width:'10%'}}>옵션</th>
                   <th style={{width:'10%'}}>주문량</th>
@@ -158,40 +168,46 @@ const handleCancel = () => {
                 ? getCurrentPagePosts().map((item, index)=> (
                 <React.Fragment key={index}>
                   <tr className={styles.list}>
-                    <td><input type="checkbox" name="list" checked={selectList.some((filter) => filter.orderId === item.orderId) || ''} onChange={()=> toggleSelectList(item)}/></td>
-                    <td><img src={item.image.mini} alt='이미지'></img></td>
-                    <td>{item.productId}</td>
+                    <td><input type="checkbox" name="list" checked={selectList.some((filter) => filter.orderId === item.id)} onChange={()=> toggleSelectList(item.id, item)}/></td>
+                    <td><img alt='이미지'></img></td>
+                    <td>{item.ProductId}</td>
                     <td>
-                      {item.orderId}
+                      {item.id}
                     </td>
                     <td>
-                      {item.delivery.deliverySelect}
-                    </td>
+                      {deliveryData.some((data)=> (data.orderId === item.id))
+                        ? deliveryData.find((data) => data.orderId === item.id).deliverySelect
+                        : '배송사미정'
+                      }                    </td>
                     <td>
                       {item.orderState === 1 ? "신규주문" :
                       item.orderState === 2 && "발송완료" }
                     </td>
                     <td>
-                      <h5 style={{fontSize: '1.1em', fontWeight: '550'}}>{item.productName}</h5>
+                    <h5 style={{fontSize: '1.1em', fontWeight: '550'}}>
+                      {data.some((data)=> (data.id === item.ProductId))
+                        ? data.find((data) => data.id === item.ProductId).title
+                        : 'Title Not Found'
+                      }
+                    </h5>
                     </td>
-                    <td>{item.optionSelected}</td>
-                    <td>{item.cnt}</td>
-                    <td>\{item.price.toLocaleString()}</td>
+                    <td>{data.some((data)=> (data.id === item.ProductId)).option
+                        ? "옵션있음"
+                        : '옵션없음'
+                      }</td>
+                    <td>{item.order_cnt}</td>
+                    <td>\{item.order_productPrice.toLocaleString()}</td>
                     <td style={{fontWeight: '750'}}>
-                      {item.finprice
-                      ? item.discount
-                      ? `\\${ (item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}`
-                      : `\\${item.finprice.toLocaleString()}`
-                      : `\\${item.price.toLocaleString()}`}
+                      \{item.order_payAmount.toLocaleString()}
                     </td>
                     <td 
                       className={styles.detailView}
-                      onClick={() => selectedModalOpen(item.orderId)}>
+                      onClick={() => selectedModalOpen(item.id)}>
                       보기
                     </td>
                   </tr>
                   {/* 모달 State가 true일때 생성됨 */}
-                  {modalName === item.orderId && <AdminSoldModal item={item} />}
+                  {modalName === item.id && <AdminSoldModal item={item} />}
                   </React.Fragment>
                   ))
                 : <tr><td colSpan="10">불러들일 데이터가 없습니다.</td></tr>
