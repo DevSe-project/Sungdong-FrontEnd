@@ -588,13 +588,18 @@ export const useOrderListStore = create((set) => ({
     })),
     setDeliveryNum: (item, fieldName, value) =>
     set((state) => ({
-      selectList: {
-        ...state.selectList.some(list => list.orderId === item.orderId),
-        delivery: {
-          ...state.selectList.delivery,
-          [fieldName]: value,
-        },
-      },
+      selectList: state.selectList.map((list) => {
+        if (list.orderId === item.orderId) {
+          return {
+            ...list,
+            delivery: {
+              ...list.delivery,
+              [fieldName]: value,
+            },
+          };
+        }
+        return list;
+      }),
     })),
     resetSelectList: () =>
       set({   
