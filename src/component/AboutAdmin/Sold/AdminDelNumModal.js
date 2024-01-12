@@ -85,13 +85,10 @@ export default function AdminDelNumModal() {
                 </td>
                 <td>
                 <h5 style={{fontSize: '1.1em', fontWeight: '550'}}>
-                  {data.some((data)=> (data.id === item.value.ProductId))
-                    ? data.find((data) => data.id === item.value.ProductId).title
-                    : '상품제목없음'
-                  }
+                  {item.value.title}
                 </h5>
                 </td>
-                <td>{data.some((data)=> (data.id === item.value.ProductId)).option
+                <td>{item.option 
                     ? "옵션있음"
                     : '옵션없음'
                   }</td>
@@ -101,17 +98,13 @@ export default function AdminDelNumModal() {
                   \{item.value.order_payAmount.toLocaleString()}
                 </td>
                 <td>
-                  {deliveryData.some((data)=> (data.orderId === item.orderId))
-                    ? deliveryData.find((data) => data.orderId === item.orderId).deliverySelect
-                    : '배송사미정'
-                  }                  
+                  {item.value.deliverySelect}                  
                 </td>
                 <td>
-                  {deliveryData.some((data)=> (data.orderId === item.orderId))
-                    && (deliveryData.find((data) => data.orderId === item.orderId).deliverySelect !== "성동택배" 
-                    && deliveryData.find((data) => data.orderId === item.orderId).deliverySelect !== "직접수령") 
+                  {item.value.deliverySelect !== "성동택배" 
+                    && item.value.deliverySelect !== "직접수령" 
                   ?
-                  <input type='text' value={item.deliveryNum} onChange={(e)=>setDeliveryNum(item, e.target.value)}/>
+                  <input type='text' value={item.value.delivery_num} onChange={(e)=>setDeliveryNum(item, e.target.value)}/>
                   :
                   <input disabled/>
                   }

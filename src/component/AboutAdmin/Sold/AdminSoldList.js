@@ -40,14 +40,6 @@ export function AdminSoldList(){
     updateMatchedData();
   }, [ordered, delivery, product]);
 
-  //렌더링 시 필터링 된 아이템 세팅 - 서버측 처리 변경요망(삭제예정)
-  useEffect(() => {
-    if(filteredItems.length > 0){
-      //결제완료인 목록만 필터링
-      setFilteredItems(filteredItems.filter((item) => item.orderState >= 1));
-    }
-  }, [filteredItems])
-
 
   // 정렬 필터
   useEffect(() => {
@@ -142,7 +134,9 @@ export function AdminSoldList(){
           return { ...orderItem, ...deliveryItem, ...productItem };
       });
 
-      setFilteredItems(finalMatchedData);
+      
+
+      setFilteredItems(finalMatchedData.filter((item) => item.orderState >= 1));
       console.log("render");
       };
 

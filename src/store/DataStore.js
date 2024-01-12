@@ -592,7 +592,10 @@ export const useOrderListStore = create((set) => ({
         if (list.orderId === item.orderId) {
           return {
             ...list,
-            deliveryNum: value,
+            value: {
+              ...list.value,
+              delivery_num: value,
+            },
           };
         }
         return list;
