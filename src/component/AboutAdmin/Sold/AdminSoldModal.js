@@ -32,28 +32,23 @@ export default function AdminSoldModal({item}) {
     { 
       id : 0, 
       title : '성함', 
-      value : item.order && item.order.name,
+      value : item.ordered_receiver && item.ordered_receiver,
     },
     { 
       id : 1, 
       title : '전화번호', 
-      value : item.order && item.order.tel,
+      value : item.order_phone && item.order_phone,
     },
     { 
       id : 2, 
       title : '주소', 
       value : 
-      item.delivery &&
-      item.delivery.address &&
-      item.delivery.address.address 
-      ?
-      `${item.delivery.address.address.roadAddress} 
-      (${item.delivery.address.address.bname}, 
-        ${item.delivery.address.address.buildingName 
-      ? item.delivery.address.address.buildingName
-      : item.delivery.address.address.jibunAddress})
-      ${item.delivery.address.addressDetail}` 
-      : '',
+      `${item.roadAddress} 
+      (${item.bname}, 
+        ${item.buildingName 
+      ? item.buildingName
+      : item.jibunAddress})
+      ${item.addressDetail}` 
     },
     { 
       id : 3, 
@@ -137,7 +132,7 @@ export default function AdminSoldModal({item}) {
               {item.value}
             </div>
           </div>
-         )}
+        )}
         </div>
       </div>
     </div>
