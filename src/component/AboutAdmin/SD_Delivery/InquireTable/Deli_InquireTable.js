@@ -29,6 +29,18 @@ export default function Deli_InquireTable() {
     }, [currentPage, ordered, delivery, product]);
 
 
+    
+    function directUpdate_deliveryStatus(e, currentStatus) {
+        const updateStatus = e.target.value;
+        
+        if(updateStatus === 1 || updateStatus === 2 || updateStatus === 3) {
+            
+        } else {
+            alert("잘못된 선택입니다.");
+        }
+    }
+
+
 
     // 전체 체크박스 업데이트
     function handleAllCheckbox(e) {
@@ -60,8 +72,8 @@ export default function Deli_InquireTable() {
 
 
     // 선택된 항목의 배송상태를 일괄 변경
-    function handleChangeDeliveryStatus(e) {
-        const updateStatus = parseInt(e.target.value, 10);
+    function batchChange_deliveryStatus(e) {
+        const updateStatus = parseInt(e.target.value, 10); // 10진수로 parse
 
         // 1, 2, 3 중에 값이 있어야 함수 동작
         if (updateStatus === 1 || updateStatus === 2 || updateStatus === 3) {
@@ -203,7 +215,7 @@ export default function Deli_InquireTable() {
                                 <select
                                     value={item.deliveryStatus}
                                     onChange={(e) => { 
-                                        item.deliveryStatus = e.target.value;
+                                        directUpdate_deliveryStatus(e, item.deliveryStatus); // temp
                                         console.log(item.deliveryStatus);
                                      }}
                                 >
@@ -275,7 +287,7 @@ export default function Deli_InquireTable() {
                             <option value={3}>배송 완료</option>
                         </select>
 
-                        <button className={styles.applyButton} value={selectedDeliveryStatus} onClick={(e) => handleChangeDeliveryStatus(e)}>
+                        <button className={styles.applyButton} value={selectedDeliveryStatus} onClick={(e) => batchChange_deliveryStatus(e)}>
                             적용
                         </button>
                     </td>
