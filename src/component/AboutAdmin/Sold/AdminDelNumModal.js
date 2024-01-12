@@ -43,7 +43,7 @@ export default function AdminDelNumModal() {
 
   return (
     <div className={styles.modalOverlay}>
-      <div style={{width: '60em'}} className={styles.modalContainer}>
+      <div className={styles.modalContainer}>
         {/* Exit Button */}
         <div className={styles.exitButton}>
           <span onClick={() => { selectedModalClose(modalName) }}>
