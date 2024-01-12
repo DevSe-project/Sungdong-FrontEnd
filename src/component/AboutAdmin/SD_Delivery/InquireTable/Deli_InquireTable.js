@@ -190,12 +190,15 @@ export default function Deli_InquireTable() {
                 <tbody>
                     {getCurrentPagePosts()?.map((item, index) => (
                         <tr key={index}>
+                            {/* 체크박스 */}
                             <td>
                                 <input type='checkbox'
                                     checked={checkedItems.includes(item.orderID) ? true : false}
                                     onChange={(e) => handlePerCheckbox(e.target.checked, item.orderID)} />
                             </td>
+                            {/* 주문번호 */}
                             <td>{item.orderID}</td>
+                            {/* 배송상태 */}
                             <td>
                                 <select
                                     value={item.deliveryStatus}
@@ -209,12 +212,19 @@ export default function Deli_InquireTable() {
                                     <option value={3}>배송 완료</option>
                                 </select>
                             </td>
+                            {/* 주문일자 */}
                             <td>{item.order_Date}</td>
+                            {/* 상품번호 */}
                             <td>{item.ProductId}</td>
+                            {/* 미니 이미지 */}
                             <td>{item.image.mini}</td>
+                            {/* 상품명 */}
                             <td>{item.title}</td>
+                            {/* 옵션 상세 */}
                             <td>{item.option ? item.option : "-"}</td>
+                            {/* 가격 */}
                             <td>{item.price}</td>
+                            {/* 할인률 */}
                             <td>{item.discount === 0 ? item.price : item.price - (item.price * item.discount / 100)}</td>
                         </tr>
                     ))}
