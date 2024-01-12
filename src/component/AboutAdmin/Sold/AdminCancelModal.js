@@ -2,6 +2,7 @@ import { React, useEffect, useState } from 'react';
 import styles from './AdminSoldModal.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useModalActions, useModalState, useOrderSelectList } from '../../../Store/DataStore';
+import { useQuery } from '@tanstack/react-query';
 
 export default function AdminCancelModal() {
 
@@ -10,6 +11,7 @@ export default function AdminCancelModal() {
   const { modalName } = useModalState();
   const {selectedModalOpen, selectedModalClose} = useModalActions();
 
+  const { data, isLoading, isError, error } = useQuery({queryKey: ['data']});
 
   const navigate = useNavigate();
 
@@ -28,6 +30,12 @@ export default function AdminCancelModal() {
     };
   }, [selectedModalClose]);
 
+  if (isLoading) {
+    return <p>Loading..</p>;
+  }
+  if (isError) {
+    return <p>에러 : {error.message}</p>;
+  }
 
   return (
     <div className={styles.modalOverlay}>
@@ -66,23 +74,27 @@ export default function AdminCancelModal() {
             <tbody>
             {selectList.map((item, key)=> (
               <tr key={key} className={styles.list}>
-                <td>{item.productId}</td>
-                <td>
-                  {item.orderId}
-                </td>
-                <td>
-                  <h5 style={{fontSize: '1.1em', fontWeight: '550'}}>{item.productName}</h5>
-                </td>
-                <td>{item.optionSelected}</td>
-                <td>{item.cnt}</td>
-                <td>\{item.price.toLocaleString()}</td>
-                <td style={{fontWeight: '750'}}>
-                  {item.finprice
-                  ? item.discount
-                  ? `\\${ (item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}`
-                  : `\\${item.finprice.toLocaleString()}`
-                  : `\\${item.price.toLocaleString()}`}
-                </td>
+              <td>{item.value.ProductId}</td>
+              <td>
+                {item.orderId}
+              </td>
+              <td>
+              <h5 style={{fontSize: '1.1em', fontWeight: '550'}}>
+                {data.some((data)=> (data.id === item.value.ProductId))
+                  ? data.find((data) => data.id === item.value.ProductId).title
+                  : '상품제목없음'
+                }
+              </h5>
+              </td>
+              <td>{data.some((data)=> (data.id === item.value.ProductId)).option
+                  ? "옵션있음"
+                  : '옵션없음'
+                }</td>
+              <td>{item.value.order_cnt}</td>
+              <td>\{item.value.order_productPrice.toLocaleString()}</td>
+              <td style={{fontWeight: '750'}}>
+                \{item.value.order_payAmount.toLocaleString()}
+              </td>
                 <td><input type='text'/></td>
               </tr>
             ))}
