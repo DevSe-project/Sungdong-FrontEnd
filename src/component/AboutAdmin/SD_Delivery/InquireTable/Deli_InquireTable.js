@@ -242,8 +242,8 @@ export default function Deli_InquireTable() {
                             <td>{item.image.mini}</td>
                             {/* 상품명 */}
                             <td>{item.title}</td>
-                            {/* 옵션 상세 */}
-                            <td>{item.option ? item.option : "-"}</td>
+                            {/* 옵션 상세 - 선택 옵션이 있을 경우만 표시*/}
+                            <td>{item.option ? item.option_selected : "-"}</td>
                             {/* 가격 */}
                             <td>{item.price}</td>
                             {/* 할인률 */}
@@ -316,6 +316,5 @@ export default function Deli_InquireTable() {
                 </tr>
             </table>
         </div>
-        // 병합..제발
     );
 }
