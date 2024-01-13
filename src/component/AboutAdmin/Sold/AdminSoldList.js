@@ -142,6 +142,8 @@ const handleCancel = () => {
                   <th>이미지</th>
                   <th style={{width:'10%'}}>상품코드</th>
                   <th style={{width:'10%'}}>주문번호</th>
+                  <th style={{width:'10%'}}>배송사</th>
+                  <th style={{width:'10%'}}>발송여부</th>
                   <th style={{width:'10%'}}>상품명</th>
                   <th style={{width:'10%'}}>옵션</th>
                   <th style={{width:'10%'}}>주문량</th>
@@ -156,11 +158,18 @@ const handleCancel = () => {
                 ? getCurrentPagePosts().map((item, index)=> (
                 <React.Fragment key={index}>
                   <tr className={styles.list}>
-                    <td><input type="checkbox" name="list" checked={selectList.find((filter) => filter === item) || ''} onChange={(e)=> toggleSelectList(item)}/></td>
+                    <td><input type="checkbox" name="list" checked={selectList.some((filter) => filter.orderId === item.orderId) || ''} onChange={()=> toggleSelectList(item)}/></td>
                     <td><img src={item.image.mini} alt='이미지'></img></td>
                     <td>{item.productId}</td>
                     <td>
                       {item.orderId}
+                    </td>
+                    <td>
+                      {item.delivery.deliverySelect}
+                    </td>
+                    <td>
+                      {item.orderState === 1 ? "신규주문" :
+                      item.orderState === 2 && "발송완료" }
                     </td>
                     <td>
                       <h5 style={{fontSize: '1.1em', fontWeight: '550'}}>{item.productName}</h5>

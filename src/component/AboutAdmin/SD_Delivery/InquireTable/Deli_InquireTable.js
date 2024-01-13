@@ -213,11 +213,12 @@ export default function Deli_InquireTable() {
                             {/* 배송상태 */}
                             <td>
                                 <select
+                                    className={styles.handler}
                                     value={item.deliveryStatus}
                                     onChange={(e) => { 
                                         directUpdate_deliveryStatus(e, item.deliveryStatus); // temp
                                         console.log(item.deliveryStatus);
-                                     }}
+                                    }}
                                 >
                                     <option value={1}>배송 준비</option>
                                     <option value={2}>배송 중</option>

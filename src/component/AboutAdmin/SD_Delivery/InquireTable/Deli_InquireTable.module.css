@@ -10,7 +10,7 @@
     width: 100%;
     display: flex;
     margin-bottom: 10px;
-    justify-content:space-between;
+    justify-content: space-between;
 }
 
 .header_txt {
@@ -64,17 +64,21 @@
     font-weight: bold;
     text-align: left;
 }
+
 .checkedboxHandleTable {
     margin-top: 0.5em;
     width: 40em;
     border-collapse: collapse;
 }
+
 .checkedboxHandleTable tr {
     cursor: default;
 }
+
 .checkedboxHandleTable tr:hover {
     background-color: white;
 }
+
 .handler {
     border: 1px solid lightgray;
     border-radius: 1vh;
@@ -84,7 +88,19 @@
     padding-right: 1.5em;
     cursor: pointer;
 }
+
 .handler:hover {
     background-color: var(--main-color-light);
     transition: background-color 0.3s;
 }
+
+.button{
+    border: 1px solid lightgray;
+    background-color: var(--main-color-original);
+    color: white;
+    margin-left: 1em;
+    padding: 0.5em;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    cursor: pointer;
+  }
