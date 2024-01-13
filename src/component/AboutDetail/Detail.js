@@ -217,7 +217,7 @@ function buyThis(product, count){
       return;
     }
   
-    if (product.option && !optionSelected) {
+    if (product.option && product.option0 !== "" && !optionSelected) {
       alert("필수 옵션을 선택해주세요!");
       return;
     }
@@ -393,7 +393,7 @@ function basketThis(product, count){
                     >
                       <option value="" disabled>옵션 선택</option>
                       {Object.values(detailData.option).map((item, index) =>
-                      <option key={index} value={item[`option${index}`]}>{item[`option${index}`]}</option>
+                      <option key={index} value={item}>{item}</option>
                       )}
                     </select>
                   </div>
