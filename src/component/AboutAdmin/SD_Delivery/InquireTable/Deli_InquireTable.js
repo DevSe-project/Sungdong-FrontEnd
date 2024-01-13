@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import styles from './Deli_InquireTable.module.css';
 
@@ -28,6 +28,21 @@ export default function Deli_InquireTable() {
         updateMatchedData();
     }, [currentPage, ordered, delivery, product]);
 
+    useEffect(()=> {
+        console.log(matchedData);
+    },[matchedData])
+
+    
+    function directUpdate_deliveryStatus(e, currentStatus) {
+        const updateStatus = e.target.value;
+        
+        if(updateStatus === 1 || updateStatus === 2 || updateStatus === 3) {
+            
+        } else {
+            alert("잘못된 선택입니다.");
+        }
+    }
+
 
     
     function directUpdate_deliveryStatus(e, currentStatus) {
@@ -48,7 +63,7 @@ export default function Deli_InquireTable() {
 
         if (checked) {
             // 전체 선택 클릭 시 데이터의 모든 아이템(id)를 담은 배열로 checkItems 상태 업데이트
-            let idArray = getCurrentPagePosts()?.map((item) => item.orderID);
+            let idArray = getCurrentPagePosts()?.map((item) => item.orderId);
             setCheckedItems(idArray);
         } else {
             // 모두 체킹 해제
@@ -80,7 +95,7 @@ export default function Deli_InquireTable() {
             if (window.confirm("변경하시겠습니까?")) {
                 // 선택된 항목들에 대해 새로운 배송 상태 설정
                 const updatedData = matchedData.map(item => {
-                    if (checkedItems.includes(item.orderID)) {
+                    if (checkedItems.includes(item.orderId)) {
                         return {
                             ...item,
                             deliveryStatus: updateStatus
@@ -103,7 +118,6 @@ export default function Deli_InquireTable() {
     }
 
 
-
     // 현재 페이지에 해당하는 게시물 목록 가져오기
     const getCurrentPagePosts = () => {
         const startIndex = (currentPage - 1) * itemsPerPage;
@@ -118,28 +132,22 @@ export default function Deli_InquireTable() {
         if (!ordered || !delivery || !product) {
             return;
         }
-
-        // delivery와 ordered 매칭
-        const matchedDelivery = ordered.map(orderItem => {
+        // ordered와 delivery, product 매칭
+        const finalMatchedData = ordered.map(orderItem => {
             const deliveryItem = delivery.find(
-                deliveryItem => deliveryItem.orderID === orderItem.orderID
+                deliveryItem => deliveryItem.orderId === orderItem.id
             );
-            return { ...orderItem, ...deliveryItem };
-        });
-
-        // 매칭된 것(delivery + ordered)와 product 매칭
-        const finalMatchedData = matchedDelivery.map(matchedItem => {
             const productItem = product.find(
-                productItem => productItem.productId === matchedItem.productId
+                productItem => productItem.id === orderItem.ProductId
             );
 
             console.log("update");
-            return { ...matchedItem, ...productItem };
+            return { ...orderItem, ...deliveryItem, ...productItem };
         });
 
         setMatchedData(finalMatchedData);
         console.log("render");
-    };
+        };
 
 
 
@@ -200,16 +208,17 @@ export default function Deli_InquireTable() {
 
                 {/* onDisplay */}
                 <tbody>
-                    {getCurrentPagePosts()?.map((item, index) => (
+                    {matchedData &&
+                    getCurrentPagePosts()?.map((item, index) => (
                         <tr key={index}>
                             {/* 체크박스 */}
                             <td>
                                 <input type='checkbox'
-                                    checked={checkedItems.includes(item.orderID) ? true : false}
-                                    onChange={(e) => handlePerCheckbox(e.target.checked, item.orderID)} />
+                                    checked={checkedItems.includes(item.orderId) ? true : false}
+                                    onChange={(e) => handlePerCheckbox(e.target.checked, item.orderId)} />
                             </td>
                             {/* 주문번호 */}
-                            <td>{item.orderID}</td>
+                            <td>{item.orderId}</td>
                             {/* 배송상태 */}
                             <td>
                                 <select
@@ -307,5 +316,6 @@ export default function Deli_InquireTable() {
                 </tr>
             </table>
         </div>
+        // 병합..제발
     );
 }

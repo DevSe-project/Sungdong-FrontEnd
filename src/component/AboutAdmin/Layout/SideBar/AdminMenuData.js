@@ -50,7 +50,7 @@ export function AdminMenuData(props){
           link: '/adminMain/yetPay',
         },
         {
-          item: '반품 관리',
+          item: '반품/교환/취소',
           link: '/adminMain/refund'
         }
       ],

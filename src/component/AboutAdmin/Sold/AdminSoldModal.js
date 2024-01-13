@@ -32,79 +32,71 @@ export default function AdminSoldModal({item}) {
     { 
       id : 0, 
       title : '성함', 
-      value : item.order && item.order.name,
+      value : item.ordered_receiver && item.ordered_receiver,
     },
     { 
       id : 1, 
       title : '전화번호', 
-      value : item.order && item.order.tel,
+      value : item.order_phone && item.order_phone,
     },
     { 
       id : 2, 
       title : '주소', 
       value : 
-      item.delivery &&
-      item.delivery.address &&
-      item.delivery.address.address 
-      ?
-      `${item.delivery.address.address.roadAddress} 
-      (${item.delivery.address.address.bname}, 
-        ${item.delivery.address.address.buildingName 
-      ? item.delivery.address.address.buildingName
-      : item.delivery.address.address.jibunAddress})
-      ${item.delivery.address.addressDetail}` 
-      : '',
+      `${item.roadAddress} 
+      (${item.bname}, 
+        ${item.buildingName 
+      ? item.buildingName
+      : item.jibunAddress})
+      ${item.addressDetail}` 
     },
     { 
       id : 3, 
       title : '배송방식', 
-      value : item.delivery &&
-      item.delivery.deliveryType &&
-      item.delivery.deliveryType === '화물'
+      value : item.deliveryType &&
+      item.deliveryType === '화물'
 
-      ? item.delivery.deliverySelect === 'kr.daesin' 
-      ? `${item.delivery && item.delivery.deliveryType} (배송 업체 : 대신화물)` 
-      : `${item.delivery && item.delivery.deliveryType} (배송 업체 : 경동화물)`
+      ? item.deliverySelect === '대신화물' 
+      ? `${item.deliveryType && item.deliveryType} (배송 업체 : 대신화물)` 
+      : `${item.deliveryType && item.deliveryType} (배송 업체 : 경동화물)`
 
-      : item.delivery &&
-      item.delivery.deliveryType &&
-      item.delivery.deliveryType === '성동택배'
+      : item.deliveryType &&
+      item.deliveryType === '성동택배'
 
-      ? `${item.delivery && item.delivery.deliveryType} 
-      (배송 예정일 : ${item.delivery && item.delivery.deliveryDate})`
-      : item.delivery && item.delivery.deliveryType === '일반택배'
-      ? `${item.delivery.deliveryType} (배송사 : 대한통운)`
+      ? `${item.deliveryType && item.deliveryType} 
+      (배송 예정일 : ${item.delivery_date && item.delivery_date})`
+      : item.deliveryType && item.deliveryType === '일반택배'
+      ? `${item.deliveryType} (배송사 : 대한통운)`
       : '없음'
     },
     { 
       id : 4, 
       title : '배송 메세지', 
-      value : item.delivery && item.delivery.deliveryMessage ? item.delivery.deliveryMessage : '없음',
+      value : item.delivery_message ? item.delivery_message : '없음',
     },
     { 
       id : 5, 
       title : '성동 메세지', 
-      value : item.order && item.order.smtMessage ? item.order.smtMessage : '없음',
+      value : item.smtMessage ? item.smtMessage : '없음',
     },
     { 
       id : 6, 
       title : '결제 방법', 
-      value : item.order && item.order.payRoute,
+      value : item.payRoute && item.payRoute,
     },
     {
       id : 7, 
       title : '증빙 서류 발급', 
-      value : item.order && item.order.moneyReceipt,
+      value : item.moneyReceipt && item.moneyReceipt,
     },
     {
       id: 8,
       title : '명세서',
-      value : item.order
-      && item.order.moneyReceipt 
-      && item.order.transAction
-      ? item.order.transAction === '명세서출력'
-      ? `${item.order.transAction} (Fax 번호 : ${item.order.fax})`
-      : item.order.transAction
+      value : item.moneyReceipt 
+      && item.printFax
+      ? item.printFax === true
+      ? `${item.printFax} (Fax 번호 : ${item.faxNum})`
+      : item.printFax
       : '발행안함'
     }
   ];
@@ -137,7 +129,7 @@ export default function AdminSoldModal({item}) {
               {item.value}
             </div>
           </div>
-         )}
+        )}
         </div>
       </div>
     </div>

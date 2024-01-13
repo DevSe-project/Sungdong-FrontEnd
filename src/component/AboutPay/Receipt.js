@@ -190,7 +190,7 @@ export function Receipt(props){
       );
     };
 
-  //정도 자동 입력
+  //정보 자동 입력
   useEffect(() => {
     if(userData){
       const findUser = userData.find(userData => userData.id == inLogin.id);
@@ -755,7 +755,7 @@ export function Receipt(props){
               checked={orderInformation.moneyReceipt === '발행안함'} 
               onChange={(e)=>handleChangeOrderField("moneyReceipt", e.target.value)}
               /> 발행안함
-              {/* <input 
+              <input 
               name='moneyreceipt' 
               type="radio"
               value="현금영수증"
@@ -778,7 +778,7 @@ export function Receipt(props){
                   moneyReceipt : e.target.value,
                 })
               )}
-              /> 세금계산서 */}
+              /> 세금계산서
               <input 
               name='moneyreceipt' 
               type="radio"
@@ -793,25 +793,16 @@ export function Receipt(props){
             <div className={styles.label}>
               <label>명세서</label>
             </div>
-            <div className={styles.input}>
               <input 
               name='transaction' 
               type="radio"
-              value="명세서실물"
-              checked={orderInformation.transAction === '명세서실물'} 
-              onChange={(e)=>handleChangeOrderField("transAction", e.target.value)}
-              /> 명세서 실물 동봉
-              <input 
-              name='transaction' 
-              type="radio"
-              value="명세서출력"
-              checked={orderInformation.transAction === '명세서출력'} 
-              onChange={(e)=>handleChangeOrderField("transAction", e.target.value)}
-              /> 명세서 FAX 출력
+              value={true}
+              checked={orderInformation.printFax === true} 
+              onChange={(e)=>handleChangeOrderField("printFax", e.target.value)}
+              /> 명세서 FAX 출력 여부 (원본은 동봉되어 발송됩니다)
             </div>
-          </div>
           }
-          {orderInformation.transAction === '명세서출력' &&
+          {orderInformation.printFax === true &&
           <div className={styles.formInner}>
             <div className={styles.label}>
               <label>FAX 번호</label>

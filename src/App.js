@@ -705,11 +705,11 @@ export default function App() {
         <Route path='/adminMain/categoryEdit/:id' element={<AdminCategoryEdit data={data} />} />
 
         {/* 주문관리 - 주문 관리*/}
-        <Route path='/adminMain/sold' element={<AdminSoldList data={data} orderData={orderData} />} />
+        <Route path='/adminMain/sold' element={<AdminSoldList data={data} orderData={orderedData} />} />
         {/* 주문관리 - 미결제 주문 관리 */}
-        <Route path='/adminMain/yetPay' element={<AdminNotSoldList orderData={orderData} />} />
+        <Route path='/adminMain/yetPay' element={<AdminNotSoldList orderData={orderedData} />} />
         {/* 주문관리 - 반품 관리 */}
-        <Route path='/adminMain/refund' element={<AdminRefund orderData={orderData} />} />
+        <Route path='/adminMain/refund' element={<AdminRefund orderData={orderedData} />} />
 
         {/* 배송관리 - 배송 상태 관리 */}
         <Route path='/adminMain/SD_delivery/DeliveryManager' element={<DeliveryManagement />}/> 

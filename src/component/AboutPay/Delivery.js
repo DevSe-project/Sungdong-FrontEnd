@@ -138,6 +138,7 @@ export function Delivery(props){
             handleDeliveryAPI(item, 111111111111)
           }}
             className={styles.button}>배송 조회</button>
+            <button className={styles.button}>주문 취소</button>
             <button
             onClick={()=>navigate("/return/request")} 
             className={styles.button}
