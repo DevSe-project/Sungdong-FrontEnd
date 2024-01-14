@@ -243,7 +243,7 @@ export default function Deli_InquireTable() {
                             {/* 상품명 */}
                             <td>{item.title}</td>
                             {/* 옵션 상세 - 선택 옵션이 있을 경우만 표시*/}
-                            <td>{item.option ? item.option_selected : "-"}</td>
+                            <td>{item.optionSelected ? item.optionSelected : "-"}</td>
                             {/* 가격 */}
                             <td>{item.price}</td>
                             {/* 할인률 */}
