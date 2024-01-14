@@ -10,11 +10,8 @@ export default function AdminDelNumModal() {
   const { setSelectListValue, resetDeliveryNum } = useOrderSelectListActions();
 
   const { modalName } = useModalState();
-  const {selectedModalOpen, selectedModalClose} = useModalActions();
+  const { selectedModalClose} = useModalActions();
 
-  const { data, isLoading, isError, error } = useQuery({queryKey: ['data']});
-
-  const { data:deliveryData } = useQuery({queryKey: ['delivery']});
 
   const navigate = useNavigate();
 
@@ -33,13 +30,6 @@ export default function AdminDelNumModal() {
       window.removeEventListener('keydown', exit_esc);
     };
   }, [selectedModalClose]);
-
-  if (isLoading) {
-    return <p>Loading..</p>;
-  }
-  if (isError) {
-    return <p>에러 : {error.message}</p>;
-  }
 
   return (
     <div className={styles.modalOverlay}>
