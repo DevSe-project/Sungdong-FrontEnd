@@ -115,34 +115,30 @@ export function AdminSoldList(){
     }
   }
 
-    // 상태 업데이트를 위한 함수
-    const updateMatchedData = () => {
-      // 해당 데이터가 모두 불러와졌을 때만 함수 실행, 하나라도 데이터가 로딩되지 않았다면 함수 종료
-      if (!ordered || !delivery || !product) {
-          return;
-      }
-      // ordered와 delivery, product 매칭
-      const finalMatchedData = ordered.map(orderItem => {
-          const deliveryItem = delivery.find(
-              deliveryItem => deliveryItem.orderId === orderItem.id
-          );
-          const productItem = product.find(
-              productItem => productItem.id === orderItem.ProductId
-          );
+  // 상태 업데이트를 위한 함수
+  const updateMatchedData = () => {
+    // 해당 데이터가 모두 불러와졌을 때만 함수 실행, 하나라도 데이터가 로딩되지 않았다면 함수 종료
+    if (!ordered || !delivery || !product) {
+        return;
+    }
+    // ordered와 delivery, product 매칭
+    const finalMatchedData = ordered.map(orderItem => {
+        const deliveryItem = delivery.find(
+            deliveryItem => deliveryItem.orderId === orderItem.id
+        );
+        const productItem = product.find(
+            productItem => productItem.id === orderItem.ProductId
+        );
 
-          console.log("update");
-          return { ...orderItem, ...deliveryItem, ...productItem };
-      });
+        return { ...orderItem, ...deliveryItem, ...productItem };
+    });
 
-      
+    setFilteredItems(finalMatchedData.filter((item) => item.orderState >= 1));
+    };
 
-      setFilteredItems(finalMatchedData.filter((item) => item.orderState >= 1));
-      console.log("render");
-      };
-
-    // 데이터 로딩 중 또는 에러 발생 시 처리
-    if (deliveryLoading || orderedLoading || productLoading) {
-      return <p>Loading...</p>;
+  // 데이터 로딩 중 또는 에러 발생 시 처리
+  if (deliveryLoading || orderedLoading || productLoading) {
+    return <p>Loading...</p>;
   }
   if (deliveryError || orderedError || productError) {
       return <p>Error fetching data</p>;
