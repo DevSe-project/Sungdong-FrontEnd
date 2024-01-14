@@ -35,7 +35,7 @@ export default function AdminCancelModal() {
     };
   }, [selectedModalClose]);
 
-  //등록 fetch 함수
+  //fetch 함수
   const fetchUpdateData = async () => {
       try {
         const token = GetCookie('jwt_token');
@@ -77,12 +77,6 @@ export default function AdminCancelModal() {
       console.error('주문 상태를 변경하던 중 오류가 발생했습니다.', error);
     },
   })
-
-
-
-
-
-
 
   if (isLoading) {
     return <p>Loading..</p>;
