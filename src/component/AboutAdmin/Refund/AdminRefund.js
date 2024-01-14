@@ -24,6 +24,8 @@ export function AdminRefund(props){
   const { isLoading: deliveryLoading, isError: deliveryError, data: delivery } = useQuery({ queryKey: ['delivery'] });
   const { isLoading: orderedLoading, isError: orderedError, data: ordered } = useQuery({ queryKey: ['ordered'] });
   const { isLoading: productLoading, isError: productError, data: product } = useQuery({ queryKey: ['data'] });
+  const { isLoading: raeLoading, isError: raeError, data: rae } = useQuery({ queryKey: ['refund'] });
+
 
   const navigate = useNavigate();
   const [sortOrder, setSortOrder] = useState('asc'); // 초기값으로 오름차순 설정
@@ -32,7 +34,7 @@ export function AdminRefund(props){
   // 업데이트 함수 호출
   useEffect(() => {
     updateMatchedData();
-  }, [ordered, delivery, product]);    
+  }, [ordered, delivery, product, rae]);    
 
     // 게시물 데이터와 페이지 번호 상태 관리    
     const [currentPage, setCurrentPage] = useState(1);
@@ -58,31 +60,32 @@ export function AdminRefund(props){
       // 상태 업데이트를 위한 함수
   const updateMatchedData = () => {
     // 해당 데이터가 모두 불러와졌을 때만 함수 실행, 하나라도 데이터가 로딩되지 않았다면 함수 종료
-    if (!ordered || !delivery || !product) {
+    if (!ordered || !delivery || !product || !rae) {
         return;
     }
-    // ordered와 delivery, product 매칭
+    // ordered와 delivery, product, rae 매칭
     const finalMatchedData = ordered.map(orderItem => {
         const deliveryItem = delivery.find(
             deliveryItem => deliveryItem.orderId === orderItem.id
+        );
+        const raeItem = rae.find(
+          raeItem => raeItem.rae_productId === orderItem.ProductId
         );
         const productItem = product.find(
             productItem => productItem.id === orderItem.ProductId
         );
 
-        return { ...orderItem, ...deliveryItem, ...productItem };
+        return { ...orderItem, ...deliveryItem, ...raeItem, ...productItem };
     });
 
-    
-
-    setFilteredItems(finalMatchedData.filter((item) => item.orderState >= 1));
+    setFilteredItems(finalMatchedData.filter((item) => item.raeState >= 1));
     };
 
   // 데이터 로딩 중 또는 에러 발생 시 처리
-  if (deliveryLoading || orderedLoading || productLoading) {
+  if (deliveryLoading || orderedLoading || productLoading || raeLoading) {
     return <p>Loading...</p>;
   }
-  if (deliveryError || orderedError || productError) {
+  if (deliveryError || orderedError || productError || raeError) {
       return <p>Error fetching data</p>;
   }
     return(
@@ -129,14 +132,14 @@ export function AdminRefund(props){
                   <th>이미지</th>
                   <th style={{width:'10%'}}>상품코드</th>
                   <th style={{width:'10%'}}>주문번호</th>
-                  <th style={{width:'10%'}}>배송사</th>
-                  <th style={{width:'10%'}}>주문상태</th>
+                  <th style={{width:'10%'}}>구분</th>
+                  <th style={{width:'10%'}}>처리상태</th>
                   <th style={{width:'10%'}}>상품명</th>
                   <th style={{width:'10%'}}>옵션</th>
-                  <th style={{width:'10%'}}>주문량</th>
+                  <th style={{width:'10%'}}>반환수량</th>
                   <th style={{width:'10%'}}>공급가</th>
-                  <th style={{width:'10%', fontWeight: '650'}}>주문가</th>
-                  <th style={{width:'13%', fontWeight: '650'}}>주문자 정보</th>
+                  <th style={{width:'10%', fontWeight: '650'}}>반환금액</th>
+                  <th style={{width:'10%', fontWeight: '650'}}>주문자 정보</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -151,11 +154,16 @@ export function AdminRefund(props){
                       {item.id}
                     </td>
                     <td>
-                      {item.deliverySelect}
+                      {item.raeTypeId === 1 ? "반품" :
+                      item.raeTypeId === 2 ? "교환" :
+                      item.raeTypeId === 3 && "취소"}
                     </td>
                     <td>
-                      {item.orderState === 1 ? "신규주문" :
-                      item.orderState === 2 && "발송완료" }
+                      {item.raeState === 1 ? "반품요청" :
+                      item.raeState === 2 ? "수거중" :
+                      item.raeState === 3 ? "수거완료" :
+                      item.raeState === 4 ? "반품완료" :
+                      item.raeState === 5 && "반품철회"}
                     </td>
                     <td>
                     <h5 style={{fontSize: '1.1em', fontWeight: '550'}}>
@@ -168,10 +176,10 @@ export function AdminRefund(props){
                         : '옵션없음'
                       }
                       </td>
-                    <td>{item.order_cnt}</td>
+                    <td>{item.rae_cnt}</td>
                     <td>\{item.order_productPrice.toLocaleString()}</td>
                     <td style={{fontWeight: '750'}}>
-                      \{item.order_payAmount.toLocaleString()}
+                      \{item.rae_amount.toLocaleString()}
                     </td>
                     <td 
                       className={styles.detailView}
