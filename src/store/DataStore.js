@@ -616,3 +616,70 @@ export const useOrderListStore = create((set) => ({
 }));
 export const useOrderSelectList = () => useOrderListStore((state) => state.selectList);
 export const useOrderSelectListActions = () => useOrderListStore((state) => state.actions);
+
+/* ----------------RefundFilter STORE---------------- */
+export const useRefundFilterStore = create((set) => ({
+  raeFilter: {
+    raeState: '',
+    date: {
+      start: '',
+      end: ''
+    },
+    raeDateType: '',
+    detailFilter: {
+      userId: '',
+      orderId: '',
+      productId: '',
+      deliveryNum: '',
+      companyName: '',
+      name: '',
+      tel: '',
+    }
+  },
+  actions: {
+    setRaeFilter: (fieldName, value) =>
+      set((state) => ({ orderFilter: { ...state.raeFilter, [fieldName]: value } })),
+    resetRaeFilter: () =>
+      set({   
+        raeFilter: {
+          raeState: '',
+          date: {
+            start: '',
+            end: ''
+          },
+          raeDateType: '',
+          detailFilter: {
+            userId: '',
+            orderId: '',
+            productId: '',
+            deliveryNum: '',
+            companyName: '',
+            name: '',
+            tel: '',
+          }
+        }
+    }),
+    setRaeDetailFilter: (fieldName, value) =>
+      set((state) => ({
+        raeFilter: {
+          ...state.raeFilter,
+          detailFilter: {
+            ...state.raeFilter.detailFilter,
+            [fieldName]: value,
+          },
+        },
+      })),
+    setRaeFilterDate: (fieldName, value) =>
+      set((state) => ({
+        raeFilter: {
+          ...state.raeFilter,
+          date: {
+            ...state.raeFilter.date,
+            [fieldName]: value,
+          },
+        },
+      })),
+  }
+}));
+export const useRaeFilter = () => useRefundFilterStore((state) => state.raeFilter);
+export const useRaeFilterActions = () => useRefundFilterStore((state) => state.actions);

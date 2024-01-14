@@ -13,10 +13,7 @@ export function AdminNotSoldList(props){
   //ZUSTAND STATE
   const { isModal, modalName } = useModalState();
   const {selectedModalOpen} = useModalActions();
-
-  //모달 창 생성 state
-  const [modal, setModal] = useState(false);
-
+  
   //데이터 불러오기
     // Fetch
     const { isLoading: deliveryLoading, isError: deliveryError, data: delivery } = useQuery({ queryKey: ['delivery'] });

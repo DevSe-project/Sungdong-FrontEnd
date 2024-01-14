@@ -116,6 +116,12 @@ export default function App() {
     const querySnapshot = await getDocs(collection(db, 'OrderData')); // 'ProductData'는 컬렉션 이름
     return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
   };
+
+  //반품 데이터 fetch
+  const fetchRefundData = async () => {
+    const querySnapshot = await getDocs(collection(db, 'RefundData')); // 'ProductData'는 컬렉션 이름
+    return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+  };
   
 
   // react-query : 서버에서 받아온 데이터 캐싱, 변수에 저장
@@ -139,6 +145,11 @@ export default function App() {
     const { data:orderedData } = useQuery({
       queryKey: ['ordered'],
       queryFn: () => fetchOrderData()
+    });
+
+    const { data:refundData } = useQuery({
+      queryKey: ['refund'],
+      queryFn: () => fetchRefundData()
     })
 
   // -----UserData fetch
