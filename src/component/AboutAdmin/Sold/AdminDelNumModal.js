@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 export default function AdminDelNumModal() {
 
   const selectList = useOrderSelectList();
-  const { setDeliveryNum, resetDeliveryNum } = useOrderSelectListActions();
+  const { setSelectListValue, resetDeliveryNum } = useOrderSelectListActions();
 
   const { modalName } = useModalState();
   const {selectedModalOpen, selectedModalClose} = useModalActions();
@@ -104,7 +104,7 @@ export default function AdminDelNumModal() {
                   {item.value.deliverySelect !== "성동택배" 
                     && item.value.deliverySelect !== "직접수령" 
                   ?
-                  <input type='text' value={item.value.delivery_num} onChange={(e)=>setDeliveryNum(item, e.target.value)}/>
+                  <input type='text' value={item.value.delivery_num} onChange={(e)=>setSelectListValue(item, "delivery_num", e.target.value)}/>
                   :
                   <input disabled/>
                   }

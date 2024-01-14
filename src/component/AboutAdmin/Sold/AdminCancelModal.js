@@ -1,12 +1,13 @@
 import { React, useEffect, useState } from 'react';
 import styles from './AdminSoldModal.module.css';
 import { useNavigate } from 'react-router-dom';
-import { useModalActions, useModalState, useOrderSelectList } from '../../../Store/DataStore';
+import { useModalActions, useModalState, useOrderSelectList, useOrderSelectListActions } from '../../../Store/DataStore';
 import { useQuery } from '@tanstack/react-query';
 
 export default function AdminCancelModal() {
 
   const selectList = useOrderSelectList();
+  const {setSelectListValue} = useOrderSelectListActions();
 
   const { modalName } = useModalState();
   const {selectedModalOpen, selectedModalClose} = useModalActions();
@@ -95,7 +96,7 @@ export default function AdminCancelModal() {
               <td style={{fontWeight: '750'}}>
                 \{item.value.order_payAmount.toLocaleString()}
               </td>
-                <td><input type='text'/></td>
+                <td><input type='text' value={item.value.cancelReason} onChange={(e)=>setSelectListValue(item, "cancelReason", e.target.value)}/></td>
               </tr>
             ))}
             </tbody>

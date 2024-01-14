@@ -95,7 +95,7 @@ export default function AdminSoldModal({item}) {
       value : item.moneyReceipt 
       && item.printFax
       ? item.printFax === true
-      ? `${item.printFax} (Fax 번호 : ${item.faxNum})`
+      ? `출력 (FAX 번호 : ${item.faxNum})`
       : item.printFax
       : '발행안함'
     }

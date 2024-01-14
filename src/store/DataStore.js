@@ -586,7 +586,7 @@ export const useOrderListStore = create((set) => ({
         ? state.selectList.filter(item => item.orderId !== valueID)
         : [...state.selectList, { orderId: valueID, value: value }],
     })),
-    setDeliveryNum: (item, value) =>
+    setSelectListValue: (item, fieldkey, value) =>
     set((state) => ({
       selectList: state.selectList.map((list) => {
         if (list.orderId === item.orderId) {
@@ -594,7 +594,7 @@ export const useOrderListStore = create((set) => ({
             ...list,
             value: {
               ...list.value,
-              delivery_num: value,
+              [fieldkey]: value,
             },
           };
         }

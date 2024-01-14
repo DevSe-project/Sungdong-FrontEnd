@@ -224,8 +224,8 @@ export function AdminSoldList(){
                     </h5>
                     </td>
                     <td>
-                      {item.option
-                        ? "옵션있음"
+                      {item.optionSelected
+                        ? item.optionSelected
                         : '옵션없음'
                       }
                       </td>
