@@ -120,9 +120,9 @@ export function AdminRefund(){
               </div>
               {/* 발주, 발송, 취소 처리 박스 */}
               <div className={styles.manageBox}>
-                <button className={styles.button} onClick={()=> selectedModalOpen("완료")}>반품/교환/취소 완료처리</button>
-                <button className={styles.button} onClick={()=> selectedModalOpen("철회")}>반품/교환/취소 거부(철회)처리</button>
-                <button className={styles.button} onClick={()=> selectedModalOpen("상태 변경")}>처리 상태 변경</button>
+                <button className={styles.button} onClick={()=> selectList.length > 0 && selectedModalOpen("완료")}>반품/교환/취소 완료처리</button>
+                <button className={styles.button} onClick={()=> selectList.length > 0 && selectedModalOpen("철회")}>반품/교환/취소 거부(철회)처리</button>
+                <button className={styles.button} onClick={()=> selectList.length > 0 && selectedModalOpen("상태 변경")}>처리 상태 변경</button>
               </div>
               {/* 리스트 출력 */}
               <table className={styles.table}>

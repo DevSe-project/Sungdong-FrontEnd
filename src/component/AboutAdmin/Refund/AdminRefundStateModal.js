@@ -18,6 +18,7 @@ export default function AdminRefundStateModal({selectList}) {
     const exit_esc = (event) => {
       if (event.key === 'Escape') {
         selectedModalClose(modalName); // "Esc" 키 누를 때 모달 닫기 함수 호출
+        resetSelectList();
       }
     };
 
@@ -107,7 +108,6 @@ export default function AdminRefundStateModal({selectList}) {
               <th style={{width:'10%'}}>옵션</th>
               <th style={{width:'10%'}}>반환수량</th>
               <th style={{width:'10%', fontWeight: '650'}}>반환금액</th>
-              {modalName === "철회" && <th style={{width:'10%', fontWeight: '650'}}>철회사유</th>}
             </tr>
             </thead>
             <tbody>
@@ -145,12 +145,6 @@ export default function AdminRefundStateModal({selectList}) {
                 <td style={{fontWeight: '750'}}>
                   \{item.value.rae_amount.toLocaleString()}
                 </td>
-                {modalName === "철회" 
-                && 
-                <td>
-                  <input type='text' value={item.value.rae_cancelReason} onChange={(e)=> setSelectListValue(item, "rae_cancelReason", e.target.value)}/>
-                </td>
-                }
               </tr>
                 ))
               }
@@ -158,7 +152,10 @@ export default function AdminRefundStateModal({selectList}) {
           </table>
         </div>
         <div className={styles.buttonBox}>
-          <button onClick={()=> selectedModalClose(modalName)} className={styles.selectButton}>취소</button>
+          <button onClick={()=> {
+            selectedModalClose(modalName);
+            resetSelectList();
+            }} className={styles.selectButton}>취소</button>
           <button  className={styles.selectedButton} onClick={()=>{
             refundMutate.mutate();
             resetSelectList();
