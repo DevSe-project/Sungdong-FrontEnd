@@ -5,7 +5,7 @@ import { GetCookie } from '../../../customFn/GetCookie';
 import axios from 'axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-export default function AdminRefundDialog({selectList}) {
+export default function AdminRefundStateModal({selectList}) {
 
   const { modalName } = useModalState();
   const {selectedModalClose} = useModalActions();
@@ -35,15 +35,8 @@ export default function AdminRefundDialog({selectList}) {
         const completeItemsData = selectList.map((item) => ({
           orderId: item.orderId,
           rae_id: item.value.rae_id,
-          raeState: 4,
+          raeState: item.value.raeState,
         }))
-        const cancelItemsData = selectList.map((item) => ({
-          orderId: item.orderId,
-          rae_id: item.value.rae_id,
-          raeState: 5,
-          rae_cancelReason: item.value.rae_cancelReason
-        }))
-        if(modalName === "완료"){
         const response = await axios.patch("/rae", 
           JSON.stringify(
             completeItemsData
@@ -56,20 +49,6 @@ export default function AdminRefundDialog({selectList}) {
           }
         )
         return response.data;
-      } else if(modalName === "철회"){
-        const response = await axios.patch("/rae", 
-        JSON.stringify(
-          cancelItemsData
-        ),
-        {
-          headers : {
-            "Content-Type" : "application/json",
-            'Authorization': `Bearer ${token}`
-          }
-        }
-      )
-      return response.data;
-      }
         // 성공 시 추가된 상품 정보를 반환합니다.
       } catch (error) {
         // 실패 시 예외를 throw합니다.
@@ -145,11 +124,11 @@ export default function AdminRefundDialog({selectList}) {
                   item.value.raeTypeId === 3 && "취소"}
                 </td>
                 <td>
-                  {item.value.raeState === 1 ? "반품요청" :
-                  item.value.raeState === 2 ? "수거중" :
-                  item.value.raeState === 3 ? "수거완료" :
-                  item.value.raeState === 4 ? "반품완료" :
-                  item.value.raeState === 5 && "반품철회"}
+                  <select className={styles.select} value={item.value.raeState} onChange={(e)=> setSelectListValue(item, "raeState", e.target.value)}>
+                    <option value={1}>반품 요청</option>
+                    <option value={2}>수거 중</option>
+                    <option value={3}>수거 완료</option>
+                  </select>
                 </td>
                 <td>
                 <h5 style={{fontSize: '1.1em', fontWeight: '550'}}>

@@ -202,3 +202,17 @@
   border-bottom: 1px solid lightgray;
   padding: 1em;
 }
+
+.input,
+.select {
+    width: 100%;
+    padding: 3px;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.input:hover,
+.select:hover {
+    border-color: rgb(174, 79, 44);
+}

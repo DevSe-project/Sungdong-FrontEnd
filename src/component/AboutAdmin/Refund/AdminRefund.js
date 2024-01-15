@@ -9,6 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useModalActions, useModalState, useOrderSelectList, useOrderSelectListActions } from '../../../Store/DataStore';
 import AdminRefundModal from './AdminRefundModal';
 import AdminRefundDialog from './AdminRefundDialog';
+import AdminRefundStateModal from './AdminRefundStateModal';
 
 export function AdminRefund(){
 
@@ -121,7 +122,7 @@ export function AdminRefund(){
               <div className={styles.manageBox}>
                 <button className={styles.button} onClick={()=> selectedModalOpen("완료")}>반품/교환/취소 완료처리</button>
                 <button className={styles.button} onClick={()=> selectedModalOpen("철회")}>반품/교환/취소 거부(철회)처리</button>
-                <button className={styles.button}>처리 상태 변경</button>
+                <button className={styles.button} onClick={()=> selectedModalOpen("상태 변경")}>처리 상태 변경</button>
               </div>
               {/* 리스트 출력 */}
               <table className={styles.table}>
@@ -225,6 +226,7 @@ export function AdminRefund(){
             </div>
           </main>
           {(selectList.length > 0 && (modalName === "완료" || modalName === "철회")) && <AdminRefundDialog selectList={selectList}/>}
+          {(selectList.length > 0 && modalName === "상태 변경") && <AdminRefundStateModal selectList={selectList}/>}
         </div>
       </div>
     )
