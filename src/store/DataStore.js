@@ -1,4 +1,3 @@
-import { otter } from 'fontawesome';
 import { create } from 'zustand'
 
 // ------------------------------데이터 STORE----------------------------//
@@ -683,3 +682,20 @@ export const useRefundFilterStore = create((set) => ({
 }));
 export const useRaeFilter = () => useRefundFilterStore((state) => state.raeFilter);
 export const useRaeFilterActions = () => useRefundFilterStore((state) => state.actions);
+
+
+// -------------- Delivery Data --------------
+export const useDeliveryStore = () => create((set) => ({
+  deliveryState: 0,
+  orderId: '',
+  invoiceNum: null,
+
+  actions: {
+    setDeliveryState: (changed) => set((state)=>({
+      deliveryState: changed
+    })),
+    setInvoiceNum: (changed) => set((state)=>({
+      invoiceNum: changed
+    })),
+  }
+}))
