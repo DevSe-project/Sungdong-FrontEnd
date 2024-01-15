@@ -94,6 +94,11 @@
     transition: background-color 0.3s;
 }
 
+.handler:active {
+    background-color: var(--main-color-original);
+}
+
+
 .button{
     border: 1px solid lightgray;
     background-color: var(--main-color-original);
