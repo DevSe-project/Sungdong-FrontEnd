@@ -356,3 +356,31 @@ input[type="checkbox"] {
   width: 100%;
   height: 10em;
 }
+
+
+/* 모달 CSS */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  /* 모달을 위로 떠오르게 설정 */
+}
+
+.modalContainer {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  color: black;
+  border: 1.5px solid #808080;
+  border-radius: 1dvb;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  width: 40em;
+  height: 25em;
+}
