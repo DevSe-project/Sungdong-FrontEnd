@@ -585,6 +585,15 @@ export const useOrderListStore = create((set) => ({
         ? state.selectList.filter(item => item.orderId !== valueID)
         : [...state.selectList, { orderId: valueID, value: value }],
     })),
+    toggleAllSelect: (selectAll, value) =>
+    set((state) => ({
+      selectList: selectAll
+        ? value.map((item) => ({
+          orderId: item.orderId,
+          value: item,
+        }))
+        : [], // 모두 선택 해제 시 빈 배열로 설정
+    })),
     setSelectListValue: (item, fieldkey, value) =>
     set((state) => ({
       selectList: state.selectList.map((list) => {
@@ -600,6 +609,18 @@ export const useOrderListStore = create((set) => ({
         return list;
       }),
     })),
+    setAllSelectListValue: (fieldkey, value) =>
+    set((state) => ({
+      selectList: state.selectList.map((list) => {
+          return {
+            ...list,
+            value: {
+              ...list.value,
+              [fieldkey]: value,
+            },
+          };
+        })
+      })),
     resetDeliveryNum: () =>
     set((state) => ({
       selectList: state.selectList.map((list) => ({
@@ -699,3 +720,31 @@ export const useDeliveryStore = () => create((set) => ({
     })),
   }
 }))
+/* ----------------Notice STORE---------------- */
+export const useNoticeStore = create((set) => ({
+  notice: {
+    title: '',
+    contents: '',
+    date: '',
+    files: null,
+    writer: ''
+  },
+  actions: {
+    addNoticeData: (value) =>
+      set((state) => ({ notice: { ...value } })),
+    setNoticeData: (fieldName, value) =>
+    set((state) => ({ notice: { ...state.notice, [fieldName]: value } })),
+    resetNoticeData: () =>
+      set({   
+        notice: {
+          title: '',
+          contents: '',
+          date: '',
+          files: null,
+          writer: ''
+        },
+    }),
+  }
+}));
+export const useNotice = () => useNoticeStore((state) => state.notice);
+export const useNoticeActions = () => useNoticeStore((state) => state.actions);

@@ -9,7 +9,7 @@ export default function AdminRefundModal({item}) {
   const navigate = useNavigate();
 
   const { modalName } = useModalState();
-  const {selectedModalOpen, selectedModalClose} = useModalActions();
+  const { selectedModalClose} = useModalActions();
 
   // esc키를 누르면 모달창 닫기.
   useEffect(() => {
@@ -129,7 +129,7 @@ export default function AdminRefundModal({item}) {
             <div className={styles.label}>
               {item.title}
             </div>
-            <div className={styles.input}>
+            <div className={styles.value}>
               {item.value}
             </div>
           </div>

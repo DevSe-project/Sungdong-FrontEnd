@@ -9,6 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useModalActions, useModalState, useOrderSelectList, useOrderSelectListActions } from '../../../Store/DataStore';
 import AdminRefundModal from './AdminRefundModal';
 import AdminRefundDialog from './AdminRefundDialog';
+import AdminRefundStateModal from './AdminRefundStateModal';
 
 export function AdminRefund(){
 
@@ -19,7 +20,7 @@ export function AdminRefund(){
   const { isModal, modalName } = useModalState();
   const {selectedModalOpen} = useModalActions();
   const selectList = useOrderSelectList();
-  const {toggleSelectList} = useOrderSelectListActions();
+  const {toggleSelectList, toggleAllSelect} = useOrderSelectListActions();
   
   //데이터 불러오기
   // Fetch
@@ -57,6 +58,11 @@ export function AdminRefund(){
   //페이지 변경 핸들링
   const handleItemsPerPageChange = (e) => {
     setItemsPerPage(parseInt(e.target.value, 10));
+  };
+  // 체크박스 전체 선택 핸들러
+  const handleToggleAllSelect = () => {
+    const allSelected = selectList.length === getCurrentPagePosts().length; // 모든 항목이 선택되었는지 확인
+    toggleAllSelect(!allSelected, getCurrentPagePosts()); // 전체 선택 토글
   };
 
   // 상태 업데이트를 위한 함수
@@ -119,9 +125,9 @@ export function AdminRefund(){
               </div>
               {/* 발주, 발송, 취소 처리 박스 */}
               <div className={styles.manageBox}>
-                <button className={styles.button} onClick={()=> selectedModalOpen("완료")}>반품/교환/취소 완료처리</button>
-                <button className={styles.button} onClick={()=> selectedModalOpen("철회")}>반품/교환/취소 거부(철회)처리</button>
-                <button className={styles.button}>처리 상태 변경</button>
+                <button className={styles.button} onClick={()=> selectList.length > 0 && selectedModalOpen("완료")}>반품/교환/취소 완료처리</button>
+                <button className={styles.button} onClick={()=> selectList.length > 0 && selectedModalOpen("철회")}>반품/교환/취소 거부(철회)처리</button>
+                <button className={styles.button} onClick={()=> selectList.length > 0 && selectedModalOpen("상태 변경")}>처리 상태 변경</button>
               </div>
               {/* 리스트 출력 */}
               <table className={styles.table}>
@@ -130,7 +136,10 @@ export function AdminRefund(){
                 >
                   {/* 헤드 */}
                 <tr>
-                  <th><input type='checkbox' disabled/></th>
+                  <th><input type='checkbox' 
+                  checked={selectList.length === getCurrentPagePosts().length && getCurrentPagePosts().length > 0}
+                  onChange={handleToggleAllSelect}/>
+                  </th>
                   <th>이미지</th>
                   <th style={{width:'10%'}}>전표번호</th>
                   <th style={{width:'10%'}}>상품코드</th>
@@ -225,6 +234,7 @@ export function AdminRefund(){
             </div>
           </main>
           {(selectList.length > 0 && (modalName === "완료" || modalName === "철회")) && <AdminRefundDialog selectList={selectList}/>}
+          {(selectList.length > 0 && modalName === "상태 변경") && <AdminRefundStateModal selectList={selectList}/>}
         </div>
       </div>
     )
