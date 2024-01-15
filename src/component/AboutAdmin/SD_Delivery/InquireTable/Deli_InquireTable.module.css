@@ -9,7 +9,6 @@
 .header {
     width: 100%;
     display: flex;
-    margin-bottom: 10px;
     justify-content: space-between;
 }
 
@@ -30,6 +29,22 @@
 
 
 /* --------Main-------- */
+
+
+/* --------Selected Handler */
+.selectedHandler {
+    display: flex;
+    margin-bottom: 10px;
+    gap: 10px;
+}
+
+.button {
+    border: 1px solid lightgray;
+    background-color: white;
+    padding: 0.5em;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+}
 
 
 /* --------PageMoveHandler-------- */
@@ -99,7 +114,7 @@
 }
 
 
-.button{
+.applyButton {
     border: 1px solid lightgray;
     background-color: var(--main-color-original);
     color: white;
@@ -108,4 +123,4 @@
     padding-left: 1.5em;
     padding-right: 1.5em;
     cursor: pointer;
-  }
+}

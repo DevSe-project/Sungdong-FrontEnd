@@ -1,13 +1,15 @@
-import { useState, useEffect, useMemo } from 'react';
-import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
+import { useState, useEffect } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useModalActions, useModalState } from '../../../../Store/DataStore';
 import styles from './Deli_InquireTable.module.css';
+import InvoiceModal from '../Modal/InvoiceModal';
+import DeliveryStateModal from '../Modal/DeliveryStateModal';
 
 export default function Deli_InquireTable() {
     const queryClient = useQueryClient();
 
-    const { isModal } = useModalState();
-    const { setIsModal, openModal, closeModal } = useModalActions();
+    const { isModal, modalName } = useModalState();
+    const { openModal, selectedModalOpen } = useModalActions();
 
     // Fetch
     const { isLoading: deliveryLoading, isError: deliveryError, data: delivery } = useQuery({ queryKey: ['delivery'] });
@@ -32,15 +34,14 @@ export default function Deli_InquireTable() {
         updateMatchedData();
     }, [currentPage, ordered, delivery, product]);
 
-    useEffect(() => {
-        console.log(matchedData);
-    }, [matchedData])
 
 
+    // 배송 개별 상태 업데이트
     function directUpdate_deliveryStatus(e, currentStatus) {
-        const updateStatus = e.target.value;
+        const updateStatus = parseInt(e.target.value, 10);
 
         if (updateStatus === 1 || updateStatus === 2 || updateStatus === 3) {
+
 
         } else {
             alert("잘못된 선택입니다.");
@@ -111,9 +112,13 @@ export default function Deli_InquireTable() {
 
     // 현재 페이지에 해당하는 게시물 목록 가져오기
     const getCurrentPagePosts = () => {
+        if (!matchedData) {
+            return [];
+        }
         const startIndex = (currentPage - 1) * itemsPerPage;
         return matchedData.slice(startIndex, startIndex + itemsPerPage);
     };
+
 
 
 
@@ -153,7 +158,7 @@ export default function Deli_InquireTable() {
 
 
     return (
-        <div className={styles.body}>
+        matchedData ? <div className={styles.body}>
             {/* Header */}
             <div className={styles.header}>
                 <div className={styles.header_txt}>
@@ -167,6 +172,36 @@ export default function Deli_InquireTable() {
                     <option value={3}>3</option>
                     <option value={5}>5</option>
                 </select>
+            </div>
+
+            {/* 선택항목일괄처리 */}
+            <div className={styles.selectedHandler}>
+                {/* 배송상태 수정 */}
+                <button
+                    className={styles.button}
+                    onClick={() => {
+                        selectedModalOpen('DeliveryStateModal')
+                    }}>
+                    배송상태 수정
+                </button>
+                {/* 송장 수정 */}
+                <button
+                    className={styles.button}
+                    // 송장수정 fn
+                    onClick={() => {
+                        selectedModalOpen('InvoiceModal')
+                    }}>
+                    송장 수정
+                </button>
+                {/* 일괄 배송 취소 */}
+                <button
+                    className={styles.button}
+                    onClick={() => {
+
+                    }}>
+                    {/* 배송 상태 리스트에서 삭제 */}
+                    배송 취소
+                </button>
             </div>
 
             {/* Main : List Of Delivery Status */}
@@ -216,7 +251,7 @@ export default function Deli_InquireTable() {
                                         className={styles.handler}
                                         value={item.deliveryStatus}
                                         onChange={(e) => {
-                                            directUpdate_deliveryStatus(e, item.deliveryStatus); // temp
+                                            directUpdate_deliveryStatus(e, item.deliveryStatus);
                                             console.log(item.deliveryStatus);
                                         }}
                                     >
@@ -288,7 +323,7 @@ export default function Deli_InquireTable() {
                             <option value={3}>배송 완료</option>
                         </select>
 
-                        <button className={styles.button} value={selectedDeliveryStatus} onClick={(e) => batchChange_deliveryStatus(e)}>
+                        <button className={styles.applyButton} value={selectedDeliveryStatus} onClick={(e) => batchChange_deliveryStatus(e)}>
                             적용
                         </button>
                     </td>
@@ -299,7 +334,7 @@ export default function Deli_InquireTable() {
                     <th>정보 수정</th>
                     <td><button
                         className={styles.handler}
-                        onClick={ () => { openModal() } }>
+                        onClick={() => { openModal() }}>
                         송장 수정
                     </button></td>
                 </tr>
@@ -312,8 +347,33 @@ export default function Deli_InquireTable() {
                 </tr>
             </table>
 
-            {/* 송장 수정 모달 */}
-            {/* {isModal == true ? <InvoiceModal /> : "Null"} */}
+
+
+            {/* 배송 상태 변경 모달 */}
+            {
+                isModal && modalName === 'DeliveryStateModal'
+                    ?
+                    <DeliveryStateModal
+                        checkedItems={checkedItems}
+                        setCheckedItems={setCheckedItems}
+                        matchedData={matchedData}
+                        setMatchedData={setMatchedData} />
+                    :
+                    null
+            }
+            {/* 송장 변경 모달 */}
+            {
+                isModal && modalName === 'InvoiceModal'
+                    ?
+                    <InvoiceModal
+                        checkedItems={checkedItems}
+                        setCheckedItems={setCheckedItems}
+                        matchedData={matchedData}
+                        setMatchedData={setMatchedData} />
+                    :
+                    null
+            }
         </div>
+            : null
     );
 }
