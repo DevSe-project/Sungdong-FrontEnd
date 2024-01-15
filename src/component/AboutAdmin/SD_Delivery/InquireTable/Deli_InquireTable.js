@@ -2,7 +2,6 @@ import { useState, useEffect, useMemo } from 'react';
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import { useModalActions, useModalState } from '../../../../Store/DataStore';
 import styles from './Deli_InquireTable.module.css';
-import InvoiceModal from '../InvoiceModal/InvocieModal';
 
 export default function Deli_InquireTable() {
     const queryClient = useQueryClient();
@@ -314,7 +313,7 @@ export default function Deli_InquireTable() {
             </table>
 
             {/* 송장 수정 모달 */}
-            {isModal == true ? <InvoiceModal /> : "Null"}
+            {/* {isModal == true ? <InvoiceModal /> : "Null"} */}
         </div>
     );
 }

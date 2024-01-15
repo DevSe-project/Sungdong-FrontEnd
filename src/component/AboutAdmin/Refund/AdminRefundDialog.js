@@ -1,12 +1,17 @@
 import { React, useEffect } from 'react';
 import styles from './AdminModal.module.css';
 import { useModalActions, useModalState, useOrderSelectListActions } from '../../../Store/DataStore';
+import { GetCookie } from '../../../customFn/GetCookie';
+import axios from 'axios';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export default function AdminRefundDialog({selectList}) {
 
   const { modalName } = useModalState();
   const {selectedModalClose} = useModalActions();
   const {setSelectListValue} = useOrderSelectListActions();
+
+  const queryClient = useQueryClient();
 
   // esc키를 누르면 모달창 닫기.
   useEffect(() => {
@@ -22,6 +27,69 @@ export default function AdminRefundDialog({selectList}) {
       window.removeEventListener('keydown', exit_esc);
     };
   }, [selectedModalClose], [modalName]);
+
+    //fetch 함수
+    const fetchUpdateData = async () => {
+      try {
+        const token = GetCookie('jwt_token');
+        const completeItemsData = selectList.map((item) => ({
+          orderId: item.orderId,
+          raeState: 4,
+        }))
+        const cancelItemsData = selectList.map((item) => ({
+          orderId: item.orderId,
+          raeState: 5,
+          rae_cancelReason: item.value.rae_cancelReason
+        }))
+        if(modalName === "완료"){
+        const response = await axios.patch("/rae", 
+          JSON.stringify(
+            completeItemsData
+          ),
+          {
+            headers : {
+              "Content-Type" : "application/json",
+              'Authorization': `Bearer ${token}`
+            }
+          }
+        )
+        return response.data;
+      } else if(modalName === "철회"){
+        const response = await axios.patch("/rae", 
+        JSON.stringify(
+          cancelItemsData
+        ),
+        {
+          headers : {
+            "Content-Type" : "application/json",
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      )
+      return response.data;
+      }
+        // 성공 시 추가된 상품 정보를 반환합니다.
+      } catch (error) {
+        // 실패 시 예외를 throw합니다.
+        throw new Error('상품을 추가하는 중 오류가 발생했습니다.');
+      }
+    };
+    
+
+ //주문 취소 함수
+  const { refundMutate } = useMutation({mutationFn: fetchUpdateData,
+    onSuccess: (data) => {
+      // 메세지 표시
+      alert(data.message);
+      console.log('처리 되었습니다.', data);
+      // 상태를 다시 불러와 갱신합니다.
+      queryClient.invalidateQueries(['refund']);
+    },
+    onError: (error) => {
+      // 실패 시, 에러 처리를 수행합니다.
+      console.error('상태를 변경하던 중 오류가 발생했습니다.', error);
+    },
+  })
 
   return (
     <div className={styles.modalOverlay}>
@@ -110,7 +178,7 @@ export default function AdminRefundDialog({selectList}) {
         </div>
         <div className={styles.buttonBox}>
           <button onClick={()=> selectedModalClose(modalName)} className={styles.selectButton}>취소</button>
-          <button  className={styles.selectedButton}>{selectList.length}건 일괄처리</button>
+          <button  className={styles.selectedButton} onClick={()=>refundMutate.mutate()}>{selectList.length}건 일괄처리</button>
         </div>
       </div>
     </div>
