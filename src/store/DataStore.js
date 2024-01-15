@@ -704,3 +704,32 @@ export const useRefundFilterStore = create((set) => ({
 }));
 export const useRaeFilter = () => useRefundFilterStore((state) => state.raeFilter);
 export const useRaeFilterActions = () => useRefundFilterStore((state) => state.actions);
+
+/* ----------------Notice STORE---------------- */
+export const useNoticeStore = create((set) => ({
+  notice: {
+    title: '',
+    contents: '',
+    date: '',
+    files: null,
+    writer: ''
+  },
+  actions: {
+    addNoticeData: (value) =>
+      set((state) => ({ notice: { ...value } })),
+    setNoticeData: (fieldName, value) =>
+    set((state) => ({ notice: { ...state.notice, [fieldName]: value } })),
+    resetNoticeData: () =>
+      set({   
+        notice: {
+          title: '',
+          contents: '',
+          date: '',
+          files: null,
+          writer: ''
+        },
+    }),
+  }
+}));
+export const useNotice = () => useNoticeStore((state) => state.notice);
+export const useNoticeActions = () => useNoticeStore((state) => state.actions);

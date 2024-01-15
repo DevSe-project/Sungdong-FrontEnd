@@ -2,27 +2,130 @@ import { useState, useEffect } from "react";
 import styles from "./AdminNotice.module.css";
 import { AdminHeader } from '../Layout/Header/AdminHeader';
 import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
-import WrtieModal from "./WriteModal";
 import EditModal from "./EditModal";
-import { NoticePostObj } from "../../Data/NoticePostObj"; // 수정된 부분
-import { useListActions, useNoticePostList, useModalActions, useModalState } from "../../../Store/DataStore";
+import { useListActions, useNoticePostList, useModalActions, useModalState, useNoticeActions, useNotice } from "../../../Store/DataStore";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import WriteModal from "./WriteModal";
+import axios from "axios";
+import { GetCookie } from "../../../customFn/GetCookie";
 
 export default function AdminNotice() {
-  const noticePostList = useNoticePostList();
-  const { setNoticePostList } = useListActions();
-  const { isModal, selectedIndex, modalName } = useModalState();
-  const { setSelectedIndex, closeModal, selectedModalOpen, selectedModalClose } = useModalActions();
-  const [isLoading, setIsLoading] = useState(true); // 로딩 중 여부 추가
+  const { isModal, modalName } = useModalState();
+  const { closeModal, selectedModalOpen } = useModalActions();
 
-  // 데이터 불러오기
-  useEffect(() => {
-    const dataload = setTimeout(() => {
-      setNoticePostList(NoticePostObj);
-      setIsLoading(false);
-    }, 1000)
+  const { isLoading, isError, data: noticePostList } = useQuery({ queryKey: ['notice'] });
 
-    return () => clearTimeout(dataload)
-  }, []);
+  const {addNoticeData, resetNoticeData} = useNoticeActions();
+  const notice = useNotice();
+
+  //게시글 삭제 함수
+  const fetchDeletedData = async (item) => {
+    try {
+      const token = GetCookie('jwt_token');
+      const response = await axios.delete("/notice", 
+        JSON.stringify(item),
+        {
+          headers : {
+            "Content-Type" : "application/json",
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      )
+      // 성공 시 추가된 상품 정보를 반환합니다.
+      return response.data;
+    } catch (error) {
+      // 실패 시 예외를 throw합니다.
+      throw new Error('게시글을 삭제하던 중 오류가 발생했습니다.');
+    }
+  };
+
+  const { deletePostMutation } = useMutation({mutationFn: fetchDeletedData,
+    onSuccess: (data) => {
+      // 메세지 표시
+      alert(data.message);
+      console.log('게시글이 업데이트 되었습니다.', data);
+      // 상태를 다시 불러와 갱신합니다.
+      useQueryClient.invalidateQueries(['notice']);
+    },
+    onError: (error) => {
+      // 실패 시, 에러 처리를 수행합니다.
+      console.error('상태를 변경하던 중 오류가 발생했습니다.', error);
+    },
+  })
+
+
+  const fetchUpdateData = async () => {
+    try {
+      const token = GetCookie('jwt_token');
+      const response = await axios.post("/notice", 
+        JSON.stringify(
+          notice
+        ),
+        {
+          headers : {
+            "Content-Type" : "application/json",
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      )
+      // 성공 시 추가된 상품 정보를 반환합니다.
+      return response.data;
+    } catch (error) {
+      // 실패 시 예외를 throw합니다.
+      throw new Error('상품을 추가하는 중 오류가 발생했습니다.');
+    }
+  }
+
+  const fetchUpdatedData = async () => {
+    try {
+      const token = GetCookie('jwt_token');
+      const response = await axios.put("/notice", 
+        JSON.stringify(
+          notice
+        ),
+        {
+          headers : {
+            "Content-Type" : "application/json",
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      )
+      // 성공 시 추가된 상품 정보를 반환합니다.
+      return response.data;
+    } catch (error) {
+      // 실패 시 예외를 throw합니다.
+      throw new Error('상품을 추가하는 중 오류가 발생했습니다.');
+    }
+  }
+
+
+  const { addPostMutation } = useMutation({mutationFn: fetchUpdateData,
+    onSuccess: (data) => {
+      // 메세지 표시
+      alert(data.message);
+      console.log('게시글이 업데이트 되었습니다.', data);
+      // 상태를 다시 불러와 갱신합니다.
+      useQueryClient.invalidateQueries(['notice']);
+    },
+    onError: (error) => {
+      // 실패 시, 에러 처리를 수행합니다.
+      console.error('상태를 변경하던 중 오류가 발생했습니다.', error);
+    },
+  })
+
+  const { editPostMutation } = useMutation({mutationFn: fetchUpdatedData,
+    onSuccess: (data) => {
+      // 메세지 표시
+      alert(data.message);
+      console.log('게시글이 업데이트 되었습니다.', data);
+      // 상태를 다시 불러와 갱신합니다.
+      useQueryClient.invalidateQueries(['notice']);
+    },
+    onError: (error) => {
+      // 실패 시, 에러 처리를 수행합니다.
+      console.error('상태를 변경하던 중 오류가 발생했습니다.', error);
+    },
+  })
 
   /* 추후 - 파일 업로드 로직
   const [selectedFile, setSelectedFile] = useState(null); // 파일 업로드 state
@@ -51,58 +154,16 @@ export default function AdminNotice() {
   };
   */
 
-  // 현재 시간을 얻기 위해 Date 객체 생성
-  const currentDate = new Date();
-  // 현재 날짜 및 시간 정보 얻기
-  const currentYear = currentDate.getFullYear();
-  const currentMonth = currentDate.getMonth() + 1; // 월은 0부터 시작하므로 +1
-  const currentDay = currentDate.getDate();
-  const currentHour = currentDate.getHours();
-  const currentMinute = currentDate.getMinutes();
-
-  // 글 담기
-  const [tempList, setTempList] = useState({
-    id: '',
-    title: '',
-    contents: '',
-    writer: '', // 관리자 로그인 계정의 이름으로 자동 들어가도록
-    date: '',
-    files: '',
-  })
-
   const addPost = () => {
-    // 입력 값들을 자체 할당
-    const { title, writer, contents, files } = tempList;
     // 입력 조건 부여
-    const isCheckInputLength = title.length > 2 && writer.length > 2 && contents.length > 10;
+    const isCheckInputLength = notice.title.length > 2 && notice.writer.length > 2 && notice.contents.length > 10;
 
     // 조건에 부합한다면
     if (isCheckInputLength) {
-      const newPost = {
-        id: `${currentYear}#${currentMonth}@${currentDay}*${currentHour}=${currentMinute}`,
-        title,
-        contents,
-        writer,
-        date: `${currentYear}/${currentMonth}/${currentDay} ${currentHour}:${currentMinute}`,
-        files,
-      };
-
-
-      // 입력받은 정보 추가
-      setNoticePostList((prevData) => [...prevData, newPost]);
-      // 입력란 초기화
-      setTempList({
-        id: '',
-        title: '',
-        contents: '',
-        writer: '',
-        date: '',
-        files: '',
-      });
-
-      console.log(noticePostList);
+      addPostMutation.mutate();
       // 모달 닫기
       closeModal();
+      resetNoticeData();
 
       alert("등록되었습니다.");
 
@@ -111,18 +172,38 @@ export default function AdminNotice() {
     }
   };
 
+  function handleConfirmSD(){
+    // 입력 조건 부여
+    const isCheckInputLength = notice.title.length > 2 && notice.writer.length > 2 && notice.contents.length > 10;
 
-  // 공지사항 리스트 업데이트
-  const editNotice = (index, editData) => {
-    // 현재 공지사항 리스트 복제
-    const editedList = [...noticePostList];
-    // 업데이트할 해당 공지사항에 새로운 데이터 할당
-    editedList[index] = editData;
-    // 부모 컴포넌트에 업데이트된 리스트 전달
-    setNoticePostList(editedList);
-    setSelectedIndex(null);
-    selectedModalClose();
-  };
+    // 조건에 부합한다면
+    if (isCheckInputLength) {
+      editPostMutation.mutate();
+      // 모달 닫기
+      closeModal();
+      resetNoticeData();
+
+      alert("등록되었습니다.");
+
+    } else {
+      alert("제목을 2글자 이상, 작성자 명을 2글자 이상, 본문 내용을 10글자 이상 작성하십시오.");
+    }
+  }
+
+  // 데이터 로딩 중 또는 에러 발생 시 처리
+  if (isLoading) {
+    return ( // isLoading이 true일 때 스켈레톤 이미지 표시 ( 20개 )
+    <div className={styles.skeletonContainer}>
+      {/* 15짜리 배열 생성 -> 반복 */}
+      {[...Array(15)].map((_, index) => (
+        <div key={index} className={styles.skeletonItem}></div>
+      ))}
+    </div>
+  );
+  }
+  if (isError) {
+      return <p>Error fetching data</p>;
+  }
 
 
   // 글 클릭 시 해당 글 수정할 수 있는 모달 창 생성
@@ -168,32 +249,18 @@ export default function AdminNotice() {
             <div className={styles.post_title}>글 목록</div>
 
             {/* Post Map */}
-            {isLoading
-              ?
-              ( // isLoading이 true일 때 스켈레톤 이미지 표시 ( 20개 )
-                <div className={styles.skeletonContainer}>
-                  {/* 15짜리 배열 생성 -> 반복 */}
-                  {[...Array(15)].map((_, index) => (
-                    <div key={index} className={styles.skeletonItem}></div>
-                  ))}
-                </div>
-
-              )
-              :
-              (
-                noticePostList.map((item, index) => (
+                {noticePostList.map((item, index) => (
                   <div className={styles.post_list_container} key={index} >
                     {/* No */}
                     <div className={styles.post_list_info_no}>
-                      {index + 1}
+                      {item.id}
                     </div>
 
                     {/* Code */}
                     <div className={styles.post_list_info_title} onClick={() => {
-                    setSelectedIndex(index);
                     selectedModalOpen('edit');
-                    console.log(selectedIndex);
-                  }}>
+                    addNoticeData(item);
+                    }}>
                       {item.title}
                     </div>
 
@@ -210,37 +277,25 @@ export default function AdminNotice() {
                     {/* Del */}
                     <div div className={styles.post_del_container} >
                       <div className={styles.post_del_button}
-                        onClick={() => {
-                          const data = [...noticePostList];
-                          data.splice(index, 1);
-                          setNoticePostList(data);
-                        }
+                        onClick={() => deletePostMutation.mutate()
                         }>
                         삭제
                       </div>
                     </div>
+                    {isModal && modalName === 'edit' &&
+                    <EditModal handleConfirmSD={handleConfirmSD} />}
                   </div>
                 ))
-              )}
-
+              }
 
           </div>
         </div>
       </div>
-
-
       {/* 모달 영역 */}
       {
-        isModal && modalName === 'write' ?
-          <WrtieModal tempList={tempList} setTempList={setTempList} addPost={addPost} />
-          :
-          isModal && modalName === 'edit' && selectedIndex != null ?
-            <EditModal editNotice={editNotice} list={noticePostList} tempList={tempList} setTempList={setTempList} />
-            :
-            null
+        isModal && modalName === 'write' &&
+          <WriteModal addPost={addPost} />
       }
-
-
     </div >
   )
 }
