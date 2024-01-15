@@ -10,7 +10,7 @@ export function AdminRefundFilter({handleSearch}){
     return (
       <div style={{display: 'flex', gap: '1em'}}>
         <div className={styles.searchFilterList}>
-          <select className={styles.select} name='filterDate' value={raeFilter.deliveryType} onChange={(e)=>setRaeFilter("raeDateType", e.target.value)} >
+          <select className={styles.select} name='filterDate' value={raeFilter.raeDateType} onChange={(e)=>setRaeFilter("raeDateType", e.target.value)} >
             <option name='filterDate' value="rae_requestDate">반품 요청일</option>
             <option name='filterDate' value="rae_checkDate">수거 완료일</option>
           </select>

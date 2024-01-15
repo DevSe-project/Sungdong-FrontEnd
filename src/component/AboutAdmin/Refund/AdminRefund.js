@@ -8,6 +8,7 @@ import { AdminRefundFilter } from '../Refund/AdminRefundFilter';
 import AdminSoldModal from '../Sold/AdminSoldModal';
 import { useQuery } from '@tanstack/react-query';
 import { useModalActions, useModalState, useOrderSelectList, useOrderSelectListActions } from '../../../Store/DataStore';
+import AdminRefundModal from './AdminRefundModal';
 export function AdminRefund(props){
 
   // 필터된 항목을 저장할 상태 변수
@@ -119,7 +120,7 @@ export function AdminRefund(props){
               <div className={styles.manageBox}>
                 <button className={styles.button}>반품/교환/취소 완료처리</button>
                 <button className={styles.button}>반품/교환/취소 거부(철회)처리</button>
-                <button className={styles.button}>요청 상태 변경</button>
+                <button className={styles.button}>처리 상태 변경</button>
               </div>
               {/* 리스트 출력 */}
               <table className={styles.table}>
@@ -137,9 +138,8 @@ export function AdminRefund(props){
                   <th style={{width:'10%'}}>상품명</th>
                   <th style={{width:'10%'}}>옵션</th>
                   <th style={{width:'10%'}}>반환수량</th>
-                  <th style={{width:'10%'}}>공급가</th>
                   <th style={{width:'10%', fontWeight: '650'}}>반환금액</th>
-                  <th style={{width:'10%', fontWeight: '650'}}>주문자 정보</th>
+                  <th style={{width:'10%', fontWeight: '650'}}>반환증 정보</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -177,7 +177,6 @@ export function AdminRefund(props){
                       }
                       </td>
                     <td>{item.rae_cnt}</td>
-                    <td>\{item.order_productPrice.toLocaleString()}</td>
                     <td style={{fontWeight: '750'}}>
                       \{item.rae_amount.toLocaleString()}
                     </td>
@@ -188,7 +187,7 @@ export function AdminRefund(props){
                     </td>
                   </tr>
                     {/* 모달 State가 true일때 생성됨 */}
-                    {modalName === item.id && <AdminSoldModal item={item} />}
+                    {modalName === item.id && <AdminRefundModal item={item}/>}
                     </React.Fragment>
                     ))
                   : <tr><td colSpan="10">불러들일 데이터가 없습니다.</td></tr>

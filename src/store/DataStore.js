@@ -638,7 +638,7 @@ export const useRefundFilterStore = create((set) => ({
   },
   actions: {
     setRaeFilter: (fieldName, value) =>
-      set((state) => ({ orderFilter: { ...state.raeFilter, [fieldName]: value } })),
+      set((state) => ({ raeFilter: { ...state.raeFilter, [fieldName]: value } })),
     resetRaeFilter: () =>
       set({   
         raeFilter: {
