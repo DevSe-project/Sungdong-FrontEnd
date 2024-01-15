@@ -2,8 +2,9 @@
 .noticeMiniContainer {
   display: flex;
   flex-direction: column;
+  border-radius: 1vh;
   padding: 10px;
-  background-color: #ffffff;
+  background-color: rgb(228, 228, 228);
   box-shadow: black;
 }
 
