@@ -8,10 +8,12 @@ import DeliveryStateModal from '../Modal/DeliveryStateModal';
 export default function Deli_InquireTable() {
     const queryClient = useQueryClient();
 
+
+    // relative modal state
     const { isModal, modalName } = useModalState();
     const { openModal, selectedModalOpen } = useModalActions();
 
-    // Fetch
+    // Fetch data
     const { isLoading: deliveryLoading, isError: deliveryError, data: delivery } = useQuery({ queryKey: ['delivery'] });
     const { isLoading: orderedLoading, isError: orderedError, data: ordered } = useQuery({ queryKey: ['ordered'] });
     const { isLoading: productLoading, isError: productError, data: product } = useQuery({ queryKey: ['data'] });
@@ -37,11 +39,11 @@ export default function Deli_InquireTable() {
 
 
     // 배송 개별 상태 업데이트
-    function directUpdate_deliveryStatus(e, currentStatus) {
+    function updateAllState(e, currentStatus) {
         const updateStatus = parseInt(e.target.value, 10);
 
         if (updateStatus === 1 || updateStatus === 2 || updateStatus === 3) {
-
+            
 
         } else {
             alert("잘못된 선택입니다.");
@@ -76,38 +78,6 @@ export default function Deli_InquireTable() {
         }
     }
 
-
-
-    // 선택된 항목의 배송상태를 일괄 변경
-    function batchChange_deliveryStatus(e) {
-        const updateStatus = parseInt(e.target.value, 10); // 10진수로 parse
-
-        // 1, 2, 3 중에 값이 있어야 함수 동작
-        if (updateStatus === 1 || updateStatus === 2 || updateStatus === 3) {
-            if (window.confirm("변경하시겠습니까?")) {
-                // 선택된 항목들에 대해 새로운 배송 상태 설정
-                const updatedData = matchedData.map(item => {
-                    if (checkedItems.includes(item.orderId)) {
-                        return {
-                            ...item,
-                            deliveryStatus: updateStatus
-                        };
-                    }
-                    return item;
-                });
-
-                // 일괄 변경된 데이터로 상태 업데이트
-                setMatchedData(updatedData);
-            } else {
-                setSelectedDeliveryStatus(0); // initialize
-                alert("수정이 취소되었습니다.");
-            }
-        }
-        else {
-            alert("잘못된 선택입니다.");
-            setSelectedDeliveryStatus(0);
-        }
-    }
 
 
     // 현재 페이지에 해당하는 게시물 목록 가져오기
@@ -251,7 +221,6 @@ export default function Deli_InquireTable() {
                                         className={styles.handler}
                                         value={item.deliveryStatus}
                                         onChange={(e) => {
-                                            directUpdate_deliveryStatus(e, item.deliveryStatus);
                                             console.log(item.deliveryStatus);
                                         }}
                                     >
@@ -279,6 +248,8 @@ export default function Deli_InquireTable() {
                 </tbody>
             </table>
 
+
+
             {/* Page Move */}
             <div className={styles.pageMoveHandler}>
                 <button className={styles.moveButton} onClick={() => {
@@ -302,51 +273,6 @@ export default function Deli_InquireTable() {
                 </button>
             </div>
 
-            {/* HandlerPost */}
-            <div className={styles.checkedAllProcessingPost}>
-                선택 항목 일괄처리
-            </div>
-            {/* Checkedbox */}
-            <table className={styles.checkedboxHandleTable}>
-                {/* Processing CheckedAll - deliveryType */}
-                <tr>
-                    <th>배송 상태</th>
-                    <td>
-                        <select
-                            className={styles.handler}
-                            value={selectedDeliveryStatus}
-                            onChange={(e) => { setSelectedDeliveryStatus(e.target.value) }}
-                        >
-                            <option value={0}>선택</option>
-                            <option value={1}>배송 준비</option>
-                            <option value={2}>배송 중</option>
-                            <option value={3}>배송 완료</option>
-                        </select>
-
-                        <button className={styles.applyButton} value={selectedDeliveryStatus} onClick={(e) => batchChange_deliveryStatus(e)}>
-                            적용
-                        </button>
-                    </td>
-                </tr>
-                {/* Processing CheckedAll - Transportation */}
-                <tr>
-                    {/* 체크된 데이터가 invoiceModal로 전송되어야 한다. */}
-                    <th>정보 수정</th>
-                    <td><button
-                        className={styles.handler}
-                        onClick={() => { openModal() }}>
-                        송장 수정
-                    </button></td>
-                </tr>
-                {/* Processing CheckedAll - Cancel */}
-                <tr>
-                    <th>취소 처리</th>
-                    <td>
-                        <button className={styles.handler}>일괄 취소</button>
-                    </td>
-                </tr>
-            </table>
-
 
 
             {/* 배송 상태 변경 모달 */}
@@ -357,7 +283,9 @@ export default function Deli_InquireTable() {
                         checkedItems={checkedItems}
                         setCheckedItems={setCheckedItems}
                         matchedData={matchedData}
-                        setMatchedData={setMatchedData} />
+                        setMatchedData={setMatchedData}
+                        updateAllState={updateAllState}
+                        setSelectedDeliveryStatus={setSelectedDeliveryStatus} />
                     :
                     null
             }
