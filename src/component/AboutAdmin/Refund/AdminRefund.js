@@ -5,11 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import React from 'react';
 import { AdminRefundFilter } from '../Refund/AdminRefundFilter';
-import AdminSoldModal from '../Sold/AdminSoldModal';
 import { useQuery } from '@tanstack/react-query';
 import { useModalActions, useModalState, useOrderSelectList, useOrderSelectListActions } from '../../../Store/DataStore';
 import AdminRefundModal from './AdminRefundModal';
-export function AdminRefund(props){
+import AdminRefundDialog from './AdminRefundDialog';
+
+export function AdminRefund(){
 
   // 필터된 항목을 저장할 상태 변수
   const [filteredItems, setFilteredItems] = useState([]);
@@ -58,7 +59,7 @@ export function AdminRefund(props){
     setItemsPerPage(parseInt(e.target.value, 10));
   };
 
-      // 상태 업데이트를 위한 함수
+  // 상태 업데이트를 위한 함수
   const updateMatchedData = () => {
     // 해당 데이터가 모두 불러와졌을 때만 함수 실행, 하나라도 데이터가 로딩되지 않았다면 함수 종료
     if (!ordered || !delivery || !product || !rae) {
@@ -118,8 +119,8 @@ export function AdminRefund(props){
               </div>
               {/* 발주, 발송, 취소 처리 박스 */}
               <div className={styles.manageBox}>
-                <button className={styles.button}>반품/교환/취소 완료처리</button>
-                <button className={styles.button}>반품/교환/취소 거부(철회)처리</button>
+                <button className={styles.button} onClick={()=> selectedModalOpen("완료")}>반품/교환/취소 완료처리</button>
+                <button className={styles.button} onClick={()=> selectedModalOpen("철회")}>반품/교환/취소 거부(철회)처리</button>
                 <button className={styles.button}>처리 상태 변경</button>
               </div>
               {/* 리스트 출력 */}
@@ -131,8 +132,8 @@ export function AdminRefund(props){
                 <tr>
                   <th><input type='checkbox' disabled/></th>
                   <th>이미지</th>
+                  <th style={{width:'10%'}}>전표번호</th>
                   <th style={{width:'10%'}}>상품코드</th>
-                  <th style={{width:'10%'}}>주문번호</th>
                   <th style={{width:'10%'}}>구분</th>
                   <th style={{width:'10%'}}>처리상태</th>
                   <th style={{width:'10%'}}>상품명</th>
@@ -144,15 +145,15 @@ export function AdminRefund(props){
                 </thead>
                 <tbody>
                   {filteredItems.length > 0
-                  ? getCurrentPagePosts().map((item, index)=> (
-                  <React.Fragment key={index}>
+                  ? getCurrentPagePosts().map((item)=> (
+                  <React.Fragment key={item.orderId}>
                   <tr className={styles.list}>
                     <td><input type="checkbox" name="list" checked={selectList.some((filter) => filter.orderId === item.orderId)} onChange={()=> toggleSelectList(item.orderId, item)}/></td>
                     <td><img alt='이미지'></img></td>
-                    <td>{item.ProductId}</td>
                     <td>
-                      {item.id}
+                      {item.rae_id}
                     </td>
+                    <td>{item.rae_productId}</td>
                     <td>
                       {item.raeTypeId === 1 ? "반품" :
                       item.raeTypeId === 2 ? "교환" :
@@ -223,6 +224,7 @@ export function AdminRefund(props){
               </div>
             </div>
           </main>
+          {(selectList.length > 0 && (modalName === "완료" || modalName === "철회")) && <AdminRefundDialog selectList={selectList}/>}
         </div>
       </div>
     )
