@@ -120,7 +120,7 @@ export default function App() {
   //반품 데이터 fetch
   const fetchRefundData = async () => {
     const querySnapshot = await getDocs(collection(db, 'RefundData')); // 'ProductData'는 컬렉션 이름
-    return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    return querySnapshot.docs.map((doc) => ({ ...doc.data(), rae_id: doc.id }));
   };
   
 
