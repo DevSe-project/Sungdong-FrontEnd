@@ -1,9 +1,14 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
+import { useModalActions, useModalState } from '../../../../Store/DataStore';
 import styles from './Deli_InquireTable.module.css';
+import InvoiceModal from '../InvoiceModal/InvocieModal';
 
 export default function Deli_InquireTable() {
     const queryClient = useQueryClient();
+
+    const { isModal } = useModalState();
+    const { setIsModal, openModal, closeModal } = useModalActions();
 
     // Fetch
     const { isLoading: deliveryLoading, isError: deliveryError, data: delivery } = useQuery({ queryKey: ['delivery'] });
@@ -28,33 +33,20 @@ export default function Deli_InquireTable() {
         updateMatchedData();
     }, [currentPage, ordered, delivery, product]);
 
-    useEffect(()=> {
+    useEffect(() => {
         console.log(matchedData);
-    },[matchedData])
+    }, [matchedData])
 
-    
+
     function directUpdate_deliveryStatus(e, currentStatus) {
         const updateStatus = e.target.value;
-        
-        if(updateStatus === 1 || updateStatus === 2 || updateStatus === 3) {
-            
+
+        if (updateStatus === 1 || updateStatus === 2 || updateStatus === 3) {
+
         } else {
             alert("잘못된 선택입니다.");
         }
     }
-
-
-    
-    function directUpdate_deliveryStatus(e, currentStatus) {
-        const updateStatus = e.target.value;
-        
-        if(updateStatus === 1 || updateStatus === 2 || updateStatus === 3) {
-            
-        } else {
-            alert("잘못된 선택입니다.");
-        }
-    }
-
 
 
     // 전체 체크박스 업데이트
@@ -147,7 +139,7 @@ export default function Deli_InquireTable() {
 
         setMatchedData(finalMatchedData);
         console.log("render");
-        };
+    };
 
 
 
@@ -209,47 +201,47 @@ export default function Deli_InquireTable() {
                 {/* onDisplay */}
                 <tbody>
                     {matchedData &&
-                    getCurrentPagePosts()?.map((item, index) => (
-                        <tr key={index}>
-                            {/* 체크박스 */}
-                            <td>
-                                <input type='checkbox'
-                                    checked={checkedItems.includes(item.orderId) ? true : false}
-                                    onChange={(e) => handlePerCheckbox(e.target.checked, item.orderId)} />
-                            </td>
-                            {/* 주문번호 */}
-                            <td>{item.orderId}</td>
-                            {/* 배송상태 */}
-                            <td>
-                                <select
-                                    className={styles.handler}
-                                    value={item.deliveryStatus}
-                                    onChange={(e) => { 
-                                        directUpdate_deliveryStatus(e, item.deliveryStatus); // temp
-                                        console.log(item.deliveryStatus);
-                                    }}
-                                >
-                                    <option value={1}>배송 준비</option>
-                                    <option value={2}>배송 중</option>
-                                    <option value={3}>배송 완료</option>
-                                </select>
-                            </td>
-                            {/* 주문일자 */}
-                            <td>{item.order_Date}</td>
-                            {/* 상품번호 */}
-                            <td>{item.ProductId}</td>
-                            {/* 미니 이미지 */}
-                            <td>{item.image.mini}</td>
-                            {/* 상품명 */}
-                            <td>{item.title}</td>
-                            {/* 옵션 상세 - 선택 옵션이 있을 경우만 표시*/}
-                            <td>{item.optionSelected ? item.optionSelected : "-"}</td>
-                            {/* 가격 */}
-                            <td>{item.price}</td>
-                            {/* 할인률 */}
-                            <td>{item.discount === 0 ? item.price : item.price - (item.price * item.discount / 100)}</td>
-                        </tr>
-                    ))}
+                        getCurrentPagePosts()?.map((item, index) => (
+                            <tr key={index}>
+                                {/* 체크박스 */}
+                                <td>
+                                    <input type='checkbox'
+                                        checked={checkedItems.includes(item.orderId) ? true : false}
+                                        onChange={(e) => handlePerCheckbox(e.target.checked, item.orderId)} />
+                                </td>
+                                {/* 주문번호 */}
+                                <td>{item.orderId}</td>
+                                {/* 배송상태 */}
+                                <td>
+                                    <select
+                                        className={styles.handler}
+                                        value={item.deliveryStatus}
+                                        onChange={(e) => {
+                                            directUpdate_deliveryStatus(e, item.deliveryStatus); // temp
+                                            console.log(item.deliveryStatus);
+                                        }}
+                                    >
+                                        <option value={1}>배송 준비</option>
+                                        <option value={2}>배송 중</option>
+                                        <option value={3}>배송 완료</option>
+                                    </select>
+                                </td>
+                                {/* 주문일자 */}
+                                <td>{item.order_Date}</td>
+                                {/* 상품번호 */}
+                                <td>{item.ProductId}</td>
+                                {/* 미니 이미지 */}
+                                <td>{item.image.mini}</td>
+                                {/* 상품명 */}
+                                <td>{item.title}</td>
+                                {/* 옵션 상세 - 선택 옵션이 있을 경우만 표시*/}
+                                <td>{item.optionSelected ? item.optionSelected : "-"}</td>
+                                {/* 가격 */}
+                                <td>{item.price}</td>
+                                {/* 할인률 */}
+                                <td>{item.discount === 0 ? item.price : item.price - (item.price * item.discount / 100)}</td>
+                            </tr>
+                        ))}
                 </tbody>
             </table>
 
@@ -297,15 +289,20 @@ export default function Deli_InquireTable() {
                             <option value={3}>배송 완료</option>
                         </select>
 
-                        <button className={styles.applyButton} value={selectedDeliveryStatus} onClick={(e) => batchChange_deliveryStatus(e)}>
+                        <button className={styles.button} value={selectedDeliveryStatus} onClick={(e) => batchChange_deliveryStatus(e)}>
                             적용
                         </button>
                     </td>
                 </tr>
                 {/* Processing CheckedAll - Transportation */}
                 <tr>
+                    {/* 체크된 데이터가 invoiceModal로 전송되어야 한다. */}
                     <th>정보 수정</th>
-                    <td><button className={styles.handler}>송장 수정</button></td>
+                    <td><button
+                        className={styles.handler}
+                        onClick={ () => { openModal() } }>
+                        송장 수정
+                    </button></td>
                 </tr>
                 {/* Processing CheckedAll - Cancel */}
                 <tr>
@@ -315,6 +312,9 @@ export default function Deli_InquireTable() {
                     </td>
                 </tr>
             </table>
+
+            {/* 송장 수정 모달 */}
+            {isModal == true ? <InvoiceModal /> : "Null"}
         </div>
     );
 }
