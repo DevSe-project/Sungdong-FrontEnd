@@ -129,7 +129,7 @@ export default function AdminRefundModal({item}) {
             <div className={styles.label}>
               {item.title}
             </div>
-            <div className={styles.input}>
+            <div className={styles.value}>
               {item.value}
             </div>
           </div>

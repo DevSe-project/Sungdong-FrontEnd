@@ -23,7 +23,7 @@ export function AdminSoldList(){
   const { isModal, modalName } = useModalState();
   const {selectedModalOpen} = useModalActions();
   const selectList = useOrderSelectList();
-  const {toggleSelectList} = useOrderSelectListActions();
+  const {toggleSelectList, toggleAllSelect} = useOrderSelectListActions();
   
   //필터관련 STATE
   const [sortOrder, setSortOrder] = useState('asc'); // 초기값으로 오름차순 설정
@@ -114,6 +114,11 @@ export function AdminSoldList(){
       alert("주문이 한 개라도 체크가 되어 있어야 취소처리가 가능합니다.");
     }
   }
+  //전체 선택 핸들러
+  const handleToggleAllSelect = () => {
+    const allSelected = selectList.length === getCurrentPagePosts().length; // 모든 항목이 선택되었는지 확인
+    toggleAllSelect(!allSelected, getCurrentPagePosts()); // 전체 선택 토글
+  };
 
   // 상태 업데이트를 위한 함수
   const updateMatchedData = () => {
@@ -182,7 +187,10 @@ export function AdminSoldList(){
               style={{backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)'}}
               >
                 <tr>
-                  <th><input type='checkbox' disabled/></th>
+                  <th><input type='checkbox' 
+                  checked={selectList.length === getCurrentPagePosts().length && getCurrentPagePosts().length > 0}
+                  onChange={handleToggleAllSelect}/>
+                  </th>
                   <th>이미지</th>
                   <th style={{width:'10%'}}>상품코드</th>
                   <th style={{width:'10%'}}>주문번호</th>

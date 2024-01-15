@@ -586,6 +586,15 @@ export const useOrderListStore = create((set) => ({
         ? state.selectList.filter(item => item.orderId !== valueID)
         : [...state.selectList, { orderId: valueID, value: value }],
     })),
+    toggleAllSelect: (selectAll, value) =>
+    set((state) => ({
+      selectList: selectAll
+        ? value.map((item) => ({
+          orderId: item.orderId,
+          value: item,
+        }))
+        : [], // 모두 선택 해제 시 빈 배열로 설정
+    })),
     setSelectListValue: (item, fieldkey, value) =>
     set((state) => ({
       selectList: state.selectList.map((list) => {
@@ -601,6 +610,18 @@ export const useOrderListStore = create((set) => ({
         return list;
       }),
     })),
+    setAllSelectListValue: (fieldkey, value) =>
+    set((state) => ({
+      selectList: state.selectList.map((list) => {
+          return {
+            ...list,
+            value: {
+              ...list.value,
+              [fieldkey]: value,
+            },
+          };
+        })
+      })),
     resetDeliveryNum: () =>
     set((state) => ({
       selectList: state.selectList.map((list) => ({

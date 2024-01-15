@@ -9,7 +9,7 @@ export default function AdminRefundStateModal({selectList}) {
 
   const { modalName } = useModalState();
   const {selectedModalClose} = useModalActions();
-  const {setSelectListValue, resetSelectList} = useOrderSelectListActions();
+  const {setSelectListValue, setAllSelectListValue, resetSelectList} = useOrderSelectListActions();
 
   const queryClient = useQueryClient();
 
@@ -108,6 +108,30 @@ export default function AdminRefundStateModal({selectList}) {
               <th style={{width:'10%'}}>옵션</th>
               <th style={{width:'10%'}}>반환수량</th>
               <th style={{width:'10%', fontWeight: '650'}}>반환금액</th>
+            </tr>
+            <tr>
+              <th></th>
+              <th style={{width:'10%'}}></th>
+              <th style={{width:'10%'}}></th>
+              <th style={{width:'10%'}}></th>
+              <th style={{width:'10%'}}>
+                <select 
+                  className={styles.select} 
+                  value={
+                  selectList.every((item) => item.value.raeState === selectList[0].value.raeState)
+                    ? selectList[0].value.raeState
+                    : ""} 
+                  onChange={(e)=> setAllSelectListValue("raeState", e.target.value)}>
+                  <option value="">개별 선택</option>
+                  <option value={1}>반품 요청</option>
+                  <option value={2}>수거 중</option>
+                  <option value={3}>수거 완료</option>                
+                </select>
+              </th>
+              <th style={{width:'10%'}}></th>
+              <th style={{width:'10%'}}></th>
+              <th style={{width:'10%'}}></th>
+              <th style={{width:'10%', fontWeight: '650'}}></th>
             </tr>
             </thead>
             <tbody>

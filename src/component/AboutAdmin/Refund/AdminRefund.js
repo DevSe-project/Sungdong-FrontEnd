@@ -20,7 +20,7 @@ export function AdminRefund(){
   const { isModal, modalName } = useModalState();
   const {selectedModalOpen} = useModalActions();
   const selectList = useOrderSelectList();
-  const {toggleSelectList} = useOrderSelectListActions();
+  const {toggleSelectList, toggleAllSelect} = useOrderSelectListActions();
   
   //데이터 불러오기
   // Fetch
@@ -58,6 +58,11 @@ export function AdminRefund(){
   //페이지 변경 핸들링
   const handleItemsPerPageChange = (e) => {
     setItemsPerPage(parseInt(e.target.value, 10));
+  };
+  // 체크박스 전체 선택 핸들러
+  const handleToggleAllSelect = () => {
+    const allSelected = selectList.length === getCurrentPagePosts().length; // 모든 항목이 선택되었는지 확인
+    toggleAllSelect(!allSelected, getCurrentPagePosts()); // 전체 선택 토글
   };
 
   // 상태 업데이트를 위한 함수
@@ -131,7 +136,10 @@ export function AdminRefund(){
                 >
                   {/* 헤드 */}
                 <tr>
-                  <th><input type='checkbox' disabled/></th>
+                  <th><input type='checkbox' 
+                  checked={selectList.length === getCurrentPagePosts().length && getCurrentPagePosts().length > 0}
+                  onChange={handleToggleAllSelect}/>
+                  </th>
                   <th>이미지</th>
                   <th style={{width:'10%'}}>전표번호</th>
                   <th style={{width:'10%'}}>상품코드</th>
