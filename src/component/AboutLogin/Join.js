@@ -6,50 +6,37 @@ import PolicyObj from "../Data/PolicyObj";
 import JoinForm from "./JoinForm";
 import { useDataActions, useUserData } from "../../Store/DataStore";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
+import axios from "../../axios";
 import { UserDataObj } from "../Data/UserDataObj";
 
+
 export default function Join() {
+
+    //장바구니 추가 함수
+const joinRequest = async (joinData) => {
+    try {
+        const response = await axios.post("/auth/register",
+            JSON.stringify({
+                ...joinData,
+                userType_name: joinData.userType_id === 1 ? "엔드회원" : "일반회원"
+            }),
+            {
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }
+        )
+        // 성공 시 추가된 상품 정보를 반환합니다.
+        return response.data;
+    } catch (error) {
+        // 실패 시 예외를 throw합니다.
+        throw new Error('회원가입 처리 중 오류가 발생했습니다.');
+    }
+};
+
     // link_navigate 
     let navigate = useNavigate();
     const queryClient = useQueryClient();
-
-    //장바구니 추가 함수
-    const joinRequest = async (joinData) => {
-        try {
-            const response = await axios.post("/join",
-                JSON.stringify(joinData),
-                {
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                }
-            )
-            // 성공 시 추가된 상품 정보를 반환합니다.
-            return response.data;
-        } catch (error) {
-            // 실패 시 예외를 throw합니다.
-            throw new Error('회원가입 처리 중 오류가 발생했습니다.');
-        }
-    };
-
-    //회원가입 요청 함수
-    const { joinMutate } = useMutation({
-        mutationFn: joinRequest,
-        onSuccess: (join) => {
-            // 메세지 표시
-            alert(join.message);
-            console.log('새로운 유저가 회원가입 되었습니다.', join);
-            // 회원 상태를 다시 불러와 갱신합니다.
-            queryClient.invalidateQueries(['user']);
-            // 로그인 화면으로 이동
-            navigate("/login");
-        },
-        onError: (error) => {
-            // 회원 추가 실패 시, 에러 처리
-            console.error('회원가입 중 오류가 발생했습니다.', error);
-        },
-    })
 
     const { setUserData } = useDataActions();
     const userData = useUserData();
@@ -75,9 +62,9 @@ export default function Join() {
     // [JoinForm.js에서 사용]입력받을 1회성 회원 정보
     let [inputData, setInputData] = useState(
         {
-            userType: "",
-            id: '',
-            password: '',
+            userType_id: "",
+            userId: '',
+            userPassword: '',
             confirmPassword: '',
             email: '',
             emailService: true,
@@ -149,59 +136,75 @@ export default function Join() {
         }
     }, [areAllRequiredChecked])
 
-    // 가입하기 버튼 클릭 event(가입s조건 모두 충족됐는지)
-    let signUp_checkCondition = () => {
-        // [필수]항목 체크확인
+
+    //회원가입 요청 함수
+    const { mutate:joinMutate, data } = useMutation({mutationFn: joinRequest});
+
+    const signUp_checkCondition = () => {
         if (!areAllRequiredChecked) {
             alert('이용약관에 모두 동의해야 가입이 가능합니다.');
             return;
         }
-
-        try {
-            joinMutate(inputData)
-        }
-        catch (error) {
-            if (userData.some((user) => user.id === inputData.id)) {
-                alert('이미 사용 중인 아이디입니다. 다른 아이디를 선택해주세요.');
-                return;
-            }
-
-            if (inputData.password !== inputData.confirmPassword) {
-                alert('비밀번호와 비밀번호 확인이 일치하지 않습니다. 다시 확인해주세요.');
-                return;
-            }
-
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(inputData.email)) {
-                alert('올바른 이메일 형식이 아닙니다. 다시 확인해주세요.');
-                return;
-            }
-            // 모든 유효성 검사처리 (프론트단)
-            if (!inputData.id || // 아아디
-                !inputData.password || // 비밀번호
-                !inputData.confirmPassword || // 비밀번호 재확인(일치검사를 했지만 혹시 몰라 중복검사)
-                !inputData.name || // 이름
-                !inputData.userType || // 고객타입
-                !inputData.address || // 회사 주소
-                !inputData.emailService || // 이메일 동의란
-                !inputData.smsService || // 문자 동의란
-                !inputData.corporationData.businessCategory || //
-                !inputData.corporationData.businessNum ||
-                !inputData.corporationData.businessSector ||
-                !inputData.corporationData.ceoName ||
-                !inputData.corporationData.companyName ||
-                !inputData.corporationData.companyNum.num1 ||
-                !inputData.corporationData.companyNum.num2 ||
-                !inputData.corporationData.companyNum.num3) {
-                alert('필수 항목을 모두 입력해주세요.');
-                return;
-            }
-            setUserData(prevUserData => [...prevUserData, inputData]);
-            setWarningMsg(false); // 경고 메시지를 지우고
-            navigate('/login');
+        joinMutate(inputData, {
+        onSuccess: (data) => {
+            console.log('User created successfully:', data);
+            // 다른 로직 수행 또는 상태 업데이트
+            queryClient.invalidateQueries(['user']);
+            navigate("/login");
             alert('성동물산에 오신 걸 환영합니다! 이제 로그인을 진행할 수 있습니다.');
-        }
-    }
+        },
+        onError: (error) => {
+            console.error('User creation failed:', error);
+            // 에러 처리 또는 메시지 표시
+        },
+        });
+    };
+
+    // 가입하기 버튼 클릭 event(가입s조건 모두 충족됐는지)
+                
+
+        // }
+        // catch (error) {
+        //     if (userData.some((user) => user.id === inputData.id)) {
+        //         alert('이미 사용 중인 아이디입니다. 다른 아이디를 선택해주세요.');
+        //         return;
+        //     }
+
+        //     if (inputData.userPassword !== inputData.confirmPassword) {
+        //         alert('비밀번호와 비밀번호 확인이 일치하지 않습니다. 다시 확인해주세요.');
+        //         return;
+        //     }
+
+        //     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        //     if (!emailRegex.test(inputData.email)) {
+        //         alert('올바른 이메일 형식이 아닙니다. 다시 확인해주세요.');
+        //         return;
+        //     }
+        //     // 모든 유효성 검사처리 (프론트단)
+        //     // if (!inputData.userId || // 아아디
+        //     //     !inputData.userPassword || // 비밀번호
+        //     //     !inputData.confirmPassword || // 비밀번호 재확인(일치검사를 했지만 혹시 몰라 중복검사)
+        //     //     !inputData.name || // 이름
+        //     //     !inputData.userType_id || // 고객타입
+        //     //     !inputData.address || // 회사 주소
+        //     //     !inputData.emailService || // 이메일 동의란
+        //     //     !inputData.smsService || // 문자 동의란
+        //     //     !inputData.corporationData.businessCategory || //
+        //     //     !inputData.corporationData.businessNum ||
+        //     //     !inputData.corporationData.businessSector ||
+        //     //     !inputData.corporationData.ceoName ||
+        //     //     !inputData.corporationData.companyName ||
+        //     //     !inputData.corporationData.companyNum.num1 ||
+        //     //     !inputData.corporationData.companyNum.num2 ||
+        //     //     !inputData.corporationData.companyNum.num3) {
+        //     //     alert('필수 항목을 모두 입력해주세요.');
+        //     //     return;
+        //     // }
+        //     setUserData(prevUserData => [...prevUserData, inputData]);
+        //     setWarningMsg(false); // 경고 메시지를 지우고
+        //     navigate('/login');
+        //     alert('성동물산에 오신 걸 환영합니다! 이제 로그인을 진행할 수 있습니다.');
+        // }
 
     return (
         <div className={styles.body}>
@@ -288,7 +291,7 @@ export default function Join() {
                 {/* 가입하기 */}
                 <div
                     className={`${styles.sign_up} ${!areAllRequiredChecked && styles.disabled}`}
-                    onClick={signUp_checkCondition}
+                    onClick={()=>signUp_checkCondition()}
                 >
                     가입하기
                 </div>

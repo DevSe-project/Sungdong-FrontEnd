@@ -81,7 +81,7 @@ export default function JoinForm(props) {
 
 
     //비밀번호, 비빈번호 재입력 일치유무 체크
-    let confirmPassword = props.inputData.password === props.inputData.confirmPassword;
+    let confirmPassword = props.inputData.userPassword == props.inputData.confirmPassword;
 
     // 기업 정보
     const CorData = () => {
@@ -131,10 +131,10 @@ export default function JoinForm(props) {
                                     id="indivisualMember"
                                     name="userType"
                                     value={props.inputData.userType}
-                                    checked={props.inputData.userType === "end_user"}
+                                    checked={props.inputData.userType_id === 1}
                                     onChange={() => {
                                         props.setInputData(
-                                            (prevData) => ({ ...prevData, userType: 'end_user' })
+                                            (prevData) => ({ ...prevData, userType_id: 1 })
                                         )
                                     }}
                                 />
@@ -146,10 +146,10 @@ export default function JoinForm(props) {
                                     id="corporateMember"
                                     name="userType"
                                     value={props.inputData.userType}
-                                    checked={props.inputData.userType === "corporation"}
+                                    checked={props.inputData.userType_id === 2}
                                     onChange={() => {
                                         props.setInputData(
-                                            (prevData) => ({ ...prevData, userType: 'corporation' })
+                                            (prevData) => ({ ...prevData, userType_id: 2 })
                                         )
                                     }}
                                 />
@@ -322,10 +322,10 @@ export default function JoinForm(props) {
                             type='text'
                             placeholder={'아이디'}
                             name="id"
-                            value={props.inputData.id}
+                            value={props.inputData.userId}
                             onChange={(e) => {
                                 props.setInputData(
-                                    (prevData) => ({ ...prevData, id: e.target.value })
+                                    (prevData) => ({ ...prevData, userId: e.target.value })
                                 )
                             }}
                         />
@@ -344,10 +344,10 @@ export default function JoinForm(props) {
                             type='password'
                             placeholder={'비밀번호'}
                             name="password"
-                            value={props.inputData.password}
+                            value={props.inputData.userPassword}
                             onChange={(e) => {
                                 props.setInputData(
-                                    (prevData) => ({ ...prevData, password: e.target.value })
+                                    (prevData) => ({ ...prevData, userPassword: e.target.value })
                                 )
                             }}
                         />

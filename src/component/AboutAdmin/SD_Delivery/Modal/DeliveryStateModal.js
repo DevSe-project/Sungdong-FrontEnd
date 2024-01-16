@@ -61,7 +61,7 @@ export default function DeliveryStateModal(props) {
                 if (props.checkedItems.includes(item.orderId))
                     return {
                         ...item,
-                        deliveryStatus: selectedStatus
+                        // deliveryStatus: selectedStatus
                     };
             })
 

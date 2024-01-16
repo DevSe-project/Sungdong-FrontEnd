@@ -57,7 +57,7 @@ export function Login(props) {
   // 로그인 처리 로직
   async function loginRequest() {
     const response = await axios.post(
-      "/user",
+      "/login",
       JSON.stringify({
         id: id,
         password: pw
