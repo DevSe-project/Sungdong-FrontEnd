@@ -3,29 +3,20 @@ import { useModalActions } from "../../../../Store/DataStore";
 import styles from './ModalStyles.module.css';
 import parentsStyles from '../InquireTable/Deli_InquireTable.module.css';
 
-//전제조건 : 선택 항목의 개수가 currentPage 수를 넘지 않는다는 것 -> 때문에 따로 최대 개수 설정 불필요
+// 주문 상태 수정을 위한 모달 컴포넌트
 export default function DeliveryStateModal(props) {
+    // 모달 닫기 함수
     const { selectedModalClose } = useModalActions();
-    const [selectedOrders, setSelectedOrders] = useState([]);
+    // 가져온 데이터 저장 상태
+    const [fetchedData, setFetchedData] = useState([]);
+    // 선택된 배송 상태 저장 상태
     const [selectedDeliveryStatus, setSelectedDeliveryStatus] = useState(0);
 
-
-
     useEffect(() => {
-        const orders = props.checkedItems.map(orderId => {
-            const order = props.matchedData.find(item => item.orderId === orderId);
-            return order;
-        });
-        setSelectedOrders(orders);
-    }, [props.checkedItems]);
-
-
-
-    // esc키를 누르면 모달창 닫기.
-    useEffect(() => {
+        // ESC 키로 모달 닫기 이벤트 리스너 등록
         const exit_esc = (event) => {
             if (event.key === 'Escape') {
-                selectedModalClose(); // "Esc" 키 누를 때 모달 닫기 함수 호출;
+                selectedModalClose();
             }
         };
 
@@ -36,75 +27,86 @@ export default function DeliveryStateModal(props) {
         };
     }, [selectedModalClose]);
 
+    useEffect(() => {
+        // 체크된 항목이나 개별 배송 상태 변경시 데이터 다시 가져오기
+        dataFetch();
+    }, [props.checkedItems, props.matchedData]);
 
-    // 선택된 항목의 배송상태를 일괄 변경
-    function batchChange_deliveryStatus() {
+    // [Effect연결함수] 선택된 항목의 데이터 가져오기
+    function dataFetch() {
+        if (!props.checkedItems) {
+            // 체크된 항목 없으면 모달 닫기
+            selectedModalClose();
+        }
+
+        // 체크된 항목에 해당하는 데이터 가져오기
+        const data = props.checkedItems.map(orderId => {
+            const matchingData = props.matchedData.find(item => item.orderId === orderId);
+            return matchingData;
+        });
+
+        setFetchedData(data);
+    }
+
+    // 일괄 변경 버튼 클릭 시 호출되는 함수
+    function handleBatchStatus() {
         const parseStatus = parseInt(selectedDeliveryStatus, 10);
-
-        // 1, 2, 3 중에 값이 있어야 함수 동작
         if (parseStatus === 1 || parseStatus === 2 || parseStatus === 3) {
-            const confirmed = window.confirm("변경하시겠습니까?");
-
-            if (confirmed) {
-                // 선택된 항목들이 없는 경우에는 알림창을 띄우고 함수 종료
-                if (props.checkedItems.length === 0) {
-                    alert("선택된 항목이 없습니다.");
-                    return;
-                }
-
-                // 선택된 항목들에 대해 새로운 배송 상태 설정
-                const updatedData = props.matchedData.map(item => {
-                    if (props.checkedItems.includes(item.orderId)) {
-                        return {
-                            ...item,
-                            deliveryStatus: parseStatus
-                        };
-                    }
-                    return item;
-                });
-
-                // 일괄 변경된 데이터로 상태 업데이트
-                props.setMatchedData(updatedData);
-                setSelectedDeliveryStatus(0);
-                selectedModalClose();
-                return; // 중요: 함수를 여기서 종료합니다.
+            if (props.checkedItems.length === 0) {
+                alert("선택된 항목이 없습니다.");
+                return;
             }
+            // 일괄 업데이트 로직 들어가야 할 곳(선택항목을 매칭데이터와 매치시켜 업데이트)
+            const updateData = props.matchedData.map((item) => {
+                if (props.checkedItems.includes(item.orderId))
+                    return {
+                        ...item,
+                        deliveryStatus: selectedStatus
+                    };
+            })
 
-            // '취소'를 선택한 경우
-            setSelectedDeliveryStatus(0); // 초기화
-            alert("수정이 취소되었습니다.");
+            props.setMatchedData(updateData);
         } else {
-            // 잘못된 선택일 경우
             alert("잘못된 선택입니다.");
-            setSelectedDeliveryStatus(0);
+            setSelectedDeliveryStatus(0); // 선택된 상태 초기화
         }
     }
 
-
-
-
-
-    // 배송 상태 개별 업데이트
-    const handleIndividualChangeDeliveryStatus = (orderId, e) => {
+    // 개별 항목의 배송 상태 변경 함수
+    const handlePerStatus = (orderId, e) => {
         const selectedStatus = parseInt(e.target.value, 10);
 
         // 선택된 항목들에 대해 새로운 배송 상태 설정
         const updatedData = props.matchedData.map(item => {
-            if (item.orderId === orderId) {
-                return {
-                    ...item,
-                    deliveryStatus: selectedStatus
-                };
+            if (props.checkedItems.includes(item.orderId)) {
+                if (item.orderId === orderId) {
+                    // 현재 처리 중인 항목에 대해서만 상태 업데이트
+                    return {
+                        ...item,
+                        deliveryStatus: selectedStatus
+                    };
+                }
             }
             return item;
         });
 
-        // 일괄 변경된 데이터로 상태 업데이트
+        // 변경된 데이터로 전체 상태 업데이트
         props.setMatchedData(updatedData);
     };
 
 
 
+    // // 개별 항목 선택 및 해제 함수
+    // const toggleSelectedStatus = (orderId) => {
+    //     if (props.checkedItems.includes(orderId)) {
+    //         // 이미 선택된 항목이면 선택 해제
+    //         const updatedCheckedItems = props.checkedItems.filter(id => id !== orderId);
+    //         props.setCheckedItems(updatedCheckedItems);
+    //     } else {
+    //         // 선택되지 않은 항목이면 선택
+    //         props.setCheckedItems([...props.checkedItems, orderId]);
+    //     }
+    // };
 
     return (
         <div className='modalOverlay'>
@@ -121,13 +123,12 @@ export default function DeliveryStateModal(props) {
                     </span>
                 </div>
 
-
                 {/* 제목 */}
                 <div className={styles.modalTitle}>
                     배송 상태 수정
                 </div>
 
-
+                {/* 데이터 표시 테이블 */}
                 <table className={styles.deliveryTable}>
                     {/* Column Names */}
                     <thead
@@ -164,47 +165,47 @@ export default function DeliveryStateModal(props) {
                         </tr>
                     </thead>
 
-                    {/* onDisplay */}
+                    {/* 데이터 표시 */}
                     <tbody>
-                        {props.matchedData &&
-                            selectedOrders.map((item, index) => (
-                                <tr key={index}>
-                                    {/* 주문번호 */}
-                                    <td>{item.orderId}</td>
-                                    {/* 배송상태 */}
-                                    <td>
-                                        <select
-                                            className={parentsStyles.handler}
-                                            value={item.deliveryStatus}
-                                            onChange={(e) => {
-                                                handleIndividualChangeDeliveryStatus(item.orderId, e);
-                                            }}
-                                        >
-                                            <option value={1}>배송 준비</option>
-                                            <option value={2}>배송 중</option>
-                                            <option value={3}>배송 완료</option>
-                                        </select>
-                                    </td>
-                                    {/* 주문일자 */}
-                                    <td>{item.order_Date}</td>
-                                    {/* 상품번호 */}
-                                    <td>{item.ProductId}</td>
-                                    {/* 미니 이미지 */}
-                                    <td>{item.image.mini}</td>
-                                    {/* 상품명 */}
-                                    <td>{item.title}</td>
-                                    {/* 옵션 상세 - 선택 옵션이 있을 경우만 표시*/}
-                                    <td>{item.optionSelected ? item.optionSelected : "-"}</td>
-                                    {/* 가격 */}
-                                    <td>{item.price}</td>
-                                    {/* 할인률 */}
-                                    <td>{item.discount === 0 ? item.price : item.price - (item.price * item.discount / 100)}</td>
-                                </tr>
-                            ))}
+                        {fetchedData.map((item, index) => (
+                            <tr key={index}>
+                                {/* 주문번호 */}
+                                <td>{item.orderId}</td>
+                                {/* 배송상태 */}
+                                <td>
+                                    <select
+                                        className={parentsStyles.handler}
+                                        value={item.deliveryStatus}
+                                        onChange={(e) => {
+                                            handlePerStatus(item.orderId, e);
+                                        }}
+                                    >
+                                        <option value={1}>배송 준비</option>
+                                        <option value={2}>배송 중</option>
+                                        <option value={3}>배송 완료</option>
+                                    </select>
+                                </td>
+                                {/* 주문일자 */}
+                                <td>{item.order_Date}</td>
+                                {/* 상품번호 */}
+                                <td>{item.ProductId}</td>
+                                {/* 미니 이미지 */}
+                                <td>{item.image.mini}</td>
+                                {/* 상품명 */}
+                                <td>{item.title}</td>
+                                {/* 옵션 상세 - 선택 옵션이 있을 경우만 표시*/}
+                                <td>{item.optionSelected ? item.optionSelected : "-"}</td>
+                                {/* 가격 */}
+                                <td>{item.price}</td>
+                                {/* 할인률 */}
+                                <td>{item.discount === 0 ? item.price : item.price - (item.price * item.discount / 100)}</td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
 
-                <button className={styles.batchChangeButton} onClick={batchChange_deliveryStatus}>
+                {/* 일괄 변경 버튼 */}
+                <button className={styles.batchChangeButton} onClick={handleBatchStatus}>
                     일괄 변경
                 </button>
 
