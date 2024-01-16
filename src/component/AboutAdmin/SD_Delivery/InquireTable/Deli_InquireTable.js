@@ -216,6 +216,8 @@ export default function Deli_InquireTable() {
                                 onChange={(e) => handleAllCheckbox(e)} />
                         </th>
                         <th>주문번호</th>
+                        <th>택배사</th>
+                        <th>송장 번호</th>
                         <th>처리상태</th>
                         <th>주문일자</th>
                         <th>상품코드</th>
@@ -240,6 +242,10 @@ export default function Deli_InquireTable() {
                                 </td>
                                 {/* 주문번호 */}
                                 <td>{item.orderId}</td>
+                                {/* 택배사 */}
+                                <td>{item.deliverySelect}</td>
+                                {/* 송장 번호 */}
+                                <td>{item.delivery_num}</td>
                                 {/* 배송상태 */}
                                 <td>{parseDeliveryState(item.deliveryStatus)}</td>
                                 {/* 주문일자 */}

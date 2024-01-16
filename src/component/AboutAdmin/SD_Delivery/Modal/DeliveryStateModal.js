@@ -10,10 +10,10 @@ export default function DeliveryStateModal(props) {
 
     // 가져온 데이터 저장 상태
     const [fetchedData, setFetchedData] = useState([]);
-    
+
     // 선택된 배송 상태 저장 상태
     const [selectedDeliveryStatus, setSelectedDeliveryStatus] = useState(0);
-    
+
     // 전체 선택된 상태 저장 상태
     const [overallSelectedStatus, setOverallSelectedStatus] = useState(0);
 
@@ -137,8 +137,22 @@ export default function DeliveryStateModal(props) {
                     >
                         <tr>
                             <th>주문번호</th>
+                            <th>택배사</th>
+                            <th>송장 번호</th>
+                            <th>처리상태</th>
+                            <th>주문일자</th>
+                            <th>상품코드</th>
+                            <th>이미지</th>
+                            <th>상품명</th>
+                            <th>옵션명</th>
+                            <th>표준가</th>
+                            <th>공급가</th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
                             <th>
-                                처리상태
                                 <select
                                     className={styles.handler}
                                     value={
@@ -158,13 +172,13 @@ export default function DeliveryStateModal(props) {
                                     <option value={3}>배송 완료</option>
                                 </select>
                             </th>
-                            <th>주문일자</th>
-                            <th>상품코드</th>
-                            <th>이미지</th>
-                            <th>상품명</th>
-                            <th>옵션명</th>
-                            <th>표준가</th>
-                            <th>공급가</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
                         </tr>
                     </thead>
 
@@ -174,6 +188,10 @@ export default function DeliveryStateModal(props) {
                             <tr key={index}>
                                 {/* 주문번호 */}
                                 <td>{item.orderId}</td>
+                                {/* 택배사 */}
+                                <td>{item.deliverySelect}</td>
+                                {/* 송장 번호 */}
+                                <td>{item.delivery_num}</td>
                                 {/* 배송상태 */}
                                 <td>
                                     <select
