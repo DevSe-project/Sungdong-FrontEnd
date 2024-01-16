@@ -9,11 +9,12 @@
   display: flex;
   flex-direction: row;
   width: 5em;
-  border: 1px solid lightgray;
+  border: 3px solid gray;
   justify-content: space-between;
   align-items: center;
   white-space: nowrap;
-  padding: 0.5em;
+  padding: 10px;
+  font-size: 18px;
   cursor: pointer;
   position: relative;
 }

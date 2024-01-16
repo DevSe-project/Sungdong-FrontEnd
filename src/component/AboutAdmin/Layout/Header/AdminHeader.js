@@ -3,27 +3,39 @@ import logo from '../../../../image/logo.jpeg';
 import { AdminHeaderSearchBar } from './AdminHeaderSearchBar'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-export function AdminHeader(){
+export function AdminHeader() {
   const [filterModal, setFilterModal] = useState(false);
   const navigate = useNavigate();
-  return(
+  return (
     <div>
       <div className={styles.background}>
-        <img style={{cursor: 'pointer'}} src={logo} alt='로고' height='70px' onClick={()=> navigate("/adminMain")}/>
-        <AdminHeaderSearchBar/>
-        <div style={{display: 'flex', gap: '2em', alignItems: 'center'}}>
-          <i 
-          className="fal fa-bell"
-          style={{fontSize: '1.5em', cursor: 'pointer'}}/>
-          <div 
-          onClick={()=>setFilterModal(!filterModal)}
-          className={styles.searchFilter}>
-            Admin 
-            <i 
-            style={{color:'gray'}} 
-            className={filterModal 
-            ? 'fas fa-angle-up' 
-            : 'fas fa-angle-down'}
+        {/* Left - 로고 */}
+        <img style={{ cursor: 'pointer' }} src={logo} alt='로고' height='70px' onClick={() => navigate("/adminMain")} />
+
+        {/* Center - 검색창 */}
+        <AdminHeaderSearchBar />
+
+
+        {/* Right - 아이콘 및 필터 */}
+        <div style={{ display: 'flex', gap: '2em', alignItems: 'center' }}>
+
+          {/* Store로 링크(고객페이지) */}
+          <i class="fa-solid fa-shop"
+            style={{ cursor: 'pointer', fontSize: '28px', color: 'rgb(50, 50, 50)' }}
+            onClick={() => { navigate('/') }}></i>
+
+          {/* 알림 아이콘 */}
+          <i class="fa-solid fa-bell" style={{ fontSize: '28px', cursor: 'pointer', color: 'rgb(50, 50, 50)' }}></i>
+          {/* 필터 */}
+          <div
+            onClick={() => setFilterModal(!filterModal)}
+            className={styles.searchFilter}>
+            Admin
+            <i
+              style={{ color: 'black', fontWeight: 'bold' }}
+              className={filterModal
+                ? 'fas fa-angle-up'
+                : 'fas fa-angle-down'}
             />
           </div>
         </div>
