@@ -25,8 +25,7 @@ export default function InvoiceModal(props) {
     useEffect(() => {
         // 업데이트 함수
         dataFetch();
-
-    }, [])
+    }, []);
 
     // 데이터 Fetching
     function dataFetch() {
@@ -37,7 +36,7 @@ export default function InvoiceModal(props) {
         // 체크된 항목에 해당하는 데이터 가져오기
         const data = props.checkedItems.map(orderId => {
             return props.matchedData.find(item => item.orderId === orderId);
-        })
+        });
 
         setFetchedData(data);
     }
@@ -69,11 +68,13 @@ export default function InvoiceModal(props) {
                             <th>옵션명</th>
                             <th>표준가</th>
                             <th>공급가</th>
+                            <th>택배사</th> {/* 추가: 택배사 컬럼 */}
+                            <th>송장번호</th> {/* 추가: 송장번호 컬럼 */}
                         </tr>
                     </thead>
                     <tbody>
                         {fetchedData.length > 0 &&
-                            fetchedData.map((item, index) => {
+                            fetchedData.map((item, index) => (
                                 <tr key={index}>
                                     {/* 주문번호 */}
                                     <td>{item.orderId}</td>
@@ -93,8 +94,30 @@ export default function InvoiceModal(props) {
                                     <td>{item.price}</td>
                                     {/* 할인률 */}
                                     <td>{item.discount === 0 ? item.price : item.price - (item.price * item.discount / 100)}</td>
+                                    {/* 택배사 선택 */}
+                                    <td>
+                                        <select
+                                            className={styles.handler}
+                                            value={item.deliverySelect}
+                                            onChange={(e) => setCourier(e.target.value)}
+                                        >
+                                            <option value="">선택</option>
+                                            <option value="성동택배">성동택배</option>
+                                            <option value="대한통운">대한통운</option>
+                                            <option value="롯데택배">롯데택배</option>
+                                        </select>
+                                    </td>
+                                    {/* 송장번호 입력 */}
+                                    <td>
+                                        <input
+                                            className={styles.handler}
+                                            type="text"
+                                            value={item.delivery_num}
+                                            onChange={(e) => setNewInvoiceNumber(e.target.value)}
+                                        />
+                                    </td>
                                 </tr>
-                            })}
+                            ))}
                     </tbody>
                 </table>
 
