@@ -310,7 +310,8 @@ export default function Deli_InquireTable() {
                         checkedItems={checkedItems}
                         setCheckedItems={setCheckedItems}
                         matchedData={matchedData}
-                        setMatchedData={setMatchedData} />
+                        setMatchedData={setMatchedData}
+                        parseDeliveryState={parseDeliveryState} />
                     :
                     null
             }
