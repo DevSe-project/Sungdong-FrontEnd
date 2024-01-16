@@ -72,28 +72,29 @@ export default function InvoiceModal(props) {
                         </tr>
                     </thead>
                     <tbody>
-                        {fetchedData.map((item, index) => {
-                            <tr key={index}>
-                                {/* 주문번호 */}
-                                <td>{item.orderId}</td>
-                                {/* 배송상태 */}
-                                <td>{props.parseDeliveryState(item.deliveryStatus)}</td>
-                                {/* 주문일자 */}
-                                <td>{item.order_Date}</td>
-                                {/* 상품번호 */}
-                                <td>{item.ProductId}</td>
-                                {/* 미니 이미지 */}
-                                <td>{item.image.mini}</td>
-                                {/* 상품명 */}
-                                <td>{item.title}</td>
-                                {/* 옵션 상세 - 선택 옵션이 있을 경우만 표시*/}
-                                <td>{item.optionSelected ? item.optionSelected : "-"}</td>
-                                {/* 가격 */}
-                                <td>{item.price}</td>
-                                {/* 할인률 */}
-                                <td>{item.discount === 0 ? item.price : item.price - (item.price * item.discount / 100)}</td>
-                            </tr>
-                        })}
+                        {fetchedData.length > 0 &&
+                            fetchedData.map((item, index) => {
+                                <tr key={index}>
+                                    {/* 주문번호 */}
+                                    <td>{item.orderId}</td>
+                                    {/* 배송상태 */}
+                                    <td>{props.parseDeliveryState(item.deliveryStatus)}</td>
+                                    {/* 주문일자 */}
+                                    <td>{item.order_Date}</td>
+                                    {/* 상품번호 */}
+                                    <td>{item.ProductId}</td>
+                                    {/* 미니 이미지 */}
+                                    <td>{item.image.mini}</td>
+                                    {/* 상품명 */}
+                                    <td>{item.title}</td>
+                                    {/* 옵션 상세 - 선택 옵션이 있을 경우만 표시*/}
+                                    <td>{item.optionSelected ? item.optionSelected : "-"}</td>
+                                    {/* 가격 */}
+                                    <td>{item.price}</td>
+                                    {/* 할인률 */}
+                                    <td>{item.discount === 0 ? item.price : item.price - (item.price * item.discount / 100)}</td>
+                                </tr>
+                            })}
                     </tbody>
                 </table>
 
