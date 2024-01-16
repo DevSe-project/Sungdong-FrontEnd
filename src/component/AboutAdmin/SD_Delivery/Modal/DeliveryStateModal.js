@@ -3,17 +3,22 @@ import { useModalActions } from "../../../../Store/DataStore";
 import styles from './ModalStyles.module.css';
 import parentsStyles from '../InquireTable/Deli_InquireTable.module.css';
 
-// 주문 상태 수정을 위한 모달 컴포넌트
+// 배송 상태 수정 모달 컴포넌트
 export default function DeliveryStateModal(props) {
-    // 모달 닫기 함수
+    // 모달 닫기 함수 가져오기
     const { selectedModalClose } = useModalActions();
+
     // 가져온 데이터 저장 상태
     const [fetchedData, setFetchedData] = useState([]);
+
     // 선택된 배송 상태 저장 상태
     const [selectedDeliveryStatus, setSelectedDeliveryStatus] = useState(0);
 
+    // 전체 선택된 상태 저장 상태
+    const [overallSelectedStatus, setOverallSelectedStatus] = useState(0);
+
+    // ESC 키로 모달 닫기 이벤트 리스너 등록
     useEffect(() => {
-        // ESC 키로 모달 닫기 이벤트 리스너 등록
         const exit_esc = (event) => {
             if (event.key === 'Escape') {
                 selectedModalClose();
@@ -27,15 +32,20 @@ export default function DeliveryStateModal(props) {
         };
     }, [selectedModalClose]);
 
+    // 전체 선택된 상태 변경 시 useEffect를 통해 일괄적으로 데이터 업데이트
     useEffect(() => {
-        // 체크된 항목이나 개별 배송 상태 변경시 데이터 다시 가져오기
-        dataFetch();
-    }, [props.checkedItems, props.matchedData]);
+        handleBatchStatus(overallSelectedStatus);
+    }, [overallSelectedStatus]);
 
-    // [Effect연결함수] 선택된 항목의 데이터 가져오기
+    // 선택된 항목이나 개별 배송 상태 변경 시 useEffect를 통해 데이터 다시 가져오기
+    useEffect(() => {
+        dataFetch();
+        setOverallSelectedStatus(selectedDeliveryStatus);
+    }, [props.checkedItems, props.setCheckedItems, props.matchedData, props.setMatchedData, selectedDeliveryStatus]);
+
+    // 선택된 항목의 데이터 가져오는 함수
     function dataFetch() {
         if (!props.checkedItems) {
-            // 체크된 항목 없으면 모달 닫기
             selectedModalClose();
         }
 
@@ -64,152 +74,164 @@ export default function DeliveryStateModal(props) {
                         // deliveryStatus: selectedStatus
                     };
             })
-
-            props.setMatchedData(updateData);
-        } else {
-            alert("잘못된 선택입니다.");
-            setSelectedDeliveryStatus(0); // 선택된 상태 초기화
-        }
-    }
-
-    // 개별 항목의 배송 상태 변경 함수
-    const handlePerStatus = (orderId, e) => {
-        const selectedStatus = parseInt(e.target.value, 10);
-
-        // 선택된 항목들에 대해 새로운 배송 상태 설정
-        const updatedData = props.matchedData.map(item => {
-            if (props.checkedItems.includes(item.orderId)) {
-                if (item.orderId === orderId) {
-                    // 현재 처리 중인 항목에 대해서만 상태 업데이트
-                    return {
+            // 적용 버튼 클릭 시 호출되는 함수
+            function applyStatus() {
+                // FetchData에서 가져온 데이터로 MatchedData 업데이트
+                props.setMatchedData((prevData) =>
+                    prevData.map((item) => ({
                         ...item,
-                        deliveryStatus: selectedStatus
-                    };
+                        deliveryStatus: fetchedData.find((dataItem) => dataItem.orderId === item.orderId).deliveryStatus,
+                    }))
+                );
+                // 모달 닫기 또는 필요한 작업 수행
+                selectedModalClose();
+                props.setCheckedItems([]);
+            }
+
+            // 전체 항목의 배송 상태 변경 함수
+            function handleBatchStatus(val) {
+                // FetchedData의 모든 항목의 배송 상태 일괄 업데이트
+                setFetchedData((prevData) =>
+                    prevData.map((item) => ({
+                        ...item,
+                        deliveryStatus: val,
+                    }))
+                );
+            }
+
+            // 개별 항목의 배송 상태 변경 함수
+            function handlePerStatus(orderId, e) {
+                const selectedStatus = parseInt(e.target.value, 10);
+
+                if (selectedStatus === 1 || selectedStatus === 2 || selectedStatus === 3) {
+                    // 선택된 항목의 배송 상태 업데이트
+                    const updatedData = fetchedData.map(item => {
+                        if (item.orderId === orderId) {
+                            return {
+                                ...item,
+                                deliveryStatus: selectedStatus
+                            };
+                        }
+                        return item;
+                    });
+
+                    setFetchedData(updatedData);
+                } else {
+                    alert("잘못된 선택입니다.");
                 }
             }
-            return item;
-        });
 
-        // 변경된 데이터로 전체 상태 업데이트
-        props.setMatchedData(updatedData);
-    };
-
-
-
-    // // 개별 항목 선택 및 해제 함수
-    // const toggleSelectedStatus = (orderId) => {
-    //     if (props.checkedItems.includes(orderId)) {
-    //         // 이미 선택된 항목이면 선택 해제
-    //         const updatedCheckedItems = props.checkedItems.filter(id => id !== orderId);
-    //         props.setCheckedItems(updatedCheckedItems);
-    //     } else {
-    //         // 선택되지 않은 항목이면 선택
-    //         props.setCheckedItems([...props.checkedItems, orderId]);
-    //     }
-    // };
-
-    return (
-        <div className='modalOverlay'>
-            <div className='modalContainer'
-                style={{
-                    width: 'max-content',
-                }}>
-                <div
-                    className='exitButton'>
-                    <span onClick={() => {
-                        selectedModalClose();
-                    }}>
-                        <i className="fas fa-times"></i>
-                    </span>
-                </div>
-
-                {/* 제목 */}
-                <div className={styles.modalTitle}>
-                    배송 상태 수정
-                </div>
-
-                {/* 데이터 표시 테이블 */}
-                <table className={styles.deliveryTable}>
-                    {/* Column Names */}
-                    <thead
+            return (
+                <div className='modalOverlay'>
+                    <div className='modalContainer'
                         style={{
-                            backgroundColor: 'white',
-                            color: 'black',
-                            boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)'
-                        }}
-                    >
-                        <tr>
-                            <th>주문번호</th>
-                            <th>
-                                처리상태
-                                <select
-                                    className={parentsStyles.handler}
-                                    value={selectedDeliveryStatus}
-                                    onChange={(e) => {
-                                        setSelectedDeliveryStatus(e.target.value);
-                                    }}
-                                >
-                                    <option value={0}>선택</option>
-                                    <option value={1}>배송 준비</option>
-                                    <option value={2}>배송 중</option>
-                                    <option value={3}>배송 완료</option>
-                                </select>
-                            </th>
-                            <th>주문일자</th>
-                            <th>상품코드</th>
-                            <th>이미지</th>
-                            <th>상품명</th>
-                            <th>옵션명</th>
-                            <th>표준가</th>
-                            <th>공급가</th>
-                        </tr>
-                    </thead>
+                            width: 'max-content',
+                        }}>
+                        <div
+                            className='exitButton'>
+                            <span onClick={() => {
+                                selectedModalClose();
+                            }}>
+                                <i className="fas fa-times"></i>
+                            </span>
+                        </div>
 
-                    {/* 데이터 표시 */}
-                    <tbody>
-                        {fetchedData.map((item, index) => (
-                            <tr key={index}>
-                                {/* 주문번호 */}
-                                <td>{item.orderId}</td>
-                                {/* 배송상태 */}
-                                <td>
-                                    <select
-                                        className={parentsStyles.handler}
-                                        value={item.deliveryStatus}
-                                        onChange={(e) => {
-                                            handlePerStatus(item.orderId, e);
-                                        }}
-                                    >
-                                        <option value={1}>배송 준비</option>
-                                        <option value={2}>배송 중</option>
-                                        <option value={3}>배송 완료</option>
-                                    </select>
-                                </td>
-                                {/* 주문일자 */}
-                                <td>{item.order_Date}</td>
-                                {/* 상품번호 */}
-                                <td>{item.ProductId}</td>
-                                {/* 미니 이미지 */}
-                                <td>{item.image.mini}</td>
-                                {/* 상품명 */}
-                                <td>{item.title}</td>
-                                {/* 옵션 상세 - 선택 옵션이 있을 경우만 표시*/}
-                                <td>{item.optionSelected ? item.optionSelected : "-"}</td>
-                                {/* 가격 */}
-                                <td>{item.price}</td>
-                                {/* 할인률 */}
-                                <td>{item.discount === 0 ? item.price : item.price - (item.price * item.discount / 100)}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        {/* 제목 */}
+                        <div className={styles.modalTitle}>
+                            배송 상태 수정
+                        </div>
 
-                {/* 일괄 변경 버튼 */}
-                <button className={styles.batchChangeButton} onClick={handleBatchStatus}>
-                    일괄 변경
-                </button>
+                        {/* 데이터 표시 테이블 */}
+                        <table className={styles.deliveryTable}>
+                            {/* Column Names */}
+                            <thead
+                                style={{
+                                    backgroundColor: 'white',
+                                    color: 'black',
+                                    boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)'
+                                }}
+                            >
+                                <tr>
+                                    <th>주문번호</th>
+                                    <th>
+                                        처리상태
+                                        <select
+                                            className={styles.handler}
+                                            value={
+                                                fetchedData.length > 0 && fetchedData.every(item => item?.deliveryStatus === fetchedData[0]?.deliveryStatus)
+                                                    ? fetchedData[0].deliveryStatus
+                                                    : 0
+                                            }
+                                            onChange={(e) => {
+                                                const selectedValue = parseInt(e.target.value, 10);
+                                                setOverallSelectedStatus(selectedValue);
+                                                handleBatchStatus(selectedValue);
+                                            }}
+                                        >
+                                            <option value={0}>개별 선택</option>
+                                            <option value={1}>배송 준비</option>
+                                            <option value={2}>배송 중</option>
+                                            <option value={3}>배송 완료</option>
+                                        </select>
+                                    </th>
+                                    <th>주문일자</th>
+                                    <th>상품코드</th>
+                                    <th>이미지</th>
+                                    <th>상품명</th>
+                                    <th>옵션명</th>
+                                    <th>표준가</th>
+                                    <th>공급가</th>
+                                </tr>
+                            </thead>
 
-            </div>
-        </div >
-    );
+                            {/* 데이터 표시 */}
+                            <tbody>
+                                {fetchedData.map((item, index) => (
+                                    <tr key={index}>
+                                        {/* 주문번호 */}
+                                        <td>{item.orderId}</td>
+                                        {/* 배송상태 */}
+                                        <td>
+                                            <select
+                                                className={styles.handler}
+                                                value={item.deliveryStatus}
+                                                onChange={(e) => {
+                                                    handlePerStatus(item.orderId, e);
+                                                }}
+                                            >
+                                                <option value={1}>배송 준비</option>
+                                                <option value={2}>배송 중</option>
+                                                <option value={3}>배송 완료</option>
+                                            </select>
+                                        </td>
+                                        {/* 주문일자 */}
+                                        <td>{item.order_Date}</td>
+                                        {/* 상품번호 */}
+                                        <td>{item.ProductId}</td>
+                                        {/* 미니 이미지 */}
+                                        <td>{item.image.mini}</td>
+                                        {/* 상품명 */}
+                                        <td>{item.title}</td>
+                                        {/* 옵션 상세 - 선택 옵션이 있을 경우만 표시*/}
+                                        <td>{item.optionSelected ? item.optionSelected : "-"}</td>
+                                        {/* 가격 */}
+                                        <td>{item.price}</td>
+                                        {/* 할인률 */}
+                                        <td>{item.discount === 0 ? item.price : item.price - (item.price * item.discount / 100)}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+
+                        {/* 적용 버튼 */}
+                        <button className={styles.applyButton} onClick={applyStatus}>
+                            적용
+                        </button>
+
+                    </div>
+                </div>
+            );
+        }
+    }
 }
+

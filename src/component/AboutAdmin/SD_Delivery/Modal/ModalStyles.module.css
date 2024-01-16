@@ -10,3 +10,40 @@
     margin: 0 1em 1em 1em;
 
 }
+
+.handler {
+    border: 1px solid lightgray;
+    border-radius: 1vh;
+    background-color: white;
+    padding: 0.5em;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    cursor: pointer;
+}
+
+.handler:hover {
+    background-color: var(--main-color-light);
+    transition: background-color 0.3s;
+}
+
+.handler:active {
+    background-color: var(--main-color-original);
+}
+
+.applyButton {
+    display: block;
+    margin: auto;
+    margin-bottom: 1em;
+    border: 1px solid lightgray;
+    background-color: var(--main-color-original);
+    color: white;
+    padding: 0.5em;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    cursor: pointer;
+}
+
+.applyButton:hover {
+    background-color: var(--text-hover-color);
+    transition: background-color 0.3s;
+}
