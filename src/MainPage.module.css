@@ -1,6 +1,7 @@
 .body {
     display: flex;
     flex-direction: column;
+    background-color: whitesmoke;
 }
 
 .flexBox {

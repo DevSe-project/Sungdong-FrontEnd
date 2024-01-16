@@ -1,18 +1,21 @@
 /* 상품 전체 컨테이너 */
 .gridContainer {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: left;
-  gap: 10px;
+  display: grid; /* 그리드 컨테이너로 선언 */
+  grid-template-columns: repeat(auto-fill, minmax(calc(25% - 20px), 1fr)); /* 그리드의 열을 유연하게 생성하되 최대 너비를 초과하지 않게 설정 */
+  gap: 1em; /* 그리드 아이템 간의 간격 */
+  justify-content: space-around; /* 그리드 아이템을 가로 방향으로 중앙 정렬 */
 }
 
 /* 각 상품 블럭 */
 .gridItem {
-  flex: 0 0 calc(33.333% - 20px);
-  width: 60em;
+  flex: 0 0 calc(25% - 20px);
+  width: 60em; /* 이상한 크기가 아닌가요? 확인이 필요할 수 있습니다. */
   margin-top: 1em;
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
+  border-radius: 1vh;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
 }
 .gridItem:hover {
   transform: scale(1.05);
