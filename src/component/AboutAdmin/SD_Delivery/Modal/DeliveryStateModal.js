@@ -51,8 +51,7 @@ export default function DeliveryStateModal(props) {
 
         // 체크된 항목에 해당하는 데이터 가져오기
         const data = props.checkedItems.map(orderId => {
-            const matchingData = props.matchedData.find(item => item.orderId === orderId);
-            return matchingData;
+            return props.matchedData.find(item => item.orderId === orderId);
         });
 
         setFetchedData(data);
