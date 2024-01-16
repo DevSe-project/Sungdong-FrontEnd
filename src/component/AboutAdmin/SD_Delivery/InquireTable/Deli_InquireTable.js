@@ -33,8 +33,31 @@ export default function Deli_InquireTable() {
 
     // 업데이트 함수 호출
     useEffect(() => {
-        updateMatchedData();
+        if (ordered && delivery && product) {
+            updateMatchedData();
+        }
     }, [currentPage, ordered, delivery, product]);
+
+
+
+
+    // 배송상태 파싱
+    function parseDeliveryState(val) {
+        console.log(val);
+        const parseVal = parseInt(val);
+        switch (parseVal) {
+            case 1:
+                return '배송 준비';
+            case 2:
+                return '배송 중';
+            case 3:
+                return '배송 완료';
+            default:
+                alert('배송 상태를 불러들이지 못했습니다.');
+                return 'null';
+        }
+    }
+
 
 
 
@@ -43,7 +66,7 @@ export default function Deli_InquireTable() {
         const updateStatus = parseInt(e.target.value, 10);
 
         if (updateStatus === 1 || updateStatus === 2 || updateStatus === 3) {
-            
+
 
         } else {
             alert("잘못된 선택입니다.");
@@ -89,6 +112,15 @@ export default function Deli_InquireTable() {
         return matchedData.slice(startIndex, startIndex + itemsPerPage);
     };
 
+
+    // 배송 상태 변경 모달 열기 조건 확인
+    const handleModalOpen = (name) => {
+        if (checkedItems.length > 0) {
+            selectedModalOpen(name); // 선택된 아이템이 있으면 배송 상태 변경 모달 열기
+        } else {
+            alert('아이템을 선택하세요.'); // 선택된 아이템이 없으면 경고 메시지 표시
+        }
+    };
 
 
 
@@ -149,19 +181,15 @@ export default function Deli_InquireTable() {
                 {/* 배송상태 수정 */}
                 <button
                     className={styles.button}
-                    onClick={() => {
-                        selectedModalOpen('DeliveryStateModal')
-                    }}>
-                    배송상태 수정
+                    onClick={() => { handleModalOpen('DeliveryStateModal') }}>
+                    선택 항목 수정(배송상태)
                 </button>
                 {/* 송장 수정 */}
                 <button
                     className={styles.button}
                     // 송장수정 fn
-                    onClick={() => {
-                        selectedModalOpen('InvoiceModal')
-                    }}>
-                    송장 수정
+                    onClick={() => { handleModalOpen('InvoiceModal') }}>
+                    선택 항목 수정(송장)
                 </button>
                 {/* 일괄 배송 취소 */}
                 <button
@@ -216,19 +244,7 @@ export default function Deli_InquireTable() {
                                 {/* 주문번호 */}
                                 <td>{item.orderId}</td>
                                 {/* 배송상태 */}
-                                <td>
-                                    <select
-                                        className={styles.handler}
-                                        value={item.deliveryStatus}
-                                        onChange={(e) => {
-                                            console.log(item.deliveryStatus);
-                                        }}
-                                    >
-                                        <option value={1}>배송 준비</option>
-                                        <option value={2}>배송 중</option>
-                                        <option value={3}>배송 완료</option>
-                                    </select>
-                                </td>
+                                <td>{parseDeliveryState(item.deliveryStatus)}</td>
                                 {/* 주문일자 */}
                                 <td>{item.order_Date}</td>
                                 {/* 상품번호 */}
