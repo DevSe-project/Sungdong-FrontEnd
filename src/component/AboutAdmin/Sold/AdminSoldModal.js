@@ -103,7 +103,7 @@ export default function AdminSoldModal({item}) {
 
   return (
     <div className={styles.modalOverlay}>
-      <div className={styles.modalContainer}>
+      <div className={styles.modalContainer} style={{width: '50em'}}>
         {/* Exit Button */}
         <div className={styles.exitButton}>
           <span onClick={() => { selectedModalClose(modalName) }}>

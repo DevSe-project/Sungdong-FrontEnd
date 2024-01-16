@@ -3,6 +3,7 @@ import { useModalActions } from "../../../../Store/DataStore";
 import styles from './ModalStyles.module.css';
 import parentsStyles from '../InquireTable/Deli_InquireTable.module.css';
 
+//전제조건 : 선택 항목의 개수가 currentPage 수를 넘지 않는다는 것 -> 때문에 따로 최대 개수 설정 불필요
 export default function DeliveryStateModal(props) {
     const { selectedModalClose } = useModalActions();
     const [selectedOrders, setSelectedOrders] = useState([]);
@@ -36,51 +37,81 @@ export default function DeliveryStateModal(props) {
     }, [selectedModalClose]);
 
 
+    // 선택된 항목의 배송상태를 일괄 변경
+    function batchChange_deliveryStatus() {
+        const parseStatus = parseInt(selectedDeliveryStatus, 10);
 
-    const handleBatchChangeDeliveryStatus = () => {
-        if (window.confirm("배송 상태를 변경하시겠습니까?")) {
-            const updatedData = props.matchedData.map(item => {
-                if (props.checkedItems.includes(item.orderId)) {
-                    return {
-                        ...item,
-                        deliveryStatus: selectedDeliveryStatus
-                    };
+        // 1, 2, 3 중에 값이 있어야 함수 동작
+        if (parseStatus === 1 || parseStatus === 2 || parseStatus === 3) {
+            const confirmed = window.confirm("변경하시겠습니까?");
+
+            if (confirmed) {
+                // 선택된 항목들이 없는 경우에는 알림창을 띄우고 함수 종료
+                if (props.checkedItems.length === 0) {
+                    alert("선택된 항목이 없습니다.");
+                    return;
                 }
-                return item;
-            });
 
-            props.setMatchedData(updatedData);
-            props.setCheckedItems([]); // Clear selection
-            setSelectedDeliveryStatus(0); // Reset delivery status
-            selectedModalClose(); // Close modal
+                // 선택된 항목들에 대해 새로운 배송 상태 설정
+                const updatedData = props.matchedData.map(item => {
+                    if (props.checkedItems.includes(item.orderId)) {
+                        return {
+                            ...item,
+                            deliveryStatus: parseStatus
+                        };
+                    }
+                    return item;
+                });
+
+                // 일괄 변경된 데이터로 상태 업데이트
+                props.setMatchedData(updatedData);
+                setSelectedDeliveryStatus(0);
+                selectedModalClose();
+                return; // 중요: 함수를 여기서 종료합니다.
+            }
+
+            // '취소'를 선택한 경우
+            setSelectedDeliveryStatus(0); // 초기화
+            alert("수정이 취소되었습니다.");
+        } else {
+            // 잘못된 선택일 경우
+            alert("잘못된 선택입니다.");
+            setSelectedDeliveryStatus(0);
         }
-    };
+    }
 
 
 
-    // Delivery status update function for individual change
-    const handleIndividualChangeDeliveryStatus = (orderId) => {
+
+
+    // 배송 상태 개별 업데이트
+    const handleIndividualChangeDeliveryStatus = (orderId, e) => {
+        const selectedStatus = parseInt(e.target.value, 10);
+
+        // 선택된 항목들에 대해 새로운 배송 상태 설정
         const updatedData = props.matchedData.map(item => {
             if (item.orderId === orderId) {
                 return {
                     ...item,
-                    deliveryStatus: selectedDeliveryStatus
+                    deliveryStatus: selectedStatus
                 };
             }
             return item;
         });
 
+        // 일괄 변경된 데이터로 상태 업데이트
         props.setMatchedData(updatedData);
     };
+
 
 
 
     return (
         <div className='modalOverlay'>
             <div className='modalContainer'
-                style={ {
+                style={{
                     width: 'max-content',
-                    }}>
+                }}>
                 <div
                     className='exitButton'>
                     <span onClick={() => {
@@ -108,7 +139,21 @@ export default function DeliveryStateModal(props) {
                     >
                         <tr>
                             <th>주문번호</th>
-                            <th>처리상태</th>
+                            <th>
+                                처리상태
+                                <select
+                                    className={parentsStyles.handler}
+                                    value={selectedDeliveryStatus}
+                                    onChange={(e) => {
+                                        setSelectedDeliveryStatus(e.target.value);
+                                    }}
+                                >
+                                    <option value={0}>선택</option>
+                                    <option value={1}>배송 준비</option>
+                                    <option value={2}>배송 중</option>
+                                    <option value={3}>배송 완료</option>
+                                </select>
+                            </th>
                             <th>주문일자</th>
                             <th>상품코드</th>
                             <th>이미지</th>
@@ -132,8 +177,7 @@ export default function DeliveryStateModal(props) {
                                             className={parentsStyles.handler}
                                             value={item.deliveryStatus}
                                             onChange={(e) => {
-                                                directUpdate_deliveryStatus(e, item.deliveryStatus);
-                                                console.log(item.deliveryStatus);
+                                                handleIndividualChangeDeliveryStatus(item.orderId, e);
                                             }}
                                         >
                                             <option value={1}>배송 준비</option>
@@ -160,7 +204,11 @@ export default function DeliveryStateModal(props) {
                     </tbody>
                 </table>
 
+                <button className={styles.batchChangeButton} onClick={batchChange_deliveryStatus}>
+                    일괄 변경
+                </button>
+
             </div>
-        </div>
+        </div >
     );
 }
