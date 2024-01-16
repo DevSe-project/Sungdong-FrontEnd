@@ -9,7 +9,6 @@
 /* 각 상품 블럭 */
 .gridItem {
   flex: 0 0 calc(25% - 20px);
-  width: 60em; /* 이상한 크기가 아닌가요? 확인이 필요할 수 있습니다. */
   margin-top: 1em;
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
