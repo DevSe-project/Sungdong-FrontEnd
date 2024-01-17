@@ -706,22 +706,6 @@ export const useRefundFilterStore = create((set) => ({
 export const useRaeFilter = () => useRefundFilterStore((state) => state.raeFilter);
 export const useRaeFilterActions = () => useRefundFilterStore((state) => state.actions);
 
-
-// -------------- Delivery Data --------------
-export const useDeliveryStore = () => create((set) => ({
-  deliveryState: 0,
-  orderId: '',
-  invoiceNum: null,
-
-  actions: {
-    setDeliveryState: (changed) => set((state) => ({
-      deliveryState: changed
-    })),
-    setInvoiceNum: (changed) => set((state) => ({
-      invoiceNum: changed
-    })),
-  }
-}))
 /* ----------------Notice STORE---------------- */
 export const useNoticeStore = create((set) => ({
   notice: {
@@ -750,3 +734,30 @@ export const useNoticeStore = create((set) => ({
 }));
 export const useNotice = () => useNoticeStore((state) => state.notice);
 export const useNoticeActions = () => useNoticeStore((state) => state.actions);
+
+
+// ------------Delivery Filter------------
+export const useDeliveryFilter = create((set) => ({
+  status_checkbox: {
+    all: false,
+    ready: false,
+    going: false,
+    gone: false,
+    delay: false
+  },
+  date_filter: {
+    start_date: '',
+    end_date: ''
+  },
+  
+  actions: {
+
+  }
+}))
+
+// 커스텀 state: 배송현황 체크박스
+export const useDeliveryStatusChekcobx = () => useDeliveryFilter((state) => state.status_checkbox);
+// 커스텀 state: 배송날짜 필터 체크박스
+export const useDeliveryDataFilter = () => useDeliveryFilter((state) => state.date_filter);
+// 커스텀 state: actions
+export const useDeliveryFilterActions = () => useDeliveryFilter((state)=> state.actions);

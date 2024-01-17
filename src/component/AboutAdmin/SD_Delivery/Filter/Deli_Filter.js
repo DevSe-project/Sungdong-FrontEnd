@@ -1,25 +1,61 @@
+import { useDeliveryFilter, useDeliveryFilterActions, useDeliveryStatusChekcobx } from '../../../../Store/DataStore';
 import styles from './Deli_Filter.module.css';
 
 export default function Deli_Filter() {
 
+    const { status_checkbox } = useDeliveryStatusChekcobx();
+    const { date_filter } = useDeliveryFilter();
+    const { } = useDeliveryFilterActions();
+
     function deliStateFtilter() {
         return (
+            // 배송상태 필터 체크박스
             <div className={styles.deliState_container}>
                 {/* 전체 */}
-                <input className={styles.state_checkbox} id='deliState_all' type='checkbox' /> 
-                <label className={styles.state_label} htmlFor='deliState_all'>전체</label>
+                <input
+                    className={styles.state_checkbox}
+                    id='deliState_all'
+                    type='checkbox'
+                    value={status_checkbox.all} />
+                <label
+                    className={styles.state_label}
+                    htmlFor='deliState_all'>전체</label>
                 {/* 배송 준비 */}
-                <input className={styles.state_checkbox} id='deliState_ready' type='checkbox' /> 
-                <label className={styles.state_label} htmlFor='deliState_ready'>배송 준비</label>
+                <input
+                    className={styles.state_checkbox}
+                    id='deliState_ready'
+                    type='checkbox'
+                    value={status_checkbox.ready} />
+                <label
+                    className={styles.state_label}
+                    htmlFor='deliState_ready'>배송 준비</label>
                 {/* 배송 진행중 */}
-                <input className={styles.state_checkbox} id='deliState_ing' type='checkbox' /> 
-                <label className={styles.state_label} htmlFor='deliState_ing'>배송 진행</label>
+                <input
+                    className={styles.state_checkbox}
+                    id='deliState_ing'
+                    type='checkbox'
+                    value={status_checkbox.going} />
+                <label
+                    className={styles.state_label}
+                    htmlFor='deliState_ing'>배송 진행</label>
                 {/* 배송 완료 */}
-                <input className={styles.state_checkbox} id='deliState_ed' type='checkbox' /> 
-                <label className={styles.state_label} htmlFor='deliState_ed'>배송 완료</label>
+                <input
+                    className={styles.state_checkbox}
+                    id='deliState_ed'
+                    type='checkbox'
+                    value={status_checkbox.gone} />
+                <label
+                    className={styles.state_label}
+                    htmlFor='deliState_ed'>배송 완료</label>
                 {/* 배송 지연 */}
-                <input className={styles.state_checkbox} id='deliState_delay' type='checkbox' />
-                <label className={styles.state_label} htmlFor='deliState_delay'>배송 지연</label>
+                <input
+                    className={styles.state_checkbox}
+                    id='deliState_delay'
+                    type='checkbox'
+                    value={status_checkbox.delay} />
+                <label
+                    className={styles.state_label}
+                    htmlFor='deliState_delay'>배송 지연</label>
             </div>
         )
     }
@@ -30,11 +66,11 @@ export default function Deli_Filter() {
                 <input className={styles.date} type='date' />
                 ~
                 <input className={styles.date} type='date' />
-                <div className={styles.dateButton} onClick={ () => {} }> 오늘 </div>
-                <div className={styles.dateButton} onClick={ () => {} }> 1 주일 </div>
-                <div className={styles.dateButton} onClick={ () => {} }> 1 개월 </div>
-                <div className={styles.dateButton} onClick={ () => {} }> 3 개월 </div>
-                <div className={styles.dateButton} onClick={ () => {} }> 6 개월 </div>
+                <div className={styles.dateButton} onClick={() => { }}> 오늘 </div>
+                <div className={styles.dateButton} onClick={() => { }}> 1 주일 </div>
+                <div className={styles.dateButton} onClick={() => { }}> 1 개월 </div>
+                <div className={styles.dateButton} onClick={() => { }}> 3 개월 </div>
+                <div className={styles.dateButton} onClick={() => { }}> 6 개월 </div>
             </div>
         )
     }
@@ -69,7 +105,7 @@ export default function Deli_Filter() {
                 ))}
                 <div style={{ display: 'flex', gap: '0.5em' }}>
                     <input className={styles.search_button} type='submit' value='검색' />
-                    <input className={styles.button} type='reset' onClick={() => {}} />
+                    <input className={styles.button} type='reset' onClick={() => { }} />
                 </div>
             </form>
         </div>
