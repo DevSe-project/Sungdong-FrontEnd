@@ -7,15 +7,13 @@ import parentsStyles from '../InquireTable/Deli_InquireTable.module.css';
 export default function DeliveryStateModal(props) {
     // 모달 닫기 함수 가져오기
     const { selectedModalClose } = useModalActions();
-
     // 가져온 데이터 저장 상태
     const [fetchedData, setFetchedData] = useState([]);
-
     // 선택된 배송 상태 저장 상태
     const [selectedDeliveryStatus, setSelectedDeliveryStatus] = useState(0);
-
     // 전체 선택된 상태 저장 상태
     const [overallSelectedStatus, setOverallSelectedStatus] = useState(0);
+
 
     // ESC 키로 모달 닫기 이벤트 리스너 등록
     useEffect(() => {
@@ -36,19 +34,18 @@ export default function DeliveryStateModal(props) {
     useEffect(() => {
         handleBatchStatus(overallSelectedStatus);
     }, [overallSelectedStatus]);
-
+    
     // 선택된 항목이나 개별 배송 상태 변경 시 useEffect를 통해 데이터 다시 가져오기
     useEffect(() => {
         dataFetch();
         setOverallSelectedStatus(selectedDeliveryStatus);
     }, [props.checkedItems, props.setCheckedItems, props.matchedData, props.setMatchedData, selectedDeliveryStatus]);
-
+    
     // 선택된 항목의 데이터 가져오는 함수
     function dataFetch() {
         if (!props.checkedItems) {
             selectedModalClose();
         }
-
         // 체크된 항목에 해당하는 데이터 가져오기
         const data = props.checkedItems.map(orderId => {
             const matchingData = props.matchedData.find(item => item.orderId === orderId);
@@ -56,20 +53,6 @@ export default function DeliveryStateModal(props) {
         });
 
         setFetchedData(data);
-    }
-
-    // 적용 버튼 클릭 시 호출되는 함수
-    function applyStatus() {
-        // FetchData에서 가져온 데이터로 MatchedData 업데이트
-        props.setMatchedData((prevData) =>
-            prevData.map((item) => ({
-                ...item,
-                deliveryStatus: fetchedData.find((dataItem) => dataItem.orderId === item.orderId).deliveryStatus,
-            }))
-        );
-        // 모달 닫기 또는 필요한 작업 수행
-        selectedModalClose();
-        props.setCheckedItems([]);
     }
 
     // 전체 항목의 배송 상태 변경 함수
@@ -104,6 +87,21 @@ export default function DeliveryStateModal(props) {
             alert("잘못된 선택입니다.");
         }
     }
+
+    // 변경사항 적용
+    function applyStatus() {
+        // FetchData에서 가져온 데이터로 MatchedData 업데이트
+        props.setMatchedData((prevData) =>
+            prevData.map((item) => ({
+                ...item,
+                deliveryStatus: fetchedData.find((dataItem) => dataItem.orderId === item.orderId).deliveryStatus,
+            }))
+        );
+        // 모달 닫기 또는 필요한 작업 수행
+        selectedModalClose();
+        props.setCheckedItems([]);
+    }
+
 
     return (
         <div className='modalOverlay'>

@@ -26,9 +26,6 @@ export default function Deli_InquireTable() {
     // 업데이트된 데이터의 체크 상태를 관리하는 state
     const [checkedItems, setCheckedItems] = useState([]);
 
-    // 선택된 배송상태를 담는다
-    const [selectedDeliveryStatus, setSelectedDeliveryStatus] = useState(0);
-
 
 
     // 업데이트 함수 호출
@@ -199,9 +196,9 @@ export default function Deli_InquireTable() {
                 </button>
             </div>
 
-            {/* Main : List Of Delivery Status */}
+            {/* Main - 배송관리 테이블 리스트업 */}
             <table>
-                {/* Column Names */}
+                {/* 필드명 */}
                 <thead
                     style={{
                         backgroundColor: 'white',
@@ -229,7 +226,7 @@ export default function Deli_InquireTable() {
                     </tr>
                 </thead>
 
-                {/* onDisplay */}
+                {/* 데이터 맵핑 */}
                 <tbody>
                     {matchedData &&
                         getCurrentPagePosts()?.map((item, index) => (
@@ -269,7 +266,7 @@ export default function Deli_InquireTable() {
 
 
 
-            {/* Page Move */}
+            {/* 패이지 이동 */}
             <div className={styles.pageMoveHandler}>
                 <button className={styles.moveButton} onClick={() => {
                     if (currentPage !== 1) {
@@ -303,8 +300,7 @@ export default function Deli_InquireTable() {
                         setCheckedItems={setCheckedItems}
                         matchedData={matchedData}
                         setMatchedData={setMatchedData}
-                        updateAllState={updateAllState}
-                        setSelectedDeliveryStatus={setSelectedDeliveryStatus} />
+                        updateAllState={updateAllState} />
                     :
                     null
             }
