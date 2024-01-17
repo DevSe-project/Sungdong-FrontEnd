@@ -3,10 +3,11 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { BrowserRouter as Router } from 'react-router-dom';
-import reportWebVitals from './reportWebVitals'; 
-import { QueryClientProvider,QueryClient } from '@tanstack/react-query';
+import reportWebVitals from './reportWebVitals';
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
 
-const queryClient = new QueryClient({
+const queryClient = new QueryClient({ 
   defaultOptions: {
     queries: {
       staleTime: Infinity, //적용 캐시 무한으로 설정
@@ -20,6 +21,7 @@ root.render(
     <Router>
       <App />
     </Router>
+    <ReactQueryDevtools initialIsOpen={false} />
   </QueryClientProvider>
 );
 
