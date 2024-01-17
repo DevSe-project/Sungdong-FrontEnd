@@ -4,9 +4,9 @@ import MainLogo from '../../image/sungdonglogo.svg';
 import { useState } from 'react';
 import FindModal from './FindModal';
 import CodeInputModal from './CodeInputModal';
-import axios from 'axios';
+import axios from '../../axios';
 import { useDataActions, useIsLogin, useModal, useModalActions, useModalState, useSetLogin, useUserData } from '../../Store/DataStore';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export function Login(props) {
 
@@ -20,77 +20,53 @@ export function Login(props) {
   const [pw, setPw] = useState('');
 
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  // 로그인 처리 로직
+  const loginRequest = async(loginData) => {
+    try {
+      const response = await axios.post("/auth/login",
+          JSON.stringify(
+            loginData
+          ),
+          {
+              headers: {
+                  "Content-Type": "application/json"
+              }
+          }
+      )
+      // 성공 시 추가된 상품 정보를 반환합니다.
+      return response.data;
+  } catch (error) {
+      // 실패 시 예외를 throw합니다.
+      throw new Error('로그인 중 오류가 발생했습니다.');
+  }
+  }
 
   //로그인 요청 처리 로직
-  const { joinMutate } = useMutation({
-    mutationFn: loginRequest,
-    onSuccess: (login) => {
-      // 메세지 표시
-      alert(login.message);
-      console.log('로그인 되었습니다.', login);
-      // 홈 화면으로 이동
-      navigate("/");
-      // 로그인 상태 TRUE
-      setLogin(true);
-      return login.token;
-    },
-    onError: (error) => {
-      // 회원 추가 실패 시, 에러 처리
-      console.error('회원가입 중 오류가 발생했습니다.', error);
-      alert('아이디 혹은 비밀번호를 확인주세요.'); //경고문구 출력
-    },
-  })
+  const { mutate:loginMutate } = useMutation({mutationFn: loginRequest})
 
 
   //로그인 요청 함수
-  const goLogin = async () => {
-    try {
-      const token = await joinMutate();
-      // 토큰을 쿠키에 저장
-      document.cookie = `jwt_token=${token}; path=/; secure; HttpOnly`;
-      // 동시에 로컬 스토리지나 세션 스토리지에도 저장
-      JSON.stringify(sessionStorage.setItem('saveLoginData', token));
-    } catch { // 서버가 없는경우 기존 태훈, 지석 코드
-      developLogin();
-    }
-  }
-  // 로그인 처리 로직
-  async function loginRequest() {
-    const response = await axios.post(
-      "/login",
-      JSON.stringify({
-        id: id,
-        password: pw
-      }),
-      {
-        headers: {
-          "Content-Type": "application/json"
-        }
+  const goLogin = () => {
+    // try {
+      loginMutate({userId: id, userPassword: pw},{
+        onSuccess: (data) => {
+            console.log('User logined successfully:', data);
+            alert(data.message);
+            // 홈 화면으로 이동
+            navigate("/");
+            // 다른 로직 수행 또는 상태 업데이트
+            queryClient.invalidateQueries(['user']);
+            // 토큰을 쿠키에 저장
+            document.cookie = `jwt_token=${data.token}; path=/;`;
+        },
+        onError: (error) => {
+            console.error('User creation failed:', error);
+            // 에러 처리 또는 메시지 표시
+        },
+        });
       }
-    )
-    return response;
-  }
-
-  function developLogin() { //서버 없이 테스트용 로그인 함수
-    const confirmUser = userData.find(userData => userData.id === id && userData.password === pw); //UserData의 id,password와 input받은 id,pw값이 일치하는 것을 꺼내옴
-    if (confirmUser && confirmUser.id === id && confirmUser.password === pw) { //꺼내 온 id,pw가 일치한다면 
-      setId(''); //입력된 id를 지움
-      setPw(''); //입력된 pw를 지움
-      console.log(userData); //확인된 유저데이터에 뭐가 들었는지 console로 확인
-      //session에 담을 data 객체
-      const LoginDataObj = {
-        id: id,
-        pw: pw,
-      }
-      sessionStorage.setItem('saveLoginData', JSON.stringify(LoginDataObj));
-      setLogin(true);
-      navigate('/'); //메인페이지로 이동하면서
-      alert('성동물산에 오신 걸 환영합니다!'); //환영문구 출력
-      window.location.reload();
-    } else { //일치하지 않다면
-      alert('아이디 혹은 비밀번호를 확인주세요.'); //경고문구 출력
-    }
-  }
 
   // 자동로그인 - 로그인정보 로컬스토리지 저장 (아직 다른 곳에서 getItem하는 부분을 안 만든 상태라 적용 안 될 것)
   function autoLogin() {
@@ -136,7 +112,7 @@ export function Login(props) {
               </div>
               {/* Login Button */}
               <div className={styles.goLogin}
-                onClick={goLogin}
+                onClick={()=>goLogin()}
               >
                 로그인
               </div>

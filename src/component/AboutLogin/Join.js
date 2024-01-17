@@ -12,7 +12,19 @@ import { UserDataObj } from "../Data/UserDataObj";
 
 export default function Join() {
 
-    //장바구니 추가 함수
+    // link_navigate 
+    const navigate = useNavigate();
+    const queryClient = useQueryClient();
+
+    const { setUserData } = useDataActions();
+    const userData = useUserData();
+    
+    useEffect(() => {
+        console.log("hello");
+        setUserData(UserDataObj);
+    }, [setUserData])
+
+    //회원가입 추가 함수
 const joinRequest = async (joinData) => {
     try {
         const response = await axios.post("/auth/register",
@@ -34,18 +46,6 @@ const joinRequest = async (joinData) => {
     }
 };
 
-    // link_navigate 
-    let navigate = useNavigate();
-    const queryClient = useQueryClient();
-
-    const { setUserData } = useDataActions();
-    const userData = useUserData();
-
-    useEffect(() => {
-        console.log("hello");
-        setUserData(UserDataObj);
-    }, [setUserData])
-
     // 액세스 권한 불러오기
     const inAccess = JSON.parse(sessionStorage.getItem('saveAllowAccess'));
 
@@ -62,7 +62,7 @@ const joinRequest = async (joinData) => {
     // [JoinForm.js에서 사용]입력받을 1회성 회원 정보
     let [inputData, setInputData] = useState(
         {
-            userType_id: "",
+            userType_id: '',
             userId: '',
             userPassword: '',
             confirmPassword: '',
@@ -98,8 +98,6 @@ const joinRequest = async (joinData) => {
             detailAddress: '',
             coupon: "",
             bonusMoney: "",
-            basket: [],
-            order: [],
         },
     )
 
@@ -138,7 +136,7 @@ const joinRequest = async (joinData) => {
 
 
     //회원가입 요청 함수
-    const { mutate:joinMutate, data } = useMutation({mutationFn: joinRequest});
+    const { mutate:joinMutate } = useMutation({mutationFn: joinRequest});
 
     const signUp_checkCondition = () => {
         if (!areAllRequiredChecked) {

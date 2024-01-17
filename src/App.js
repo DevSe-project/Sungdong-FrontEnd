@@ -74,6 +74,8 @@ import { TakeBackList } from "./component/AboutTakeBack/TakeBackList";
 import { ErrorTrade } from "./component/AboutTakeBack/ErrorTradeRequest";
 import { ErrorTradeList } from "./component/AboutTakeBack/ErrorTradeList";
 import { AdminEditDetail } from "./component/AboutAdmin/Detail/AdminEditDetail";
+import axios from "./axios";
+
 
 export default function App() {
   const navigate = useNavigate();
@@ -165,27 +167,27 @@ export default function App() {
 
   // -----UserData fetch
   const fetchUserData = async () => {
-    const querySnapshot = await getDocs(collection(db, 'UserData'));
-    return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+  //   try {
+  //     const response = await axios.get("/auth/user",
+  //         {
+  //             headers: {
+  //                 "Content-Type": "application/json"
+  //             }
+  //         }
+  //     )
+  //     // 성공 시 추가된 상품 정보를 반환합니다.
+  //     return response.data;
+  // } catch (error) {
+  //     // 실패 시 예외를 throw합니다.
+  //     throw new Error('확인 중 오류가 발생했습니다.');
+  // }
   };
 
-  const { data: users } = useQuery({
-    queryKey: ['users'],
-    queryFn: () => fetchUserData()
-  });
+  // const { data: user } = useQuery({
+  //   queryKey: ['user'],
+  //   queryFn: () => fetchUserData()
+  // });
   // -----UserData fetch
-
-  useEffect(() => {
-    if (isLogin === false) {
-      // 세션 스토리지의 데이터 파싱
-      const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'));
-      if (inLogin) {
-        setLogin(true); //로그인상태유지
-      } else {
-        console.log("사용자를 찾을 수 없습니다.");
-      }
-    }
-  }, []);
 
   // 특정 주소에서만 SessionStorage 사용하기
   useEffect(() => {

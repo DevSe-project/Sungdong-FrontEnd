@@ -6,6 +6,7 @@ import { SearchBar } from './SearchBar';
 import { SeperateSearchBar } from './SeperateSearchBar';
 import { CategoryBar } from './CategoryBar';
 import { useIsLogin, useSetLogin } from '../../../Store/DataStore';
+import { GetCookie } from '../../../customFn/GetCookie';
 //상단 메뉴 리스트 
 export function TopBanner(props) {
   const navigate = useNavigate();
@@ -51,15 +52,14 @@ export function TopBanner(props) {
           {/* 5_로그인/로그아웃 */}
           <div className={styles.login}>
             <button className={styles.link_signIn} onClick={() => {
-              if (isLogin) {
-                sessionStorage.removeItem('saveLoginData');
-                setLogin(false);
-                window.location.reload();
+              const isLoggedIn = document.cookie.includes(`jwt_token=${GetCookie('jwt_token')}`);
+              if (isLoggedIn) {
+                
               } else {
                 navigate("/login");
               }
             }}>
-              {isLogin
+              {document.cookie.includes(`jwt_token=${GetCookie('jwt_token')}`)
                 ? <div className={styles.align_iconNtext}>
                   <i style={{ fontSize: '1.2em' }} className="fas fa-sign-out" />
                   <span className={styles.text}>&nbsp;로그아웃</span>
