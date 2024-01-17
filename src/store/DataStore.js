@@ -751,7 +751,7 @@ export const useDeliveryFilter = create((set) => ({
   },
   
   actions: {
-    setStatus_checkbox: () => set((state) => (피곤해))
+    setStatus_checkbox: () => set((state) => ("피곤해"))
   }
 }))
 

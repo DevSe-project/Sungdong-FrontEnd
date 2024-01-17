@@ -76,14 +76,14 @@ export function TopBanner(props) {
           {/* 5_로그인/로그아웃 */}
           <div className={styles.login}>
             <button className={styles.link_signIn} onClick={() => {
-              const isLoggedIn = document.cookie.includes(`jwt_token=${GetCookie('jwt_token')}`);
+              const isLoggedIn = GetCookie('jwt_token');
               if (isLoggedIn) {
                 handleLogoutFetch();
               } else {
                 navigate("/login");
               }
             }}>
-              {document.cookie.includes(`jwt_token=${GetCookie('jwt_token')}`)
+              {GetCookie('jwt_token')
                 ? <div className={styles.align_iconNtext}>
                   <i style={{ fontSize: '1.2em' }} className="fas fa-sign-out" />
                   <span className={styles.text}>&nbsp;로그아웃</span>
