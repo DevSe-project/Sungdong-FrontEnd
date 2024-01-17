@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import { useModalActions, useModalState } from '../../../../Store/DataStore';
 import styles from './Deli_InquireTable.module.css';
 import InvoiceModal from '../Modal/InvoiceModal';
 import DeliveryStateModal from '../Modal/DeliveryStateModal';
+import axios from "axios";
+import { GetCookie } from '../../../../customFn/GetCookie';
+
 
 export default function Deli_InquireTable() {
     const queryClient = useQueryClient();
@@ -11,7 +14,7 @@ export default function Deli_InquireTable() {
 
     // relative modal state
     const { isModal, modalName } = useModalState();
-    const { openModal, selectedModalOpen } = useModalActions();
+    const { selectedModalOpen } = useModalActions();
 
     // Fetch data
     const { isLoading: deliveryLoading, isError: deliveryError, data: delivery } = useQuery({ queryKey: ['delivery'] });
@@ -26,14 +29,13 @@ export default function Deli_InquireTable() {
     // 업데이트된 데이터의 체크 상태를 관리하는 state
     const [checkedItems, setCheckedItems] = useState([]);
 
-
-
     // 업데이트 함수 호출
     useEffect(() => {
         if (ordered && delivery && product) {
             updateMatchedData();
         }
     }, [currentPage, ordered, delivery, product]);
+
     // (Effect연결함수) 상태 업데이트를 위한 함수
     const updateMatchedData = () => {
         // 해당 데이터가 모두 불러와졌을 때만 함수 실행, 하나라도 데이터가 로딩되지 않았다면 함수 종료
@@ -56,9 +58,6 @@ export default function Deli_InquireTable() {
         setMatchedData(finalMatchedData);
         console.log("render");
     };
-
-
-
 
     // 배송상태 파싱
     function parseDeliveryState(val) {
@@ -142,6 +141,60 @@ export default function Deli_InquireTable() {
     };
 
 
+    // 삭제
+    const deleteData = async (orderId) => {
+        try {
+            const token = GetCookie('jwt_token');
+            const response = await axios.delete(`/delivery`,
+                JSON.stringigy(orderId),
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        'Authorization': `Bearer ${token}`
+                    }
+                }
+            );
+            // 성공 시 삭제된 데이터를 반환
+            if (response.status === 200) {
+                return response.data;
+            } else {
+                console.error('데이터 삭제 실패:', response.data);
+            }
+        } catch (error) {
+            console.error('데이터 삭제 중 에러 발생:', error);
+            throw error; // 에러를 다시 던져서 호출자에게 알릴 수 있습니다.
+        }
+    };
+
+    const deleteDataMutation = useMutation(deleteData);
+
+
+    const handleDelete = async () => {
+        if (checkedItems.length === 0) {
+            alert('삭제할 항목을 선택하세요.');
+            return;
+        }
+
+        try {
+            // 선택된 아이템을 반복하여 삭제 작업을 수행합니다.
+            for (const orderId of checkedItems) {
+                await deleteDataMutation.mutateAsync(orderId);
+            }
+
+            // 삭제 작업이 완료되면 refetch를 통해 데이터를 다시 불러올 수 있습니다.
+            queryClient.invalidateQueries(['delivery']);
+            queryClient.invalidateQueries(['ordered']);
+            queryClient.invalidateQueries(['data']);
+
+            // 선택된 아이템 초기화
+            setCheckedItems([]);
+        } catch (error) {
+            console.error('삭제 중 에러가 발생했습니다.', error);
+        }
+    };
+
+
+
 
     // 데이터 로딩 중 또는 에러 발생 시 처리
     if (deliveryLoading || orderedLoading || productLoading) {
@@ -189,7 +242,7 @@ export default function Deli_InquireTable() {
                 <button
                     className={styles.button}
                     onClick={() => {
-
+                        handleDelete()
                     }}>
                     {/* 배송 상태 리스트에서 삭제 */}
                     배송 취소
