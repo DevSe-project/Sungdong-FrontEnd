@@ -1,10 +1,9 @@
-import { useDeliveryFilter, useDeliveryFilterActions, useDeliveryStatusChekcobx } from '../../../../Store/DataStore';
+import { useDeliveryFilterActions, useDeliveryStatus } from '../../../../Store/DataStore';
 import styles from './Deli_Filter.module.css';
 
 export default function Deli_Filter() {
 
-    const { status_checkbox } = useDeliveryStatusChekcobx();
-    const { date_filter } = useDeliveryFilter();
+    const { status_checkbox } = useDeliveryStatus();
     const { } = useDeliveryFilterActions();
 
     function deliStateFtilter() {
@@ -16,7 +15,9 @@ export default function Deli_Filter() {
                     className={styles.state_checkbox}
                     id='deliState_all'
                     type='checkbox'
-                    value={status_checkbox.all} />
+                    value={status_checkbox ? status_checkbox.all : true}
+                    checked={status_checkbox.all}
+                    onChange={() => {}} />
                 <label
                     className={styles.state_label}
                     htmlFor='deliState_all'>전체</label>
@@ -25,7 +26,9 @@ export default function Deli_Filter() {
                     className={styles.state_checkbox}
                     id='deliState_ready'
                     type='checkbox'
-                    value={status_checkbox.ready} />
+                    value={status_checkbox ? status_checkbox.ready : true} 
+                    checked={status_checkbox.ready}
+                    onChange={() => {}}/>
                 <label
                     className={styles.state_label}
                     htmlFor='deliState_ready'>배송 준비</label>
@@ -34,7 +37,9 @@ export default function Deli_Filter() {
                     className={styles.state_checkbox}
                     id='deliState_ing'
                     type='checkbox'
-                    value={status_checkbox.going} />
+                    value={status_checkbox ? status_checkbox.ing : true} 
+                    checked={status_checkbox.ing}
+                    onChange={() => {}}/>
                 <label
                     className={styles.state_label}
                     htmlFor='deliState_ing'>배송 진행</label>
@@ -43,7 +48,9 @@ export default function Deli_Filter() {
                     className={styles.state_checkbox}
                     id='deliState_ed'
                     type='checkbox'
-                    value={status_checkbox.gone} />
+                    value={status_checkbox ? status_checkbox.ed : true} 
+                    checked={status_checkbox.ed}
+                    onChange={() => {}}/>
                 <label
                     className={styles.state_label}
                     htmlFor='deliState_ed'>배송 완료</label>
@@ -52,7 +59,9 @@ export default function Deli_Filter() {
                     className={styles.state_checkbox}
                     id='deliState_delay'
                     type='checkbox'
-                    value={status_checkbox.delay} />
+                    value={status_checkbox ? status_checkbox.delay : true} 
+                    checked={status_checkbox.delay}
+                    onChange={() => {}}/>
                 <label
                     className={styles.state_label}
                     htmlFor='deliState_delay'>배송 지연</label>

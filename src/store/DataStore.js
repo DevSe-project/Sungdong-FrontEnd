@@ -741,8 +741,8 @@ export const useDeliveryFilter = create((set) => ({
   status_checkbox: {
     all: false,
     ready: false,
-    going: false,
-    gone: false,
+    ing: false,
+    ed: false,
     delay: false
   },
   date_filter: {
@@ -751,13 +751,14 @@ export const useDeliveryFilter = create((set) => ({
   },
   
   actions: {
-
+    setStatus_checkbox: () => set((state) => (피곤해))
   }
 }))
 
-// 커스텀 state: 배송현황 체크박스
-export const useDeliveryStatusChekcobx = () => useDeliveryFilter((state) => state.status_checkbox);
-// 커스텀 state: 배송날짜 필터 체크박스
-export const useDeliveryDataFilter = () => useDeliveryFilter((state) => state.date_filter);
-// 커스텀 state: actions
+// 커스텀 : state
+export const useDeliveryStatus = () => {
+  const {status_checkbox, date_filter} = useDeliveryFilter();
+  return {status_checkbox, date_filter};
+}
+// 커스텀 : actions
 export const useDeliveryFilterActions = () => useDeliveryFilter((state)=> state.actions);
