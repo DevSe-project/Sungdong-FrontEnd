@@ -15,18 +15,18 @@ export default function AdminNotice() {
 
   const { isLoading, isError, data: noticePostList } = useQuery({ queryKey: ['notice'] });
 
-  const {addNoticeData, resetNoticeData} = useNoticeActions();
+  const { addNoticeData, resetNoticeData } = useNoticeActions();
   const notice = useNotice();
 
   //게시글 삭제 함수
   const fetchDeletedData = async (item) => {
     try {
       const token = GetCookie('jwt_token');
-      const response = await axios.delete("/notice", 
+      const response = await axios.delete("/notice",
         JSON.stringify(item),
         {
-          headers : {
-            "Content-Type" : "application/json",
+          headers: {
+            "Content-Type": "application/json",
             'Authorization': `Bearer ${token}`
           }
         }
@@ -39,7 +39,8 @@ export default function AdminNotice() {
     }
   };
 
-  const { deletePostMutation } = useMutation({mutationFn: fetchDeletedData,
+  const { deletePostMutation } = useMutation({
+    mutationFn: fetchDeletedData,
     onSuccess: (data) => {
       // 메세지 표시
       alert(data.message);
@@ -57,13 +58,13 @@ export default function AdminNotice() {
   const fetchUpdateData = async () => {
     try {
       const token = GetCookie('jwt_token');
-      const response = await axios.post("/notice", 
+      const response = await axios.post("/notice",
         JSON.stringify(
           notice
         ),
         {
-          headers : {
-            "Content-Type" : "application/json",
+          headers: {
+            "Content-Type": "application/json",
             'Authorization': `Bearer ${token}`
           }
         }
@@ -79,13 +80,13 @@ export default function AdminNotice() {
   const fetchUpdatedData = async () => {
     try {
       const token = GetCookie('jwt_token');
-      const response = await axios.put("/notice", 
+      const response = await axios.put("/notice",
         JSON.stringify(
           notice
         ),
         {
-          headers : {
-            "Content-Type" : "application/json",
+          headers: {
+            "Content-Type": "application/json",
             'Authorization': `Bearer ${token}`
           }
         }
@@ -99,7 +100,8 @@ export default function AdminNotice() {
   }
 
 
-  const { addPostMutation } = useMutation({mutationFn: fetchUpdateData,
+  const { addPostMutation } = useMutation({
+    mutationFn: fetchUpdateData,
     onSuccess: (data) => {
       // 메세지 표시
       alert(data.message);
@@ -113,7 +115,8 @@ export default function AdminNotice() {
     },
   })
 
-  const { editPostMutation } = useMutation({mutationFn: fetchUpdatedData,
+  const { editPostMutation } = useMutation({
+    mutationFn: fetchUpdatedData,
     onSuccess: (data) => {
       // 메세지 표시
       alert(data.message);
@@ -172,7 +175,7 @@ export default function AdminNotice() {
     }
   };
 
-  function handleConfirmSD(){
+  function handleConfirmSD() {
     // 입력 조건 부여
     const isCheckInputLength = notice.title.length > 2 && notice.writer.length > 2 && notice.contents.length > 10;
 
@@ -193,16 +196,16 @@ export default function AdminNotice() {
   // 데이터 로딩 중 또는 에러 발생 시 처리
   if (isLoading) {
     return ( // isLoading이 true일 때 스켈레톤 이미지 표시 ( 20개 )
-    <div className={styles.skeletonContainer}>
-      {/* 15짜리 배열 생성 -> 반복 */}
-      {[...Array(15)].map((_, index) => (
-        <div key={index} className={styles.skeletonItem}></div>
-      ))}
-    </div>
-  );
+      <div className={styles.skeletonContainer}>
+        {/* 15짜리 배열 생성 -> 반복 */}
+        {[...Array(15)].map((_, index) => (
+          <div key={index} className={styles.skeletonItem}></div>
+        ))}
+      </div>
+    );
   }
   if (isError) {
-      return <p>Error fetching data</p>;
+    return <p>Error fetching data</p>;
   }
 
 
@@ -249,44 +252,44 @@ export default function AdminNotice() {
             <div className={styles.post_title}>글 목록</div>
 
             {/* Post Map */}
-                {noticePostList.map((item, index) => (
-                  <div className={styles.post_list_container} key={index} >
-                    {/* No */}
-                    <div className={styles.post_list_info_no}>
-                      {item.id}
-                    </div>
+            {noticePostList.map((item, index) => (
+              <div className={styles.post_list_container} key={index} >
+                {/* No */}
+                <div className={styles.post_list_info_no}>
+                  {item.id}
+                </div>
 
-                    {/* Code */}
-                    <div className={styles.post_list_info_title} onClick={() => {
-                    selectedModalOpen('edit');
-                    addNoticeData(item);
-                    }}>
-                      {item.title}
-                    </div>
+                {/* Code */}
+                <div className={styles.post_list_info_title} onClick={() => {
+                  selectedModalOpen('edit');
+                  addNoticeData(item);
+                }}>
+                  {item.title}
+                </div>
 
-                    {/* Writer */}
-                    <div className={styles.post_list_info_writer}>
-                      {item.writer}
-                    </div>
+                {/* Writer */}
+                <div className={styles.post_list_info_writer}>
+                  {item.writer}
+                </div>
 
-                    {/* WritedDate */}
-                    <div className={styles.post_list_info_date}>
-                      {item.date}
-                    </div>
+                {/* WritedDate */}
+                <div className={styles.post_list_info_date}>
+                  {item.date}
+                </div>
 
-                    {/* Del */}
-                    <div div className={styles.post_del_container} >
-                      <div className={styles.post_del_button}
-                        onClick={() => deletePostMutation.mutate()
-                        }>
-                        삭제
-                      </div>
-                    </div>
-                    {isModal && modalName === 'edit' &&
-                    <EditModal handleConfirmSD={handleConfirmSD} />}
+                {/* Del */}
+                <div div className={styles.post_del_container} >
+                  <div className={styles.post_del_button}
+                    onClick={() => deletePostMutation.mutate()
+                    }>
+                    삭제
                   </div>
-                ))
-              }
+                </div>
+                {isModal && modalName === 'edit' &&
+                  <EditModal handleConfirmSD={handleConfirmSD} />}
+              </div>
+            ))
+            }
 
           </div>
         </div>
@@ -294,7 +297,7 @@ export default function AdminNotice() {
       {/* 모달 영역 */}
       {
         isModal && modalName === 'write' &&
-          <WriteModal addPost={addPost} />
+        <WriteModal addPost={addPost} />
       }
     </div >
   )

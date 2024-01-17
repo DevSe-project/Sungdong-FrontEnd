@@ -19,22 +19,22 @@ const useDataStore = create((set) => ({
       mini: "",
     },
     option: {
-        option0: '',
-        option1: '',
-        option2: '',
-        option3: '',
-        option4: '',
-        option5: '',
-        option6: '',
-        option7: '',
-        option8: '',
-        option9: '',
-      },
+      option0: '',
+      option1: '',
+      option2: '',
+      option3: '',
+      option4: '',
+      option5: '',
+      option6: '',
+      option7: '',
+      option8: '',
+      option9: '',
+    },
     category: {
-        id: '',
-        highId: '',
-        lowId: '',
-      },
+      id: '',
+      highId: '',
+      lowId: '',
+    },
     brand: '',
     madeIn: '',
     state: '',
@@ -342,16 +342,17 @@ export const useProductStore = create((set) => ({
     editProduct: (data) =>
       set((state) => ({ product: data })),
     resetProduct: () =>
-      set({ product: {
-        productId: '',
-        title: '',
-        content: '',
-        price: '',
-        supply: 1,
-        discount: 0,
-        image_original: '',
-        image_mini: '',
-        option: {
+      set({
+        product: {
+          productId: '',
+          title: '',
+          content: '',
+          price: '',
+          supply: 1,
+          discount: 0,
+          image_original: '',
+          image_mini: '',
+          option: {
             option0: '',
             option1: '',
             option2: '',
@@ -363,16 +364,17 @@ export const useProductStore = create((set) => ({
             option8: '',
             option9: '',
           },
-        category: {
-          highId: '',
-          middleId: '',
-          lowId: '',
+          category: {
+            highId: '',
+            middleId: '',
+            lowId: '',
           },
-        brand: '',
-        madeIn: '',
-        state: '',
-      }}),
-      setProductOption: (fieldName, value) =>
+          brand: '',
+          madeIn: '',
+          state: '',
+        }
+      }),
+    setProductOption: (fieldName, value) =>
       set((state) => ({
         product: {
           ...state.product,
@@ -382,7 +384,7 @@ export const useProductStore = create((set) => ({
           },
         },
       })),
-      setProductCategory: (fieldName, value) =>
+    setProductCategory: (fieldName, value) =>
       set((state) => ({
         product: {
           ...state.product,
@@ -427,32 +429,32 @@ export const useProductFilterStore = create((set) => ({
     setProductFilter: (fieldName, value) =>
       set((state) => ({ productFilter: { ...state.productFilter, [fieldName]: value } })),
     resetProductFilter: () =>
-      set({   
-      productFilter: {
-        title: '',
-        brand: '',
-        productId: '',
-        state: {
-          전체: false,
-          판매대기: false,
-          판매중: false,
-          판매중단: false,
-          판매종료: false
-        },
-        category: {
-          highId: '',
-          middleId: '',
-          lowId: ''
-        },
-        dateType: '',
-        date: {
-          start: '',
-          end: ''
-        },
-        supply: '',
-        option: '',
-      }
-    }),
+      set({
+        productFilter: {
+          title: '',
+          brand: '',
+          productId: '',
+          state: {
+            전체: false,
+            판매대기: false,
+            판매중: false,
+            판매중단: false,
+            판매종료: false
+          },
+          category: {
+            highId: '',
+            middleId: '',
+            lowId: ''
+          },
+          dateType: '',
+          date: {
+            start: '',
+            end: ''
+          },
+          supply: '',
+          option: '',
+        }
+      }),
     setProductCategory: (fieldName, value) =>
       set((state) => ({
         productFilter: {
@@ -482,16 +484,16 @@ export const useProductFilterStore = create((set) => ({
             [fieldName]: !state[fieldName],
           },
         },
-      })),    
+      })),
     setAllCheckboxState: () =>
       set((state) => {
         const allChecked = Object.values(state.productFilter.state).every((value) => value);
         const updatedState = {};
-        
+
         Object.keys(state.productFilter.state).forEach((key) => {
           updatedState[key] = !allChecked;
         });
-    
+
         return {
           ...state,
           productFilter: {
@@ -530,26 +532,26 @@ export const useOrderFilterStore = create((set) => ({
     setOrderFilter: (fieldName, value) =>
       set((state) => ({ orderFilter: { ...state.orderFilter, [fieldName]: value } })),
     resetOrderFilter: () =>
-      set({   
-      orderFilter: {
-        orderState: '',
-        dateType: '',
-        date: {
-          start: '',
-          end: ''
-        },
-        deliveryType: '',
-        detailFilter: {
-          userId: '',
-          orderId: '',
-          productId: '',
-          deliveryNum: '',
-          companyName: '',
-          name: '',
-          tel: '',
+      set({
+        orderFilter: {
+          orderState: '',
+          dateType: '',
+          date: {
+            start: '',
+            end: ''
+          },
+          deliveryType: '',
+          detailFilter: {
+            userId: '',
+            orderId: '',
+            productId: '',
+            deliveryNum: '',
+            companyName: '',
+            name: '',
+            tel: '',
+          }
         }
-      }
-    }),
+      }),
     setOrderDetailFilter: (fieldName, value) =>
       set((state) => ({
         orderFilter: {
@@ -577,41 +579,41 @@ export const useOrderFilterActions = () => useOrderFilterStore((state) => state.
 
 /* ----------------OrderList STORE---------------- */
 export const useOrderListStore = create((set) => ({
-  selectList:[],
+  selectList: [],
   actions: {
     toggleSelectList: (valueID, value) =>
-    set((state) => ({
-      selectList: state.selectList.some(item => item.orderId === valueID)
-        ? state.selectList.filter(item => item.orderId !== valueID)
-        : [...state.selectList, { orderId: valueID, value: value }],
-    })),
+      set((state) => ({
+        selectList: state.selectList.some(item => item.orderId === valueID)
+          ? state.selectList.filter(item => item.orderId !== valueID)
+          : [...state.selectList, { orderId: valueID, value: value }],
+      })),
     toggleAllSelect: (selectAll, value) =>
-    set((state) => ({
-      selectList: selectAll
-        ? value.map((item) => ({
-          orderId: item.orderId,
-          value: item,
-        }))
-        : [], // 모두 선택 해제 시 빈 배열로 설정
-    })),
+      set((state) => ({
+        selectList: selectAll
+          ? value.map((item) => ({
+            orderId: item.orderId,
+            value: item,
+          }))
+          : [], // 모두 선택 해제 시 빈 배열로 설정
+      })),
     setSelectListValue: (item, fieldkey, value) =>
-    set((state) => ({
-      selectList: state.selectList.map((list) => {
-        if (list.orderId === item.orderId) {
-          return {
-            ...list,
-            value: {
-              ...list.value,
-              [fieldkey]: value,
-            },
-          };
-        }
-        return list;
-      }),
-    })),
+      set((state) => ({
+        selectList: state.selectList.map((list) => {
+          if (list.orderId === item.orderId) {
+            return {
+              ...list,
+              value: {
+                ...list.value,
+                [fieldkey]: value,
+              },
+            };
+          }
+          return list;
+        }),
+      })),
     setAllSelectListValue: (fieldkey, value) =>
-    set((state) => ({
-      selectList: state.selectList.map((list) => {
+      set((state) => ({
+        selectList: state.selectList.map((list) => {
           return {
             ...list,
             value: {
@@ -622,16 +624,16 @@ export const useOrderListStore = create((set) => ({
         })
       })),
     resetDeliveryNum: () =>
-    set((state) => ({
-      selectList: state.selectList.map((list) => ({
-        ...list,
-        deliveryNum: '',
+      set((state) => ({
+        selectList: state.selectList.map((list) => ({
+          ...list,
+          deliveryNum: '',
+        })),
       })),
-    })),
     resetSelectList: () =>
-      set({   
-      selectList: []
-    })
+      set({
+        selectList: []
+      })
   }
 }));
 export const useOrderSelectList = () => useOrderListStore((state) => state.selectList);
@@ -660,7 +662,7 @@ export const useRefundFilterStore = create((set) => ({
     setRaeFilter: (fieldName, value) =>
       set((state) => ({ raeFilter: { ...state.raeFilter, [fieldName]: value } })),
     resetRaeFilter: () =>
-      set({   
+      set({
         raeFilter: {
           raeState: '',
           date: {
@@ -678,7 +680,7 @@ export const useRefundFilterStore = create((set) => ({
             tel: '',
           }
         }
-    }),
+      }),
     setRaeDetailFilter: (fieldName, value) =>
       set((state) => ({
         raeFilter: {
@@ -712,10 +714,10 @@ export const useDeliveryStore = () => create((set) => ({
   invoiceNum: null,
 
   actions: {
-    setDeliveryState: (changed) => set((state)=>({
+    setDeliveryState: (changed) => set((state) => ({
       deliveryState: changed
     })),
-    setInvoiceNum: (changed) => set((state)=>({
+    setInvoiceNum: (changed) => set((state) => ({
       invoiceNum: changed
     })),
   }
@@ -733,9 +735,9 @@ export const useNoticeStore = create((set) => ({
     addNoticeData: (value) =>
       set((state) => ({ notice: { ...value } })),
     setNoticeData: (fieldName, value) =>
-    set((state) => ({ notice: { ...state.notice, [fieldName]: value } })),
+      set((state) => ({ notice: { ...state.notice, [fieldName]: value } })),
     resetNoticeData: () =>
-      set({   
+      set({
         notice: {
           title: '',
           contents: '',
@@ -743,7 +745,7 @@ export const useNoticeStore = create((set) => ({
           files: null,
           writer: ''
         },
-    }),
+      }),
   }
 }));
 export const useNotice = () => useNoticeStore((state) => state.notice);

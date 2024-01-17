@@ -3,12 +3,12 @@ import { useEffect } from 'react';
 import { useModalActions, useModalState, useNotice, useNoticeActions } from "../../../Store/DataStore";
 
 
-export default function WriteModal({addPost}) {
+export default function WriteModal({ addPost }) {
     const { isModal, modalName } = useModalState();
-    const {selectedModalClose} = useModalActions();
+    const { selectedModalClose } = useModalActions();
 
     const notice = useNotice();
-    const {setNoticeData, resetNoticeData} = useNoticeActions();
+    const { setNoticeData, resetNoticeData } = useNoticeActions();
 
     // esc키를 누르면 모달창 닫기.
     useEffect(() => {
@@ -46,7 +46,7 @@ export default function WriteModal({addPost}) {
                     <div className={styles.title}>
                         Title <input className={styles.inputTitle} type="text" value={notice.title} onChange={(e) => {
                             setNoticeData("title", e.target.value)
-                            }} required />
+                        }} required />
                     </div>
                     {/* 작성자 */}
                     <div className={styles.writer}>
@@ -54,7 +54,7 @@ export default function WriteModal({addPost}) {
                             className={styles.inputWriter}
                             type="text" value={notice.writer}
                             onChange={(e) => {
-                            setNoticeData("writer", e.target.value)
+                                setNoticeData("writer", e.target.value)
                             }} required />
                     </div>
                     {/* 글 내용 */}
@@ -63,7 +63,7 @@ export default function WriteModal({addPost}) {
                             className={styles.textarea}
                             value={notice.contents}
                             onChange={(e) => {
-                            setNoticeData("contents", e.target.value)
+                                setNoticeData("contents", e.target.value)
                             }}>
                         </textarea>
                     </div>
@@ -71,15 +71,15 @@ export default function WriteModal({addPost}) {
 
                 {/* 첨부파일 */}
                 <div className={styles.addFiles}>
-                    <input type="file" onChange={ (e) => (
+                    <input type="file" onChange={(e) => (
                         setNoticeData("files", e.target.value)
-                    ) } />
+                    )} />
                 </div>
 
                 {/* 등록 버튼 */}
-                <div className={styles.printPost} onClick={ () => {
+                <div className={styles.printPost} onClick={() => {
                     addPost();
-                    }}>
+                }}>
                     <div>등록</div>
                 </div>
             </div>
