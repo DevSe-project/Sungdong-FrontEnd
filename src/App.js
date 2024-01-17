@@ -75,6 +75,7 @@ import { ErrorTrade } from "./component/AboutTakeBack/ErrorTradeRequest";
 import { ErrorTradeList } from "./component/AboutTakeBack/ErrorTradeList";
 import { AdminEditDetail } from "./component/AboutAdmin/Detail/AdminEditDetail";
 import axios from "./axios";
+import { GetCookie } from "./customFn/GetCookie";
 
 
 export default function App() {
@@ -130,6 +131,26 @@ export default function App() {
     const querySnapshot = await getDocs(collection(db, 'NoticeData')); // 'ProductData'는 컬렉션 이름
     return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
   };
+
+  // //토큰 데이터 fetch
+  // const fetchTokenData = async () => {
+  //     try {
+  //       const token = GetCookie('jwt_token');
+  //       const response = await axios.get("/auth/user",
+  //           {
+  //               headers: {
+  //                   "Content-Type": "application/json",
+  //                   'Authorization': `Bearer ${token}`
+  //               }
+  //           }
+  //       )
+  //       // 성공 시 추가된 상품 정보를 반환합니다.
+  //       return response.data;
+  //   } catch (error) {
+  //       // 실패 시 예외를 throw합니다.
+  //       throw new Error('확인 중 오류가 발생했습니다.');
+  //   }
+  //   };
   
 
   // react-query : 서버에서 받아온 데이터 캐싱, 변수에 저장
@@ -164,6 +185,11 @@ export default function App() {
       queryKey: ['notice'],
       queryFn: () => fetchNoticeData()
     })
+
+    // const { data:tokenData } = useQuery({
+    //   queryKey: ['token'],
+    //   queryFn: () => fetchTokenData()
+    // })
 
   // -----UserData fetch
   const fetchUserData = async () => {

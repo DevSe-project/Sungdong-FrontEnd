@@ -7,11 +7,35 @@ import { SeperateSearchBar } from './SeperateSearchBar';
 import { CategoryBar } from './CategoryBar';
 import { useIsLogin, useSetLogin } from '../../../Store/DataStore';
 import { GetCookie } from '../../../customFn/GetCookie';
+import axios from '../../../axios';
+import { useQueryClient } from '@tanstack/react-query';
 //상단 메뉴 리스트 
 export function TopBanner(props) {
   const navigate = useNavigate();
   const isLogin = useIsLogin();
   const {setLogin} = useSetLogin();
+  const queryClient = useQueryClient();
+
+  const handleLogoutFetch = async() => {
+    try {
+      const token = GetCookie('jwt_token');
+      const response = await axios.post("/auth/logout",
+          {
+              headers: {
+                  "Content-Type": "application/json",
+                  'Authorization': `Bearer ${token}`
+              }
+          }
+      )
+      queryClient.clear();
+      alert(response.data.message);
+      navigate("/")
+      // 성공 시 추가된 상품 정보를 반환합니다.
+    } catch (error) {
+        // 실패 시 예외를 throw합니다.
+        throw new Error('로그아웃 중 오류가 발생했습니다.');
+    }  
+  }
 
   return (
     <div className={styles.body}>
@@ -54,7 +78,7 @@ export function TopBanner(props) {
             <button className={styles.link_signIn} onClick={() => {
               const isLoggedIn = document.cookie.includes(`jwt_token=${GetCookie('jwt_token')}`);
               if (isLoggedIn) {
-                
+                handleLogoutFetch();
               } else {
                 navigate("/login");
               }
