@@ -30,9 +30,10 @@ export function Login(props) {
             loginData
           ),
           {
-              headers: {
-                  "Content-Type": "application/json"
-              }
+            credentials: 'include', // withCredentials: true 와 같은 효과
+            headers: {
+                "Content-Type": "application/json"
+            }
           }
       )
       // 성공 시 추가된 상품 정보를 반환합니다.
@@ -59,7 +60,7 @@ export function Login(props) {
             // 다른 로직 수행 또는 상태 업데이트
             queryClient.invalidateQueries(['user']);
             // 토큰을 쿠키에 저장
-            document.cookie = `jwt_token=${data.token}; path=/;`;
+            // document.cookie = `jwt_token=${data.token}; path=/;`;
         },
         onError: (error) => {
             console.error('User creation failed:', error);

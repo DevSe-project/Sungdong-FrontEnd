@@ -7,6 +7,8 @@ const instance = axios.create({
     'Content-Type': 'application/json',
     // 기타 헤더 설정
   },
+  crossDomain: true,
+  withCredentials: true
 });
 
 export default instance;
