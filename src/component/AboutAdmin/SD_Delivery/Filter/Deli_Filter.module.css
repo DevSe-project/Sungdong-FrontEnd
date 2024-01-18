@@ -88,6 +88,10 @@
 
 /* ---------------function - deliState--------------- */
 .state_checkbox {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    vertical-align: center;
 }
 .state_label {
     margin-right: 20px;

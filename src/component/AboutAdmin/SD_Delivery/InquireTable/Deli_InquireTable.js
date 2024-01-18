@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
-import { useModalActions, useModalState } from '../../../../Store/DataStore';
+import { useDeliveryFilter, useModalActions, useModalState } from '../../../../Store/DataStore';
 import styles from './Deli_InquireTable.module.css';
 import InvoiceModal from '../Modal/InvoiceModal';
 import DeliveryStateModal from '../Modal/DeliveryStateModal';
@@ -25,6 +25,9 @@ export default function Deli_InquireTable() {
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(3);
     const [matchedData, setMatchedData] = useState([]);
+
+    // FetchData
+    const { deliveryData, setDeliveryData } = useDeliveryFilter();
 
     // 업데이트된 데이터의 체크 상태를 관리하는 state
     const [checkedItems, setCheckedItems] = useState([]);

@@ -738,27 +738,65 @@ export const useNoticeActions = () => useNoticeStore((state) => state.actions);
 
 // ------------Delivery Filter------------
 export const useDeliveryFilter = create((set) => ({
-  status_checkbox: {
-    all: false,
-    ready: false,
-    ing: false,
-    ed: false,
-    delay: false
+  deliveryFilter: {
+    checkedState: {
+      '전체': false,
+      '배송 준비': false,
+      '배송 중': false,
+      '배송 완료': false,
+      '배송 지연': false
+    },
+    date: {
+      start: '',
+      end: ''
+    },
+    dateButton: {
+      '오늘': false,
+      '1 주일': false,
+      '1 개월': false,
+      '3 개월': false,
+      '6 개월': false,
+    }
   },
-  date_filter: {
-    start_date: '',
-    end_date: ''
-  },
-  
+
   actions: {
-    setStatus_checkbox: () => set((state) => ("피곤해"))
+    resetDeliveryFilter: () => set({
+      checkedState: {
+        '전체': false,
+        '배송 준비': false,
+        '배송 중': false,
+        '배송 완료': false,
+        '배송 지연': false,
+        'all': false, // 'all' 속성 추가
+      },
+      date: {
+        start: '',
+        end: ''
+      },
+      dateButton: {
+        '오늘': false,
+        '1 주일': false,
+        '1 개월': false,
+        '3 개월': false,
+        '6 개월': false,
+      }
+    }),
+
+    updateCheckedState: (fieldName) => set((state) => ({
+      deliveryFilter: {
+        ...state.deliveryFilter,
+        checkedState: {
+          ...state.deliveryFilter.checkedState,
+          [fieldName]: !state.deliveryFilter.checkedState[fieldName],
+        }
+      }
+    })),
   }
 }))
 
+
 // 커스텀 : state
-export const useDeliveryStatus = () => {
-  const {status_checkbox, date_filter} = useDeliveryFilter();
-  return {status_checkbox, date_filter};
-}
-// 커스텀 : actions
-export const useDeliveryFilterActions = () => useDeliveryFilter((state)=> state.actions);
+export const useDeliveryFilterState = () => useDeliveryFilter((state) => state.deliveryFilter);
+export const useDeliveryFilterActions = () => useDeliveryFilter((state) => state.actions);
+
+// --------------------------

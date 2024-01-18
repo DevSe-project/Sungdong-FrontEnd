@@ -1,70 +1,31 @@
-import { useDeliveryFilterActions, useDeliveryStatus } from '../../../../Store/DataStore';
+import { useDeliveryFilterState, useDeliveryFilterActions } from '../../../../Store/DataStore';
 import styles from './Deli_Filter.module.css';
 
 export default function Deli_Filter() {
 
-    const { status_checkbox } = useDeliveryStatus();
-    const { } = useDeliveryFilterActions();
+    const { checkedState, date } = useDeliveryFilterState();
+    const { updateCheckedState } = useDeliveryFilterActions();
+
 
     function deliStateFtilter() {
         return (
-            // 배송상태 필터 체크박스
             <div className={styles.deliState_container}>
-                {/* 전체 */}
-                <input
-                    className={styles.state_checkbox}
-                    id='deliState_all'
-                    type='checkbox'
-                    value={status_checkbox ? status_checkbox.all : true}
-                    checked={status_checkbox.all}
-                    onChange={() => {}} />
-                <label
-                    className={styles.state_label}
-                    htmlFor='deliState_all'>전체</label>
-                {/* 배송 준비 */}
-                <input
-                    className={styles.state_checkbox}
-                    id='deliState_ready'
-                    type='checkbox'
-                    value={status_checkbox ? status_checkbox.ready : true} 
-                    checked={status_checkbox.ready}
-                    onChange={() => {}}/>
-                <label
-                    className={styles.state_label}
-                    htmlFor='deliState_ready'>배송 준비</label>
-                {/* 배송 진행중 */}
-                <input
-                    className={styles.state_checkbox}
-                    id='deliState_ing'
-                    type='checkbox'
-                    value={status_checkbox ? status_checkbox.ing : true} 
-                    checked={status_checkbox.ing}
-                    onChange={() => {}}/>
-                <label
-                    className={styles.state_label}
-                    htmlFor='deliState_ing'>배송 진행</label>
-                {/* 배송 완료 */}
-                <input
-                    className={styles.state_checkbox}
-                    id='deliState_ed'
-                    type='checkbox'
-                    value={status_checkbox ? status_checkbox.ed : true} 
-                    checked={status_checkbox.ed}
-                    onChange={() => {}}/>
-                <label
-                    className={styles.state_label}
-                    htmlFor='deliState_ed'>배송 완료</label>
-                {/* 배송 지연 */}
-                <input
-                    className={styles.state_checkbox}
-                    id='deliState_delay'
-                    type='checkbox'
-                    value={status_checkbox ? status_checkbox.delay : true} 
-                    checked={status_checkbox.delay}
-                    onChange={() => {}}/>
-                <label
-                    className={styles.state_label}
-                    htmlFor='deliState_delay'>배송 지연</label>
+                {
+                    Object.keys(checkedState).map((item) => (
+                        <label key={item} className={styles.state_checkbox}>
+                            <input
+                                type='checkbox'
+                                name={item}
+                                checked={checkedState[item]}
+                                onChange={() => {
+                                    updateCheckedState(item)
+
+                                }}
+                            />
+                            {item}
+                        </label>
+                    ))
+                }
             </div>
         )
     }
@@ -72,8 +33,10 @@ export default function Deli_Filter() {
     function dateFilter() {
         return (
             <div className={styles.dateFilter_container}>
+                {/* 시작 */}
                 <input className={styles.date} type='date' />
                 ~
+                {/* 끝 */}
                 <input className={styles.date} type='date' />
                 <div className={styles.dateButton} onClick={() => { }}> 오늘 </div>
                 <div className={styles.dateButton} onClick={() => { }}> 1 주일 </div>
