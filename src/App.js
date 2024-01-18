@@ -191,30 +191,6 @@ export default function App() {
     //   queryFn: () => fetchTokenData()
     // })
 
-  // -----UserData fetch
-  const fetchUserData = async () => {
-  //   try {
-  //     const response = await axios.get("/auth/user",
-  //         {
-  //             headers: {
-  //                 "Content-Type": "application/json"
-  //             }
-  //         }
-  //     )
-  //     // 성공 시 추가된 상품 정보를 반환합니다.
-  //     return response.data;
-  // } catch (error) {
-  //     // 실패 시 예외를 throw합니다.
-  //     throw new Error('확인 중 오류가 발생했습니다.');
-  // }
-  };
-
-  // const { data: user } = useQuery({
-  //   queryKey: ['user'],
-  //   queryFn: () => fetchUserData()
-  // });
-  // -----UserData fetch
-
   // 특정 주소에서만 SessionStorage 사용하기
   useEffect(() => {
     if (

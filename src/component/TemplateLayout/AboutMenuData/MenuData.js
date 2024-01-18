@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from './MenuData.module.css'
-import { useIsLogin } from "../../../Store/DataStore";
+import { GetCookie } from "../../../customFn/GetCookie";
 export function MenuData(props){
   const navigate = useNavigate();
   const location = useLocation();
   const [topTab, setTopTab] = useState(null); // 현재 활성화된 탭을 추적
-  const isLogin = useIsLogin();
   useEffect(() => {
     const tabstate = JSON.parse(sessionStorage.getItem('tabState'));
     setTopTab(tabstate);
@@ -47,17 +46,17 @@ export function MenuData(props){
         {
           item: '내 정보 관리',
           link: '/mypages',
-          require : isLogin === true
+          require : GetCookie('jwt_token') !== null
         },
         {
           item: '원장조회',
           link: '/accountBook',
-          require : isLogin === true
+          require : GetCookie('jwt_token') !== null
         },
         {
           item: '입금내역',
           link: '/depositHistory',
-          require : isLogin === true
+          require : GetCookie('jwt_token') !== null
         },
         {
           item: '세금계산서',
@@ -79,12 +78,12 @@ export function MenuData(props){
         {
           item: '장바구니 목록',
           link: '/basket',
-          require : isLogin === true
+          require : GetCookie('jwt_token') !== null
         },
         {
           item: '주문/배송 현황',
           link: '/delivery',
-          require : isLogin === true
+          require : GetCookie('jwt_token') !== null
         },
       ],
     },
@@ -96,12 +95,12 @@ export function MenuData(props){
       subMenuItems: [{
         item: '견적함',
         link: '/estimateBox',
-        require : isLogin === true
+        require : GetCookie('jwt_token') !== null
       },
       {
         item: '견적관리',
         link: '/estimateManager',
-        require : isLogin === true
+        require : GetCookie('jwt_token') !== null
       }
       ]
     },
@@ -113,22 +112,22 @@ export function MenuData(props){
       subMenuItems: [{
         item: '반품신청',
         link: '/return/request',
-        require : isLogin === true
+        require : GetCookie('jwt_token') !== null
       },
       {
         item: '반품조회',
         link: '/return/list',
-        require : isLogin === true
+        require : GetCookie('jwt_token') !== null
       },
       {
         item: '불량교환신청',
         link: '/error/request',
-        require : isLogin === true
+        require : GetCookie('jwt_token') !== null
       },
       {
         item: '불량교환조회',
         link: '/error/list',
-        require : isLogin === true
+        require : GetCookie('jwt_token') !== null
       },
       ]
     },
@@ -145,7 +144,7 @@ export function MenuData(props){
         {
           item: '문의하기',
           link: '/userservice/contact',
-          require : isLogin === true
+          require : GetCookie('jwt_token') !== null
         }
       ],
     },
@@ -155,7 +154,7 @@ export function MenuData(props){
         item: '장바구니',
         link: '/basket'
       },
-      require: isLogin === true
+      require: GetCookie('jwt_token') !== null
     }
   ];
 
