@@ -47,13 +47,13 @@ export default function CorporateMember(props) {
                             className={styles.isInput}
                             type='text'
                             placeholder={'영어, 하이픈[-], 숫자만 입력 가능'}
-                            value={props.inputData.corporationData.businessNum}
+                            value={props.inputData.corporationData.cor_num}
                             onChange={(e) => {
                                 props.setInputData((prevData) => ({
                                     ...prevData,
                                     corporationData: {
                                         ...prevData.corporationData,
-                                        businessNum: e.target.value
+                                        cor_num: e.target.value
                                     }
                                 }))
                             }}

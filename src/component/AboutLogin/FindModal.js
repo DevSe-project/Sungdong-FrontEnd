@@ -3,6 +3,8 @@ import styles from './Modal.module.css';
 import { useDataActions, useModalActions, useModalState, useUserData } from '../../Store/DataStore';
 import FindId from './FindId';
 import FindPw from './FindPw';
+import axios from '../../axios';
+import { useMutation } from '@tanstack/react-query';
 
 export default function FindModal(props) {
     const { modalName, isModal } = useModalState();
@@ -11,33 +13,92 @@ export default function FindModal(props) {
     const { setUserData } = useDataActions();
     // Input State
     const [inputForFind, setInputForFind] = useState({
-        id: '',
-        ceoName: '',
-        biz_num: '',
+        userId: '',
+        cor_ceoName: '',
+        cor_num: '',
     })
+
+    // 로그인 처리 로직
+    const findIdRequest = async(loginData) => {
+        try {
+        const response = await axios.post("/auth/findId",
+            JSON.stringify({
+                cor_ceoName: loginData.cor_ceoName,
+                cor_num: loginData.cor_num
+            }),
+            {
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }
+        )
+        // 성공 시 추가된 상품 정보를 반환합니다.
+        return response.data;
+        } catch (error) {
+            // 실패 시 예외를 throw합니다.
+            throw new Error('아이디를 찾는 중 오류가 발생했습니다.');
+        }
+    }
+    const findPwRequest = async(loginData) => {
+        try {
+        const response = await axios.post("/auth/findPw",
+            JSON.stringify({
+                userId: loginData.userId,
+                cor_num: loginData.cor_num
+            }),
+            {
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }
+        )
+        // 성공 시 추가된 상품 정보를 반환합니다.
+        return response.data;
+        } catch (error) {
+            // 실패 시 예외를 throw합니다.
+            throw new Error('비밀번호를 찾는 중 오류가 발생했습니다.');
+        }
+    }
+    const { mutate:findIdMutate } = useMutation({mutationFn: findIdRequest})
+    const { mutate:findPwMutate } = useMutation({mutationFn: findPwRequest})
+
 
     // 아이디 찾기 Input정보(대표명, 사업자등록번호) 일치 확인
     function checking_FindId() {
-        // 일치하는 값 추출
-        const confirmIdFind = userData.find(userData => userData.corporationData.ceoName === inputForFind.ceoName && userData.corporationData.businessNum === inputForFind.biz_num);
-        // 값이 있다면 조건문 실행
-        if (confirmIdFind && confirmIdFind.corporationData.ceoName === inputForFind.ceoName && confirmIdFind.corporationData.businessNum === inputForFind.biz_num) {
-            alert(`일치한 정보입니다. 아이디는 ${confirmIdFind.id}입니다.`);
-        } else {
-            alert("입력하신 정보가 일치하지 않습니다.");
-        }
+        findIdMutate(inputForFind,{
+            onSuccess: (data) => {
+                console.log('UserId Find successfully:', data);
+                alert(`일치한 정보입니다. 아이디는 ${data.data.userId}입니다.`);
+            },
+            onError: (error) => {
+                console.error('UserId Find Failed:', error);
+                // 에러 처리 또는 메시지 표시
+                alert("입력하신 정보가 일치하지 않습니다.");
+            },
+        });
     }
 
     // 비밀번호 찾기 Input정보(아이디, 사업자등록번호) 일치 확인
     function checking_FindPw() {
-        // 일치하는 값 추출
-        const confirmPwFind = userData.find(userData => userData.id === inputForFind.id && userData.corporationData.businessNum === inputForFind.biz_num);
-        // 값이 있다면 조건문 실행
-        if (confirmPwFind && confirmPwFind.id === inputForFind.id && confirmPwFind.corporationData.businessNum === inputForFind.biz_num) {
-            alert(`일치한 정보입니다. 비밀번호는 ${confirmPwFind.password}입니다.`);
-        } else {
-            alert("입력하신 정보가 일치하지 않습니다.");
-        }
+        // // 일치하는 값 추출
+        // const confirmPwFind = userData.find(userData => userData.id === inputForFind.id && userData.corporationData.businessNum === inputForFind.biz_num);
+        // // 값이 있다면 조건문 실행
+        // if (confirmPwFind && confirmPwFind.id === inputForFind.id && confirmPwFind.corporationData.businessNum === inputForFind.biz_num) {
+        //     alert(`일치한 정보입니다. 비밀번호는 ${confirmPwFind.password}입니다.`);
+        // } else {
+        //     alert("입력하신 정보가 일치하지 않습니다.");
+        // }
+        findPwMutate(inputForFind,{
+            onSuccess: (data) => {
+                console.log('UserPw Find successfully:', data);
+                alert(`일치한 정보입니다. \n${inputForFind.userId}의 비밀번호는 ${data.data.userPassword}입니다.`);
+            },
+            onError: (error) => {
+                console.error('UserPw Find Failed:', error);
+                // 에러 처리 또는 메시지 표시
+                alert("입력하신 정보가 일치하지 않습니다.");
+            },
+        });
     }
 
     // enter키를 누르면 'ID찾기'
@@ -60,9 +121,9 @@ export default function FindModal(props) {
             if (event.key === 'Escape') {
                 selectedModalClose(); // "Esc" 키 누를 때 모달 닫기 함수 호출
                 setInputForFind({ // initialized
-                    id: '',
-                    ceoName: '',
-                    biz_num: '',
+                    userId: '',
+                    cor_ceoName: '',
+                    cor_num: '',
                 });
             }
         };

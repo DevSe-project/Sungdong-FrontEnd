@@ -15,11 +15,11 @@ export default function FindPw(props) {
                                     type='text'
                                     placeholder='아이디'
                                     className={styles.input}
-                                    value={props.inputForFind.id}
+                                    value={props.inputForFind.userId}
                                     onChange={(e) => {
                                         const inputCeoName = {
                                             ...props.inputForFind,
-                                            id: e.target.value
+                                            userId: e.target.value
                                         };
                                         props.setInputForFind(inputCeoName);
                                     }}
@@ -34,11 +34,11 @@ export default function FindPw(props) {
                                     type='text'
                                     placeholder='예)000-00-00000'
                                     className={styles.input}
-                                    value={props.inputForFind.biz_num}
+                                    value={props.inputForFind.cor_num}
                                     onChange={(e) => {
                                         const inputCeoName = {
                                             ...props.inputForFind,
-                                            biz_num: e.target.value
+                                            cor_num: e.target.value
                                         };
                                         props.setInputForFind(inputCeoName);
                                     }}

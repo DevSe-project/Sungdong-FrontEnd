@@ -20,7 +20,7 @@ export default function FindId(props) {
                                         onChange={(e) => {
                                             const inputCeoName = {
                                                 ...props.inputForFind,
-                                                ceoName: e.target.value
+                                                cor_ceoName: e.target.value
                                             };
                                             props.setInputForFind(inputCeoName);
                                         }}
@@ -39,7 +39,7 @@ export default function FindId(props) {
                                         onChange={(e) => {
                                             const inputCeoName = {
                                                 ...props.inputForFind,
-                                                biz_num: e.target.value
+                                                cor_num: e.target.value
                                             };
                                             props.setInputForFind(inputCeoName);
                                         }}
