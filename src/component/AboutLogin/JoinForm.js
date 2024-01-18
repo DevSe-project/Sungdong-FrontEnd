@@ -95,14 +95,14 @@ export default function JoinForm(props) {
                             className={styles.isInput}
                             type='text'
                             placeholder={'ex) OO전자'}
-                            value={props.inputData.corporationData.companyName}
+                            value={props.inputData.corporationData.cor_corName}
                             onChange={(e) => {
                                 props.setInputData(
                                     (prevData) => ({
                                         ...prevData,
                                         corporationData: {
                                             ...prevData.corporationData,
-                                            companyName: e.target.value
+                                            cor_corName: e.target.value
                                         }
                                     })
                                 )
@@ -168,13 +168,13 @@ export default function JoinForm(props) {
                             className={styles.isInput}
                             type='text'
                             placeholder={'홍길동'}
-                            value={props.inputData.corporationData.ceoName}
+                            value={props.inputData.corporationData.cor_ceoName}
                             onChange={(e) => {
                                 props.setInputData(prevData => ({
                                     ...prevData,
                                     corporationData: {
                                         ...prevData.corporationData,
-                                        ceoName: e.target.value
+                                        cor_ceoName: e.target.value
                                     }
                                 }))
                             }}
@@ -192,14 +192,14 @@ export default function JoinForm(props) {
                             placeholder={'ex) 010'}
                             maxLength="3"
                             size="6"
-                            value={props.inputData.corporationData.companyNum.num1}
+                            value={props.inputData.corporationData.cor_tel.num1}
                             onChange={(e) => {
                                 props.setInputData(prevData => ({
                                     ...prevData,
                                     corporationData: {
                                         ...prevData.corporationData,
-                                        companyNum: {
-                                            ...prevData.corporationData.companyNum,
+                                        cor_tel: {
+                                            ...prevData.corporationData.cor_tel,
                                             num1: e.target.value
                                         }
                                     }
@@ -212,14 +212,14 @@ export default function JoinForm(props) {
                             placeholder={'ex) 1234'}
                             maxLength="4"
                             size="8"
-                            value={props.inputData.corporationData.companyNum.num2}
+                            value={props.inputData.corporationData.cor_tel.num2}
                             onChange={(e) => {
                                 props.setInputData(prevData => ({
                                     ...prevData,
                                     corporationData: {
                                         ...prevData.corporationData,
-                                        companyNum: {
-                                            ...prevData.corporationData.companyNum,
+                                        cor_tel: {
+                                            ...prevData.corporationData.cor_tel,
                                             num2: e.target.value
                                         }
                                     }
@@ -232,39 +232,54 @@ export default function JoinForm(props) {
                             placeholder={'ex) 5678'}
                             maxLength="4"
                             size="8"
-                            value={props.inputData.corporationData.companyNum.num3}
+                            value={props.inputData.corporationData.cor_tel.num3}
                             onChange={(e) => {
                                 props.setInputData(prevData => ({
                                     ...prevData,
                                     corporationData: {
                                         ...prevData.corporationData,
-                                        companyNum: {
-                                            ...prevData.corporationData.companyNum,
+                                        cor_tel: {
+                                            ...prevData.corporationData.cor_tel,
                                             num3: e.target.value
                                         }
                                     }
                                 }))
                             }}
                         />
-                        <div className={styles.notification}>
+                        {/* <div className={styles.notification}>
                             <strong>문자(SMS) 서비스를 받으시겠습니까?</strong>
                             <div className={styles.YesNo}>
+                            <label for="CEO_SMS_Y">
                                 <input
                                     type="radio"
                                     name="CEO_SMS"
                                     id="CEO_SMS_Y"
+                                    value={1}
+                                    checked={props.inputData.smsService === 1}
+                                    onChange={(e) => {
+                                        props.setInputData(
+                                            (prevData) => ({ ...prevData, smsService: 1 })
+                                        )
+                                    }}
                                 />
-                                <label for="CEO_SMS_Y">예</label>
+                                예</label>
                             </div>
                             <div className={styles.YesNo}>
                                 <input
                                     type="radio"
                                     name="CEO_SMS"
                                     id="CEO_SMS_N"
+                                    value={0}
+                                    checked={props.inputData.smsService === 0}
+                                    onChange={(e) => {
+                                        props.setInputData(
+                                            (prevData) => ({ ...prevData, smsService: 0 })
+                                        )
+                                    }}
                                 />
                                 <label for="CEO_SMS_N">아니오</label>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </li>
                 {/* 사업자등록번호 */}
@@ -276,13 +291,13 @@ export default function JoinForm(props) {
                             id="coNum"
                             type='text'
                             placeholder={'숫자로만 이루어진 10자리 값으로만 조회 가능'}
-                            value={props.inputData.corporationData.businessNum}
+                            value={props.inputData.corporationData.cor_num}
                             onChange={(e) => {
                                 props.setInputData((prevData) => ({
                                     ...prevData,
                                     corporationData: {
                                         ...prevData.corporationData,
-                                        businessNum: e.target.value
+                                        cor_num: e.target.value
                                     }
                                 }))
                             }}
@@ -401,11 +416,11 @@ export default function JoinForm(props) {
                                     type="radio"
                                     id="email_Y"
                                     name="emailService"
-                                    value="yes"
-                                    checked={props.inputData.emailService === "yes"}
+                                    value={1}
+                                    checked={props.inputData.emailService === 1}
                                     onChange={(e) => {
                                         props.setInputData(
-                                            (prevData) => ({ ...prevData, emailService: 'yes' })
+                                            (prevData) => ({ ...prevData, emailService: 1 })
                                         )
                                     }}
                                 />
@@ -416,11 +431,11 @@ export default function JoinForm(props) {
                                     type="radio"
                                     id="email_N"
                                     name="emailService"
-                                    value="no"
-                                    checked={props.inputData.emailService === "no"}
+                                    value={0}
+                                    checked={props.inputData.emailService === 0}
                                     onChange={(e) => {
                                         props.setInputData(
-                                            (prevData) => ({ ...prevData, emailService: 'no' })
+                                            (prevData) => ({ ...prevData, emailService: 0 })
                                         )
                                     }}
                                 />
@@ -504,11 +519,11 @@ export default function JoinForm(props) {
                                     type="radio"
                                     name="smsService"
                                     id="SMS_Y"
-                                    value="yes"
-                                    checked={props.inputData.smsService === "yes"}
+                                    value={1}
+                                    checked={props.inputData.smsService === 1}
                                     onChange={(e) => {
                                         props.setInputData(
-                                            (prevData) => ({ ...prevData, smsService: 'yes' })
+                                            (prevData) => ({ ...prevData, smsService: 1 })
                                         )
                                     }}
                                 />
@@ -519,11 +534,11 @@ export default function JoinForm(props) {
                                     type="radio"
                                     name="smsService"
                                     id="SMS_N"
-                                    value="no"
-                                    checked={props.inputData.smsService === "no"}
+                                    value={0}
+                                    checked={props.inputData.smsService === 0}
                                     onChange={(e) => {
                                         props.setInputData(
-                                            (prevData) => ({ ...prevData, smsService: 'no' })
+                                            (prevData) => ({ ...prevData, smsService: 0 })
                                         )
                                     }}
                                 />
@@ -548,7 +563,7 @@ export default function JoinForm(props) {
                                         value={address && address.zonecode}
                                         onChange={(e) => {
                                             props.setInputData(
-                                                (prevData) => ({ ...prevData, address: e.target.value })
+                                                (prevData) => ({ ...prevData, zonecode: e.target.value })
                                             )
                                         }}
                                     />
@@ -587,10 +602,10 @@ export default function JoinForm(props) {
                                         type="text"
                                         placeholder="상세주소를 입력해주세요."
                                         name="detailAddress"
-                                        value={props.inputData.detailAddress}
+                                        value={props.inputData.addressDetail}
                                         onChange={(e) => {
                                             props.setInputData(
-                                                (prevData) => ({ ...prevData, detailAddress: e.target.value })
+                                                (prevData) => ({ ...prevData, addressDetail: e.target.value })
                                             )
                                         }}
                                     />

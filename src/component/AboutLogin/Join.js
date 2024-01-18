@@ -30,7 +30,10 @@ const joinRequest = async (joinData) => {
         const response = await axios.post("/auth/register",
             JSON.stringify({
                 ...joinData,
-                userType_name: joinData.userType_id === 1 ? "엔드회원" : "일반회원"
+                tel: `${joinData.num1}-${joinData.num2}-${joinData.num3}`,
+                ...joinData.corporationData,
+                cor_tel: `${joinData.corporationData.cor_tel.num1}-${joinData.corporationData.cor_tel.num2}-${joinData.corporationData.cor_tel.num3}`,
+                ...joinData.address
             }),
             {
                 headers: {
@@ -68,7 +71,6 @@ const joinRequest = async (joinData) => {
             confirmPassword: '',
             email: '',
             emailService: true,
-            grade: 'D',
             name: '',
             num1: '',
             num2: '',
@@ -76,17 +78,17 @@ const joinRequest = async (joinData) => {
             smsService: true,
             CMS: true,
             corporationData: {
-                ceoName: '',
-                companyName: '',
-                companyNum: {
+                cor_ceoName: '',
+                cor_corName: '',
+                cor_tel: {
                     num1: '',
                     num2: '',
                     num3: '',
                 },
-                businessNum: '',
-                businessSector: '',
-                businessCategory: '',
-                FAX: '',
+                cor_num: '',
+                cor_sector: '',
+                cor_category: '',
+                cor_fax: '',
             },
             address: {
                 zonecode: '',
@@ -96,8 +98,6 @@ const joinRequest = async (joinData) => {
                 jibunAddress: '',
             },
             detailAddress: '',
-            coupon: "",
-            bonusMoney: "",
         },
     )
 
@@ -137,6 +137,8 @@ const joinRequest = async (joinData) => {
 
     //회원가입 요청 함수
     const { mutate:joinMutate } = useMutation({mutationFn: joinRequest});
+
+
 
     const signUp_checkCondition = () => {
         if (!areAllRequiredChecked) {
