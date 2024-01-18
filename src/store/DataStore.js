@@ -737,66 +737,55 @@ export const useNoticeActions = () => useNoticeStore((state) => state.actions);
 
 
 // ------------Delivery Filter------------
-export const useDeliveryFilter = create((set) => ({
-  deliveryFilter: {
+export const useDeliveryFilter_checkbox = create((set) => ({
+  checkedState: {
+    '전체': false,
+    '배송 준비': false,
+    '배송 중': false,
+    '배송 완료': false,
+    '배송 지연': false
+  },
+
+  // 초기화
+  resetDeliveryFilter: () => set({
     checkedState: {
       '전체': false,
       '배송 준비': false,
       '배송 중': false,
       '배송 완료': false,
-      '배송 지연': false
+      '배송 지연': false,
     },
-    date: {
-      start: '',
-      end: ''
-    },
-    dateButton: {
-      '오늘': false,
-      '1 주일': false,
-      '1 개월': false,
-      '3 개월': false,
-      '6 개월': false,
-    }
-  },
-
-  actions: {
-    resetDeliveryFilter: () => set({
+  }),
+  // 업데이트 : 체크박스 핸들러
+  updateCheckedState: (fieldName) => set((state) => ({
+    deliveryFilter: {
+      ...state.deliveryFilter,
       checkedState: {
-        '전체': false,
-        '배송 준비': false,
-        '배송 중': false,
-        '배송 완료': false,
-        '배송 지연': false,
-        'all': false, // 'all' 속성 추가
-      },
-      date: {
-        start: '',
-        end: ''
-      },
-    dateButton: {
-      '오늘': false,
-      '1 주일': false,
-      '1 개월': false,
-      '3 개월': false,
-      '6 개월': false,
-    }
-    }),
-
-    updateCheckedState: (fieldName) => set((state) => ({
-      deliveryFilter: {
-        ...state.deliveryFilter,
-        checkedState: {
-          ...state.deliveryFilter.checkedState,
-          [fieldName]: !state.deliveryFilter.checkedState[fieldName],
-        }
+        ...state.deliveryFilter.checkedState,
+        [fieldName]: !state.deliveryFilter.checkedState[fieldName],
       }
-    })),
-  }
+    }
+  })),
 }))
 
 
-// 커스텀 : state
-export const useDeliveryFilterState = () => useDeliveryFilter((state) => state.deliveryFilter);
-export const useDeliveryFilterActions = () => useDeliveryFilter((state) => state.actions);
+export const useDeliveryFilter_date = create((set) => ({
+  startDate: '',
+  endDate: '',
+  filteredData: [],
 
+  setDateRange: (start, end) => set({ startDate: start, endDate: end }),
+
+  filterData: (data) => {
+    // 데이터 필터링, 상태 업데이트 로직을 추가 예정
+    const filteredData = data.filter((item) => {
+      // 필터링 조건에 따라 로직을 구현 예정
+      // item.date가 startDate와 endDate 사이에 있는지 확인하는 등등...ㅅㅂ
+
+      return true; // 나중에 결과 반환
+    });
+
+    set({ filteredData });
+  },
+}));
 // --------------------------
