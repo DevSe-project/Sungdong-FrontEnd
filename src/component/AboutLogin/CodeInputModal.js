@@ -6,7 +6,7 @@ import { useDataActions, useModal, useModalActions, useUserData } from '../../St
 export default function CodeInputModal() {
   const userData = useUserData();
   const { setUserData } = useDataActions();
-  const { selectedModalClose, closeModal} = useModalActions();
+  const { selectedModalClose, closeModal } = useModalActions();
 
   const navigate = useNavigate();
 
@@ -27,7 +27,7 @@ export default function CodeInputModal() {
 
   // 인증코드 입력 state
   const [inputCode, setInputCode] = useState('');
-  
+
   // 유효코드인증API
   const confirmCode = () => {
     const calledCodeList = JSON.parse(sessionStorage.getItem('savePrintCodeList')) || []; // 코드 리스트를 불러오고, 없을 경우 빈 배열로 초기화

@@ -11,7 +11,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 export function Login(props) {
 
   const { isModal, modalName } = useModalState();
-  const {selectedModalOpen} = useModalActions();
+  const { selectedModalOpen } = useModalActions();
   const { setLogin } = useSetLogin();
   const { isLogin } = useIsLogin();
   const userData = useUserData();
@@ -23,51 +23,51 @@ export function Login(props) {
   const queryClient = useQueryClient();
 
   // 로그인 처리 로직
-  const loginRequest = async(loginData) => {
+  const loginRequest = async (loginData) => {
     try {
       const response = await axios.post("/auth/login",
-          JSON.stringify(
-            loginData
-          ),
-          {
-            credentials: 'include', // withCredentials: true 와 같은 효과
-            headers: {
-                "Content-Type": "application/json"
-            }
+        JSON.stringify(
+          loginData
+        ),
+        {
+          credentials: 'include', // withCredentials: true 와 같은 효과
+          headers: {
+            "Content-Type": "application/json"
           }
+        }
       )
       // 성공 시 추가된 상품 정보를 반환합니다.
       return response.data;
-  } catch (error) {
+    } catch (error) {
       // 실패 시 예외를 throw합니다.
       throw new Error('로그인 중 오류가 발생했습니다.');
-  }
+    }
   }
 
   //로그인 요청 처리 로직
-  const { mutate:loginMutate } = useMutation({mutationFn: loginRequest})
+  const { mutate: loginMutate } = useMutation({ mutationFn: loginRequest })
 
 
   //로그인 요청 함수
   const goLogin = () => {
     // try {
-      loginMutate({userId: id, userPassword: pw},{
-        onSuccess: (data) => {
-            console.log('User logined successfully:', data);
-            alert(data.message);
-            // 홈 화면으로 이동
-            navigate("/");
-            // 다른 로직 수행 또는 상태 업데이트
-            queryClient.invalidateQueries(['user']);
-            // 토큰을 쿠키에 저장
-            // document.cookie = `jwt_token=${data.token}; path=/;`;
-        },
-        onError: (error) => {
-            console.error('User creation failed:', error);
-            // 에러 처리 또는 메시지 표시
-        },
-        });
-      }
+    loginMutate({ userId: id, userPassword: pw }, {
+      onSuccess: (data) => {
+        console.log('User logined successfully:', data);
+        alert(data.message);
+        // 홈 화면으로 이동
+        navigate("/");
+        // 다른 로직 수행 또는 상태 업데이트
+        queryClient.invalidateQueries(['user']);
+        // 토큰을 쿠키에 저장
+        // document.cookie = `jwt_token=${data.token}; path=/;`;
+      },
+      onError: (error) => {
+        console.error('User creation failed:', error);
+        // 에러 처리 또는 메시지 표시
+      },
+    });
+  }
 
   // 자동로그인 - 로그인정보 로컬스토리지 저장 (아직 다른 곳에서 getItem하는 부분을 안 만든 상태라 적용 안 될 것)
   function autoLogin() {
@@ -113,7 +113,7 @@ export function Login(props) {
               </div>
               {/* Login Button */}
               <div className={styles.goLogin}
-                onClick={()=>goLogin()}
+                onClick={() => goLogin()}
               >
                 로그인
               </div>
