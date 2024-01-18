@@ -70,6 +70,8 @@ export default function Deli_InquireTable() {
                 return '배송 중';
             case 3:
                 return '배송 완료';
+            case 4: 
+                return '배송 지연';
             default:
                 alert('배송 상태를 불러들이지 못했습니다.');
                 return 'null';

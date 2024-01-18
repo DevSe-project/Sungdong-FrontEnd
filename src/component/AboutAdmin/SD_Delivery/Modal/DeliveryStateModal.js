@@ -34,13 +34,13 @@ export default function DeliveryStateModal(props) {
     useEffect(() => {
         handleBatchStatus(overallSelectedStatus);
     }, [overallSelectedStatus]);
-    
+
     // 선택된 항목이나 개별 배송 상태 변경 시 useEffect를 통해 데이터 다시 가져오기
     useEffect(() => {
         dataFetch();
         setOverallSelectedStatus(selectedDeliveryStatus);
     }, [props.checkedItems, props.setCheckedItems, props.matchedData, props.setMatchedData, selectedDeliveryStatus]);
-    
+
     // 선택된 항목의 데이터 가져오는 함수
     function dataFetch() {
         if (!props.checkedItems) {
@@ -70,7 +70,7 @@ export default function DeliveryStateModal(props) {
     function handlePerStatus(orderId, e) {
         const selectedStatus = parseInt(e.target.value, 10);
 
-        if (selectedStatus === 1 || selectedStatus === 2 || selectedStatus === 3) {
+        if (selectedStatus === 1 || selectedStatus === 2 || selectedStatus === 3 || selectedStatus === 4) {
             // 선택된 항목의 배송 상태 업데이트
             const updatedData = fetchedData.map(item => {
                 if (item.orderId === orderId) {
@@ -168,6 +168,7 @@ export default function DeliveryStateModal(props) {
                                     <option value={1}>배송 준비</option>
                                     <option value={2}>배송 중</option>
                                     <option value={3}>배송 완료</option>
+                                    <option value={4}>배송 지연</option>
                                 </select>
                             </th>
                             <th></th>
@@ -202,6 +203,7 @@ export default function DeliveryStateModal(props) {
                                         <option value={1}>배송 준비</option>
                                         <option value={2}>배송 중</option>
                                         <option value={3}>배송 완료</option>
+                                        <option value={4}>배송 지연</option>
                                     </select>
                                 </td>
                                 {/* 주문일자 */}

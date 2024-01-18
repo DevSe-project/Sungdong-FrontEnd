@@ -30,7 +30,7 @@ export default function CorporateMember(props) {
                                         ...prevData,
                                         corporationData: {
                                             ...prevData.corporationData,
-                                            companyName : e.target.value
+                                            companyName: e.target.value
                                         }
                                     })
                                 )
@@ -177,7 +177,7 @@ export default function CorporateMember(props) {
                             <div className={styles.rightInnerContainer}>
                                 <div className={styles.searchAddress}>
                                     <input
-                                        className={styles.isInput} 
+                                        className={styles.isInput}
                                         type="text"
                                         placeholder="우편번호"
                                         readOnly
