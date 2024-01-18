@@ -773,13 +773,13 @@ export const useDeliveryFilter = create((set) => ({
         start: '',
         end: ''
       },
-      dateButton: {
-        '오늘': false,
-        '1 주일': false,
-        '1 개월': false,
-        '3 개월': false,
-        '6 개월': false,
-      }
+    dateButton: {
+      '오늘': false,
+      '1 주일': false,
+      '1 개월': false,
+      '3 개월': false,
+      '6 개월': false,
+    }
     }),
 
     updateCheckedState: (fieldName) => set((state) => ({
