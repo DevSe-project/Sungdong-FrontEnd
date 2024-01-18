@@ -15,18 +15,6 @@ export default function MyPage(props) {
   const { isLogin } = useIsLogin()
 
   const navigate = useNavigate();
-  // 액세스 권한 불러오기
-  const inLogin = GetCookie('jwt_token');
-
-  // 최초 접근 권한검사 -> 코드인증으로 액세스 혀용에 따른 접근 불/허용
-  useEffect(() => {
-    if (inLogin !== null) {
-      alert('인증이 완료되었습니다.');
-    } else {
-      alert('정상적인 접근이 아닙니다.')
-      navigate('/login');
-    }
-  }, [navigate]);
 
     // -----UserData fetch
     const fetchUserData = async () => {
