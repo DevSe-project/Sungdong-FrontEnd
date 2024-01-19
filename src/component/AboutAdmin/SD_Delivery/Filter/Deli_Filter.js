@@ -1,13 +1,14 @@
-import { search } from 'fontawesome';
-import { useDeliveryFilter_checkbox, useDeliveryFilter_date } from '../../../../Store/DataStore';
+import { useDeliveryFilter } from '../../../../Store/DataStore';
 import styles from './Deli_Filter.module.css';
 
 export default function Deli_Filter() {
     // Checkbox State
-    const { checkboxState, resetCheckboxState, updateCheckboxState, allUpdateCheckboxState } = useDeliveryFilter_checkbox();
-    // Date
-    const { startDate, endDate, setDateRange, resetDateFilter, filterDate } = useDeliveryFilter_date();
+    const { checkboxState, resetDeliveryFilter, updateCheckboxState, allUpdateCheckboxState,  startDate, endDate, setDateRange, filterDate } = useDeliveryFilter();
+    
+    // 필터링된 모든 데이터를 한 곳에 담아 서버로 전송하고 Deli_InquireTable에서 필터링된 데이터를 받아서 출력되도록 하는 목적의 검색 함수
+    const search = () => {
 
+    }
 
     // 배송 상태 체크박스
     function checkboxFtilter() {
@@ -138,10 +139,7 @@ export default function Deli_Filter() {
                 ))}
                 <div style={{ display: 'flex', gap: '0.5em' }}>
                     <input className={styles.search_button} type='submit' value='검색' onClick={search}/>
-                    <input className={styles.button} type='reset' onClick={() => {
-                        resetCheckboxState();
-                        resetDateFilter();
-                    }} />
+                    <input className={styles.button} type='reset' onClick={resetDeliveryFilter} />
                 </div>
             </form>
         </div>

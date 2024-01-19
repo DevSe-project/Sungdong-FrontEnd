@@ -738,22 +738,30 @@ export const useNoticeActions = () => useNoticeStore((state) => state.actions);
 
 
 // ------------Delivery Filter------------
-export const useDeliveryFilter_checkbox = create((set) => ({
+export const useDeliveryFilter = create((set) => ({
+  // 배송상태
   checkboxState: {
     '배송 준비': false,
     '배송 중': false,
     '배송 완료': false,
     '배송 지연': false
   },
+  // 배송일자
+  startDate: '',
+  endDate: '',
+  filteredData: [],
 
   // 초기화
-  resetCheckboxState: () => set({
+  resetDeliveryFilter: () => set({
     checkedState: {
       '배송 준비': false,
       '배송 중': false,
       '배송 완료': false,
       '배송 지연': false,
     },
+    startDate: '',
+    endDate: '',
+    filteredData: []
   }),
 
   // 업데이트 : 체크박스 핸들러
@@ -763,7 +771,7 @@ export const useDeliveryFilter_checkbox = create((set) => ({
       [fieldName]: !state.checkboxState[fieldName],
     },
   })),
-  
+
   // 전체 업데이트
   allUpdateCheckboxState: (fieldName, bool) => set((state) => ({
     checkboxState: {
@@ -771,16 +779,11 @@ export const useDeliveryFilter_checkbox = create((set) => ({
       [fieldName]: bool,
     },
   })),
-}))
 
-
-export const useDeliveryFilter_date = create((set) => ({
-  startDate: '',
-  endDate: '',
-  filteredData: [],
-
+  // 배송일자 범위 지정
   setDateRange: (start, end) => set({ startDate: start, endDate: end }),
 
+  //
   filterDate: (data) => {
     // 데이터 필터링, 상태 업데이트 로직을 추가 예정
     const filteredData = data.filter((item) => {
@@ -792,11 +795,4 @@ export const useDeliveryFilter_date = create((set) => ({
 
     set({ filteredData });
   },
-
-  resetDateFilter: () => set({
-    startDate: '',
-    endDate: '',
-    filteredData: []
-  })
-}));
-// --------------------------
+}))
