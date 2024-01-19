@@ -3,7 +3,7 @@ import styles from './Deli_Filter.module.css';
 
 export default function Deli_Filter() {
     // Checkbox State
-    const { checkboxState, resetDeliveryFilter, updateCheckboxState, allUpdateCheckboxState,  startDate, endDate, setDateRange, filterDate } = useDeliveryFilter();
+    const { checkboxState, date, resetDeliveryFilter, updateCheckboxState, allUpdateCheckboxState,  startDate, endDate, setDateRange, filterDate } = useDeliveryFilter();
     
     // 필터링된 모든 데이터를 한 곳에 담아 서버로 전송하고 Deli_InquireTable에서 필터링된 데이터를 받아서 출력되도록 하는 목적의 검색 함수
     const search = () => {
@@ -87,14 +87,14 @@ export default function Deli_Filter() {
                 {/* 시작일 */}
                 <input
                     type='date'
-                    value={startDate}
-                    onChange={(e) => setDateRange(e.target.value, endDate)}
+                    value={date.startDate}
+                    onChange={(e) => setDateRange(e.target.value, date.endDate)}
                 />
                 {/* 종료일 */}
                 <input
                     type='date'
-                    value={endDate}
-                    onChange={(e) => setDateRange(startDate, e.target.value)}
+                    value={date.endDate}
+                    onChange={(e) => setDateRange(date.startDate, e.target.value)}
                 />
 
                 {/* 날짜 필터 버튼들 */}

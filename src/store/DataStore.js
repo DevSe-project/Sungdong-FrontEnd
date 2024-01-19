@@ -746,10 +746,12 @@ export const useDeliveryFilter = create((set) => ({
     '배송 완료': false,
     '배송 지연': false
   },
-  // 배송일자
-  startDate: '',
-  endDate: '',
-  filteredData: [],
+  // 배송일자'
+  date: {
+    startDate: '',
+    endDate: '',
+    filteredData: []
+  },
 
   // 초기화
   resetDeliveryFilter: () => set({
@@ -759,9 +761,11 @@ export const useDeliveryFilter = create((set) => ({
       '배송 완료': false,
       '배송 지연': false,
     },
-    startDate: '',
-    endDate: '',
-    filteredData: []
+    date: {
+      startDate: '',
+      endDate: '',
+      filteredData: []
+    },
   }),
 
   // 업데이트 : 체크박스 핸들러
@@ -781,7 +785,13 @@ export const useDeliveryFilter = create((set) => ({
   })),
 
   // 배송일자 범위 지정
-  setDateRange: (start, end) => set({ startDate: start, endDate: end }),
+  setDateRange: (start, end) => set((state) => ({
+    date: {
+      ...state.date,
+      startDate: start,
+      endDate: end
+    }
+  })),
 
   //
   filterDate: (data) => {
