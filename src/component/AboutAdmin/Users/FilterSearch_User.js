@@ -13,9 +13,9 @@ export default function FilterSearch_User(props) {
             {/* FILTER OPTIONS */}
             <div className={styles.searchRow}>
                 <div className={styles.searchGroup}>
-                    <label htmlFor="bizName">기업명</label>
+                    <label htmlFor="cor_corName">기업명</label>
                     <input
-                        id="bizname"
+                        id="corName"
                         className={styles.input}
                         type="text"
                         placeholder="기업명"
@@ -23,9 +23,9 @@ export default function FilterSearch_User(props) {
                 </div>
 
                 <div className={styles.searchGroup}>
-                    <label htmlFor="ceoName">대표명</label>
+                    <label htmlFor="cor_ceoName">대표명</label>
                     <input
-                        id="ceoName"
+                        id="cor_ceoName"
                         className={styles.input}
                         type="text"
                         placeholder="대표명"
@@ -33,9 +33,9 @@ export default function FilterSearch_User(props) {
                 </div>
 
                 <div className={styles.searchGroup}>
-                    <label htmlFor="bizNum">사업자등록번호</label>
+                    <label htmlFor="cor_corNum">사업자등록번호</label>
                     <input
-                        id="bizNum"
+                        id="cor_corNum"
                         className={styles.input}
                         type="text"
                         placeholder="사업자등록번호"
@@ -45,9 +45,9 @@ export default function FilterSearch_User(props) {
 
             <div className={styles.searchRow}>
                 <div className={styles.searchGroup}>
-                    <label htmlFor="customerType">고객유형</label>
-                    <select className={styles.select} id="customerType">
-                        <option value="customerType">고객유형</option>
+                    <label htmlFor="userType">고객유형</label>
+                    <select className={styles.select} id="userType">
+                        <option value="userType">고객유형</option>
                     </select>
                 </div>
 
