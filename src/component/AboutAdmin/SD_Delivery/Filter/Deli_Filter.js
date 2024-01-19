@@ -1,36 +1,65 @@
+import { search } from 'fontawesome';
 import { useDeliveryFilter_checkbox, useDeliveryFilter_date } from '../../../../Store/DataStore';
 import styles from './Deli_Filter.module.css';
 
 export default function Deli_Filter() {
     // Checkbox State
-    const { checkedState, resetDeliveryFilter, updateCheckedState } = useDeliveryFilter_checkbox();
+    const { checkboxState, resetCheckboxState, updateCheckboxState, allUpdateCheckboxState } = useDeliveryFilter_checkbox();
     // Date
-    const { startDate, endDate, setDateRange, filterData } = useDeliveryFilter_date();
+    const { startDate, endDate, setDateRange, resetDateFilter, filterDate } = useDeliveryFilter_date();
 
 
-    function deliStateFtilter() {
+    // 배송 상태 체크박스
+    function checkboxFtilter() {
+        // 모든 체크박스가 체크됐는지 확인
+        const allChecked = Object.values(checkboxState).every(value => value);
+
+        // 모든 체크박스 - 체크/해제
+        const handleAllCheck = () => {
+
+            if (allChecked) { // 모든 체크박스가 체크돼있다면
+                Object.keys(checkboxState).map((item) => {
+                    allUpdateCheckboxState(item, false);
+                }); 
+            } else { // 체크박스가 하나라도 체크되지 않았다면
+                Object.keys(checkboxState).map((item) => {
+                    allUpdateCheckboxState(item, true);
+                });
+            }
+        };
+
         return (
             <div className={styles.deliState_container}>
-                {
-                    Object.keys(checkedState).map((item) => (
-                        <label key={item} className={styles.state_checkbox}>
-                            <input
-                                type='checkbox'
-                                name={item}
-                                checked={checkedState[item]}
-                                onChange={() => {
-                                    updateCheckedState(item)
-
-                                }}
-                            />
-                            {item}
-                        </label>
-                    ))
-                }
+                <label className={styles.state_checkbox}>
+                    <input
+                        type='checkbox'
+                        name='전체'
+                        checked={allChecked}
+                        onChange={handleAllCheck}
+                    />
+                    전체
+                </label>
+                {Object.keys(checkboxState).map((item) => (
+                    <label key={item} className={styles.state_checkbox}>
+                        <input
+                            type='checkbox'
+                            name={item}
+                            checked={checkboxState[item]}
+                            onChange={() => {
+                                updateCheckboxState(item);
+                                const changedCheckboxes = Object.keys(checkboxState).filter(key => checkboxState[key]);
+                                console.log(`현재 체크된 체크박스: ${changedCheckboxes.join(', ')}`);
+                            }}
+                        />
+                        {item}
+                    </label>
+                ))}
             </div>
-        )
+        );
     }
 
+
+    // 배송일자 조회
     function dateFilter() {
         const handleDateFilter = (days) => {
             const today = new Date();
@@ -47,7 +76,7 @@ export default function Deli_Filter() {
 
             // 이 부분에 필터링할 데이터를 가져오고 상태 업데이트 예정
             const data = []; // 데이터 가져오는 로직을 구현해야 함
-            filterData(data);
+            filterDate(data);
 
             console.log(`조회 기간: ${startDate} ~ ${endDate}`);
         };
@@ -80,7 +109,7 @@ export default function Deli_Filter() {
 
 
     const filterList = [
-        { label: '배송상태', content: deliStateFtilter() },
+        { label: '배송상태', content: checkboxFtilter() },
         { label: '기간', content: dateFilter() },
     ]
 
@@ -108,8 +137,11 @@ export default function Deli_Filter() {
                     </div>
                 ))}
                 <div style={{ display: 'flex', gap: '0.5em' }}>
-                    <input className={styles.search_button} type='submit' value='검색' />
-                    <input className={styles.button} type='reset' onClick={() => { }} />
+                    <input className={styles.search_button} type='submit' value='검색' onClick={search}/>
+                    <input className={styles.button} type='reset' onClick={() => {
+                        resetCheckboxState();
+                        resetDateFilter();
+                    }} />
                 </div>
             </form>
         </div>

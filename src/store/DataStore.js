@@ -1,3 +1,4 @@
+import { fieldHockey } from 'fontawesome';
 import { create } from 'zustand'
 
 // ------------------------------데이터 STORE----------------------------//
@@ -738,8 +739,7 @@ export const useNoticeActions = () => useNoticeStore((state) => state.actions);
 
 // ------------Delivery Filter------------
 export const useDeliveryFilter_checkbox = create((set) => ({
-  checkedState: {
-    '전체': false,
+  checkboxState: {
     '배송 준비': false,
     '배송 중': false,
     '배송 완료': false,
@@ -747,24 +747,29 @@ export const useDeliveryFilter_checkbox = create((set) => ({
   },
 
   // 초기화
-  resetDeliveryFilter: () => set({
+  resetCheckboxState: () => set({
     checkedState: {
-      '전체': false,
       '배송 준비': false,
       '배송 중': false,
       '배송 완료': false,
       '배송 지연': false,
     },
   }),
+
   // 업데이트 : 체크박스 핸들러
-  updateCheckedState: (fieldName) => set((state) => ({
-    deliveryFilter: {
-      ...state.deliveryFilter,
-      checkedState: {
-        ...state.deliveryFilter.checkedState,
-        [fieldName]: !state.deliveryFilter.checkedState[fieldName],
-      }
-    }
+  updateCheckboxState: (fieldName) => set((state) => ({
+    checkboxState: {
+      ...state.checkboxState,
+      [fieldName]: !state.checkboxState[fieldName],
+    },
+  })),
+  
+  // 전체 업데이트
+  allUpdateCheckboxState: (fieldName, bool) => set((state) => ({
+    checkboxState: {
+      ...state.checkboxState,
+      [fieldName]: bool,
+    },
   })),
 }))
 
@@ -776,7 +781,7 @@ export const useDeliveryFilter_date = create((set) => ({
 
   setDateRange: (start, end) => set({ startDate: start, endDate: end }),
 
-  filterData: (data) => {
+  filterDate: (data) => {
     // 데이터 필터링, 상태 업데이트 로직을 추가 예정
     const filteredData = data.filter((item) => {
       // 필터링 조건에 따라 로직을 구현 예정
@@ -787,5 +792,11 @@ export const useDeliveryFilter_date = create((set) => ({
 
     set({ filteredData });
   },
+
+  resetDateFilter: () => set({
+    startDate: '',
+    endDate: '',
+    filteredData: []
+  })
 }));
 // --------------------------
