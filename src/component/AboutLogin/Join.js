@@ -8,6 +8,7 @@ import { useDataActions, useUserData } from "../../Store/DataStore";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "../../axios";
 import { UserDataObj } from "../Data/UserDataObj";
+import { GetCookie } from "../../customFn/GetCookie";
 
 
 export default function Join() {
@@ -45,17 +46,17 @@ export default function Join() {
             return response.data;
         } catch (error) {
             // 실패 시 예외를 throw합니다.
-            throw new Error('회원가입 처리 중 오류가 발생했습니다.');
+            throw new Error('미 기입된 항목이 있습니다. 다시 확인해주세요..!');
         }
     };
 
     // 액세스 권한 불러오기
-    const inAccess = JSON.parse(sessionStorage.getItem('saveAllowAccess'));
+    const inAccess = GetCookie('register_code');
 
     // 최초 접근 권한검사 -> 코드인증으로 액세스 혀용에 따른 접근 불/허용
     useEffect(() => {
-        if (inAccess) {
-            alert('인증이 완료되었습니다.');
+        if (inAccess !== null) {
+            alert('접근 검사 : 인증이 완료되었습니다.');
         } else {
             alert('정상적인 접근이 아닙니다.')
             navigate('/login');
@@ -156,6 +157,7 @@ export default function Join() {
             onError: (error) => {
                 console.error('User creation failed:', error);
                 // 에러 처리 또는 메시지 표시
+                alert(error);
             },
         });
     };

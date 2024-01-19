@@ -2,11 +2,14 @@ import { React, useEffect, useState } from 'react';
 import styles from './Modal.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useDataActions, useModal, useModalActions, useUserData } from '../../Store/DataStore';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import axios from '../../axios';
 
 export default function CodeInputModal() {
   const userData = useUserData();
   const { setUserData } = useDataActions();
   const { selectedModalClose, closeModal } = useModalActions();
+  const queryClient = useQueryClient();
 
   const navigate = useNavigate();
 
@@ -25,21 +28,45 @@ export default function CodeInputModal() {
     };
   }, [selectedModalClose]);
 
+    //코드 데이터 생성 fetch
+    const fetchCheckCode = async (inputCode) => {
+      try {
+      const response = await axios.post("/auth/checkCode",
+          JSON.stringify({
+            user_code: inputCode
+          }),
+          {
+            credentials: 'include', // withCredentials: true 와 같은 효과
+            headers: {
+                "Content-Type": "application/json",
+            }
+          }
+      )
+      // 성공 시 추가된 상품 정보를 반환합니다.
+      return response.data;
+  } catch (error) {
+      // 실패 시 예외를 throw합니다.
+      throw new Error('확인 중 오류가 발생했습니다.');
+  }
+  };
+
   // 인증코드 입력 state
   const [inputCode, setInputCode] = useState('');
+  const {mutate:checkCodeMutation} = useMutation({mutationFn: fetchCheckCode})
 
-  // 유효코드인증API
+  // 유효코드 체크
   const confirmCode = () => {
-    const calledCodeList = JSON.parse(sessionStorage.getItem('savePrintCodeList')) || []; // 코드 리스트를 불러오고, 없을 경우 빈 배열로 초기화
-    const matchedCode = calledCodeList.find(codeItem => codeItem.code === inputCode); //매칭되는 코드를 찾음
-    if (matchedCode) { // 일치하는 코드가 발견된 경우
-      sessionStorage.setItem('saveAllowAccess', JSON.stringify(true)); //세션에 해당상태 저장
-      navigate('/join'); // 1. 회원가입 페이지로 이동
-      // 2. userData의 id값으로 입력받은 코드를 삽입
-    } else { //코드일치X -> 접근권한 false -> 경고창
-      sessionStorage.setItem('saveAllowAccess', JSON.stringify(false)); //세션에 해당상태 저장
-      alert('유효하지 않은 코드입니다.');
-    }
+    checkCodeMutation(inputCode,{
+      onSuccess: (data) => {
+        console.log('유효한 코드 :', data);
+        alert(data.message);
+        navigate("/join");        
+      },
+      onError: (error) => {
+        console.error('code check failed:', error);
+        // 에러 처리 또는 메시지 표시
+      },
+    });
   }
 
   return (
@@ -80,7 +107,7 @@ export default function CodeInputModal() {
           {/* 회원가입 진행 Button */}
           <div
             className={styles.goProve}
-            onClick={confirmCode}
+            onClick={()=>confirmCode()}
           >
             인증하기
           </div>
