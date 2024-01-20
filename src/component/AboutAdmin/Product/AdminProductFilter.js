@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useProductFilter, useProductFilterActions } from '../../../Store/DataStore'
 import styles from './AdminProductFilter.module.css'
-export function AdminProductFilter({handelSearch}){
+export function AdminProductFilter({handleSearch}){
   const productFilter = useProductFilter();
   const {setProductFilter, resetProductFilter, setProductDate, setProductCategory, setCheckboxState, setAllCheckboxState} = useProductFilterActions();
   
@@ -145,7 +145,7 @@ export function AdminProductFilter({handelSearch}){
         </div>
         ))}
         <div style={{display: 'flex', gap: '0.5em'}}>
-          <input className={styles.button} type='submit' value='검색' onClick={()=>handelSearch()}/>
+          <input className={styles.button} type='submit' value='검색' onClick={()=>handleSearch()}/>
           <input className={styles.button} type='reset' onClick={()=>resetProductFilter()}/>
         </div>
       </form>
