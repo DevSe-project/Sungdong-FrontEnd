@@ -73,7 +73,7 @@ export default function Deli_InquireTable() {
                 return '배송 중';
             case 3:
                 return '배송 완료';
-            case 4: 
+            case 4:
                 return '배송 지연';
             default:
                 alert('배송 상태를 불러들이지 못했습니다.');
@@ -232,20 +232,20 @@ export default function Deli_InquireTable() {
             <div className={styles.selectedHandler}>
                 {/* 배송상태 수정 */}
                 <button
-                    className={styles.button}
+                    className='white_button'
                     onClick={() => { handleModalOpen('DeliveryStateModal') }}>
                     선택 항목 수정(배송상태)
                 </button>
                 {/* 송장 수정 */}
                 <button
-                    className={styles.button}
+                    className='white_button'
                     // 송장수정 fn
                     onClick={() => { handleModalOpen('InvoiceModal') }}>
                     선택 항목 수정(송장)
                 </button>
                 {/* 일괄 배송 취소 */}
                 <button
-                    className={styles.button}
+                    className='white_button'
                     onClick={() => {
                         handleDelete()
                     }}>
@@ -326,7 +326,7 @@ export default function Deli_InquireTable() {
 
             {/* 패이지 이동 */}
             <div className={styles.pageMoveHandler}>
-                <button className={styles.moveButton} onClick={() => {
+                <button className='white_button' onClick={() => {
                     if (currentPage !== 1) {
                         setCurrentPage(currentPage - 1);
                     } else {
@@ -336,7 +336,7 @@ export default function Deli_InquireTable() {
                     <i className="far fa-angle-left" />
                 </button>
                 <div className={styles.currentPage}> {currentPage} </div>
-                <button className={styles.moveButton} onClick={() => {
+                <button className='white_button' onClick={() => {
                     if (matchedData.length > currentPage * 5) {
                         setCurrentPage(currentPage + 1);
                     } else {

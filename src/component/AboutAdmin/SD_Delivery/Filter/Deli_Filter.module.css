@@ -39,32 +39,6 @@
 
 }
 
-.button {
-    border: 1px solid lightgray;
-    background-color: white;
-    padding: 0.5em;
-    padding-left: 1.5em;
-    padding-right: 1.5em;
-    cursor: pointer;
-}
-.button:hover {
-    background-color: var(--main-color-light);
-    transition: background-color 0.3s;
-}
-.search_button{
-    border: 1px solid lightgray;
-    background-color: var(--main-color-original);
-    color: white;
-    padding: 0.5em;
-    padding-left: 1.5em;
-    padding-right: 1.5em;
-    cursor: pointer;
-  }
-.search_button:hover {
-    background-color: var(--text-hover-color);
-    transition: background-color 0.3s;
-}
-
 .input,
 .select {
     width: 100%;

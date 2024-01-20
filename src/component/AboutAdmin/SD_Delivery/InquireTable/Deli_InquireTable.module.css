@@ -38,15 +38,6 @@
     gap: 10px;
 }
 
-.button {
-    border: 1px solid lightgray;
-    background-color: white;
-    padding: 0.5em;
-    padding-left: 1.5em;
-    padding-right: 1.5em;
-}
-
-
 /* --------PageMoveHandler-------- */
 .pageMoveHandler {
     display: flex;

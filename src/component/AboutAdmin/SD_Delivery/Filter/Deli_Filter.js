@@ -173,8 +173,8 @@ export default function Deli_Filter() {
                     </div>
                 ))}
                 <div style={{ display: 'flex', gap: '0.5em' }}>
-                    <input className={styles.search_button} type='submit' value='검색' onClick={search} />
-                    <input className={styles.button} type='reset' onClick={resetDeliveryFilter} />
+                    <input className='original_button' type='submit' value='검색' onClick={search} />
+                    <input className='white_button' type='reset' onClick={resetDeliveryFilter} />
                 </div>
             </form>
         </div>
