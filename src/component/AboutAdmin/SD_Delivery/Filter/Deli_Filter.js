@@ -1,14 +1,49 @@
 import { useDeliveryFilter } from '../../../../Store/DataStore';
 import styles from './Deli_Filter.module.css';
+import { useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
 
 export default function Deli_Filter() {
-    // Checkbox State
-    const { checkboxState, date, resetDeliveryFilter, updateCheckboxState, allUpdateCheckboxState,  startDate, endDate, setDateRange, filterDate } = useDeliveryFilter();
-    
-    // 필터링된 모든 데이터를 한 곳에 담아 서버로 전송하고 Deli_InquireTable에서 필터링된 데이터를 받아서 출력되도록 하는 목적의 검색 함수
-    const search = () => {
+    const queryClient = useQueryClient();
+    // 쭈~스텐드
+    const { checkboxState, date, resetDeliveryFilter, updateCheckboxState, allUpdateCheckboxState, startDate, endDate, setDateRange, filterDate } = useDeliveryFilter();
 
-    }
+    // 검색 함수
+    const search = () => {
+        // 체크박스 중 선택된 상태를 filter
+        const selectedStatus = Object.keys(checkboxState).filter((key) => checkboxState[key]);
+        // 요청할 데이터 조각모음 ㅋㅋㅎ
+        const requestData = {
+            statuses: selectedStatus,
+            startDate: date.startDate,
+            endDate: date.endDate,
+        };
+
+        // 'filteredData' 쿼리를 무효화하고 새로운 데이터를 fetching하기 위함
+        queryClient.invalidateQueries('filteredData');
+
+        // API 요청
+        queryClient.fetchQuery('filteredData', () => fetchFilteredDelivery(requestData));
+    };
+
+    // 필터링된 API 데이터를 가져오는 함수
+    const fetchFilteredDelivery = async (requestData) => {
+        try {
+            const response = await axios.get('/data', { params: requestData });
+
+            if (response.ok) {
+                const data = await response.json();
+                return data;
+            } else {
+                // HTTP 오류 응답에 대한 예외 처리
+                throw new Error(`HTTP 오류: ${response.status}`);
+            }
+        } catch (error) {
+            // 네트워크 오류 등의 예외 처리
+            console.error('데이터 가져오기 실패:', error.message);
+            throw new Error('데이터 가져오기 실패');
+        }
+    };
 
     // 배송 상태 체크박스
     function checkboxFtilter() {
@@ -21,7 +56,7 @@ export default function Deli_Filter() {
             if (allChecked) { // 모든 체크박스가 체크돼있다면
                 Object.keys(checkboxState).map((item) => {
                     allUpdateCheckboxState(item, false);
-                }); 
+                });
             } else { // 체크박스가 하나라도 체크되지 않았다면
                 Object.keys(checkboxState).map((item) => {
                     allUpdateCheckboxState(item, true);
@@ -138,7 +173,7 @@ export default function Deli_Filter() {
                     </div>
                 ))}
                 <div style={{ display: 'flex', gap: '0.5em' }}>
-                    <input className={styles.search_button} type='submit' value='검색' onClick={search}/>
+                    <input className={styles.search_button} type='submit' value='검색' onClick={search} />
                     <input className={styles.button} type='reset' onClick={resetDeliveryFilter} />
                 </div>
             </form>
