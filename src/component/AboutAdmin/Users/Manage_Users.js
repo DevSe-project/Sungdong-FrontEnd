@@ -2,8 +2,8 @@ import React, { useState, useMemo } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AdminHeader } from '../Layout/Header/AdminHeader';
 import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
-import Sort_UserList from '../Users/Sort_UserList';
-import FilterSearch_User from '../Users/FilterSearch_User';
+import SortUserList from '../Users/SortUserList';
+import FilterSearchUser from '../Users/FilterSearchUser';
 import styles from './Manage_Users.module.css';
 import axios from '../../../axios';
 import { useUserFilter } from '../../../Store/DataStore';
@@ -51,7 +51,7 @@ export default function Manage_Users() {
         throw new Error('조건에 일치하는 유저가 없습니다.');
     }
     };
-    const { data:users, isError, isLoading, refetch: refetchAllUsers } = useQuery({
+    const { data:users, isError, isLoading } = useQuery({
         queryKey: ['users'],
         queryFn: fetchAllUserData
     })
@@ -113,8 +113,8 @@ export default function Manage_Users() {
                 <AdminMenuData />
                 <div className={styles.mainContainer}>
                     <div className={styles.filtSortContainer}>
-                        <FilterSearch_User onFiltering={onFiltering} />
-                        <Sort_UserList sortBy={sortBy} onSort={handleSort} />
+                        <FilterSearchUser onFiltering={onFiltering} />
+                        <SortUserList sortBy={sortBy} onSort={handleSort} />
                     </div>
 
                     <table className={styles.userTable}>

@@ -2,7 +2,7 @@
 import React from 'react';
 import styles from './Sort_UserList.module.css';
 
-const Sort_UserList = (props) => {
+const SortUserList = (props) => {
 
     const optionsArr = [
         {
@@ -52,4 +52,4 @@ const Sort_UserList = (props) => {
     );
 };
 
-export default Sort_UserList;
+export default SortUserList;

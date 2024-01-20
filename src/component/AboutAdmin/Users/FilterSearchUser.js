@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './FiterSearch_User.module.css';
 import { useUserFilter, useUserFilterActions } from '../../../Store/DataStore';
 
-export default function FilterSearch_User(props) {
+export default function FilterSearchUser(props) {
     const userFilter = useUserFilter();
     const { setUserFilter,resetUserFilter } = useUserFilterActions();
 
