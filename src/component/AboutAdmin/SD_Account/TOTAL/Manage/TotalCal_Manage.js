@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './TotalCal_Manage.module.css';
-import { AdminHeader } from '../Layout/Header/AdminHeader';
-import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
+import { AdminHeader } from '../../../Layout/Header/AdminHeader';
+import { AdminMenuData } from '../../../Layout/SideBar/AdminMenuData';
 
 const TotalCal_Manage = () => {
     // 임시 총 주문 데이터 30개
@@ -76,42 +76,29 @@ const TotalCal_Manage = () => {
                     </header>
                     <main className={styles.main}>
                         <div className={styles.filter_buttons}>
-                            <button onClick={() => handleFilter('모두')}
-                                className={
-                                    filter === '모두'
-                                        ?
-                                        `${styles.filter_button} ${styles.active}`
-                                        :
-                                        styles.filter_button
-                                }>
+                            <button 
+                            className='original_button'
+                            onClick={() => handleFilter('모두')}>
                                 모두 보기
                             </button>
                             <button onClick={() => handleFilter('완료')}
-                                className={
-                                    filter === '완료'
-                                        ?
-                                        `${styles.filter_button} ${styles.active}`
-                                        :
-                                        styles.filter_button
-                                }>
+                                
+                                className='original_button'>
                                 정산 완료
                             </button>
                             <button onClick={() => handleFilter('처리 중')}
-                                className={
-                                    filter === '처리 중'
-                                        ?
-                                        `${styles.filter_button} ${styles.active}`
-                                        :
-                                        styles.filter_button
-                                }>
+                                
+                            className='original_button'>
                                 처리 중
                             </button>
                             {/* 필터 버튼 추가 */}
-                            {/* ... */}
                         </div>
 
+                        
+                        <div className={styles.header_txt}>
+                            목록
+                        </div>
                         <section>
-                            <h4>정산 내용</h4>
                             <table className={styles.table}>
                                 <thead>
                                     <tr>
@@ -137,7 +124,7 @@ const TotalCal_Manage = () => {
                                 </tbody>
                             </table>
                             <div className={styles.btn_container}>
-                                <button className={styles.btn}>정산하기</button>
+                                <button className='red_button'>정산하기</button>
                             </div>
                         </section>
                     </main>

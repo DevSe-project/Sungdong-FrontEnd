@@ -19,32 +19,36 @@
     padding: 1em;
 }
 
+.totalAccount {
+    color: orangered;
+}
+
 .filter_buttons {
     display: flex;
     gap: 10px;
     margin-bottom: 1em;
 }
 
-.filter_buttons button {
-    background-color: rgb(204, 94, 53);
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.btn_container {
+    margin-top: 20px;
+}
+
+.btn {
+    background-color: #333;
     color: white;
     border: none;
-    border-radius: 1dvh;
+    border-radius: 10px;
     padding: 0.7em 1.5em;
     cursor: pointer;
     font-size: 18px;
     transition: background-color 0.3s;
 }
 
-.filter_buttons button:hover {
-    background-color: rgb(174, 79, 44);
-}
-
-.active {
-    background-color: #CC0000;
-}
-
-.table {
-    width: 100%;
-    border-collapse: collapse;
+.btn:hover {
+    background-color: #ae4f2c;
 }

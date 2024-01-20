@@ -25,7 +25,7 @@ export default function DeliveryManagement() {
                 <div className={styles.main}>
 
                     {/* Post */}
-                    <div className={styles.main_post}> 배송 상태 관리  </div>
+                    <div className='LargeHeader'> 배송 상태 관리  </div>
 
                     {/* Filter Container */}
                     <Deli_Filter />

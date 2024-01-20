@@ -12,12 +12,3 @@
     justify-content: center;
     align-items: center;
 }
-
-.main_post {
-    width: 100%;
-    text-align: left;
-    padding: 5px;
-    border-bottom: 3px solid var(--background-color-set);
-    font-size: 20px;
-    font-weight: bold;
-}

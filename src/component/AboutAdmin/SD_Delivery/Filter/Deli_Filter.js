@@ -66,18 +66,20 @@ export default function Deli_Filter() {
 
         return (
             <div className={styles.deliState_container}>
-                <label className={styles.state_checkbox}>
+                <label className={styles.deliveryStateLabel}>
                     <input
+                        className={styles.deliveryStateCheckbox}
                         type='checkbox'
                         name='전체'
                         checked={allChecked}
                         onChange={handleAllCheck}
                     />
-                    전체
+                    <span>전체</span>
                 </label>
                 {Object.keys(checkboxState).map((item) => (
-                    <label key={item} className={styles.state_checkbox}>
+                    <label key={item} className={styles.deliveryStateLabel}>
                         <input
+                            className={styles.deliveryStateCheckbox}
                             type='checkbox'
                             name={item}
                             checked={checkboxState[item]}
@@ -121,24 +123,26 @@ export default function Deli_Filter() {
             <div className={styles.dateFilter_container}>
                 {/* 시작일 */}
                 <input
+                    className='date'
                     type='date'
                     value={date.startDate}
                     onChange={(e) => setDateRange(e.target.value, date.endDate)}
                 />
                 {/* 종료일 */}
                 <input
+                    className='date'
                     type='date'
                     value={date.endDate}
                     onChange={(e) => setDateRange(date.startDate, e.target.value)}
                 />
 
                 {/* 날짜 필터 버튼들 */}
-                <div className={styles.dateButton} onClick={() => handleDateFilter(0)}> 오늘 </div>
-                <div className={styles.dateButton} onClick={() => handleDateFilter(7)}> 1 주일 </div>
-                <div className={styles.dateButton} onClick={() => handleDateFilter(30)}> 1 개월 </div>
-                <div className={styles.dateButton} onClick={() => handleDateFilter(90)}> 3 개월 </div>
-                <div className={styles.dateButton} onClick={() => handleDateFilter(180)}> 6 개월 </div>
-                <div className={styles.dateButton} onClick={() => handleDateFilter(365)}> 12 개월 </div>
+                <div className='white_round_button' onClick={() => handleDateFilter(0)}> 오늘 </div>
+                <div className='white_round_button' onClick={() => handleDateFilter(7)}> 1 주일 </div>
+                <div className='white_round_button' onClick={() => handleDateFilter(30)}> 1 개월 </div>
+                <div className='white_round_button' onClick={() => handleDateFilter(90)}> 3 개월 </div>
+                <div className='white_round_button' onClick={() => handleDateFilter(180)}> 6 개월 </div>
+                <div className='white_round_button' onClick={() => handleDateFilter(365)}> 12 개월 </div>
             </div>
         );
     }

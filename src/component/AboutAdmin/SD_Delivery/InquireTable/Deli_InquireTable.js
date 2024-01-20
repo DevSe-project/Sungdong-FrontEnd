@@ -212,170 +212,160 @@ export default function Deli_InquireTable() {
 
 
     return (
-        matchedData ? <div className={styles.body}>
-            {/* Header */}
-            <div className={styles.header}>
-                <div className={styles.header_txt}>
-                    목록
-                </div>
-                <select className={styles.denoteNumber_select}
-                    value={itemsPerPage}
-                    onChange={(e) => setItemsPerPage(Number(e.target.value))}
-                >
-                    <option value={1}>1</option>
-                    <option value={3}>3</option>
-                    <option value={5}>5</option>
-                </select>
-            </div>
-
-            {/* 선택항목일괄처리 */}
-            <div className={styles.selectedHandler}>
-                {/* 배송상태 수정 */}
-                <button
-                    className='white_button'
-                    onClick={() => { handleModalOpen('DeliveryStateModal') }}>
-                    선택 항목 수정(배송상태)
-                </button>
-                {/* 송장 수정 */}
-                <button
-                    className='white_button'
-                    // 송장수정 fn
-                    onClick={() => { handleModalOpen('InvoiceModal') }}>
-                    선택 항목 수정(송장)
-                </button>
-                {/* 일괄 배송 취소 */}
-                <button
-                    className='white_button'
-                    onClick={() => {
-                        handleDelete()
-                    }}>
-                    {/* 배송 상태 리스트에서 삭제 */}
-                    배송 취소
-                </button>
-            </div>
-
-            {/* Main - 배송관리 테이블 리스트업 */}
-            <table>
-                {/* 필드명 */}
-                <thead
-                    style={{
-                        backgroundColor: 'white',
-                        color: 'black',
-                        boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)'
-                    }}
-                >
-                    <tr>
-                        <th>
-                            <input type='checkbox'
-                                checked={checkedItems.length === getCurrentPagePosts().length ? true : false}
-                                onChange={(e) => handleAllCheckbox(e)} />
-                        </th>
-                        <th>주문번호</th>
-                        <th>택배사</th>
-                        <th>송장 번호</th>
-                        <th>처리상태</th>
-                        <th>주문일자</th>
-                        <th>상품코드</th>
-                        <th>이미지</th>
-                        <th>상품명</th>
-                        <th>옵션명</th>
-                        <th>표준가</th>
-                        <th>공급가</th>
-                    </tr>
-                </thead>
-
-                {/* 데이터 맵핑 */}
-                <tbody>
-                    {matchedData &&
-                        getCurrentPagePosts()?.map((item, index) => (
-                            <tr key={index}>
-                                {/* 체크박스 */}
-                                <td>
+        <div style={{ width: '100%' }}>
+            {matchedData ?
+                <div className={styles.body}>
+                    {/* Header */}
+                    <div className='MediumHeader'>
+                        <div className='HeaderTxt'>
+                            목록
+                        </div>
+                        <select
+                            className='select'
+                            style={{ margin: '5px' }}
+                            value={itemsPerPage}
+                            onChange={(e) => setItemsPerPage(Number(e.target.value))}
+                        >
+                            <option value={1}>1</option>
+                            <option value={3}>3</option>
+                            <option value={5}>5</option>
+                        </select>
+                    </div>
+                    {/* 선택항목일괄처리 */}
+                    <div className={styles.selectedHandler}>
+                        {/* 배송상태 수정 */}
+                        <button
+                            className='white_button'
+                            onClick={() => { handleModalOpen('DeliveryStateModal') }}>
+                            선택 항목 수정(배송상태)
+                        </button>
+                        {/* 송장 수정 */}
+                        <button
+                            className='white_button'
+                            // 송장수정 fn
+                            onClick={() => { handleModalOpen('InvoiceModal') }}>
+                            선택 항목 수정(송장)
+                        </button>
+                        {/* 일괄 배송 취소 */}
+                        <button
+                            className='white_button'
+                            onClick={() => {
+                                handleDelete()
+                            }}>
+                            {/* 배송 상태 리스트에서 삭제 */}
+                            배송 취소
+                        </button>
+                    </div>
+                    {/* Main - 배송관리 테이블 리스트업 */}
+                    <table>
+                        {/* 필드명 */}
+                        <thead>
+                            <tr>
+                                <th>
                                     <input type='checkbox'
-                                        checked={checkedItems.includes(item.orderId) ? true : false}
-                                        onChange={(e) => handlePerCheckbox(e.target.checked, item.orderId)} />
-                                </td>
-                                {/* 주문번호 */}
-                                <td>{item.orderId}</td>
-                                {/* 택배사 */}
-                                <td>{item.deliverySelect}</td>
-                                {/* 송장 번호 */}
-                                <td>{item.delivery_num}</td>
-                                {/* 배송상태 */}
-                                <td>{parseDeliveryState(item.deliveryStatus)}</td>
-                                {/* 주문일자 */}
-                                <td>{item.order_Date}</td>
-                                {/* 상품번호 */}
-                                <td>{item.ProductId}</td>
-                                {/* 미니 이미지 */}
-                                <td>{item.image.mini}</td>
-                                {/* 상품명 */}
-                                <td>{item.title}</td>
-                                {/* 옵션 상세 - 선택 옵션이 있을 경우만 표시*/}
-                                <td>{item.optionSelected ? item.optionSelected : "-"}</td>
-                                {/* 가격 */}
-                                <td>{item.price}</td>
-                                {/* 할인률 */}
-                                <td>{item.discount === 0 ? item.price : item.price - (item.price * item.discount / 100)}</td>
+                                        checked={checkedItems.length === getCurrentPagePosts().length ? true : false}
+                                        onChange={(e) => handleAllCheckbox(e)} />
+                                </th>
+                                <th>주문번호</th>
+                                <th>택배사</th>
+                                <th>송장 번호</th>
+                                <th>처리상태</th>
+                                <th>주문일자</th>
+                                <th>상품코드</th>
+                                <th>이미지</th>
+                                <th>상품명</th>
+                                <th>옵션명</th>
+                                <th>표준가</th>
+                                <th>공급가</th>
                             </tr>
-                        ))}
-                </tbody>
-            </table>
-
-
-
-            {/* 패이지 이동 */}
-            <div className={styles.pageMoveHandler}>
-                <button className='white_button' onClick={() => {
-                    if (currentPage !== 1) {
-                        setCurrentPage(currentPage - 1);
-                    } else {
-                        alert("해당 페이지가 가장 첫 페이지 입니다.");
+                        </thead>
+                        {/* 데이터 맵핑 */}
+                        <tbody>
+                            {matchedData &&
+                                getCurrentPagePosts()?.map((item, index) => (
+                                    <tr key={index}>
+                                        {/* 체크박스 */}
+                                        <td>
+                                            <input type='checkbox'
+                                                checked={checkedItems.includes(item.orderId) ? true : false}
+                                                onChange={(e) => handlePerCheckbox(e.target.checked, item.orderId)} />
+                                        </td>
+                                        {/* 주문번호 */}
+                                        <td>{item.orderId}</td>
+                                        {/* 택배사 */}
+                                        <td>{item.deliverySelect}</td>
+                                        {/* 송장 번호 */}
+                                        <td>{item.delivery_num}</td>
+                                        {/* 배송상태 */}
+                                        <td>{parseDeliveryState(item.deliveryStatus)}</td>
+                                        {/* 주문일자 */}
+                                        <td>{item.order_Date}</td>
+                                        {/* 상품번호 */}
+                                        <td>{item.ProductId}</td>
+                                        {/* 미니 이미지 */}
+                                        <td>{item.image.mini}</td>
+                                        {/* 상품명 */}
+                                        <td>{item.title}</td>
+                                        {/* 옵션 상세 - 선택 옵션이 있을 경우만 표시*/}
+                                        <td>{item.optionSelected ? item.optionSelected : "-"}</td>
+                                        {/* 가격 */}
+                                        <td>{item.price}</td>
+                                        {/* 할인률 */}
+                                        <td>{item.discount === 0 ? item.price : item.price - (item.price * item.discount / 100)}</td>
+                                    </tr>
+                                ))}
+                        </tbody>
+                    </table>
+                    {/* 패이지 이동 */}
+                    <div className={styles.pageMoveHandler}>
+                        <button className='white_button' onClick={() => {
+                            if (currentPage !== 1) {
+                                setCurrentPage(currentPage - 1);
+                            } else {
+                                alert("해당 페이지가 가장 첫 페이지 입니다.");
+                            }
+                        }}>
+                            <i className="far fa-angle-left" />
+                        </button>
+                        <div className={styles.currentPage}> {currentPage} </div>
+                        <button className='white_button' onClick={() => {
+                            if (matchedData.length > currentPage * 5) {
+                                setCurrentPage(currentPage + 1);
+                            } else {
+                                alert("다음 페이지가 없습니다.");
+                            }
+                        }}>
+                            <i className="far fa-angle-right" />
+                        </button>
+                    </div>
+                    {/* 배송 상태 변경 모달 */}
+                    {
+                        isModal && modalName === 'DeliveryStateModal'
+                            ?
+                            <DeliveryStateModal
+                                checkedItems={checkedItems}
+                                setCheckedItems={setCheckedItems}
+                                matchedData={matchedData}
+                                setMatchedData={setMatchedData}
+                                updateAllState={updateAllState} />
+                            :
+                            null
                     }
-                }}>
-                    <i className="far fa-angle-left" />
-                </button>
-                <div className={styles.currentPage}> {currentPage} </div>
-                <button className='white_button' onClick={() => {
-                    if (matchedData.length > currentPage * 5) {
-                        setCurrentPage(currentPage + 1);
-                    } else {
-                        alert("다음 페이지가 없습니다.");
+                    {/* 송장 변경 모달 */}
+                    {
+                        isModal && modalName === 'InvoiceModal'
+                            ?
+                            <InvoiceModal
+                                checkedItems={checkedItems}
+                                setCheckedItems={setCheckedItems}
+                                matchedData={matchedData}
+                                setMatchedData={setMatchedData}
+                                parseDeliveryState={parseDeliveryState} />
+                            :
+                            null
                     }
-                }}>
-                    <i className="far fa-angle-right" />
-                </button>
-            </div>
-
-
-
-            {/* 배송 상태 변경 모달 */}
-            {
-                isModal && modalName === 'DeliveryStateModal'
-                    ?
-                    <DeliveryStateModal
-                        checkedItems={checkedItems}
-                        setCheckedItems={setCheckedItems}
-                        matchedData={matchedData}
-                        setMatchedData={setMatchedData}
-                        updateAllState={updateAllState} />
-                    :
-                    null
-            }
-            {/* 송장 변경 모달 */}
-            {
-                isModal && modalName === 'InvoiceModal'
-                    ?
-                    <InvoiceModal
-                        checkedItems={checkedItems}
-                        setCheckedItems={setCheckedItems}
-                        matchedData={matchedData}
-                        setMatchedData={setMatchedData}
-                        parseDeliveryState={parseDeliveryState} />
-                    :
-                    null
-            }
+                </div>
+                : null}
         </div>
-            : null
     );
 }

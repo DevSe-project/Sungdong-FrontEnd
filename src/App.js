@@ -52,8 +52,8 @@ import { AdminNotSoldList } from './component/AboutAdmin/Sold/AdminNotSoldList';
 import { AdminRefund } from './component/AboutAdmin/Refund/AdminRefund';
 import AdminNotice from './component/AboutAdmin/Notice/AdminNotice';
 import DeliveryManagement from "./component/AboutAdmin/SD_Delivery/State_M/DeliveryManagement";
-import TotalCal_Manage from "./component/AboutAdmin/SD_Account/TotalCal_Manage";
-import CMSaccount_Manage from "./component/AboutAdmin/SD_Account/CMSaccount_Manage";
+import TotalCal_Manage from "./component/AboutAdmin/SD_Account/TOTAL/Manage/TotalCal_Manage";
+import CMSaccount_Manage from "./component/AboutAdmin/SD_Account/CMS/Manage/CMSaccount_Manage";
 
 // 템플릿 컴포넌트
 import { TopBanner } from './component/TemplateLayout/AboutHeader/TopBanner';
