@@ -1,15 +1,18 @@
 import React, { useState, useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AdminHeader } from '../Layout/Header/AdminHeader';
 import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
 import Sort_UserList from '../Users/Sort_UserList';
 import FilterSearch_User from '../Users/FilterSearch_User';
 import styles from './Manage_Users.module.css';
 import axios from '../../../axios';
+import { useUserFilter } from '../../../Store/DataStore';
 
 export default function Manage_Users() {
+    const userFilter = useUserFilter();
+    const queryClient = useQueryClient();
 
-      //토큰 데이터 fetch
+    //유저 데이터 fetch
     const fetchAllUserData = async () => {
         try {
         const response = await axios.get("/auth/userAll",
@@ -27,17 +30,55 @@ export default function Manage_Users() {
     }
     };
 
-    const onFiltering = () => {
-        // 여기에 검색을 위한 로직을 추가하면 됩니다.
-        console.log("필터링이 완료되었습니다.")
-        // 추가로 필요한 검색 로직을 작성하십시오.
+
+    //유저 필터링 fetch
+    const fetchFilteredUserData = async (userFilterData) => {
+        try {
+        const response = await axios.post("/auth/userFilter",
+            JSON.stringify(
+                userFilterData
+            ),
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            }
+        )
+        // 성공 시 추가된 상품 정보를 반환합니다.
+        return response.data;
+    } catch (error) {
+        // 실패 시 예외를 throw합니다.
+        throw new Error('조건에 일치하는 유저가 없습니다.');
+    }
     };
-
-
-    const { data:users, isError, isLoading } = useQuery({
+    const { data:users, isError, isLoading, refetch: refetchAllUsers } = useQuery({
         queryKey: ['users'],
         queryFn: fetchAllUserData
     })
+
+
+    const {mutate:filterMutation} = useMutation({mutationFn: fetchFilteredUserData})
+
+
+    const onFiltering = () => {
+        filterMutation(userFilter,{
+            onSuccess: (data) => {
+                console.log('user Filtered successfully:', data);
+                alert(data.message);
+                // 다른 로직 수행 또는 상태 업데이트
+                queryClient.setQueryData(['users'], () => {
+                    return data.data
+                })
+            },
+            onError: (error) => {
+                console.error('user Filtered failed:', error);
+                // 에러 처리 또는 메시지 표시
+                alert(error.message);
+            },
+            });
+    };
+
+
 
     const [sortBy, setSortBy] = useState([]);
     
@@ -72,8 +113,8 @@ export default function Manage_Users() {
                 <AdminMenuData />
                 <div className={styles.mainContainer}>
                     <div className={styles.filtSortContainer}>
-                        <FilterSearch_User className={styles.FilterSearch_User} onFiltering={onFiltering} />
-                        <Sort_UserList sortBy={sortBy} onSort={handleSort} className={styles.Sort_UserList} />
+                        <FilterSearch_User onFiltering={onFiltering} />
+                        <Sort_UserList sortBy={sortBy} onSort={handleSort} />
                     </div>
 
                     <table className={styles.userTable}>

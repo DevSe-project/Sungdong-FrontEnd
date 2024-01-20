@@ -806,3 +806,30 @@ export const useDeliveryFilter = create((set) => ({
     set({ filteredData });
   },
 }))
+
+/* ----------------RefundFilter STORE---------------- */
+export const useUserFilterStore = create((set) => ({
+  userFilter: {
+    cor_corName: '',
+    cor_ceoName: '',
+    cor_num: '',
+    userType_id: '',
+    grade: '',
+  },
+  actions: {
+    setUserFilter: (fieldName, value) =>
+      set((state) => ({ userFilter: { ...state.userFilter, [fieldName]: value } })),
+    resetUserFilter: () =>
+      set({
+        userFilter: {
+          cor_corName: '',
+          cor_ceoName: '',
+          cor_num: '',
+          userType_id: '',
+          grade: '',
+        }
+      }),
+  }
+}));
+export const useUserFilter = () => useUserFilterStore((state) => state.userFilter);
+export const useUserFilterActions = () => useUserFilterStore((state) => state.actions);
