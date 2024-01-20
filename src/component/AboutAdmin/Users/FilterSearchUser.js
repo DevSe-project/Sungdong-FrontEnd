@@ -83,8 +83,8 @@ export default function FilterSearchUser(props) {
             </div>
 
             {/* Button */}
-            <div>
-                <button type='reset' className={styles.button} onClick={()=>resetUserFilter()}>초기화</button>
+            <div style={{display: 'flex', justifyContent: 'center', gap: '0.5em'}}>
+                <button type='reset' className={styles.buttonReset} onClick={()=>resetUserFilter()}>초기화</button>
                 <button className={styles.button} onClick={()=>props.onFiltering()}>검색하기</button>
             </div>
         </div>

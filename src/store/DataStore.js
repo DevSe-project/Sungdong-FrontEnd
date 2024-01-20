@@ -816,9 +816,16 @@ export const useUserFilterStore = create((set) => ({
     userType_id: '',
     grade: '',
   },
+  userSort: {
+    first: '',
+    second: '',
+    third: ''
+  },
   actions: {
     setUserFilter: (fieldName, value) =>
       set((state) => ({ userFilter: { ...state.userFilter, [fieldName]: value } })),
+    setUserSort: (fieldName, value) =>
+      set((state) => ({ userSort: { ...state.userSort, [fieldName]: value } })),
     resetUserFilter: () =>
       set({
         userFilter: {
@@ -829,7 +836,16 @@ export const useUserFilterStore = create((set) => ({
           grade: '',
         }
       }),
+    resetUserSort: () =>
+      set({
+        userSort: {
+          first: '',
+          second: '',
+          third: ''
+        }
+      }),
   }
 }));
 export const useUserFilter = () => useUserFilterStore((state) => state.userFilter);
+export const useUserSort = () => useUserFilterStore((state) => state.userSort);
 export const useUserFilterActions = () => useUserFilterStore((state) => state.actions);

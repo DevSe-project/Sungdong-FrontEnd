@@ -1,8 +1,11 @@
 // Sort_UserList.js
 import React from 'react';
 import styles from './Sort_UserList.module.css';
+import { useUserFilterActions, useUserSort } from '../../../Store/DataStore';
 
 const SortUserList = (props) => {
+    const userSort = useUserSort();
+    const {setUserSort} = useUserFilterActions();
 
     const optionsArr = [
         {
@@ -10,15 +13,15 @@ const SortUserList = (props) => {
             key: "선택없음",
         },
         {
-            value: "userType",
+            value: "USER.userType_id",
             key: "고객유형",
         },
         {
-            value: "bizname",
+            value: "COR.cor_corName",
             key: "업체명(상호명)",
         },
         {
-            value: "grade",
+            value: "INFO.grade",
             key: "회원등급",
         },
     ];
@@ -35,8 +38,12 @@ const SortUserList = (props) => {
                         {priority}순위
                         <select
                             className={styles.sortSelect}
-                            value={props.sortBy[priority - 1]}
-                            //onChange={(e) => onSort(e.target.value, priority - 1)}
+                            value={priority === 1 ? userSort.first 
+                                : priority === 2 ? userSort.second 
+                                : priority === 3 && userSort.third}
+                            onChange={(e) => setUserSort(priority === 1 ? "first" 
+                                : priority === 2 ? "second" 
+                                : priority === 3 && "third", e.target.value)}
                             >
                             {/* 옵션 배열의 객체들을 map으로 풂. */}
                             {optionsArr.map((item, index) => (

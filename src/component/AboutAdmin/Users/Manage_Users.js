@@ -6,11 +6,12 @@ import SortUserList from '../Users/SortUserList';
 import FilterSearchUser from '../Users/FilterSearchUser';
 import styles from './Manage_Users.module.css';
 import axios from '../../../axios';
-import { useUserFilter } from '../../../Store/DataStore';
+import { useUserFilter, useUserSort } from '../../../Store/DataStore';
 
 export default function Manage_Users() {
     const userFilter = useUserFilter();
     const queryClient = useQueryClient();
+    const userSort = useUserSort();
 
     //유저 데이터 fetch
     const fetchAllUserData = async () => {
@@ -51,6 +52,28 @@ export default function Manage_Users() {
         throw new Error('조건에 일치하는 유저가 없습니다.');
     }
     };
+
+    //유저 필터링 fetch
+    const fetchSortedUserData = async (userFilterData) => {
+        try {
+        const response = await axios.post("/auth/userSort",
+            JSON.stringify(
+                userFilterData
+            ),
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            }
+        )
+        // 성공 시 추가된 상품 정보를 반환합니다.
+        return response.data;
+    } catch (error) {
+        // 실패 시 예외를 throw합니다.
+        throw new Error('정렬할 순위가 없습니다.');
+    }
+    };
+
     const { data:users, isError, isLoading } = useQuery({
         queryKey: ['users'],
         queryFn: fetchAllUserData
@@ -58,6 +81,8 @@ export default function Manage_Users() {
 
 
     const {mutate:filterMutation} = useMutation({mutationFn: fetchFilteredUserData})
+    const {mutate:sortMutation} = useMutation({mutationFn: fetchSortedUserData})
+
 
 
     const onFiltering = () => {
@@ -83,9 +108,21 @@ export default function Manage_Users() {
     const [sortBy, setSortBy] = useState([]);
     
     const handleSort = () => {
-        // 정렬 로직 구현
-        // sortBy 배열을 기반으로 데이터를 정렬하고 setSortedData를 통해 업데이트
-        // 예: 정렬 로직 구현 후 setSortedData(sortedData)
+        sortMutation(userSort,{
+            onSuccess: (data) => {
+                console.log('user Sorted successfully:', data);
+                alert(data.message);
+                // 다른 로직 수행 또는 상태 업데이트
+                queryClient.setQueryData(['users'], () => {
+                    return data.data
+                })
+            },
+            onError: (error) => {
+                console.error('user Sorted failed:', error);
+                // 에러 처리 또는 메시지 표시
+                alert(error.message);
+            },
+            });
     };
 
     useMemo(() => {

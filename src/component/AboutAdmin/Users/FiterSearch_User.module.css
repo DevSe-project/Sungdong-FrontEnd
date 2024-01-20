@@ -65,3 +65,18 @@
 .button:hover {
     background-color: var(--main-color-original-hover);
 }
+
+.buttonReset {
+    background-color: gray;
+    color: white;
+    border: none;
+    border-radius: 1dvh;
+    padding: 0.5em 1.3em;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 0.3s;
+}
+
+.buttonReset:hover {
+    background-color: rgb(100, 89, 89);
+}
