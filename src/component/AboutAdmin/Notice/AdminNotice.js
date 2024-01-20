@@ -224,6 +224,7 @@ export default function AdminNotice() {
 
         {/* 메인 */}
         <div className={styles.main}>
+
           {/* 코드발급 | 최신코드 묶음 */}
           <div className={styles.flex_container}>
             {/* 코드 발급 블록 */}
@@ -245,55 +246,50 @@ export default function AdminNotice() {
           </div>
 
 
-          {/* Post List */}
-          <div className={styles.post_container}>
-
-            {/* Post Title */}
-            <div className={styles.post_title}>글 목록</div>
-
-            {/* Post Map */}
-            {noticePostList.map((item, index) => (
-              <div className={styles.post_list_container} key={index} >
-                {/* No */}
-                <div className={styles.post_list_info_no}>
-                  {item.id}
-                </div>
-
-                {/* Code */}
-                <div className={styles.post_list_info_title} onClick={() => {
-                  selectedModalOpen('edit');
-                  addNoticeData(item);
-                }}>
-                  {item.title}
-                </div>
-
-                {/* Writer */}
-                <div className={styles.post_list_info_writer}>
-                  {item.writer}
-                </div>
-
-                {/* WritedDate */}
-                <div className={styles.post_list_info_date}>
-                  {item.date}
-                </div>
-
-                {/* Del */}
-                <div div className={styles.post_del_container} >
-                  <div className={styles.post_del_button}
-                    onClick={() => deletePostMutation.mutate()
-                    }>
-                    삭제
-                  </div>
-                </div>
-                {isModal && modalName === 'edit' &&
-                  <EditModal handleConfirmSD={handleConfirmSD} />}
-              </div>
-            ))
-            }
-
-          </div>
+          {/* 공시사항 목록 */}
+          <table className={styles.noticePostList}>
+            <thead
+              style={{
+                boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)'
+              }}>
+              <th>고유번호</th>
+              <th>제목</th>
+              <th>작성자</th>
+              <th>작성일자</th>
+              <th>삭제</th>
+            </thead>
+            <tbody>
+              {noticePostList.map((item, index) => (
+                <tr key={index}>
+                  {/* 글 고유번호 */}
+                  <td>{item.id}</td>
+                  {/* 제목 */}
+                  <td onClick={() => {
+                    selectedModalOpen('edit');
+                    addNoticeData(item);
+                  }}>{item.title}</td>
+                  {/* 작성자 */}
+                  <td>{item.writer}</td>
+                  {/* 날짜 */}
+                  <td>{item.date}</td>
+                  {/* 삭제 */}
+                  <td style={{display: 'flex', justifyContent: 'center'}}>
+                    <div className={styles.post_del_button}
+                      onClick={() => deletePostMutation.mutate()
+                      }>
+                      삭제
+                    </div>
+                  </td>
+                  {/* 수정 모달 */}
+                  {isModal && modalName === 'edit' &&
+                    <EditModal handleConfirmSD={handleConfirmSD} />}
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
+
       {/* 모달 영역 */}
       {
         isModal && modalName === 'write' &&

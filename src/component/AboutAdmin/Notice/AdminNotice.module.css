@@ -1,8 +1,9 @@
 .body {
   display: flex;
+  width: 100%;
 }
 .main {
-  margin: 16px;
+  margin: 12px;
   display: flex;
   flex-direction: column;
 }
@@ -81,85 +82,22 @@
 
 }
 /* ----------------------------------------- */
-/* 글 목록 */
-.post_container {
-  margin-top: 10px;
-  display: flex;
-  flex-direction: column;
-}
-/* Post */
-.post_title {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--main-color-heavy);
-  color: white;
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 0;
-  border-radius: 1vh;
-  height: 50px;
-}
-/* List */
-.post_list_container {
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  font-size: 16px;
-  font-weight: bold;
-  border-bottom: 2px solid gray;
-  margin: var(--list-margin);
-  padding: var(--list-padding);
-}
-
-/* No */
-.post_list_info_no {
-  width: 2vw;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-/* Title */
-.post_list_info_title {
-  width: 50vw;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  cursor: pointer;
-} .post_list_info_title:hover {
-  color: orangered;
-}
-/* Writer */
-.post_list_info_writer {
-  width: 10vw;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-.post_list_info_date {
-  width: 10vw;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-/* Del */
-.post_del_container {
-  display: flex;
-  cursor: pointer;
-  overflow: hidden;
+/* NoticePostList */
+.noticePostList {
+  margin-top: 16px;
 }
 .post_del_button {
-  display: flex;
-  height: 40px;
-  width: 4vw;
-  border-radius: 1vh;
-  background-color: #CC0000;
+  border: 1px solid lightgray;
+  background-color: var(--main-red);
   color: white;
-  align-items: center;
-  justify-content: center;
+  padding: 10px 20px;
+  cursor: pointer;
 }
 .post_del_button:hover {
   background-color: var(--main-red-hover);
 }
+
+
 /* ----------------------------------------- */
 /* 스켈레톤 컨테이너 스타일 */
 .skeletonContainer {
