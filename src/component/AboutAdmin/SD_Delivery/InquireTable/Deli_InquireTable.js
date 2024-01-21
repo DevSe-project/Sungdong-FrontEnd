@@ -222,7 +222,6 @@ export default function Deli_InquireTable() {
                         </div>
                         <select
                             className='select'
-                            style={{ margin: '5px' }}
                             value={itemsPerPage}
                             onChange={(e) => setItemsPerPage(Number(e.target.value))}
                         >

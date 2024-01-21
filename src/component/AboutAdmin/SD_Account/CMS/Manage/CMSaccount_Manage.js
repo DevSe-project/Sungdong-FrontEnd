@@ -3,6 +3,7 @@ import styles from './CMSaccount_Manage.module.css';
 import { AdminHeader } from '../../../Layout/Header/AdminHeader';
 import { AdminMenuData } from '../../../Layout/SideBar/AdminMenuData';
 import CMSFilter from '../Filter/CMSFilter';
+import CMSList from '../List/CMSList';
 
 const CMSaccount_Manage = () => {
     const [accounts, setAccounts] = useState([
@@ -47,33 +48,7 @@ const CMSaccount_Manage = () => {
                     }}>
                         <CMSFilter handleFilter={handleFilter}/>
 
-                        {/* MediumHeader */}
-                        <div className='MediumHeader'>
-                            <div className='HeaderTxt'>회원 목록</div>
-                        </div>
-
-                        {/* UserList */}
-                        <table style={{ margin: '0px 16px' }}>
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>사용자명</th>
-                                    <th>역할</th>
-                                    <th>상태</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {sortedAccounts &&
-                                    sortedAccounts.map((account) => (
-                                        <tr key={account.id}>
-                                            <td>{account.id}</td>
-                                            <td>{account.username}</td>
-                                            <td>{account.role}</td>
-                                            <td>{account.status}</td>
-                                        </tr>
-                                    ))}
-                            </tbody>
-                        </table>
+                        <CMSList sortedAccounts={sortedAccounts}/>
                     </div>
                 </div>
             </div>

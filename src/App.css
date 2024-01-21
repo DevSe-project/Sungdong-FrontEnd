@@ -512,6 +512,7 @@ input[type="checkbox"] {
 
 /* Select */
 .select {
+  margin-bottom: 5px;
   padding: 3px 10px;
   border: 1px solid lightgray;
   background-color: white;
@@ -540,7 +541,6 @@ input[type="checkbox"] {
 /* MediumHeader(중) */
 .MediumHeader {
   width: 100%;
-  margin: 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -553,6 +553,7 @@ input[type="checkbox"] {
 .HeaderTxt {
   font-size: 20px;
   font-weight: bold;
+  margin-bottom: 5px;
 }
 
 
