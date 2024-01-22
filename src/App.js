@@ -104,8 +104,22 @@ export default function App() {
 
   //카테고리 데이터 fetch
   const fetchCategoryData = async () => {
-    const querySnapshot = await getDocs(collection(db, 'CategoryData')); // 'ProductData'는 컬렉션 이름
-    return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    // const querySnapshot = await getDocs(collection(db, 'CategoryData')); // 'ProductData'는 컬렉션 이름
+    // return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    try {
+      const response = await axios.get("/category/list",
+          {
+              headers: {
+                  "Content-Type": "application/json",
+              }
+          }
+      )
+      // 성공 시 추가된 상품 정보를 반환합니다.
+      return response.data.data;
+    } catch (error) {
+        // 실패 시 예외를 throw합니다.
+        throw new Error('확인 중 오류가 발생했습니다.');
+    }
   };
 
   //딜리버리 데이터 fetch

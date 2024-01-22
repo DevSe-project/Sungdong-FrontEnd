@@ -53,18 +53,18 @@ export function AdminCategory(props){
 
     //대 카테고리 필터링
     function FilteredHighCategoryData() {
-      return categoryData.filter(element => /^[A-Z]$/.test(element.id));
+      return categoryData.filter(element => /^[A-Z]$/.test(element.category_id));
     }
 
     //중 카테고리 필터링
     function FilteredMiddleCategoryData(itemId) {
-      const newData = categoryData.filter(element => new RegExp(`^${itemId}[a-z]$`).test(element.id));
+      const newData = categoryData.filter(element => new RegExp(`^${itemId}[A-Z]$`).test(element.category_id));
       setMiddleCategory(newData);
     }
 
     //소 카테고리 필터링
     function FilteredLowCategoryData(itemId) {
-      const newData = categoryData.filter(element => new RegExp(`^${itemId}[1-9]|[1-9][0-9]|100.{3,}$`).test(element.id));
+      const newData = categoryData.filter(element => new RegExp(`^${itemId}[1-9]|[1-9][0-9]|100.{3,}$`).test(element.category_id));
       setLowCategory(newData);
     }
 
@@ -120,7 +120,7 @@ export function AdminCategory(props){
             <h4 style={{fontSize: '1.1em', fontWeight: '750', marginTop: '1em'}}>
                 선택된 카테고리 : 
                 <span style={{color: '#CC0000', fontWeight: '650', margin: '0.5em'}}>
-                {[categoryData.find((item) => item.id === selectedCategory.big)?.name, categoryData.find((item) => item.id === selectedCategory.medium)?.name, categoryData.find((item) => item.id === selectedCategory.low)?.name].filter(Boolean).join(' - ')}
+                {[categoryData.find((item) => item.category_id === selectedCategory.big)?.name, categoryData.find((item) => item.category_id === selectedCategory.medium)?.name, categoryData.find((item) => item.category_id === selectedCategory.low)?.name].filter(Boolean).join(' - ')}
                 </span>
             </h4>
             <div style={{display: 'flex', gap: '2em'}}>
@@ -130,12 +130,12 @@ export function AdminCategory(props){
                   && FilteredHighCategoryData().map((item, index)=> (
                   <div onClick={()=> {
                     setLowCategory([]);
-                    handleCategoryClick('big', item.id);
-                    FilteredMiddleCategoryData(item.id)
+                    handleCategoryClick('big', item.category_id);
+                    FilteredMiddleCategoryData(item.category_id)
                   }} 
                   key={index} 
                   className={styles.categoryInner}
-                  style={{backgroundColor: selectedCategory.big === item.id && 'lightgray'}}
+                  style={{backgroundColor: selectedCategory.big === item.category_id && 'lightgray'}}
                   >
                     {item.name}
                     <i className="far fa-chevron-right" style={{color: 'gray'}}/>
@@ -152,12 +152,12 @@ export function AdminCategory(props){
                   {middleCategory != null && middleCategory.map((item, index) => (
                     <div 
                       onClick={()=> {
-                      FilteredLowCategoryData(item.id)
-                      handleCategoryClick('medium', item.id);
+                      FilteredLowCategoryData(item.category_id)
+                      handleCategoryClick('medium', item.category_id);
                       }} 
                       key={index} 
                       className={styles.categoryInner}
-                      style={{backgroundColor: selectedCategory.medium === item.id && 'lightgray'}}
+                      style={{backgroundColor: selectedCategory.medium === item.category_id && 'lightgray'}}
                     >
                     {item.name}
                     <i className="far fa-chevron-right" style={{color: 'gray'}}/>
@@ -179,9 +179,9 @@ export function AdminCategory(props){
                     <div 
                     key={index}
                     className={styles.categoryInner}
-                    style={{backgroundColor: selectedCategory.low === item.id && 'lightgray'}}
+                    style={{backgroundColor: selectedCategory.low === item.category_id && 'lightgray'}}
                     onClick={()=> {
-                      handleCategoryClick('low', item.id);
+                      handleCategoryClick('low', item.category_id);
                     }}
                     >
                     {item.name}
@@ -216,9 +216,9 @@ export function AdminCategory(props){
                 <React.Fragment key={index}>
                   <tr className={styles.list}>
                     <td><img src={item.image.mini} alt='이미지'></img></td>
-                    <td>{item.id}</td>
+                    <td>{item.category_id}</td>
                     <td>{item.category.main} - {item.category.sub} </td>
-                    <td className={styles.detailView} onClick={()=>navigate(`/detail/${item.id}`)}>
+                    <td className={styles.detailView} onClick={()=>navigate(`/detail/${item.category_id}`)}>
                       <h5 style={{fontSize: '1.1em', fontWeight: '550'}}>{item.title}</h5>
                     </td>
                     <td>\{item.price.toLocaleString()}</td>
@@ -232,7 +232,7 @@ export function AdminCategory(props){
                     <td 
                       className={styles.detailView}
                       >
-                      <button onClick={()=> navigate(`/adminMain/categoryEdit/${item.id}`)} className={styles.button}>변경</button>
+                      <button onClick={()=> navigate(`/adminMain/categoryEdit/${item.category_id}`)} className={styles.button}>변경</button>
                     </td>
                   </tr>
                   </React.Fragment>

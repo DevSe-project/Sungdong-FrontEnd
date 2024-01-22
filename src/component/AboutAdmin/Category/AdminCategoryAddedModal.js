@@ -3,7 +3,7 @@ import styles from './AdminCategoryModal.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useModalActions, useModalState } from '../../../Store/DataStore';
 import { GetCookie } from '../../../customFn/GetCookie';
-import axios from 'axios';
+import axios from '../../../axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export default function AdminCategoryAddedModal({selectedCategory, categoryData}) {
@@ -20,15 +20,15 @@ export default function AdminCategoryAddedModal({selectedCategory, categoryData}
 
   const sendCategoriesToServer = async(category) => {
     try {
-      const token = GetCookie('jwt_token');
-      const response = await axios.post("/category", 
+      // const token = GetCookie('jwt_token');
+      const response = await axios.post("/category/create", 
         JSON.stringify(
           category
         ),
         {
           headers : {
             "Content-Type" : "application/json",
-            'Authorization': `Bearer ${token}`
+            // 'Authorization': `Bearer ${token}`
           }
         }
       )
@@ -41,19 +41,7 @@ export default function AdminCategoryAddedModal({selectedCategory, categoryData}
   }
 
     //상품 등록 함수
-    const { addCategoryMutation } = useMutation({mutationFn: sendCategoriesToServer,
-      onSuccess: (data) => {
-        // 메세지 표시
-        alert(data.message);
-        console.log('카테고리가 추가/변경 되었습니다.', data);
-        // 상태를 다시 불러와 갱신합니다.
-        queryClient.invalidateQueries(['category']);
-      },
-      onError: (error) => {
-        // 상품 추가 실패 시, 에러 처리를 수행합니다.
-        console.error('카테고리를 추가/변경 하는 중 오류가 발생했습니다.', error);
-      },
-    })
+    const { mutate:addCategoryMutation } = useMutation({mutationFn: sendCategoriesToServer})
 
   // esc키를 누르면 모달창 닫기.
   useEffect(() => {
@@ -75,24 +63,24 @@ export default function AdminCategoryAddedModal({selectedCategory, categoryData}
     const handleAddInput = () => {
       switch(modalName){
         case "대": 
-          if(inputs.length >= 15){
-            alert("대 카테고리는 한 번에 최대 15개까지만 생성 가능합니다.");
+          if(inputs.length >= 10){
+            alert("대 카테고리는 한 번에 최대 10개까지만 생성 가능합니다.");
             return;
           } else {
             setInputs([...inputs, '']);
           }
           break;
         case "중":
-          if(inputs.length >= 20){
-            alert("중 카테고리는 한 번에 최대 20개까지만 생성 가능합니다.");
+          if(inputs.length >= 15){
+            alert("중 카테고리는 한 번에 최대 15개까지만 생성 가능합니다.");
             return;
           } else {
             setInputs([...inputs, '']);
           }
           break;
         case "소":
-          if(inputs.length >= 30){
-            alert("소 카테고리는 한 번에 최대 30개까지만 생성 가능합니다.");
+          if(inputs.length >= 20){
+            alert("소 카테고리는 한 번에 최대 20개까지만 생성 가능합니다.");
             return;
           } else {
             setInputs([...inputs, '']);
@@ -136,21 +124,60 @@ export default function AdminCategoryAddedModal({selectedCategory, categoryData}
         const bigCategories = inputs.map((item) => ({
           name: item
         }))
-        addCategoryMutation.mutate(bigCategories)
+        addCategoryMutation(bigCategories,{
+          onSuccess: (data) => {
+            // 메세지 표시
+            alert(data.message);
+            console.log('카테고리가 추가/변경 되었습니다.', data);
+            // 상태를 다시 불러와 갱신합니다.
+            queryClient.invalidateQueries(['category']);
+            selectedModalClose("대")
+          },
+          onError: (error) => {
+            // 상품 추가 실패 시, 에러 처리를 수행합니다.
+            console.error('카테고리를 추가/변경 하는 중 오류가 발생했습니다.', error);
+          },
+        })
         break;
       case "중":
         const mediumCategories = inputs.map((item) => ({
-          pid: selectedCategory.big,
+          parentsCategory_id: selectedCategory.big,
           name: item
         }))
-        addCategoryMutation.mutate(mediumCategories);
+        addCategoryMutation(mediumCategories,{
+          onSuccess: (data) => {
+            // 메세지 표시
+            alert(data.message);
+            console.log('카테고리가 추가/변경 되었습니다.', data);
+            // 상태를 다시 불러와 갱신합니다.
+            queryClient.invalidateQueries(['category']);
+            selectedModalClose("중")
+          },
+          onError: (error) => {
+            // 상품 추가 실패 시, 에러 처리를 수행합니다.
+            console.error('카테고리를 추가/변경 하는 중 오류가 발생했습니다.', error);
+          },
+        });
         break;
       case "소":
         const lowCategories = inputs.map((item) => ({
-          pid: selectedCategory.medium,
+          parentsCategory_id: selectedCategory.medium,
           name: item
         }))
-        addCategoryMutation.mutate(lowCategories);
+        addCategoryMutation(lowCategories,{
+          onSuccess: (data) => {
+            // 메세지 표시
+            alert(data.message);
+            console.log('카테고리가 추가/변경 되었습니다.', data);
+            // 상태를 다시 불러와 갱신합니다.
+            queryClient.invalidateQueries(['category']);
+            selectedModalClose("소")
+          },
+          onError: (error) => {
+            // 상품 추가 실패 시, 에러 처리를 수행합니다.
+            console.error('카테고리를 추가/변경 하는 중 오류가 발생했습니다.', error);
+          },
+        });
       break;
       default:
     }
