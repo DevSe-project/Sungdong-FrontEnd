@@ -4,7 +4,7 @@ import axios from 'axios';
 import { QueryClient } from "@tanstack/react-query";
 
 export default function JoinForm(props) {
-    
+
     // 주소입력 API
     const [address, setAddress] = useState("");
     const openPopup = (setAddress) => {
@@ -23,50 +23,23 @@ export default function JoinForm(props) {
         }
         document.body.appendChild(script);
     }
-    // 무작위 사업자 등록번호 생성 함수 (테스트용)
-    function generateRandomBusinessNumber() {
-        const num1 = String(Math.floor(Math.random() * 1000)).padStart(3, '0');
-        const num2 = String(Math.floor(Math.random() * 100)).padStart(2, '0');
-        const num3 = String(Math.floor(Math.random() * 100000)).padStart(5, '0');
-        return num1 + '-' + num2 + '-' + num3;
-    }
-
-    // 테스트용 가짜 사업자 등록번호 생성
-    const randomBusinessNumber = generateRandomBusinessNumber();
 
     // 사업자등록번호 인증 API
     const [apiResponse, setApiResponse] = useState(null);// API 호출 결과를 저장할 상태 변수
     // API 호출 함수
-    const callApi = () => {
+    const callCheckBizNumApi = (inputBizNum) => {
         const API_KEY = '%2FRM319x1LSNsYv3Zs4dbkeZ4iIGKMDc54ysPEQBiGmcIqj3%2Badug9JP2VKliI7op92oe7EeDVFnx3bKiYGdnVg%3D%3D';
         // API 호출
-        axios.post('https://api.odcloud.kr/api/nts-businessman/v1/validate?serviceKey=' + API_KEY + '&returnType=JSON', {
-            businesses: [
-                {
-                    b_no: randomBusinessNumber,
-                    start_dt: "20000101",
-                    p_nm: "홍길동",
-                    p_nm2: "홍길동",
-                    b_nm: "(주)테스트",
-                    corp_no: "231-86-23454",
-                    b_sector: "",
-                    b_type: "",
-                    b_adr: "",
-                }
-            ]
-        })
+        axios.post('https://api.odcloud.kr/api/nts-businessman/v1/validate?serviceKey=' + API_KEY + '&returnType=JSON',
+            {
+                b_no: inputBizNum
+            }
+        )
             .then((response) => {
                 // API 호출 성공 시 데이터를 상태 변수에 저장
                 const responseData = response.data;
                 setApiResponse(responseData);
                 console.log(randomBusinessNumber);
-                // if (responseData.status === "OK") {
-                //     // 유효한 사업자 등록번호인 경우 데이터를 받아온다.
-                //     setApiResponse(responseData);
-                // } else {
-                //     // 유효하지 않은 사업자 등록번호인 경우 알림창을 띄운다.
-                //     alert("유효하지 않은 사업자 등록번호입니다.");
-                // }
             })
             .catch((error) => {
                 // API 호출 실패 시 에러 처리
@@ -76,7 +49,7 @@ export default function JoinForm(props) {
     };
     // API 호출 버튼을 클릭하면 API를 호출하도록 설정
     const handleApiCall = () => {
-        callApi();
+        callCheckBizNumApi();
     };
 
 
@@ -302,9 +275,9 @@ export default function JoinForm(props) {
                                 }))
                             }}
                         />
-                        <button onClick={callApi}>사업자등록번호 인증</button>
+                        <button onClick={(e) => callCheckBizNumApi(e.target.value)}>사업자등록번호 인증</button>
                     </div>
-                    {/* { apiResponse.status_code === "OK" ? <strong>정상적으로 인증되었습니다.</strong> : <strong>해당 번호로 인증할 수 없습니다.</strong> } */}
+                    {apiResponse.status_code === "OK" ? <strong>정상적으로 인증되었습니다.</strong> : <strong>해당 번호로 인증할 수 없습니다.</strong>}
                 </li>
                 <li className={styles.inputContainer}>
                     {/* API 호출 결과 표시 */}
@@ -615,7 +588,7 @@ export default function JoinForm(props) {
                     </div>
                 </li>
                 {/* 기업 정보 */}
-                <CorData /> 
+                <CorData />
 
             </ul>
         </div>
