@@ -54,14 +54,14 @@ export default function Join() {
     const inAccess = GetCookie('register_code');
 
     // 최초 접근 권한검사 -> 코드인증으로 액세스 혀용에 따른 접근 불/허용
-    useEffect(() => {
-        if (inAccess !== null) {
-            alert('접근 검사 : 인증이 완료되었습니다.');
-        } else {
-            alert('정상적인 접근이 아닙니다.')
-            navigate('/login');
-        }
-    }, [navigate]);
+    // useEffect(() => {
+    //     if (inAccess !== null) {
+    //         alert('접근 검사 : 인증이 완료되었습니다.');
+    //     } else {
+    //         alert('정상적인 접근이 아닙니다.')
+    //         navigate('/login');
+    //     }
+    // }, [navigate]);
 
     // [JoinForm.js에서 사용]입력받을 1회성 회원 정보
     let [inputData, setInputData] = useState(
@@ -79,17 +79,18 @@ export default function Join() {
             smsService: true,
             CMS: true,
             corporationData: {
-                cor_ceoName: '',
-                cor_corName: '',
-                cor_tel: {
+                cor_ceoName: '', // 대표명
+                cor_corName: '', // 상호명
+                cor_startDate: '', // 개업연월일
+                cor_tel: { // 회사 번호
                     num1: '',
                     num2: '',
                     num3: '',
                 },
-                cor_num: '',
-                cor_sector: '',
-                cor_category: '',
-                cor_fax: '',
+                cor_num: '', // 사업자번호
+                cor_sector: '', // 업태
+                cor_category: '', // 종목
+                cor_fax: '', // FAX번호
             },
             address: {
                 zonecode: '',
@@ -98,7 +99,7 @@ export default function Join() {
                 buildingName: '',
                 jibunAddress: '',
             },
-            detailAddress: '',
+            detailAddress: '', 
         },
     )
 

@@ -524,6 +524,18 @@ input[type="checkbox"] {
   border: 1px solid gray;
 }
 
+.basic_input {
+  display: flex;
+  align-items: center;
+  margin: 0.5em;
+  padding: 1em;
+  border: none;
+  border-radius: 1dvb;
+  background-color: #F3F3F3;
+  height: 20px;
+  font-size: 16px;
+}
+
 /* -------------------------Header------------------------- */
 
 /* LargeHeader */

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import styles from './RelativeJoin.module.css';
-import axios from 'axios';
 import { QueryClient } from "@tanstack/react-query";
 
 export default function JoinForm(props) {
@@ -24,12 +23,11 @@ export default function JoinForm(props) {
         document.body.appendChild(script);
     }
 
-    const [inputBizNum, setInputBizNum] = useState('');
     const [apiResponse, setApiResponse] = useState({});// API 호출 결과를 저장할 상태 
     const API_KEY = process.env.REACT_APP_BIZNUM_API_KEY;
-    const API_ENDPOINT = 'https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=' + API_KEY;
+    const API_ENDPOINT = 'https://api.odcloud.kr/api/nts-businessman/v1/validate?serviceKey=' + API_KEY;
     // 사업자등록번호 진위확인 API
-    const callCheckBizNumApi = async (val) => {
+    const callCheckBizNumApi = async (corNum, corStartDate, corCeoName, corSector, corCategory) => {
         try {
             const response = await fetch(API_ENDPOINT, {
                 method: 'POST',
@@ -38,8 +36,14 @@ export default function JoinForm(props) {
                 },
                 body: JSON.stringify(
                     {
-                        "b_no": [
-                            val
+                        "businesses": [
+                            {
+                                "b_no": corNum, // 사업자등록번호
+                                "start_dt": corStartDate, // 개업일자
+                                "p_nm": corCeoName, // 대표1
+                                "b_sector": corSector,
+                                "b_type": corCategory,
+                            }
                         ]
                     }
                 ),
@@ -88,7 +92,7 @@ export default function JoinForm(props) {
                     <div className={styles.left}>아이디</div>
                     <div className={styles.right}>
                         <input
-                            className={styles.isInput}
+                            className='basic_input'
                             type='text'
                             placeholder={'아이디'}
                             name="id"
@@ -110,7 +114,7 @@ export default function JoinForm(props) {
                     <div className={styles.left}>비밀번호</div>
                     <div className={styles.right}>
                         <input
-                            className={styles.isInput}
+                            className='basic_input'
                             type='password'
                             placeholder={'비밀번호'}
                             name="password"
@@ -130,7 +134,7 @@ export default function JoinForm(props) {
                     <div className={styles.left}>비밀번호 확인</div>
                     <div className={styles.right}>
                         <input
-                            className={styles.isInput}
+                            className='basic_input'
                             type='password'
                             placeholder={'비밀번호 재입력(일치 확인)'}
                             name="confirmPassword"
@@ -153,7 +157,7 @@ export default function JoinForm(props) {
                     <div className={styles.left}>이메일</div>
                     <div className={styles.right}>
                         <input
-                            className={styles.isInput}
+                            className='basic_input'
                             type='email'
                             placeholder={'이메일'}
                             name="email"
@@ -205,7 +209,7 @@ export default function JoinForm(props) {
                     <div className={styles.left}>이름</div>
                     <div className={styles.right}>
                         <input
-                            className={styles.isInput}
+                            className='basic_input'
                             type='text'
                             placeholder={'이름'}
                             name="name"
@@ -310,7 +314,7 @@ export default function JoinForm(props) {
                             <div className={styles.rightInnerContainer}>
                                 <div className={styles.searchAddress}>
                                     <input
-                                        className={styles.isInput}
+                                        className='basic_input'
                                         type="text"
                                         placeholder="우편번호"
                                         readOnly
@@ -323,7 +327,7 @@ export default function JoinForm(props) {
                                         }}
                                     />
                                     <input
-                                        className={styles.searchButton}
+                                        className='original_button'
                                         type="button"
                                         onClick={() => {
                                             openPopup(setAddress);
@@ -369,15 +373,92 @@ export default function JoinForm(props) {
                         </div>
                     </div>
                 </li>
+            </ul>
 
-                {/* ----------기업 정보---------- */}
+            <br />
+            <br />
+            <br />
+
+
+
+            {/* ----------기업 정보---------- */}
+            <div className={styles.indivisualMembers}>기업정보</div>
+
+            {/* 목록 */}
+            <ul className={styles.inputWrap}>
+                {/* 사업자등록번호 */}
+                <li className={styles.inputContainer}>
+                    <div className={styles.left}>사업자등록번호</div>
+                    <div className={styles.right}>
+                        <input
+                            className='basic_input'
+                            type='text'
+                            placeholder='-을 제외하고 입력하시오'
+                            value={props.inputData.corporationData.cor_num}
+                            onChange={(e) => {
+                                props.setInputData(
+                                    (prevData) => ({
+                                        ...prevData,
+                                        corporationData: {
+                                            ...prevData.corporationData,
+                                            cor_num: e.target.value
+                                        }
+                                    })
+                                )
+                            }}
+                        />
+                    </div>
+                </li>
+
+                {/* 개업연월일 */}
+                <li className={styles.inputContainer}>
+                    <div className={styles.left}>개업연월일</div>
+                    <div className={styles.right}>
+                        <input
+                            type="text"
+                            placeholder="ex)20201225"
+                            className="basic_input"
+                            value={props.cor_startDate}
+                            onChange={(e) => {
+                                props.setInputData((prevData) => ({
+                                    ...prevData,
+                                    corporationData: {
+                                        ...prevData.corporationData,
+                                        cor_startDate: e.target.value
+                                    }
+                                }))
+                            }} />
+                    </div>
+                </li>
+
+                {/* 대표명 */}
+                <li className={styles.inputContainer}>
+                    <div className={styles.left}>대표명</div>
+                    <div className={styles.right}>
+                        <input
+                            className='basic_input'
+                            type='text'
+                            placeholder={'ex)홍길동'}
+                            value={props.inputData.corporationData.cor_ceoName}
+                            onChange={(e) => {
+                                props.setInputData(prevData => ({
+                                    ...prevData,
+                                    corporationData: {
+                                        ...prevData.corporationData,
+                                        cor_ceoName: e.target.value
+                                    }
+                                }))
+                            }}
+                        />
+                    </div>
+                </li>
 
                 {/* 기업명 */}
                 <li className={styles.inputContainer}>
                     <div className={styles.left}>기업명</div>
                     <div className={styles.right}>
                         <input
-                            className={styles.isInput}
+                            className='basic_input'
                             type='text'
                             placeholder={'ex) OO전자'}
                             value={props.inputData.corporationData.cor_corName}
@@ -391,97 +472,6 @@ export default function JoinForm(props) {
                                         }
                                     })
                                 )
-                            }}
-                        />
-                        <button onClick={() => { }}>기업명 호출(미완성)</button>
-                        {/* 해당 기업명을 호출 */}
-                        {apiResponse && apiResponse.businesses && apiResponse.businesses[0] && (
-                            // 기업명 출력
-                            <div>
-                                <h2>b_nm 값:</h2>
-                                <p>{apiResponse.businesses[0].b_nm}</p>
-                            </div>
-                        )}
-                    </div>
-                </li>
-
-                {/* 개인 OR 기업 체크박스 */}
-                <li className={styles.inputContainer}>
-                    <div className={styles.left}>회원구분</div>
-                    <div className={styles.right}>
-                        <div className={styles.isInput}>
-                            <div className={styles.typeMember}>
-                                <input
-                                    type="radio"
-                                    id="indivisualMember"
-                                    name="userType"
-                                    value={props.inputData.userType}
-                                    checked={props.inputData.userType_id === 1}
-                                    onChange={() => {
-                                        props.setInputData(
-                                            (prevData) => ({ ...prevData, userType_id: 1 })
-                                        )
-                                    }}
-                                />
-                                <label htmlFor="endUser">실사용자</label>
-                            </div>
-                            <div className={styles.typeMember}>
-                                <input
-                                    type="radio"
-                                    id="corporateMember"
-                                    name="userType"
-                                    value={props.inputData.userType}
-                                    checked={props.inputData.userType_id === 2}
-                                    onChange={() => {
-                                        props.setInputData(
-                                            (prevData) => ({ ...prevData, userType_id: 2 })
-                                        )
-                                    }}
-                                />
-                                <label htmlFor="corporateMember">납품</label>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-
-
-                {/* 사업자등록번호 */}
-                <li className={styles.inputContainer}>
-                    <div className={styles.left}>사업자등록번호</div>
-                    <div className={styles.right}>
-                        <input
-                            className={styles.isInput}
-                            type='text'
-                            placeholder='-을 제외하고 입력하시오'
-                            value={inputBizNum}
-                            onChange={(e) => setInputBizNum(e.target.value)}
-                        />
-                        <button onClick={() => {
-                            callCheckBizNumApi(inputBizNum)
-                            console.log(process.env.REACT_APP_BIZNUM_API_KEY);
-                        }
-                        }>사업자등록번호 인증</button>
-                    </div>
-                    {apiResponse.data ? <strong>{apiResponse.data.b_stt}</strong> : <strong>해당 번호로 인증할 수 없습니다.</strong>}
-                </li>
-
-                {/* 대표자명 */}
-                <li className={styles.inputContainer}>
-                    <div className={styles.left}>대표자명</div>
-                    <div className={styles.right}>
-                        <input
-                            className={styles.isInput}
-                            type='text'
-                            placeholder={'홍길동'}
-                            value={props.inputData.corporationData.cor_ceoName}
-                            onChange={(e) => {
-                                props.setInputData(prevData => ({
-                                    ...prevData,
-                                    corporationData: {
-                                        ...prevData.corporationData,
-                                        cor_ceoName: e.target.value
-                                    }
-                                }))
                             }}
                         />
                     </div>
@@ -551,44 +541,73 @@ export default function JoinForm(props) {
                                 }))
                             }}
                         />
-                        {/* <div className={styles.notification}>
-                            <strong>문자(SMS) 서비스를 받으시겠습니까?</strong>
-                            <div className={styles.YesNo}>
-                            <label for="CEO_SMS_Y">
-                                <input
-                                    type="radio"
-                                    name="CEO_SMS"
-                                    id="CEO_SMS_Y"
-                                    value={1}
-                                    checked={props.inputData.smsService === 1}
-                                    onChange={(e) => {
-                                        props.setInputData(
-                                            (prevData) => ({ ...prevData, smsService: 1 })
-                                        )
-                                    }}
-                                />
-                                예</label>
-                            </div>
-                            <div className={styles.YesNo}>
-                                <input
-                                    type="radio"
-                                    name="CEO_SMS"
-                                    id="CEO_SMS_N"
-                                    value={0}
-                                    checked={props.inputData.smsService === 0}
-                                    onChange={(e) => {
-                                        props.setInputData(
-                                            (prevData) => ({ ...prevData, smsService: 0 })
-                                        )
-                                    }}
-                                />
-                                <label for="CEO_SMS_N">아니오</label>
-                            </div>
-                        </div> */}
                     </div>
                 </li>
 
+                {/* 업태 */}
+                {/* 종목 */}
+                {/* FAX */}
+
+                {/* 회원구분 체크박스 */}
                 <li className={styles.inputContainer}>
+                    <div className={styles.left}>회원구분</div>
+                    <div className={styles.right}>
+                        <div className='basic_input'>
+                            <div className={styles.typeMember}>
+                                <input
+                                    type="radio"
+                                    id="indivisualMember"
+                                    name="userType"
+                                    value={props.inputData.userType}
+                                    checked={props.inputData.userType_id === 1}
+                                    onChange={() => {
+                                        props.setInputData(
+                                            (prevData) => ({ ...prevData, userType_id: 1 })
+                                        )
+                                    }}
+                                />
+                                <label htmlFor="endUser">실사용자</label>
+                            </div>
+                            <div className={styles.typeMember}>
+                                <input
+                                    type="radio"
+                                    id="corporateMember"
+                                    name="userType"
+                                    value={props.inputData.userType}
+                                    checked={props.inputData.userType_id === 2}
+                                    onChange={() => {
+                                        props.setInputData(
+                                            (prevData) => ({ ...prevData, userType_id: 2 })
+                                        )
+                                    }}
+                                />
+                                <label htmlFor="corporateMember">납품</label>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul >
+
+            {/* 인증 및 결과 확인 */}
+            <div>
+                {/* 인증버튼 */}
+                <button className='original_button' onClick={() => {
+                    callCheckBizNumApi(
+                        props.inputData.corporationData.cor_num,
+                        props.inputData.corporationData.cor_startDate,
+                        props.inputData.corporationData.cor_ceoName)
+                }
+                }>기업정보 인증</button>
+                {/* 확인문구 */}
+                {
+                    apiResponse.valid_cnt == null
+                        ?
+                        <strong style={{ color: 'red' }}>국세청에 등록되지 않은 사업자등록번호입니다.</strong>
+                        :
+                        <strong style={{ color: 'green' }}>인증이 완료되었습니다.</strong>
+                }
+                {/* 결과표시 */}
+                <div>
                     {/* API 호출 결과 표시 */}
                     {apiResponse && (
                         <div>
@@ -596,8 +615,11 @@ export default function JoinForm(props) {
                             <pre>{JSON.stringify(apiResponse, null, 2)}</pre>
                         </div>
                     )}
-                </li>
-            </ul>
-        </div>
+                </div>
+            </div>
+
+
+
+        </div >
     )
 }
