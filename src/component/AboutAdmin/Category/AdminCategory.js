@@ -58,7 +58,7 @@ export function AdminCategory(props){
 
     //중 카테고리 필터링
     function FilteredMiddleCategoryData(itemId) {
-      const newData = categoryData.filter(element => new RegExp(`^${itemId}[A-Z]$`).test(element.category_id));
+      const newData = categoryData.filter(element => new RegExp(`^${itemId}[a-z]$`).test(element.category_id));
       setMiddleCategory(newData);
     }
 
