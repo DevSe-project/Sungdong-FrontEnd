@@ -6,6 +6,8 @@ import { MenuData } from './component/TemplateLayout/AboutMenuData/MenuData';
 import { Footer } from './component/TemplateLayout/AboutFooter/Footer';
 import NoticeMini from './component/AboutHome/NoticeMini';
 import { Product } from './component/AboutHome/Product';
+import MyInfoSummary from './component/MyInfoModule/MyInfoSummary';
+import { GetCookie } from './customFn/GetCookie';
 export default function MainPage(props) {
   return (
     <div className={styles.body}>
@@ -25,6 +27,14 @@ export default function MainPage(props) {
         <div className={styles.flexBox}>
           {/* ❗️----SIDE----❗️ */}
           <div className={styles.left}>
+            {/* 로그인이 돼있다면 모듈 표시 */}
+            {/* { GetCookie('jwt_token') !== null ? <MyInfoSummary /> : null } */}
+            
+            
+            {/* 서버 연동 전 모듈 항시표시 - 확인용 */}
+            <MyInfoSummary />
+            
+            
             <MenuData login={props.login} menu_dynamicStyle={props.menu_dynamicStyle} />
           </div>
           {/* ❗️----CENTER----❗️ */}
