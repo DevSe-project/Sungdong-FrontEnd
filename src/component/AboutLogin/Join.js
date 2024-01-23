@@ -30,11 +30,17 @@ export default function Join() {
         try {
             const response = await axios.post("/auth/register",
                 JSON.stringify({
+                    // 전화번호
                     ...joinData,
                     tel: `${joinData.num1}-${joinData.num2}-${joinData.num3}`,
+                    // 대표번호
                     ...joinData.corporationData,
                     cor_tel: `${joinData.corporationData.cor_tel.num1}-${joinData.corporationData.cor_tel.num2}-${joinData.corporationData.cor_tel.num3}`,
-                    ...joinData.address
+                    // FAX번호
+                    ...joinData.corporationData.cor_fax,
+                    cor_fax: `${joinData.corporationData.cor_fax.fax_num1}-${joinData.corporationData.cor_fax.fax_num2}-${joinData.corporationData.cor_fax.fax_num3}`,
+                    // 주소
+                    ...joinData.address,
                 }),
                 {
                     headers: {
@@ -90,7 +96,11 @@ export default function Join() {
                 cor_num: '', // 사업자번호
                 cor_sector: '', // 업태
                 cor_category: '', // 종목
-                cor_fax: '', // FAX번호
+                cor_fax: {
+                    fax_num1: '',
+                    fax_num2: '',
+                    fax_num3: '',
+                }, // FAX번호
             },
             address: {
                 zonecode: '',
@@ -99,7 +109,7 @@ export default function Join() {
                 buildingName: '',
                 jibunAddress: '',
             },
-            detailAddress: '', 
+            detailAddress: '',
         },
     )
 

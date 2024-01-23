@@ -23,11 +23,14 @@ export default function JoinForm(props) {
         document.body.appendChild(script);
     }
 
+    const [isCallApi, setIsCallApi] = useState(false);
     const [apiResponse, setApiResponse] = useState({});// API 호출 결과를 저장할 상태 
     const API_KEY = process.env.REACT_APP_BIZNUM_API_KEY;
     const API_ENDPOINT = 'https://api.odcloud.kr/api/nts-businessman/v1/validate?serviceKey=' + API_KEY;
-    // 사업자등록번호 진위확인 API
-    const callCheckBizNumApi = async (corNum, corStartDate, corCeoName, corSector, corCategory) => {
+    // 기업정보 진위확인 API
+    const callCheckCorInfoApi = async (corNum, corStartDate, corCeoName) => {
+        setIsCallApi(isCallApi + 1);
+        console.log(isCallApi);
         try {
             const response = await fetch(API_ENDPOINT, {
                 method: 'POST',
@@ -41,8 +44,6 @@ export default function JoinForm(props) {
                                 "b_no": corNum, // 사업자등록번호
                                 "start_dt": corStartDate, // 개업일자
                                 "p_nm": corCeoName, // 대표1
-                                "b_sector": corSector,
-                                "b_type": corCategory,
                             }
                         ]
                     }
@@ -81,7 +82,7 @@ export default function JoinForm(props) {
     return (
         <div>
             {/* 회원정보를 입력해주세요! */}
-            <strong className={styles.noti}>회원정보를 입력해주세요!</strong>
+            <strong className={styles.noti}>환영합니다! 회원정보를 입력해주세요!</strong>
 
             {/* 회원정보 입력란 */}
             <ul className={styles.inputWrap}>
@@ -374,15 +375,10 @@ export default function JoinForm(props) {
                     </div>
                 </li>
             </ul>
-
             <br />
-            <br />
-            <br />
-
-
-
-            {/* ----------기업 정보---------- */}
-            <div className={styles.indivisualMembers}>기업정보</div>
+            {/* -----------------------------기업 인증----------------------------- */}
+            {/* -----------------------------기업 인증----------------------------- */}
+            <div className={styles.indivisualMembers}>기업인증</div>
 
             {/* 목록 */}
             <ul className={styles.inputWrap}>
@@ -406,7 +402,17 @@ export default function JoinForm(props) {
                                     })
                                 )
                             }}
+                            disabled={apiResponse.valid_cnt}
                         />
+                        <div className={styles.notification}>
+                            {
+                                apiResponse.valid_cnt
+                                    ?
+                                    <span style={{ color: 'green' }}>인증이 완료되었습니다. 더 이상 수정할 수 없습니다.</span>
+                                    :
+                                    <span style={{ color: 'var(--main-red)' }}>기업인증 필수 항목</span>
+                            }
+                        </div>
                     </div>
                 </li>
 
@@ -427,7 +433,18 @@ export default function JoinForm(props) {
                                         cor_startDate: e.target.value
                                     }
                                 }))
-                            }} />
+                            }}
+                            disabled={apiResponse.valid_cnt}
+                        />
+                        <div className={styles.notification}>
+                            {
+                                apiResponse.valid_cnt
+                                    ?
+                                    <span style={{ color: 'green' }}>인증이 완료되었습니다. 더 이상 수정할 수 없습니다.</span>
+                                    :
+                                    <span style={{ color: 'var(--main-red)' }}>기업인증 필수 항목</span>
+                            }
+                        </div>
                     </div>
                 </li>
 
@@ -449,10 +466,52 @@ export default function JoinForm(props) {
                                     }
                                 }))
                             }}
+                            disabled={apiResponse.valid_cnt}
                         />
+                        <div className={styles.notification}>
+                            {
+                                apiResponse.valid_cnt
+                                    ?
+                                    <span style={{ color: 'green' }}>인증이 완료되었습니다. 더 이상 수정할 수 없습니다.</span>
+                                    :
+                                    <span style={{ color: 'var(--main-red)' }}>기업인증 필수 항목</span>
+                            }
+                        </div>
                     </div>
                 </li>
-
+            </ul>
+            {/* 인증버튼 및 확인문구 */}
+            <div>
+                <div style={{ display: 'flex', margin: '10px 20px 10px 20px', alignItems: 'center', gap: '16px' }}>
+                    {/* 인증버튼 */}
+                    <button 
+                    style={{width: '10em'}}
+                    className='original_button' onClick={() => {
+                        callCheckCorInfoApi(
+                            props.inputData.corporationData.cor_num,
+                            props.inputData.corporationData.cor_startDate,
+                            props.inputData.corporationData.cor_ceoName,
+                        );
+                    }
+                    }>기업정보 인증</button>
+                    {/* 확인문구 */}
+                    {
+                        isCallApi ?
+                            apiResponse.valid_cnt
+                                ?
+                                <strong style={{ color: 'green' }}>인증이 완료되었습니다.</strong>
+                                :
+                                <strong style={{ color: 'red' }}>국세청에 등록되지 않은 기업 정보입니다.</strong>
+                            :
+                            null
+                    }
+                </div>
+            </div>
+            <br />
+            {/* -----------------------------기업 정보----------------------------- */}
+            {/* -----------------------------기업 정보----------------------------- */}
+            <div className={styles.indivisualMembers}>기업정보</div>
+            <ul className={styles.inputWrap}>
                 {/* 기업명 */}
                 <li className={styles.inputContainer}>
                     <div className={styles.left}>기업명</div>
@@ -545,8 +604,116 @@ export default function JoinForm(props) {
                 </li>
 
                 {/* 업태 */}
+                <li className={styles.inputContainer}>
+                    <div className={styles.left}>업태</div>
+                    <div className={styles.right}>
+                        <input
+                            className='basic_input'
+                            type='text'
+                            placeholder='도매 및 소매업'
+                            value={props.inputData.corporationData.cor_sector}
+                            onChange={(e) => props.setInputData(prevData => (
+                                {
+                                    ...prevData,
+                                    corporationData: {
+                                        ...prevData.corporationData,
+                                        cor_sector: e.target.value
+                                    }
+                                }
+                            ))}
+                        />
+                    </div>
+                </li>
                 {/* 종목 */}
+                <li className={styles.inputContainer}>
+                    <div className={styles.left}>종목</div>
+                    <div className={styles.right}>
+                        <input
+                            className="basic_input"
+                            type='text'
+                            placeholder='여마재, 안전용품'
+                            value={props.inputData.corporationData.cor_category}
+                            onChange={(e) => props.setInputData(prevData => (
+                                {
+                                    ...prevData,
+                                    corporationData: {
+                                        ...prevData.corporationData,
+                                        cor_category: e.target.value
+                                    }
+                                }
+                            ))}
+                        />
+                    </div>
+                </li>
                 {/* FAX */}
+                <li className={styles.inputContainer}>
+                    <div className={styles.left}>FAX</div>
+                    <div className={styles.right}>
+                        {/* 첫자리 */}
+                        <input
+                            className={styles.phoneNum}
+                            type='text'
+                            placeholder='ex)052'
+                            maxLength='4'
+                            size='8'
+                            value={props.inputData.corporationData.cor_fax.fax_num1}
+                            onChange={e => props.setInputData(prevData => (
+                                {
+                                    ...prevData,
+                                    corporationData: {
+                                        ...prevData.corporationData,
+                                        cor_fax: {
+                                            ...prevData.corporationData.cor_fax,
+                                            fax_num1: e.target.value
+                                        }
+                                    }
+                                }
+                            ))}
+                        />
+                        {/* 가운데 */}
+                        <input
+                            className={styles.phoneNum}
+                            type='text'
+                            placeholder='ex)1234'
+                            maxLength='4'
+                            size='8'
+                            value={props.inputData.corporationData.cor_fax.fax_num2}
+                            onChange={e => props.setInputData(prevData => (
+                                {
+                                    ...prevData,
+                                    corporationData: {
+                                        ...prevData.corporationData,
+                                        cor_fax: {
+                                            ...prevData.corporationData.cor_fax,
+                                            fax_num2: e.target.value
+                                        }
+                                    }
+                                }
+                            ))}
+                        />
+                        {/* 마지막 */}
+                        <input
+                            className={styles.phoneNum}
+                            type='text'
+                            placeholder='ex)5678'
+                            maxLength='4'
+                            size='8'
+                            value={props.inputData.corporationData.cor_fax.fax_num3}
+                            onChange={e => props.setInputData(prevData => (
+                                {
+                                    ...prevData,
+                                    corporationData: {
+                                        ...prevData.corporationData,
+                                        cor_fax: {
+                                            ...prevData.corporationData.cor_fax,
+                                            fax_num3: e.target.value
+                                        }
+                                    }
+                                }
+                            ))}
+                        />
+                    </div>
+                </li>
 
                 {/* 회원구분 체크박스 */}
                 <li className={styles.inputContainer}>
@@ -554,72 +721,41 @@ export default function JoinForm(props) {
                     <div className={styles.right}>
                         <div className='basic_input'>
                             <div className={styles.typeMember}>
-                                <input
-                                    type="radio"
-                                    id="indivisualMember"
-                                    name="userType"
-                                    value={props.inputData.userType}
-                                    checked={props.inputData.userType_id === 1}
-                                    onChange={() => {
-                                        props.setInputData(
-                                            (prevData) => ({ ...prevData, userType_id: 1 })
-                                        )
-                                    }}
-                                />
-                                <label htmlFor="endUser">실사용자</label>
+                                <label htmlFor="endUser">
+                                    <input
+                                        type="radio"
+                                        id="endUser"
+                                        name="userType"
+                                        value={props.inputData.userType}
+                                        checked={props.inputData.userType_id === 1}
+                                        onChange={() => {
+                                            props.setInputData(
+                                                (prevData) => ({ ...prevData, userType_id: 1 })
+                                            )
+                                        }}
+                                    />
+                                    실사용자</label>
                             </div>
                             <div className={styles.typeMember}>
-                                <input
-                                    type="radio"
-                                    id="corporateMember"
-                                    name="userType"
-                                    value={props.inputData.userType}
-                                    checked={props.inputData.userType_id === 2}
-                                    onChange={() => {
-                                        props.setInputData(
-                                            (prevData) => ({ ...prevData, userType_id: 2 })
-                                        )
-                                    }}
-                                />
-                                <label htmlFor="corporateMember">납품</label>
+                                <label htmlFor="suplier">
+                                    <input
+                                        type="radio"
+                                        id="suplier"
+                                        name="userType"
+                                        value={props.inputData.userType}
+                                        checked={props.inputData.userType_id === 2}
+                                        onChange={() => {
+                                            props.setInputData(
+                                                (prevData) => ({ ...prevData, userType_id: 2 })
+                                            )
+                                        }}
+                                    />
+                                    납품</label>
                             </div>
                         </div>
                     </div>
                 </li>
             </ul >
-
-            {/* 인증 및 결과 확인 */}
-            <div>
-                {/* 인증버튼 */}
-                <button className='original_button' onClick={() => {
-                    callCheckBizNumApi(
-                        props.inputData.corporationData.cor_num,
-                        props.inputData.corporationData.cor_startDate,
-                        props.inputData.corporationData.cor_ceoName)
-                }
-                }>기업정보 인증</button>
-                {/* 확인문구 */}
-                {
-                    apiResponse.valid_cnt == null
-                        ?
-                        <strong style={{ color: 'red' }}>국세청에 등록되지 않은 사업자등록번호입니다.</strong>
-                        :
-                        <strong style={{ color: 'green' }}>인증이 완료되었습니다.</strong>
-                }
-                {/* 결과표시 */}
-                <div>
-                    {/* API 호출 결과 표시 */}
-                    {apiResponse && (
-                        <div>
-                            <h2>인증 결과:</h2>
-                            <pre>{JSON.stringify(apiResponse, null, 2)}</pre>
-                        </div>
-                    )}
-                </div>
-            </div>
-
-
-
         </div >
     )
 }
