@@ -6,7 +6,6 @@ import { MenuData } from './component/TemplateLayout/AboutMenuData/MenuData';
 import { Footer } from './component/TemplateLayout/AboutFooter/Footer';
 import NoticeMini from './component/AboutHome/NoticeMini';
 import { Product } from './component/AboutHome/Product';
-import MyInfoSummary from './component/MyInfoModule/MyInfoSummary';
 export default function MainPage(props) {
   return (
     <div className={styles.body}>
@@ -26,7 +25,6 @@ export default function MainPage(props) {
         <div className={styles.flexBox}>
           {/* ❗️----SIDE----❗️ */}
           <div className={styles.left}>
-            <MyInfoSummary />
             <MenuData login={props.login} menu_dynamicStyle={props.menu_dynamicStyle} />
           </div>
           {/* ❗️----CENTER----❗️ */}

@@ -8,7 +8,7 @@
   list-style: none;
   position: sticky;
   top: 96px;
-  transition: transform 0.3s ease; /* 변환 효과를 부드럽게 적용합니다. */
+  transition: transform 0.5s ease; /* 변환 효과를 부드럽게 적용합니다. */
 }
 
 /* 네비게이션 내부 링크 스타일링 (옵션) */
@@ -37,4 +37,5 @@
 }
 .sub_item:hover{
   background-color: lightgray;
+  transition: background-color 0.5s ease;
 }
