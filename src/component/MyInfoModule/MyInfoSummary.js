@@ -1,31 +1,25 @@
 import styles from './MyInfoSummary.module.css';
-import { GetCookie } from '../../customFn/GetCookie';
-import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
+import fetchDataMiddleware from '../../middleware/FetchDataMiddleware';
 
 export default function MyInfoSummary() {
 
-    // -----UserData fetch-----
     const fetchUserData = async () => {
-        try {
-            const token = GetCookie('jwt_token');
-            const response = await axios.get("/auth/info",
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`
-                    }
-                }
-            )
-            // 성공 시 추가된 상품 정보를 반환합니다.
-            return response.data.data;
-        } catch (error) {
-            // 실패 시 예외를 throw합니다.
-            throw new Error('확인 중 오류가 발생했습니다.');
-        }
-    }
+        const userData = await fetchDataMiddleware('/auth/users');
+        console.log(userData);
+    };
 
-    const { isLoading, isError, error, data: users } = useQuery({queryKey: ['users'] });
+    const { isLoading, isError, error, data: users } = useQuery({ queryKey: ['users'] });
+
+    // 백앤드 연결 후, 실사용 코드
+    // const { isLoading, isError, error, data: users } = useQuery(
+    //     ['users'], // Query Key
+    //     async () => {
+    //         const userData = await fetchDataMiddleware('/auth/users'); // middleware사용하여 코드 간소화함
+    //         return userData;
+    //     }
+    // );
+
 
     if (isLoading) {
         return <p>Loading..</p>;
@@ -36,17 +30,17 @@ export default function MyInfoSummary() {
 
 
     return (
-        <div>
+        <div className={styles.container}>
             {/* 환영문구 */}
-            <div>
-                <strong>{users.corporationData.companyName && users.corporationData.companyName}</strong>
+            <div className={styles.header}>
+                <span>(주)BIGDEV</span>
                 <span>님 환영합니다.</span>
             </div>
             {/* 담당자명 | 연락처 */}
             <div>
-                <label>
-                    담당자
-                </label>
+                <span>담당자</span>
+                <span>박형조</span>
+                <span>연락처 010-1234-5678</span>
             </div>
         </div>
     )
