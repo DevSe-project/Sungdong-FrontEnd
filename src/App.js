@@ -108,46 +108,51 @@ export default function App() {
     // return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
     try {
       const response = await axios.get("/category/list",
-          {
-              headers: {
-                  "Content-Type": "application/json",
-              }
+        {
+          headers: {
+            "Content-Type": "application/json",
           }
+        }
       )
       // 성공 시 추가된 상품 정보를 반환합니다.
       return response.data.data;
     } catch (error) {
-        // 실패 시 예외를 throw합니다.
-        throw new Error('확인 중 오류가 발생했습니다.');
+      // 실패 시 예외를 throw합니다.
+      throw new Error('확인 중 오류가 발생했습니다.');
     }
   };
 
   //딜리버리 데이터 fetch
   const fetchDeliveryData = async () => {
-    const querySnapshot = await getDocs(collection(db, 'DeliveryData')); // 'ProductData'는 컬렉션 이름
+    const querySnapshot = await getDocs(collection(db, 'DeliveryData')); // 'ProductData'라는 컬렉션 이름
     return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
   };
-  
+
   //주문 데이터 fetch
   const fetchOrderData = async () => {
-    const querySnapshot = await getDocs(collection(db, 'OrderData')); // 'ProductData'는 컬렉션 이름
+    const querySnapshot = await getDocs(collection(db, 'OrderData')); // 'OrderData'라는 컬렉션 이름
     return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
   };
 
   //반품 데이터 fetch
   const fetchRefundData = async () => {
-    const querySnapshot = await getDocs(collection(db, 'RefundData')); // 'ProductData'는 컬렉션 이름
+    const querySnapshot = await getDocs(collection(db, 'RefundData')); // 'RefundData'라는 컬렉션 이름
     return querySnapshot.docs.map((doc) => ({ ...doc.data(), rae_id: doc.id }));
   };
 
   //공지 데이터 fetch
   const fetchNoticeData = async () => {
-    const querySnapshot = await getDocs(collection(db, 'NoticeData')); // 'ProductData'는 컬렉션 이름
+    const querySnapshot = await getDocs(collection(db, 'NoticeData')); // 'NoticeData'라는 컬렉션 이름
     return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
   };
 
+  // 유저 데이터 fetch
+  const fetchUserData = async () => {
+    const querySnapshot = await getDocs(collection(db, 'UserData')); // 'UserData'라는 컬렉션 이름
+    return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+  }
 
-  
+
 
   // react-query : 서버에서 받아온 데이터 캐싱, 변수에 저장
   const { isLoading, isError, error, data } = useQuery({
@@ -155,39 +160,44 @@ export default function App() {
     queryFn: () => fetchData()
   });
 
-    // react-query : 서버에서 받아온 데이터 캐싱, 변수에 저장
-    const { data:categoryData } = useQuery({
-      queryKey: ['category'],
-      queryFn: () => fetchCategoryData()
-    });
+  // react-query : 서버에서 받아온 데이터 캐싱, 변수에 저장
+  const { data: categoryData } = useQuery({
+    queryKey: ['category'],
+    queryFn: () => fetchCategoryData()
+  });
 
-    // react-query : 서버에서 받아온 데이터 캐싱, 변수에 저장
-    const { data:deliveryData } = useQuery({
-      queryKey: ['delivery'],
-      queryFn: () => fetchDeliveryData()
-    });
+  // react-query : 서버에서 받아온 데이터 캐싱, 변수에 저장
+  const { data: deliveryData } = useQuery({
+    queryKey: ['delivery'],
+    queryFn: () => fetchDeliveryData()
+  });
 
-    const { data:orderedData } = useQuery({
-      queryKey: ['ordered'],
-      queryFn: () => fetchOrderData()
-    });
+  const { data: orderedData } = useQuery({
+    queryKey: ['ordered'],
+    queryFn: () => fetchOrderData()
+  });
 
-    const { data:refundData } = useQuery({
-      queryKey: ['refund'],
-      queryFn: () => fetchRefundData()
-    })
+  const { data: refundData } = useQuery({
+    queryKey: ['refund'],
+    queryFn: () => fetchRefundData()
+  })
 
-    const { data:noticeData } = useQuery({
-      queryKey: ['notice'],
-      queryFn: () => fetchNoticeData()
-    })
+  const { data: noticeData } = useQuery({
+    queryKey: ['notice'],
+    queryFn: () => fetchNoticeData()
+  })
+  
+  const { data: users } = useQuery({
+    queryKey: ['users'],
+    queryFn: () => fetchUserData()
+  })
 
 
 
-    // const { data:tokenData } = useQuery({
-    //   queryKey: ['token'],
-    //   queryFn: () => fetchTokenData()
-    // })
+  // const { data:tokenData } = useQuery({
+  //   queryKey: ['token'],
+  //   queryFn: () => fetchTokenData()
+  // })
 
   // 특정 주소에서만 SessionStorage 사용하기
   useEffect(() => {
@@ -506,7 +516,7 @@ export default function App() {
                 </footer>
               </div>
             </div>
-            </>}/>
+          </>} />
 
         <Route path='/estimateBox' element={
           <>
@@ -526,7 +536,7 @@ export default function App() {
                 </footer>
               </div>
             </div>
-            </>}/>
+          </>} />
 
         <Route path='/estimateManager' element={
           <>
@@ -546,8 +556,8 @@ export default function App() {
                 </footer>
               </div>
             </div>
-            </>}/>
-        
+          </>} />
+
         {/* 반품 관련 */}
         {/* 반품 신청 */}
         <Route path='/return/request' element={
@@ -568,7 +578,7 @@ export default function App() {
                 </footer>
               </div>
             </div>
-            </>}/>
+          </>} />
 
         {/* 반품조회 */}
         <Route path='/return/list' element={
@@ -589,7 +599,7 @@ export default function App() {
                 </footer>
               </div>
             </div>
-            </>}/>
+          </>} />
 
         {/* 불량 교환 관련 */}
         <Route path='/error/request' element={
@@ -604,13 +614,13 @@ export default function App() {
             <div className='main'>
               <MenuData menu_dynamicStyle={menu_dynamicStyle} />
               <div className='container'>
-                <ErrorTrade/>
+                <ErrorTrade />
                 <footer className='footer'>
                   <Footer />
                 </footer>
               </div>
             </div>
-            </>}/>
+          </>} />
         <Route path='/error/list' element={
           <>
             {/* 최상단배너 */}
@@ -629,7 +639,7 @@ export default function App() {
                 </footer>
               </div>
             </div>
-            </>}/>
+          </>} />
 
         {/* 회사 관련 */}
         <Route path='/comeway' element={
@@ -736,7 +746,7 @@ export default function App() {
         <Route path='/adminMain/refund' element={<AdminRefund orderData={orderedData} />} />
 
         {/* 배송관리 - 배송 상태 관리 */}
-        <Route path='/adminMain/SD_delivery/DeliveryManager' element={<DeliveryManagement />}/> 
+        <Route path='/adminMain/SD_delivery/DeliveryManager' element={<DeliveryManagement />} />
 
         {/* 정산관리 - 누적정산 */}
         <Route path='/adminMain/SD_account/total' element={<TotalCal_Manage />} />
@@ -750,7 +760,7 @@ export default function App() {
         <Route path='/adminMain/user' element={<Manage_Users />} />
         {/* 회원관리 - 회원가입 코드 관리 */}
         <Route path='/adminMain/printCode' element={<ManageCode />} />
-        
+
       </Routes>
     </div>
   );
