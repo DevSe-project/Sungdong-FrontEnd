@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { TopBanner } from "../TemplateLayout/AboutHeader/TopBanner";
 import styles from "./Mypage.module.css";
 import ModifyPW from "./ModifyPW";
-import { useIsLogin, useModalState, useUserData } from "../../Store/DataStore";
+import { useModalState } from "../../Store/DataStore";
 import { useNavigate } from "react-router-dom";
 import { MenuData } from "../TemplateLayout/AboutMenuData/MenuData";
 import { Footer } from "../TemplateLayout/AboutFooter/Footer";
@@ -12,7 +12,6 @@ import axios from "../../axios";
 export default function MyPage(props) {
 
   const { isModal, openModal } = useModalState();
-  const { isLogin } = useIsLogin()
 
   const navigate = useNavigate();
 
@@ -102,15 +101,15 @@ export default function MyPage(props) {
             <table className={styles.table}>
               <tr className={styles.tr}>
                 <th className={styles.th}>상호명</th>
-                <td className={styles.td}>{userProfile.cor_corName ? userProfile.cor_corName : '미 작성'}</td>
+                <td className={styles.td}>{userProfile.cor_corName && userProfile.cor_corName}</td>
                 <th className={styles.th}>대표자</th>
-                <td className={styles.td}>{userProfile.cor_ceoName ? userProfile.cor_ceoName : '미 작성'}</td>
+                <td className={styles.td}>{userProfile.cor_ceoName && userProfile.cor_ceoName}</td>
                 <th className={styles.th}>사업자번호</th>
-                <td className={styles.td}>{userProfile.cor_num ? userProfile.cor_num : '미 작성'}</td>
+                <td className={styles.td}>{userProfile.cor_num && userProfile.cor_num}</td>
               </tr>
               <tr className={styles.tr}>
                 <th className={styles.th}>아이디</th>
-                <td className={styles.td}>{userProfile.userId ? userProfile.userId : '미 작성'}</td>
+                <td className={styles.td}>{userProfile.userId && userProfile.userId}</td>
                 <th className={styles.th}>비밀번호</th>
                 <td className={styles.td}>
                   <button
@@ -124,9 +123,9 @@ export default function MyPage(props) {
               </tr>
               <tr className={styles.tr}>
                 <th className={styles.th}>업태</th>
-                <td className={styles.td}>{userProfile.cor_sector ? userProfile.cor_sector : '미 작성'}</td>
+                <td className={styles.td}>{userProfile.cor_sector && userProfile.cor_sector}</td>
                 <th className={styles.th}>종목</th>
-                <td className={styles.td}>{userProfile.cor_sector ? userProfile.cor_sector : '미 작성'}</td>
+                <td className={styles.td}>{userProfile.cor_sector && userProfile.cor_sector}</td>
                 <th className={styles.th}></th>
                 <td className={styles.td}></td>
               </tr>
