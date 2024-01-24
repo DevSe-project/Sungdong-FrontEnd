@@ -2,10 +2,10 @@ import axios from "axios";
 import { GetCookie } from "../customFn/GetCookie";
 
 // 미들웨어 함수 정의
-const fetchDataMiddleware = async (url, config = {}) => {
+const fetchDataMiddleware = async (path, config = {}) => {
   try {
     const token = GetCookie('jwt_token');
-    const response = await axios.get(url, {
+    const response = await axios.get(`http://localhost:5050${path}`, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
@@ -21,4 +21,3 @@ const fetchDataMiddleware = async (url, config = {}) => {
 };
 
 export default fetchDataMiddleware;
-
