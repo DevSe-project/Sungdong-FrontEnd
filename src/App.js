@@ -187,8 +187,8 @@ export default function App() {
     queryFn: () => fetchNoticeData()
   })
   
-  const { data: users } = useQuery({
-    queryKey: ['users'],
+  const { data: user } = useQuery({
+    queryKey: ['user'],
     queryFn: () => fetchUserData()
   })
 

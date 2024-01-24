@@ -15,31 +15,31 @@ export default function MyPage(props) {
 
   const navigate = useNavigate();
 
-    // -----UserData fetch
-    const fetchUserData = async () => {
-      try {
-        const token = GetCookie('jwt_token');
-        const response = await axios.get("/auth/info",
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization" : `Bearer ${token}`
-                }
-            }
-        )
-        // 성공 시 추가된 상품 정보를 반환합니다.
-        return response.data.data;
+  // -----UserData fetch
+  const fetchUserData = async () => {
+    try {
+      const token = GetCookie('jwt_token');
+      const response = await axios.get("/auth/info",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          }
+        }
+      )
+      // 성공 시 추가된 상품 정보를 반환합니다.
+      return response.data.data;
     } catch (error) {
-        // 실패 시 예외를 throw합니다.
-        throw new Error('확인 중 오류가 발생했습니다.');
+      // 실패 시 예외를 throw합니다.
+      throw new Error('확인 중 오류가 발생했습니다.');
     }
   }
 
-    const { isLoading, isError, error, data:userProfile } = useQuery({
-      queryKey: ['user'],
-      queryFn: fetchUserData
-    });
-    //-----UserData fetch
+  const { isLoading, isError, error, data: userProfile } = useQuery({
+    queryKey: ['user'],
+    queryFn: fetchUserData
+  });
+  //-----UserData fetch
 
   // 유저 프로필 state 
   // const [userProfile, setUserProfile] = useState([]);
@@ -63,10 +63,10 @@ export default function MyPage(props) {
   // 조건에 부합하는 해당 유저의 데이터를 호출
 
 
-  if(isLoading){
+  if (isLoading) {
     return <p>Loading..</p>;
   }
-  if(isError){
+  if (isError) {
     return <p>에러 : {error.message}</p>;
   }
 
