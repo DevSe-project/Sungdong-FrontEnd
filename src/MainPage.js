@@ -6,7 +6,7 @@ import { MenuData } from './component/TemplateLayout/AboutMenuData/MenuData';
 import { Footer } from './component/TemplateLayout/AboutFooter/Footer';
 import NoticeMini from './component/AboutHome/NoticeMini';
 import { Product } from './component/AboutHome/Product';
-import MyInfoSummary from './component/MyInfoModule/MyInfoSummary';
+import WelcomeModule from './component/WelcomeModule/WelcomeModule';
 import { GetCookie } from './customFn/GetCookie';
 export default function MainPage(props) {
   return (
@@ -32,7 +32,7 @@ export default function MainPage(props) {
             
             
             {/* 서버 연동 전 모듈 항시표시 - 확인용 */}
-            <MyInfoSummary />
+            <WelcomeModule />
             
             
             <MenuData login={props.login} menu_dynamicStyle={props.menu_dynamicStyle} />
