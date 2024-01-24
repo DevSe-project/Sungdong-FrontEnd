@@ -1,9 +1,10 @@
 import styles from './WelcomeModule.module.css';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import axios from '../../axios';
 import { GetCookie } from '../../customFn/GetCookie';
 
 export default function WelcomeModule() {
+
     // -----UserData fetch
     const fetchUserData = async () => {
         try {
@@ -24,12 +25,10 @@ export default function WelcomeModule() {
         }
     }
 
-    const { isLoading, isError, error, data: userData } = useQuery({
+    const { isLoading, isError, error, data: userData } = useQuery({ 
         queryKey: ['user'],
         queryFn: fetchUserData
     });
-
-
 
     if (isLoading) {
         return <p>Loading..</p>;

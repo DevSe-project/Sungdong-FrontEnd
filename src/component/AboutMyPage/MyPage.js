@@ -8,36 +8,16 @@ import { MenuData } from "../TemplateLayout/AboutMenuData/MenuData";
 import { Footer } from "../TemplateLayout/AboutFooter/Footer";
 import { GetCookie } from "../../customFn/GetCookie";
 import { useQuery } from "@tanstack/react-query";
-import axios from "../../axios";
 export default function MyPage(props) {
 
   const { isModal, openModal } = useModalState();
 
   const navigate = useNavigate();
 
-  // -----UserData fetch
-  const fetchUserData = async () => {
-    try {
-      const token = GetCookie('jwt_token');
-      const response = await axios.get("/auth/info",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-          }
-        }
-      )
-      // 성공 시 추가된 상품 정보를 반환합니다.
-      return response.data.data;
-    } catch (error) {
-      // 실패 시 예외를 throw합니다.
-      throw new Error('확인 중 오류가 발생했습니다.');
-    }
-  }
+  
 
   const { isLoading, isError, error, data: userProfile } = useQuery({
-    queryKey: ['user'],
-    queryFn: fetchUserData
+    queryKey: ['user']
   });
   //-----UserData fetch
 

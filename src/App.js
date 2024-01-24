@@ -146,12 +146,6 @@ export default function App() {
     return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
   };
 
-  // 유저 데이터 fetch
-  const fetchUserData = async () => {
-    const querySnapshot = await getDocs(collection(db, 'UserData')); // 'UserData'라는 컬렉션 이름
-    return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-  }
-
 
 
   // react-query : 서버에서 받아온 데이터 캐싱, 변수에 저장
@@ -185,11 +179,6 @@ export default function App() {
   const { data: noticeData } = useQuery({
     queryKey: ['notice'],
     queryFn: () => fetchNoticeData()
-  })
-  
-  const { data: user } = useQuery({
-    queryKey: ['user'],
-    queryFn: () => fetchUserData()
   })
 
 
