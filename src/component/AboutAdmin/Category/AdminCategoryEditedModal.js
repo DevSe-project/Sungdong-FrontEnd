@@ -3,7 +3,7 @@ import styles from './AdminCategoryModal.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useModalActions, useModalState } from '../../../Store/DataStore';
 import { GetCookie } from '../../../customFn/GetCookie';
-import axios from 'axios';
+import axios from '../../../axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export default function AdminCategoryEditedModal({selectedCategory, categoryData}) {
@@ -20,15 +20,13 @@ export default function AdminCategoryEditedModal({selectedCategory, categoryData
 
   const sendCategoriesToServer = async(category) => {
     try {
-      const token = GetCookie('jwt_token');
-      const response = await axios.patch("/category", 
+      const response = await axios.patch("/category/edit", 
         JSON.stringify(
           category
         ),
         {
           headers : {
             "Content-Type" : "application/json",
-            'Authorization': `Bearer ${token}`
           }
         }
       )
@@ -42,19 +40,7 @@ export default function AdminCategoryEditedModal({selectedCategory, categoryData
 
   
     //카테고리 수정 함수
-    const { editCategoryMutation } = useMutation({mutationFn: sendCategoriesToServer,
-      onSuccess: (data) => {
-        // 메세지 표시
-        alert(data.message);
-        console.log('카테고리가 추가/변경 되었습니다.', data);
-        // 상태를 다시 불러와 갱신합니다.
-        queryClient.invalidateQueries(['category']);
-      },
-      onError: (error) => {
-        // 상품 추가 실패 시, 에러 처리를 수행합니다.
-        console.error('카테고리를 추가/변경 하는 중 오류가 발생했습니다.', error);
-      },
-    })
+    const { mutate:editCategoryMutation } = useMutation({mutationFn: sendCategoriesToServer});
 
   // esc키를 누르면 모달창 닫기.
   useEffect(() => {
@@ -85,19 +71,19 @@ export default function AdminCategoryEditedModal({selectedCategory, categoryData
 
     //대 카테고리 필터링
     function FilteredHighCategoryData() {
-      const newData = categoryData.filter(element => /^[A-Z]$/.test(element.id));
+      const newData = categoryData.filter(element => /^[A-Z]$/.test(element.category_id));
       setInputs(newData);
     }
 
     //중 카테고리 필터링
     function FilteredMiddleCategoryData(itemId) {
-      const newData = categoryData.filter(element => new RegExp(`^${itemId}[a-z]$`).test(element.id));
+      const newData = categoryData.filter(element => new RegExp(`^${itemId}[a-z]$`).test(element.category_id));
       setInputs(newData);
     }
 
     //소 카테고리 필터링
     function FilteredLowCategoryData(itemId) {
-      const newData = categoryData.filter(element => new RegExp(`^${itemId}[1-9]|[1-9][0-9]|100.{3,}$`).test(element.id));
+      const newData = categoryData.filter(element => new RegExp(`^${itemId}[1-9]|[1-9][0-9]|100.{3,}$`).test(element.category_id));
       setInputs(newData);
     }
 
@@ -109,7 +95,6 @@ export default function AdminCategoryEditedModal({selectedCategory, categoryData
       newInputs.splice(index, 1);
       setInputs(newInputs);
     };
-
     return (
       <div>
         {inputs.map((input, index) => (
@@ -122,7 +107,7 @@ export default function AdminCategoryEditedModal({selectedCategory, categoryData
               className={styles.input}
               onChange={(e) => {
                 const newInputs = [...inputs];
-                newInputs[index] = e.target.value;
+                newInputs[index].name = e.target.value;
                 setInputs(newInputs);
               }}
             />
@@ -135,28 +120,65 @@ export default function AdminCategoryEditedModal({selectedCategory, categoryData
 
   function handleConfirmCategory(){
     switch(modalName){
-      case "대":
+      case "수정 : 대":
         const bigCategories = inputs.map((item) => ({
-          id: item.id,
+          parentsCategory_id: null,
+          category_id: item.category_id,
           name: item.name
         }))
-        editCategoryMutation.mutate(bigCategories)
+        editCategoryMutation(bigCategories,{
+          onSuccess: (data) => {
+            // 메세지 표시
+            alert(data.message);
+            console.log('카테고리가 추가/변경 되었습니다.', data);
+            // 상태를 다시 불러와 갱신합니다.
+            queryClient.invalidateQueries(['category']);
+          },
+          onError: (error) => {
+            // 상품 추가 실패 시, 에러 처리를 수행합니다.
+            console.error('카테고리를 추가/변경 하는 중 오류가 발생했습니다.', error);
+          },
+        })
         break;
-      case "중":
+      case "수정 : 중":
         const mediumCategories = inputs.map((item) => ({
-          pid: selectedCategory.big,
-          id: item.id,
+          parentsCategory_id: selectedCategory.big,
+          category_id: item.category_id,
           name: item.name
         }))
-        editCategoryMutation.mutate(mediumCategories);
+        editCategoryMutation(mediumCategories,{
+          onSuccess: (data) => {
+            // 메세지 표시
+            alert(data.message);
+            console.log('카테고리가 추가/변경 되었습니다.', data);
+            // 상태를 다시 불러와 갱신합니다.
+            queryClient.invalidateQueries(['category']);
+          },
+          onError: (error) => {
+            // 상품 추가 실패 시, 에러 처리를 수행합니다.
+            console.error('카테고리를 추가/변경 하는 중 오류가 발생했습니다.', error);
+          },
+        });
         break;
-      case "소":
+      case "수정 : 소":
         const lowCategories = inputs.map((item) => ({
-          pid: selectedCategory.medium,
-          id: item.id,
+          parentsCategory_id: selectedCategory.medium,
+          category_id: item.category_id,
           name: item.name            
         }))
-        editCategoryMutation.mutate(lowCategories);
+        editCategoryMutation(lowCategories,{
+          onSuccess: (data) => {
+            // 메세지 표시
+            alert(data.message);
+            console.log('카테고리가 추가/변경 되었습니다.', data);
+            // 상태를 다시 불러와 갱신합니다.
+            queryClient.invalidateQueries(['category']);
+          },
+          onError: (error) => {
+            // 상품 추가 실패 시, 에러 처리를 수행합니다.
+            console.error('카테고리를 추가/변경 하는 중 오류가 발생했습니다.', error);
+          },
+        });
       break;
       default:
     }
@@ -177,8 +199,8 @@ export default function AdminCategoryEditedModal({selectedCategory, categoryData
             <div className={styles.title}>
               <span style={{color: 'darkred', fontWeight: '650'}}>
               {modalName === "수정 : 대" ? '대' : 
-              modalName === "수정 : 중" ? categoryData.find((item) => item.id === selectedCategory.big)?.name :
-              modalName === "수정 : 소" && categoryData.find((item) => item.id === selectedCategory.medium)?.name}</span> 카테고리 수정
+              modalName === "수정 : 중" ? categoryData.find((item) => item.category_id === selectedCategory.big)?.name :
+              modalName === "수정 : 소" && categoryData.find((item) => item.category_id === selectedCategory.medium)?.name}</span> 카테고리 수정
             </div>
           </div>
         </div>

@@ -122,7 +122,8 @@ export default function AdminCategoryAddedModal({selectedCategory, categoryData}
     switch(modalName){
       case "대":
         const bigCategories = inputs.map((item) => ({
-          name: item
+          name: item,
+          parentsCategory_id: null
         }))
         addCategoryMutation(bigCategories,{
           onSuccess: (data) => {
@@ -198,8 +199,8 @@ export default function AdminCategoryAddedModal({selectedCategory, categoryData}
             <div className={styles.title}>
               <span style={{color: 'darkred', fontWeight: '650'}}>
               {modalName === "대" ? modalName : 
-              modalName === "중" ? categoryData.find((item) => item.id === selectedCategory.big)?.name :
-              modalName === "소" && categoryData.find((item) => item.id === selectedCategory.medium)?.name}</span> 카테고리 추가
+              modalName === "중" ? categoryData.find((item) => item.category_id === selectedCategory.big)?.name :
+              modalName === "소" && categoryData.find((item) => item.category_id === selectedCategory.medium)?.name}</span> 카테고리 추가
             </div>
           </div>
         </div>
