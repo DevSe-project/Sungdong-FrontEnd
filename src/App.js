@@ -136,12 +136,6 @@ export default function App() {
     }
   };
 
-  //딜리버리 데이터 fetch
-  const fetchDeliveryData = async () => {
-    const querySnapshot = await getDocs(collection(db, 'DeliveryData')); // 'ProductData'라는 컬렉션 이름
-    return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-  };
-
   //주문 데이터 fetch
   const fetchOrderData = async () => {
     const querySnapshot = await getDocs(collection(db, 'OrderData')); // 'OrderData'라는 컬렉션 이름
@@ -172,12 +166,6 @@ export default function App() {
   const { data: categoryData } = useQuery({
     queryKey: ['category'],
     queryFn: () => fetchCategoryData()
-  });
-
-  // react-query : 서버에서 받아온 데이터 캐싱, 변수에 저장
-  const { data: deliveryData } = useQuery({
-    queryKey: ['delivery'],
-    queryFn: () => fetchDeliveryData()
   });
 
   const { data: orderedData } = useQuery({

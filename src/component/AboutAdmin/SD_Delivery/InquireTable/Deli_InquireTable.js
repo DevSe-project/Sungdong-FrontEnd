@@ -4,7 +4,7 @@ import { useModalActions, useModalState } from '../../../../Store/DataStore';
 import styles from './Deli_InquireTable.module.css';
 import InvoiceModal from '../Modal/InvoiceModal';
 import DeliveryStateModal from '../Modal/DeliveryStateModal';
-import axios from "axios";
+import axios from '../../../../axios';
 import { GetCookie } from '../../../../customFn/GetCookie';
 
 
@@ -17,50 +17,39 @@ export default function Deli_InquireTable() {
     const { selectedModalOpen } = useModalActions();
 
     // Fetch data
-    const { isLoading: deliveryLoading, isError: deliveryError, data: delivery } = useQuery({ queryKey: ['delivery'] });
-    const { isLoading: orderedLoading, isError: orderedError, data: ordered } = useQuery({ queryKey: ['ordered'] });
-    const { isLoading: productLoading, isError: productError, data: product } = useQuery({ queryKey: ['data'] });
+    // const { isLoading: deliveryLoading, isError: deliveryError, data: delivery } = useQuery({ queryKey: ['delivery'] });
+    // const { isLoading: orderedLoading, isError: orderedError, data: ordered } = useQuery({ queryKey: ['ordered'] });
+    // const { isLoading: productLoading, isError: productError, data: product } = useQuery({ queryKey: ['data'] });
 
     // 게시물 데이터와 페이지 번호 상태 관리    
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(3);
-    const [matchedData, setMatchedData] = useState([]);
 
     // FetchData
-
+    const fetchDeliveryData = async () => {
+        try {
+            const token = GetCookie('jwt_token');
+            const response = await axios.get(`/delivery/dlAll`,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    }
+                }
+            )
+            console.log('배송 데이터 불러오기에 성공했습니다.');
+            return response.data
+        } catch (error) {
+            throw new Error('배송 데이터 불러오기 중 오류가 발생하였습니다.');
+        }
+    }
+    const { isLoading, isError, error, data: deliveryData } = useQuery({
+        queryKey: [`delivery`],
+        queryFn: fetchDeliveryData
+    })
 
     // 업데이트된 데이터의 체크 상태를 관리하는 state
     const [checkedItems, setCheckedItems] = useState([]);
-
-    // 업데이트 함수 호출
-    useEffect(() => {
-        if (ordered && delivery && product) {
-            updateMatchedData();
-        }
-    }, [currentPage, ordered, delivery, product]);
-
-    // (Effect연결함수) 상태 업데이트를 위한 함수
-    const updateMatchedData = () => {
-        // 해당 데이터가 모두 불러와졌을 때만 함수 실행, 하나라도 데이터가 로딩되지 않았다면 함수 종료
-        if (!ordered || !delivery || !product) {
-            return;
-        }
-        // ordered와 delivery, product 매칭
-        const finalMatchedData = ordered.map(orderItem => {
-            const deliveryItem = delivery.find(
-                deliveryItem => deliveryItem.orderId === orderItem.id
-            );
-            const productItem = product.find(
-                productItem => productItem.id === orderItem.ProductId
-            );
-
-            console.log("update");
-            return { ...orderItem, ...deliveryItem, ...productItem };
-        });
-
-        setMatchedData(finalMatchedData);
-        console.log("render");
-    };
 
     // 배송상태 파싱
     function parseDeliveryState(val) {
@@ -103,7 +92,7 @@ export default function Deli_InquireTable() {
 
         if (checked) {
             // 전체 선택 클릭 시 데이터의 모든 아이템(id)를 담은 배열로 checkItems 상태 업데이트
-            let idArray = getCurrentPagePosts()?.map((item) => item.orderId);
+            let idArray = getCurrentPagePosts()?.map((item) => item.order_id);
             setCheckedItems(idArray);
         } else {
             // 모두 체킹 해제
@@ -114,13 +103,13 @@ export default function Deli_InquireTable() {
 
 
     // 체크박스 개별 업데이트
-    function handlePerCheckbox(checked, orderID) {
+    function handlePerCheckbox(checked, order_id) {
         if (checked) {
             // 단일 선택 시 체크된 아이템을 배열에 추가
-            setCheckedItems(prev => [...prev, orderID]);
+            setCheckedItems(prev => [...prev, order_id]);
         } else {
             // 단일 선택 해제 시 체크된 아이템을 제외한 배열 (필터)
-            setCheckedItems(checkedItems.filter((el) => el !== orderID));
+            setCheckedItems(checkedItems.filter((el) => el !== order_id));
         }
     }
 
@@ -128,11 +117,11 @@ export default function Deli_InquireTable() {
 
     // 현재 페이지에 해당하는 게시물 목록 가져오기
     const getCurrentPagePosts = () => {
-        if (!matchedData) {
+        if (!deliveryData) {
             return [];
         }
         const startIndex = (currentPage - 1) * itemsPerPage;
-        return matchedData.slice(startIndex, startIndex + itemsPerPage);
+        return deliveryData.slice(startIndex, startIndex + itemsPerPage);
     };
 
 
@@ -147,11 +136,11 @@ export default function Deli_InquireTable() {
 
 
     // 삭제
-    const deleteData = async (orderId) => {
+    const deleteData = async (order_id) => {
         try {
             const token = GetCookie('jwt_token');
             const response = await axios.delete(`/delivery`,
-                JSON.stringigy(orderId),
+                JSON.stringigy(order_id),
                 {
                     headers: {
                         "Content-Type": "application/json",
@@ -182,8 +171,8 @@ export default function Deli_InquireTable() {
 
         try {
             // 선택된 아이템을 반복하여 삭제 작업을 수행합니다.
-            for (const orderId of checkedItems) {
-                await deleteDataMutation.mutateAsync(orderId);
+            for (const order_id of checkedItems) {
+                await deleteDataMutation.mutateAsync(order_id);
             }
 
             // 삭제 작업이 완료되면 refetch를 통해 데이터를 다시 불러올 수 있습니다.
@@ -202,18 +191,18 @@ export default function Deli_InquireTable() {
 
 
     // 데이터 로딩 중 또는 에러 발생 시 처리
-    if (deliveryLoading || orderedLoading || productLoading) {
+    if (isLoading) {
         return <p>Loading...</p>;
     }
-    if (deliveryError || orderedError || productError) {
-        return <p>Error fetching data</p>;
+    if (isError) {
+        return <p>{error.message}</p>;
     }
 
 
 
     return (
         <div style={{ width: '100%' }}>
-            {matchedData ?
+            {deliveryData ?
                 <div className={styles.body}>
                     {/* Header */}
                     <div className='MediumHeader'>
@@ -280,37 +269,35 @@ export default function Deli_InquireTable() {
                         </thead>
                         {/* 데이터 맵핑 */}
                         <tbody>
-                            {matchedData &&
+                            {deliveryData &&
                                 getCurrentPagePosts()?.map((item, index) => (
                                     <tr key={index}>
                                         {/* 체크박스 */}
                                         <td>
                                             <input type='checkbox'
-                                                checked={checkedItems.includes(item.orderId) ? true : false}
-                                                onChange={(e) => handlePerCheckbox(e.target.checked, item.orderId)} />
+                                                checked={checkedItems.includes(item.order_id) ? true : false}
+                                                onChange={(e) => handlePerCheckbox(e.target.checked, item.order_id)} />
                                         </td>
                                         {/* 주문번호 */}
-                                        <td>{item.orderId}</td>
+                                        <td>{item.order_id}</td>
                                         {/* 택배사 */}
-                                        <td>{item.deliverySelect}</td>
+                                        <td>{item.delivery_selectedCor}</td>
                                         {/* 송장 번호 */}
                                         <td>{item.delivery_num}</td>
                                         {/* 배송상태 */}
-                                        <td>{parseDeliveryState(item.deliveryStatus)}</td>
+                                        <td>{parseDeliveryState(item.delivery_state)}</td>
                                         {/* 주문일자 */}
-                                        <td>{item.order_Date}</td>
+                                        <td>{item.order_date}</td>
                                         {/* 상품번호 */}
-                                        <td>{item.ProductId}</td>
+                                        <td>{item.product_id}</td>
                                         {/* 미니 이미지 */}
-                                        <td>{item.image.mini}</td>
+                                        <td>{item.product_image_mini}</td>
                                         {/* 상품명 */}
-                                        <td>{item.title}</td>
+                                        <td>{item.product_title}</td>
                                         {/* 옵션 상세 - 선택 옵션이 있을 경우만 표시*/}
                                         <td>{item.optionSelected ? item.optionSelected : "-"}</td>
                                         {/* 가격 */}
-                                        <td>{item.price}</td>
-                                        {/* 할인률 */}
-                                        <td>{item.discount === 0 ? item.price : item.price - (item.price * item.discount / 100)}</td>
+                                        <td>{item.order_payAmount}</td>
                                     </tr>
                                 ))}
                         </tbody>
@@ -328,7 +315,7 @@ export default function Deli_InquireTable() {
                         </button>
                         <div className={styles.currentPage}> {currentPage} </div>
                         <button className='white_button' onClick={() => {
-                            if (matchedData.length > currentPage * 5) {
+                            if (deliveryData.length > currentPage * 5) {
                                 setCurrentPage(currentPage + 1);
                             } else {
                                 alert("다음 페이지가 없습니다.");
@@ -344,9 +331,9 @@ export default function Deli_InquireTable() {
                             <DeliveryStateModal
                                 checkedItems={checkedItems}
                                 setCheckedItems={setCheckedItems}
-                                matchedData={matchedData}
-                                setMatchedData={setMatchedData}
-                                updateAllState={updateAllState} />
+                                updateAllState={updateAllState}
+                                deliveryData={deliveryData}
+                            />
                             :
                             null
                     }
@@ -357,9 +344,9 @@ export default function Deli_InquireTable() {
                             <InvoiceModal
                                 checkedItems={checkedItems}
                                 setCheckedItems={setCheckedItems}
-                                matchedData={matchedData}
-                                setMatchedData={setMatchedData}
-                                parseDeliveryState={parseDeliveryState} />
+                                parseDeliveryState={parseDeliveryState}
+                                deliveryData={deliveryData}
+                            />
                             :
                             null
                     }
