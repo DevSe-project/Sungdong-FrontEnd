@@ -4,15 +4,14 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useBasketList, useListActions } from '../../Store/DataStore';
 import { useQuery } from '@tanstack/react-query';
-export function RelatedData(props) {
+import { GetCookie } from '../../customFn/GetCookie';
+export function RelatedData({detailData}) {
 
   const { isLoading, isError, error, data } = useQuery({queryKey:['data']});
 
   const basketList = useBasketList();
   const { setBasketList } = useListActions();
   const navigate = useNavigate();
-
-  const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'));
 
   // 게시물 데이터와 페이지 번호 상태 관리    
   const [currentPage, setCurrentPage] = useState(1);
@@ -28,24 +27,19 @@ export function RelatedData(props) {
 
   //옵션 선택 state
   const [optionSelected, setOptionSelected] = useState(relatedList.map(() => ""));
-  // 장바구니 복사
-  const copyList = [...basketList];
-
-  // userId가 같은 항목만 필터링
-  const onlyUserData = copyList.filter((item)=> item.userId === inLogin.id);
 
   // relatedList 데이터 삽입
   useEffect(() => {
-    if (data && props.detailData) {
+    if (data && detailData) {
       const filterList = data.filter((item) =>
-      item.category.main === props.detailData.category.main);
+      item.category_id === detailData.category_id);
       const addCntList = filterList.map((item,index) => ({
         ...item,
         listId : index,
       }));
       setRelatedList(addCntList);
     }
-  }, [data, props.detailData]);
+  }, [data, detailData]);
 
   // 아이템 클릭 핸들러
   const handleItemClick = (itemId) => {
@@ -81,7 +75,7 @@ export function RelatedData(props) {
 
     if (lengthTarget >= 0 && lengthTarget.length <= 3) {
       const updatedItems = relatedList.map((item) => {
-        if (item.id === prevItem.id) {  
+        if (item.product_id === prevItem.product_id) {  
           return { ...item, cnt: lengthTarget };
         }
       return item; // 다른 아이템은 그대로 반환
@@ -93,7 +87,7 @@ export function RelatedData(props) {
   // 수량 DOWN
   function handleDelItem(prevItem) {
     const updatedItems = relatedList.map((item) => {
-      if (item.id === prevItem.id) {
+      if (item.product_id === prevItem.product_id) {
         if (item.cnt > 1) {
           return { ...item, cnt: parseInt(item.cnt) - 1 };
         } else {
@@ -128,7 +122,7 @@ export function RelatedData(props) {
   // 장바구니 담기 함수
   function basketRelatedData() {
     // 유효성 체크
-    if(!props.login){
+    if(GetCookie('jwt_token') === null){
       alert("로그인 후 이용가능한 서비스입니다.")
       navigate("/login");
       return;
@@ -145,39 +139,12 @@ export function RelatedData(props) {
     return;
 }
   
-    // 중복확인
-    const selectedItemsInfo = selectedItems.map((item) => ({
-      id: item.id,
-      option: optionSelected[item.listId],
-    }));
-  
-    const isDuplicate = selectedItemsInfo.some((selectedItemsInfo) =>
-    onlyUserData.some((basketItem) =>
-        basketItem.id === selectedItemsInfo.id &&
-        basketItem.optionSelected === selectedItemsInfo.option
-      )
-    );
-  
-    if (isDuplicate) {
-      const findDuplicate = onlyUserData.filter((item) =>
-        selectedItemsInfo.some((selectedItemInfo) =>
-          item.id === selectedItemInfo.id &&
-          item.optionSelected === selectedItemInfo.option
-        )
-      );
-  
-      const duplicateTitles = findDuplicate.map((item) => item.title).join(", ");
-      alert(`이미 장바구니에 추가된 상품이 있습니다. 
-        (중복된 상품 : ${duplicateTitles})`);
-      return;
-    }
-  
     // 옵션 선택한 경우에만 option 객체로 추가
     const basketProductsToAdd = selectedItems.map((item) => {
       if (item.option && optionSelected[item.listId] !== (undefined || null)) {
-        return { ...item, userId: inLogin.id, optionSelected: optionSelected[item.listId] };
+        return { ...item, optionSelected: optionSelected[item.listId] };
       }
-      return { ...item,  userId: inLogin.id };
+      return { ...item};
     });
   
     setBasketList([...basketList, ...basketProductsToAdd]);
@@ -191,6 +158,28 @@ export function RelatedData(props) {
     newOptionSelected[index] = e.target.value;
     setOptionSelected(newOptionSelected);
   }
+
+  const optionCreator = (item) => {
+    let options = [];
+    for(let i = 0; i<10; i++){
+      options.push(item[`option${i}`])
+    }
+    return(
+      <select>
+      {options.length > 0 && options.map((option, key) => {
+      return (
+        option !== "" &&
+          <option key={key} value={option}>
+            {(option !== null || option !== "" )&& option}
+          </option>
+        )
+      })}
+      </select>
+    )
+  }
+
+
+
   if(isLoading){
     return <p>Loading..</p>;
   }
@@ -231,33 +220,34 @@ export function RelatedData(props) {
             ? getCurrentPagePosts().map((item, index)=> (
             <React.Fragment key={index}>
               <tr className={styles.list}>
-                <td><img src={item.image.mini} alt='이미지'/></td>
-                <td>{item.id}</td>
+                <td><img src={item.product_image_mini} alt='이미지'/></td>
+                <td>{item.product_id}</td>
                 <td 
                   className={styles.detailView}
-                  onClick={()=>navigate(`/detail/${item.id}`)}>
+                  onClick={()=>navigate(`/detail/${item.product_id}`)}>
                   상세보기
                 </td>
-                <td className={styles.detailView} onClick={()=>handleItemClick(item.id)}>
-                  <h5 style={{fontSize: '1.1em', fontWeight: '550'}}>{item.title}</h5>
+                <td className={styles.detailView} onClick={()=>handleItemClick(item.product_id)}>
+                  <h5 style={{fontSize: '1.1em', fontWeight: '550'}}>{item.product_title}</h5>
                 </td>
                 <td>EA</td>
-                <td>\{item.price.toLocaleString()}</td>
+                <td>\{item.product_price.toLocaleString()}</td>
                 <td style={{fontWeight: '750'}}>
-                {item.discount
-                  ? `\\${ (item.price - ((item.price/100)*item.discount)).toLocaleString()}`
-                  : `\\${item.price.toLocaleString()}`}
+                {item.product_discount
+                  ? `${(item.product_price - (item.product_price / 100) * item.product_discount)
+                    .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
+                  : `${item.product_price.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
                 </td>
                 <td 
                   className={styles.detailView}
-                  onClick={()=>handleItemClick(item.id)}>
-                  더보기&nbsp;{selectRelatedData === item.id  
+                  onClick={()=>handleItemClick(item.product_id)}>
+                  더보기&nbsp;{selectRelatedData === item.product_id  
                   ? <i className="fa-sharp fa-solid fa-caret-up"></i>
                   : <i className="fa-sharp fa-solid fa-caret-down"></i>}&nbsp;
                 </td>
               </tr>
               {/* Modal */}
-              {selectRelatedData === item.id && (
+              {selectRelatedData === item.product_id && (
               <tr>
                 <td colSpan="8">
                   <table className={styles.colTable}>
@@ -289,23 +279,10 @@ export function RelatedData(props) {
                     <tbody>
                       <tr>
                         <td>
-                          {item.brand}
+                          {item.product_brand}
                         </td>
                         <td>
-                          {item.option 
-                          ?                   
-                          <div style={{ width: '100%', display: 'flex', alignItems:'center', textAlign: 'center', justifyContent: 'center'}}>
-                            <select 
-                            value={optionSelected[index] || ""}
-                            onChange={(e)=>{optionChange(e, index)}}
-                            className={styles.selectSize}
-                            >
-                              <option value="" disabled>옵션 선택</option>
-                              {item.option.map((item, index) =>
-                              <option key={index} value={item.value}>{item.value}</option>
-                              )}
-                            </select>
-                          </div>  : '없음'}
+                          {optionCreator(item)}
                         </td>
                         {/* 수량 변경 */}
                         <td className={styles.countTd}>
@@ -324,18 +301,19 @@ export function RelatedData(props) {
                           </button>
                         </td>
                         <td>
-                          {item.discount}%
+                          {item.product_discount}%
                         </td>
                         <td>
-                          {item.discount
-                          ? `\\${(((item.price/100)*item.discount)*item.cnt).toLocaleString()}`
-                          : 0}
+                          {item.product_discount
+                          ? `${((item.product_price / 100) * item.product_discount)
+                          .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
+                          : '0'.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                         </td>
                         <td style={{fontWeight: '750'}}> 
-                        {item.discount
-                        ? `\\${ ((item.price * item.cnt) - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}`
-                        : `\\${(item.price * item.cnt).toLocaleString()}`
-                        }
+                        {item.product_discount
+                        ? `${(item.product_price - (item.product_price / 100) * item.product_discount)
+                          .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
+                        : `${item.product_price.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
                         </td>
                         <td>
                           <input 

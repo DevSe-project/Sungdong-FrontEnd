@@ -29,6 +29,38 @@ export function AdminDetail() {
     };
   }, []);
 
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [imageUrl, setImageUrl] = useState('');
+
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
+
+  const uploadImage = async () => {
+    if (selectedFile) {
+      try {
+        const formData = new FormData();
+        formData.append('image', selectedFile);
+  
+        const response = await axios.post('/product/upload', formData, {
+          withCredentials: false,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+  
+        // 성공 시 추가된 상품 정보를 반환합니다.
+        setImageUrl(response.data.imageUrl);
+        setProduct("product_image_original", response.data.imageUrl)
+      } catch (error) {
+        // 실패 시 예외를 throw합니다.
+        console.error('이미지 업로드 에러:', error);
+      }
+    } else {
+      console.error('이미지를 선택하세요.');
+    }
+  };
+
   const handleCategoryClick = (categoryType, category) => {
     setSelectedCategory(prevState => ({
       ...prevState,
@@ -202,7 +234,11 @@ export function AdminDetail() {
 
               {/* 상품 이미지 부분 */}
               <div className={styles.headLeft}>
-                <input type="file" className={styles.thumnail}/>
+                <img id="productImage" src={imageUrl} alt="상품 이미지" className={styles.thumnail}/>
+                <div>
+                  <input type="file" id="imageInput" accept="image/*" onChange={handleFileChange} />
+                  <button onClick={uploadImage}>이미지 업로드</button>
+                </div>
               </div>
 
 

@@ -29,7 +29,7 @@ export function TopBanner(props) {
       )
       queryClient.clear();
       alert(response.data.message);
-      window.location.reload()
+      window.location.reload();
       // 성공 시 추가된 상품 정보를 반환합니다.
     } catch (error) {
         // 실패 시 예외를 throw합니다.

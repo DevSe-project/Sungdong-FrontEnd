@@ -6,7 +6,7 @@ import styles from './Product.module.css';
 
 export function Product() {
   const navigate = useNavigate();
-  const { isLoading, isError, error, data } = useQuery({ queryKey: ['data'] });
+  const { isLoading, isError, error, data:data } = useQuery({ queryKey: ['data'] });
   const { data:categoryData } = useQuery({queryKey:['category']});
 
 
@@ -57,7 +57,7 @@ export function Product() {
                 {item.product_discount ? (
                   <div className={styles.discountSection}>
                     <p className={styles.discountText}>
-                    {item.product_price.toLocaleString('ko-KR',{ style: 'currency', currency: 'KRW' })}
+                    {parseInt(item.product_price).toLocaleString('ko-KR',{ style: 'currency', currency: 'KRW' })}
                     </p>
                     <p className={styles.discountText}>
                       {item.product_discount ? (
@@ -76,7 +76,7 @@ export function Product() {
                 ) : (
                   <h3>{item.product_price.toLocaleString('ko-KR',{ style: 'currency', currency: 'KRW' })}</h3>
                 )}
-                <span>{[categoryData.find((category) => category.category_id === item.parentsCategory_id)?.name, categoryData.find((category) => category.category_id === item.category_id)?.name].filter(Boolean).join(' - ')}</span>
+                <span>{categoryData && [categoryData.find((category) => category.category_id === item.parentsCategory_id)?.name, categoryData.find((category) => category.category_id === item.category_id)?.name].filter(Boolean).join(' - ')}</span>
               </div>
             </div>
           </div>

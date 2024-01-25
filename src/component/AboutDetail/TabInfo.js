@@ -1,14 +1,14 @@
 import styles from './TabInfo.module.css'
 import React from 'react';
 import { RelatedData } from './RelatedData'
-export function TabInfo(props){
+export function TabInfo({detailData}){
 
   // 상품정보 데이터
   const productInfo = [
-    {label: '상품번호', value: props.detailData.id},
-    {label: '브랜드', value: props.detailData.brand},
-    {label: '원산지', value: props.detailData.madeIn},
-    {label: '상품상태', value: props.detailData.new ? '새 상품' : '중고 상품'},
+    {label: '상품번호', value: detailData.product_id},
+    {label: '브랜드', value: detailData.product_brand},
+    {label: '원산지', value: detailData.product_madeIn},
+    {label: '상품상태', value: detailData.product_state},
   ]
 
   const returnInfo = [
@@ -42,7 +42,7 @@ export function TabInfo(props){
       <div className={styles.reviewHeader}>
       <h3 style={{borderBottom: '3px solid #cc0000', marginBottom: '1em'}}>상품 설명</h3>
         <p>
-          {props.detailData.content}
+          {detailData.product_content}
         </p>
       </div>
     </div>
@@ -76,7 +76,7 @@ export function TabInfo(props){
           <p>해당 상품과 관련된 상품입니다.</p>
         </div>
       </div>
-      <RelatedData decryptData={props.decryptData} login={props.login} setLogin={props.setLogin} detailData={props.detailData}/>
+      <RelatedData detailData={detailData}/>
     </div>
   </div>
   )
