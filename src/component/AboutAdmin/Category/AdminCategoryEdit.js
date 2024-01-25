@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useProduct, useProductActions } from '../../../Store/DataStore';
 import { GetCookie } from '../../../customFn/GetCookie';
-import axios from 'axios';
+import axios from '../../../axios';
 export function AdminCategoryEdit(props){
   const [middleCategory, setMiddleCategory] = useState([]);
   const [lowCategory, setLowCategory] = useState([]);
@@ -20,12 +20,19 @@ export function AdminCategoryEdit(props){
     const loadData = ()=> {
       if(props.data){
         //입력된 id과 data내부의 id값 일치하는 값 찾아 변수 선언
-        const data = props.data.find((product)=>product.id===id);
+        const data = props.data.find((product)=>product.product_id===id);
         return data;
       } else {
         return <div>데이터를 불러오는 중이거나 상품을 찾을 수 없습니다.</div>;
       }
     }
+
+    useEffect(() => {
+      return () => {
+        window.location.reload();
+        // 컴포넌트가 언마운트될 때 Product 상태 리셋 및 새로고침
+      };
+    }, []);
 
     //데이터 불러오기 이전 loadData()함수 실행 금지
     useEffect(() => {
@@ -41,13 +48,11 @@ export function AdminCategoryEdit(props){
     const sendCategoryToServer = async() => {
       try {
         const token = GetCookie('jwt_token');
-        const response = await axios.put("/product", 
+        const response = await axios.put("/product/categoryEdit", 
           JSON.stringify({
-            category: {
-              id: categoryData.low,
-              pid: categoryData.medium,
-              name: categoryData.find((item) => item.id === selectedCategory.low)?.name
-            }
+            product_id: product.product_id,
+            category_id: selectedCategory.low,
+            parentsCategory_id: selectedCategory.medium
           }),
           {
             headers : {
@@ -64,23 +69,24 @@ export function AdminCategoryEdit(props){
       }
     }
     //상품 수정 함수
-    const { editCategoryMutation } = useMutation({mutationFn: sendCategoryToServer,
-      onSuccess: (data) => {
-        // 메세지 표시
-        alert(data.message);
-        console.log('카테고리가 추가/변경 되었습니다.', data);
-        // 상태를 다시 불러와 갱신합니다.
-        queryClient.invalidateQueries(['data']);
-      },
-      onError: (error) => {
-        // 상품 추가 실패 시, 에러 처리를 수행합니다.
-        console.error('카테고리를 추가/변경 하는 중 오류가 발생했습니다.', error);
-      },
-    })
+    const { mutate:editCategoryMutation } = useMutation({mutationFn: sendCategoryToServer})
 
     function handleConfirmCategory(){
       if(selectedCategory.low !== null && selectedCategory.low !== ""){
-        editCategoryMutation.mutate();
+        editCategoryMutation({},{
+          onSuccess: (data) => {
+            // 메세지 표시
+            alert(data.message);
+            console.log('해당 상품의 카테고리가 추가/변경 되었습니다.', data);
+            // 상태를 다시 불러와 갱신합니다.
+            queryClient.invalidateQueries(['data']);
+            navigate("/adminMain/category")
+          },
+          onError: (error) => {
+            // 상품 추가 실패 시, 에러 처리를 수행합니다.
+            console.error('카테고리를 추가/변경 하는 중 오류가 발생했습니다.', error);
+          },
+        });
       } else {
         alert("소 카테고리까지 모두 선택 후 변경하여 주십시오!")
       }
@@ -94,16 +100,16 @@ export function AdminCategoryEdit(props){
     };
 
     function FilteredHighCategoryData() {
-      return categoryData.filter(element => /^[A-Z]$/.test(element.id))
+      return categoryData.filter(element => /^[A-Z]$/.test(element.category_id))
     }
 
     function FilteredMiddleCategoryData(itemId) {
-      const newData = categoryData.filter(element => new RegExp(`^${itemId}[a-z]$`).test(element.id));
+      const newData = categoryData.filter(element => new RegExp(`^${itemId}[a-z]$`).test(element.category_id));
       setMiddleCategory(newData);
     }
 
     function FilteredLowCategoryData(itemId) {
-      const newData = categoryData.filter(element => new RegExp(`^${itemId}[1-9]|[1-9][0-9]|100.{3,}$`).test(element.id));
+      const newData = categoryData.filter(element => new RegExp(`^${itemId}[1-9]|[1-9][0-9]|100.{3,}$`).test(element.category_id));
       setLowCategory(newData);
     }
 
@@ -140,19 +146,20 @@ export function AdminCategoryEdit(props){
               {props.data 
               ? 
                 <tr className={styles.list}>
-                  <td><img src={product.image_mini} alt='이미지'></img></td>
-                  <td>{product.id}</td>
-                  <td style={{fontWeight: 650}}> {product.category.main} - {product.category.sub} </td>
-                  <td>
-                    <h5 style={{fontSize: '1.1em', fontWeight: '550'}}>{product.title}</h5>
+                  <td><img src={product.product_image_mini} alt='이미지'></img></td>
+                  <td>{product.product_id}</td>
+                  <td style={{fontWeight: 650}}>
+                  {[categoryData.find((category) => category.category_id === product.parentsCategory_id)?.name, categoryData.find((category) => category.category_id === product.category_id)?.name].filter(Boolean).join(' - ')}  
                   </td>
-                  <td>\{product.price.toLocaleString()}</td>
+                  <td>
+                    <h5 style={{fontSize: '1.1em', fontWeight: '550'}}>{product.product_title}</h5>
+                  </td>
+                  <td>{product.product_price.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}</td>
                   <td style={{fontWeight: '750'}}>
-                    {product.finprice
-                    ? product.discount
-                    ? `\\${product.finprice - (((product.price/100)*product.discount)).toLocaleString()}`
-                    : `\\${product.finprice.toLocaleString()}`
-                    : `\\${product.price.toLocaleString()}`}
+                  {product.product_discount
+                  ? `${(product.product_price - (product.product_price / 100) * product.product_discount)
+                    .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
+                  : `${product.product_price.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
                   </td>
                 </tr>
               : <tr><td>로딩중</td></tr>
@@ -164,7 +171,7 @@ export function AdminCategoryEdit(props){
             <div style={{width: '100%', borderBottom: '3px dotted lightgray', marginBottom: '3em'}}>
               <h1>현재 카테고리</h1>
               <p style={{fontSize: '2em', fontWeight: '750'}}>
-                {product.category.main} - {product.category.sub}
+              {[categoryData.find((category) => category.category_id === product.parentsCategory_id)?.name, categoryData.find((category) => category.category_id === product.category_id)?.name].filter(Boolean).join(' - ')}
               </p>
             </div>
             <h1>변경할 카테고리</h1>
@@ -172,7 +179,7 @@ export function AdminCategoryEdit(props){
               <h4 style={{fontSize: '1.1em', fontWeight: '750', marginTop: '1em'}}>
                 선택된 카테고리 : 
                 <span style={{color: '#CC0000', fontWeight: '650', margin: '0.5em'}}>
-                  {[categoryData.find((item) => item.id === selectedCategory.big)?.name, categoryData.find((item) => item.id === selectedCategory.medium)?.name, categoryData.find((item) => item.id === selectedCategory.low)?.name].filter(Boolean).join(' - ')}
+                  {[categoryData.find((item) => item.category_id === selectedCategory.big)?.name, categoryData.find((item) => item.category_id === selectedCategory.medium)?.name, categoryData.find((item) => item.category_id === selectedCategory.low)?.name].filter(Boolean).join(' - ')}
                 </span>
               </h4>
               <div style={{display: 'flex', gap: '1em', marginTop: '1em', alignItems: 'center'}}>
@@ -182,14 +189,14 @@ export function AdminCategoryEdit(props){
                     && FilteredHighCategoryData().map((item, index)=> (
                     <div onClick={()=> {
                       setLowCategory([]);
-                      handleCategoryClick('big', item.id);
+                      handleCategoryClick('big', item.category_id);
                       handleCategoryClick('medium', '');
                       handleCategoryClick('low', '');
-                      FilteredMiddleCategoryData(item.id)
+                      FilteredMiddleCategoryData(item.category_id)
                     }} 
                     key={index} 
                     className={styles.categoryInner}
-                    style={{backgroundColor: selectedCategory.big === item.id && 'lightgray'}}
+                    style={{backgroundColor: selectedCategory.big === item.category_id && 'lightgray'}}
                     >
                       {item.name}
                       <i className="far fa-chevron-right" style={{color: 'gray'}}/>
@@ -202,12 +209,12 @@ export function AdminCategoryEdit(props){
                     {middleCategory != null && middleCategory.map((item, index) => (
                       <div 
                         onClick={()=> {
-                          FilteredLowCategoryData(item.id)
-                          handleCategoryClick('medium', item.id);
+                          FilteredLowCategoryData(item.category_id)
+                          handleCategoryClick('medium', item.category_id);
                           handleCategoryClick('low', '');
                         }} 
                         key={index} 
-                        style={{backgroundColor: selectedCategory.medium === item.id && 'lightgray'}}
+                        style={{backgroundColor: selectedCategory.medium === item.category_id && 'lightgray'}}
                         className={styles.categoryInner}>
                       {item.name}
                       <i className="far fa-chevron-right" style={{color: 'gray'}}/>
@@ -221,9 +228,9 @@ export function AdminCategoryEdit(props){
                       <div 
                       key={index} 
                       className={styles.categoryInner}
-                      style={{backgroundColor: selectedCategory.low === item.id && 'lightgray'}}
+                      style={{backgroundColor: selectedCategory.low === item.category_id && 'lightgray'}}
                       onClick={()=> {
-                        handleCategoryClick('low', item.id);
+                        handleCategoryClick('low', item.category_id);
                       }}
                       >
                       {item.name}

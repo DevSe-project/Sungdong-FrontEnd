@@ -111,8 +111,8 @@ export function AdminTabInfo({setMiddleCategory, setLowCategory, setSelectedCate
     {/* 탭 상품 정보 */}
     <h5 style={{fontWeight: '650'}}>상품 정보</h5>
     <div className={styles.productDetail}>
-    {productInfo.map((item) => 
-      <div className={styles.productDetailInner}>
+    {productInfo.map((item, index) => 
+      <div key={index} className={styles.productDetailInner}>
         <div className={styles.productDetail_label}>
           <p>{item.label}</p>
         </div>

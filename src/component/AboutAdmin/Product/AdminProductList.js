@@ -7,7 +7,7 @@ import styles from './AdminProductList.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useProductFilter } from '../../../Store/DataStore';
-import axios from 'axios';
+import axios from '../../../axios';
 export function AdminProductList(){
   
   //Td 선택시 Modal State 변수
@@ -48,7 +48,7 @@ export function AdminProductList(){
 
   const fetchFilteredProducts = async (filter) => {
     try {
-      const response = await axios.get(`/data`, { params: filter });
+      const response = await axios.get(`/product`, { params: filter });
       return response.data;
     } catch (error) {
       throw new Error('상품 데이터를 불러오던 중 오류가 발생했습니다.');
@@ -57,7 +57,7 @@ export function AdminProductList(){
 
   const fetchDeletedProducts = async(productId) => {
     try {
-      const response = await axios.delete(`/data/${productId}`);
+      const response = await axios.delete(`/product/delete/${productId}`);
       return response.data;
     } catch (error) {
       throw error;
@@ -65,16 +65,7 @@ export function AdminProductList(){
   }
 
   // 상품 삭제를 처리하는 뮤테이션
-  const deleteProductMutation = useMutation({mutationFn: fetchDeletedProducts,
-    onSuccess: () => {
-      // 상품 삭제 성공 시 상품 목록을 다시 불러옴
-      queryClient.invalidateQueries(['data']);
-    },
-    onError: (error) => {
-      // 상품 삭제 실패 시, 에러 처리를 수행합니다.
-      console.error('상품을 삭제 처리하는 중 오류가 발생했습니다.', error);
-    },
-  });
+  const {mutate:deleteProductMutation} = useMutation({mutationFn: fetchDeletedProducts})
 
 
   const handleSearch = () => {
@@ -83,7 +74,20 @@ export function AdminProductList(){
   };
 
   const handleDeleted = (item) => {
-    deleteProductMutation.mutate(item.id);
+    const isConfirmed = window.confirm('정말로 삭제하시겠습니까?');
+    if(isConfirmed){
+      deleteProductMutation(item.product_id,{
+        onSuccess: (data) => {
+          alert(data.message);
+          // 상품 삭제 성공 시 상품 목록을 다시 불러옴
+          queryClient.invalidateQueries(['data']);
+        },
+        onError: (error) => {
+          // 상품 삭제 실패 시, 에러 처리를 수행합니다.
+          console.error('상품을 삭제 처리하는 중 오류가 발생했습니다.', error);
+        },
+      });
+    }
   }
 
   const optionCreator = (item) => {
@@ -159,8 +163,8 @@ export function AdminProductList(){
                     <td>EA</td>
                     <td>
                       {item.product_discount
-                      ? `${(item.product_price - (item.product_price / 100) * item.product_discount)
-                      .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
+                      ? `${parseInt(item.product_price)
+                        .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
                       : '0'.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                     </td>
                     <td style={{fontWeight: '750'}}>
@@ -203,7 +207,7 @@ export function AdminProductList(){
                               공급가
                             </th>
                             <th>
-                              <button className={styles.button} onClick={()=>handleDeleted()}>삭제</button>
+                              <button className={styles.button} onClick={()=>handleDeleted(item)}>삭제</button>
                             </th>
                           </tr>
                         </thead>

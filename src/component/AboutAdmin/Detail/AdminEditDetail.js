@@ -192,8 +192,8 @@ export function AdminEditDetail() {
                         ? '할인율이 잘못 설정되었습니다.'
                         : `${(product.product_price - (product.product_price / 100) * product.product_discount)
                         .toLocaleString('ko-KR')}원`
-                      : `${product.product_price.toLocaleString('ko-KR')}원`}
-                    </span>
+                        : `${product.product_price.toLocaleString('ko-KR')}원`}
+                        </span>
                     </h4>
                   </div>
                 </h4>

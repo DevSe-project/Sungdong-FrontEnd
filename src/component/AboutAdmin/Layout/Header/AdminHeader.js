@@ -20,12 +20,12 @@ export function AdminHeader() {
         <div style={{ display: 'flex', gap: '2em', alignItems: 'center' }}>
 
           {/* Store로 링크(고객페이지) */}
-          <i class="fa-solid fa-shop"
+          <i className="fa-solid fa-shop"
             style={{ cursor: 'pointer', fontSize: '28px', color: 'rgb(50, 50, 50)' }}
             onClick={() => { navigate('/') }}></i>
 
           {/* 알림 아이콘 */}
-          <i class="fa-solid fa-bell" style={{ fontSize: '28px', cursor: 'pointer', color: 'rgb(50, 50, 50)' }}></i>
+          <i className="fa-solid fa-bell" style={{ fontSize: '28px', cursor: 'pointer', color: 'rgb(50, 50, 50)' }}></i>
           {/* 필터 */}
           <div
             onClick={() => setFilterModal(!filterModal)}

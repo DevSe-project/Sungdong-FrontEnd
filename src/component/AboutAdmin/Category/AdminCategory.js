@@ -215,24 +215,29 @@ export function AdminCategory(props){
                 ? getCurrentPagePosts().map((item, index)=> (
                 <React.Fragment key={index}>
                   <tr className={styles.list}>
-                    <td><img src={item.image.mini} alt='이미지'></img></td>
-                    <td>{item.category_id}</td>
-                    <td>{item.category.main} - {item.category.sub} </td>
-                    <td className={styles.detailView} onClick={()=>navigate(`/detail/${item.category_id}`)}>
-                      <h5 style={{fontSize: '1.1em', fontWeight: '550'}}>{item.title}</h5>
+                    <td><img src={item.product_image_mini} alt='이미지'></img></td>
+                    <td>{item.product_id}</td>
+                    <td style={{fontSize: '1em', fontWeight: '550'}}>
+                      {[categoryData.find((category) => category.category_id === item.parentsCategory_id)?.name, categoryData.find((category) => category.category_id === item.category_id)?.name].filter(Boolean).join(' - ')}
                     </td>
-                    <td>\{item.price.toLocaleString()}</td>
-                    <td style={{fontWeight: '750'}}>
-                      {item.finprice
-                      ? item.discount
-                      ? `\\${ (item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}`
-                      : `\\${item.finprice.toLocaleString()}`
-                      : `\\${item.price.toLocaleString()}`}
+                    <td className={styles.detailView} onClick={()=>navigate(`/detail/${item.product_id}`)}>
+                      <h5 style={{fontSize: '1.1em', fontWeight: '550'}}>{item.product_title}</h5>
+                    </td>
+                    <td>
+                      {item.product_discount
+                      ? `${parseInt(item.product_price)
+                      .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
+                      : '0'.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
+                    </td>                    <td style={{fontWeight: '750'}}>
+                    {item.product_discount
+                    ? `${(item.product_price - (item.product_price / 100) * item.product_discount)
+                      .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
+                    : `${item.product_price.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
                     </td>
                     <td 
                       className={styles.detailView}
                       >
-                      <button onClick={()=> navigate(`/adminMain/categoryEdit/${item.category_id}`)} className={styles.button}>변경</button>
+                      <button onClick={()=> navigate(`/adminMain/categoryEdit/${item.product_id}`)} className={styles.button}>변경</button>
                     </td>
                   </tr>
                   </React.Fragment>
