@@ -98,8 +98,22 @@ export default function App() {
 
   //데이터 fetch
   const fetchData = async () => {
-    const querySnapshot = await getDocs(collection(db, 'ProductData')); // 'ProductData'는 컬렉션 이름
-    return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    // const querySnapshot = await getDocs(collection(db, 'ProductData')); // 'ProductData'는 컬렉션 이름
+    // return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    try {
+      const response = await axios.get("/product/list",
+        {
+          headers: {
+            "Content-Type": "application/json",
+          }
+        }
+      )
+      // 성공 시 추가된 상품 정보를 반환합니다.
+      return response.data.data;
+    } catch (error) {
+      // 실패 시 예외를 throw합니다.
+      throw new Error('확인 중 오류가 발생했습니다.');
+    }
   };
 
   //카테고리 데이터 fetch
@@ -180,6 +194,11 @@ export default function App() {
     queryKey: ['notice'],
     queryFn: () => fetchNoticeData()
   })
+  
+  // const { data: users } = useQuery({
+  //   queryKey: ['users'],
+  //   queryFn: () => fetchUserData()
+  // })
 
 
 
@@ -227,11 +246,11 @@ export default function App() {
       setOrderData(OrderObj);
       setUserData(UserDataObj);
       setTodayTopicData(TodayTopicPostObj);
-      setCategoryData(CategoryDataObj);
+      // setCategoryData(CategoryDataObj);
     }, 1000)
 
     return () => clearTimeout(dataload)
-  }, [setOrderData, setUserData, setTodayTopicData, setCategoryData])
+  }, [setOrderData, setUserData, setTodayTopicData])
 
 
   useEffect(() => {

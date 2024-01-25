@@ -308,14 +308,15 @@ export const useErrTradeActions = () => useErrTradeStore((state) => state.action
 /* ----------------Product STORE---------------- */
 export const useProductStore = create((set) => ({
   product: {
-    productId: '',
-    title: '',
-    content: '',
-    price: '',
-    supply: 1,
-    discount: 0,
-    image_original: '',
-    image_mini: '',
+    product_id: '',
+    product_spec: '',
+    product_title: '',
+    product_content: '',
+    product_price: '',
+    product_supply: 1,
+    product_discount: 0,
+    product_image_original: '',
+    product_image_mini: '',
     option: {
       option0: '',
       option1: '',
@@ -333,9 +334,9 @@ export const useProductStore = create((set) => ({
       middleId: '',
       lowId: '',
     },
-    brand: '',
-    madeIn: '',
-    state: '',
+    product_brand: '',
+    product_madeIn: '',
+    product_state: '',
   },
   actions: {
     setProduct: (fieldName, value) =>
@@ -345,14 +346,15 @@ export const useProductStore = create((set) => ({
     resetProduct: () =>
       set({
         product: {
-          productId: '',
-          title: '',
-          content: '',
-          price: '',
-          supply: 1,
-          discount: 0,
-          image_original: '',
-          image_mini: '',
+          product_id: '',
+          product_spec: '',
+          product_title: '',
+          product_content: '',
+          product_price: '',
+          product_supply: 1,
+          product_discount: 0,
+          product_image_original: '',
+          product_image_mini: '',
           option: {
             option0: '',
             option1: '',
@@ -370,9 +372,9 @@ export const useProductStore = create((set) => ({
             middleId: '',
             lowId: '',
           },
-          brand: '',
-          madeIn: '',
-          state: '',
+          product_brand: '',
+          product_madeIn: '',
+          product_state: '',
         }
       }),
     setProductOption: (fieldName, value) =>

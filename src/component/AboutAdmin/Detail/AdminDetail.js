@@ -18,6 +18,7 @@ export function AdminDetail() {
   const [middleCategory, setMiddleCategory] = useState([]);
   const [lowCategory, setLowCategory] = useState([]);
   const { isLoading, isError, error, data:categoryData } = useQuery({queryKey:['category']});
+  
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -37,16 +38,16 @@ export function AdminDetail() {
 
 
   function FilteredHighCategoryData() {
-    return categoryData.filter(element => /^[A-Z]$/.test(element.id));
+    return categoryData.filter(element => /^[A-Z]$/.test(element.category_id));
   }
 
   function FilteredMiddleCategoryData(itemId) {
-    const newData = categoryData.filter(element => new RegExp(`^${itemId}[a-z]$`).test(element.id));
+    const newData = categoryData.filter(element => new RegExp(`^${itemId}[a-z]$`).test(element.category_id));
     setMiddleCategory(newData);
   }
 
   function FilteredLowCategoryData(itemId) {
-    const newData = categoryData.filter(element => new RegExp(`^${itemId}[1-9]|[1-9][0-9]|100.{3,}$`).test(element.id));
+    const newData = categoryData.filter(element => new RegExp(`^${itemId}[1-9]|[1-9][0-9]|100.{3,}$`).test(element.category_id));
     setLowCategory(newData);
   }
 
@@ -58,13 +59,13 @@ export function AdminDetail() {
     // 숫자가 아닌 문자를 제외하고 저장
     const numericValue = formattedValue.replace(/\D/g, '');
 
-    setProduct("price", numericValue);
+    setProduct("product_price", numericValue);
   }
 
   function AddDiscountFunc(discount){
     const numericValue = discount.replace(/\D/g, '');
     if(numericValue > -1 && numericValue <= 100) {
-      setProduct("discount", numericValue);
+      setProduct("product_discount", numericValue);
     }
     else{
       alert("할인율은 최소 0부터 100%까지 설정 가능합니다.");
@@ -86,7 +87,7 @@ export function AdminDetail() {
   function AddSupplyFunc(supplyCnt){
     const numericValue = supplyCnt.replace(/\D/g, '');
     if(numericValue > -1 && numericValue <= 999) {
-      setProduct("supply", numericValue);
+      setProduct("product_supply", numericValue);
     }
     else {
       alert("최소 1개부터 999개까지 재고 설정이 가능합니다.");
@@ -131,7 +132,7 @@ export function AdminDetail() {
             <h4 style={{fontSize: '1.1em', fontWeight: '750', marginTop: '1em'}}>
               선택된 카테고리 : 
               <span style={{color: '#CC0000', fontWeight: '650', margin: '0.5em'}}>
-              {[categoryData.find((item) => item.id === product.category.highId)?.name, categoryData.find((item) => item.id === product.category.middleId)?.name, categoryData.find((item) => item.id === product.category.lowId)?.name].filter(Boolean).join(' - ')}
+              {[categoryData.find((item) => item.category_id === product.category.highId)?.name, categoryData.find((item) => item.category_id === product.category.middleId)?.name, categoryData.find((item) => item.category_id === product.category.lowId)?.name].filter(Boolean).join(' - ')}
               </span>
             </h4>
             <div style={{display: 'flex', flexDirection: 'row', gap: '1em', marginTop: '1em', alignItems: 'center'}}>
@@ -141,13 +142,13 @@ export function AdminDetail() {
                     && FilteredHighCategoryData().map((item, index)=> (
                     <div onClick={()=> {
                       setLowCategory([]);
-                      handleCategoryClick('big', item.id);
-                      FilteredMiddleCategoryData(item.id);
-                      setProductCategory('highId', item.id);
+                      handleCategoryClick('big', item.category_id);
+                      FilteredMiddleCategoryData(item.category_id);
+                      setProductCategory('highId', item.category_id);
                       setProductCategory('middleId', '');
                       setProductCategory('lowId', '');
                     }} 
-                    style={{backgroundColor: selectedCategory.big === item.id && 'lightgray'}}
+                    style={{backgroundColor: selectedCategory.big === item.category_id && 'lightgray'}}
                     key={index} 
                     className={styles.categoryInner}
                     >
@@ -161,13 +162,13 @@ export function AdminDetail() {
                   <div style={{overflowY: 'auto'}}>
                     {middleCategory != null && middleCategory.map((item, index) => (
                       <div onClick={()=> {
-                        FilteredLowCategoryData(item.id)
-                        handleCategoryClick('medium', item.id);
-                        setProductCategory('middleId', item.id);
+                        FilteredLowCategoryData(item.category_id)
+                        handleCategoryClick('medium', item.category_id);
+                        setProductCategory('middleId', item.category_id);
                         setProductCategory('lowId', '');
                         }} 
                         key={index} 
-                        style={{backgroundColor: selectedCategory.medium === item.id && 'lightgray'}}
+                        style={{backgroundColor: selectedCategory.medium === item.category_id && 'lightgray'}}
                         className={styles.categoryInner}
                         >
                         {item.name}
@@ -181,10 +182,10 @@ export function AdminDetail() {
                     {lowCategory != null && lowCategory.map((item, index) => (
                       <div 
                         key={index} 
-                        style={{backgroundColor: selectedCategory.small === item.id && 'lightgray'}}
+                        style={{backgroundColor: selectedCategory.small === item.category_id && 'lightgray'}}
                         onClick={()=> {
-                          handleCategoryClick('small', item.id);
-                          setProductCategory('lowId', item.id);
+                          handleCategoryClick('small', item.category_id);
+                          setProductCategory('lowId', item.category_id);
                         }}
                         className={styles.categoryInner}
                         >
@@ -209,7 +210,8 @@ export function AdminDetail() {
               {/* 상품 정보(상품 이름, 가격) 부분 (삼항연산자 : 스켈레톤 처리) */}
               <div className={styles.headRight}>
                 <div className={styles.textBox}>
-                  <input style={{width: '20em'}}className={styles.input} onChange={(e)=>setProduct("title", e.target.value)} type='text' placeholder='상품명을 입력해주세요'/>
+                  <input style={{width: '20em'}}className={styles.input} onChange={(e)=>setProduct("product_title", e.target.value)} type='text' placeholder='상품명을 입력해주세요'/>
+                  <input style={{width: '20em'}}className={styles.input} onChange={(e)=>setProduct("product_spec", e.target.value)} type='text' placeholder='규격을 입력해주세요'/>
                 </div>
                 <h4 className={styles.h4}>
                   <div className={styles.priceTag}>
@@ -229,7 +231,7 @@ export function AdminDetail() {
                           className={styles.input} 
                           type='text' 
                           placeholder='할인율을 입력해주세요'
-                          value={product.discount}
+                          value={product.product_discount}
                           onChange={(e)=>AddDiscountFunc(e.target.value)} 
                           />
                           <span className={styles.spanStyle}>%</span>
@@ -243,7 +245,7 @@ export function AdminDetail() {
                         className={styles.input}
                         type='text'  // type을 'text'로 변경하여 숫자와 쉼표만 표시되도록 함
                         placeholder='판매가를 입력해주세요'
-                        value={product.price}
+                        value={product.product_price}
                         onChange={handleInputChange}
                       />                       
                       <span className={styles.spanStyle}>원</span>
@@ -252,11 +254,11 @@ export function AdminDetail() {
                     <h4 style={{fontSize: '1.1em', fontWeight: '750'}}>
                     적용가 : 
                     <span style={{color: '#CC0000', fontWeight: '750', margin: '0.5em'}}>
-                    {product.discount !== null && product.discount !== undefined
-                      ? isNaN(product.price - (product.price * (product.discount / 100)))
+                    {product.product_discount !== null && product.product_discount !== undefined
+                      ? isNaN(product.product_price - (product.product_price * (product.product_discount / 100)))
                         ? '할인율이 잘못 설정되었습니다.'
-                        : `${((product.price - (product.price * (product.discount / 100))).toLocaleString())}원`
-                      : `${product.price.toLocaleString()}원`}
+                        : `${((product.product_price - (product.product_price * (product.product_discount / 100))).toLocaleString())}원`
+                      : `${product.product_price.toLocaleString()}원`}
                     </span>
                     </h4>
                   </div>
@@ -272,7 +274,7 @@ export function AdminDetail() {
                       className={styles.input} 
                       type='text' 
                       placeholder='재고수량을 입력해주세요'
-                      value={product.supply}
+                      value={product.product_supply}
                       onChange={
                         (e)=> {
                           AddSupplyFunc(e.target.value);

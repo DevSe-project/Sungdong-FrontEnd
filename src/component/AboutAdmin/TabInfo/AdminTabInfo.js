@@ -3,7 +3,7 @@ import React from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useProduct, useProductActions } from '../../../Store/DataStore';
-import axios from 'axios';
+import axios from '../../../axios';
 import { GetCookie } from '../../../customFn/GetCookie';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
@@ -16,13 +16,13 @@ export function AdminTabInfo({setMiddleCategory, setLowCategory, setSelectedCate
   const { data } = useQuery({queryKey:['data']});
 
   //등록 fetch 함수
-  const fetchAddData = async () => {
-    if(data.find((item) => item.id === product.id )){
+  const fetchAddData = async (newData) => {
+    if(data.find((item) => item.product_id === product.product_id )){
       try {
         const token = GetCookie('jwt_token');
-        const response = await axios.patch("/product", 
+        const response = await axios.patch("/product/edit", 
           JSON.stringify(
-            product
+            newData
           ),
           {
             headers : {
@@ -39,15 +39,13 @@ export function AdminTabInfo({setMiddleCategory, setLowCategory, setSelectedCate
       }
     } else {
       try {
-        const token = GetCookie('jwt_token');
-        const response = await axios.post("/product", 
+        const response = await axios.post("/product/create", 
           JSON.stringify(
-            product
+            newData
           ),
           {
             headers : {
               "Content-Type" : "application/json",
-              'Authorization': `Bearer ${token}`
             }
           }
         )
@@ -61,7 +59,15 @@ export function AdminTabInfo({setMiddleCategory, setLowCategory, setSelectedCate
   };
 
   //상품 등록 함수
-  const { addProductMutate } = useMutation({mutationFn: fetchAddData,
+  const { mutate:addProductMutate } = useMutation({mutationFn: fetchAddData})
+
+  function handleAddedProduct(){
+    const newProduct = {
+      ...product,
+      parentsCategory_id: product.category.middleId,
+      category_id: product.category.lowId,
+    }
+    addProductMutate(newProduct,{
     onSuccess: (data) => {
       // 메세지 표시
       alert(data.message);
@@ -74,13 +80,15 @@ export function AdminTabInfo({setMiddleCategory, setLowCategory, setSelectedCate
       console.error('상품을 추가/변경 하는 중 오류가 발생했습니다.', error);
     },
   })
+  }
+
   // 상품정보 데이터
   const productInfo = [
-    {label: '상품코드', value: <input className={styles.input} value={product.productId} onChange={(e)=>setProduct("productId", e.target.value)} type='text' placeholder='A001-10001'/>},
-    {label: '브랜드', value: <input className={styles.input} value={product.brand} onChange={(e)=>setProduct("brand", e.target.value)} type='text' placeholder='한국브랜드'/>},
-    {label: '원산지', value: <input className={styles.input} value={product.madeIn} onChange={(e)=>setProduct("madeIn", e.target.value)} type='text' placeholder='국산'/>},
+    {label: '상품코드', value: <input className={styles.input} value={product.product_id} onChange={(e)=>setProduct("product_id", e.target.value)} type='text' placeholder='A001-10001'/>},
+    {label: '브랜드', value: <input className={styles.input} value={product.product_brand} onChange={(e)=>setProduct("product_brand", e.target.value)} type='text' placeholder='한국브랜드'/>},
+    {label: '원산지', value: <input className={styles.input} value={product.product_madeIn} onChange={(e)=>setProduct("product_madeIn", e.target.value)} type='text' placeholder='국산'/>},
     {label: '판매상태',value: 
-    <select className={styles.input} value={product.state} onChange={(e)=>setProduct("state", e.target.value)}>
+    <select className={styles.input} value={product.state} onChange={(e)=>setProduct("product_state", e.target.value)}>
       <option>판매대기</option>
       <option>판매중</option>
       <option>판매중단</option>
@@ -115,14 +123,13 @@ export function AdminTabInfo({setMiddleCategory, setLowCategory, setSelectedCate
         {/* 에디터 훅 사용 */}
         <CKEditor
         editor={ ClassicEditor }
-        data={product.content}
+        data={product.product_content}
         onReady={ ( editor ) => {
           console.log( "CKEditor5 React Component is ready to use!", editor );
         } }
         onChange={ ( event, editor ) => {
           const data = editor.getData();
-          setProduct('content', data);
-          console.log( { event, editor, data } );
+          setProduct('product_content', data);
         } }
         />
       </div>
@@ -133,7 +140,7 @@ export function AdminTabInfo({setMiddleCategory, setLowCategory, setSelectedCate
     <div className={styles.textButton}>
       <button 
       className={styles.mainButton}
-      // onClick={()=>addProductMutate.mutate();}
+      onClick={()=>handleAddedProduct()}
       >등록하기
       </button>
       <div className={styles.sideTextButton}>
