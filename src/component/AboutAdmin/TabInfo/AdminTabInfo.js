@@ -6,11 +6,13 @@ import { useProduct, useProductActions } from '../../../Store/DataStore';
 import axios from '../../../axios';
 import { GetCookie } from '../../../customFn/GetCookie';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 
 export function AdminTabInfo({setMiddleCategory, setLowCategory, setSelectedCategory}){
   const product = useProduct();
   const {setProduct, resetProduct} = useProductActions();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   
   //데이터 불러오기
   const { data } = useQuery({queryKey:['data']});
@@ -62,10 +64,15 @@ export function AdminTabInfo({setMiddleCategory, setLowCategory, setSelectedCate
   const { mutate:addProductMutate } = useMutation({mutationFn: fetchAddData})
 
   function handleAddedProduct(){
-    const newProduct = {
-      ...product,
-      parentsCategory_id: product.category.middleId,
-      category_id: product.category.lowId,
+    let newProduct;
+    if(data.find((item) => item.product_id === product.product_id )){
+      newProduct = product;
+    } else {
+      newProduct = {
+        ...product,
+        parentsCategory_id: product.category.middleId,
+        category_id: product.category.lowId,
+      }
     }
     addProductMutate(newProduct,{
     onSuccess: (data) => {
@@ -74,6 +81,7 @@ export function AdminTabInfo({setMiddleCategory, setLowCategory, setSelectedCate
       console.log('상품이 추가/변경 되었습니다.', data);
       // 상태를 다시 불러와 갱신합니다.
       queryClient.invalidateQueries(['data']);
+      navigate("/adminMain/searchProduct");
     },
     onError: (error) => {
       // 상품 추가 실패 시, 에러 처리를 수행합니다.
@@ -88,7 +96,7 @@ export function AdminTabInfo({setMiddleCategory, setLowCategory, setSelectedCate
     {label: '브랜드', value: <input className={styles.input} value={product.product_brand} onChange={(e)=>setProduct("product_brand", e.target.value)} type='text' placeholder='한국브랜드'/>},
     {label: '원산지', value: <input className={styles.input} value={product.product_madeIn} onChange={(e)=>setProduct("product_madeIn", e.target.value)} type='text' placeholder='국산'/>},
     {label: '판매상태',value: 
-    <select className={styles.input} value={product.state} onChange={(e)=>setProduct("product_state", e.target.value)}>
+    <select className={styles.input} value={product.product_state} onChange={(e)=>setProduct("product_state", e.target.value)}>
       <option>판매대기</option>
       <option>판매중</option>
       <option>판매중단</option>
@@ -141,7 +149,8 @@ export function AdminTabInfo({setMiddleCategory, setLowCategory, setSelectedCate
       <button 
       className={styles.mainButton}
       onClick={()=>handleAddedProduct()}
-      >등록하기
+      > {data.find((item) => item.product_id === product.product_id ) ?
+        '수정하기' : '등록하기'}
       </button>
       <div className={styles.sideTextButton}>
         <button 

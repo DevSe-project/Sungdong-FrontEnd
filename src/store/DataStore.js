@@ -343,6 +343,25 @@ export const useProductStore = create((set) => ({
       set((state) => ({ product: { ...state.product, [fieldName]: value } })),
     editProduct: (data) =>
       set((state) => ({ product: data })),
+    editOptionProduct: (data) =>
+      set((state) => ({ 
+        product: {
+          ...state.product,
+          option: {
+            ...state.product.option,
+            option0: data.option0 && data.option0,
+            option1: data.option1 && data.option1,
+            option2: data.option2 && data.option2,
+            option3: data.option3 && data.option3,
+            option4: data.option4 && data.option4,
+            option5: data.option5 && data.option5,
+            option6: data.option6 && data.option6,
+            option7: data.option7 && data.option7,
+            option8: data.option8 && data.option8,
+            option9: data.option9 && data.option9,
+          },
+        }
+      })),
     resetProduct: () =>
       set({
         product: {

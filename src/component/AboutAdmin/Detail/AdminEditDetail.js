@@ -12,15 +12,16 @@ export function AdminEditDetail() {
   const [isDiscount, setIsDiscount] = useState(false);
   const [isOption, setIsOption] = useState(false);
   const product = useProduct();
-  const {setProduct, resetProduct, setProductOption, editProduct} = useProductActions();
+  const {setProduct, resetProduct, setProductOption, editProduct, editOptionProduct} = useProductActions();
   const [addInputOption, setAddInputOption] = useState(0);
 
   useEffect(() => {
     return () => {
       resetProduct();
-      // 컴포넌트가 언마운트될 때 Product 상태 리셋
+      window.location.reload();
+      // 컴포넌트가 언마운트될 때 Product 상태 리셋 및 새로고침
     };
-  }, []);
+  }, [resetProduct]);
 
   //데이터 불러오기
   const { isLoading, isError, error, data } = useQuery({queryKey:['data']});
@@ -30,10 +31,12 @@ export function AdminEditDetail() {
     const fetchData = async () => {
       if (data !== null) {
         await editProduct(loadData());
+        await editOptionProduct(loadData());
       }
     };
   
     fetchData();
+
   }, [isLoading]);
 
   //주소창 입력된 id값 받아오기
@@ -42,30 +45,12 @@ export function AdminEditDetail() {
   const loadData = ()=> {
     if(data != null){
       //입력된 id과 data내부의 id값 일치하는 값 찾아 변수 선언
-      const detaildata = data.find((item)=>item.id===id);
+      const detaildata = data.find((item)=>item.product_id===id);
       return detaildata;
     } else {
       return <div>데이터를 불러오는 중이거나 상품을 찾을 수 없습니다.</div>;
     }
   }
-
-  //카테고리 데이터 fetch
-  const fetchCategoryData = async() => {
-    try{
-      const response = await axios.get("/category", 
-        {
-          headers : {
-            "Content-Type" : "application/json"
-          }
-        }
-      )
-      return response.data;
-    } catch(error) {
-      throw new Error('카테고리를 불러오던 중 오류가 발생했습니다.');
-    }
-  }
-  // 카테고리 데이터 불러오기
-  //const { isLoading, isError, error, data:categoryData } = useQuery({queryKey:['category'], queryFn: ()=> fetchCategoryData();});
 
 
   const handleInputChange = (event) => {
@@ -75,13 +60,13 @@ export function AdminEditDetail() {
     // 숫자가 아닌 문자를 제외하고 저장
     const numericValue = formattedValue.replace(/\D/g, '');
 
-    setProduct("price", numericValue);
+    setProduct("product_price", numericValue);
   }
 
   function AddDiscountFunc(discount){
     const numericValue = discount.replace(/\D/g, '');
     if(numericValue > -1 && numericValue <= 100) {
-      setProduct("discount", numericValue);
+      setProduct("product_discount", numericValue);
     }
     else{
       alert("할인율은 최소 0부터 100%까지 설정 가능합니다.");
@@ -103,7 +88,7 @@ export function AdminEditDetail() {
   function AddSupplyFunc(supplyCnt){
     const numericValue = supplyCnt.replace(/\D/g, '');
     if(numericValue > -1 && numericValue <= 999) {
-      setProduct("supply", numericValue);
+      setProduct("product_supply", numericValue);
     }
     else {
       alert("최소 1개부터 999개까지 재고 설정이 가능합니다.");
@@ -159,7 +144,7 @@ export function AdminEditDetail() {
               {/* 상품 정보(상품 이름, 가격) 부분 (삼항연산자 : 스켈레톤 처리) */}
               <div className={styles.headRight}>
                 <div className={styles.textBox}>
-                  <input style={{width: '20em'}} className={styles.input} value={product.title} onChange={(e)=>setProduct("title", e.target.value)} type='text' placeholder='상품명을 입력해주세요'/>
+                  <input style={{width: '20em'}} className={styles.input} value={product.product_title} onChange={(e)=>setProduct("product_title", e.target.value)} type='text' placeholder='상품명을 입력해주세요'/>
                 </div>
                 <h4 className={styles.h4}>
                   <div className={styles.priceTag}>
@@ -179,7 +164,7 @@ export function AdminEditDetail() {
                           className={styles.input} 
                           type='text' 
                           placeholder='할인율을 입력해주세요'
-                          value={product.discount}
+                          value={product.product_discount}
                           onChange={(e)=>AddDiscountFunc(e.target.value)} 
                           />
                           <span className={styles.spanStyle}>%</span>
@@ -193,7 +178,7 @@ export function AdminEditDetail() {
                         className={styles.input}
                         type='text'  // type을 'text'로 변경하여 숫자와 쉼표만 표시되도록 함
                         placeholder='판매가를 입력해주세요'
-                        value={product.price}
+                        value={product.product_price}
                         onChange={handleInputChange}
                       />                       
                       <span className={styles.spanStyle}>원</span>
@@ -202,11 +187,12 @@ export function AdminEditDetail() {
                     <h4 style={{fontSize: '1.1em', fontWeight: '750'}}>
                     적용가 : 
                     <span style={{color: '#CC0000', fontWeight: '750', margin: '0.5em'}}>
-                    {product.discount !== null && product.discount !== undefined
-                      ? isNaN(product.price - (product.price * (product.discount / 100)))
+                    {product.product_discount !== null && product.product_discount !== undefined
+                      ? isNaN(product.product_price - (product.product_price * (product.product_discount / 100)))
                         ? '할인율이 잘못 설정되었습니다.'
-                        : `${((product.price - (product.price * (product.discount / 100))).toLocaleString())}원`
-                      : `${product.price.toLocaleString()}원`}
+                        : `${(product.product_price - (product.product_price / 100) * product.product_discount)
+                        .toLocaleString('ko-KR')}원`
+                      : `${product.product_price.toLocaleString('ko-KR')}원`}
                     </span>
                     </h4>
                   </div>
@@ -222,7 +208,7 @@ export function AdminEditDetail() {
                       className={styles.input} 
                       type='text' 
                       placeholder='재고수량을 입력해주세요'
-                      value={product.supply}
+                      value={product.product_supply}
                       onChange={
                         (e)=> {
                           AddSupplyFunc(e.target.value);

@@ -24,7 +24,7 @@ export function AdminProductList(){
 
   // 아이템 수정 핸들러
   function handleEditItem(item) {
-    navigate(`/adminMain/editProduct/${item.id}`);
+    navigate(`/adminMain/editProduct/${item.product_id}`);
   }
 
 
@@ -86,6 +86,26 @@ export function AdminProductList(){
     deleteProductMutation.mutate(item.id);
   }
 
+  const optionCreator = (item) => {
+    let options = [];
+    for(let i = 0; i<10; i++){
+      options.push(item[`option${i}`])
+    }
+    return(
+      <select>
+      {options.length > 0 && options.map((option, key) => {
+      return (
+        option !== "" &&
+          <option key={key} value={option}>
+            {(option !== null || option !== "" )&& option}
+          </option>
+        )
+      })}
+      </select>
+    )
+  }
+
+
 
   // const { data:filteredData, isLoading, isError } = useQuery(['filteredProducts', productFilter], () => fetchFilteredProducts(productFilter));
 
@@ -126,35 +146,39 @@ export function AdminProductList(){
                 {data && getCurrentPagePosts().map((item, index)=> (
                 <React.Fragment key={index}>
                   <tr className={styles.list}>
-                    <td><img src={item.image.mini} alt='이미지'></img></td>
-                    <td>{item.id}</td>
+                    <td><img src={item.product_image_mini} alt='이미지'></img></td>
+                    <td>{item.product_id}</td>
                     <td 
                       className={styles.detailView}
-                      onClick={()=>navigate(`/detail/${item.id}`)}>
+                      onClick={()=>navigate(`/detail/${item.product_id}`)}>
                       상세보기
                     </td>
-                    <td className={styles.detailView} onClick={()=>handleItemClick(item.id)}>
-                      <h5 style={{fontSize: '1.1em', fontWeight: '550'}}>{item.title}</h5>
+                    <td className={styles.detailView} onClick={()=>handleItemClick(item.product_id)}>
+                      <h5 style={{fontSize: '1.1em', fontWeight: '550'}}>{item.product_title}</h5>
                     </td>
                     <td>EA</td>
-                    <td>\{item.price.toLocaleString()}</td>
+                    <td>
+                      {item.product_discount
+                      ? `${(item.product_price - (item.product_price / 100) * item.product_discount)
+                      .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
+                      : '0'.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
+                    </td>
                     <td style={{fontWeight: '750'}}>
-                      {item.finprice
-                      ? item.discount
-                      ? `\\${ (item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}`
-                      : `\\${item.finprice.toLocaleString()}`
-                      : `\\${item.price.toLocaleString()}`}
+                    {item.product_discount
+                      ? `${(item.product_price - (item.product_price / 100) * item.product_discount)
+                        .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
+                      : `${item.product_price.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
                     </td>
                     <td 
                       className={styles.detailView}
-                      onClick={()=>handleItemClick(item.id)}>
-                      더보기&nbsp;{selectedData === item.id  
+                      onClick={()=>handleItemClick(item.product_id)}>
+                      더보기&nbsp;{selectedData === item.product_id  
                       ? <i className="fa-sharp fa-solid fa-caret-up"></i>
                       : <i className="fa-sharp fa-solid fa-caret-down"></i>}&nbsp;
                     </td>
                   </tr>
                   {/* 모달 */}
-                  {selectedData === item.id && (
+                  {selectedData === item.product_id && (
                   <tr>
                     <td colSpan="8">
                       <table className={styles.colTable}>
@@ -186,33 +210,28 @@ export function AdminProductList(){
                         <tbody>
                           <tr>
                             <td>
-                              {item.brand}
+                              {item.product_brand}
                             </td>
                             <td>
-                              {item.option 
-                              ?            
-                              <span>옵션있음</span>
-                              :
-                              <span>옵션없음</span>
-                              }
+                              {optionCreator(item)}
                             </td>
                             <td>
-                              {item.supply}
+                              {item.product_supply}
                             </td>
                             <td>
-                              {item.discount}%
+                              {item.product_discount}%
+                            </td>
+                            <td style={{fontWeight: '550'}}>
+                              {item.product_discount
+                              ? `${((item.product_price / 100) * item.product_discount)
+                              .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
+                              : '0'.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                             </td>
                             <td style={{fontWeight: '750'}}>
-                              {item.discount
-                              ? `\\${(((item.price/100)*item.discount)*item.cnt).toLocaleString()}`
-                              : 0}
-                            </td>
-                            <td style={{fontWeight: '750'}}>
-                            {item.finprice
-                            ? item.discount
-                            ? `\\${ (item.finprice - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}`
-                            : `\\${item.finprice.toLocaleString()}`
-                            : `\\${item.price.toLocaleString()}`}
+                            {item.product_discount
+                              ? `${(item.product_price - (item.product_price / 100) * item.product_discount)
+                                .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
+                              : `${item.product_price.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
                             </td>
                             <td>
                               <button className={styles.button} onClick={()=>handleEditItem(item)}>수정</button>
