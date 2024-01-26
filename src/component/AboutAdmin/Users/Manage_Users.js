@@ -173,7 +173,7 @@ export default function Manage_Users() {
                                     <td>{user.cor_corName}</td>
                                     <td>{user.grade && user.grade}</td>
                                     <td>{user.bname} {user.roadAddress}({user.zonecode})</td>
-                                    <td>{user.cor_num}</td>
+                                    <td>{user.cor_tel}</td>
                                     <td>{user.hasCMS === 1 ? "동의" : "비동의"}</td>
                                     <td>
                                         <button className={styles.button}

@@ -148,18 +148,7 @@ export function Detail(props) {
 
 
     //견적함 추가 함수
-    const { mutate:addEstimateBox } = useMutation({mutationFn : addToEstimate,
-      onSuccess: (ebData) => {
-        // 메세지 표시
-        console.log('상품을 견적함에 추가하였습니다.', ebData);
-        // 추가 안내 메세지
-        alert("견적함에 해당 상품을 추가하였습니다.");
-      },
-      onError: (error) => {
-        // 상품 추가 실패 시, 에러 처리를 수행합니다.
-        console.error('상품을 장바구니에 추가하는 중 오류가 발생했습니다.', error);
-      },
-    });
+    const { mutate:addEstimateBox } = useMutation({mutationFn : addToEstimate});
 
 
   //수량 최대입력 글자(제한 길이 변수)
@@ -171,6 +160,23 @@ export function Detail(props) {
     if ( lengthTarget >= 0 && lengthTarget.length <= 3) { 
         setCount(lengthTarget); 
     } 
+}
+
+function setEstimateItem(product, count){
+
+  addEstimateBox({product, count},
+    {
+      onSuccess: (ebData) => {
+    // 메세지 표시
+    console.log('상품을 견적함에 추가하였습니다.', ebData);
+    // 추가 안내 메세지
+    alert("견적함에 해당 상품을 추가하였습니다.");
+    },
+    onError: (error) => {
+      // 상품 추가 실패 시, 에러 처리를 수행합니다.
+      console.error('상품을 장바구니에 추가하는 중 오류가 발생했습니다.', error);
+    },
+  });
 }
 
 // 즉시구매 함수
@@ -308,7 +314,7 @@ function basketThis(product, count){
               </div>
               <h4 className={styles.h4}>
                 {data !== null
-                ? detailData.product_discount !== null
+                ? detailData.product_discount !== 0
                 ? 
                 <div className={styles.priceTag}>
                   <div>
@@ -379,7 +385,7 @@ function basketThis(product, count){
                   &nbsp;찜하기
                   </button>
                   <button 
-                  onClick={()=>{addEstimateBox.mutate(detailData)}}
+                  onClick={()=>{setEstimateItem(detailData, count)}}
                   className={styles.sideButton}>견적함</button>
                 </div>
               </div>

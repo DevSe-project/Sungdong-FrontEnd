@@ -47,8 +47,6 @@ export function Basket(props){
   // 배송 주문 건 팝업띄우기
   const [openDeliveryModal, setOpenDeliveryModal] = useState(true);
 
-  // 로그인 정보 불러오기
-  const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'));
   // 게시물 데이터와 페이지 번호 상태 관리    
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -77,7 +75,7 @@ export function Basket(props){
     return () => {
       window.removeEventListener('popstate', handleBack);
     };
-  }, [props, navigate, inLogin]);
+  }, [props, navigate]);
 
   useEffect(() => {
     if (
@@ -188,7 +186,6 @@ export function Basket(props){
           mini : item.image.mini,
           original : item.image.original,
         },
-        userId: inLogin.id, 
         productName : item.title,
         supply: item.supply,
         cnt : Number(item.cnt), 
@@ -198,7 +195,6 @@ export function Basket(props){
         optionSelected: item.optionSelected && item.optionSelected,
       }));
       // sessionStoragerage에 저장
-      // 데이터를 암호화 (JSON 변환 2번 과정 거치기 (암호화 시 1번, 암호화 성공 후 세션스토리지 저장 시 1번))
       sessionStorage.setItem('orderData', JSON.stringify(editedData));
       setOrderList(editedData);
       navigate("/basket/receipt");

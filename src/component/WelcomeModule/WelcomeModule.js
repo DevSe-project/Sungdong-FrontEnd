@@ -2,9 +2,10 @@ import styles from './WelcomeModule.module.css';
 import { useQuery } from '@tanstack/react-query';
 import axios from '../../axios';
 import { GetCookie } from '../../customFn/GetCookie';
+import { useNavigate } from 'react-router-dom';
 
 export default function WelcomeModule() {
-
+    const navigate = useNavigate();
     // -----UserData fetch
     const fetchUserData = async () => {
         try {
@@ -20,16 +21,22 @@ export default function WelcomeModule() {
             // 성공 시 추가된 상품 정보를 반환합니다.
             return response.data.data;
         } catch (error) {
-            if (error.response?.status === 401) {
-                return null;
-            } else {
-            // 실패 시 예외를 throw합니다.
-                throw new Error('확인 중 오류가 발생했습니다.');
-            }
-        }
+                    // 서버 응답이 실패인 경우
+        if (error.response && error.response.status === 401) {
+            // 서버가 400 Bad Request를 반환한 경우
+            alert(error.response.data.message); 
+            navigate("/login");         
+            throw new Error(error.response.data.message);
+        } else if(error.response && error.response.status === 403){
+            alert(error.response.data.message);          
+            navigate("/login");
+            throw new Error(error.response.data.message);
+        } else {
+            throw new Error('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
+        }}
     }
 
-    const { isLoading, isError, error, data: userData } = useQuery({ 
+    const { isLoading, isError, data: userData } = useQuery({ 
         queryKey: ['user'],
         queryFn: fetchUserData,
     });
@@ -38,7 +45,13 @@ export default function WelcomeModule() {
         return <p>Loading..</p>;
     }
     if (isError) {
-        return null;
+        return (
+            <div>
+                <input></input>
+                <input></input>
+                <button>로그인</button>
+            </div>
+        );
     }
 
 

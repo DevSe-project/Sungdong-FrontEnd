@@ -74,7 +74,7 @@ export function Product() {
                     </h3>
                   </div>
                 ) : (
-                  <h3>{item.product_price.toLocaleString('ko-KR',{ style: 'currency', currency: 'KRW' })}</h3>
+                  <h3>{parseInt(item.product_price).toLocaleString('ko-KR',{ style: 'currency', currency: 'KRW' })}</h3>
                 )}
                 <span>{categoryData && [categoryData.find((category) => category.category_id === item.parentsCategory_id)?.name, categoryData.find((category) => category.category_id === item.category_id)?.name].filter(Boolean).join(' - ')}</span>
               </div>
