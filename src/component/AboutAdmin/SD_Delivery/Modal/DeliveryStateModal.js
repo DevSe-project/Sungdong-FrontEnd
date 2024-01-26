@@ -90,7 +90,7 @@ export default function DeliveryStateModal(props) {
     }
 
     // 배송 상태 변경 함수
-    const applyStatusToServer = async () => {
+    const sendUpdateStateApiToServer = async () => {
         try {
             const token = GetCookie('jwt_token');
             const response = await axios.put("/product/categoryEdit",
@@ -234,7 +234,7 @@ export default function DeliveryStateModal(props) {
 
                 {/* 적용 버튼 */}
                 <div style={{ margin: '10px' }}>
-                    <button className='original_button' onClick={applyStatusToServer}>
+                    <button className='original_button' onClick={sendUpdateStateApiToServer}>
                         적용
                     </button>
                 </div>

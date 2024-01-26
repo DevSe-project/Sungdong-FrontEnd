@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useModalActions } from '../../../../Store/DataStore';
 import styles from './DeliveryModalStyles.module.css';
+import { GetCookie } from '../../../../customFn/GetCookie';
+import axios from '../../../../axios';
 
 export default function InvoiceModal(props) {
     const { selectedModalClose } = useModalActions();
@@ -70,16 +72,27 @@ export default function InvoiceModal(props) {
     };
 
     // 변경사항 적용
-    function applyInvoiceChanges() {
-        props.setMatchedData((prevData) =>
-            prevData.map((data) => ({
-                ...data,
-                delivery_selectedCor: fetchedData.find((fetchedItem) => (fetchedItem.order_id === data.order_id)).delivery_selectedCor,
-                delivery_num: fetchedData.find((fetchedItem) => (fetchedItem.order_id === data.order_id)).delivery_num
-            }))
-        )
+    const sendUpdateInvoiceApiToServer = async () => {
+        try {
+            const token = GetCookie('jwt_token');
+            const response = await axios.put(`/delivery/invoiceUpdate`,
+                JSON.stringify({
+                    delivery_selectedCor: fetchedData.delivery_selectedCor,
+                    delivery_num: fetchedData.delivery_num
+                }),
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorizaition": `Bearer ${token}`
+                    }
+                }
+            )
 
-        selectedModalClose();
+            return response.data;
+
+        } catch (error) {
+            throw new Error('송장을 수정하는 중 오류가 발생했습니다.')
+        }
     };
 
 
@@ -159,7 +172,7 @@ export default function InvoiceModal(props) {
 
                 {/* 적용 버튼 */}
                 <div style={{ margin: '10px' }}>
-                    <button className='original_button' onClick={applyInvoiceChanges}>
+                    <button className='original_button' onClick={sendUpdateInvoiceApiToServer}>
                         적용
                     </button>
                 </div>
