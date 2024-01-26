@@ -43,8 +43,7 @@ export function Detail(props) {
     const navigate = useNavigate();
     //리스트 불러오기
     const wishList = useWishList();
-    const basketList = useBasketList();
-    const { setWishList, setOrderList, setBasketList} = useListActions();
+    const { setWishList, setOrderList} = useListActions();
   
     //수량 개수 state
     const [count, setCount] = useState(1);
@@ -72,8 +71,15 @@ export function Detail(props) {
         // 성공 시 추가된 상품 정보를 반환합니다.
         return response.data;
       } catch (error) {
-        // 실패 시 예외를 throw합니다.
-        throw new Error('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
+        // 서버 응답이 실패인 경우
+        if (error.response && error.response.status === 400) {
+          // 서버가 400 Bad Request를 반환한 경우
+          alert(error.response.data.message);          
+          return console.error(error.response.data.message);
+        } else {
+          // 그 외의 오류인 경우
+          throw new Error('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
+        }
       }
     };
   
