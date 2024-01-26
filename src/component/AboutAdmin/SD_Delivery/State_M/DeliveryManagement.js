@@ -32,7 +32,7 @@ export default function DeliveryManagement() {
 
                     {/* Delivery InquireTable Header */}
                     <Deli_InquireTable />
-                    
+
                 </div>
 
             </div>

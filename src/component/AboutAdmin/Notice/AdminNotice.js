@@ -273,7 +273,7 @@ export default function AdminNotice() {
                   {/* 날짜 */}
                   <td>{item.date}</td>
                   {/* 삭제 */}
-                  <td style={{display: 'flex', justifyContent: 'center'}}>
+                  <td style={{ display: 'flex', justifyContent: 'center' }}>
                     <div className={styles.post_del_button}
                       onClick={() => deletePostMutation.mutate()
                       }>
