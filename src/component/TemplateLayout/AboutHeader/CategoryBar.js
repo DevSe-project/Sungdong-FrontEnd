@@ -2,9 +2,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './CategoryBar.module.css'
 import { useEffect, useState } from 'react';
 import { useCategoryData } from '../../../Store/DataStore';
+import { useQuery } from '@tanstack/react-query';
 
 export function CategoryBar(props) {
-  const categoryData  = useCategoryData();
+  const { isLoading, isError, error, data:categoryData } = useQuery({queryKey:['category']});
   // 선택된 카테고리 변경 핸들러 (우선순위 : 1. 소 카테고리 2. 대 카테고리)
   const handleCategoryChange = (category) => {
     // 큰 카테고리에 해당하는 탭만을 찾기위해 subCategory는 삭제
@@ -39,7 +40,7 @@ export function CategoryBar(props) {
 
   const navigate = useNavigate();
   //서브메뉴 열림창 변수 초기화
-  const [subMenuStates, setSubMenuStates] = useState(categoryData.map(()=>false));
+  const [subMenuStates, setSubMenuStates] = useState(categoryData?.length > 0 ? categoryData.map(() => false) : []);
 
   const handleTabClick = (tabItem) => {
     sessionStorage.setItem('categoryTabState', JSON.stringify(tabItem.id));
@@ -59,6 +60,12 @@ export function CategoryBar(props) {
     setSubMenuStates(newSubMenuStates);
   };
 
+  if (isLoading) {
+    return <p>Loading..</p>;
+  }
+  if (isError) {
+    return <p>에러 : {error.message}</p>;
+  }
   return (
     <div className={styles.categoryLocation}>
       <div className={styles.categoryBarContainer} 
@@ -66,28 +73,36 @@ export function CategoryBar(props) {
       style={{...props.category_dynamicStyle}}>
         {/* 아이콘 hovered */}
         {
-          categoryData !== null
-          ? categoryData.map((item, index) => (
+          categoryData.length > 0
+          ? categoryData.map((item, index) => 
+          item.parentsCategory_id === null &&
+          (
             <li
               key={index}
               onMouseEnter={() => handleMouseEnter(index)}
               onMouseLeave={() => handleMouseLeave(index)}
-              className={`categorymenu-item ${subMenuStates[index] && 'open'} + categorytab-item ${activeTab === item.id ? 'active' : ''}`}
+              className={`categorymenu-item ${subMenuStates[index] && 'open'} + categorytab-item ${activeTab === item.category_id ? 'active' : ''}`}
               onClick={() => { handleTabClick(item) }}
             >
               <span 
-              onClick={() => handleCategoryChange(item.title)}
+              onClick={() => handleCategoryChange(item.category_id)}
               >
-                {item.title}
+                {item.name}
               </span>
               {/* 서브메뉴 loop */}
               {subMenuStates[index] && (
-                <ul onMouseLeave={() => handleMouseLeave(index)} className="sub-menu">
-                  {item.subMenuItems.map((item, index) => (
-                    <li onClick={() => handleSubCategoryChange(item.item)} className={styles.category} key={index}>
-                      {item.item}
+              <ul onMouseLeave={() => handleMouseLeave(index)} className="sub-menu">
+                {categoryData && categoryData
+                  .filter((category) => category.parentsCategory_id === item.category_id)
+                  .map((category, subIndex) => (
+                    <li
+                      onClick={() => handleSubCategoryChange(category.item)} // 수정: item 대신 category.item을 사용
+                      className={styles.category}
+                      key={subIndex} // 수정: index 대신 subIndex를 사용
+                    >
+                    {category.name}
                     </li>
-                  ))}
+                    ))}
                 </ul>
               )}
             </li>
