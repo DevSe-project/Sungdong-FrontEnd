@@ -3,15 +3,16 @@ import styles from './Basket.module.css'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import React from 'react';
 import { useBasketList, useListActions, useOrderList } from '../../Store/DataStore';
-import axios from 'axios';
+import axios from '../../axios';
 import { GetCookie } from '../../customFn/GetCookie';
+import { useQuery } from '@tanstack/react-query';
 export function Basket(props){
 
   //장바구니 데이터 fetch
   const fetchCartData = async() => {
     try{
       const token = GetCookie('jwt_token');
-      const response = await axios.get("/cart", 
+      const response = await axios.get("/cart/list", 
         {
           headers : {
             "Content-Type" : "application/json",
@@ -19,17 +20,16 @@ export function Basket(props){
           }
         }
       )
-      return response.data;
+      return response.data.data;
     } catch(error) {
       throw new Error('장바구니를 불러오던 중 오류가 발생했습니다.');
     }
   }
   // 장바구니 데이터 불러오기
-  //const { isLoading, isError, error, data:basketList } = useQuery({queryKey:['cart'], queryFn: ()=> fetchCartData();});
+  const { isLoading, isError, error, data:basketList } = useQuery({queryKey:['cart'], queryFn: ()=> fetchCartData()});
 
   const orderList = useOrderList();
-  const basketList = useBasketList();
-  const { setBasketList, setOrderList } = useListActions();
+  const { setOrderList } = useListActions();
 
   const navigate = useNavigate();
 
@@ -52,10 +52,6 @@ export function Basket(props){
   // 게시물 데이터와 페이지 번호 상태 관리    
   const [currentPage, setCurrentPage] = useState(1);
 
-  const copyList = [...basketList];
-
-  const onlyUserData = copyList.filter((item)=> item.userId === inLogin.id);
-
   // 일정 시간 후 팝업 닫음
   useEffect(()=> {
     const opentime = setInterval(() => {
@@ -67,11 +63,6 @@ export function Basket(props){
 
   // 장바구니 탭 - 결제 탭에서 뒤로가기 시 뒤로가기 방지 후 장바구니 탭으로 이동
   useEffect(() => {
-    if(!inLogin){
-      alert("로그인 후 이용가능한 서비스입니다.");
-      navigate("/login");
-      return;
-    }
     const handleBack = (e) => {
       e.preventDefault();
       alert("주문서 작성, 결제 중 뒤로가기 시 결제 정보가 초기화 됩니다.")
@@ -109,7 +100,7 @@ export function Basket(props){
     setSelectAll(!selectAll);
 
     if (!selectAll) {
-      const allId = basketList.map((item) => item);
+      const allId = basketList && basketList.map((item) => item);
       setSelectedItems(allId);
     } else {
       setSelectedItems([]);
@@ -117,12 +108,12 @@ export function Basket(props){
   };
 
   // 체크박스 클릭 시 호출되는 함수
-  function checkedBox(productId) {
-    if (selectedItems.includes(productId)) { //productID가 중복이면 true == 이미 체크박스가 클릭되어 있으면
-      setSelectedItems(selectedItems.filter((item) => item !== productId)); //체크박스를 해제함 == 선택한 상품 저장 변수에서 제외
+  function checkedBox(product) {
+    if (selectedItems.includes(product)) { //productID가 중복이면 true == 이미 체크박스가 클릭되어 있으면
+      setSelectedItems(selectedItems.filter((item) => item !== product)); //체크박스를 해제함 == 선택한 상품 저장 변수에서 제외
       setSelectAll(false);
     } else {
-      setSelectedItems([...selectedItems, productId]); //selectedItems의 배열과 productID 배열을 합쳐 다시 selectedItems에 저장
+      setSelectedItems([...selectedItems, product]); //selectedItems의 배열과 productID 배열을 합쳐 다시 selectedItems에 저장
       if(selectedItems.length + 1 === basketList.length){
         setSelectAll(true);
       }
@@ -131,19 +122,7 @@ export function Basket(props){
 
   //상품 목록 삭제 함수
   const deletedList = () => {
-  if(selectedItems !== null && selectedItems.length > 0){
-    //wishlist 배열에서 selectedItems에 포함된(체크박스 선택된) 항목들이 아닌 것들로 새로운 배열을 생성
-    const updatedWishlist = basketList.filter((item) => !selectedItems.includes(item)); 
-    setBasketList(updatedWishlist);
 
-    // 선택된 항목들 초기화
-    setSelectedItems([]);
-    
-    //알림
-    alert("장바구니에서 해당 품목이 성공적으로 삭제되었습니다.")
-  } else {
-    alert("선택된 항목이 없습니다.")
-  }
 };
 // --------- 수량 변경 부분 ----------
   
@@ -158,16 +137,15 @@ export function Basket(props){
         }
       return item; // 다른 아이템은 그대로 반환
       });
-      setBasketList(updatedItems);
     }
   };
 
   // 수량 DOWN
   function handleDelItem(prevItem) {
     const updatedItems = basketList.map((item) => {
-      if (item.id === prevItem.id) {
+      if (item.product_id === prevItem.product_id) {
         if (item.cnt > 1) {
-          return { ...item, cnt: parseInt(item.cnt) - 1 };
+          return { ...item, cnt: parseInt(item.product_cnt) - 1 };
         } else {
           alert("수량은 1보다 커야합니다.");
           return item; // 1이하로 내릴 수 없으면 기존 아이템 반환
@@ -175,8 +153,6 @@ export function Basket(props){
       }
       return item; // 다른 아이템은 그대로 반환
     });
-
-    setBasketList(updatedItems);
   }
     
 
@@ -193,8 +169,6 @@ export function Basket(props){
       }
       return item; // 다른 아이템은 그대로 반환
     });
-
-    setBasketList(updatedItems);
   }
 
   // 주문서 작성창 링크 함수(receipt에 넘어가면 해당 객체의 키와 값만 가지고 감(주의))
@@ -221,7 +195,7 @@ export function Basket(props){
         price: item.price,
         // 이후 discount 값 수정 필요 (등급에 따라)
         discount : item.discount ? item.discount : 0, 
-        optionSelected: item.option && item.optionSelected,
+        optionSelected: item.optionSelected && item.optionSelected,
       }));
       // sessionStoragerage에 저장
       // 데이터를 암호화 (JSON 변환 2번 과정 거치기 (암호화 시 1번, 암호화 성공 후 세션스토리지 저장 시 1번))
@@ -241,11 +215,13 @@ export function Basket(props){
       { id: 4, title: '주문 완료' },
     ];
 
-    // 장바구니 목록 나열
-    const getCurrentPagePosts = () => {
-      const startIndex = (currentPage - 1) * 10; // 한 페이지에 5개씩 표시
-      return onlyUserData.slice(startIndex, startIndex + 5);
-    };
+
+    if(isLoading){
+      return <p>Loading..</p>;
+    }
+    if(isError){
+      return <p>에러 : {error.message}</p>;
+    }
   return(
     <div>
       {/* 스탭 모듈 */}
@@ -314,7 +290,7 @@ export function Basket(props){
             <tbody>
               {/* 장바구니 탭일 때는 장바구니 목록만 */}
               {props.activeTab===1 &&
-              basketList ? getCurrentPagePosts().map((item, index)=>(
+              basketList.map((item, index)=>(
               <tr key={index}>
                 <td>
                   <input 
@@ -323,12 +299,12 @@ export function Basket(props){
                   type='checkbox'
                   /> 
                 </td>
-                <td><img src={item.image.mini} alt='이미지'/></td>
+                <td><img className={styles.thumnail} src={item.product_image_original} alt='이미지'/></td>
                 <td>
-                  <h5 className={styles.link} onClick={()=>navigate(`/detail/${item.id}`)}>{item.title}</h5>
+                  <h5 className={styles.link} onClick={()=>navigate(`/detail/${item.product_id}`)}>{item.product_title}</h5>
                   <div>
-                  {item.option && `옵션 : ${item.optionSelected}`}
-                  <p>상품 표준가 : <span className={styles.price}>\{item.price.toLocaleString()}</span></p>
+                  {item.cart_selectedOption && `옵션 : ${item.cart_selectedOption}`}
+                  <p>상품 표준가 : <span className={styles.price}>{parseInt(item.cart_price).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}</span></p>
                   </div>
                 </td>
                 {/* 수량 변경 */}
@@ -340,7 +316,7 @@ export function Basket(props){
                   >
                     -
                   </button>                          
-                  <input value={item.cnt} className={styles.input} onChange={(e)=>maxLengthCheck(e,item)} type='text' placeholder='숫자만 입력'/>
+                  <input value={item.cart_cnt} className={styles.input} onChange={(e)=>maxLengthCheck(e,item)} type='text' placeholder='숫자만 입력'/>
                   <button 
                   className={styles.editButton}
                   onClick={()=>handleAddItem(item)}
@@ -350,21 +326,19 @@ export function Basket(props){
                   </div>
                 </td>
                 <td className={styles.price}>
-                  {item.discount
+                  {item.product_discount
                   ?
                   <>
                   <span style={{color: 'red', fontWeight: '750'}}>
-                    ({item.discount}%)
+                    ({item.product_discount}%)
                   </span>
                   &nbsp;<i className="fal fa-long-arrow-right"/>&nbsp;
-                  \{((item.price * item.cnt) - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}
+                  {parseInt(item.cart_amount).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                   </>
-                  : `\\${(item.price * item.cnt).toLocaleString()}`}
+                  : `${(item.cart_price * item.cart_cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
                 </td>
               </tr>
-              ))
-            : null}
-
+              ))}
             {/* 주문서 작성 탭으로 넘어가면 체크된 목록들만 나열함(수정 불가) */}
             {props.activeTab > 1 && orderList &&
             orderList.map((item, key)=> (
@@ -373,9 +347,9 @@ export function Basket(props){
                 <td>
                   <h5 className={styles.link} 
                   onClick={()=>props.activeTab === 1
-                  ? navigate(`/detail/${item.id 
-                    ? item.id 
-                    : item.productId}`) 
+                  ? navigate(`/detail/${item.product_id 
+                    ? item.product_id 
+                    : item.product_id}`) 
                     : null}
                   >
                     {item.title 
@@ -383,7 +357,7 @@ export function Basket(props){
                   ? item.productName : null}</h5>
                   <div>
                   {item.optionSelected && `옵션 : ${item.optionSelected}`}
-                  <p>상품 표준가 : <span className={styles.price}>\{item.price.toLocaleString()}</span></p>
+                  <p>상품 표준가 : <span className={styles.price}>\{item.cart_price.toLocaleString()}</span></p>
                   </div>
                 </td>
                 <td>{item.cnt}</td>
@@ -416,12 +390,12 @@ export function Basket(props){
                     \{
                     orderList.length !== 0 ?
                       orderList.reduce((sum, item) => //reduce 사용하여 배열 객체의 합계 계산, 0으로 초기화
-                        sum + ((item.price * item.cnt) - (((item.price / 100) * item.discount) * item.cnt))
+                        sum + ((item.cart_price * item.cart_cnt) - (((item.cart_price / 100) * item.cart_discount) * item.cart_cnt))
                       , 0).toLocaleString()
                       :
                       selectedItems.length !== 0 ?
                         selectedItems.reduce((sum, item) =>
-                          sum + ((item.price * item.cnt) - ((item.price / 100) * item.discount) * item.cnt)
+                          sum + ((item.cart_price * item.cart_cnt) - ((item.cart_price / 100) * item.cart_discount) * item.cart_cnt)
                         , 0).toLocaleString()
                         : 0
                       }
@@ -447,7 +421,7 @@ export function Basket(props){
                       :
                       selectedItems.length !== 0 ?
                         selectedItems.reduce((sum, item) =>
-                          sum + ((item.price * item.cnt) - ((item.price / 100) * item.discount) * item.cnt)
+                          sum + ((item.cart_price * item.cart_cnt) - ((item.cart_price / 100) * item.cart_discount) * item.cart_cnt)
                         , delivery).toLocaleString()
                         : 0
                       }
@@ -475,7 +449,7 @@ export function Basket(props){
             <button
             className={styles.moveButton}
             onClick={()=> {
-              if(onlyUserData.length > 5){
+              if(basketList.length > 5){
                 setCurrentPage(currentPage + 1)
               } else {
                 alert("다음 페이지가 없습니다.")

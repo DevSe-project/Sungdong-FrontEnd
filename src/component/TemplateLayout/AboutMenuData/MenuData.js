@@ -57,9 +57,9 @@ export function MenuData(props) {
       id: 3,
       title: {
         item: '장바구니',
-        link: '/basket'
+        link: '/basket',
+        require: GetCookie('jwt_token') !== null
       },
-      require: GetCookie('jwt_token') !== null
     },
     {
       id: 4,

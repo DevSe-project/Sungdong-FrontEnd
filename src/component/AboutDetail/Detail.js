@@ -3,9 +3,9 @@ import styles from './Detail.module.css'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { TabInfo } from './TabInfo'
-import { useBasketList, useDataActions, useDetailData, useIsLogin, useListActions, useSetLogin, useWishList } from '../../Store/DataStore'
+import { useBasketList, useDataActions, useDetailData, useListActions, useWishList } from '../../Store/DataStore'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import axios from 'axios'
+import axios from '../../axios'
 import { GetCookie } from '../../customFn/GetCookie'
 export function Detail(props) {
 
@@ -59,15 +59,13 @@ export function Detail(props) {
         return;
       }
       try {
-        const response = await axios.post("/cart", 
-          JSON.stringify({
-            product_id: product.product_id,  // 예시: product가 객체이고 id 속성이 있는 경우
-            optionSelect: product.optionSelect ? product.optionSelect : null,
-            cnt: count,
-          }),
+        const token = GetCookie("jwt_token");
+        const response = await axios.post("/cart/create", 
+          JSON.stringify(product),
           {
             headers : {
-              "Content-Type" : "application/json"
+              "Content-Type" : "application/json",
+              "Authorization" : `Bearer ${token}`,
             }
           }
         )
@@ -116,8 +114,8 @@ export function Detail(props) {
         const token = GetCookie('jwt_token');
         const response = await axios.post("/estimate/box", 
           JSON.stringify({
-            productId: product.product_id,  // 예시: product가 객체이고 id 속성이 있는 경우
-            optionSelect: product.optionSelect ? product.optionSelect : null,
+            ...product,
+            optionSelect: optionSelected ? optionSelected : null,
             cnt: count,
           }),
           {
@@ -144,7 +142,7 @@ export function Detail(props) {
 
 
     //견적함 추가 함수
-    const { addEstimateBox } = useMutation({mutationFn : addToEstimate,
+    const { mutate:addEstimateBox } = useMutation({mutationFn : addToEstimate,
       onSuccess: (ebData) => {
         // 메세지 표시
         console.log('상품을 견적함에 추가하였습니다.', ebData);
@@ -209,8 +207,17 @@ function buyThis(product, count){
 
 // 장바구니 담기 함수
 function basketThis(product, count){
+  if(product.option0 !== null && (optionSelected === "" || optionSelected === null)){
+    alert("옵션 선택 후 상품을 추가해주세요");
+    return;
+  }
   // login 캐쉬값이 저장되어 있는 것이 확인이 되면 허용
-    cartMutate(product,{
+  const newProduct = {
+    ...product,
+    cnt: count,
+    selectedOption: optionSelected ? optionSelected : null
+  }
+    cartMutate(newProduct,{
       onSuccess: (cartData) => {
         // 메세지 표시
         alert(cartData.message);
@@ -251,6 +258,7 @@ function basketThis(product, count){
       <select value={optionSelected || ""}
       onChange={(e)=>{setOptionSelected(e.target.value)}}
       className={styles.selectSize}>
+      <option value="">옵션 선택</option>
       {options.length > 0 && options.map((option, key) => {
       return (
         option !== "" &&
