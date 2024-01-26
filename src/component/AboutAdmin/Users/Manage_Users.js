@@ -154,7 +154,7 @@ export default function Manage_Users() {
                         <SortUserList sortBy={sortBy} onSort={handleSort} />
                     </div>
 
-                    <table className={styles.userTable}>
+                    <table style={{marginTop: '10px'}}>
                         <thead>
                             <tr>
                                 <th>구분</th>
