@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useModalActions } from "../../../../Store/DataStore";
 import styles from './DeliveryModalStyles.module.css';
+import axios from '../../../../axios';
+import { GetCookie } from "../../../../customFn/GetCookie";
 
 // 배송 상태 수정 모달 컴포넌트
 export default function DeliveryStateModal(props) {
@@ -54,7 +56,7 @@ export default function DeliveryStateModal(props) {
         setFetchedData(data);
     }
 
-    // 전체 항목의 배송 상태 변경 함수
+    // 모든 항목의 배송 상태 변경 함수
     function handleBatchStatus(val) {
         // FetchedData의 모든 항목의 배송 상태 일괄 업데이트
         setFetchedData((prevData) =>
@@ -87,19 +89,33 @@ export default function DeliveryStateModal(props) {
         }
     }
 
-    // 변경사항 적용
-    function applyStatus() {
-        // FetchData에서 가져온 데이터로 MatchedData 업데이트
-        props.setMatchedData((prevData) =>
-            prevData.map((item) => ({
-                ...item,
-                delivery_state: fetchedData.find((dataItem) => dataItem.order_id === item.order_id).delivery_state,
-            }))
-        );
-        // 모달 닫기 또는 필요한 작업 수행
-        selectedModalClose();
-        props.setCheckedItems([]);
+    // 배송 상태 변경 함수
+    const applyStatusToServer = async () => {
+        try {
+            const token = GetCookie('jwt_token');
+            const response = await axios.put("/product/categoryEdit",
+                JSON.stringify({
+                    delivery_state: fetchedData.delivery_state
+                }),
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        'Authorization': `Bearer ${token}`
+                    }
+                }
+            )
+            // 서버 응답 처리
+            if (response.status === 200) {
+                console.log("배송 상태가 성공적으로 업데이트되었습니다.");
+                // 필요한 추가 작업 수행
+            } else {
+                console.error("배송 상태 업데이트에 실패했습니다.");
+            }
+        } catch (error) {
+            console.error("배송 상태 업데이트 중 오류가 발생했습니다:", error);
+        }
     }
+
 
 
     return (
@@ -173,7 +189,7 @@ export default function DeliveryStateModal(props) {
                         </thead>
                         {/* 데이터 표시 */}
                         <tbody>
-                            {props.deliveryData.map((item, index) => (
+                            {fetchedData.map((item, index) => (
                                 <tr key={index}>
                                     {/* 주문번호 */}
                                     <td>{item.order_id}</td>
@@ -218,7 +234,7 @@ export default function DeliveryStateModal(props) {
 
                 {/* 적용 버튼 */}
                 <div style={{ margin: '10px' }}>
-                    <button className='original_button' onClick={applyStatus}>
+                    <button className='original_button' onClick={applyStatusToServer}>
                         적용
                     </button>
                 </div>
