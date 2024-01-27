@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import styles from './Basket.module.css'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import React from 'react';
-import { useBasketList, useListActions, useOrderList } from '../../Store/DataStore';
+import { useBasketList, useCartList, useListActions, useOrderList } from '../../Store/DataStore';
 import axios from '../../axios';
 import { GetCookie } from '../../customFn/GetCookie';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 export function Basket(props){
 
   //장바구니 데이터 fetch
@@ -28,10 +28,16 @@ export function Basket(props){
   // 장바구니 데이터 불러오기
   const { isLoading, isError, error, data:basketList } = useQuery({queryKey:['cart'], queryFn: ()=> fetchCartData()});
 
+  const cartList = useCartList();
+  const {setCartList, setCartCntUp, setCartCntDown, setCartCnt, resetCartList} = useListActions();
+
+
   const orderList = useOrderList();
   const { setOrderList } = useListActions();
 
   const navigate = useNavigate();
+
+  const queryClient = useQueryClient();
 
   // 배송가
   const delivery = 3000;
@@ -93,12 +99,23 @@ export function Basket(props){
     }
   }, [location]);
 
+  useEffect(()=> {
+    function fetchData(){
+      if ((basketList && cartList.length === 0) || (basketList && basketList.map(item => cartList.length > 0 && cartList.map(cart => item !== cart)))) {
+        resetCartList();
+        setCartList(basketList);
+      }
+    };
+  
+    fetchData();
+  }, [basketList])
+
   // 전체 선택 체크박스 클릭 시 호출되는 함수
   function handleSelectAllChange() {
     setSelectAll(!selectAll);
 
     if (!selectAll) {
-      const allId = basketList && basketList.map((item) => item);
+      const allId = basketList && cartList.map((item) => item);
       setSelectedItems(allId);
     } else {
       setSelectedItems([]);
@@ -112,16 +129,44 @@ export function Basket(props){
       setSelectAll(false);
     } else {
       setSelectedItems([...selectedItems, product]); //selectedItems의 배열과 productID 배열을 합쳐 다시 selectedItems에 저장
-      if(selectedItems.length + 1 === basketList.length){
+      if(selectedItems.length + 1 === cartList.length){
         setSelectAll(true);
       }
     }
   };
 
+
+  const fetchDeletedProducts = async(productId) => {
+    try {
+      const response = await axios.delete(`/cart/delete/${productId}`,
+      )
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // 상품 삭제를 처리하는 뮤테이션
+  const {mutate:deleteProductMutation} = useMutation({mutationFn: fetchDeletedProducts})
+
   //상품 목록 삭제 함수
   const deletedList = () => {
-
-};
+    const isConfirmed = window.confirm('정말로 삭제하시겠습니까?');
+    if(isConfirmed){
+      const itemsId = selectedItems.map(item => item.cart_product_id)
+      deleteProductMutation(itemsId,{
+        onSuccess: (data) => {
+          alert(data.message);
+          // 상품 삭제 성공 시 상품 목록을 다시 불러옴
+          queryClient.invalidateQueries(['cart']);
+        },
+        onError: (error) => {
+          // 상품 삭제 실패 시, 에러 처리를 수행합니다.
+          console.error('상품을 삭제 처리하는 중 오류가 발생했습니다.', error);
+        },
+      });
+    }
+  };
 // --------- 수량 변경 부분 ----------
   
   // 수량 최대입력 글자(제한 길이 변수)
@@ -129,44 +174,29 @@ export function Basket(props){
     const lengthTarget = e.target.value;
 
     if (lengthTarget >= 0 && lengthTarget.length <= 3) {
-      const updatedItems = basketList.map((item) => {
-        if (item.id === prevItem.id) {  
-          return { ...item, cnt: lengthTarget };
-        }
-      return item; // 다른 아이템은 그대로 반환
-      });
+      setCartCnt(prevItem, lengthTarget);
     }
   };
 
   // 수량 DOWN
   function handleDelItem(prevItem) {
-    const updatedItems = basketList.map((item) => {
-      if (item.product_id === prevItem.product_id) {
-        if (item.cnt > 1) {
-          return { ...item, cnt: parseInt(item.product_cnt) - 1 };
-        } else {
-          alert("수량은 1보다 커야합니다.");
-          return item; // 1이하로 내릴 수 없으면 기존 아이템 반환
-        }
-      }
-      return item; // 다른 아이템은 그대로 반환
-    });
+    if (prevItem.cnt > 1) {
+      setCartCntDown(prevItem);
+    } else {
+      alert("수량은 1보다 커야합니다.");
+      return prevItem; // 1이하로 내릴 수 없으면 기존 아이템 반환
+    }
   }
     
 
   // 수량 UP
   function handleAddItem(prevItem) {
-    const updatedItems = basketList.map((item) => {
-      if (item.id === prevItem.id) {
-        if (item.cnt < 999) {
-          return { ...item, cnt: parseInt(item.cnt) + 1 };
-        } else {
-          alert("수량은 999보다 작아야합니다.");
-          return item; // 999 이상으로 올릴 수 없으면 기존 아이템 반환
-        }
-      }
-      return item; // 다른 아이템은 그대로 반환
-    });
+    if (prevItem.cnt < 999) {
+      setCartCntUp(prevItem);
+    } else {
+      alert("수량은 999보다 작아야합니다.");
+      return prevItem; // 999 이상으로 올릴 수 없으면 기존 아이템 반환
+    }
   }
 
   // 주문서 작성창 링크 함수(receipt에 넘어가면 해당 객체의 키와 값만 가지고 감(주의))
@@ -286,7 +316,7 @@ export function Basket(props){
             <tbody>
               {/* 장바구니 탭일 때는 장바구니 목록만 */}
               {props.activeTab===1 &&
-              basketList.map((item, index)=>(
+              basketList && cartList.map((item, index)=>(
               <tr key={index}>
                 <td>
                   <input 
@@ -312,7 +342,7 @@ export function Basket(props){
                   >
                     -
                   </button>                          
-                  <input value={item.cart_cnt} className={styles.input} onChange={(e)=>maxLengthCheck(e,item)} type='text' placeholder='숫자만 입력'/>
+                  <input value={item.cnt} className={styles.input} onChange={(e)=>maxLengthCheck(e,item)} type='text' placeholder='숫자만 입력'/>
                   <button 
                   className={styles.editButton}
                   onClick={()=>handleAddItem(item)}
@@ -329,9 +359,9 @@ export function Basket(props){
                     ({item.product_discount}%)
                   </span>
                   &nbsp;<i className="fal fa-long-arrow-right"/>&nbsp;
-                  {parseInt(item.cart_amount).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
+                  {parseInt(item.cart_price * item.cnt - (((item.cart_price/100)*item.cart_discount)*item.cnt)).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                   </>
-                  : `${(item.cart_price * item.cart_cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
+                  : `${(item.cart_price * item.cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
                 </td>
               </tr>
               ))}
@@ -391,7 +421,7 @@ export function Basket(props){
                       :
                       selectedItems.length !== 0 ?
                         selectedItems.reduce((sum, item) =>
-                          sum + ((item.cart_price * item.cart_cnt) - ((item.cart_price / 100) * item.cart_discount) * item.cart_cnt)
+                          sum + ((item.cart_price * item.cnt) - ((item.cart_price / 100) * item.cart_discount) * item.cnt)
                         , 0).toLocaleString()
                         : 0
                       }
@@ -417,7 +447,7 @@ export function Basket(props){
                       :
                       selectedItems.length !== 0 ?
                         selectedItems.reduce((sum, item) =>
-                          sum + ((item.cart_price * item.cart_cnt) - ((item.cart_price / 100) * item.cart_discount) * item.cart_cnt)
+                          sum + ((item.cart_price * item.cnt) - ((item.cart_price / 100) * item.cart_discount) * item.cnt)
                         , delivery).toLocaleString()
                         : 0
                       }

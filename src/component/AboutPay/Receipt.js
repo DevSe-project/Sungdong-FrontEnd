@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import styles from './Receipt.module.css'
 import { useNavigate } from 'react-router-dom';
-import { useBasketList, useDataActions, useDeliveryInfo, useListActions, useListStore, useOrderActions, useOrderData, useOrderInfo, useOrderList, useUserData } from '../../Store/DataStore';
+import { useCartList, useDataActions, useDeliveryInfo, useListActions, useListStore, useOrderActions, useOrderData, useOrderInfo, useOrderList, useUserData } from '../../Store/DataStore';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { GetCookie } from '../../customFn/GetCookie';
@@ -107,7 +107,7 @@ export function Receipt(props){
   const { setOrderData } = useDataActions();
 
   const orderList = useOrderList();
-  const basketList = useBasketList();
+  const cartList = useCartList();
   
   const { setBasketList } = useListActions();
 
@@ -344,7 +344,7 @@ export function Receipt(props){
         // sessionStorage 변경
         sessionStorage.removeItem('orderData');
         sessionStorage.setItem('newOrderData', JSON.stringify(newOrderData));
-        setBasketList(basketList.filter((item)=>!orderList.some((orderItem) =>
+        setBasketList(cartList.filter((item)=>!orderList.some((orderItem) =>
         orderItem.optionSelected 
         ? 
         orderItem.optionSelected === item.optionSelected &&

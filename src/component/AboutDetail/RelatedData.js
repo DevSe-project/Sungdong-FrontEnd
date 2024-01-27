@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react';
 import styles from './RelatedData.module.css'
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useBasketList, useListActions } from '../../Store/DataStore';
+import { useCartList, useListActions } from '../../Store/DataStore';
 import { useQuery } from '@tanstack/react-query';
 import { GetCookie } from '../../customFn/GetCookie';
 export function RelatedData({detailData}) {
 
   const { isLoading, isError, error, data } = useQuery({queryKey:['data']});
 
-  const basketList = useBasketList();
+  const cartList = useCartList();
   const { setBasketList } = useListActions();
   const navigate = useNavigate();
 
@@ -147,7 +147,7 @@ export function RelatedData({detailData}) {
       return { ...item};
     });
   
-    setBasketList([...basketList, ...basketProductsToAdd]);
+    setBasketList([...cartList, ...basketProductsToAdd]);
   
     alert("해당 상품이 장바구니에 추가되었습니다.");
     setSelectedItems([]);

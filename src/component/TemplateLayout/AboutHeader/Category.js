@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from './Category.module.css'
 import React from 'react';
-import { useBasketList, useCategoryData, useIsLogin, useListActions } from "../../../Store/DataStore";
+import { useCartList, useCategoryData, useIsLogin, useListActions } from "../../../Store/DataStore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { CategoryFilter } from "./CategoryFilter";
@@ -80,7 +80,7 @@ export function Category(props){
 
     const categoryData = useCategoryData();
     const isLogin = useIsLogin();
-    const basketList = useBasketList();
+    const cartList = useCartList();
     const { setBasketList } = useListActions();
     
     // 카테고리
@@ -112,12 +112,6 @@ export function Category(props){
     
     //옵션 선택 state
     const [optionSelected, setOptionSelected] = useState(filteredItems.map(() => ""));
-    
-    // 장바구니 복사
-    const copyList = [...basketList];
-
-    // userId가 같은 항목만 필터링
-    const onlyUserData = copyList.filter((item)=> item.userId === inLogin.id);
   
 
     // ------------------카테고리 찾기 - mainCategory와 subCategory가 바뀔 때 마다 실행
@@ -379,14 +373,14 @@ export function Category(props){
         }));
       
         const isDuplicate = selectedItemsInfo.some((selectedItemsInfo) =>
-          onlyUserData.some((basketItem) =>
+          cartList.some((basketItem) =>
             basketItem.id === selectedItemsInfo.id &&
             basketItem.optionSelected === selectedItemsInfo.option
           )
         );
       
         if (isDuplicate) {
-          const findDuplicate = onlyUserData.filter((item) =>
+          const findDuplicate = cartList.filter((item) =>
             selectedItemsInfo.some((selectedItemInfo) =>
               item.id === selectedItemInfo.id &&
               item.optionSelected === selectedItemInfo.option
@@ -407,7 +401,7 @@ export function Category(props){
           return {...item, userId: inLogin.id };
         });
       
-        setBasketList([...basketList, ...basketProductsToAdd]);
+        setBasketList([...cartList, ...basketProductsToAdd]);
       
         alert("해당 상품이 장바구니에 추가되었습니다.");
         setSelectedItems([]);

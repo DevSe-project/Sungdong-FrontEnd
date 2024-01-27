@@ -91,7 +91,7 @@ export const useDataActions = () => useDataStore((state) => state.actions);
 const useListStore = create((set) => ({
   wishList: [],
   orderList: [],
-  basketList: [],
+  cartList: [],
   noticePostList: [],
 
 
@@ -106,12 +106,62 @@ const useListStore = create((set) => ({
       set((state) => ({
         orderList: val
       })),
-    // 장바구니
 
-    setBasketList: (val) =>
+    resetCartList: (val) =>
       set((state) => ({
-        basketList: val
+        orderList: []
       })),
+
+    // 장바구니
+    setCartList: (data) =>
+      set((state) => ({
+        cartList: [
+          ...data.map((item) => ({ cnt: 1, ...item })),
+        ],
+      })),
+
+    //카트수량 UP
+    setCartCnt: (item, value) =>
+    set((state) => ({
+      cartList: state.cartList.map((list) => {
+        if (list.cart_product_id === item.cart_product_id) {
+          return {
+            ...list,
+            cnt: value,
+          };
+        }
+        return list;
+      }),
+    })),
+
+    //카트수량 UP
+    setCartCntUp: (item) =>
+    set((state) => ({
+      cartList: state.cartList.map((list) => {
+        if (list.cart_product_id === item.cart_product_id) {
+          return {
+            ...list,
+            cnt: (parseInt(list.cnt) + 1).toString(),
+          };
+        }
+        return list;
+      }),
+    })),
+
+    //카트수량 DOWN
+    setCartCntDown: (item) =>
+    set((state) => ({
+      cartList: state.cartList.map((list) => {
+        if (list.cart_product_id === item.cart_product_id) {
+          return {
+            ...list,
+            cnt: (parseInt(list.cnt) - 1).toString(),
+          };
+        }
+        return list;
+      }),
+    })),
+
     // 공지사항
     setNoticePostList: (val) => {
       set((state) => ({
@@ -127,7 +177,7 @@ const useListStore = create((set) => ({
 // 선택자 생성, 상태가 변경될 때마다 구성요소가 업데이트 되기 때문에 반복적 렌더링 방지, 
 // 실수로 전체 스토어를 렌더링 하는 일 방지.
 export const useWishList = () => useListStore((state) => state.wishList);
-export const useBasketList = () => useListStore((state) => state.basketList);
+export const useCartList = () => useListStore((state) => state.cartList);
 export const useOrderList = () => useListStore((state) => state.orderList);
 export const useNoticePostList = () => useListStore((state) => state.noticePostList);
 
