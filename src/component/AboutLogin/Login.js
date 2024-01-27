@@ -39,8 +39,15 @@ export function Login(props) {
       // 성공 시 추가된 상품 정보를 반환합니다.
       return response.data;
     } catch (error) {
+      if (error.response && error.response.status === 400) {
+        // 서버가 400을 반환한 경우
+        alert(error.response.data.message);
+        navigate("/login");
+        throw new Error(error.response.data.message);
+      } else {
       // 실패 시 예외를 throw합니다.
       throw new Error('로그인 중 오류가 발생했습니다.');
+      }
     }
   }
 
