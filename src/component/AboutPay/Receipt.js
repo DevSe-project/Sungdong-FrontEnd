@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import styles from './Receipt.module.css'
 import { useNavigate } from 'react-router-dom';
-import { useCartList, useDataActions, useDeliveryInfo, useListActions, useListStore, useOrderActions, useOrderData, useOrderInfo, useOrderList, useUserData } from '../../Store/DataStore';
+import { useDeliveryInfo, useOrderActions, useOrderInfo, useOrderList, useUserData } from '../../Store/DataStore';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { GetCookie } from '../../customFn/GetCookie';
@@ -10,21 +10,17 @@ import { GetCookie } from '../../customFn/GetCookie';
 export function Receipt(props){
   const navigate = useNavigate();
 
+  const userData = useUserData();
+  const orderList = useOrderList();
+
   const queryClient = useQueryClient();
 
   //주문 목록 추가 요청 함수
-  const orderTo = async () => {
+  const orderTo = async (orderData) => {
     try {
       const token = GetCookie('jwt_token');
       const response = await axios.post("/order", 
-        JSON.stringify({
-          productId: orderList.id,  // 예시: product가 객체이고 id 속성이 있는 경우
-          optionSelect: orderList.optionSelect ? orderList.optionSelect : null,
-          cnt: orderList.cnt,
-          order: orderInformation,
-          delivery: deliveryInformation,
-          orderState: orderInformation.payRoute === 'CMS' ? 2 : 0, //0 => 결제대기, 1 => 결제완료 2 => 배송준비중 3 => 배송중 4 => 배송완료 
-        }),
+        JSON.stringify(orderData),
         {
           headers : {
             "Content-Type" : "application/json",
@@ -43,9 +39,7 @@ export function Receipt(props){
   const lowSupply = async (filteredData) => {
     try {
       const response = await axios.put(`/data/supply`, 
-        JSON.stringify({
-          ...filteredData,
-        }),
+        JSON.stringify(filteredData),
         {
           headers : {
             "Content-Type" : "application/json",
@@ -60,60 +54,19 @@ export function Receipt(props){
     }
   };
   //데이터 재고 감소 요청 함수
-  const { supplyMutation } = useMutation({mutationFn: lowSupply,
-    onSuccess: (success) => {
-      console.log("재고 상태를 업데이트 하였습니다.", success);
-      queryClient.invalidateQueries(['data']);
-    },
-    onError: (error) => {
-      // 상품 추가 실패 시, 에러 처리를 수행합니다.
-      console.error('상품을 수정하던 중 오류가 발생했습니다.', error);
-    }
-  });
+  const { mutate:supplyMutation } = useMutation({mutationFn: lowSupply})
+
 
   //주문 신청 함수
-  const { orderMutation } = useMutation({mutationFn: orderTo,
-    onSuccess: (success) => {
-      // 메세지 표시
-      alert(success.message);
-      console.log('주문이 완료되었습니다.', success);
-      // 주문 상태를 다시 불러와 갱신합니다.
-      queryClient.invalidateQueries(['order']);
-      supplyMutation.mutate();
-      // 선택된 아이템들 초기화
-      if(orderInformation.payRoute === 'CMS'){
-        navigate("/basket/order");
-      } else {
-        navigate("/basket/pay");
-      }
-    },
-    onError: (error) => {
-      // 상품 추가 실패 시, 에러 처리를 수행합니다.
-      console.error('상품을 주문목록에 넣는 중 오류가 발생했습니다.', error);
-    },
-  })
-
-  const orderData = useOrderData();
-  const userData = useUserData();
-
-  const { setOrderData } = useDataActions();
-
-  const orderList = useOrderList();
-  const cartList = useCartList();
-  
-  const { setBasketList } = useListActions();
+  const { mutate:orderMutation } = useMutation({mutationFn: orderTo})
 
 
   // 데이터 항목 저장
   const orderInformation = useOrderInfo();
   const deliveryInformation = useDeliveryInfo();
-  const {setOrderInformation, setDeliveryInformation, setDetailInformation} = useOrderActions();
+  const {setOrderInformation, setDeliveryInformation, setDetailInformation, resetOrderInfo} = useOrderActions();
 
-  const [address, setAddress] = useState("");
   const [inputUser, setInputUser] = useState("사업자정보");
-  const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'));
-  // 유효성검사 State
-  const [isFormValid, setIsFormValid] = useState(false);  
 
   // 성동 택배 날짜 계산 로직 ~
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -125,19 +78,19 @@ export function Receipt(props){
     if (props.activeTab !== 2) {
       alert("잘못된 접근입니다.")
       props.setActiveTab(1);
+      resetOrderInfo();
       navigate("/");
     }
   }, [props, navigate])
 
   // 다음(카카오) 주소찾기 API 기능
-  const openPopup = (setAddress) => {
+  const openPopup = () => {
       const script = document.createElement('script');
       script.src = 'https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
       script.onload = () => {
         new window.daum.Postcode({
           oncomplete: (data) => {
-            setAddress(data);
-            setDetailInformation("address", "address", data);
+            setOrderInformation("address", data);
           }
       }).open();
   }
@@ -169,53 +122,70 @@ export function Receipt(props){
     );
   };
 
-    //반복되는 인풋란(배송) 렌더링
-    const deliveryInputField = (fieldName, placeholder) => {
-      return (
-        <input
-          type="text"
-          className={styles.selectSize}
-          placeholder={placeholder}
-          value={deliveryInformation[fieldName]}
-          onChange={(e) => handleChangeDeliveryField(fieldName, e.target.value)}
-        />
-      );
-    };
-
-  // //정보 자동 입력
-  // useEffect(() => {
-  //   if(userData){
-  //     const findUser = userData.find(userData => userData.id == inLogin.id);
-  //     if (findUser) {
-  //       setOrderInformation("name",findUser.corporationData.ceoName);
-  //       setOrderInformation("tel", `${findUser.num1}-${findUser.num2}-${findUser.num3}`);
-  //       setOrderInformation("email", findUser.email);
-  //       if (inputUser === '사업자정보') {
-  //         setAddress(findUser.address);
-  //         setOrderInformation("fax",findUser.corporationData.FAX);
-  //         setDeliveryInformation("name",findUser.corporationData.ceoName);
-  //         setDeliveryInformation("tel",`${findUser.num1}-${findUser.num2}-${findUser.num3}`);
-  //         setDetailInformation("address", "address", address);
-  //         setDetailInformation("address","addressDetail",findUser.addressDetail);
-  //       } else if (inputUser === '직접입력') {
-  //         setAddress("")
-  //       };
-  //     }
-  //   }
-  // }, [inputUser, userData, inLogin.id, address]);
+  //정보 자동 입력
+  useEffect(() => {
+    if(userData){
+        setOrderInformation("order_name",userData.name);
+        setOrderInformation("order_tel", userData.tel);
+        setOrderInformation("order_email", userData.email);
+        if (inputUser === '사업자정보') {
+          setOrderInformation("order_faxNum", userData.cor_fax);
+          setOrderInformation("order_delName", userData.cor_ceoName);
+          setOrderInformation("order_delTel", userData.cor_tel);
+          setDetailInformation("address", "zonecode", userData.zonecode);
+          setDetailInformation("address", "roadAddress", userData.roadAddress);
+          setDetailInformation("address", "bname", userData.bname);
+          setDetailInformation("address", "buildingName", userData.buildingName);
+          setDetailInformation("address", "jinunAddress", userData.jibunAddress);
+          setOrderInformation("addressDetail",userData.addressDetail);
+        } else if (inputUser === '직접입력') {
+          resetOrderInfo();
+        };
+    }
+  }, [inputUser, userData]);
 
 
 
   // submit 버튼
   function submitReceipt(){
       if(props.activeTab===2){
+
         //결제 방식이 CMS일때
         if(orderInformation.payRoute === 'CMS'){
-          props.setActiveTab(4);
-          navigate("/basket/order");
-        orderMutation.mutate();
-          // 결제방식이 일반결제 일때
-        } else if (orderInformation.payRoute === '일반결제') {
+          const orderData = {
+            ...orderInformation,
+            ...orderInformation.address,
+            deliveryInformation
+          }
+          orderMutation(orderData,{
+          onSuccess: (success) => {
+            // 메세지 표시
+            alert(success.message);
+            console.log('주문이 완료되었습니다.', success);
+            // 주문 상태를 다시 불러와 갱신합니다.
+            queryClient.invalidateQueries(['order']);
+            //재고 상태 수량만큼 감소
+            
+            supplyMutation(orderList,{
+              onSuccess: (success) => {
+                console.log("재고 상태를 업데이트 하였습니다.", success);
+                queryClient.invalidateQueries(['data']);
+                props.setActiveTab(4);
+                navigate("/basket/order");
+              },
+              onError: (error) => {
+                // 상품 추가 실패 시, 에러 처리를 수행합니다.
+                console.error('상품을 수정하던 중 오류가 발생했습니다.', error);
+              }
+            });
+          },
+          onError: (error) => {
+            // 상품 추가 실패 시, 에러 처리를 수행합니다.
+            console.error('상품을 주문목록에 넣는 중 오류가 발생했습니다.', error);
+          },
+        })
+          // 결제방식이 무통장 입금일때
+        } else if (orderInformation.payRoute === '무통장입금') {
           props.setActiveTab(3);
           navigate("/basket/pay");
         }
@@ -237,7 +207,8 @@ export function Receipt(props){
 
   // 성동 택배 일 때 택배 날짜 로직
   useEffect(() => {
-    updateDateList();
+    if(deliveryInformation.deliveryType === "성동택배")
+      updateDateList();
   }, []);
 
   const updateDateList = () => {
@@ -298,7 +269,7 @@ export function Receipt(props){
     if (!isNaN(selectedDateObj)) {
       setSelectedDate(selectedDateObj);
       setDeliveryInformation(
-        "deliveryDate",selectedDateStr
+        "delivery_date",selectedDateStr
       )
     }
   };
@@ -339,7 +310,7 @@ export function Receipt(props){
               <label>성함</label>
             </div>
             <div className={styles.input}>
-              {orderInputField("name","주문자의 성함을 입력해주세요")}
+              {orderInputField("order_name","주문자의 성함을 입력해주세요")}
             </div>
           </div>
           <div className={styles.formInner}>
@@ -347,7 +318,7 @@ export function Receipt(props){
               <label>전화번호</label>
             </div>
             <div className={styles.input}>
-              {orderInputField("tel","주문자의 전화번호를 입력해주세요")}
+              {orderInputField("order_tel","주문자의 전화번호를 입력해주세요")}
             </div>
           </div>
           <div className={styles.formInner}>
@@ -355,7 +326,7 @@ export function Receipt(props){
               <label>이메일</label>
             </div>
             <div className={styles.input}>
-              {orderInputField("email","주문자의 이메일을 입력해주세요")}
+              {orderInputField("order_email","주문자의 이메일을 입력해주세요")}
             </div>
           </div>
           <div className={styles.formInner}>
@@ -390,7 +361,7 @@ export function Receipt(props){
               <label>성함</label>
             </div>
             <div className={styles.input}>
-              {deliveryInputField("name","배송 받으실 분의 성함을 입력해주세요")}
+              {orderInputField("order_delName","배송 받으실 분의 성함을 입력해주세요")}
             </div>
           </div>
           <div className={styles.formInner}>
@@ -398,7 +369,7 @@ export function Receipt(props){
               <label>전화번호</label>
             </div>
             <div className={styles.input}>
-              {deliveryInputField("tel","배송 받으실 분의 전화번호를 입력해주세요")}
+              {orderInputField("order_delTel","배송 받으실 분의 전화번호를 입력해주세요")}
             </div>
           </div>
           <div className={styles.formInner}>
@@ -409,7 +380,8 @@ export function Receipt(props){
               <div className={styles.searchAddress}>
                 <input 
                   className={styles.inputSize} 
-                  type="text" value={address && address.zonecode} 
+                  type="text" 
+                  value={orderInformation.address && orderInformation.address.zonecode} 
                   placeholder="우편번호"
                   required
                   readOnly
@@ -418,7 +390,7 @@ export function Receipt(props){
                   className={styles.button} 
                   type="button" 
                   onClick={()=>{
-                    openPopup(setAddress);
+                    openPopup();
                   }}
                   value="우편번호 찾기"
                 />
@@ -426,7 +398,7 @@ export function Receipt(props){
               <input 
                 className={styles.inputSize} 
                 type="text" 
-                value={address && address.roadAddress}
+                value={orderInformation.address && orderInformation.address.roadAddress}
                 placeholder="도로명 주소"
                 required
                 readOnly
@@ -434,7 +406,7 @@ export function Receipt(props){
               <input 
                 className={styles.inputSize}
                 type="text" 
-                value={address && address.buildingName ? `(${address.bname}, ${address.buildingName})` : address && `(${address.bname}, ${address.jibunAddress})`}  
+                value={orderInformation.address.buildingName ? `(${orderInformation.address.bname}, ${orderInformation.address.buildingName})` : orderInformation.address && `(${orderInformation.address.bname}, ${orderInformation.address.jibunAddress})`}  
                 placeholder="건물 이름 또는 지번 주소"
                 required
                 readOnly
@@ -443,8 +415,8 @@ export function Receipt(props){
               type="text"
               className={styles.inputSize}
               placeholder="상세 주소를 입력하세요"
-              value={deliveryInformation.address.addressDetail}
-              onChange={(e) => setDetailInformation("address","addressDetail",e.target.value)}
+              value={orderInformation.addressDetail}
+              onChange={(e) => setOrderInformation("addressDetail",e.target.value)}
             />
             </div>
           </div>
@@ -497,7 +469,7 @@ export function Receipt(props){
               <input 
                 name='deliveryDate' 
                 className={styles.inputSize}
-                value={deliveryInformation.deliveryDate} 
+                value={deliveryInformation.delivery_date} 
                 type="text"
                 readOnly
                 />
@@ -525,17 +497,17 @@ export function Receipt(props){
               <input 
               name='deliverySel' 
               value="kr.daesin" 
-              checked={deliveryInformation.deliverySelect === 'kr.daesin'} 
+              checked={deliveryInformation.delivery_selectedCor === 'kr.daesin'} 
               type="radio"
-              onChange={(e)=>handleChangeDeliveryField("deliverySelect", e.target.value)}
+              onChange={(e)=>handleChangeDeliveryField("delivery_selectedCor", e.target.value)}
               />
               대신화물
               <input 
               name='deliverySel' 
               value="kr.kdexp" 
-              checked={deliveryInformation.deliverySelect === 'kr.kdexp'} 
+              checked={deliveryInformation.delivery_selectedCor === 'kr.kdexp'} 
               type="radio"
-              onChange={(e)=>handleChangeDeliveryField("deliverySelect", e.target.value)}
+              onChange={(e)=>handleChangeDeliveryField("delivery_selectedCor", e.target.value)}
               />
               경동화물
             </div>
@@ -549,11 +521,11 @@ export function Receipt(props){
               <input 
               style={{flexDirection: 'row', width: '50%'}}
               className={styles.selectSize} 
-              value={deliveryInformation.deliveryMessage}
+              value={deliveryInformation.delivery_message}
               type="text" 
               list="deliveryMessages"
               placeholder='택배 기사님께 남길 메세지를 적어주세요'
-              onChange={(e)=>handleChangeDeliveryField("deliveryMessage", e.target.value)}
+              onChange={(e)=>handleChangeDeliveryField("delivery_message", e.target.value)}
               />
               <datalist id="deliveryMessages">
                 <option value="" label="/----메세지 선택----/" disabled/>
@@ -576,17 +548,17 @@ export function Receipt(props){
               <input 
               name='payroute' 
               type="radio"
-              value="일반결제"
-              checked={orderInformation.payRoute === '일반결제'} 
-              onChange={(e)=>handleChangeOrderField("payRoute", e.target.value)}
+              value="무통장입금"
+              checked={orderInformation.order_payRoute === '무통장입금'} 
+              onChange={(e)=>handleChangeOrderField("order_payRoute", e.target.value)}
               />
-              일반결제 (무통장 입금)
+              무통장 입금
               <input 
               name='payroute' 
               type="radio"
               value="CMS"
-              checked={orderInformation.payRoute === 'CMS'} 
-              onChange={(e)=>handleChangeOrderField("payRoute", e.target.value)}
+              checked={orderInformation.order_payRoute === 'CMS'} 
+              onChange={(e)=>handleChangeOrderField("order_payRoute", e.target.value)}
               />
               CMS (매달 정기일 자동 결제)
             </div>
@@ -600,54 +572,37 @@ export function Receipt(props){
               name='moneyreceipt' 
               type="radio"
               value="발행안함"
-              checked={orderInformation.moneyReceipt === '발행안함'} 
-              onChange={(e)=>handleChangeOrderField("moneyReceipt", e.target.value)}
+              checked={orderInformation.order_moneyReceipt === '발행안함'} 
+              onChange={(e)=>handleChangeOrderField("order_moneyReceipt", e.target.value)}
               /> 발행안함
               <input 
               name='moneyreceipt' 
               type="radio"
               value="현금영수증"
-              checked={orderInformation.moneyReceipt === '현금영수증'} 
-              onChange={(e)=>setOrderInformation(
-                prevdata=> ({
-                  ...prevdata,
-                  moneyReceipt : e.target.value,
-                })
-              )}
+              checked={orderInformation.order_moneyReceipt === '현금영수증'} 
+              onChange={(e)=>handleChangeOrderField("order_moneyReceipt", e.target.value)}
               /> 현금영수증
               <input 
               name='moneyreceipt' 
               type="radio"
               value="세금계산서"
-              checked={orderInformation.moneyReceipt === '세금계산서'} 
-              onChange={(e)=>setOrderInformation(
-                prevdata=> ({
-                  ...prevdata,
-                  moneyReceipt : e.target.value,
-                })
-              )}
+              checked={orderInformation.order_moneyReceipt === '세금계산서'} 
+              onChange={(e)=>handleChangeOrderField("order_moneyReceipt", e.target.value)}
               /> 세금계산서
-              <input 
-              name='moneyreceipt' 
-              type="radio"
-              value="명세서"
-              checked={orderInformation.moneyReceipt === '명세서'} 
-              onChange={(e)=>handleChangeOrderField("moneyReceipt", e.target.value)}
-              /> 명세서
             </div>
           </div>
-          {orderInformation.moneyReceipt === '명세서' && 
+          {orderInformation.order_moneyReceipt !== '' && 
           <div className={styles.formInner}>
             <div className={styles.label}>
-              <label>명세서</label>
+            <label>명세서</label>
             </div>
-              <input 
-              name='transaction' 
-              type="radio"
-              value={true}
-              checked={orderInformation.printFax === true} 
-              onChange={(e)=>handleChangeOrderField("printFax", e.target.value)}
-              /> 명세서 FAX 출력 여부 (원본은 동봉되어 발송됩니다)
+            <input 
+            name='transaction' 
+            type="radio"
+            value={orderInformation.printFax}
+            checked={orderInformation.printFax === true} 
+            onChange={(e)=>handleChangeOrderField("printFax", !orderInformation.printFax)}
+            /> 명세서 FAX 출력 여부 (원본은 동봉되어 발송됩니다)
             </div>
           }
           {orderInformation.printFax === true &&
@@ -656,7 +611,7 @@ export function Receipt(props){
               <label>FAX 번호</label>
             </div>
             <div className={styles.input}>
-              {orderInputField("fax","fax 번호를 입력해주세요")}
+              {orderInputField("order_faxNum","fax 번호를 입력해주세요")}
             </div>
           </div>
           }

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import styles from './Basket.module.css'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import React from 'react';
-import { useBasketList, useCartList, useListActions, useOrderList } from '../../Store/DataStore';
+import { useCartList, useDataActions, useListActions, useOrderActions, useOrderList } from '../../Store/DataStore';
 import axios from '../../axios';
 import { GetCookie } from '../../customFn/GetCookie';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -29,6 +29,7 @@ export function Basket(props){
   //장바구니 데이터 fetch
   const orderToFetch = async(product) => {
     try{
+      const token = GetCookie('jwt_token');
       const response = await axios.post("/order/write",
         JSON.stringify(
           product
@@ -36,6 +37,7 @@ export function Basket(props){
         {
           headers : {
             "Content-Type" : "application/json",
+            'Authorization': `Bearer ${token}`,
           }
         }
       )
@@ -53,6 +55,8 @@ export function Basket(props){
 
   const orderList = useOrderList();
   const { setOrderList } = useListActions();
+  const {resetOrderInfo} = useOrderActions();
+  const {setUserData} = useDataActions();
 
   const navigate = useNavigate();
 
@@ -88,11 +92,15 @@ export function Basket(props){
   useEffect(() => {
     const handleBack = (e) => {
       e.preventDefault();
-      alert("주문서 작성, 결제 중 뒤로가기 시 결제 정보가 초기화 됩니다.")
-      props.setActiveTab(1);
-      setSelectedItems([]);
-      setSelectAll(false);
-      navigate('/basket');
+      const isConfirmed = 
+      window.confirm(`주문서 작성 및 결제 중 뒤로가기 시 결제 정보가 초기화 됩니다. \n계속하시겠습니까?`)
+      if(isConfirmed){
+        props.setActiveTab(1);
+        resetOrderInfo();
+        setSelectedItems([]);
+        setSelectAll(false);
+        navigate('/basket');
+      }
     };
     window.history.pushState(null, null, window.location.href);
     window.addEventListener('popstate', handleBack);
@@ -111,10 +119,9 @@ export function Basket(props){
       // 필요한 상태 초기화 로직을 여기에 추가
       setSelectedItems([]);
       setSelectAll(false);
+      resetOrderInfo();
       props.setActiveTab(1);
       setOrderList([]);
-      sessionStorage.removeItem('orderData');
-      sessionStorage.removeItem('newOrderData')
     }
   }, [location]);
 
@@ -250,6 +257,7 @@ export function Basket(props){
         onSuccess: (data) => {
           alert(data.message);
           setOrderList(data.requestData);
+          setUserData(data.data);
           navigate("/basket/receipt");
           props.setActiveTab(2);
         },

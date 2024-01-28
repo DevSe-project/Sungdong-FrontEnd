@@ -120,7 +120,7 @@ const useListStore = create((set) => ({
         ],
       })),
 
-    //카트수량 UP
+    //카트수량 SET
     setCartCnt: (item, value) =>
     set((state) => ({
       cartList: state.cartList.map((list) => {
@@ -240,27 +240,25 @@ export const useSelectActions = () => selectStore((state) => ({ actions: state.a
 
 const useOrderStore = create((set) => ({
   orderInformation: {
-    name: '',
-    tel: '',
-    email: '',
+    order_name: '',
+    order_tel: '',
+    order_email: '',
     smtMessage: '',
-    payRoute: '',
-    moneyReceipt: '',
-    transAction: '',
-    fax: '',
+    order_delName: '',
+    order_delTel: '',
+    address: [],
+    addressDetail: '',
+    order_payRoute: '',
+    order_moneyReceipt: '',
+    printFax: false,
+    order_faxNum: '',
     checked: false,
   },
   deliveryInformation: {
-    name: '',
-    tel: '',
-    address: {
-      address: [],
-      addressDetail: '',
-    },
     deliveryType: '',
-    deliverySelect: '',
-    deliveryMessage: '',
-    deliveryDate: '',
+    delivery_selectedCor: '',
+    delivery_message: '',
+    delivery_date: '',
   },
   actions: {
     setOrderInformation: (fieldName, value) =>
@@ -270,7 +268,31 @@ const useOrderStore = create((set) => ({
       set((state) => ({ deliveryInformation: { ...state.deliveryInformation, [fieldName]: value } })),
 
     setDetailInformation: (first, fieldName, value) =>
-      set((state) => ({ deliveryInformation: { ...state.deliveryInformation, [first]: { ...state.deliveryInformation[first], [fieldName]: value } } })),
+      set((state) => ({ orderInformation: { ...state.orderInformation, [first]: { ...state.orderInformation[first], [fieldName]: value } } })),
+    resetOrderInfo: () =>
+      set({
+        orderInformation: {
+          order_name: '',
+          order_tel: '',
+          order_email: '',
+          smtMessage: '',
+          order_delName: '',
+          order_delTel: '',
+          address: '',
+          addressDetail: '',
+          order_payRoute: '',
+          order_moneyReceipt: '',
+          printFax: false,
+          order_faxNum: '',
+          checked: false,
+        },
+        deliveryInformation: {
+          deliveryType: '',
+          delivery_selectedCor: '',
+          delivery_message: '',
+          delivery_date: '',
+        }
+      }),
   }
 }));
 export const useOrderInfo = () => useOrderStore((state) => state.orderInformation);
