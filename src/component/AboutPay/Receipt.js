@@ -10,17 +10,10 @@ import { GetCookie } from '../../customFn/GetCookie';
 export function Receipt(props){
   const navigate = useNavigate();
 
-  // react-query : 서버에서 받아온 데이터 캐싱, 변수에 저장
-  const { isLoading, isError, error, data } = useQuery({queryKey:['data']});
-
   const queryClient = useQueryClient();
 
   //주문 목록 추가 요청 함수
   const orderTo = async () => {
-    if (isLoading) {
-      // 데이터가 없으면 아무것도 하지 않고 종료
-      return;
-    }
     try {
       const token = GetCookie('jwt_token');
       const response = await axios.post("/order", 
@@ -47,12 +40,11 @@ export function Receipt(props){
     }
   };
   //재고 감소 요청
-  const lowSupply = async () => {
+  const lowSupply = async (filteredData) => {
     try {
-      const filteredData = data.filter((item) => item.id === orderList.id);
-      const response = await axios.put(`/data/${filteredData.id}`, 
+      const response = await axios.put(`/data/supply`, 
         JSON.stringify({
-          supply: filteredData.supply - orderList.cnt,
+          ...filteredData,
         }),
         {
           headers : {
@@ -190,182 +182,45 @@ export function Receipt(props){
       );
     };
 
-  //정보 자동 입력
-  useEffect(() => {
-    if(userData){
-      const findUser = userData.find(userData => userData.id == inLogin.id);
-      if (findUser) {
-        setOrderInformation("name",findUser.corporationData.ceoName);
-        setOrderInformation("tel", `${findUser.num1}-${findUser.num2}-${findUser.num3}`);
-        setOrderInformation("email", findUser.email);
-        if (inputUser === '사업자정보') {
-          setAddress(findUser.address);
-          setOrderInformation("fax",findUser.corporationData.FAX);
-          setDeliveryInformation("name",findUser.corporationData.ceoName);
-          setDeliveryInformation("tel",`${findUser.num1}-${findUser.num2}-${findUser.num3}`);
-          setDetailInformation("address", "address", address);
-          setDetailInformation("address","addressDetail",findUser.addressDetail);
-        } else if (inputUser === '직접입력') {
-          setAddress("")
-        };
-      }
-    }
-  }, [inputUser, userData, inLogin.id, address]);
-
-  // Input란 유효성 검사
-  const validateForm = () => {
-    if (!orderInformation || !deliveryInformation) {
-      alert("주문 정보 및 배송 정보가 정의되지 않았습니다.");
-      return;
-    }
-    const isOrderInformationValid = () => {
-      if(
-      orderInformation.name !== "" &&
-      orderInformation.tel !== "" &&
-      orderInformation.email !== "" &&
-      orderInformation.payRoute !== ""
-      ){
-        if(orderInformation.moneyReceipt === '명세서'){
-          if(orderInformation.transAction === '명세서출력'){
-            return (
-              orderInformation.moneyReceipt !== "" &&
-              orderInformation.transAction !== "" &&
-              orderInformation.fax !== ""
-            );
-          } else {
-            return (
-            orderInformation.moneyReceipt !== "" &&
-            orderInformation.transAction !== ""
-            )
-          }
-        } else {
-          return(
-            orderInformation.moneyReceipt !== ""
-          )
-        }
-      } else {
-      return false;
-      }
-  }
-      
-      
-      
-    const isDeliveryInformationValid = () => {
-      if(deliveryInformation.name !== "" &&
-      deliveryInformation.tel !== "" &&
-      deliveryInformation.address.address !== "" &&
-      deliveryInformation.address.addressDetail !== "" 
-      ){
-        if(deliveryInformation.deliveryType === '화물'){
-          return(
-            deliveryInformation.deliveryType !== "" &&
-            deliveryInformation.deliverySelect !== "" &&
-            deliveryInformation.deliveryMessage !== ""
-          );
-          } else if (deliveryInformation.deliveryType === '성동택배'){
-            return(
-              deliveryInformation.deliveryType !== "" &&
-              deliveryInformation.deliveryDate !== "" &&
-              deliveryInformation.deliveryMessage !== ""
-            );
-          }
-          else {
-          return(
-            deliveryInformation.deliveryType !== "" &&
-            deliveryInformation.deliveryMessage !== ""
-          )
-        }
-      } else {
-        return false;
-      }
-    }
-  
-    const isCheckboxChecked = orderInformation.checked === true;
-
-    const isOrderValid = isOrderInformationValid();
-    const isDeliveryValid = isDeliveryInformationValid();
-
-    setIsFormValid(isOrderValid && isDeliveryValid && isCheckboxChecked);
-
-    if (!isOrderValid || !isDeliveryValid || !isCheckboxChecked){
-      alert("작성이 되지 않은 란이 있습니다. 다시 확인해주세요!");
-    }
-  };
+  // //정보 자동 입력
+  // useEffect(() => {
+  //   if(userData){
+  //     const findUser = userData.find(userData => userData.id == inLogin.id);
+  //     if (findUser) {
+  //       setOrderInformation("name",findUser.corporationData.ceoName);
+  //       setOrderInformation("tel", `${findUser.num1}-${findUser.num2}-${findUser.num3}`);
+  //       setOrderInformation("email", findUser.email);
+  //       if (inputUser === '사업자정보') {
+  //         setAddress(findUser.address);
+  //         setOrderInformation("fax",findUser.corporationData.FAX);
+  //         setDeliveryInformation("name",findUser.corporationData.ceoName);
+  //         setDeliveryInformation("tel",`${findUser.num1}-${findUser.num2}-${findUser.num3}`);
+  //         setDetailInformation("address", "address", address);
+  //         setDetailInformation("address","addressDetail",findUser.addressDetail);
+  //       } else if (inputUser === '직접입력') {
+  //         setAddress("")
+  //       };
+  //     }
+  //   }
+  // }, [inputUser, userData, inLogin.id, address]);
 
 
 
   // submit 버튼
   function submitReceipt(){
-    try{
-      orderMutation.mutate();
-    } catch(error) {
-      validateForm();
-      const isValidSupply = orderList.every((orderItem) => {
-      const productMatchingId = data.find((item) => item.id === orderItem.id);
-      return productMatchingId && productMatchingId.supply > 0;
-    });
-    
-    if (!isValidSupply) {
-      alert("주문 요청한 상품 중에 재고가 없는 상품이 있습니다!");
-      return;
-    }
-    if(props.activeTab===2 && isFormValid && isValidSupply) {
-    // supply 수정
-      const productData = data.map((item) => {
-        const isProductInOrderList = orderList.some(
-          (orderListItem) => orderListItem.productId === item.id
-        );
-      if (isProductInOrderList) {
-        return {
-          ...item,
-          supply: item.supply - 1,
-        };
-      }
-      return item;
-    });
-      // 현재 날짜와 시간을 가져오기
-      const currentDate =  new Date();
-      const formattedDate = currentDate.toLocaleString();
-      const newOrderId = orderData.length + 1;
-      const editedData = JSON.parse(sessionStorage.getItem('orderData'));
-      const newOrderData = editedData.map((item) => ({
-        ...item,
-        orderId: newOrderId,
-        order: orderInformation,
-        delivery: deliveryInformation,
-        date: formattedDate,
-        orderState: orderInformation.payRoute === 'CMS' ? 2 : 0, //0 => 결제대기, 1 => 결제완료 2 => 배송준비중 3 => 배송중 4 => 배송완료 
-      }));
-        // 데이터 삽입
-        //orderData (주문 진행 객체) 업데이트
-        const copyData = [...orderData];
-        copyData.push(...newOrderData);
-        setOrderData(copyData);
-        // sessionStorage 변경
-        sessionStorage.removeItem('orderData');
-        sessionStorage.setItem('newOrderData', JSON.stringify(newOrderData));
-        setBasketList(cartList.filter((item)=>!orderList.some((orderItem) =>
-        orderItem.optionSelected 
-        ? 
-        orderItem.optionSelected === item.optionSelected &&
-        orderItem.userId === item.userId &&
-        orderItem.productId === item.id
-        :  
-        orderItem.userId === item.userId &&
-        orderItem.productId === item.id)))
+      if(props.activeTab===2){
         //결제 방식이 CMS일때
         if(orderInformation.payRoute === 'CMS'){
           props.setActiveTab(4);
           navigate("/basket/order");
-
+        orderMutation.mutate();
           // 결제방식이 일반결제 일때
         } else if (orderInformation.payRoute === '일반결제') {
-        props.setActiveTab(3);
-        navigate("/basket/pay");
+          props.setActiveTab(3);
+          navigate("/basket/pay");
         }
       }
     }
-  }
 
   const deliveryMessageExample=[
   {value: '빠른배송 부탁드립니다.'},
@@ -447,13 +302,6 @@ export function Receipt(props){
       )
     }
   };
-
-  if(isLoading){
-    return <p>Loading..</p>;
-  }
-  if(isError){
-    return <p>에러 : {error.message}</p>;
-  }
 
   return(
     <div>

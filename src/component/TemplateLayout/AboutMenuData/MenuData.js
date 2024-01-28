@@ -58,8 +58,8 @@ export function MenuData(props) {
       title: {
         item: '장바구니',
         link: '/basket',
-        require: GetCookie('jwt_token') !== null
       },
+      require: GetCookie('jwt_token') !== null
     },
     {
       id: 4,
@@ -193,7 +193,7 @@ export function MenuData(props) {
           className={`menu-item
           menutab-item ${topTab === item.id ? 'active' : ''}`}
           onClick={() => {
-            if (item.require && item.require == false) {
+            if (item.require === false) {
               alert("로그인이 필요한 서비스입니다.");
               navigate("/login");
               return;
@@ -216,7 +216,7 @@ export function MenuData(props) {
               {item.subMenuItems.map((subMenuItem, subMenuItemindex) => (
                 <li
                   onClick={() => {
-                    if (subMenuItem.require == false) {
+                    if (subMenuItem.require === false) {
                       alert("로그인이 필요한 서비스입니다.");
                       navigate("/login");
                       return;

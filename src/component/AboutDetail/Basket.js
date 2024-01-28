@@ -25,6 +25,25 @@ export function Basket(props){
       throw new Error('장바구니를 불러오던 중 오류가 발생했습니다.');
     }
   }
+
+  //장바구니 데이터 fetch
+  const orderToFetch = async(product) => {
+    try{
+      const response = await axios.post("/order/write",
+        JSON.stringify(
+          product
+        ),
+        {
+          headers : {
+            "Content-Type" : "application/json",
+          }
+        }
+      )
+      return response.data;
+    } catch(error) {
+      throw new Error('장바구니를 불러오던 중 오류가 발생했습니다.');
+    }
+  }
   // 장바구니 데이터 불러오기
   const { isLoading, isError, error, data:basketList } = useQuery({queryKey:['cart'], queryFn: ()=> fetchCartData()});
 
@@ -110,6 +129,7 @@ export function Basket(props){
     fetchData();
   }, [basketList])
 
+  //----------------------체크박스------------------------
   // 전체 선택 체크박스 클릭 시 호출되는 함수
   function handleSelectAllChange() {
     setSelectAll(!selectAll);
@@ -124,8 +144,8 @@ export function Basket(props){
 
   // 체크박스 클릭 시 호출되는 함수
   function checkedBox(product) {
-    if (selectedItems.includes(product)) { //productID가 중복이면 true == 이미 체크박스가 클릭되어 있으면
-      setSelectedItems(selectedItems.filter((item) => item !== product)); //체크박스를 해제함 == 선택한 상품 저장 변수에서 제외
+    if (selectedItems.find(item => item.cart_product_id === product.cart_product_id)) { //productID가 중복이면 true == 이미 체크박스가 클릭되어 있으면
+      setSelectedItems(selectedItems.filter((item) => item.cart_product_id !== product.cart_product_id)); //체크박스를 해제함 == 선택한 상품 저장 변수에서 제외
       setSelectAll(false);
     } else {
       setSelectedItems([...selectedItems, product]); //selectedItems의 배열과 productID 배열을 합쳐 다시 selectedItems에 저장
@@ -135,6 +155,7 @@ export function Basket(props){
     }
   };
 
+  //-------------------상품삭제--------------------
 
   const fetchDeletedProducts = async(productId) => {
     try {
@@ -174,14 +195,27 @@ export function Basket(props){
     const lengthTarget = e.target.value;
 
     if (lengthTarget >= 0 && lengthTarget.length <= 3) {
-      setCartCnt(prevItem, lengthTarget);
+      const isSelected = selectedItems.some(item => item.cart_product_id === prevItem.cart_product_id);
+      if(isSelected){
+        setSelectedItems(selectedItems.filter(item => item.cart_product_id !== prevItem.cart_product_id));
+        setCartCnt(prevItem, lengthTarget);
+      } else {
+        setCartCnt(prevItem, lengthTarget);
+      }
     }
   };
 
   // 수량 DOWN
   function handleDelItem(prevItem) {
     if (prevItem.cnt > 1) {
-      setCartCntDown(prevItem);
+      const isSelected = selectedItems.some(item => item.cart_product_id === prevItem.cart_product_id);
+      if(isSelected){
+        setSelectedItems(selectedItems.filter(item => item.cart_product_id !== prevItem.cart_product_id));
+        setCartCntDown(prevItem);
+      }
+      else {
+        setCartCntDown(prevItem);
+      }
     } else {
       alert("수량은 1보다 커야합니다.");
       return prevItem; // 1이하로 내릴 수 없으면 기존 아이템 반환
@@ -192,47 +226,40 @@ export function Basket(props){
   // 수량 UP
   function handleAddItem(prevItem) {
     if (prevItem.cnt < 999) {
-      setCartCntUp(prevItem);
+      const isSelected = selectedItems.some(item => item.cart_product_id === prevItem.cart_product_id);
+      if(isSelected){
+        setSelectedItems(selectedItems.filter(item => item.cart_product_id !== prevItem.cart_product_id));
+        setCartCntUp(prevItem);
+      } else {
+        setCartCntUp(prevItem);
+      }
     } else {
       alert("수량은 999보다 작아야합니다.");
       return prevItem; // 999 이상으로 올릴 수 없으면 기존 아이템 반환
     }
   }
 
+  //--------------------------------------------------------------
+
+  // 상품 주문서 작성을 처리하는 뮤테이션
+  const {mutate:orderToMutation} = useMutation({mutationFn: orderToFetch})
+
   // 주문서 작성창 링크 함수(receipt에 넘어가면 해당 객체의 키와 값만 가지고 감(주의))
-  function gotoLink(){
-    const isValidSupply = selectedItems.filter((item)=> item.supply <= 0)
-    const duplicateTitles = isValidSupply.map((item) => item.title).join(", ")
-    if(isValidSupply.length > 0){
-      alert(`품절된 상품이 포함되어 있습니다.
-            (품절된 상품 : ${duplicateTitles})`)
-      return;
-    }
-    if(props.activeTab===1 
-      && (selectedItems !== null || selectedItems.length > 0)) {
-      const editedData = selectedItems.map((item) => ({
-        productId : item.id,
-        image : {
-          mini : item.image.mini,
-          original : item.image.original,
+  function gotoLink(orderingData){
+      orderToMutation(orderingData,{
+        onSuccess: (data) => {
+          alert(data.message);
+          setOrderList(data.requestData);
+          navigate("/basket/receipt");
+          props.setActiveTab(2);
         },
-        productName : item.title,
-        supply: item.supply,
-        cnt : Number(item.cnt), 
-        price: item.price,
-        // 이후 discount 값 수정 필요 (등급에 따라)
-        discount : item.discount ? item.discount : 0, 
-        optionSelected: item.optionSelected && item.optionSelected,
-      }));
-      // sessionStoragerage에 저장
-      sessionStorage.setItem('orderData', JSON.stringify(editedData));
-      setOrderList(editedData);
-      navigate("/basket/receipt");
-      props.setActiveTab(2);
-    } else {
-      alert("주문 요청한 상품 중에 재고가 없는 상품이 있습니다!");
+        onError: (error) => {
+          // 상품 삭제 실패 시, 에러 처리를 수행합니다.
+          console.error('상품을 삭제 처리하는 중 오류가 발생했습니다.', error);
+        },
+      });
     }
-  }
+
   //스탭 메뉴
     const stepItems = [
       { id: 1, title: '장바구니' },
@@ -320,7 +347,7 @@ export function Basket(props){
               <tr key={index}>
                 <td>
                   <input 
-                  checked={selectedItems.includes(item)}
+                  checked={selectedItems.some(select => select.cart_product_id === item.cart_product_id)}
                   onChange={() => checkedBox(item)}
                   type='checkbox'
                   /> 
@@ -365,39 +392,36 @@ export function Basket(props){
                 </td>
               </tr>
               ))}
+
+
             {/* 주문서 작성 탭으로 넘어가면 체크된 목록들만 나열함(수정 불가) */}
             {props.activeTab > 1 && orderList &&
             orderList.map((item, key)=> (
               <tr key={key}>
-                <td><img src={item.image.mini} alt='이미지'/></td>
+                <td><img className={styles.thumnail} src={item.product_image_original} alt='이미지'/></td>
                 <td>
                   <h5 className={styles.link} 
-                  onClick={()=>props.activeTab === 1
-                  ? navigate(`/detail/${item.product_id 
-                    ? item.product_id 
-                    : item.product_id}`) 
-                    : null}
+                  onClick={()=>props.activeTab === 1 &&
+                  navigate(`/detail/${item.product_id}`)}
                   >
-                    {item.title 
-                  ? item.title : item.productName
-                  ? item.productName : null}</h5>
+                    {item.product_title}</h5>
                   <div>
-                  {item.optionSelected && `옵션 : ${item.optionSelected}`}
+                  {item.cart_selectedOption && `옵션 : ${item.cart_selectedOption}`}
                   <p>상품 표준가 : <span className={styles.price}>\{item.cart_price.toLocaleString()}</span></p>
                   </div>
                 </td>
                 <td>{item.cnt}</td>
                 <td className={styles.price}>
-                {item.discount
+                  {item.product_discount
                   ?
                   <>
                   <span style={{color: 'red', fontWeight: '750'}}>
-                    ({item.discount}%)
+                    ({item.product_discount}%)
                   </span>
                   &nbsp;<i className="fal fa-long-arrow-right"/>&nbsp;
-                  \{((item.price * item.cnt) - (((item.price/100)*item.discount)*item.cnt)).toLocaleString()}
+                  {parseInt(item.cart_price * item.cnt - (((item.cart_price/100)*item.cart_discount)*item.cnt)).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                   </>
-                  : `\\${(item.price * item.cnt).toLocaleString()}`}
+                  : `${(item.cart_price * item.cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
                 </td>
               </tr>
             ))}
@@ -416,7 +440,7 @@ export function Basket(props){
                     \{
                     orderList.length !== 0 ?
                       orderList.reduce((sum, item) => //reduce 사용하여 배열 객체의 합계 계산, 0으로 초기화
-                        sum + ((item.cart_price * item.cart_cnt) - (((item.cart_price / 100) * item.cart_discount) * item.cart_cnt))
+                        sum + ((item.cart_price * item.cnt) - (((item.cart_price / 100) * item.cart_discount) * item.cnt))
                       , 0).toLocaleString()
                       :
                       selectedItems.length !== 0 ?
@@ -442,7 +466,7 @@ export function Basket(props){
                     <h5>\{
                     orderList.length !== 0 ?
                       orderList.reduce((sum, item) => //reduce 함수사용하여 배열 객체의 합계 계산, delivery값으로 sum을 초기화
-                        sum + ((item.price * item.cnt) - (((item.price / 100) * item.discount) * item.cnt))
+                      sum + ((item.cart_price * item.cnt) - ((item.cart_price / 100) * item.cart_discount) * item.cnt)
                       , delivery).toLocaleString()
                       :
                       selectedItems.length !== 0 ?
@@ -492,7 +516,7 @@ export function Basket(props){
             {props.activeTab===1 && 
             <>
             <button className={styles.deletebutton} onClick={()=>deletedList()}>삭제</button>
-            <button onClick={selectedItems.length > 0 && props.activeTab === 1 ? ()=>{gotoLink();} : null} className={styles.button}>{selectedItems ? `${selectedItems.length}건` : `0건`} 주문하기</button>
+            <button onClick={selectedItems.length > 0 && props.activeTab === 1 ? ()=>{gotoLink(selectedItems);} : null} className={styles.button}>{selectedItems ? `${selectedItems.length}건` : `0건`} 주문하기</button>
             </>}
           </div>
 
