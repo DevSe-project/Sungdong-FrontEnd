@@ -436,7 +436,7 @@ export function Basket(props){
               </tr>
             ))}
 
-          {/* 주문서 작성 탭으로 넘어가면 체크된 목록들만 나열함(수정 불가) */}
+          {/* 주문후 주문 데이터들로 나열함(수정 불가) */}
           {props.activeTab > 2 && orderData.length !== 0 &&
             orderData.map((item, key)=> (
               <tr key={key}>

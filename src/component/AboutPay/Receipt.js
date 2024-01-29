@@ -210,7 +210,6 @@ export function Receipt(props){
               orderListMutation(orderData,{
                 onSuccess: (success) => {
                   // 메세지 표시
-                  alert(success.message);
                   console.log('주문 리스트를 불러왔습니다.', success);
                   setOrderData(success.data);
 
@@ -248,7 +247,7 @@ export function Receipt(props){
                 },
                   onError: (error) => {
                     // 상품 삭제 실패 시, 에러 처리를 수행합니다.
-                    console.error('상품을 삭제 처리하는 중 오류가 발생했습니다.', error);
+                    console.error('주문 상품을 불러오는 중 오류가 발생했습니다.', error);
                   }
                 });
               },
