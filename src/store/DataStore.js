@@ -259,7 +259,7 @@ const useOrderStore = create((set) => ({
     deliveryType: '',
     delivery_selectedCor: '',
     delivery_message: '',
-    delivery_date: '',
+    delivery_date: null,
   },
   actions: {
     setOrderInformation: (fieldName, value) =>
@@ -291,7 +291,7 @@ const useOrderStore = create((set) => ({
           deliveryType: '',
           delivery_selectedCor: '',
           delivery_message: '',
-          delivery_date: '',
+          delivery_date: null,
         }
       }),
   }

@@ -2,8 +2,9 @@ import { useNavigate } from 'react-router-dom'
 import styles from './Delivery.module.css'
 import { useEffect, useState } from 'react';
 import { useOrderData } from '../../Store/DataStore';
-import axios from 'axios';
+import axios from '../../axios';
 import { GetCookie } from '../../customFn/GetCookie';
+import { useQuery } from '@tanstack/react-query';
 
 export function Delivery(props){
   //로그인 정보 불러오기
@@ -17,7 +18,7 @@ export function Delivery(props){
   const fetchOrderData = async() => {
     try{
       const token = GetCookie('jwt_token');
-      const response = await axios.get("/order", 
+      const response = await axios.get("/order/list", 
         {
           headers : {
             "Content-Type" : "application/json",
@@ -30,7 +31,8 @@ export function Delivery(props){
       throw new Error('주문 내역을 불러오던 중 오류가 발생했습니다.');
     }
   }
-  //const { isLoading, isError, error, data:orderData } = useQuery({queryKey:['order'], queryFn: ()=> fetchOrderData();});
+
+  const { isLoading, isError, error, data:order } = useQuery({queryKey:['order'], queryFn: ()=> fetchOrderData()});
 
   useEffect(()=>{
     if(props.resultSearch){

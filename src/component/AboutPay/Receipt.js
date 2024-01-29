@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import styles from './Receipt.module.css'
 import { useNavigate } from 'react-router-dom';
-import { useDeliveryInfo, useOrderActions, useOrderInfo, useOrderList, useUserData } from '../../Store/DataStore';
+import { useDataActions, useDeliveryInfo, useListActions, useOrderActions, useOrderInfo, useOrderList, useUserData } from '../../Store/DataStore';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from '../../axios';
 import { GetCookie } from '../../customFn/GetCookie';
@@ -13,7 +13,8 @@ export function Receipt(props){
   const userData = useUserData();
   const orderList = useOrderList();
 
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient();  
+  const { setOrderData } = useDataActions();
 
   //주문 목록 추가 요청 함수
   const orderTo = async (orderData) => {
@@ -62,6 +63,28 @@ export function Receipt(props){
       throw error;
     }
   }
+
+    //주문 리스트 요청 함수
+    const orderListTo = async (orderData) => {
+      try {
+        const token = GetCookie('jwt_token');
+        const response = await axios.post("/order/findList", 
+          JSON.stringify(orderData),
+          {
+            headers : {
+              "Content-Type" : "application/json",
+              'Authorization': `Bearer ${token}`,
+            }
+          }
+        )
+        // 성공 시 추가된 상품 정보를 반환합니다.
+        return response.data;
+      } catch (error) {
+        // 실패 시 예외를 throw합니다.
+        throw new Error('상품을 주문 목록에 요청하던 중 오류가 발생했습니다.');
+      }
+    };
+
   //데이터 재고 감소 요청 함수
   const { mutate:supplyMutation } = useMutation({mutationFn: lowSupply})
 
@@ -70,6 +93,9 @@ export function Receipt(props){
 
   //주문 신청 함수
   const { mutate:orderMutation } = useMutation({mutationFn: orderTo})
+
+  const { mutate:orderListMutation } = useMutation({mutationFn: orderListTo})
+
 
 
   // 데이터 항목 저장
@@ -161,8 +187,6 @@ export function Receipt(props){
   function submitReceipt(){
       if(props.activeTab===2){
 
-        //결제 방식이 CMS일때
-        if(orderInformation.order_payRoute === 'CMS'){
           const orderData = {
             orderInformation,
             deliveryInformation,
@@ -174,6 +198,7 @@ export function Receipt(props){
           onSuccess: (success) => {
             console.log("재고 상태를 업데이트 하였습니다.", success);
             queryClient.invalidateQueries(['data']);
+
             orderMutation(orderData,{
             onSuccess: (success) => {
               // 메세지 표시
@@ -182,26 +207,50 @@ export function Receipt(props){
               // 주문 상태를 다시 불러와 갱신합니다.
               queryClient.invalidateQueries(['order']);
 
-                if(orderInformation.isCart === true){
-                //장바구니 목록 삭제
-                  const itemsId = orderList.map(item => item.cart_product_id)
-                  deleteProductMutation(itemsId,{
-                    onSuccess: (data) => {
-                      // 상품 삭제 성공 시 상품 목록을 다시 불러옴
-                      queryClient.invalidateQueries(['cart']);
+              orderListMutation(orderData,{
+                onSuccess: (success) => {
+                  // 메세지 표시
+                  alert(success.message);
+                  console.log('주문 리스트를 불러왔습니다.', success);
+                  setOrderData(success.data);
+
+                  if(orderInformation.isCart === true){
+                  //장바구니 목록 삭제
+                    const itemsId = orderList.map(item => item.cart_product_id)
+                    deleteProductMutation(itemsId,{
+                      onSuccess: (data) => {
+                        // 상품 삭제 성공 시 상품 목록을 다시 불러옴
+                        queryClient.invalidateQueries(['cart']);
+                        //결제 방식이 CMS일때
+                        if(orderInformation.order_payRoute === 'CMS'){
+                          props.setActiveTab(4);
+                          navigate("/basket/order");
+                        } else {
+                          props.setActiveTab(3);
+                          navigate("/basket/pay");
+                        }
+                      },
+                      onError: (error) => {
+                        // 상품 삭제 실패 시, 에러 처리를 수행합니다.
+                        console.error('상품을 삭제 처리하는 중 오류가 발생했습니다.', error);
+                      }
+                    })
+                  }
+                  else {
+                    if(orderInformation.order_payRoute === 'CMS'){
                       props.setActiveTab(4);
                       navigate("/basket/order");
-                    },
-                    onError: (error) => {
-                      // 상품 삭제 실패 시, 에러 처리를 수행합니다.
-                      console.error('상품을 삭제 처리하는 중 오류가 발생했습니다.', error);
+                    } else {
+                      props.setActiveTab(3);
+                      navigate("/basket/pay");
                     }
-                  })
-                }
-                else {
-                  props.setActiveTab(4);
-                  navigate("/basket/order");
-                }
+                  }
+                },
+                  onError: (error) => {
+                    // 상품 삭제 실패 시, 에러 처리를 수행합니다.
+                    console.error('상품을 삭제 처리하는 중 오류가 발생했습니다.', error);
+                  }
+                });
               },
               onError: (error) => {
                 // 상품 추가 실패 시, 에러 처리를 수행합니다.
@@ -214,11 +263,6 @@ export function Receipt(props){
             console.error('상품을 재고 변경 처리를 수행하던 중 오류가 발생했습니다.', error);
           },
         })
-          // 결제방식이 무통장 입금일때
-        } else if (orderInformation.order_payRoute === '무통장입금') {
-          props.setActiveTab(3);
-          navigate("/basket/pay");
-        }
       }
     }
 

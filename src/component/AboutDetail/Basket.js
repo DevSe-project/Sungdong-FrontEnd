@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import styles from './Basket.module.css'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import React from 'react';
-import { useCartList, useDataActions, useListActions, useOrderActions, useOrderList } from '../../Store/DataStore';
+import { useCartList, useDataActions, useListActions, useOrderActions, useOrderData, useOrderList } from '../../Store/DataStore';
 import axios from '../../axios';
 import { GetCookie } from '../../customFn/GetCookie';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -53,6 +53,7 @@ export function Basket(props){
   const {setCartList, setCartCntUp, setCartCntDown, setCartCnt, resetCartList} = useListActions();
 
 
+  const orderData = useOrderData();
   const orderList = useOrderList();
   const { setOrderList } = useListActions();
   const {resetOrderInfo, setOrderInformation} = useOrderActions();
@@ -404,7 +405,7 @@ export function Basket(props){
 
 
             {/* 주문서 작성 탭으로 넘어가면 체크된 목록들만 나열함(수정 불가) */}
-            {props.activeTab > 1 && orderList &&
+            {props.activeTab === 2 && orderList.length !== 0 &&
             orderList.map((item, key)=> (
               <tr key={key}>
                 <td><img className={styles.thumnail} src={item.product_image_original} alt='이미지'/></td>
@@ -416,7 +417,7 @@ export function Basket(props){
                     {item.product_title}</h5>
                   <div>
                   {item.cart_selectedOption && `옵션 : ${item.cart_selectedOption}`}
-                  <p>상품 표준가 : <span className={styles.price}>\{item.cart_price.toLocaleString()}</span></p>
+                  <p>상품 표준가 : <span className={styles.price}>\{(item.cart_price).toLocaleString()}</span></p>
                   </div>
                 </td>
                 <td>{item.cnt}</td>
@@ -431,6 +432,28 @@ export function Basket(props){
                   {parseInt(item.cart_price * item.cnt - (((item.cart_price/100)*item.cart_discount)*item.cnt)).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                   </>
                   : `${(item.cart_price * item.cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
+                </td>
+              </tr>
+            ))}
+
+          {/* 주문서 작성 탭으로 넘어가면 체크된 목록들만 나열함(수정 불가) */}
+          {props.activeTab > 2 && orderData.length !== 0 &&
+            orderData.map((item, key)=> (
+              <tr key={key}>
+                <td><img className={styles.thumnail} src={item.product_image_original} alt='이미지'/></td>
+                <td>
+                  <h5 className={styles.link} 
+                  onClick={()=>props.activeTab === 1 &&
+                  navigate(`/detail/${item.product_id}`)}
+                  >
+                    {item.product_title}</h5>
+                  <div>
+                  {item.selectedOption && `옵션 : ${item.selectedOption}`}
+                  </div>
+                </td>
+                <td>{item.order_cnt}</td>
+                <td className={styles.price}>
+                  {parseInt(item.order_productPrice * item.order_cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                 </td>
               </tr>
             ))}
