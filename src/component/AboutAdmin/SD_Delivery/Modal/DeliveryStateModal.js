@@ -101,16 +101,12 @@ export default function DeliveryStateModal(props) {
                 }
             );
 
-            if (window.confirm('정말로 변경하시겠습니까?')) {
-                // 서버 응답 처리
-                if (response.status === 200) {
-                    console.log("배송 상태가 성공적으로 업데이트되었습니다.");
-                    selectedModalClose();
-                    alert('변경이 완료되었습니다.');
-                    window.location.reload();
-                } else {
-                    console.error("배송 상태 업데이트에 실패했습니다.");
-                }
+            if (window.confirm(`적용이 완료되었습니다. 창을 닫으시겠습니까?`) && response.status === 200) {
+                selectedModalClose();
+                alert(`변경사항이 성공적으로 업데이트되었습니다.`);
+                window.location.reload();
+            } else {
+                alert("변경사항 업데이트에 실패했습니다.");
             }
 
         } catch (error) {

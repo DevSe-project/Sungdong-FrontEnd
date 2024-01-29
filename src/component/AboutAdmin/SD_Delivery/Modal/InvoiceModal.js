@@ -92,8 +92,12 @@ export default function InvoiceModal(props) {
                     }
                 }
             )
-            if (window.confirm(`적용이 완료되었습니다. 창을 닫으시겠습니까?`)) {
+            if (window.confirm(`적용이 완료되었습니다. 창을 닫으시겠습니까?`) && response.status === 200) {
                 selectedModalClose();
+                alert(`변경사항이 성공적으로 업데이트되었습니다.`);
+                window.location.reload();
+            } else {
+                alert("변경사항 업데이트에 실패했습니다.");
             }
 
             return response.data;
