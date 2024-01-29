@@ -92,10 +92,10 @@ export default function InvoiceModal(props) {
                     }
                 }
             )
-            if(window.confirm(`적용이 완료되었습니다. 창을 닫으시겠습니까?`)) {
+            if (window.confirm(`적용이 완료되었습니다. 창을 닫으시겠습니까?`)) {
                 selectedModalClose();
             }
-            
+
             return response.data;
 
         } catch (error) {

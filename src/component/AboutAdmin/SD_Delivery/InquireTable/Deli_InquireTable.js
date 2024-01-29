@@ -351,7 +351,8 @@ export default function Deli_InquireTable() {
                             null
                     }
                 </div>
-                : null}
+                : 
+                <p>정보를 불러오지 못했습니다.</p>}
         </div>
     );
 }
