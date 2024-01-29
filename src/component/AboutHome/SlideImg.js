@@ -46,7 +46,9 @@ function handleChange(index) {
       infiniteLoop={true}
       showThumbs={false}
       selectedItem={imageData[currentIndex]}
-      onChange={handleChange} >
+      onChange={handleChange}
+      className={styles.image} 
+      >
       {renderSlides}
       </Carousel>
       <Carousel
@@ -55,7 +57,9 @@ function handleChange(index) {
       infiniteLoop={true}
       showThumbs={false}
       selectedItem={imageData[currentIndex]}
-      onChange={handleChange} >
+      onChange={handleChange} 
+      className={styles.image}
+      >
       {renderSlides}
       </Carousel>
     </div>

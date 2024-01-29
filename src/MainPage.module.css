@@ -14,10 +14,17 @@
 }
 
 .center {
+    float: left;
+    flex: 1;
     margin: 10px;
 }
 
+.product_container{
+    clear: both;
+}
+
 .right {
+    float: right;
     margin: 10px;
     margin-left: 0px;
     width: 20vw;
