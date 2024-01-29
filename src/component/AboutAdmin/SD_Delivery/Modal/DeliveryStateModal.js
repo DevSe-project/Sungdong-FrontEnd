@@ -10,10 +10,6 @@ export default function DeliveryStateModal(props) {
     const { selectedModalClose } = useModalActions();
     // 가져온 데이터 저장 상태
     const [fetchedData, setFetchedData] = useState([]);
-    // 선택된 배송 상태 저장 상태
-    const [selecteddelivery_state, setSelecteddelivery_state] = useState(0);
-    // 전체 선택된 상태 저장 상태
-    const [overallSelectedStatus, setOverallSelectedStatus] = useState(0);
 
 
     // ESC 키로 모달 닫기 이벤트 리스너 등록
@@ -31,16 +27,10 @@ export default function DeliveryStateModal(props) {
         };
     }, [selectedModalClose]);
 
-    // 전체 선택된 상태 변경 시 useEffect를 통해 일괄적으로 데이터 업데이트
-    useEffect(() => {
-        handleBatchStatus(overallSelectedStatus);
-    }, [overallSelectedStatus]);
-
     // 선택된 항목이나 개별 배송 상태 변경 시 useEffect를 통해 데이터 다시 가져오기
     useEffect(() => {
         dataFetch();
-        setOverallSelectedStatus(selecteddelivery_state);
-    }, [props.checkedItems, props.setCheckedItems, selecteddelivery_state]);
+    }, [props.checkedItems, props.setCheckedItems]);
 
     // 선택된 항목의 데이터 가져오는 함수
     function dataFetch() {
@@ -111,14 +101,18 @@ export default function DeliveryStateModal(props) {
                 }
             );
 
-
-            // 서버 응답 처리
-            if (response.status === 200) {
-                console.log("배송 상태가 성공적으로 업데이트되었습니다.");
-                // 필요한 추가 작업 수행
-            } else {
-                console.error("배송 상태 업데이트에 실패했습니다.");
+            if (window.confirm('정말로 변경하시겠습니까?')) {
+                // 서버 응답 처리
+                if (response.status === 200) {
+                    console.log("배송 상태가 성공적으로 업데이트되었습니다.");
+                    selectedModalClose();
+                    alert('변경이 완료되었습니다.');
+                    window.location.reload();
+                } else {
+                    console.error("배송 상태 업데이트에 실패했습니다.");
+                }
             }
+
         } catch (error) {
             console.error("배송 상태 업데이트 중 오류가 발생했습니다:", error);
         }
@@ -176,7 +170,6 @@ export default function DeliveryStateModal(props) {
                                         }
                                         onChange={(e) => {
                                             const selectedValue = parseInt(e.target.value, 10);
-                                            setOverallSelectedStatus(selectedValue);
                                             handleBatchStatus(selectedValue);
                                         }}
                                     >
