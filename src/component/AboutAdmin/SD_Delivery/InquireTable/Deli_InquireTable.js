@@ -29,7 +29,7 @@ export default function Deli_InquireTable() {
     const fetchDeliveryData = async () => {
         try {
             const token = GetCookie('jwt_token');
-            const response = await axios.get(`/delivery/dlAll`,
+            const response = await axios.get(`/delivery/deliveries`,
                 {
                     headers: {
                         "Content-Type": "application/json",
