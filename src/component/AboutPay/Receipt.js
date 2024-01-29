@@ -3,7 +3,7 @@ import styles from './Receipt.module.css'
 import { useNavigate } from 'react-router-dom';
 import { useDeliveryInfo, useOrderActions, useOrderInfo, useOrderList, useUserData } from '../../Store/DataStore';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
+import axios from '../../axios';
 import { GetCookie } from '../../customFn/GetCookie';
 
 
@@ -19,7 +19,7 @@ export function Receipt(props){
   const orderTo = async (orderData) => {
     try {
       const token = GetCookie('jwt_token');
-      const response = await axios.post("/order", 
+      const response = await axios.post("/order/create", 
         JSON.stringify(orderData),
         {
           headers : {
@@ -38,7 +38,7 @@ export function Receipt(props){
   //재고 감소 요청
   const lowSupply = async (filteredData) => {
     try {
-      const response = await axios.put(`/data/supply`, 
+      const response = await axios.put(`/product/supplyLow`, 
         JSON.stringify(filteredData),
         {
           headers : {
@@ -53,9 +53,20 @@ export function Receipt(props){
       throw new Error('재고를 변경하던 중 오류가 발생했습니다.');
     }
   };
+  const fetchDeletedProducts = async(productId) => {
+    try {
+      const response = await axios.delete(`/cart/delete/${productId}`,
+      )
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
   //데이터 재고 감소 요청 함수
   const { mutate:supplyMutation } = useMutation({mutationFn: lowSupply})
 
+  //장바구니 목록 삭제 mutate
+  const {mutate:deleteProductMutation} = useMutation({mutationFn: fetchDeletedProducts})
 
   //주문 신청 함수
   const { mutate:orderMutation } = useMutation({mutationFn: orderTo})
@@ -136,7 +147,7 @@ export function Receipt(props){
           setDetailInformation("address", "roadAddress", userData.roadAddress);
           setDetailInformation("address", "bname", userData.bname);
           setDetailInformation("address", "buildingName", userData.buildingName);
-          setDetailInformation("address", "jinunAddress", userData.jibunAddress);
+          setDetailInformation("address", "jibunAddress", userData.jibunAddress);
           setOrderInformation("addressDetail",userData.addressDetail);
         } else if (inputUser === '직접입력') {
           resetOrderInfo();
@@ -151,41 +162,60 @@ export function Receipt(props){
       if(props.activeTab===2){
 
         //결제 방식이 CMS일때
-        if(orderInformation.payRoute === 'CMS'){
+        if(orderInformation.order_payRoute === 'CMS'){
           const orderData = {
-            ...orderInformation,
-            ...orderInformation.address,
-            deliveryInformation
+            orderInformation,
+            deliveryInformation,
+            orderList,
           }
-          orderMutation(orderData,{
+          //재고 상태 수량만큼 감소
+
+          supplyMutation(orderList,{
           onSuccess: (success) => {
-            // 메세지 표시
-            alert(success.message);
-            console.log('주문이 완료되었습니다.', success);
-            // 주문 상태를 다시 불러와 갱신합니다.
-            queryClient.invalidateQueries(['order']);
-            //재고 상태 수량만큼 감소
-            
-            supplyMutation(orderList,{
-              onSuccess: (success) => {
-                console.log("재고 상태를 업데이트 하였습니다.", success);
-                queryClient.invalidateQueries(['data']);
-                props.setActiveTab(4);
-                navigate("/basket/order");
+            console.log("재고 상태를 업데이트 하였습니다.", success);
+            queryClient.invalidateQueries(['data']);
+            orderMutation(orderData,{
+            onSuccess: (success) => {
+              // 메세지 표시
+              alert(success.message);
+              console.log('주문이 완료되었습니다.', success);
+              // 주문 상태를 다시 불러와 갱신합니다.
+              queryClient.invalidateQueries(['order']);
+
+                if(orderInformation.isCart === true){
+                //장바구니 목록 삭제
+                  const itemsId = orderList.map(item => item.cart_product_id)
+                  deleteProductMutation(itemsId,{
+                    onSuccess: (data) => {
+                      // 상품 삭제 성공 시 상품 목록을 다시 불러옴
+                      queryClient.invalidateQueries(['cart']);
+                      props.setActiveTab(4);
+                      navigate("/basket/order");
+                    },
+                    onError: (error) => {
+                      // 상품 삭제 실패 시, 에러 처리를 수행합니다.
+                      console.error('상품을 삭제 처리하는 중 오류가 발생했습니다.', error);
+                    }
+                  })
+                }
+                else {
+                  props.setActiveTab(4);
+                  navigate("/basket/order");
+                }
               },
               onError: (error) => {
                 // 상품 추가 실패 시, 에러 처리를 수행합니다.
-                console.error('상품을 수정하던 중 오류가 발생했습니다.', error);
+                console.error('주문을 처리하던 중 오류가 발생했습니다.', error);
               }
             });
           },
           onError: (error) => {
             // 상품 추가 실패 시, 에러 처리를 수행합니다.
-            console.error('상품을 주문목록에 넣는 중 오류가 발생했습니다.', error);
+            console.error('상품을 재고 변경 처리를 수행하던 중 오류가 발생했습니다.', error);
           },
         })
           // 결제방식이 무통장 입금일때
-        } else if (orderInformation.payRoute === '무통장입금') {
+        } else if (orderInformation.order_payRoute === '무통장입금') {
           props.setActiveTab(3);
           navigate("/basket/pay");
         }
@@ -257,11 +287,8 @@ export function Receipt(props){
     const selectedDateStr = event.target.value;
   
     // "년", "월", "요일" 등의 문자를 "-"로 대체하고 공백을 제거하여 "YYYY-MM-DD" 형식의 문자열로 변환합니다.
-    const formattedDateStr = selectedDateStr
-      .replace(/년|월/g, '-')
-      .replace(/(일요일|월요일|화요일|수요일|목요일|금요일|토요일|일|요일|-)/g, '')
-      .trim();
-  
+    const formattedDateStr = selectedDateStr.replace(/년|월/g, '-').replace(/(일요일|월요일|화요일|수요일|목요일|금요일|토요일|일|요일)/g, '').replace(/\s+/g, '').trim();
+
     // 요일 정보를 제외한 "YYYY-MM-DD" 형식의 문자열을 Date 객체로 파싱합니다.
     const selectedDateObj = new Date(formattedDateStr);
   
@@ -269,7 +296,7 @@ export function Receipt(props){
     if (!isNaN(selectedDateObj)) {
       setSelectedDate(selectedDateObj);
       setDeliveryInformation(
-        "delivery_date",selectedDateStr
+        "delivery_date",formattedDateStr
       )
     }
   };

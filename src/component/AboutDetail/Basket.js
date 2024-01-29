@@ -55,7 +55,7 @@ export function Basket(props){
 
   const orderList = useOrderList();
   const { setOrderList } = useListActions();
-  const {resetOrderInfo} = useOrderActions();
+  const {resetOrderInfo, setOrderInformation} = useOrderActions();
   const {setUserData} = useDataActions();
 
   const navigate = useNavigate();
@@ -256,6 +256,7 @@ export function Basket(props){
       orderToMutation(orderingData,{
         onSuccess: (data) => {
           alert(data.message);
+          setOrderInformation("isCart", true);
           setOrderList(data.requestData);
           setUserData(data.data);
           navigate("/basket/receipt");

@@ -253,6 +253,7 @@ const useOrderStore = create((set) => ({
     printFax: false,
     order_faxNum: '',
     checked: false,
+    isCart: false,
   },
   deliveryInformation: {
     deliveryType: '',
