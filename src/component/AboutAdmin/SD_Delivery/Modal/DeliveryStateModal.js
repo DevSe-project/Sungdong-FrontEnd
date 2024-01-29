@@ -93,17 +93,25 @@ export default function DeliveryStateModal(props) {
     const sendUpdateStateApiToServer = async () => {
         try {
             const token = GetCookie('jwt_token');
-            const response = await axios.put("/product/categoryEdit",
-                JSON.stringify({
-                    delivery_state: fetchedData.delivery_state
-                }),
+
+            // 변경된 배송 상태 데이터 추출
+            const updatedData = fetchedData.map(item => ({
+                order_id: item.order_id,//식별자
+                delivery_state: item.delivery_state
+            }));
+
+            const response = await axios.put(
+                `/delivery/state/edit`,
+                updatedData,
                 {
                     headers: {
                         "Content-Type": "application/json",
                         'Authorization': `Bearer ${token}`
                     }
                 }
-            )
+            );
+
+
             // 서버 응답 처리
             if (response.status === 200) {
                 console.log("배송 상태가 성공적으로 업데이트되었습니다.");
@@ -115,6 +123,7 @@ export default function DeliveryStateModal(props) {
             console.error("배송 상태 업데이트 중 오류가 발생했습니다:", error);
         }
     }
+
 
 
 
