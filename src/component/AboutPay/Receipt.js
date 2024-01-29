@@ -280,57 +280,51 @@ export function Receipt(props){
 
   // 성동 택배 일 때 택배 날짜 로직
   useEffect(() => {
-    if(deliveryInformation.deliveryType === "성동택배")
       updateDateList();
   }, []);
 
   const updateDateList = () => {
     const currentHour = currentDate.getHours();
-
-    // 만약 현재 시간이 12시 이후라면 모레 날짜를 계산합니다.
-    if (currentHour >= 12) {
-      const tomorrow = new Date(currentDate);
-      tomorrow.setDate(currentDate.getDate() + 1);
-      setCurrentDate(tomorrow);
-    }
-    // 그렇지 않으면 내일 날짜를 계산합니다.
-    else {
-      const tomorrow = new Date(currentDate);
-      tomorrow.setDate(currentDate.getDate());
-      setCurrentDate(tomorrow);
-    }
+    const tomorrow = new Date(currentDate);
+    
+    // 현재 시간이 12시 이후라면 모레 날짜를 계산, 그렇지 않으면 내일 날짜를 계산
+    tomorrow.setDate(currentDate.getDate() + (currentHour >= 12 ? 1 : 0));
+    setCurrentDate(tomorrow);
   };
-
+  
   const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   const formatDate = selectedDate.toLocaleDateString(undefined, dateOptions);
-
+  
   // 선택 가능한 날짜 목록을 생성합니다.
   const dateSelectOptions = [];
   for (let i = 0; i < 10; i++) {
     const date = new Date(currentDate);
     date.setDate(currentDate.getDate() + i);
     const dayOfWeek = date.getDay(); // 0: 일요일, 1: 월요일, ..., 6: 토요일
-
-
-  // 날짜의 요일이 일요일(0)이 아닌 경우에만 옵션추가
-  if (dayOfWeek !== 0) {
-    const formattedOption = date.toLocaleDateString(undefined, dateOptions);
-    dateSelectOptions.push(
-      <option key={i} value={formattedOption}>
-        {formattedOption}
-      </option>
-    );
-  } else {
-    continue;
+  
+    // 날짜의 요일이 일요일(0)이 아닌 경우에만 옵션 추가
+    if (dayOfWeek !== 0) {
+      const formattedOption = date.toLocaleDateString(undefined, dateOptions);
+      dateSelectOptions.push(
+        <option key={i} value={formattedOption}>
+          {formattedOption}
+        </option>
+      );
+    }
   }
-}
 
 
   const handleDateChange = (event) => {
     const selectedDateStr = event.target.value;
+
   
     // "년", "월", "요일" 등의 문자를 "-"로 대체하고 공백을 제거하여 "YYYY-MM-DD" 형식의 문자열로 변환합니다.
-    const formattedDateStr = selectedDateStr.replace(/년|월/g, '-').replace(/(일요일|월요일|화요일|수요일|목요일|금요일|토요일|일|요일)/g, '').replace(/\s+/g, '').trim();
+    const formattedDateStr = selectedDateStr
+    .replace(/년|월/g, '-')
+    .replace(/(일요일|월요일|화요일|수요일|목요일|금요일|토요일|일|요일)/g, '')
+    .replace(/\s+/g, '')
+    .replace(/-$/, '')  // 맨 끝에 있는 '-' 제거
+    .trim();
 
     // 요일 정보를 제외한 "YYYY-MM-DD" 형식의 문자열을 Date 객체로 파싱합니다.
     const selectedDateObj = new Date(formattedDateStr);
@@ -533,7 +527,7 @@ export function Receipt(props){
           &&
           <div className={styles.formInner}>
             <div className={styles.label}>
-              <label>희망 택배일자</label>
+              <label htmlFor="deliveryDate">희망 택배일자</label>
             </div>
             <div className={styles.input}>
               <input 
