@@ -75,11 +75,16 @@ export default function InvoiceModal(props) {
     const sendUpdateInvoiceApiToServer = async () => {
         try {
             const token = GetCookie('jwt_token');
-            const response = await axios.put(`/delivery/invoiceUpdate`,
-                JSON.stringify({
-                    delivery_selectedCor: fetchedData.delivery_selectedCor,
-                    delivery_num: fetchedData.delivery_num
-                }),
+
+            const updatedData = fetchedData.map(item => ({
+                order_id: item.order_id,//식별자
+                delivery_selectedCor: item.delivery_selectedCor,
+                delivery_num: item.delivery_num
+            }))
+
+            const response = await axios.put(
+                `/delivery/invoice/edit`,
+                updatedData,
                 {
                     headers: {
                         "Content-Type": "application/json",
@@ -87,7 +92,10 @@ export default function InvoiceModal(props) {
                     }
                 }
             )
-
+            if(window.confirm(`적용이 완료되었습니다. 창을 닫으시겠습니까?`)) {
+                selectedModalClose();
+            }
+            
             return response.data;
 
         } catch (error) {
