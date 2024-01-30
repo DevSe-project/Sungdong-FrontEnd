@@ -337,7 +337,9 @@ export default function App() {
               category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
               menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
             <div className='main'>
-              <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              <div style={{float: 'left'}}>
+                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              </div>
               <div className='container'>
                 <Category menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} navigate={navigate} setActiveTab={setActiveTab} activeTab={activeTab}
                   iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
@@ -360,7 +362,9 @@ export default function App() {
               category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
               menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
             <div className='main'>
-              <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              <div style={{float: 'left'}}>
+                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              </div>
               <div className='container'>
                 <Detail menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} navigate={navigate} setActiveTab={setActiveTab} activeTab={activeTab}
                   iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
@@ -383,7 +387,9 @@ export default function App() {
               category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
               menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
             <div className='main'>
-              <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              <div style={{float: 'left'}}>
+                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              </div>
               <div className='container'>
                 <LikeItem menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
@@ -405,7 +411,9 @@ export default function App() {
               category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
               menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
             <div className='main'>
-              <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              <div style={{float: 'left'}}>
+                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              </div>
               <div className='container'>
                 <Basket menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} activeTab={activeTab} setActiveTab={setActiveTab} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
@@ -431,7 +439,9 @@ export default function App() {
               category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
               menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
             <div className='main'>
-              <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              <div style={{float: 'left'}}>
+                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              </div>
               <div className='container'>
                 <DeliveryMain menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
@@ -453,7 +463,9 @@ export default function App() {
               category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
               menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
             <div className='main'>
-              <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              <div style={{float: 'left'}}>
+                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              </div>
               <div className='container'>
                 <OrderDetail menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
@@ -484,7 +496,9 @@ export default function App() {
               category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
               menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
             <div className='main'>
-              <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              <div style={{float: 'left'}}>
+                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              </div>
               <div className='container'>
                 <MyPage />
                 <footer className='footer'>
@@ -503,7 +517,9 @@ export default function App() {
               category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
               menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
             <div className='main'>
-              <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              <div style={{float: 'left'}}>
+                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              </div>
               <div className='container'>
                 <AccountBook />
                 <footer className='footer'>
@@ -522,7 +538,9 @@ export default function App() {
               category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
               menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
             <div className='main'>
-              <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              <div style={{float: 'left'}}>
+                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              </div>
               <div className='container'>
                 <DepositHistory />
                 <footer className='footer'>
@@ -542,7 +560,9 @@ export default function App() {
               category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
               menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
             <div className='main'>
-              <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              <div style={{float: 'left'}}>
+                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              </div>
               <div className='container'>
                 <EstimateBox />
                 <footer className='footer'>
@@ -562,7 +582,9 @@ export default function App() {
               category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
               menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
             <div className='main'>
-              <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              <div style={{float: 'left'}}>
+                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              </div>
               <div className='container'>
                 <EstimateManager />
                 <footer className='footer'>
@@ -584,7 +606,9 @@ export default function App() {
               category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
               menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
             <div className='main'>
-              <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              <div style={{float: 'left'}}>
+                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              </div>
               <div className='container'>
                 <TackBackRequest />
                 <footer className='footer'>
@@ -605,7 +629,9 @@ export default function App() {
               category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
               menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
             <div className='main'>
-              <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              <div style={{float: 'left'}}>
+                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              </div>
               <div className='container'>
                 <TakeBackList />
                 <footer className='footer'>
@@ -626,7 +652,9 @@ export default function App() {
               category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
               menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
             <div className='main'>
-              <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              <div style={{float: 'left'}}>
+                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              </div>              
               <div className='container'>
                 <ErrorTrade />
                 <footer className='footer'>
@@ -645,7 +673,9 @@ export default function App() {
               category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
               menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
             <div className='main'>
-              <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              <div style={{float: 'left'}}>
+                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              </div>
               <div className='container'>
                 <ErrorTradeList />
                 <footer className='footer'>
@@ -666,7 +696,9 @@ export default function App() {
               category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
               menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
             <div className='main'>
-              <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              <div style={{float: 'left'}}>
+                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              </div>
               <div className='container'>
                 <Comeway menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
@@ -687,7 +719,9 @@ export default function App() {
               category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
               menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
             <div className='main'>
-              <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              <div style={{float: 'left'}}>
+                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              </div>
               <div className='container'>
                 <TodayNews menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
@@ -707,7 +741,9 @@ export default function App() {
               category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
               menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
             <div className='main'>
-              <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              <div style={{float: 'left'}}>
+                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              </div>
               <div className='container'>
                 <TodayNewsInner menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
@@ -727,7 +763,9 @@ export default function App() {
               category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
               menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
             <div className='main'>
-              <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              <div style={{float: 'left'}}>
+                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
+              </div>
               <div className='container'>
                 <Event menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
