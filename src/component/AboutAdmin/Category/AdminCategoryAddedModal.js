@@ -132,7 +132,7 @@ export default function AdminCategoryAddedModal({selectedCategory, categoryData}
             console.log('카테고리가 추가/변경 되었습니다.', data);
             // 상태를 다시 불러와 갱신합니다.
             queryClient.invalidateQueries(['category']);
-            selectedModalClose("대")
+            selectedModalClose("대");
             window.location.reload();
           },
           onError: (error) => {
@@ -153,7 +153,7 @@ export default function AdminCategoryAddedModal({selectedCategory, categoryData}
             console.log('카테고리가 추가/변경 되었습니다.', data);
             // 상태를 다시 불러와 갱신합니다.
             queryClient.invalidateQueries(['category']);
-            selectedModalClose("중")
+            selectedModalClose("중");
             window.location.reload();
           },
           onError: (error) => {
@@ -174,7 +174,7 @@ export default function AdminCategoryAddedModal({selectedCategory, categoryData}
             console.log('카테고리가 추가/변경 되었습니다.', data);
             // 상태를 다시 불러와 갱신합니다.
             queryClient.invalidateQueries(['category']);
-            selectedModalClose("소")
+            selectedModalClose("소");
             window.location.reload();
           },
           onError: (error) => {
