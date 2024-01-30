@@ -2,16 +2,24 @@
     display: flex;
     flex-direction: column;
     background-color: whitesmoke;
+    overflow: hidden;
 }
 
 .flexBox {
     display: flex;
 }
 
-/* ---- 큰 틀 ---- */
-.left {
-    
+.qqqq {
+    overflow-y: auto;
 }
+
+.asdf {
+    display: flex;
+    flex-direction: row;
+}
+
+/* ---- 큰 틀 ---- */
+.left {}
 
 .center {
     float: left;
@@ -19,7 +27,7 @@
     margin: 10px;
 }
 
-.product_container{
+.product_container {
     clear: both;
 }
 
@@ -30,11 +38,11 @@
 }
 
 
-
 @media screen and (max-width: 1152px) {
     .right {
         display: none;
     }
+
     .center {
         margin-left: 0;
     }

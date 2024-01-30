@@ -21,42 +21,36 @@ export default function MainPage(props) {
         iconOnClick={props.iconOnClick}
         menuOnClick={props.menuOnClick}
         menu_dynamicStyle={props.menu_dynamicStyle} />
-        
-        <div className={styles.flexBox}>
-          {/* ❗️----SIDE----❗️ */}
-          <div className={styles.left}>
-            {/* 로그인이 돼있다면 모듈 표시 */}
-            {/* { GetCookie('jwt_token') !== null ? <MyInfoSummary /> : null } */}
-            
-            
-            {/* 서버 연동 전 모듈 항시표시 - 확인용 */}
-            <WelcomeModule />
-            
-            
-            <MenuData login={props.login} menu_dynamicStyle={props.menu_dynamicStyle} />
-          </div>
-          {/* ❗️----CENTER----❗️ */}
-          <div className={styles.center}>
-            {/* 슬라이드 이미지 2개 */}
-            <div className={styles.slideImg_container}>
-              <SlideImg />
+
+      <div className={styles.flexBox}>
+        {/* ❗️----SIDE----❗️ */}
+        <div className={styles.left}>
+          <WelcomeModule />
+          <MenuData login={props.login} menu_dynamicStyle={props.menu_dynamicStyle} />
+        </div>
+        <div className={styles.qqqq}
+          style={{ display: 'flex', flexDirection: 'column' }}>
+          <div className={styles.asdf}>
+            {/* ❗️----CENTER----❗️ */}
+            <div className={styles.center}>
+              {/* 슬라이드 이미지 2개 */}
+              <div className={styles.slideImg_container}>
+                <SlideImg />
+              </div>
+              {/* 상품 목록 Grid */}
+              <div className={styles.product_container}>
+                <Product />
+              </div>
             </div>
-            {/* 상품 목록 Grid */}
-            <div className={styles.product_container}>
-              <Product />
+            {/* ❗️----RIGHT----❗️ */}
+            <div className={styles.right}>
+              <NoticeMini />
             </div>
           </div>
-          {/* ❗️----RIGHT----❗️ */}
-          <div className={styles.right}>
-            <NoticeMini />
-          </div>
+          {/* FOOTER */}
+          <Footer />
+        </div>
       </div>
-
-      {/* FOOTER */}
-      <footer className='footer'>
-        <Footer />
-      </footer>
-
     </div>
   )
 }

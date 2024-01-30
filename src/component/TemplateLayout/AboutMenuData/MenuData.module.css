@@ -2,7 +2,9 @@
 /* 위치 조정 */
 .menuLocation{
   width: 14em;
-  height: 100vh;
+  height: 77.8121vh;
+  min-height: 77.8121vh;
+  max-height: 77.8121vh;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   list-style: none;
