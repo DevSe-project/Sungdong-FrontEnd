@@ -18,7 +18,6 @@
   border-radius: 1vh;
   background-color: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  height: 400px;
 }
 
 .gridItem:hover {
@@ -27,10 +26,10 @@
 
 /* 상품 이미지 컨테이너 */
 .thumnail_container {
-  flex: 50%;
   overflow: hidden;
   border-radius: 1vh;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  flex: 80%;
 }
 
 /* 이미지 썸네일 */
@@ -41,7 +40,7 @@
 }
 
 .productInfo_container {
-  flex: 50%;
+  flex: 20%;
   display: flex;
   flex-direction: column;
   text-align: left;
@@ -67,13 +66,15 @@
 
 .discountSection {
   display: flex;
+  flex-direction: column;
   align-items: start;
   justify-content: flex-start;
 }
 
 .discountText {
   color: gray;
-  text-decoration: line-through;
+  display: flex;
+  flex-direction: row;
 }
 
 .discountPercentage {
@@ -81,8 +82,9 @@
   font-weight: 750;
 }
 
-.discountedPrice {
+.price {
   color: black;
+  font-size: 20px;
   font-weight: bold;
 }
 

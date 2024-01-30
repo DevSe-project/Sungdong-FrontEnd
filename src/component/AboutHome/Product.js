@@ -26,7 +26,7 @@ export function Product() {
   }
 
   if (isError) {
-    return <p>Error: {error.message}</p>;
+    return <div>Error: {error.message}</div>;
   }
 
   return (
@@ -49,13 +49,13 @@ export function Product() {
               {item.product_supply <= 0 ?
                 <div className={styles.product_title}>
                   {/* 상품 제목 */}
-                  <p className={styles.discountText}>
+                  <div className={styles.discountText}>
                     {item.product_title}
-                  </p>
+                  </div>
                   {/* 품절 */}
-                  <p style={{ color: 'red', fontWeight: '750' }}>
+                  <div style={{ color: 'red', fontWeight: '750' }}>
                     품절
-                  </p>
+                  </div>
                 </div>
                 :
                 <div className={styles.product_title}>
@@ -67,16 +67,22 @@ export function Product() {
                 {item.product_discount
                   ? (
                     <div className={styles.discountSection}>
-                      <div className={styles.discountText}>
+                      <div className={styles.discountText} style={{textDecoration: 'line-through'}}>
                         {parseInt(item.product_price).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                       </div>
                       <div className={styles.discountText}>
                         {item.product_discount ? (
                           <>
                             {/* 할일률 표기 */}
-                            <span className={styles.discountPercentage}>
-                              ({item.product_discount}%)
-                            </span>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                              <i className="fal fa-long-arrow-right" />
+                              <div className={styles.price}>
+                                {(item.product_price - (item.product_price / 100) * item.product_discount).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
+                              </div>
+                              <span className={styles.discountPercentage}>
+                                ({item.product_discount}%)
+                              </span>
+                            </div>
                           </>
                         ) : (
                           // 적용된 할인이 없다면 그냥 제목만
@@ -85,15 +91,10 @@ export function Product() {
                       </div>
                       {/* 할인가 표시 */}
                       {/* 아이콘 */}
-                      <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <i className="fal fa-long-arrow-right" />
-                        <h3 className={styles.discountedPrice}>
-                          {(item.product_price - (item.product_price / 100) * item.product_discount).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
-                        </h3>
-                      </div>
+
                     </div>
                   ) : (
-                    <h3>{parseInt(item.product_price).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}</h3>
+                    <div className={styles.price}>{parseInt(item.product_price).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}</div>
                   )}
                 <span>{
                   categoryData &&
