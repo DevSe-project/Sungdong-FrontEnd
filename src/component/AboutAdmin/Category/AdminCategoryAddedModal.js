@@ -133,6 +133,7 @@ export default function AdminCategoryAddedModal({selectedCategory, categoryData}
             // 상태를 다시 불러와 갱신합니다.
             queryClient.invalidateQueries(['category']);
             selectedModalClose("대")
+            window.location.reload();
           },
           onError: (error) => {
             // 상품 추가 실패 시, 에러 처리를 수행합니다.
@@ -153,6 +154,7 @@ export default function AdminCategoryAddedModal({selectedCategory, categoryData}
             // 상태를 다시 불러와 갱신합니다.
             queryClient.invalidateQueries(['category']);
             selectedModalClose("중")
+            window.location.reload();
           },
           onError: (error) => {
             // 상품 추가 실패 시, 에러 처리를 수행합니다.
@@ -173,6 +175,7 @@ export default function AdminCategoryAddedModal({selectedCategory, categoryData}
             // 상태를 다시 불러와 갱신합니다.
             queryClient.invalidateQueries(['category']);
             selectedModalClose("소")
+            window.location.reload();
           },
           onError: (error) => {
             // 상품 추가 실패 시, 에러 처리를 수행합니다.

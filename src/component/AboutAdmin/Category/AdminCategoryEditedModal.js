@@ -133,6 +133,8 @@ export default function AdminCategoryEditedModal({selectedCategory, categoryData
             console.log('카테고리가 추가/변경 되었습니다.', data);
             // 상태를 다시 불러와 갱신합니다.
             queryClient.invalidateQueries(['category']);
+            selectedModalClose(modalName);
+            window.location.reload();
           },
           onError: (error) => {
             // 상품 추가 실패 시, 에러 처리를 수행합니다.
@@ -153,6 +155,8 @@ export default function AdminCategoryEditedModal({selectedCategory, categoryData
             console.log('카테고리가 추가/변경 되었습니다.', data);
             // 상태를 다시 불러와 갱신합니다.
             queryClient.invalidateQueries(['category']);
+            selectedModalClose(modalName);
+            window.location.reload();
           },
           onError: (error) => {
             // 상품 추가 실패 시, 에러 처리를 수행합니다.
@@ -173,6 +177,8 @@ export default function AdminCategoryEditedModal({selectedCategory, categoryData
             console.log('카테고리가 추가/변경 되었습니다.', data);
             // 상태를 다시 불러와 갱신합니다.
             queryClient.invalidateQueries(['category']);
+            selectedModalClose(modalName);
+            window.location.reload();
           },
           onError: (error) => {
             // 상품 추가 실패 시, 에러 처리를 수행합니다.
