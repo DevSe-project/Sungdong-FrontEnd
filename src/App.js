@@ -253,12 +253,7 @@ export default function App() {
         <Route path='/category' element={
           <>
             {/* 최상단배너 */}
-            <MainPage
-              category_dynamicStyle={category_dynamicStyle}
-              menuOnClick={menuOnClick}
-              text_dynamicStyle={text_dynamicStyle}
-              menu_dynamicStyle={menu_dynamicStyle}
-            />
+            <TopBanner />
             <div className='main'>
               <MenuData />
               <div className='container'>
@@ -281,13 +276,7 @@ export default function App() {
         {/* 상세 페이지 */}
         <Route path="/detail/:id" element={
           <>
-            {/* 최상단배너 */}
-            <MainPage
-              category_dynamicStyle={category_dynamicStyle}
-              menuOnClick={menuOnClick}
-              text_dynamicStyle={text_dynamicStyle}
-              menu_dynamicStyle={menu_dynamicStyle}
-            />
+            <TopBanner />
             <div className='main'>
               <MenuData />
               <div className='container'>
@@ -307,12 +296,7 @@ export default function App() {
         <Route path='/likeitem' element={
           <>
             {/* 최상단배너 */}
-            <MainPage
-              category_dynamicStyle={category_dynamicStyle}
-              menuOnClick={menuOnClick}
-              text_dynamicStyle={text_dynamicStyle}
-              menu_dynamicStyle={menu_dynamicStyle}
-            />
+            <TopBanner />
             <div className='main'>
               <MenuData />
               <div className='container'>
@@ -329,12 +313,7 @@ export default function App() {
         <Route path='/basket' element={
           <>
             {/* 최상단배너 */}
-            <MainPage
-              category_dynamicStyle={category_dynamicStyle}
-              menuOnClick={menuOnClick}
-              text_dynamicStyle={text_dynamicStyle}
-              menu_dynamicStyle={menu_dynamicStyle}
-            />
+            <TopBanner />
             <div className='main'>
               <MenuData />
               <div className='container'>
@@ -355,12 +334,7 @@ export default function App() {
         <Route path='/delivery' element={
           <>
             {/* 최상단배너 */}
-            <MainPage
-              category_dynamicStyle={category_dynamicStyle}
-              menuOnClick={menuOnClick}
-              text_dynamicStyle={text_dynamicStyle}
-              menu_dynamicStyle={menu_dynamicStyle}
-            />
+            <TopBanner />
             <div className='main'>
               <MenuData />
               <div className='container'>
@@ -377,12 +351,7 @@ export default function App() {
         <Route path='/orderDetail' element={
           <>
             {/* 최상단배너 */}
-            <MainPage
-              category_dynamicStyle={category_dynamicStyle}
-              menuOnClick={menuOnClick}
-              text_dynamicStyle={text_dynamicStyle}
-              menu_dynamicStyle={menu_dynamicStyle}
-            />
+            <TopBanner />
             <div className='main'>
               <MenuData />
               <div className='container'>
@@ -408,12 +377,7 @@ export default function App() {
         <Route path='/mypages' element={
           <>
             {/* 최상단배너 */}
-            <MainPage
-              category_dynamicStyle={category_dynamicStyle}
-              menuOnClick={menuOnClick}
-              text_dynamicStyle={text_dynamicStyle}
-              menu_dynamicStyle={menu_dynamicStyle}
-            />
+            <TopBanner />
             <div className='main'>
               <MenuData />
               <div className='container'>
@@ -427,12 +391,7 @@ export default function App() {
         <Route path='/accountBook' element={
           <>
             {/* 최상단배너 */}
-            <MainPage
-              category_dynamicStyle={category_dynamicStyle}
-              menuOnClick={menuOnClick}
-              text_dynamicStyle={text_dynamicStyle}
-              menu_dynamicStyle={menu_dynamicStyle}
-            />
+            <TopBanner />
             <div className='main'>
               <MenuData />
               <div className='container'>
@@ -446,12 +405,7 @@ export default function App() {
         <Route path='/depositHistory' element={
           <>
             {/* 최상단배너 */}
-            <MainPage
-              category_dynamicStyle={category_dynamicStyle}
-              menuOnClick={menuOnClick}
-              text_dynamicStyle={text_dynamicStyle}
-              menu_dynamicStyle={menu_dynamicStyle}
-            />
+            <TopBanner />
             <div className='main'>
               <MenuData />
               <div className='container'>
@@ -466,12 +420,7 @@ export default function App() {
         <Route path='/estimateBox' element={
           <>
             {/* 최상단배너 */}
-            <MainPage
-              category_dynamicStyle={category_dynamicStyle}
-              menuOnClick={menuOnClick}
-              text_dynamicStyle={text_dynamicStyle}
-              menu_dynamicStyle={menu_dynamicStyle}
-            />
+            <TopBanner />
             <div className='main'>
               <MenuData />
               <div className='container'>
@@ -486,12 +435,7 @@ export default function App() {
         <Route path='/estimateManager' element={
           <>
             {/* 최상단배너 */}
-            <MainPage
-              category_dynamicStyle={category_dynamicStyle}
-              menuOnClick={menuOnClick}
-              text_dynamicStyle={text_dynamicStyle}
-              menu_dynamicStyle={menu_dynamicStyle}
-            />
+            <TopBanner />
             <div className='main'>
               <MenuData />
               <div className='container'>
@@ -508,12 +452,7 @@ export default function App() {
         <Route path='/return/request' element={
           <>
             {/* 최상단배너 */}
-            <MainPage
-              category_dynamicStyle={category_dynamicStyle}
-              menuOnClick={menuOnClick}
-              text_dynamicStyle={text_dynamicStyle}
-              menu_dynamicStyle={menu_dynamicStyle}
-            />
+            <TopBanner />
             <div className='main'>
               <MenuData />
               <div className='container'>
@@ -529,12 +468,7 @@ export default function App() {
         <Route path='/return/list' element={
           <>
             {/* 최상단배너 */}
-            <MainPage
-              category_dynamicStyle={category_dynamicStyle}
-              menuOnClick={menuOnClick}
-              text_dynamicStyle={text_dynamicStyle}
-              menu_dynamicStyle={menu_dynamicStyle}
-            />
+            <TopBanner />
             <div className='main'>
               <MenuData />
               <div className='container'>
@@ -550,12 +484,7 @@ export default function App() {
         <Route path='/error/request' element={
           <>
             {/* 최상단배너 */}
-            <MainPage
-              category_dynamicStyle={category_dynamicStyle}
-              menuOnClick={menuOnClick}
-              text_dynamicStyle={text_dynamicStyle}
-              menu_dynamicStyle={menu_dynamicStyle}
-            />
+            <TopBanner />
             <div className='main'>
               <MenuData />
               <div className='container'>
@@ -569,12 +498,7 @@ export default function App() {
         <Route path='/error/list' element={
           <>
             {/* 최상단배너 */}
-            <MainPage
-              category_dynamicStyle={category_dynamicStyle}
-              menuOnClick={menuOnClick}
-              text_dynamicStyle={text_dynamicStyle}
-              menu_dynamicStyle={menu_dynamicStyle}
-            />
+            <TopBanner />
             <div className='main'>
               <MenuData />
               <div className='container'>
@@ -590,12 +514,7 @@ export default function App() {
         <Route path='/comeway' element={
           <>
             {/* 최상단배너 */}
-            <MainPage
-              category_dynamicStyle={category_dynamicStyle}
-              menuOnClick={menuOnClick}
-              text_dynamicStyle={text_dynamicStyle}
-              menu_dynamicStyle={menu_dynamicStyle}
-            />
+            <TopBanner />
             <div className='main'>
               <MenuData />
               <div className='container'>
@@ -611,12 +530,7 @@ export default function App() {
         <Route path='/todayTopic/:page' element={
           <>
             {/* 최상단배너 */}
-            <MainPage
-              category_dynamicStyle={category_dynamicStyle}
-              menuOnClick={menuOnClick}
-              text_dynamicStyle={text_dynamicStyle}
-              menu_dynamicStyle={menu_dynamicStyle}
-            />
+            <TopBanner />
             <div className='main'>
               <MenuData />
               <div className='container'>
@@ -631,12 +545,7 @@ export default function App() {
         <Route path='/todayTopicPost/:id' element={
           <>
             {/* 최상단배너 */}
-            <MainPage
-              category_dynamicStyle={category_dynamicStyle}
-              menuOnClick={menuOnClick}
-              text_dynamicStyle={text_dynamicStyle}
-              menu_dynamicStyle={menu_dynamicStyle}
-            />
+            <TopBanner />
             <div className='main'>
               <MenuData />
               <div className='container'>
@@ -651,12 +560,7 @@ export default function App() {
         <Route path='/event' element={
           <>
             {/* 최상단배너 */}
-            <MainPage
-              category_dynamicStyle={category_dynamicStyle}
-              menuOnClick={menuOnClick}
-              text_dynamicStyle={text_dynamicStyle}
-              menu_dynamicStyle={menu_dynamicStyle}
-            />
+            <TopBanner />
             <div className='main'>
               <MenuData />
               <div className='container'>
