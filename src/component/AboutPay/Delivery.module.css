@@ -97,6 +97,12 @@
   white-space: nowrap;
 }
 
+.deliveryNowItem{
+  border: 0.5px solid lightgray;
+  border-radius: 5px;
+  gap: 1em;
+}
+
 
 /* 버튼 CSS */
 

@@ -7,13 +7,6 @@ import { GetCookie } from '../../customFn/GetCookie';
 import { useQuery } from '@tanstack/react-query';
 
 export function Delivery(props){
-  //로그인 정보 불러오기
-  const orderData = useOrderData();
-  const inLogin = JSON.parse(sessionStorage.getItem('saveLoginData'));
-  const filterOrderData = orderData && orderData.filter((item)=>item.userId === inLogin.id);
-  const [filterSearch, setFilterSearch] = useState("");
-  const [filteredItems, setFilteredItems] = useState([]);
-
   //주문 데이터 fetch 
   const fetchOrderData = async() => {
     try{
@@ -34,36 +27,9 @@ export function Delivery(props){
 
   const { isLoading, isError, error, data:order } = useQuery({queryKey:['order'], queryFn: ()=> fetchOrderData()});
 
-  useEffect(()=>{
-    if(props.resultSearch){
-      setFilterSearch(props.resultSearch)
-    }
-  },[props.resultSearch])
-
-  useEffect(() => {
-    if(filterOrderData){
-      if (filterSearch !== "") {
-        // 데이터에서 타이틀과 검색결과를 찾고
-        const filtered = filterOrderData.filter((item) =>
-          item.productName.includes(filterSearch))
-        // 목록 밑작업 해줌
-        const addCntList = filtered.map((item, index) => ({
-          ...item,
-          cnt: item.cnt ? item.cnt : 1,
-          finprice: item.finprice ? item.finprice : item.price,
-          listId: index,
-        }));
-        // 필터링 된 아이템 표시
-        setFilteredItems(addCntList);
-      }
-    }
-  }, [filterSearch])
-
   const navigate = useNavigate();
-  function detailOrder(item){
-    sessionStorage.setItem('newOrderData', JSON.stringify(item));
-    navigate('/orderDetail');
-  }
+
+  console.log(order);
 
   function handleDeliveryAPI(item, deliveryNum){
     if(item.orderState === 3){
@@ -72,7 +38,7 @@ export function Delivery(props){
           window.open(`https://tracker.delivery/#/kr.cjlogistics/${deliveryNum}`, '_blank', 'width=600,height=800');
           break;
         case '화물':
-          window.open(`https://tracker.delivery/#/${item.delivery.deliverySelect}/${deliveryNum}`, '_blank', 'width=600,height=800');
+          window.open(`https://tracker.delivery/#/${item.selectedCor}/${deliveryNum}`, '_blank', 'width=600,height=800');
           break;
         default : 
           alert("직접 수령이나 성동 택배는 조회하실 수 없습니다.");
@@ -84,13 +50,23 @@ export function Delivery(props){
   }
   // 게시물 데이터와 페이지 번호 상태 관리    
   const [currentPage, setCurrentPage] = useState(1);
-  // 현재 페이지에 해당하는 게시물 목록 가져오기
-  const getCurrentPagePosts = () => {
-    const startIndex = (currentPage - 1) * 5; // 한 페이지에 5개씩 표시
-    return filteredItems.length > 0 
-    ? filteredItems.slice(startIndex, startIndex + 5) 
-    : orderData && filterOrderData.slice(startIndex, startIndex + 5)
-  };
+  // // 현재 페이지에 해당하는 게시물 목록 가져오기
+  // const getCurrentPagePosts = () => {
+  //   const startIndex = (currentPage - 1) * 5; // 한 페이지에 5개씩 표시
+  //   return order.length > 0 
+  //   && order.slice(startIndex, startIndex + 5) 
+  // };
+
+  function detailOrder(){
+
+  }
+
+  if(isLoading){
+    return <p>Loading..</p>;
+  }
+  if(isError){
+    return <p>에러 : {error.message}</p>;
+  }
 
 
   return(
@@ -98,41 +74,44 @@ export function Delivery(props){
       {props.resultSearch &&
       <h3 style={{margin: '1em'}}>
       "{props.resultSearch}" 에 대해
-      <span style={{color: '#CC0000', fontWeight: '650', margin: '0.5em'}}>{filteredItems.length}건</span>
-      이 검색 되었습니다.
+      {/* <span style={{color: '#CC0000', fontWeight: '650', margin: '0.5em'}}>{filteredItems.length}건</span>
+      이 검색 되었습니다. */}
       </h3>}
-      {orderData ?
-      getCurrentPagePosts().map((item, key)=> 
+      {order ?
+      order.result.map((item, key)=> 
       <div key={key} className={styles.deliveryList}>
         <div className={styles.orderDate}>
-          <h4>{item.date} 주문</h4>
+          <h4 style={{fontWeight: '850'}}>{new Date(item.order_date).toLocaleDateString()} 주문</h4>
           <div onClick={()=>detailOrder(item)} className={styles.orderDetail}>
             <span style={{fontWeight: '450'}}>주문 상세보기</span> 
             <i className="far fa-chevron-right"></i>
           </div>
         </div>
-        <div className={styles.deliveryStyle}>
+        <div className={styles.deliveryStyle}> 
           <div className={styles.deliveryNow}>
             <div className={styles.deliveryNowMenu}>
-              <h5>{item.delivery.deliveryDate 
-              ? `배송 예정 : ${item.delivery.deliveryDate}`
-              : item.orderState === 0 ? '결제 대기' 
+              <h5 style={{fontWeight: '650'}}>
+              {item.orderState === 0 ? '결제 대기' 
               : item.orderState === 1 ? '결제 완료'
               : item.orderState === 2 ? '배송 준비중'
               : item.orderState === 3 ? '배송 중'
               : item.orderState === 4 ? '배송 완료' 
-              : '누락된 상품(고객센터 문의)' }</h5>
+              : '누락된 상품(고객센터 문의)' }
+              <p style={{color: 'orangered', fontWeight: '550'}}>{item.delivery_date && `🚚 배송 예정 : ${new Date(item.delivery_date).toLocaleDateString()}`}</p>
+              </h5>
               <i style={{color: '#ccc'}} className="fas fa-trash-alt"></i>
             </div>
-            <div className={styles.deliveryNowItem}>
-              <img className={styles.img} src={item.image.mini} alt="주문상품"/>
+            {item.products.map((product,key) => 
+            <div key={key} className={styles.deliveryNowItem}>
+              <img className={styles.img} src={product.product_image_original} alt="주문상품"/>
               <div className={styles.deliveryNowInformation}>
-                <span style={{fontWeight: '650'}}>{item.title}{item.optionSelected && `(${item.optionSelected})`}, {item.cnt}개 </span>
-                <span style={{fontWeight: '650'}}>{item.discount 
-                ? (item.price * item.cnt) - ((item.price * item.cnt)/100*item.discount).toLocaleString()
-                : (item.price * item.cnt).toLocaleString()}원</span>
+                <span style={{fontWeight: '450'}}>{product.product_title}, {product.order_cnt}개 </span>
+                <span>규격 : {product.product_spec && product.product_spec}</span>
+                <span>옵션 : {product.selectedOption && product.selectedOption}</span>
+                <span style={{fontWeight: '650'}}>{parseInt(product.order_productPrice).toLocaleString()}원</span>
               </div>
             </div>
+            )}
           </div>
           <div className={styles.deliveryMenu}>
             <button 
@@ -140,11 +119,15 @@ export function Delivery(props){
             handleDeliveryAPI(item, 111111111111)
           }}
             className={styles.button}>배송 조회</button>
+            {item.orderState < 4 
+            ?
             <button className={styles.button}>주문 취소</button>
+            :
             <button
             onClick={()=>navigate("/return/request")} 
             className={styles.button}
             >교환, 반품 신청</button>
+            }
           </div>
         </div>
       </div>
@@ -182,7 +165,7 @@ export function Delivery(props){
       <button
       className={styles.pageButton}
       onClick={()=> {
-        if(filteredItems.length > 5){
+        if(order.length > 5){
           setCurrentPage(currentPage + 1)
         } else {
           alert("다음 페이지가 없습니다.")
