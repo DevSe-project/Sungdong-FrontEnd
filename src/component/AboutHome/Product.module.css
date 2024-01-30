@@ -1,29 +1,33 @@
-/* 상품 전체 컨테이너 */
 .gridContainer {
-  display: grid; /* 그리드 컨테이너로 선언 */
-  grid-template-columns: repeat(auto-fill, minmax(calc(20% - 20px), 1fr)); /* 그리드의 열을 유연하게 생성하되 최대 너비를 초과하지 않게 설정 */
-  gap: 1em; /* 그리드 아이템 간의 간격 */
-  justify-content: space-around; /* 그리드 아이템을 가로 방향으로 중앙 정렬 */
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(calc(20% - 20px), 1fr));
+  gap: 1em;
+  justify-content: space-around;
   margin-left: 10px;
 
 }
 
 /* 각 상품 블럭 */
 .gridItem {
+  display: flex;
+  flex-direction: column;
   flex: 0 0 calc(20% - 20px);
   margin-top: 1em;
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
   border-radius: 1vh;
   background-color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  height: 400px;
 }
+
 .gridItem:hover {
   transform: scale(1.05);
 }
 
 /* 상품 이미지 컨테이너 */
 .thumnail_container {
+  flex: 50%;
   overflow: hidden;
   border-radius: 1vh;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -36,19 +40,25 @@
   display: block;
 }
 
+.productInfo_container {
+  flex: 50%;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  justify-content: space-between;
+  padding: 10px;
+}
+
 .product_title {
   display: flex;
   flex-direction: column;
-  justify-content: left;
-  align-items: start;
-  margin-top: 20px;
-  margin-left: 10px;
+  font-weight: bold;
 }
+
 
 .product_price {
   display: flex;
   flex-direction: column;
-  margin-top: 20px;
 }
 
 .product_price h3 {
@@ -57,30 +67,23 @@
 
 .discountSection {
   display: flex;
-  flex-direction: column;
   align-items: start;
   justify-content: flex-start;
-  padding-bottom: 1.5em;
 }
 
 .discountText {
   color: gray;
   text-decoration: line-through;
-  margin: 0;
-  font-size: 0.8em;
-  overflow: hidden;
 }
 
 .discountPercentage {
-  margin-top: 0.3em;
   color: red;
   font-weight: 750;
 }
 
 .discountedPrice {
-  color: black; 
+  color: black;
   font-weight: bold;
-  margin: 0;
 }
 
 /* Skeleton Layout */
