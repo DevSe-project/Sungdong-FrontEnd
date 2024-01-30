@@ -23,8 +23,7 @@ export default function MainPage(props) {
       <div className="main">
         {/* ❗️----SIDE----❗️ */}
         <div className={styles.left}>
-          <WelcomeModule />
-          <MenuData login={props.login} menu_dynamicStyle={props.menu_dynamicStyle} />
+          <MenuData login={props.login} menu_dynamicStyle={props.menu_dynamicStyle}/>
         </div>
         <div className="container">
           <div className={styles.location}>

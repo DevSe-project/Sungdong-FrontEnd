@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from './MenuData.module.css'
 import { GetCookie } from "../../../customFn/GetCookie";
+import WelcomeModule from "../../WelcomeModule/WelcomeModule";
 export function MenuData(props) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -183,6 +184,7 @@ export function MenuData(props) {
   return (
     <div
       className={styles.menuLocation}>
+      <WelcomeModule/>
       {/* 메뉴 loop */}
       {menuData.map((item, index) => (
         <li

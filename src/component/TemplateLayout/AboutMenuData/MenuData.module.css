@@ -6,7 +6,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   list-style: none;
   position: sticky;
-  top: 96px;
+  top: 100px;
   transition: transform 0.5s ease; /* 변환 효과를 부드럽게 적용합니다. */
 }
 
