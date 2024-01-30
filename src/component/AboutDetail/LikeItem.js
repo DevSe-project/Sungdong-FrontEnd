@@ -19,7 +19,7 @@ export function LikeItem(){
     setSelectAll(!selectAll);
 
     if (!selectAll) {
-      const allId = wishList.map((item) => item.id);
+      const allId = wishList.map((item) => item.product_id);
       setSelectedItems(allId);
     } else {
       setSelectedItems([]);
@@ -39,7 +39,7 @@ export function LikeItem(){
   const deletedList = () => {
     if(selectedItems !== null && selectedItems.length > 0){
       //wishList 배열에서 selectedItems에 포함된(체크박스 선택된) 항목들이 아닌 것들로 새로운 배열을 생성
-      const updatedWishlist = wishList.filter((item) => !selectedItems.includes(item.id)); 
+      const updatedWishlist = wishList.filter((item) => !selectedItems.includes(item.product_id)); 
       setWishList(updatedWishlist);
 
       // LocalStorage에 업데이트된 찜 목록 저장
@@ -82,14 +82,14 @@ export function LikeItem(){
               <tr key={key}>
                 <td>
                   <input 
-                  checked={selectedItems.includes(item.id)}
-                  onChange={() => checkedBox(item.id)}
+                  checked={selectedItems.includes(item.product_id)}
+                  onChange={() => checkedBox(item.product_id)}
                   type='checkbox'
                   />
                 </td>
-                <td><img src={item.image.mini && item.image.mini} alt='이미지'/></td>
-                <td><span className={styles.link} onClick={()=>navigate(`/detail/${item.id}`)}>{item.title}</span></td>
-                <td>\{item.price.toLocaleString()}</td>
+                <td><img style={{width: '8em', height: '8em'}} src={item.product_image_original} alt='이미지'/></td>
+                <td><span className={styles.link} onClick={()=>navigate(`/detail/${item.product_id}`)}>{item.product_title}</span></td>
+                <td>\{item.product_price.toLocaleString()}</td>
               </tr>
               ))}
             </tbody>

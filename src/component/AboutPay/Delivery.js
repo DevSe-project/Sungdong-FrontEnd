@@ -5,6 +5,7 @@ import { useDataActions, useOrderData } from '../../Store/DataStore';
 import axios from '../../axios';
 import { GetCookie } from '../../customFn/GetCookie';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { handleForbiddenError, handleOtherErrors, handleUnauthorizedError } from '../../customFn/ErrorHandling';
 
 export function Delivery(props){
 
@@ -23,11 +24,21 @@ export function Delivery(props){
         }
       )
       return response.data;
-    } catch(error) {
-      throw new Error('주문 내역을 불러오던 중 오류가 발생했습니다.');
+    } catch (error) {
+      // 서버 응답이 실패인 경우
+      if (error.response && error.response.status === 401) {
+          // 서버가 401 UnAuthorazation를 반환한 경우
+          handleUnauthorizedError(error.response.data.message);
+          return {};
+      } else if (error.response && error.response.status === 403) {
+          handleForbiddenError(error.response.data.message);
+          return {};
+      } else {
+          handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
+          return {};
+      }
     }
   }
-
 
   //상품 주문 정보 요청 함수
   const orderRequest = async (order_id) => {
@@ -46,7 +57,17 @@ export function Delivery(props){
       return response.data;
     } catch (error) {
       // 실패 시 예외를 throw합니다.
-      throw new Error('상품을 주문 목록에 요청하던 중 오류가 발생했습니다.');
+      if (error.response && error.response.status === 401) {
+        // 서버가 401 UnAuthorazation를 반환한 경우
+        handleUnauthorizedError(error.response.data.message);
+        return {};
+      } else if (error.response && error.response.status === 403) {
+        handleForbiddenError(error.response.data.message);
+        return {};
+      } else {
+        handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
+        return {};
+      }    
     }
   };
 

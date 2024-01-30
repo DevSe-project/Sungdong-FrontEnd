@@ -5,6 +5,7 @@ import axios from '../../axios';
 import { GetCookie } from '../../customFn/GetCookie';
 import { useQuery } from '@tanstack/react-query';
 import { useListActions, useOrderList } from '../../Store/DataStore';
+import { handleForbiddenError, handleOtherErrors, handleUnauthorizedError } from '../../customFn/ErrorHandling';
 
 
 export function Order(props){
@@ -24,10 +25,21 @@ export function Order(props){
         }
       )
       return response.data;
-    } catch(error) {
-      throw new Error('주문 내역을 불러오던 중 오류가 발생했습니다.');
+    } catch (error) {
+      // 서버 응답이 실패인 경우
+      if (error.response && error.response.status === 401) {
+        // 서버가 401 UnAuthorazation를 반환한 경우
+        handleUnauthorizedError(error.response.data.message);
+        return {};
+    } else if (error.response && error.response.status === 403) {
+        handleForbiddenError(error.response.data.message);
+        return {};
+    } else {
+        handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
+        return {};
     }
   }
+};
 
   const { isLoading, isError, error, data:orderData } = useQuery({queryKey:['orderDetail'], queryFn: ()=> fetchOrderData()});
 

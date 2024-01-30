@@ -7,6 +7,7 @@ import { useBasketList, useDataActions, useDetailData, useListActions, useWishLi
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import axios from '../../axios'
 import { GetCookie } from '../../customFn/GetCookie'
+import { handleForbiddenError, handleOtherErrors, handleUnauthorizedError } from '../../customFn/ErrorHandling'
 export function Detail(props) {
 
   const detailData = useDetailData();
@@ -76,9 +77,17 @@ export function Detail(props) {
           // 서버가 400 Bad Request를 반환한 경우
           alert(error.response.data.message);          
           return console.error(error.response.data.message);
+          // 서버 응답이 실패인 경우
+        } else if (error.response && error.response.status === 401) {
+            // 서버가 401 UnAuthorazation를 반환한 경우
+            handleUnauthorizedError(error.response.data.message);
+            return {};
+        } else if (error.response && error.response.status === 403) {
+            handleForbiddenError(error.response.data.message);
+            return {};
         } else {
-          // 그 외의 오류인 경우
-          throw new Error('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
+            handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
+            return {};
         }
       }
     };
@@ -105,12 +114,22 @@ export function Detail(props) {
         // 성공 시 추가된 상품 정보를 반환합니다.
         return response.data;
       } catch (error) {
-        // 실패 시 예외를 throw합니다.
-        throw new Error('상품을 결제항목에 작성하는 중 오류가 발생했습니다.');
+        // 서버 응답이 실패인 경우
+        if (error.response && error.response.status === 401) {
+          // 서버가 401 UnAuthorazation를 반환한 경우
+          handleUnauthorizedError(error.response.data.message);
+          return {};
+      } else if (error.response && error.response.status === 403) {
+          handleForbiddenError(error.response.data.message);
+          return {};
+      } else {
+          handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
+          return {};
       }
-    };
+    }
+  };
 
-    //결제하기 함수
+    //견적함 추가 함수
     const addToEstimate = async (product) => {
       if (isLoading) {
         // 데이터가 없으면 아무것도 하지 않고 종료
@@ -134,10 +153,20 @@ export function Detail(props) {
         // 성공 시 추가된 상품 정보를 반환합니다.
         return response.data;
       } catch (error) {
-        // 실패 시 예외를 throw합니다.
-        throw new Error('상품을 견적함에 추가하는 중 오류가 발생했습니다.');
+        // 서버 응답이 실패인 경우
+        if (error.response && error.response.status === 401) {
+          // 서버가 401 UnAuthorazation를 반환한 경우
+          handleUnauthorizedError(error.response.data.message);
+          return {};
+      } else if (error.response && error.response.status === 403) {
+          handleForbiddenError(error.response.data.message);
+          return {};
+      } else {
+          handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
+          return {};
       }
-    };
+    }
+  };
   
     //장바구니 추가 함수
     const { mutate:cartMutate } = useMutation({mutationFn: addToCart})

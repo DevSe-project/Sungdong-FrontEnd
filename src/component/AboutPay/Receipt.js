@@ -5,6 +5,7 @@ import { useDataActions, useDeliveryInfo, useListActions, useOrderActions, useOr
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from '../../axios';
 import { GetCookie } from '../../customFn/GetCookie';
+import { handleForbiddenError, handleOtherErrors, handleUnauthorizedError } from '../../customFn/ErrorHandling';
 
 
 export function Receipt(props){
@@ -32,8 +33,18 @@ export function Receipt(props){
       // 성공 시 추가된 상품 정보를 반환합니다.
       return response.data;
     } catch (error) {
-      // 실패 시 예외를 throw합니다.
-      throw new Error('상품을 주문 목록에 요청하던 중 오류가 발생했습니다.');
+        // 서버 응답이 실패인 경우
+        if (error.response && error.response.status === 401) {
+          // 서버가 401 UnAuthorazation를 반환한 경우
+          handleUnauthorizedError(error.response.data.message);
+          return {};
+      } else if (error.response && error.response.status === 403) {
+          handleForbiddenError(error.response.data.message);
+          return {};
+      } else {
+          handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
+          return {};
+      }
     }
   };
   //재고 감소 요청
@@ -50,10 +61,20 @@ export function Receipt(props){
       // 성공 시 추가된 상품 정보를 반환합니다.
       return response.data;
     } catch (error) {
-      // 실패 시 예외를 throw합니다.
-      throw new Error('재고를 변경하던 중 오류가 발생했습니다.');
+      // 서버 응답이 실패인 경우
+      if (error.response && error.response.status === 401) {
+        // 서버가 401 UnAuthorazation를 반환한 경우
+        handleUnauthorizedError(error.response.data.message);
+        return {};
+    } else if (error.response && error.response.status === 403) {
+        handleForbiddenError(error.response.data.message);
+        return {};
+    } else {
+        handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
+        return {};
     }
-  };
+  }
+};
   const fetchDeletedProducts = async(productId) => {
     try {
       const response = await axios.delete(`/cart/delete/${productId}`,
@@ -80,10 +101,20 @@ export function Receipt(props){
         // 성공 시 추가된 상품 정보를 반환합니다.
         return response.data;
       } catch (error) {
-        // 실패 시 예외를 throw합니다.
-        throw new Error('상품을 주문 목록에 요청하던 중 오류가 발생했습니다.');
+        // 서버 응답이 실패인 경우
+        if (error.response && error.response.status === 401) {
+          // 서버가 401 UnAuthorazation를 반환한 경우
+          handleUnauthorizedError(error.response.data.message);
+          return {};
+      } else if (error.response && error.response.status === 403) {
+          handleForbiddenError(error.response.data.message);
+          return {};
+      } else {
+          handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
+          return {};
       }
-    };
+    }
+  };
 
   //데이터 재고 감소 요청 함수
   const { mutate:supplyMutation } = useMutation({mutationFn: lowSupply})

@@ -3,10 +3,10 @@ import { useQuery } from '@tanstack/react-query';
 import axios from '../../axios';
 import { GetCookie } from '../../customFn/GetCookie';
 import { useNavigate } from 'react-router-dom';
+import { handleForbiddenError, handleOtherErrors, handleUnauthorizedError } from '../../customFn/ErrorHandling';
 
 export default function WelcomeModule() {
     const navigate = useNavigate();
-    let errorDisplayed = false;
 
     // -----UserData fetch
     const fetchUserData = async () => {
@@ -30,42 +30,12 @@ export default function WelcomeModule() {
                 return {};
             } else if (error.response && error.response.status === 403) {
                 handleForbiddenError(error.response.data.message);
-                return (
-                    <div>
-                        <input></input>
-                        <input></input>
-                        <div>
-                            <button>로그인</button>
-                        </div>
-                    </div>
-                );
+                return {};
             } else {
                 handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
                 return {};
             }
         }
-    }
-
-    const handleUnauthorizedError = (errorMessage) => {
-        if (!errorDisplayed) {
-            console.error(errorMessage);
-        }
-        errorDisplayed = true;
-    }
-
-    const handleForbiddenError = (errorMessage) => {
-        if (!errorDisplayed) {
-            alert(errorMessage);
-            navigate("/login");
-        }
-        errorDisplayed = true;
-    }
-
-    const handleOtherErrors = (errorMessage) => {
-        if (!errorDisplayed) {
-            alert(errorMessage);
-        }
-        errorDisplayed = true;
     }
 
     const { isLoading, isError, data: userData } = useQuery({
