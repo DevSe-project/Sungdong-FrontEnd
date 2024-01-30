@@ -80,21 +80,10 @@ import { GetCookie } from "./customFn/GetCookie";
 
 export default function App() {
   const navigate = useNavigate();
-  const location = useLocation();
   // 주문 스탭 부분 State
   const [activeTab, setActiveTab] = useState(1); // 현재 활성화된 스탭을 추적하는 State 
-
-  // 데이터액션 State 불러오기
-  const { setOrderData, setUserData, setCategoryData, setTodayTopicData } = useDataActions();
-
-  // 상품 데이터 State
-  const userData = useUserData();
-  const orderData = useOrderData();
-  const isLogin = useIsLogin();
-
-  const { setLogin } = useSetLogin();
   // 리스트 State 불러오기
-  const { setWishList, setPostList } = useListActions();
+  const { setWishList } = useListActions();
 
   //데이터 fetch
   const fetchData = async () => {
@@ -136,11 +125,6 @@ export default function App() {
     }
   };
 
-  //주문 데이터 fetch
-  const fetchOrderData = async () => {
-    const querySnapshot = await getDocs(collection(db, 'OrderData')); // 'OrderData'라는 컬렉션 이름
-    return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-  };
 
   //반품 데이터 fetch
   const fetchRefundData = async () => {
@@ -168,11 +152,6 @@ export default function App() {
     queryFn: () => fetchCategoryData()
   });
 
-  const { data: orderedData } = useQuery({
-    queryKey: ['ordered'],
-    queryFn: () => fetchOrderData()
-  });
-
   const { data: refundData } = useQuery({
     queryKey: ['refund'],
     queryFn: () => fetchRefundData()
@@ -195,30 +174,6 @@ export default function App() {
   //   queryFn: () => fetchTokenData()
   // })
 
-  // 특정 주소에서만 SessionStorage 사용하기
-  useEffect(() => {
-    if (
-      location.pathname !== '/basket/order' &&
-      location.pathname !== '/basket/receipt' &&
-      location.pathname !== '/basket/pay' &&
-      location.pathname !== '/orderDetail'
-    ) {
-      sessionStorage.removeItem('orderData');
-      sessionStorage.removeItem('newOrderData');
-    }
-    if (
-      location.pathname !== '/category'
-    ) {
-      sessionStorage.removeItem('category');
-      sessionStorage.removeItem('categoryTabState');
-      sessionStorage.removeItem('subCategory');
-      sessionStorage.removeItem('filterSearch');
-      sessionStorage.removeItem('filterSearchBrand');
-      sessionStorage.removeItem('filterSearchCode');
-      sessionStorage.removeItem('filterSearchOption');
-    }
-  }, [location])
-
   // 찜 데이터(캐쉬) 불러오기
   useEffect(() => {
     //localStorage에서 likelist를 파싱 
@@ -227,38 +182,11 @@ export default function App() {
   }, [setWishList]);
 
 
-
-  // 데이터 불러오기
-  useEffect(() => {
-    const dataload = setTimeout(() => {
-      setOrderData(OrderObj);
-      setUserData(UserDataObj);
-      setTodayTopicData(TodayTopicPostObj);
-      // setCategoryData(CategoryDataObj);
-    }, 1000)
-
-    return () => clearTimeout(dataload)
-  }, [setOrderData, setUserData, setTodayTopicData])
-
-
   useEffect(() => {
     // 페이지 이동시 항상 스크롤을 최상단으로 이동
     window.scrollTo(0, 0);
   }, [navigate]); // navigate가 변경될 때마다 실행
 
-  // const {logout, setIsLogin} = useContext(UserContext);
-  // // 백엔드 에서 세션 정보 받아오는 코드
-  // useEffect(() => {
-  //   axios.get(
-  //     "/user/session"
-  //   )
-  //   .then(res => {
-  //     if (res.data.sessionId != null) {
-  //       setIsLogin(true)
-  //     }
-  //   })
-  //   .catch(()=>{setIsLogin(false)})
-  // }, [])
 
   // 이 부분 zustand State화 시켜줘
   // (START) 아이콘 클릭 관련 객체, 함수, state //
@@ -304,7 +232,6 @@ export default function App() {
   if (isError) {
     return <p>에러 : {error.message}</p>;
   }
-  // setData(query);
   return (
     <div className="App">
       <Routes>
@@ -791,11 +718,11 @@ export default function App() {
         <Route path='/adminMain/categoryEdit/:id' element={<AdminCategoryEdit data={data} />} />
 
         {/* 주문관리 - 주문 관리*/}
-        <Route path='/adminMain/sold' element={<AdminSoldList data={data} orderData={orderedData} />} />
+        <Route path='/adminMain/sold' element={<AdminSoldList data={data}  />} />
         {/* 주문관리 - 미결제 주문 관리 */}
-        <Route path='/adminMain/yetPay' element={<AdminNotSoldList orderData={orderedData} />} />
+        <Route path='/adminMain/yetPay' element={<AdminNotSoldList />} />
         {/* 주문관리 - 반품 관리 */}
-        <Route path='/adminMain/refund' element={<AdminRefund orderData={orderedData} />} />
+        <Route path='/adminMain/refund' element={<AdminRefund />} />
 
         {/* 배송관리 - 배송 상태 관리 */}
         <Route path='/adminMain/SD_delivery/DeliveryManager' element={<DeliveryManagement />} />

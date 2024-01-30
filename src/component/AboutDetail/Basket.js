@@ -6,6 +6,8 @@ import { useCartList, useDataActions, useListActions, useOrderActions, useOrderD
 import axios from '../../axios';
 import { GetCookie } from '../../customFn/GetCookie';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { handleForbiddenError, handleOtherErrors, handleUnauthorizedError } from '../../customFn/ErrorHandling';
+import Cookies from 'js-cookie';
 export function Basket(props){
 
   //장바구니 데이터 fetch
@@ -21,10 +23,21 @@ export function Basket(props){
         }
       )
       return response.data.data;
-    } catch(error) {
-      throw new Error('장바구니를 불러오던 중 오류가 발생했습니다.');
+    } catch (error) {
+      // 서버 응답이 실패인 경우
+      if (error.response && error.response.status === 401) {
+        // 서버가 401 UnAuthorazation를 반환한 경우
+        handleUnauthorizedError(error.response.data.message);
+        return {};
+    } else if (error.response && error.response.status === 403) {
+        handleForbiddenError(error.response.data.message);
+        return {};
+    } else {
+        handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
+        return {};
     }
   }
+};
 
   //장바구니 데이터 fetch
   const orderToFetch = async(product) => {
@@ -42,20 +55,30 @@ export function Basket(props){
         }
       )
       return response.data;
-    } catch(error) {
-      throw new Error('장바구니를 불러오던 중 오류가 발생했습니다.');
+    } catch (error) {
+      // 서버 응답이 실패인 경우
+      if (error.response && error.response.status === 401) {
+        // 서버가 401 UnAuthorazation를 반환한 경우
+        handleUnauthorizedError(error.response.data.message);
+        return {};
+    } else if (error.response && error.response.status === 403) {
+        handleForbiddenError(error.response.data.message);
+        return {};
+    } else {
+        handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
+        return {};
     }
   }
+};
   // 장바구니 데이터 불러오기
   const { isLoading, isError, error, data:basketList } = useQuery({queryKey:['cart'], queryFn: ()=> fetchCartData()});
 
   const cartList = useCartList();
-  const {setCartList, setCartCntUp, setCartCntDown, setCartCnt, resetCartList} = useListActions();
+  const {setCartList, setCartCntUp, setCartCntDown, setCartCnt, resetCartList, setOrderList} = useListActions();
 
 
   const orderData = useOrderData();
   const orderList = useOrderList();
-  const { setOrderList } = useListActions();
   const {resetOrderInfo, setOrderInformation} = useOrderActions();
   const {setUserData} = useDataActions();
 
@@ -85,6 +108,11 @@ export function Basket(props){
     const opentime = setInterval(() => {
       setOpenDeliveryModal((prev) => !prev)
     }, 1000)
+
+    if(Cookies.get('saveo_p')){
+      setOrderList(JSON.parse(Cookies.get('saveo_p')))
+    }
+
 
     return () => clearInterval(opentime)
   }, [])
@@ -149,6 +177,8 @@ export function Basket(props){
       setSelectedItems([]);
     }
   };
+
+  console.log(orderList)
 
   // 체크박스 클릭 시 호출되는 함수
   function checkedBox(product) {
@@ -278,7 +308,6 @@ export function Basket(props){
       { id: 4, title: '주문 완료' },
     ];
 
-
     if(isLoading){
       return <p>Loading..</p>;
     }
@@ -352,8 +381,9 @@ export function Basket(props){
             </thead>
             <tbody>
               {/* 장바구니 탭일 때는 장바구니 목록만 */}
-              {props.activeTab===1 &&
-              basketList && cartList.map((item, index)=>(
+              {props.activeTab===1 ?
+              cartList.length > 0
+              && cartList.map((item, index)=>(
               <tr key={index}>
                 <td>
                   <input 
@@ -401,23 +431,19 @@ export function Basket(props){
                   : `${(item.cart_price * item.cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
                 </td>
               </tr>
-              ))}
-
-
-            {/* 주문서 작성 탭으로 넘어가면 체크된 목록들만 나열함(수정 불가) */}
-            {props.activeTab === 2 && orderList.length !== 0 &&
+              ))
+            // 주문서 작성에 들어간 상품들을 mapping
+            : props.activeTab === 2
+            ? orderList.length > 0 && 
             orderList.map((item, key)=> (
               <tr key={key}>
                 <td><img className={styles.thumnail} src={item.product_image_original} alt='이미지'/></td>
                 <td>
-                  <h5 className={styles.link} 
-                  onClick={()=>props.activeTab === 1 &&
-                  navigate(`/detail/${item.product_id}`)}
-                  >
+                  <h5 className={styles.link}>
                     {item.product_title}</h5>
                   <div>
                   {item.cart_selectedOption && `옵션 : ${item.cart_selectedOption}`}
-                  <p>상품 표준가 : <span className={styles.price}>\{(item.cart_price).toLocaleString()}</span></p>
+                  <p>상품 표준가 : <span className={styles.price}>\{(item.product_price).toLocaleString()}</span></p>
                   </div>
                 </td>
                 <td>{item.cnt}</td>
@@ -429,15 +455,16 @@ export function Basket(props){
                     ({item.product_discount}%)
                   </span>
                   &nbsp;<i className="fal fa-long-arrow-right"/>&nbsp;
-                  {parseInt(item.cart_price * item.cnt - (((item.cart_price/100)*item.cart_discount)*item.cnt)).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
+                  {parseInt(item.product_price * item.cnt - (((item.product_price/100)*item.product_discount)*item.cnt)).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                   </>
-                  : `${(item.cart_price * item.cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
+                  : `${(item.product_price * item.cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
                 </td>
               </tr>
-            ))}
-
-          {/* 주문후 주문 데이터들로 나열함(수정 불가) */}
-          {props.activeTab > 2 && orderData.length !== 0 &&
+            ))
+            :
+            // 주문후 주문 데이터들로 나열함(수정 불가)
+            props.activeTab > 2 &&
+            orderData.length > 0 && 
             orderData.map((item, key)=> (
               <tr key={key}>
                 <td><img className={styles.thumnail} src={item.product_image_original} alt='이미지'/></td>
@@ -456,7 +483,8 @@ export function Basket(props){
                   {parseInt(item.order_productPrice * item.order_cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                 </td>
               </tr>
-            ))}
+            ))
+            }
             </tbody>
           </table>
 
@@ -470,12 +498,12 @@ export function Basket(props){
                   <div className={styles.price}>
                     <h5>
                     \{
-                    orderList.length !== 0 ?
+                    orderList.length > 0 ?
                       orderList.reduce((sum, item) => //reduce 사용하여 배열 객체의 합계 계산, 0으로 초기화
-                        sum + ((item.cart_price * item.cnt) - (((item.cart_price / 100) * item.cart_discount) * item.cnt))
+                        sum + ((item.product_price * item.cnt) - (((item.product_price / 100) * item.product_discount) * item.cnt))
                       , 0).toLocaleString()
                       :
-                      selectedItems.length !== 0 ?
+                      selectedItems.length > 0 ?
                         selectedItems.reduce((sum, item) =>
                           sum + ((item.cart_price * item.cnt) - ((item.cart_price / 100) * item.cart_discount) * item.cnt)
                         , 0).toLocaleString()
@@ -496,14 +524,14 @@ export function Basket(props){
                   <h2>최종 결제 금액</h2>
                   <div className={styles.price}>
                     <h5>\{
-                    orderList.length !== 0 ?
+                    orderList.length > 0 ?
                       orderList.reduce((sum, item) => //reduce 함수사용하여 배열 객체의 합계 계산, delivery값으로 sum을 초기화
-                      sum + ((item.cart_price * item.cnt) - ((item.cart_price / 100) * item.cart_discount) * item.cnt)
+                      sum + ((item.product_price * item.cnt) - (((item.product_price / 100) * item.product_discount) * item.cnt))
                       , delivery).toLocaleString()
                       :
-                      selectedItems.length !== 0 ?
+                      selectedItems.length > 0 ?
                         selectedItems.reduce((sum, item) =>
-                          sum + ((item.cart_price * item.cnt) - ((item.cart_price / 100) * item.cart_discount) * item.cnt)
+                        sum + ((item.cart_price * item.cnt) - ((item.cart_price / 100) * item.cart_discount) * item.cnt)
                         , delivery).toLocaleString()
                         : 0
                       }
@@ -548,7 +576,7 @@ export function Basket(props){
             {props.activeTab===1 && 
             <>
             <button className={styles.deletebutton} onClick={()=>deletedList()}>삭제</button>
-            <button onClick={selectedItems.length > 0 && props.activeTab === 1 ? ()=>{gotoLink(selectedItems);} : null} className={styles.button}>{selectedItems ? `${selectedItems.length}건` : `0건`} 주문하기</button>
+            <button onClick={selectedItems.length > 0 && props.activeTab === 1 ? ()=>gotoLink(selectedItems) : null} className={styles.button}>{selectedItems ? `${selectedItems.length}건` : `0건`} 주문하기</button>
             </>}
           </div>
 

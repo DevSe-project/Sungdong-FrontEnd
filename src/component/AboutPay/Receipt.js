@@ -309,6 +309,7 @@ export function Receipt(props){
     {value: '발송자 표시 바랍니다.(고객 직송 건)'}
   ]
 
+
   // 성동 택배 일 때 택배 날짜 로직
   useEffect(() => {
       updateDateList();
