@@ -51,32 +51,30 @@ export function Product() {
                   <p style={{ color: 'red', fontWeight: '750' }}>품절</p>
                 </div>
               ) : (
-                <p style={{ fontSize: '1.05em', fontWeight: 'bold', margin: '0px' }}>{item.product_title}</p>
+                <p style={{ fontSize: '0.9em', fontWeight: '950', margin: '0px' }}>{item.product_title}</p>
               )}
+              <p style={{ fontSize: '0.9em', fontWeight: '550', margin: '1px', marginLeft: 0, color: 'orangered'}}>{item.product_brand}</p>
               <div className={styles.product_price}>
-                {item.product_discount ? (
+                {item.product_discount 
+                ? (
                   <div className={styles.discountSection}>
-                    <p className={styles.discountText}>
-                    {parseInt(item.product_price).toLocaleString('ko-KR',{ style: 'currency', currency: 'KRW' })}
-                    </p>
-                    <p className={styles.discountText}>
-                      {item.product_discount ? (
-                        <>
-                          <span className={styles.discountPercentage}>({item.product_discount}%)</span>
-                          &nbsp; <i className="fal fa-long-arrow-right" />
-                        </>
-                      ) : (
-                        `${item.product_title}`
-                      )}
-                    </p>
-                    <h3 className={styles.discountedPrice}>
-                      {(item.product_price - (item.product_price / 100) * item.product_discount).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}             
-                    </h3>
+                    <div style={{display: 'flex', gap: '0.3em', alignItems: 'center'}}>
+                      {/* 공급가 */}
+                      <h3 style={{ fontSize: '1.15em', fontWeight: '1050' }}>
+                        {(item.product_price - (item.product_price / 100) * item.product_discount).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}             
+                      </h3>
+                      {/* 할인 전 표준가 */}
+                      <p className={styles.discountText}>
+                        {parseInt(item.product_price).toLocaleString('ko-KR',{ style: 'currency', currency: 'KRW' })}
+                      </p>
+                    </div>
+                    {/* 할인률 */}
+                    <span className={styles.discountPercentage}>{item.product_discount}%</span>
                   </div>
                 ) : (
-                  <h3>{parseInt(item.product_price).toLocaleString('ko-KR',{ style: 'currency', currency: 'KRW' })}</h3>
+                  // 표준 기본가
+                  <h3 style={{ fontSize: '1.15em', fontWeight: '1050' }}>{parseInt(item.product_price).toLocaleString('ko-KR',{ style: 'currency', currency: 'KRW' })}</h3>
                 )}
-                <span>{categoryData && [categoryData.find((category) => category.category_id === item.parentsCategory_id)?.name, categoryData.find((category) => category.category_id === item.category_id)?.name].filter(Boolean).join(' - ')}</span>
               </div>
             </div>
           </div>

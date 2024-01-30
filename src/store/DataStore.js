@@ -287,9 +287,10 @@ export const useSetLogin = () => useLoginStore((state) => state.actions);
 
 export const useSearchStore = create((set) => ({
   seperateSearchTerm: {
-    productName: "",
     productCode: "",
+    productName: "",
     productBrand: "",
+    productSpec: "",
     productOption: ""
   },
   actions: {

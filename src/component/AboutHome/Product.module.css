@@ -10,7 +10,7 @@
 
 /* 각 상품 블럭 */
 .gridItem {
-  flex: 0 0 calc(25% - 20px);
+  flex: 0 0 calc(20% - 20px);
   margin-top: 1em;
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
@@ -37,11 +37,18 @@
 }
 
 .product_title {
-  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  align-items: start;
+  margin-top: 20px;
+  margin-left: 10px;
 }
 
 .product_price {
-  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
 }
 
 .product_price h3 {
@@ -50,18 +57,22 @@
 
 .discountSection {
   display: flex;
-  align-items: center;
-  gap: 0.5em;
-  justify-content: flex-end;
+  flex-direction: column;
+  align-items: start;
+  justify-content: flex-start;
+  padding-bottom: 1.5em;
 }
 
 .discountText {
   color: gray;
   text-decoration: line-through;
   margin: 0;
+  font-size: 0.8em;
+  overflow: hidden;
 }
 
 .discountPercentage {
+  margin-top: 0.3em;
   color: red;
   font-weight: 750;
 }

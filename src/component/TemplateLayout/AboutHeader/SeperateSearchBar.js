@@ -100,8 +100,10 @@ export function SeperateSearchBar() {
           ? '상품명' 
           : inputName == 'productBrand'
           ? '브랜드'
+          : inputName == 'productSpec'
+          ? '규격'
           : inputName == 'productCode'
-          ? '코드'
+          ? '상품 코드'
           : inputName == 'productOption'
           && '옵션'
         }
