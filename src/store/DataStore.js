@@ -1,7 +1,4 @@
-import { fieldHockey } from 'fontawesome';
-import { create, createStore } from 'zustand'
-import { persist, createJSONStorage } from 'zustand/middleware'
-
+import { create } from 'zustand'
 
 // ------------------------------데이터 STORE----------------------------//
 

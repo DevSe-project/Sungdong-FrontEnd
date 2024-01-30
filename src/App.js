@@ -61,7 +61,7 @@ import { MenuData } from './component/TemplateLayout/AboutMenuData/MenuData';
 import { Footer } from './component/TemplateLayout/AboutFooter/Footer';
 
 // State Management (Zustand) Store
-import { useUserData, useDataActions, useListActions, useOrderData, useIsLogin, useSetLogin } from "./Store/DataStore";
+import { useUserData, useDataActions, useListActions, useOrderData, useIsLogin, useSetLogin, useModalActions, useModalState } from "./Store/DataStore";
 import { useQuery } from "@tanstack/react-query";
 import { getDocs, collection } from 'firebase/firestore'
 import { AccountBook } from "./component/AboutMyPage/AccountBook/AccountBook";
@@ -82,6 +82,10 @@ export default function App() {
   const navigate = useNavigate();
   // 주문 스탭 부분 State
   const [activeTab, setActiveTab] = useState(1); // 현재 활성화된 스탭을 추적하는 State 
+
+  // 데이터액션 State 불러오기
+  const { setOrderData, setUserData, setCategoryData, setTodayTopicData } = useDataActions();
+
   // 리스트 State 불러오기
   const { setWishList } = useListActions();
 
@@ -190,18 +194,8 @@ export default function App() {
 
   // 이 부분 zustand State화 시켜줘
   // (START) 아이콘 클릭 관련 객체, 함수, state //
-  const [iconHovered, setIconHovered] = useState(false);
-  const [iconClicked, setIconClicked] = useState(true);
+  const { isModal, modalName } = useModalState();
   const [menuClicked, setMenuClicked] = useState(true);
-  const iconMouseEnter = () => {
-    setIconHovered(true);
-  };
-  const iconMouseLeave = () => {
-    setIconHovered(false);
-  };
-  const iconOnClick = () => {
-    setIconClicked(!iconClicked);
-  }
   const menuOnClick = () => {
     setMenuClicked(!menuClicked);
   }
@@ -209,15 +203,15 @@ export default function App() {
   const transitionDurate = 350; // 애니메이션 지속 시간(ms)
   const text_dynamicStyle = {
     transition: `color ${transitionDurate}ms, font-size ${transitionDurate}ms, font-weight ${transitionDurate}ms`,
-    color: iconClicked ? '#6d3535 ' : '#000',
+    color: isModal ? '#6d3535 ' : '#000',
     fontSize: '1.1em',
-    fontWeight: iconClicked ? '800' : '600',
+    fontWeight: isModal ? '800' : '600',
   }
   const category_dynamicStyle = {
     transition: `opacity ${transitionDurate}ms, transform ${transitionDurate}ms, height ${transitionDurate}ms`,
-    opacity: iconClicked ? 1 : 0,
-    height: iconClicked ? '100%' : '0px',
-    visibility: iconClicked ? 'visible' : 'hidden',
+    opacity: isModal ? 1 : 0,
+    height: isModal ? '100%' : '0px',
+    visibility: isModal ? 'visible' : 'hidden',
   }
   const menu_dynamicStyle = {
     transition: `opacity ${transitionDurate}ms, transform ${transitionDurate}ms, height ${transitionDurate}ms`,
@@ -239,9 +233,11 @@ export default function App() {
         <Route path='/' element={
           <>
             <MainPage
-              iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
-              category_dynamicStyle={category_dynamicStyle} menuOnClick={menuOnClick} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle}
-              menu_dynamicStyle={menu_dynamicStyle} />
+              category_dynamicStyle={category_dynamicStyle}
+              menuOnClick={menuOnClick}
+              text_dynamicStyle={text_dynamicStyle}
+              menu_dynamicStyle={menu_dynamicStyle}
+            />
             <div
               className='topButton'
               onClick={() =>
@@ -257,19 +253,23 @@ export default function App() {
         <Route path='/category' element={
           <>
             {/* 최상단배너 */}
-            <TopBanner
-              iconHovered={iconHovered}
-              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+            <MainPage
+              category_dynamicStyle={category_dynamicStyle}
+              menuOnClick={menuOnClick}
               text_dynamicStyle={text_dynamicStyle}
-              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+              menu_dynamicStyle={menu_dynamicStyle}
+            />
             <div className='main'>
-              <div style={{float: 'left'}}>
-                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
-              </div>
+              <MenuData />
               <div className='container'>
-                <Category menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} navigate={navigate} setActiveTab={setActiveTab} activeTab={activeTab}
-                  iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <Category
+                  menuOnClick={menuOnClick}
+                  menu_dynamicStyle={menu_dynamicStyle}
+                  navigate={navigate}
+                  setActiveTab={setActiveTab}
+                  activeTab={activeTab}
+                  category_dynamicStyle={category_dynamicStyle}
+                  text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
                   <Footer />
                 </footer>
@@ -282,19 +282,19 @@ export default function App() {
         <Route path="/detail/:id" element={
           <>
             {/* 최상단배너 */}
-            <TopBanner
-              iconHovered={iconHovered}
-              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+            <MainPage
+              category_dynamicStyle={category_dynamicStyle}
+              menuOnClick={menuOnClick}
               text_dynamicStyle={text_dynamicStyle}
-              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+              menu_dynamicStyle={menu_dynamicStyle}
+            />
             <div className='main'>
-              <div style={{float: 'left'}}>
-                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
-              </div>
+              <MenuData />
               <div className='container'>
-                <Detail menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} navigate={navigate} setActiveTab={setActiveTab} activeTab={activeTab}
-                  iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <Detail
+                  navigate={navigate}
+                  setActiveTab={setActiveTab}
+                  activeTab={activeTab} />
                 <footer className='footer'>
                   <Footer />
                 </footer>
@@ -307,18 +307,16 @@ export default function App() {
         <Route path='/likeitem' element={
           <>
             {/* 최상단배너 */}
-            <TopBanner
-              iconHovered={iconHovered}
-              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+            <MainPage
+              category_dynamicStyle={category_dynamicStyle}
+              menuOnClick={menuOnClick}
               text_dynamicStyle={text_dynamicStyle}
-              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+              menu_dynamicStyle={menu_dynamicStyle}
+            />
             <div className='main'>
-              <div style={{float: 'left'}}>
-                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
-              </div>
+              <MenuData />
               <div className='container'>
-                <LikeItem menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <LikeItem menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} category_dynamicStyle={category_dynamicStyle} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
                   <Footer />
                 </footer>
@@ -331,18 +329,16 @@ export default function App() {
         <Route path='/basket' element={
           <>
             {/* 최상단배너 */}
-            <TopBanner
-              iconHovered={iconHovered}
-              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+            <MainPage
+              category_dynamicStyle={category_dynamicStyle}
+              menuOnClick={menuOnClick}
               text_dynamicStyle={text_dynamicStyle}
-              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+              menu_dynamicStyle={menu_dynamicStyle}
+            />
             <div className='main'>
-              <div style={{float: 'left'}}>
-                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
-              </div>
+              <MenuData />
               <div className='container'>
-                <Basket menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} activeTab={activeTab} setActiveTab={setActiveTab} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <Basket menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} activeTab={activeTab} setActiveTab={setActiveTab} category_dynamicStyle={category_dynamicStyle} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
                   <Footer />
                 </footer>
@@ -359,18 +355,16 @@ export default function App() {
         <Route path='/delivery' element={
           <>
             {/* 최상단배너 */}
-            <TopBanner
-              iconHovered={iconHovered}
-              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+            <MainPage
+              category_dynamicStyle={category_dynamicStyle}
+              menuOnClick={menuOnClick}
               text_dynamicStyle={text_dynamicStyle}
-              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+              menu_dynamicStyle={menu_dynamicStyle}
+            />
             <div className='main'>
-              <div style={{float: 'left'}}>
-                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
-              </div>
+              <MenuData />
               <div className='container'>
-                <DeliveryMain menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <DeliveryMain />
                 <footer className='footer'>
                   <Footer />
                 </footer>
@@ -383,18 +377,16 @@ export default function App() {
         <Route path='/orderDetail' element={
           <>
             {/* 최상단배너 */}
-            <TopBanner
-              iconHovered={iconHovered}
-              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+            <MainPage
+              category_dynamicStyle={category_dynamicStyle}
+              menuOnClick={menuOnClick}
               text_dynamicStyle={text_dynamicStyle}
-              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+              menu_dynamicStyle={menu_dynamicStyle}
+            />
             <div className='main'>
-              <div style={{float: 'left'}}>
-                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
-              </div>
+              <MenuData />
               <div className='container'>
-                <OrderDetail menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <OrderDetail />
                 <footer className='footer'>
                   <Footer />
                 </footer>
@@ -416,16 +408,14 @@ export default function App() {
         <Route path='/mypages' element={
           <>
             {/* 최상단배너 */}
-            <TopBanner
-              iconHovered={iconHovered}
-              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+            <MainPage
+              category_dynamicStyle={category_dynamicStyle}
+              menuOnClick={menuOnClick}
               text_dynamicStyle={text_dynamicStyle}
-              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+              menu_dynamicStyle={menu_dynamicStyle}
+            />
             <div className='main'>
-              <div style={{float: 'left'}}>
-                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
-              </div>
+              <MenuData />
               <div className='container'>
                 <MyPage />
                 <footer className='footer'>
@@ -437,16 +427,14 @@ export default function App() {
         <Route path='/accountBook' element={
           <>
             {/* 최상단배너 */}
-            <TopBanner
-              iconHovered={iconHovered}
-              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+            <MainPage
+              category_dynamicStyle={category_dynamicStyle}
+              menuOnClick={menuOnClick}
               text_dynamicStyle={text_dynamicStyle}
-              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+              menu_dynamicStyle={menu_dynamicStyle}
+            />
             <div className='main'>
-              <div style={{float: 'left'}}>
-                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
-              </div>
+              <MenuData />
               <div className='container'>
                 <AccountBook />
                 <footer className='footer'>
@@ -458,16 +446,14 @@ export default function App() {
         <Route path='/depositHistory' element={
           <>
             {/* 최상단배너 */}
-            <TopBanner
-              iconHovered={iconHovered}
-              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+            <MainPage
+              category_dynamicStyle={category_dynamicStyle}
+              menuOnClick={menuOnClick}
               text_dynamicStyle={text_dynamicStyle}
-              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+              menu_dynamicStyle={menu_dynamicStyle}
+            />
             <div className='main'>
-              <div style={{float: 'left'}}>
-                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
-              </div>
+              <MenuData />
               <div className='container'>
                 <DepositHistory />
                 <footer className='footer'>
@@ -480,16 +466,14 @@ export default function App() {
         <Route path='/estimateBox' element={
           <>
             {/* 최상단배너 */}
-            <TopBanner
-              iconHovered={iconHovered}
-              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+            <MainPage
+              category_dynamicStyle={category_dynamicStyle}
+              menuOnClick={menuOnClick}
               text_dynamicStyle={text_dynamicStyle}
-              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+              menu_dynamicStyle={menu_dynamicStyle}
+            />
             <div className='main'>
-              <div style={{float: 'left'}}>
-                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
-              </div>
+              <MenuData />
               <div className='container'>
                 <EstimateBox />
                 <footer className='footer'>
@@ -502,16 +486,14 @@ export default function App() {
         <Route path='/estimateManager' element={
           <>
             {/* 최상단배너 */}
-            <TopBanner
-              iconHovered={iconHovered}
-              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+            <MainPage
+              category_dynamicStyle={category_dynamicStyle}
+              menuOnClick={menuOnClick}
               text_dynamicStyle={text_dynamicStyle}
-              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+              menu_dynamicStyle={menu_dynamicStyle}
+            />
             <div className='main'>
-              <div style={{float: 'left'}}>
-                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
-              </div>
+              <MenuData />
               <div className='container'>
                 <EstimateManager />
                 <footer className='footer'>
@@ -526,16 +508,14 @@ export default function App() {
         <Route path='/return/request' element={
           <>
             {/* 최상단배너 */}
-            <TopBanner
-              iconHovered={iconHovered}
-              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+            <MainPage
+              category_dynamicStyle={category_dynamicStyle}
+              menuOnClick={menuOnClick}
               text_dynamicStyle={text_dynamicStyle}
-              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+              menu_dynamicStyle={menu_dynamicStyle}
+            />
             <div className='main'>
-              <div style={{float: 'left'}}>
-                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
-              </div>
+              <MenuData />
               <div className='container'>
                 <TackBackRequest />
                 <footer className='footer'>
@@ -549,16 +529,14 @@ export default function App() {
         <Route path='/return/list' element={
           <>
             {/* 최상단배너 */}
-            <TopBanner
-              iconHovered={iconHovered}
-              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+            <MainPage
+              category_dynamicStyle={category_dynamicStyle}
+              menuOnClick={menuOnClick}
               text_dynamicStyle={text_dynamicStyle}
-              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+              menu_dynamicStyle={menu_dynamicStyle}
+            />
             <div className='main'>
-              <div style={{float: 'left'}}>
-                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
-              </div>
+              <MenuData />
               <div className='container'>
                 <TakeBackList />
                 <footer className='footer'>
@@ -572,16 +550,14 @@ export default function App() {
         <Route path='/error/request' element={
           <>
             {/* 최상단배너 */}
-            <TopBanner
-              iconHovered={iconHovered}
-              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+            <MainPage
+              category_dynamicStyle={category_dynamicStyle}
+              menuOnClick={menuOnClick}
               text_dynamicStyle={text_dynamicStyle}
-              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+              menu_dynamicStyle={menu_dynamicStyle}
+            />
             <div className='main'>
-              <div style={{float: 'left'}}>
-                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
-              </div>              
+              <MenuData />
               <div className='container'>
                 <ErrorTrade />
                 <footer className='footer'>
@@ -593,16 +569,14 @@ export default function App() {
         <Route path='/error/list' element={
           <>
             {/* 최상단배너 */}
-            <TopBanner
-              iconHovered={iconHovered}
-              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+            <MainPage
+              category_dynamicStyle={category_dynamicStyle}
+              menuOnClick={menuOnClick}
               text_dynamicStyle={text_dynamicStyle}
-              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+              menu_dynamicStyle={menu_dynamicStyle}
+            />
             <div className='main'>
-              <div style={{float: 'left'}}>
-                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
-              </div>
+              <MenuData />
               <div className='container'>
                 <ErrorTradeList />
                 <footer className='footer'>
@@ -616,18 +590,16 @@ export default function App() {
         <Route path='/comeway' element={
           <>
             {/* 최상단배너 */}
-            <TopBanner
-              iconHovered={iconHovered}
-              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+            <MainPage
+              category_dynamicStyle={category_dynamicStyle}
+              menuOnClick={menuOnClick}
               text_dynamicStyle={text_dynamicStyle}
-              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+              menu_dynamicStyle={menu_dynamicStyle}
+            />
             <div className='main'>
-              <div style={{float: 'left'}}>
-                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
-              </div>
+              <MenuData />
               <div className='container'>
-                <Comeway menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <Comeway />
                 <footer className='footer'>
                   <Footer />
                 </footer>
@@ -639,18 +611,16 @@ export default function App() {
         <Route path='/todayTopic/:page' element={
           <>
             {/* 최상단배너 */}
-            <TopBanner
-              iconHovered={iconHovered}
-              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+            <MainPage
+              category_dynamicStyle={category_dynamicStyle}
+              menuOnClick={menuOnClick}
               text_dynamicStyle={text_dynamicStyle}
-              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+              menu_dynamicStyle={menu_dynamicStyle}
+            />
             <div className='main'>
-              <div style={{float: 'left'}}>
-                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
-              </div>
+              <MenuData />
               <div className='container'>
-                <TodayNews menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <TodayNews />
                 <footer className='footer'>
                   <Footer />
                 </footer>
@@ -661,18 +631,16 @@ export default function App() {
         <Route path='/todayTopicPost/:id' element={
           <>
             {/* 최상단배너 */}
-            <TopBanner
-              iconHovered={iconHovered}
-              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+            <MainPage
+              category_dynamicStyle={category_dynamicStyle}
+              menuOnClick={menuOnClick}
               text_dynamicStyle={text_dynamicStyle}
-              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+              menu_dynamicStyle={menu_dynamicStyle}
+            />
             <div className='main'>
-              <div style={{float: 'left'}}>
-                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
-              </div>
+              <MenuData />
               <div className='container'>
-                <TodayNewsInner menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <TodayNewsInner />
                 <footer className='footer'>
                   <Footer />
                 </footer>
@@ -683,18 +651,16 @@ export default function App() {
         <Route path='/event' element={
           <>
             {/* 최상단배너 */}
-            <TopBanner
-              iconHovered={iconHovered}
-              iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave}
+            <MainPage
+              category_dynamicStyle={category_dynamicStyle}
+              menuOnClick={menuOnClick}
               text_dynamicStyle={text_dynamicStyle}
-              category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick}
-              menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} />
+              menu_dynamicStyle={menu_dynamicStyle}
+            />
             <div className='main'>
-              <div style={{float: 'left'}}>
-                <MenuData menu_dynamicStyle={menu_dynamicStyle} />
-              </div>
+              <MenuData />
               <div className='container'>
-                <Event menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} iconHovered={iconHovered} iconMouseEnter={iconMouseEnter} iconMouseLeave={iconMouseLeave} category_dynamicStyle={category_dynamicStyle} iconOnClick={iconOnClick} text_dynamicStyle={text_dynamicStyle} />
+                <Event />
                 <footer className='footer'>
                   <Footer />
                 </footer>

@@ -5,25 +5,23 @@ import { MenuData } from './component/TemplateLayout/AboutMenuData/MenuData';
 import { Footer } from './component/TemplateLayout/AboutFooter/Footer';
 import NoticeMini from './component/AboutHome/NoticeMini';
 import { Product } from './component/AboutHome/Product';
-import WelcomeModule from './component/WelcomeModule/WelcomeModule';
+
+
+
 export default function MainPage(props) {
   return (
     <>
       {/* TOP */}
       <TopBanner
-        iconHovered={props.iconHovered}
-        iconMouseEnter={props.iconMouseEnter}
-        iconMouseLeave={props.iconMouseLeave}
-        icon_dynamicStyle={props.icon_dynamicStyle}
-        text_dynamicStyle={props.text_dynamicStyle}
         category_dynamicStyle={props.category_dynamicStyle}
-        iconOnClick={props.iconOnClick}
         menuOnClick={props.menuOnClick}
-        menu_dynamicStyle={props.menu_dynamicStyle} />
+        text_dynamicStyle={props.text_dynamicStyle}
+        menu_dynamicStyle={props.menu_dynamicStyle}
+      />
       <div className="main">
         {/* ❗️----SIDE----❗️ */}
         <div className={styles.left}>
-          <MenuData login={props.login} menu_dynamicStyle={props.menu_dynamicStyle}/>
+          <MenuData login={props.login} menu_dynamicStyle={props.menu_dynamicStyle} />
         </div>
         <div className="container">
           <div className={styles.location}>

@@ -1,18 +1,6 @@
-.flexBox {
-    display: flex;
-    flex-direction: row;
-}
-
 /*----------- 본문 시작 ---------- */
 .left {
     float: left;
-}
-
-.main{
-    display: flex;
-    flex-direction: column;
-    float: right;
-    overflow-y: auto;
 }
 
 .location {

@@ -5,36 +5,36 @@ import styles from './TopBanner.module.css';
 import { SearchBar } from './SearchBar';
 import { SeperateSearchBar } from './SeperateSearchBar';
 import { CategoryBar } from './CategoryBar';
-import { useIsLogin, useSetLogin } from '../../../Store/DataStore';
+import { useModalActions, useModalState } from '../../../Store/DataStore';
 import { GetCookie } from '../../../customFn/GetCookie';
 import axios from '../../../axios';
 import { useQueryClient } from '@tanstack/react-query';
-//상단 메뉴 리스트 
+
+
+
 export function TopBanner(props) {
   const navigate = useNavigate();
-  const isLogin = useIsLogin();
-  const {setLogin} = useSetLogin();
   const queryClient = useQueryClient();
+  const { isModal, modalName } = useModalState();
+  const { setIsModal, selectedModalClose, selectedModalOpen } = useModalActions();
 
-  const handleLogoutFetch = async() => {
+  const handleLogoutFetch = async () => {
     try {
       const token = GetCookie('jwt_token');
       const response = await axios.post("/auth/logout",
-          {
-              headers: {
-                  "Content-Type": "application/json",
-                  'Authorization': `Bearer ${token}`
-              }
+        {
+          headers: {
+            "Content-Type": "application/json",
+            'Authorization': `Bearer ${token}`
           }
+        }
       )
       queryClient.clear();
       alert(response.data.message);
       window.location.reload();
-      // 성공 시 추가된 상품 정보를 반환합니다.
     } catch (error) {
-        // 실패 시 예외를 throw합니다.
-        throw new Error('로그아웃 중 오류가 발생했습니다.');
-    }  
+      throw new Error('로그아웃 중 오류가 발생했습니다.');
+    }
   }
 
   return (
@@ -58,14 +58,18 @@ export function TopBanner(props) {
             <SeperateSearchBar />
           </div>
 
+
           {/* 4_카테고리 아이콘 */}
           <div className={styles.cate_icon}>
             <li
               className='menu-item'
-              onClick={props.iconOnClick}
+              onClick={() => {
+                if (isModal && modalName == 'categoryBar')
+                  selectedModalClose('categoryBar');
+                else if (!isModal && modalName == '')
+                  selectedModalOpen('categoryBar');
+              }}
               style={{ ...props.text_dynamicStyle }}
-              onMouseEnter={props.iconMouseEnter}
-              onMouseLeave={props.iconMouseLeave}
             >
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4em' }}>
                 <i style={{ fontSize: '1.2em' }} className="fas fa-bookmark" /> <span className={styles.text}>카테고리</span>
@@ -99,11 +103,14 @@ export function TopBanner(props) {
       </div>
 
       {/* 클릭하면 나오는 카테고리바 */}
-      <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-        <div className={styles.categoryBar}>
-          <CategoryBar selectedCategory={props.selectedCategory} setSelectedCategory={props.setSelectedCategory} selectedSubCategory={props.selectedSubCategory} setSelectedSubCategory={props.setSelectedSubCategory} category_dynamicStyle={props.category_dynamicStyle} />
-        </div>
-      </div>
+      {
+        isModal && modalName == 'categoryBar'
+          ?
+            <CategoryBar category_dynamicStyle={props.category_dynamicStyle} />
+          :
+          null
+      }
+
     </div>
   );
 }
