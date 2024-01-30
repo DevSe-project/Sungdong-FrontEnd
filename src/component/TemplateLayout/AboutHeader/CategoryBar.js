@@ -2,9 +2,12 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './CategoryBar.module.css'
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useModalActions } from '../../../Store/DataStore';
 
 export function CategoryBar(props) {
   const { isLoading, isError, error, data: categoryData } = useQuery({ queryKey: ['category'] });
+  const { selectedModalClose } = useModalActions();
+
   // 선택된 카테고리 변경 핸들러 (우선순위 : 1. 소 카테고리 2. 대 카테고리)
   const handleCategoryChange = (category) => {
     // 큰 카테고리에 해당하는 탭만을 찾기위해 subCategory는 삭제
@@ -58,6 +61,21 @@ export function CategoryBar(props) {
     newSubMenuStates[index] = false;
     setSubMenuStates(newSubMenuStates);
   };
+
+  // esc키를 누르면 모달창 닫기.
+  useEffect(() => {
+    const exit_esc = (event) => {
+      if (event.key === 'Escape') {
+        selectedModalClose(); // "Esc" 키 누를 때 모달 닫기 함수 호출
+      }
+    };
+
+    window.addEventListener('keydown', exit_esc);
+
+    return () => {
+      window.removeEventListener('keydown', exit_esc);
+    };
+  }, [selectedModalClose]);
 
   if (isLoading) {
     return <p>Loading..</p>;
