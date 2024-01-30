@@ -1,26 +1,26 @@
-.body {
-    display: flex;
-    flex-direction: column;
-    background-color: whitesmoke;
-    overflow: hidden;
-}
-
 .flexBox {
-    display: flex;
-}
-
-.qqqq {
-    overflow-y: auto;
-}
-
-.asdf {
     display: flex;
     flex-direction: row;
 }
 
-/* ---- 큰 틀 ---- */
-.left {}
+/*----------- 본문 시작 ---------- */
+.left {
+    float: left;
+}
 
+.main{
+    display: flex;
+    flex-direction: column;
+    float: right;
+    overflow-y: auto;
+}
+
+.location {
+    display: flex;
+    flex-direction: row;
+}
+
+/* ---- 본문 내부 틀 ---- */
 .center {
     float: left;
     flex: 1;

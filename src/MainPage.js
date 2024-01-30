@@ -8,8 +8,7 @@ import { Product } from './component/AboutHome/Product';
 import WelcomeModule from './component/WelcomeModule/WelcomeModule';
 export default function MainPage(props) {
   return (
-    <div className={styles.body}>
-
+    <>
       {/* TOP */}
       <TopBanner
         iconHovered={props.iconHovered}
@@ -21,16 +20,14 @@ export default function MainPage(props) {
         iconOnClick={props.iconOnClick}
         menuOnClick={props.menuOnClick}
         menu_dynamicStyle={props.menu_dynamicStyle} />
-
-      <div className={styles.flexBox}>
+      <div className="main">
         {/* ❗️----SIDE----❗️ */}
         <div className={styles.left}>
           <WelcomeModule />
           <MenuData login={props.login} menu_dynamicStyle={props.menu_dynamicStyle} />
         </div>
-        <div className={styles.qqqq}
-          style={{ display: 'flex', flexDirection: 'column' }}>
-          <div className={styles.asdf}>
+        <div className="container">
+          <div className={styles.location}>
             {/* ❗️----CENTER----❗️ */}
             <div className={styles.center}>
               {/* 슬라이드 이미지 2개 */}
@@ -48,9 +45,11 @@ export default function MainPage(props) {
             </div>
           </div>
           {/* FOOTER */}
-          <Footer />
+          <div>
+            <Footer />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
