@@ -1,12 +1,15 @@
 import { useNavigate } from 'react-router-dom'
 import styles from './Delivery.module.css'
 import { useEffect, useState } from 'react';
-import { useOrderData } from '../../Store/DataStore';
+import { useDataActions, useOrderData } from '../../Store/DataStore';
 import axios from '../../axios';
 import { GetCookie } from '../../customFn/GetCookie';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 export function Delivery(props){
+
+  const {setDetailData} = useDataActions();
+
   //주문 데이터 fetch 
   const fetchOrderData = async() => {
     try{
@@ -25,11 +28,34 @@ export function Delivery(props){
     }
   }
 
+
+  //상품 주문 정보 요청 함수
+  const orderRequest = async (order_id) => {
+    try {
+      const token = GetCookie('jwt_token');
+      const response = await axios.post("/order/findSelectOrderList", 
+        JSON.stringify({order_id: order_id}),
+        {
+          headers : {
+            "Content-Type" : "application/json",
+            'Authorization': `Bearer ${token}`,
+          }
+        }
+      )
+      // 성공 시 추가된 상품 정보를 반환합니다.
+      return response.data;
+    } catch (error) {
+      // 실패 시 예외를 throw합니다.
+      throw new Error('상품을 주문 목록에 요청하던 중 오류가 발생했습니다.');
+    }
+  };
+
   const { isLoading, isError, error, data:order } = useQuery({queryKey:['order'], queryFn: ()=> fetchOrderData()});
 
-  const navigate = useNavigate();
+  const { mutate:orderListMutation } = useMutation({mutationFn: orderRequest})
 
-  console.log(order);
+
+  const navigate = useNavigate();
 
   function handleDeliveryAPI(item, deliveryNum){
     if(item.orderState === 3){
@@ -38,7 +64,7 @@ export function Delivery(props){
           window.open(`https://tracker.delivery/#/kr.cjlogistics/${deliveryNum}`, '_blank', 'width=600,height=800');
           break;
         case '화물':
-          window.open(`https://tracker.delivery/#/${item.selectedCor}/${deliveryNum}`, '_blank', 'width=600,height=800');
+          window.open(`https://tracker.delivery/#/${item.delivery_selectedCor}/${deliveryNum}`, '_blank', 'width=600,height=800');
           break;
         default : 
           alert("직접 수령이나 성동 택배는 조회하실 수 없습니다.");
@@ -50,15 +76,21 @@ export function Delivery(props){
   }
   // 게시물 데이터와 페이지 번호 상태 관리    
   const [currentPage, setCurrentPage] = useState(1);
-  // // 현재 페이지에 해당하는 게시물 목록 가져오기
-  // const getCurrentPagePosts = () => {
-  //   const startIndex = (currentPage - 1) * 5; // 한 페이지에 5개씩 표시
-  //   return order.length > 0 
-  //   && order.slice(startIndex, startIndex + 5) 
-  // };
 
-  function detailOrder(){
 
+  function detailOrder(item){
+    orderListMutation(item.order_id,{
+      onSuccess: (data) => {
+        console.log(data);
+        const orderdata = data.data;
+        setDetailData(...orderdata);
+        navigate("/orderDetail");
+      },
+      onError: (error) => {
+        // 상품 삭제 실패 시, 에러 처리를 수행합니다.
+        console.error('상품을 삭제 처리하는 중 오류가 발생했습니다.', error);
+      }
+    })
   }
 
   if(isLoading){
@@ -83,7 +115,7 @@ export function Delivery(props){
         <div className={styles.orderDate}>
           <h4 style={{fontWeight: '850'}}>{new Date(item.order_date).toLocaleDateString()} 주문</h4>
           <div onClick={()=>detailOrder(item)} className={styles.orderDetail}>
-            <span style={{fontWeight: '450'}}>주문 상세보기</span> 
+            <span style={{fontWeight: '450'}} onClick={()=> detailOrder(item)}>주문 상세보기</span> 
             <i className="far fa-chevron-right"></i>
           </div>
         </div>
@@ -97,6 +129,7 @@ export function Delivery(props){
               : item.orderState === 3 ? '배송 중'
               : item.orderState === 4 ? '배송 완료' 
               : '누락된 상품(고객센터 문의)' }
+              <p>배송 : {item.deliveryType}{item.delivery_selectedCor && item.delivery_selectedCor === "kr.daesin" ? `( 대신 화물 )` : item.delivery_selectedCor === "kr.kdexp" ? `(경동 화물)` : item.deliveryType === "일반택배" && `( CJ대한통운 )`}</p>
               <p style={{color: 'orangered', fontWeight: '550'}}>{item.delivery_date && `🚚 배송 예정 : ${new Date(item.delivery_date).toLocaleDateString()}`}</p>
               </h5>
               <i style={{color: '#ccc'}} className="fas fa-trash-alt"></i>
@@ -116,7 +149,7 @@ export function Delivery(props){
           <div className={styles.deliveryMenu}>
             <button 
           onClick={() => {
-            handleDeliveryAPI(item, 111111111111)
+            handleDeliveryAPI(item, item.delivery_num && item.delivery_num)
           }}
             className={styles.button}>배송 조회</button>
             {item.orderState < 4 

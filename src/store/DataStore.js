@@ -8,62 +8,31 @@ const useDataStore = create((set) => ({
   categoryData: [],
   userData: [],
   todayTopicData: null,
-  detailData: {
-    productId: '',
-    title: '',
-    content: '',
-    price: '',
-    supply: 1,
-    discount: 0,
-    image: {
-      original: "",
-      mini: "",
-    },
-    option: {
-      option0: '',
-      option1: '',
-      option2: '',
-      option3: '',
-      option4: '',
-      option5: '',
-      option6: '',
-      option7: '',
-      option8: '',
-      option9: '',
-    },
-    category: {
-      id: '',
-      highId: '',
-      lowId: '',
-    },
-    brand: '',
-    madeIn: '',
-    state: '',
-  },
+  detailData: [],
 
   actions: {
-    setDetailData: (input) =>
+    setDetailData: (input) => //주문,배송 현황에서 주문 상세보기에 사용
       set((prev) => ({
         detailData: input
       })),
-    setOrderData: (input) =>
+    setOrderData: (input) => //주문을 끝난 후 상품 주문 데이터들 표기에 사용
       set((prev) => ({
         orderData: input
       })),
     // 카테고리
 
-    setCategoryData: (input) =>
+    setCategoryData: (input) => //Category에서 상품들 Data에 사용
       set((prev) => ({
         categoryData: input
       })),
-    // 고객정보
 
-    setUserData: (input) =>
+    // 고객정보
+    setUserData: (input) => //Receipt에서 UserData 사용
       set((prev) => ({
         userData: input
       })),
-    // 오늘의 주제
 
+    // 오늘의 주제
     setTodayTopicData: (input) =>
       set((prev) => ({
         todayTopicData: input
@@ -74,9 +43,8 @@ const useDataStore = create((set) => ({
 // 💡 커스텀 훅 사용 -> 
 // 선택자 생성, 상태가 변경될 때마다 구성요소가 업데이트 되기 때문에 반복적 렌더링 방지, 
 // 실수로 전체 스토어를 렌더링 하는 일 방지.
-// export const useData = () => useDataStore((state) => state.data);
 export const useDetailData = () => useDataStore((state) => state.detailData);
-export const useOrderData = () => useDataStore((state) => state.orderData);
+export const useOrderData = () => useDataStore((state) => state.orderData); // 주문을 마친 후 상품데이터가 들어가는 State
 export const useCategoryData = () => useDataStore((state) => state.categoryData);
 export const useUserData = () => useDataStore((state) => state.userData);
 export const useTopicData = () => useDataStore((state) => state.todayTopicData);
