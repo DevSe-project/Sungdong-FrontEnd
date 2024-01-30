@@ -379,13 +379,6 @@ input[type="checkbox"] {
   margin-top: 1em;
   gap: 1em;
 }
-
-.footer {
-  width: 100%;
-  height: 50vh;
-  background-color: lightgray;
-}
-
 /* -------------------------모달------------------------- */
 
 /* 모달 CSS */
