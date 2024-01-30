@@ -21,6 +21,8 @@ export default function NoticeMini() {
             <div style={{
                 display: "flex",
                 justifyContent: "space-between",
+                padding: "10px",
+                borderBottom: "1px solid lightgray",
                 alignItems: "center" }}>
                 <span style={{
                     fontSize: "20px",

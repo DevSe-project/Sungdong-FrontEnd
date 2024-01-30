@@ -4,7 +4,7 @@
   grid-template-columns: repeat(auto-fill, minmax(calc(20% - 20px), 1fr)); /* 그리드의 열을 유연하게 생성하되 최대 너비를 초과하지 않게 설정 */
   gap: 1em; /* 그리드 아이템 간의 간격 */
   justify-content: space-around; /* 그리드 아이템을 가로 방향으로 중앙 정렬 */
-  margin-left: 20px;
+  margin-left: 10px;
 
 }
 
