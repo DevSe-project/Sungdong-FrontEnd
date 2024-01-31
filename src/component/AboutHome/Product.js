@@ -40,19 +40,26 @@ export function Product() {
             key={index}
             className={styles.gridItem}
           >
+            {/* 상품 이미지부 */}
             <div className={styles.thumnail_container}>
               <img className={styles.thumnail} src={item.product_image_original} alt="상품 이미지" />
             </div>
-            <div className={styles.product_title}>
-              {item.product_supply <= 0 ? (
-                <div style={{ display: 'flex' }}>
-                  <p className={styles.discountText}>{item.product_title}</p>
-                  &nbsp;
-                  <p style={{ color: 'red', fontWeight: '750' }}>품절</p>
+            {/* 상품 제목부 */}
+            <div className={styles.productInfo_container}>
+              {item.product_supply <= 0 ?
+                <div className={styles.product_title}>
+                  {/* 상품 제목 */}
+                  <div className={styles.discountText}>
+                    {item.product_title}
+                  </div>
+                  {/* 품절 */}
+                  <div style={{ color: 'red', fontWeight: '750' }}>
+                    품절
+                  </div>
                 </div>
-              ) : (
+              :
                 <p style={{ fontSize: '0.9em', fontWeight: '950', margin: '0px' }}>{item.product_title}</p>
-              )}
+              }
               <p style={{ fontSize: '0.9em', fontWeight: '550', margin: '1px', marginLeft: 0, color: 'orangered'}}>{item.product_brand}</p>
               <div className={styles.product_price}>
                 {item.product_discount 

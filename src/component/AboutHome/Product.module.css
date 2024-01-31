@@ -36,6 +36,15 @@
   display: block;
 }
 
+.productInfo_container {
+  flex: 20%;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  justify-content: space-between;
+  padding: 10px;
+}
+
 .product_title {
   display: flex;
   flex-direction: column;
@@ -66,7 +75,7 @@
   align-items: start;
   justify-content: flex-start;
   padding-bottom: 1.5em;
-  margin-top: -14px;
+  margin-top: -15px;
 }
 
 .discountSort{
