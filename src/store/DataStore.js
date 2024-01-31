@@ -84,7 +84,7 @@ const useListStore = create((set) => ({
     setCartList: (data) =>
       set((state) => ({
         cartList: [
-          ...data.map((item) => ({ cnt: 1, ...item })),
+          ...data.map((item) => ({...item})),
         ],
       })),
 
@@ -95,7 +95,7 @@ const useListStore = create((set) => ({
         if (list.cart_product_id === item.cart_product_id) {
           return {
             ...list,
-            cnt: value,
+            cart_cnt: value,
           };
         }
         return list;
@@ -109,7 +109,7 @@ const useListStore = create((set) => ({
         if (list.cart_product_id === item.cart_product_id) {
           return {
             ...list,
-            cnt: (parseInt(list.cnt) + 1).toString(),
+            cart_cnt: (parseInt(list.cart_cnt) + 1).toString(),
           };
         }
         return list;
@@ -123,7 +123,7 @@ const useListStore = create((set) => ({
         if (list.cart_product_id === item.cart_product_id) {
           return {
             ...list,
-            cnt: (parseInt(list.cnt) - 1).toString(),
+            cart_cnt: (parseInt(list.cart_cnt) - 1).toString(),
           };
         }
         return list;

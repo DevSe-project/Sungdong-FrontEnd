@@ -29,16 +29,19 @@ export function Basket(props){
       if (error.response && error.response.status === 401) {
         // 서버가 401 UnAuthorazation를 반환한 경우
         handleUnauthorizedError(error.response.data.message);
-        return {};
-    } else if (error.response && error.response.status === 403) {
-        handleForbiddenError(error.response.data.message);
-        return {};
-    } else {
-        handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
-        return {};
+        throw new Error(error.response.data.message)
+      } else if (error.response && error.response.status === 403) {
+          handleForbiddenError(error.response.data.message);
+          throw new Error(error.response.data.message)
+      } else if(error.response && error.response.status === 400) {
+        handleOtherErrors(error.response.data.message);
+        throw new Error(error.response.data.message)
+      } else {
+          handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
+          throw new Error(error.response.data.message)
+      }
     }
-  }
-};
+  };
 
 
   // 장바구니 데이터 불러오기
@@ -46,8 +49,6 @@ export function Basket(props){
 
   const cartList = useCartList();
   const {setCartList, setCartCntUp, setCartCntDown, setCartCnt, resetCartList, setOrderList} = useListActions();
-
-  const orderList = useOrderList();
 
   const {setUserData} = useDataActions();
   const {resetOrderInfo, setOrderInformation} = useOrderActions();
@@ -65,7 +66,6 @@ export function Basket(props){
   // 전체 선택 체크박스 상태를 저장할 상태 변수
   const [selectAll, setSelectAll] = useState(false);
 
-  const location = useLocation();
 
   // 게시물 데이터와 페이지 번호 상태 관리    
   const [currentPage, setCurrentPage] = useState(1);
@@ -91,53 +91,20 @@ export function Basket(props){
     if (error.response && error.response.status === 401) {
         // 서버가 401 UnAuthorazation를 반환한 경우
         handleUnauthorizedError(error.response.data.message);
-        return {};
+        throw new Error(error.response.data.message)
     } else if (error.response && error.response.status === 403) {
         handleForbiddenError(error.response.data.message);
-        return {};
+        throw new Error(error.response.data.message)
+    } else if(error.response && error.response.status === 400) {
+      handleOtherErrors(error.response.data.message);
+      throw new Error(error.response.data.message)
     } else {
         handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
-        return {};
+        throw new Error(error.response.data.message)
     }
 }
 };
 
-
-
-  // 장바구니 탭 - 결제 탭에서 뒤로가기 시 뒤로가기 방지 후 장바구니 탭으로 이동
-  useEffect(() => {
-    const handleBack = (e) => {
-      e.preventDefault();
-      const isConfirmed = 
-      window.confirm(`주문서 작성 및 결제 중 뒤로가기 시 결제 정보가 초기화 됩니다. \n계속하시겠습니까?`)
-      if(isConfirmed){
-        props.setActiveTab(1);
-        setSelectedItems([]);
-        setSelectAll(false);
-        navigate('/basket');
-      }
-    };
-    window.history.pushState(null, null, window.location.href);
-    window.addEventListener('popstate', handleBack);
-
-    return () => {
-      window.removeEventListener('popstate', handleBack);
-    };
-  }, [props, navigate]);
-
-  useEffect(() => {
-    if (
-      location.pathname !== '/basket/order' &&
-      location.pathname !== '/basket/receipt' &&
-      location.pathname !== '/basket/pay'
-    ) {
-      // 필요한 상태 초기화 로직을 여기에 추가
-      setSelectedItems([]);
-      setSelectAll(false);
-      props.setActiveTab(1);
-      setOrderList([]);
-    }
-  }, [location]);
 
   useEffect(()=> {
     function fetchData(){
@@ -162,8 +129,6 @@ export function Basket(props){
       setSelectedItems([]);
     }
   };
-
-  console.log(orderList)
 
   // 체크박스 클릭 시 호출되는 함수
   function checkedBox(product) {
@@ -203,10 +168,11 @@ export function Basket(props){
           alert(data.message);
           // 상품 삭제 성공 시 상품 목록을 다시 불러옴
           queryClient.invalidateQueries(['cart']);
+          window.location.reload();
         },
         onError: (error) => {
           // 상품 삭제 실패 시, 에러 처리를 수행합니다.
-          console.error('상품을 삭제 처리하는 중 오류가 발생했습니다.', error);
+          alert(error.message);
         },
       });
     }
@@ -230,7 +196,7 @@ export function Basket(props){
 
   // 수량 DOWN
   function handleDelItem(prevItem) {
-    if (prevItem.cnt > 1) {
+    if (prevItem.cart_cnt > 1) {
       const isSelected = selectedItems.some(item => item.cart_product_id === prevItem.cart_product_id);
       if(isSelected){
         setSelectedItems(selectedItems.filter(item => item.cart_product_id !== prevItem.cart_product_id));
@@ -248,7 +214,7 @@ export function Basket(props){
 
   // 수량 UP
   function handleAddItem(prevItem) {
-    if (prevItem.cnt < 999) {
+    if (prevItem.cart_cnt < 999) {
       const isSelected = selectedItems.some(item => item.cart_product_id === prevItem.cart_product_id);
       if(isSelected){
         setSelectedItems(selectedItems.filter(item => item.cart_product_id !== prevItem.cart_product_id));
@@ -278,8 +244,7 @@ export function Basket(props){
           props.setActiveTab(2);
           },
           onError: (error) => {
-          // 상품 삭제 실패 시, 에러 처리를 수행합니다.
-          console.error('상품을 삭제 처리하는 중 오류가 발생했습니다.', error);
+            alert(error.message);
           },
       });
   }
@@ -346,7 +311,7 @@ export function Basket(props){
                   >
                     -
                   </button>                          
-                  <input value={item.cnt} className={styles.input} onChange={(e)=>maxLengthCheck(e,item)} type='text' placeholder='숫자만 입력'/>
+                  <input value={item.cart_cnt} className={styles.input} onChange={(e)=>maxLengthCheck(e,item)} type='text' placeholder='숫자만 입력'/>
                   <button 
                   className={styles.editButton}
                   onClick={()=>handleAddItem(item)}
@@ -363,9 +328,9 @@ export function Basket(props){
                     ({item.product_discount}%)
                   </span>
                   &nbsp;<i className="fal fa-long-arrow-right"/>&nbsp;
-                  {parseInt(item.cart_price * item.cnt - (((item.cart_price/100)*item.cart_discount)*item.cnt)).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
+                  {parseInt(item.cart_price * item.cart_cnt - (((item.cart_price/100)*item.cart_discount)*item.cart_cnt)).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                   </>
-                  : `${(item.cart_price * item.cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
+                  : `${(item.cart_price * item.cart_cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
                 </td>
               </tr>
               ))}
@@ -384,7 +349,7 @@ export function Basket(props){
                     \{
                       selectedItems.length > 0 ?
                         selectedItems.reduce((sum, item) =>
-                          sum + ((item.cart_price * item.cnt) - ((item.cart_price / 100) * item.cart_discount) * item.cnt)
+                          sum + ((item.cart_price * item.cart_cnt) - ((item.cart_price / 100) * item.cart_discount) * item.cart_cnt)
                         , 0).toLocaleString()
                         : 0
                       }
@@ -405,7 +370,7 @@ export function Basket(props){
                     <h5>\{
                       selectedItems.length > 0 ?
                         selectedItems.reduce((sum, item) =>
-                        sum + ((item.cart_price * item.cnt) - ((item.cart_price / 100) * item.cart_discount) * item.cnt)
+                        sum + ((item.cart_price * item.cart_cnt) - ((item.cart_price / 100) * item.cart_discount) * item.cart_cnt)
                         , delivery).toLocaleString()
                         : 0
                       }

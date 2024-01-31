@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import styles from './Step.module.css'
-import { useOrderData, useOrderList } from "../../Store/DataStore";
-import { Outlet, useNavigate } from 'react-router-dom';
+import { useListActions, useOrderData, useOrderList } from "../../Store/DataStore";
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { StepModule } from "./StepModule";
 
-export function OrderStep({activeTab}){
+export function OrderStep({setActiveTab, activeTab}){
     const orderList = useOrderList();
     const orderData = useOrderData();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const {setOrderList} = useListActions();
 
     // 배송가
     const delivery = 3000;
@@ -20,6 +23,37 @@ export function OrderStep({activeTab}){
 
         return () => clearInterval(opentime)
     }, [])
+
+      // 장바구니 탭 - 결제 탭에서 뒤로가기 시 뒤로가기 방지 후 장바구니 탭으로 이동
+    useEffect(() => {
+        const handleBack = (e) => {
+        e.preventDefault();
+        const isConfirmed = 
+        window.confirm(`주문서 작성 및 결제 중 뒤로가기 시 결제 정보가 초기화 됩니다. \n계속하시겠습니까?`)
+        if(isConfirmed){
+            setActiveTab(1);
+            navigate('/basket');
+        }
+        };
+        window.history.pushState(null, null, window.location.href);
+        window.addEventListener('popstate', handleBack);
+
+        return () => {
+        window.removeEventListener('popstate', handleBack);
+        };
+    }, [navigate]);
+
+    useEffect(() => {
+        if (
+        location.pathname !== '/orderStep/order' &&
+        location.pathname !== '/orderStep/receipt' &&
+        location.pathname !== '/orderStep/pay'
+        ) {
+        // 필요한 상태 초기화 로직을 여기에 추가
+        setActiveTab(1);
+        setOrderList([]);
+        }
+    }, [location]);
 
     return(
     <div className={styles.body}>
@@ -58,21 +92,21 @@ export function OrderStep({activeTab}){
                     {item.product_title}</h5>
                     <div>
                     {item.cart_selectedOption && `옵션 : ${item.cart_selectedOption}`}
-                    <p>상품 표준가 : <span className={styles.price}>\{(item.product_price).toLocaleString()}</span></p>
+                    <p>상품 표준가 : <span className={styles.price}>\{parseInt(item.cart_price).toLocaleString()}</span></p>
                     </div>
                 </td>
-                <td>{item.cnt}</td>
+                <td>{item.cart_cnt}</td>
                 <td className={styles.price}>
-                    {item.product_discount
+                    {item.cart_discount
                     ?
                     <>
                     <span style={{color: 'red', fontWeight: '750'}}>
-                    ({item.product_discount}%)
+                    ({item.cart_discount}%)
                     </span>
                     &nbsp;<i className="fal fa-long-arrow-right"/>&nbsp;
-                    {parseInt(item.product_price * item.cnt - (((item.product_price/100)*item.product_discount)*item.cnt)).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
+                    {parseInt(item.cart_price * item.cart_cnt - (((item.cart_price/100)*item.cart_discount)*item.cart_cnt)).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                     </>
-                    : `${(item.product_price * item.cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
+                    : `${(item.cart_price * item.cart_cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
                 </td>
             </tr>
         ))
@@ -109,7 +143,7 @@ export function OrderStep({activeTab}){
                     \{
                     orderList.length > 0 ?
                     orderList.reduce((sum, item) => //reduce 사용하여 배열 객체의 합계 계산, 0으로 초기화
-                        sum + ((item.product_price * item.cnt) - (((item.product_price / 100) * item.product_discount) * item.cnt))
+                    sum + ((item.cart_price * item.cart_cnt) - (((item.cart_price / 100) * item.cart_discount) * item.cart_cnt))
                     , 0).toLocaleString()
                     : 0
                     }
@@ -130,7 +164,7 @@ export function OrderStep({activeTab}){
                         <h5>\{
                             orderList.length > 0 ?
                             orderList.reduce((sum, item) => //reduce 함수사용하여 배열 객체의 합계 계산, delivery값으로 sum을 초기화
-                            sum + ((item.product_price * item.cnt) - (((item.product_price / 100) * item.product_discount) * item.cnt))
+                            sum + ((item.cart_price * item.cart_cnt) - (((item.cart_price / 100) * item.cart_discount) * item.cart_cnt))
                             , delivery).toLocaleString()
                             : 0
                             }

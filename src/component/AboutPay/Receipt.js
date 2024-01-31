@@ -34,17 +34,20 @@ export function Receipt(props){
       // 성공 시 추가된 상품 정보를 반환합니다.
       return response.data;
     } catch (error) {
-        // 서버 응답이 실패인 경우
-        if (error.response && error.response.status === 401) {
-          // 서버가 401 UnAuthorazation를 반환한 경우
-          handleUnauthorizedError(error.response.data.message);
-          return {};
+      // 서버 응답이 실패인 경우
+      if (error.response && error.response.status === 401) {
+        // 서버가 401 UnAuthorazation를 반환한 경우
+        handleUnauthorizedError(error.response.data.message);
+        throw new Error(error.response.data.message)
       } else if (error.response && error.response.status === 403) {
           handleForbiddenError(error.response.data.message);
-          return {};
+          throw new Error(error.response.data.message)
+      } else if(error.response && error.response.status === 400) {
+        handleOtherErrors(error.response.data.message);
+        throw new Error(error.response.data.message)
       } else {
           handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
-          return {};
+          throw new Error(error.response.data.message)
       }
     }
   };
@@ -66,16 +69,20 @@ export function Receipt(props){
       if (error.response && error.response.status === 401) {
         // 서버가 401 UnAuthorazation를 반환한 경우
         handleUnauthorizedError(error.response.data.message);
-        return {};
-    } else if (error.response && error.response.status === 403) {
-        handleForbiddenError(error.response.data.message);
-        return {};
-    } else {
-        handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
-        return {};
+        throw new Error(error.response.data.message)
+      } else if (error.response && error.response.status === 403) {
+          handleForbiddenError(error.response.data.message);
+          throw new Error(error.response.data.message)
+      } else if(error.response && error.response.status === 400) {
+        handleOtherErrors(error.response.data.message);
+        throw new Error(error.response.data.message)
+      } else {
+          handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
+          throw new Error(error.response.data.message)
+      }
     }
-  }
-};
+  };
+
   const fetchDeletedProducts = async(productId) => {
     try {
       const response = await axios.delete(`/cart/delete/${productId}`,
@@ -106,16 +113,19 @@ export function Receipt(props){
         if (error.response && error.response.status === 401) {
           // 서버가 401 UnAuthorazation를 반환한 경우
           handleUnauthorizedError(error.response.data.message);
-          return {};
-      } else if (error.response && error.response.status === 403) {
-          handleForbiddenError(error.response.data.message);
-          return {};
-      } else {
-          handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
-          return {};
+          throw new Error(error.response.data.message)
+        } else if (error.response && error.response.status === 403) {
+            handleForbiddenError(error.response.data.message);
+            throw new Error(error.response.data.message)
+        } else if(error.response && error.response.status === 400) {
+          handleOtherErrors(error.response.data.message);
+          throw new Error(error.response.data.message)
+        } else {
+            handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
+            throw new Error(error.response.data.message)
+        }
       }
-    }
-  };
+    };
 
   //데이터 재고 감소 요청 함수
   const { mutate:supplyMutation } = useMutation({mutationFn: lowSupply})
@@ -215,93 +225,103 @@ export function Receipt(props){
 
 
 
-  // submit 버튼
-  function submitReceipt(){
-      if(props.activeTab===2){
+// submit 버튼
+async function submitReceipt() {
+  if (props.activeTab === 2) {
+    try {
+      const orderData = {
+        orderInformation,
+        deliveryInformation,
+        orderList,
+      };
 
-          const orderData = {
-            orderInformation,
-            deliveryInformation,
-            orderList,
-          }
-          //재고 상태 수량만큼 감소
-
-          supplyMutation(orderList,{
+      // 재고 상태 수량만큼 감소
+      await new Promise((resolve, reject) => {
+        supplyMutation(orderList, {
           onSuccess: (success) => {
             console.log("재고 상태를 업데이트 하였습니다.", success);
             queryClient.invalidateQueries(['data']);
-
-            orderMutation(orderData,{
-            onSuccess: (success) => {
-              // 메세지 표시
-              alert(success.message);
-              console.log('주문이 완료되었습니다.', success);
-              // 주문 상태를 다시 불러와 갱신합니다.
-              queryClient.invalidateQueries(['order']);
-
-              orderListMutation(orderData,{
-                onSuccess: (success) => {
-                  // 메세지 표시
-                  console.log('주문 리스트를 불러왔습니다.', success);
-                  setOrderData(success.data);
-
-                  if(orderInformation.isCart === true){
-                  //장바구니 목록 삭제
-                    const itemsId = orderList.map(item => item.cart_product_id)
-                    deleteProductMutation(itemsId,{
-                      onSuccess: (data) => {
-                        // 상품 삭제 성공 시 상품 목록을 다시 불러옴
-                        queryClient.invalidateQueries(['cart']);
-                        //결제 방식이 CMS일때
-                        if(orderInformation.order_payRoute === 'CMS'){
-                          props.setActiveTab(4);
-                          navigate("/orderStep/order");
-                        } else {
-                          props.setActiveTab(3);
-                          navigate("/orderStep/pay");
-                        }
-                      },
-                      onError: (error) => {
-                        // 상품 삭제 실패 시, 에러 처리를 수행합니다.
-                        console.error('상품을 삭제 처리하는 중 오류가 발생했습니다.', error);
-                      }
-                    })
-                  }
-                  else {
-                    if(orderInformation.order_payRoute === 'CMS'){
-                      props.setActiveTab(4);
-                      navigate("/orderStep/order");
-                    } else {
-                      props.setActiveTab(3);
-                      navigate("/orderStep/pay");
-                    }
-                  }
-                },
-                  onError: (error) => {
-                    // 상품 삭제 실패 시, 에러 처리를 수행합니다.
-                    console.error('주문 상품을 불러오는 중 오류가 발생했습니다.', error);
-                    navigate("/")
-                    return;
-                  }
-                });
-              },
-              onError: (error) => {
-                // 상품 추가 실패 시, 에러 처리를 수행합니다.
-                console.error('주문을 처리하던 중 오류가 발생했습니다.', error);
-                navigate("/")
-                return;
-              }
-            });
+            resolve();
           },
           onError: (error) => {
-            // 상품 추가 실패 시, 에러 처리를 수행합니다.
             console.error('상품을 재고 변경 처리를 수행하던 중 오류가 발생했습니다.', error);
-            navigate("/")
-            return;
+            reject(error);
           },
-        })
-      }
+        });
+      });
+
+      await new Promise((resolve, reject) => {
+        orderMutation(orderData, {
+          onSuccess: (success) => {
+            // 메세지 표시
+            alert(success.message);
+            console.log('주문이 완료되었습니다.', success);
+            // 주문 상태를 다시 불러와 갱신합니다.
+            queryClient.invalidateQueries(['order']);
+            resolve();
+          },
+          onError: (error) => {
+            console.error('주문을 처리하던 중 오류가 발생했습니다.', error);
+            reject(error);
+          },
+        });
+      });
+
+      await new Promise((resolve, reject) => {
+        orderListMutation(orderData, {
+          onSuccess: (success) => {
+            // 메세지 표시
+            console.log('주문 리스트를 불러왔습니다.', success);
+            setOrderData(success.data);
+
+            if (orderInformation.isCart === true) {
+              // 장바구니 목록 삭제
+              const itemsId = orderList.map((item) => item.cart_product_id);
+              deleteProductMutation(itemsId, {
+                onSuccess: (data) => {
+                  // 상품 삭제 성공 시 상품 목록을 다시 불러옴
+                  queryClient.invalidateQueries(['cart']);
+                  // 결제 방식이 CMS일때
+                  if (orderInformation.order_payRoute === 'CMS') {
+                    props.setActiveTab(4);
+                    navigate("/orderStep/order");
+                  } else {
+                    props.setActiveTab(3);
+                    navigate("/orderStep/pay");
+                  }
+                  resolve();
+                },
+                onError: (error) => {
+                  // 상품 삭제 실패 시, 에러 처리를 수행합니다.
+                  console.error('상품을 삭제 처리하는 중 오류가 발생했습니다.', error.message);
+                  reject(error);
+                },
+              });
+            } else {
+              if (orderInformation.order_payRoute === 'CMS') {
+                props.setActiveTab(4);
+                navigate("/orderStep/order");
+              } else {
+                props.setActiveTab(3);
+                navigate("/orderStep/pay");
+              }
+              resolve();
+            }
+          },
+          onError: (error) => {
+            // 주문 상품 불러오기 실패 시, 에러 처리를 수행합니다.
+            console.error('주문 상품을 불러오는 중 오류가 발생했습니다.', error.message);
+            reject(error);
+          },
+        });
+      });
+    } catch (error) {
+      console.error('주문 처리 중에 오류가 발생했습니다:', error.message);
+      alert(error.message)
     }
+  }
+}
+
 
   const deliveryMessageExample=[
   {value: '빠른배송 부탁드립니다.'},
