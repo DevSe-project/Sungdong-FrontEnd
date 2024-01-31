@@ -42,7 +42,7 @@ export function TabInfo({detailData}){
       <div className={styles.reviewHeader}>
       <h3 style={{borderBottom: '3px solid #cc0000', marginBottom: '1em'}}>상품 설명</h3>
         <p>
-          {detailData.product_content.replace(/<p>|<\/p>/g, '')}
+          {detailData.product_content}
         </p>
       </div>
     </div>

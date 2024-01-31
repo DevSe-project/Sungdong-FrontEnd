@@ -1,5 +1,5 @@
 import styles from './AdminTabInfo.module.css'
-import React from 'react';
+import React, { useState } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useProduct, useProductActions } from '../../../Store/DataStore';
@@ -13,6 +13,43 @@ export function AdminTabInfo({setMiddleCategory, setLowCategory, setSelectedCate
   const {setProduct, resetProduct} = useProductActions();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+
+  const [flag, setFlag] = useState(false);
+  const [img, setImage] = useState("");
+  const imgLink = "http://localhost:5050/product/upload/"
+
+  const customUploadAdapter = (loader) => { // (2)
+      return {
+          upload(){
+              return new Promise ((resolve, reject) => {
+                  const data = new FormData();
+                  loader.file.then( (file) => {
+                          data.append("name", file.name);
+                          data.append("file", file);
+
+                          axios.post('/product/upload', data)
+                              .then((res) => {
+                                  if(!flag){
+                                      setFlag(true);
+                                      setImage(res.data.filename);
+                                  }
+                                  resolve({
+                                      default: `${imgLink}/${res.data.filename}`
+                                  });
+                              })
+                              .catch((err)=>reject(err));
+                      })
+              })
+          }
+      }
+  }
+
+  function uploadPlugin (editor){ // (3)
+      editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+          return customUploadAdapter(loader);
+      }
+  }
+
   
   //데이터 불러오기
   const { data } = useQuery({queryKey:['data']});
@@ -130,6 +167,9 @@ export function AdminTabInfo({setMiddleCategory, setLowCategory, setSelectedCate
         <h3 style={{borderBottom: '3px solid #cc0000', marginBottom: '1em'}}>상품 설명</h3>
         {/* 에디터 훅 사용 */}
         <CKEditor
+        config={{ // (4)
+          extraPlugins: [uploadPlugin]
+        }}
         editor={ ClassicEditor }
         data={product.product_content}
         onReady={ ( editor ) => {
