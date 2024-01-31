@@ -5,9 +5,10 @@ import { useDataActions, useOrderData } from '../../Store/DataStore';
 import axios from '../../axios';
 import { GetCookie } from '../../customFn/GetCookie';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { handleForbiddenError, handleOtherErrors, handleUnauthorizedError } from '../../customFn/ErrorHandling';
+import { useErrorHandling } from '../../customFn/ErrorHandling';
 
 export function Delivery(props){
+  const {handleForbiddenError, handleOtherErrors, handleUnauthorizedError} = useErrorHandling();
 
   const {setDetailData} = useDataActions();
 

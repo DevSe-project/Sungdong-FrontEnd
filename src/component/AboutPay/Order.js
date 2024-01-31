@@ -5,10 +5,12 @@ import axios from '../../axios';
 import { GetCookie } from '../../customFn/GetCookie';
 import { useQuery } from '@tanstack/react-query';
 import { useListActions, useOrderList } from '../../Store/DataStore';
-import { handleForbiddenError, handleOtherErrors, handleUnauthorizedError } from '../../customFn/ErrorHandling';
+import { useErrorHandling } from '../../customFn/ErrorHandling';
 
 
 export function Order(props){
+  const {handleForbiddenError, handleOtherErrors, handleUnauthorizedError} = useErrorHandling();
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -47,7 +49,7 @@ export function Order(props){
   console.log(orderData)
   useEffect(() => {
     if (
-      location.pathname !== '/basket/order'
+      location.pathname !== '/orderStep/order'
     ) {
       props.setActiveTab(1);
     }

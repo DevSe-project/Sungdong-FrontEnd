@@ -3,10 +3,11 @@ import { useQuery } from '@tanstack/react-query';
 import axios from '../../axios';
 import { GetCookie } from '../../customFn/GetCookie';
 import { useNavigate } from 'react-router-dom';
-import { handleForbiddenError, handleOtherErrors, handleUnauthorizedError } from '../../customFn/ErrorHandling';
+import { useErrorHandling } from '../../customFn/ErrorHandling';
 
 export default function WelcomeModule() {
     const navigate = useNavigate();
+    const {handleForbiddenError, handleOtherErrors, handleUnauthorizedError} = useErrorHandling();
 
     // -----UserData fetch
     const fetchUserData = async () => {

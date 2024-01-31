@@ -5,11 +5,12 @@ import { useDataActions, useDeliveryInfo, useListActions, useOrderActions, useOr
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from '../../axios';
 import { GetCookie } from '../../customFn/GetCookie';
-import { handleForbiddenError, handleOtherErrors, handleUnauthorizedError } from '../../customFn/ErrorHandling';
+import { useErrorHandling } from '../../customFn/ErrorHandling';
 
 
 export function Receipt(props){
   const navigate = useNavigate();
+  const {handleForbiddenError, handleOtherErrors, handleUnauthorizedError} = useErrorHandling();
 
   const userData = useUserData();
   const orderList = useOrderList();
@@ -254,10 +255,10 @@ export function Receipt(props){
                         //결제 방식이 CMS일때
                         if(orderInformation.order_payRoute === 'CMS'){
                           props.setActiveTab(4);
-                          navigate("/basket/order");
+                          navigate("/orderStep/order");
                         } else {
                           props.setActiveTab(3);
-                          navigate("/basket/pay");
+                          navigate("/orderStep/pay");
                         }
                       },
                       onError: (error) => {
@@ -269,28 +270,34 @@ export function Receipt(props){
                   else {
                     if(orderInformation.order_payRoute === 'CMS'){
                       props.setActiveTab(4);
-                      navigate("/basket/order");
+                      navigate("/orderStep/order");
                     } else {
                       props.setActiveTab(3);
-                      navigate("/basket/pay");
+                      navigate("/orderStep/pay");
                     }
                   }
                 },
                   onError: (error) => {
                     // 상품 삭제 실패 시, 에러 처리를 수행합니다.
                     console.error('주문 상품을 불러오는 중 오류가 발생했습니다.', error);
+                    navigate("/")
+                    return;
                   }
                 });
               },
               onError: (error) => {
                 // 상품 추가 실패 시, 에러 처리를 수행합니다.
                 console.error('주문을 처리하던 중 오류가 발생했습니다.', error);
+                navigate("/")
+                return;
               }
             });
           },
           onError: (error) => {
             // 상품 추가 실패 시, 에러 처리를 수행합니다.
             console.error('상품을 재고 변경 처리를 수행하던 중 오류가 발생했습니다.', error);
+            navigate("/")
+            return;
           },
         })
       }

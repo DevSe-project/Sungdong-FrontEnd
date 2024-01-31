@@ -8,7 +8,7 @@ export function Pay(props){
   function gotoLink(){
     if(props.activeTab===3) {
       props.setActiveTab(4);
-      navigate("/basket/order");
+      navigate("/orderStep/order");
     }
   }
   // 주소창으로 접근 등 잘못된 접근 시 경고창 표시 후 홈으로 이동 

@@ -76,6 +76,7 @@ import { ErrorTradeList } from "./component/AboutTakeBack/ErrorTradeList";
 import { AdminEditDetail } from "./component/AboutAdmin/Detail/AdminEditDetail";
 import axios from "./axios";
 import { GetCookie } from "./customFn/GetCookie";
+import { OrderStep } from "./component/AboutPay/OrderStep";
 
 
 export default function App() {
@@ -255,7 +256,9 @@ export default function App() {
             {/* 최상단배너 */}
             <TopBanner />
             <div className='main'>
-              <MenuData />
+              <div style={{float: 'left'}}>
+                <MenuData />
+              </div>
               <div className='container'>
                 <Category
                   menuOnClick={menuOnClick}
@@ -278,7 +281,9 @@ export default function App() {
           <>
             <TopBanner />
             <div className='main'>
-              <MenuData />
+              <div style={{float: 'left'}}>
+                <MenuData />
+              </div>
               <div className='container'>
                 <Detail
                   navigate={navigate}
@@ -298,7 +303,9 @@ export default function App() {
             {/* 최상단배너 */}
             <TopBanner />
             <div className='main'>
-              <MenuData />
+                            <div style={{float: 'left'}}>
+                <MenuData />
+              </div>      
               <div className='container'>
                 <LikeItem menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} category_dynamicStyle={category_dynamicStyle} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
@@ -309,15 +316,35 @@ export default function App() {
           </>
         } />
 
-        {/* 장바구니 ~ 주문 */}
+        {/* 장바구니 */}
         <Route path='/basket' element={
           <>
             {/* 최상단배너 */}
             <TopBanner />
             <div className='main'>
-              <MenuData />
+              <div style={{float: 'left'}}>
+                <MenuData />
+              </div>      
               <div className='container'>
                 <Basket menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} activeTab={activeTab} setActiveTab={setActiveTab} category_dynamicStyle={category_dynamicStyle} text_dynamicStyle={text_dynamicStyle} />
+                <footer className='footer'>
+                  <Footer />
+                </footer>
+              </div>
+            </div>
+          </>
+        }/>
+
+        <Route path='/orderStep' element={
+          <>
+            {/* 최상단배너 */}
+            <TopBanner />
+            <div className='main'>
+              <div style={{float: 'left'}}>
+                <MenuData />
+              </div>      
+              <div className='container'>
+                <OrderStep menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} activeTab={activeTab} setActiveTab={setActiveTab} category_dynamicStyle={category_dynamicStyle} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
                   <Footer />
                 </footer>
@@ -336,7 +363,9 @@ export default function App() {
             {/* 최상단배너 */}
             <TopBanner />
             <div className='main'>
-              <MenuData />
+              <div style={{float: 'left'}}>
+                <MenuData />
+              </div>      
               <div className='container'>
                 <DeliveryMain />
                 <footer className='footer'>
@@ -353,7 +382,9 @@ export default function App() {
             {/* 최상단배너 */}
             <TopBanner />
             <div className='main'>
-              <MenuData />
+              <div style={{float: 'left'}}>
+                <MenuData />
+              </div>      
               <div className='container'>
                 <OrderDetail />
                 <footer className='footer'>
@@ -379,7 +410,9 @@ export default function App() {
             {/* 최상단배너 */}
             <TopBanner />
             <div className='main'>
-              <MenuData />
+              <div style={{float: 'left'}}>
+                <MenuData />
+              </div>      
               <div className='container'>
                 <MyPage />
                 <footer className='footer'>
@@ -393,7 +426,9 @@ export default function App() {
             {/* 최상단배너 */}
             <TopBanner />
             <div className='main'>
-              <MenuData />
+              <div style={{float: 'left'}}>
+                <MenuData />
+              </div>      
               <div className='container'>
                 <AccountBook />
                 <footer className='footer'>
@@ -407,7 +442,9 @@ export default function App() {
             {/* 최상단배너 */}
             <TopBanner />
             <div className='main'>
-              <MenuData />
+              <div style={{float: 'left'}}>
+                <MenuData />
+              </div>      
               <div className='container'>
                 <DepositHistory />
                 <footer className='footer'>
@@ -422,7 +459,9 @@ export default function App() {
             {/* 최상단배너 */}
             <TopBanner />
             <div className='main'>
-              <MenuData />
+              <div style={{float: 'left'}}>
+                <MenuData />
+              </div>      
               <div className='container'>
                 <EstimateBox />
                 <footer className='footer'>
@@ -437,7 +476,9 @@ export default function App() {
             {/* 최상단배너 */}
             <TopBanner />
             <div className='main'>
-              <MenuData />
+              <div style={{float: 'left'}}>
+                <MenuData />
+              </div>      
               <div className='container'>
                 <EstimateManager />
                 <footer className='footer'>
@@ -454,7 +495,9 @@ export default function App() {
             {/* 최상단배너 */}
             <TopBanner />
             <div className='main'>
-              <MenuData />
+              <div style={{float: 'left'}}>
+                <MenuData />
+              </div>      
               <div className='container'>
                 <TackBackRequest />
                 <footer className='footer'>
@@ -470,7 +513,9 @@ export default function App() {
             {/* 최상단배너 */}
             <TopBanner />
             <div className='main'>
-              <MenuData />
+              <div style={{float: 'left'}}>
+                <MenuData />
+              </div>      
               <div className='container'>
                 <TakeBackList />
                 <footer className='footer'>
@@ -486,7 +531,9 @@ export default function App() {
             {/* 최상단배너 */}
             <TopBanner />
             <div className='main'>
-              <MenuData />
+              <div style={{float: 'left'}}>
+                <MenuData />
+              </div>      
               <div className='container'>
                 <ErrorTrade />
                 <footer className='footer'>
@@ -500,7 +547,9 @@ export default function App() {
             {/* 최상단배너 */}
             <TopBanner />
             <div className='main'>
-              <MenuData />
+              <div style={{float: 'left'}}>
+                <MenuData />
+              </div>      
               <div className='container'>
                 <ErrorTradeList />
                 <footer className='footer'>
@@ -532,7 +581,9 @@ export default function App() {
             {/* 최상단배너 */}
             <TopBanner />
             <div className='main'>
-              <MenuData />
+              <div style={{float: 'left'}}>
+                <MenuData />
+              </div>      
               <div className='container'>
                 <TodayNews />
                 <footer className='footer'>
@@ -562,7 +613,9 @@ export default function App() {
             {/* 최상단배너 */}
             <TopBanner />
             <div className='main'>
-              <MenuData />
+              <div style={{float: 'left'}}>
+                <MenuData />
+              </div>      
               <div className='container'>
                 <Event />
                 <footer className='footer'>

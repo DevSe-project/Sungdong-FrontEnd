@@ -1,25 +1,31 @@
-// errorHandling.js
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-let errorDisplayed = false;
+export const useErrorHandling = () => {
+const [errorDisplayed, setErrorDisplayed] = useState(false);
+const navigate = useNavigate();
 
-export const handleUnauthorizedError = (errorMessage) => {
+const handleUnauthorizedError = (errorMessage) => {
     if (!errorDisplayed) {
-        console.error(errorMessage);
+    console.error(errorMessage);
     }
-    errorDisplayed = true;
-    };
+    setErrorDisplayed(true);
+};
 
-    export const handleForbiddenError = (errorMessage, navigate) => {
+const handleForbiddenError = (errorMessage) => {
     if (!errorDisplayed) {
-        alert(errorMessage);
-        navigate("/login");
+    alert(errorMessage);
+    navigate("/login");
     }
-    errorDisplayed = true;
-    };
+    setErrorDisplayed(true);
+};
 
-    export const handleOtherErrors = (errorMessage) => {
+const handleOtherErrors = (errorMessage) => {
     if (!errorDisplayed) {
-        alert(errorMessage);
+    alert(errorMessage);
     }
-    errorDisplayed = true;
-    };
+    setErrorDisplayed(true);
+};
+
+return { handleUnauthorizedError, handleForbiddenError, handleOtherErrors };
+};

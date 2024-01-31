@@ -3,16 +3,17 @@ import styles from './Detail.module.css'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { TabInfo } from './TabInfo'
-import { useBasketList, useDataActions, useDetailData, useListActions, useWishList } from '../../Store/DataStore'
+import { useDataActions, useDetailData, useListActions, useWishList } from '../../Store/DataStore'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import axios from '../../axios'
 import { GetCookie } from '../../customFn/GetCookie'
-import { handleForbiddenError, handleOtherErrors, handleUnauthorizedError } from '../../customFn/ErrorHandling'
-import Cookies from 'js-cookie'
+import { useErrorHandling } from '../../customFn/ErrorHandling'
 export function Detail(props) {
 
   const detailData = useDetailData();
 
+  const {handleForbiddenError, handleOtherErrors, handleUnauthorizedError} = useErrorHandling();
+  
   const {setDetailData, setUserData} = useDataActions();
   //데이터 불러오기
   const { isLoading, isError, error, data } = useQuery({queryKey:['data']});
@@ -27,7 +28,7 @@ export function Detail(props) {
     };
   
     fetchData();
-  }, [isLoading]);
+  }, []);
 
     //주소창 입력된 id값 받아오기
     let {id} = useParams();
@@ -206,6 +207,11 @@ function setEstimateItem(product, count){
 
 // 즉시구매 함수
 function buyThis(product, count){
+  if(GetCookie('jwt_token') === null){
+    alert("로그인 후 이용가능한 서비스입니다.");
+    return;
+  }
+
   if(count <= 0){
     alert("수량은 0보다 커야합니다.")
     return;
@@ -223,17 +229,17 @@ function buyThis(product, count){
   const newProduct = {
     ...product,
     cnt: count,
-    cart_selectedOption: optionSelected ? optionSelected : null
+    selectedOption: optionSelected ? optionSelected : null
   }
-    orderMutate(newProduct,{
+    orderMutate([newProduct],{
       onSuccess: (data) => {
         // 메세지 표시
         console.log('상품을 전달하였습니다.', data);
         // 장바구니로 이동
         alert(data.message);
-        Cookies.set('saveo_p', JSON.stringify(data.requestData));
+        setOrderList([...data.newProduct]);
         setUserData(data.data);
-        navigate("/basket/receipt");
+        navigate("/orderStep/receipt");
         props.setActiveTab(2);
       },
       onError: (error) => {
