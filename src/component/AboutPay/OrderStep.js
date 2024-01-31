@@ -92,7 +92,7 @@ export function OrderStep({activeTab}){
             </td>
             <td>{item.order_cnt}</td>
             <td className={styles.price}>
-            {parseInt(item.order_productPrice * item.order_cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
+            {parseInt(item.order_productPrice).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
             </td>
         </tr>
         ))}
