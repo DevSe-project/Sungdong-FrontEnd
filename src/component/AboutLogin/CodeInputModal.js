@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDataActions, useModal, useModalActions, useUserData } from '../../Store/DataStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from '../../axios';
+import { useErrorHandling } from '../../customFn/ErrorHandling';
 
 export default function CodeInputModal() {
   const userData = useUserData();
@@ -12,6 +13,7 @@ export default function CodeInputModal() {
   const queryClient = useQueryClient();
 
   const navigate = useNavigate();
+  const {handleOtherErrors} = useErrorHandling();
 
   // esc키를 누르면 모달창 닫기.
   useEffect(() => {
@@ -45,8 +47,16 @@ export default function CodeInputModal() {
       // 성공 시 추가된 상품 정보를 반환합니다.
       return response.data;
   } catch (error) {
-      // 실패 시 예외를 throw합니다.
-      throw new Error('확인 중 오류가 발생했습니다.');
+      // 서버 응답이 실패인 경우
+      if (error.response && error.response.status === 400) {
+        // 서버가 400 Bad Request를 반환한 경우
+        alert(error.response.data.message);          
+        return console.error(error.response.data.message);
+        // 서버 응답이 실패인 경우
+      } else {
+          handleOtherErrors('회원 인증을 처리하는 중 오류가 발생했습니다.');
+          return {};
+      }
   }
   };
 
@@ -60,11 +70,11 @@ export default function CodeInputModal() {
       onSuccess: (data) => {
         console.log('유효한 코드 :', data);
         alert(data.message);
+        closeModal();
         navigate("/join");        
       },
       onError: (error) => {
-        console.error('code check failed:', error);
-        // 에러 처리 또는 메시지 표시
+        closeModal();
       },
     });
   }
