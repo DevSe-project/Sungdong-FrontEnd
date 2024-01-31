@@ -37,7 +37,6 @@
 }
 
 .productInfo_container {
-  flex: 20%;
   display: flex;
   flex-direction: column;
   text-align: left;
@@ -50,8 +49,6 @@
   flex-direction: column;
   justify-content: left;
   align-items: start;
-  margin-top: 20px;
-  margin-left: 10px;
 }
 
 .product_price {
