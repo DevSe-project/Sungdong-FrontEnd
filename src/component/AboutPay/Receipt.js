@@ -289,6 +289,7 @@ async function submitReceipt() {
                     props.setActiveTab(3);
                     navigate("/orderStep/pay");
                   }
+                  resetOrderInfo();
                   resolve();
                 },
                 onError: (error) => {
@@ -305,6 +306,7 @@ async function submitReceipt() {
                 props.setActiveTab(3);
                 navigate("/orderStep/pay");
               }
+              resetOrderInfo();
               resolve();
             }
           },

@@ -46,7 +46,6 @@ export function Order(props){
   const { isLoading, isError, error, data:orderData } = useQuery({queryKey:['orderDetail'], queryFn: ()=> fetchOrderData()});
 
 
-  console.log(orderData)
   useEffect(() => {
     if (
       location.pathname !== '/orderStep/order'

@@ -3,7 +3,7 @@ import styles from './Detail.module.css'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { TabInfo } from './TabInfo'
-import { useDataActions, useDetailData, useListActions, useWishList } from '../../Store/DataStore'
+import { useDataActions, useDetailData, useListActions, useOrderActions, useWishList } from '../../Store/DataStore'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import axios from '../../axios'
 import { GetCookie } from '../../customFn/GetCookie'
@@ -15,10 +15,14 @@ export function Detail(props) {
   const {handleForbiddenError, handleOtherErrors, handleUnauthorizedError} = useErrorHandling();
   
   const {setDetailData, setUserData} = useDataActions();
+  const {resetOrderInfo, setOrderInformation} = useOrderActions();
+
   //데이터 불러오기
   const { isLoading, isError, error, data } = useQuery({queryKey:['data']});
+
   //Mutate를 위한 queryClient 사용
   const queryClient = useQueryClient();
+  
   //데이터 불러오기 이전 loadData()함수 실행 금지
   useEffect(() => {
     const fetchData = async () => {
@@ -239,6 +243,7 @@ function buyThis(product, count){
         alert(data.message);
         setOrderList([...data.newProduct]);
         setUserData(data.data);
+        setOrderInformation("isCart", false);
         navigate("/orderStep/receipt");
         props.setActiveTab(2);
       },

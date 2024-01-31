@@ -24,6 +24,15 @@ export function OrderStep({setActiveTab, activeTab}){
         return () => clearInterval(opentime)
     }, [])
 
+    // 주소창으로 접근 등 잘못된 접근 시 경고창 표시 후 홈으로 이동 
+    useEffect(()=>{
+        if (activeTab !== 2) {
+        alert("잘못된 접근입니다.")
+        setActiveTab(1);
+        navigate("/");
+        }
+    }, [navigate])
+
       // 장바구니 탭 - 결제 탭에서 뒤로가기 시 뒤로가기 방지 후 장바구니 탭으로 이동
     useEffect(() => {
         const handleBack = (e) => {
@@ -50,8 +59,9 @@ export function OrderStep({setActiveTab, activeTab}){
         location.pathname !== '/orderStep/pay'
         ) {
         // 필요한 상태 초기화 로직을 여기에 추가
-        setActiveTab(1);
-        setOrderList([]);
+            setActiveTab(1);
+            setOrderList([]);
+            window.location.reload();
         }
     }, [location]);
 
