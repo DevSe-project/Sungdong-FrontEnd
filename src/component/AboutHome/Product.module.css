@@ -1,25 +1,23 @@
+/* 상품 전체 컨테이너 */
 .gridContainer {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(calc(20% - 20px), 1fr));
-  gap: 1em;
-  justify-content: space-around;
+  display: grid; /* 그리드 컨테이너로 선언 */
+  grid-template-columns: repeat(auto-fill, minmax(calc(20% - 20px), 1fr)); /* 그리드의 열을 유연하게 생성하되 최대 너비를 초과하지 않게 설정 */
+  gap: 1em; /* 그리드 아이템 간의 간격 */
+  justify-content: space-around; /* 그리드 아이템을 가로 방향으로 중앙 정렬 */
   margin-left: 10px;
 
 }
 
 /* 각 상품 블럭 */
 .gridItem {
-  display: flex;
-  flex-direction: column;
   flex: 0 0 calc(20% - 20px);
   margin-top: 1em;
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
   border-radius: 1vh;
   background-color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
 }
-
 .gridItem:hover {
   transform: scale(1.05);
 }
@@ -29,7 +27,6 @@
   overflow: hidden;
   border-radius: 1vh;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  flex: 80%;
 }
 
 /* 이미지 썸네일 */
@@ -39,25 +36,24 @@
   display: block;
 }
 
-.productInfo_container {
-  flex: 20%;
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-  justify-content: space-between;
-  padding: 10px;
-}
-
 .product_title {
   display: flex;
   flex-direction: column;
-  font-weight: bold;
+  justify-content: left;
+  align-items: start;
+  margin-top: 20px;
+  margin-left: 10px;
 }
-
 
 .product_price {
   display: flex;
   flex-direction: column;
+  margin-top: 20px;
+}
+
+.price{
+  font-size: 1.15em;
+  font-weight: 900;
 }
 
 .product_price h3 {
@@ -69,23 +65,35 @@
   flex-direction: column;
   align-items: start;
   justify-content: flex-start;
+  padding-bottom: 1.5em;
+  margin-top: -14px;
+}
+
+.discountSort{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 0.5em;
 }
 
 .discountText {
   color: gray;
-  display: flex;
-  flex-direction: row;
+  text-decoration: line-through;
+  margin: 0;
+  font-size: 0.8em;
+  overflow: hidden;
 }
 
 .discountPercentage {
   color: red;
   font-weight: 750;
+  font-size: 0.8em;
 }
 
-.price {
-  color: black;
-  font-size: 20px;
+.discountedPrice {
+  color: black; 
   font-weight: bold;
+  margin: 0;
 }
 
 /* Skeleton Layout */
