@@ -146,7 +146,6 @@ export default function DeliveryStateModal(props) {
                                 <th>처리상태</th>
                                 <th>주문일자</th>
                                 <th>상품코드</th>
-                                <th>이미지</th>
                                 <th>상품명</th>
                                 <th>옵션명</th>
                                 <th>표준가</th>
@@ -176,7 +175,6 @@ export default function DeliveryStateModal(props) {
                                         <option value={4}>배송 지연</option>
                                     </select>
                                 </th>
-                                <th></th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
@@ -214,8 +212,6 @@ export default function DeliveryStateModal(props) {
                                     <td>{item.order_date}</td>
                                     {/* 상품번호 */}
                                     <td>{item.product_id}</td>
-                                    {/* 미니 이미지 */}
-                                    <td>{item.image_mini}</td>
                                     {/* 상품명 */}
                                     <td>{item.product_title}</td>
                                     {/* 옵션 상세 - 선택 옵션이 있을 경우만 표시*/}
@@ -223,7 +219,7 @@ export default function DeliveryStateModal(props) {
                                     {/* 가격 */}
                                     <td>{item.product_price}</td>
                                     {/* 할인률 */}
-                                    <td>{item.product_discount === 0 ? item.price : item.price - (item.price * item.discount / 100)}</td>
+                                    <td>{item.discountPrice}</td>
                                 </tr>
                             ))}
                         </tbody>

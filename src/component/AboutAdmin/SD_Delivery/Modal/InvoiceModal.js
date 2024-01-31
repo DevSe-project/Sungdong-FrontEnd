@@ -137,8 +137,7 @@ export default function InvoiceModal(props) {
                                 <th>처리상태</th>
                                 <th>주문일자</th>
                                 <th>상품코드</th>
-                                <th>이미지</th>
-                                <th>상품명</th>
+                                <th style={{ width: '200px', overflowX: 'hidden' }}>상품명</th>
                                 <th>옵션명</th>
                                 <th>표준가</th>
                                 <th>공급가</th>
@@ -169,13 +168,18 @@ export default function InvoiceModal(props) {
                                             />
                                         </td>
                                         <td>{props.parseDeliveryState(item.delivery_state)}</td>
+                                        {/* 주문일자 */}
                                         <td>{item.order_date}</td>
+                                        {/* 상품코드 */}
                                         <td>{item.product_id}</td>
-                                        <td>{item.product_image_mini}</td>
-                                        <td>{item.product_title}</td>
+                                        {/* 상품명 */}
+                                        <td style={{ width: '200px', overflowX: 'hidden' }}>{item.product_title}</td>
+                                        {/* 옵션 */}
                                         <td>{item.optionSelected ? item.optionSelected : "-"}</td>
+                                        {/* 표준가 */}
                                         <td>{item.product_price}</td>
-                                        <td>{item.product_discount === 0 ? item.price : item.price - (item.price * item.discount / 100)}</td>
+                                        {/* 공급가 */}
+                                        <td>{item.discountPrice}</td>
                                     </tr>
                                 ))}
                         </tbody>

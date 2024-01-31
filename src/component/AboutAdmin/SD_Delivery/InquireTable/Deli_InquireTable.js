@@ -122,10 +122,10 @@ export default function Deli_InquireTable() {
     // 삭제
     const deleteData = async () => {
         if (window.confirm('삭제를 진행하시겠습니까?')) {
+            console.log(checkedItems);
             try {
                 const token = GetCookie('jwt_token');
-                const response = await axios.delete(`/delivery/deliveries/delete`, {
-                    data: checkedItems, // checkedItems 배열을 바로 전달
+                const response = await axios.delete(`/delivery/deliveries/delete/${checkedItems}`, {
                     headers: {
                         "Content-Type": "application/json",
                         'Authorization': `Bearer ${token}`
@@ -134,12 +134,9 @@ export default function Deli_InquireTable() {
 
                 // 성공 시 삭제된 데이터를 반환
                 if (response.status === 200) {
+                    window.location.reload(); // 성공했을 때만 페이지를 새로 고침
                     return response.data;
-                } else {
-                    console.error('데이터 삭제 실패:', response.data);
                 }
-
-                window.location.reload(); // 성공했을 때만 페이지를 새로 고침
             } catch (error) {
                 console.error('데이터 삭제 중 에러 발생:', error);
                 throw error; // 에러를 다시 던져서 호출자에게 알릴 수 있습니다.
@@ -180,14 +177,14 @@ export default function Deli_InquireTable() {
                         <button
                             className='white_button'
                             onClick={() => { handleModalOpen('DeliveryStateModal') }}>
-                            선택 항목 수정(배송상태)
+                            선택 항목 배송상태 수정
                         </button>
                         {/* 송장 수정 */}
                         <button
                             className='white_button'
                             // 송장수정 fn
                             onClick={() => { handleModalOpen('InvoiceModal') }}>
-                            선택 항목 수정(송장)
+                            선택 항목 송장 수정
                         </button>
                         {/* 일괄 배송 취소 */}
                         <button
@@ -196,7 +193,7 @@ export default function Deli_InquireTable() {
                                 deleteData()
                             }}>
                             {/* 배송 상태 리스트에서 삭제 */}
-                            배송 취소
+                            선택 항목 배송 취소
                         </button>
                     </div>
                     {/* Main - 배송관리 테이블 리스트업 */}
@@ -215,7 +212,6 @@ export default function Deli_InquireTable() {
                                 <th>처리상태</th>
                                 <th>주문일자</th>
                                 <th>상품코드</th>
-                                <th>이미지</th>
                                 <th>상품명</th>
                                 <th>옵션명</th>
                                 <th>표준가</th>
@@ -245,14 +241,14 @@ export default function Deli_InquireTable() {
                                         <td>{item.order_date}</td>
                                         {/* 상품번호 */}
                                         <td>{item.product_id}</td>
-                                        {/* 미니 이미지 */}
-                                        <td>{item.product_image_mini}</td>
                                         {/* 상품명 */}
                                         <td>{item.product_title}</td>
                                         {/* 옵션 상세 - 선택 옵션이 있을 경우만 표시*/}
                                         <td>{item.optionSelected ? item.optionSelected : "-"}</td>
-                                        {/* 가격 */}
-                                        <td>{item.order_payAmount}</td>
+                                        {/* 표준가 */}
+                                        <td>{item.product_price}</td>
+                                        {/* 공급가 */}
+                                        <td>{item.discountPrice}</td>
                                     </tr>
                                 ))}
                         </tbody>
