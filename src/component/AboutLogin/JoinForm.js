@@ -128,7 +128,7 @@ export default function JoinForm(props) {
                         <input
                             className='basic_input'
                             type='password'
-                            placeholder={'비밀번호 재입력(일치 확인)'}
+                            placeholder={'비밀번호 재입력(일치확인)'}
                             name="confirmPassword"
                             value={props.inputData.confirmPassword}
                             onChange={(e) => {
@@ -223,7 +223,7 @@ export default function JoinForm(props) {
                         <input
                             className={styles.phoneNum}
                             type='text'
-                            placeholder={'ex) 010'}
+                            placeholder={'예) 010'}
                             maxLength="3"
                             size="6"
                             name="num1"
@@ -237,7 +237,7 @@ export default function JoinForm(props) {
                         <input
                             className={styles.phoneNum}
                             type='text'
-                            placeholder={'ex) 0101'}
+                            placeholder={'예) 0101'}
                             maxLength="4"
                             size="8"
                             name="num2"
@@ -251,7 +251,7 @@ export default function JoinForm(props) {
                         <input
                             className={styles.phoneNum}
                             type='text'
-                            placeholder={'ex) 1010'}
+                            placeholder={'예) 1010'}
                             maxLength="4"
                             size="8"
                             name="num3"
@@ -367,7 +367,8 @@ export default function JoinForm(props) {
                 </li>
             </ul>
             <br />
-            {/* -----------------------------기업 인증----------------------------- */}
+
+
             {/* -----------------------------기업 인증----------------------------- */}
             <div className={styles.indivisualMembers}>기업인증</div>
 
@@ -380,7 +381,7 @@ export default function JoinForm(props) {
                         <input
                             className='basic_input'
                             type='text'
-                            placeholder='-을 제외하고 입력하시오'
+                            placeholder='예)5898812345'
                             value={props.inputData.corporationData.cor_num}
                             onChange={(e) => {
                                 props.setInputData(
@@ -401,7 +402,7 @@ export default function JoinForm(props) {
                                     ?
                                     <span style={{ color: 'green' }}>인증이 완료되었습니다. 더 이상 수정할 수 없습니다.</span>
                                     :
-                                    <span style={{ color: 'var(--main-red)' }}>기업인증 필수 항목</span>
+                                    <span style={{ color: 'var(--main-red)' }}>기업인증 필수 항목: 하이픈('-')을 생략한 번호를 기입하십시오.</span>
                             }
                         </div>
                     </div>
@@ -413,7 +414,7 @@ export default function JoinForm(props) {
                     <div className={styles.right}>
                         <input
                             type="text"
-                            placeholder="ex)20201225"
+                            placeholder="예)20201206"
                             className="basic_input"
                             value={props.cor_startDate}
                             onChange={(e) => {
@@ -433,7 +434,7 @@ export default function JoinForm(props) {
                                     ?
                                     <span style={{ color: 'green' }}>인증이 완료되었습니다. 더 이상 수정할 수 없습니다.</span>
                                     :
-                                    <span style={{ color: 'var(--main-red)' }}>기업인증 필수 항목</span>
+                                    <span style={{ color: 'var(--main-red)' }}>기업인증 필수 항목: 하이픈('-')을 생략한 번호를 기입하십시오.</span>
                             }
                         </div>
                     </div>
@@ -446,7 +447,7 @@ export default function JoinForm(props) {
                         <input
                             className='basic_input'
                             type='text'
-                            placeholder={'ex)홍길동'}
+                            placeholder={'예)홍길동'}
                             value={props.inputData.corporationData.cor_ceoName}
                             onChange={(e) => {
                                 props.setInputData(prevData => ({
@@ -510,7 +511,7 @@ export default function JoinForm(props) {
                         <input
                             className='basic_input'
                             type='text'
-                            placeholder={'ex) OO전자'}
+                            placeholder={'예) OO전자'}
                             value={props.inputData.corporationData.cor_corName}
                             onChange={(e) => {
                                 props.setInputData(
@@ -534,7 +535,7 @@ export default function JoinForm(props) {
                         <input
                             className={styles.phoneNum}
                             type="text"
-                            placeholder={'ex) 010'}
+                            placeholder={'예) 010'}
                             maxLength="3"
                             size="6"
                             value={props.inputData.corporationData.cor_tel.num1}
@@ -554,7 +555,7 @@ export default function JoinForm(props) {
                         <input
                             className={styles.phoneNum}
                             type='text'
-                            placeholder={'ex) 1234'}
+                            placeholder={'예) 1234'}
                             maxLength="4"
                             size="8"
                             value={props.inputData.corporationData.cor_tel.num2}
@@ -574,7 +575,7 @@ export default function JoinForm(props) {
                         <input
                             className={styles.phoneNum}
                             type='text'
-                            placeholder={'ex) 5678'}
+                            placeholder={'예) 5678'}
                             maxLength="4"
                             size="8"
                             value={props.inputData.corporationData.cor_tel.num3}
@@ -622,7 +623,7 @@ export default function JoinForm(props) {
                         <input
                             className="basic_input"
                             type='text'
-                            placeholder='여마재, 안전용품'
+                            placeholder='예) 연마재, 안전용품'
                             value={props.inputData.corporationData.cor_category}
                             onChange={(e) => props.setInputData(prevData => (
                                 {
@@ -644,7 +645,7 @@ export default function JoinForm(props) {
                         <input
                             className={styles.phoneNum}
                             type='text'
-                            placeholder='ex)052'
+                            placeholder='예)052'
                             maxLength='4'
                             size='8'
                             value={props.inputData.corporationData.cor_fax.fax_num1}
@@ -665,7 +666,7 @@ export default function JoinForm(props) {
                         <input
                             className={styles.phoneNum}
                             type='text'
-                            placeholder='ex)1234'
+                            placeholder='예)1234'
                             maxLength='4'
                             size='8'
                             value={props.inputData.corporationData.cor_fax.fax_num2}
@@ -686,7 +687,7 @@ export default function JoinForm(props) {
                         <input
                             className={styles.phoneNum}
                             type='text'
-                            placeholder='ex)5678'
+                            placeholder='예)5678'
                             maxLength='4'
                             size='8'
                             value={props.inputData.corporationData.cor_fax.fax_num3}
