@@ -51,7 +51,12 @@ export function MenuData(props) {
         {
           item: '세금계산서',
           link: 'outLink',
-        }
+        },
+        {
+          item: '주문/배송 현황',
+          link: '/delivery',
+          require: GetCookie('jwt_token') !== null
+        },
       ],
     },
     {
@@ -77,7 +82,7 @@ export function MenuData(props) {
           item: '장바구니 목록',
           link: '/basket',
           require: GetCookie('jwt_token') !== null
-        },
+        },        
         {
           item: '주문/배송 현황',
           link: '/delivery',

@@ -12,7 +12,7 @@ export function AdminEditDetail() {
   const [isDiscount, setIsDiscount] = useState(false);
   const [isOption, setIsOption] = useState(false);
   const product = useProduct();
-  const {setProduct, resetProduct, setProductOption, editProduct, editOptionProduct} = useProductActions();
+  const {setProduct, resetProduct, setProductOption, editProduct, editOptionProduct, resetProductOption} = useProductActions();
   const [addInputOption, setAddInputOption] = useState(0);
 
   useEffect(() => {
@@ -189,7 +189,10 @@ export function AdminEditDetail() {
                         <span className={isDiscount ? styles.selectedButton : styles.selectButton} onClick={()=>setIsDiscount(true)}>
                           할인 설정
                         </span>
-                        <span className={isDiscount ? styles.selectButton : styles.selectedButton} onClick={()=>setIsDiscount(false)}>
+                        <span className={isDiscount ? styles.selectButton : styles.selectedButton} onClick={()=>{
+                          setIsDiscount(false)
+                          setProduct("product_discount", 0);
+                          }}>
                           설정 안함
                         </span>
                       </div>
@@ -258,7 +261,11 @@ export function AdminEditDetail() {
                     <span className={isOption ? styles.selectedButton : styles.selectButton} onClick={()=>setIsOption(true)}>
                       옵션 설정
                     </span>
-                    <span className={isOption ? styles.selectButton : styles.selectedButton} onClick={()=>setIsOption(false)}>
+                    <span className={isOption ? styles.selectButton : styles.selectedButton} onClick={()=>{
+                      setIsOption(false);
+                      setAddInputOption(0);
+                      resetProductOption();
+                      }}>
                       설정 안함
                     </span>
                   </div>

@@ -227,12 +227,13 @@ export function AdminCategory(props){
                       {item.product_discount
                       ? `${parseInt(item.product_price)
                       .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
-                      : '0'.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
-                    </td>                    <td style={{fontWeight: '750'}}>
+                      : `${parseInt(item.product_price).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
+                      </td>                    
+                    <td style={{fontWeight: '750'}}>
                     {item.product_discount
                     ? `${(item.product_price - (item.product_price / 100) * item.product_discount)
                       .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
-                    : `${item.product_price.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
+                    : `${parseInt(item.product_price).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
                     </td>
                     <td 
                       className={styles.detailView}

@@ -41,9 +41,8 @@ export function TabInfo({detailData}){
     <div id='1' className="tab-content">
       <div className={styles.reviewHeader}>
       <h3 style={{borderBottom: '3px solid #cc0000', marginBottom: '1em'}}>상품 설명</h3>
-        <p>
-          {detailData.product_content}
-        </p>
+      {/* HTML 구문 표기 */}
+        <div dangerouslySetInnerHTML={{ __html: detailData.product_content }}/>
       </div>
     </div>
 

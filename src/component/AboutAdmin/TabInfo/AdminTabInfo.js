@@ -16,25 +16,29 @@ export function AdminTabInfo({setMiddleCategory, setLowCategory, setSelectedCate
 
   const [flag, setFlag] = useState(false);
   const [img, setImage] = useState("");
-  const imgLink = "http://localhost:5050/product/upload/"
 
   const customUploadAdapter = (loader) => { // (2)
       return {
           upload(){
               return new Promise ((resolve, reject) => {
                   const data = new FormData();
+                  const url = `http://localhost:5050/`
                   loader.file.then( (file) => {
-                          data.append("name", file.name);
-                          data.append("file", file);
+                          data.append("image", file); // 변경된 부분: "file" -> "image"
 
-                          axios.post('/product/upload', data)
+                          axios.post('/product/upload', data, {
+                            withCredentials: false,
+                            headers: {
+                              'Content-Type': 'multipart/form-data',
+                            }
+                          })
                               .then((res) => {
                                   if(!flag){
                                       setFlag(true);
-                                      setImage(res.data.filename);
-                                  }
+                                      setImage(res.data.imageUrl);
+                                    }
                                   resolve({
-                                      default: `${imgLink}/${res.data.filename}`
+                                      default: `${url}/${res.data.fileName}`
                                   });
                               })
                               .catch((err)=>reject(err));
@@ -168,7 +172,9 @@ export function AdminTabInfo({setMiddleCategory, setLowCategory, setSelectedCate
         {/* 에디터 훅 사용 */}
         <CKEditor
         config={{ // (4)
-          extraPlugins: [uploadPlugin]
+          extraPlugins: [uploadPlugin],
+          baseHref: 'http://localhost:5050/', // CKEditor의 기본 경로 설정
+          extraAllowedContent: 'img[src,alt]', // 추가로 허용되는 콘텐츠
         }}
         editor={ ClassicEditor }
         data={product.product_content}

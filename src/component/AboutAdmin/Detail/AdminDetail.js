@@ -13,14 +13,11 @@ export function AdminDetail() {
   const [isOption, setIsOption] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState({ big: null, medium: null, small: null });
   const product = useProduct();
-  const {setProduct, resetProduct, setProductOption, setProductCategory} = useProductActions();
+  const {setProduct, resetProduct, setProductOption, setProductCategory, resetProductOption} = useProductActions();
   const [addInputOption, setAddInputOption] = useState(0);
   const [middleCategory, setMiddleCategory] = useState([]);
   const [lowCategory, setLowCategory] = useState([]);
   const { isLoading, isError, error, data:categoryData } = useQuery({queryKey:['category']});
-  
-  const navigate = useNavigate();
-  const location = useLocation();
 
   useEffect(() => {
     return () => {
@@ -256,7 +253,10 @@ export function AdminDetail() {
                         <span className={isDiscount ? styles.selectedButton : styles.selectButton} onClick={()=>setIsDiscount(true)}>
                           할인 설정
                         </span>
-                        <span className={isDiscount ? styles.selectButton : styles.selectedButton} onClick={()=>setIsDiscount(false)}>
+                        <span className={isDiscount ? styles.selectButton : styles.selectedButton} onClick={()=>{
+                          setIsDiscount(false)
+                          setProduct("product_discount", 0);
+                          }}>
                           설정 안함
                         </span>
                       </div>
@@ -306,6 +306,7 @@ export function AdminDetail() {
                 <div className={styles.textBox}>
                   {/* 상품 수량 및 옵션, 최종 결제금액 */}
                   <label style={{display:'flex'}}>
+                    <p style={{fontSize: '0.9em', width: '50px', display:'flex', fontWeight:'650', marginRight: '0.5em'}}>재고</p>
                       <input 
                       className={styles.input} 
                       type='text' 
@@ -324,7 +325,11 @@ export function AdminDetail() {
                     <span className={isOption ? styles.selectedButton : styles.selectButton} onClick={()=>setIsOption(true)}>
                       옵션 설정
                     </span>
-                    <span className={isOption ? styles.selectButton : styles.selectedButton} onClick={()=>setIsOption(false)}>
+                    <span className={isOption ? styles.selectButton : styles.selectedButton} onClick={()=>{
+                      setIsOption(false);
+                      setAddInputOption(0);
+                      resetProductOption();
+                      }}>
                       설정 안함
                     </span>
                   </div>
