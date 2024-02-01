@@ -5,13 +5,7 @@ import axios from "../../axios";
 import { useErrorHandling } from "../../customFn/ErrorHandling";
 
 export default function JoinForm(props) {
-    const {handleUnauthorizedError, handleOtherErrors} = useErrorHandling();
-
-    // id 중복 체크
-    const [idDuplicateCheck, setIdDuplicateCheck] = useState(false);
-    const fetchIdDuplicateCheck = (id) => {
-        
-    }
+    const { handleUnauthorizedError, handleOtherErrors } = useErrorHandling();
 
     // 주소입력 API
     const [address, setAddress] = useState("");
@@ -75,54 +69,72 @@ export default function JoinForm(props) {
         }
     };
 
-      //주문 데이터 fetch
-    const fetchDuplicatedData = async(userID) => {
-        try{
-        const response = await axios.post("/auth/duplicate", 
-            JSON.stringify({userId: userID}),
-            {
-            headers : {
-                "Content-Type" : "application/json",
-            }
-            }
-        )
-        return response.data;
+    //주문 데이터 fetch
+    const fetchDuplicatedData = async (userID) => {
+        try {
+            const response = await axios.post("/auth/duplicate",
+                JSON.stringify({ userId: userID }),
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    }
+                }
+            )
+
+            return response.data;
         } catch (error) {
-        // 서버 응답이 실패인 경우
-        if (error.response && error.response.status === 409) {
-            // 서버가 401 UnAuthorazation를 반환한 경우
-            handleUnauthorizedError(error.response.data.message);
-            return new Error(error.response.data.message);
-        } else {
-            handleOtherErrors('예기치 못한 오류가 발생했습니다.');
-            return new Error(error.response.data.message);
+            // 서버 응답이 실패인 경우
+            if (error.response && error.response.status === 409) {
+                // 서버가 401 UnAuthorazation를 반환한 경우
+                handleUnauthorizedError(error.response.data.message);
+                throw new Error(error.response.data.message);
+            } else {
+                handleOtherErrors('예기치 못한 오류가 발생했습니다.');
+                throw new Error(error.response.data.message);
+            }
         }
-    }
     };
 
-    const { mutate:duplicateMutate } = useMutation({mutationFn: fetchDuplicatedData})
+    // 아이디 중복체크 API
+    const { mutate: duplicateMutate } = useMutation({ mutationFn: fetchDuplicatedData })
+    function handleIsDuplicateId(id) {
+        if (isIdRegexValid) {
+            duplicateMutate(id, {
+                onSuccess: (success) => {
+                    setIdDuplicateCheck(true);
+                    console.log("중복체크 완료.", success);
+                    alert(success.message);
+                },
+                onError: (error) => {
+                    setIdDuplicateCheck(false);
+                    console.error(error);
+                },
+            });
+        } else {
+            alert("조건에 부합하지 않는 아이디입니다.");
+        }
+    }
 
+    // 아이디 중복체크
+    const [idDuplicateCheck, setIdDuplicateCheck] = useState(false);
+    // 아이디가 8글자 이상 20글자 미만인지를 확인하는 정규 표현식
+    const userIdRegex = /^.{8,19}$/;
+    // 정규 표현식에 부합하는지 확인
+    const isIdRegexValid = userIdRegex.test(props.inputData.userId);
 
     //비밀번호, 비빈번호 재입력 일치유무 체크
-    let confirmPassword = props.inputData.userPassword == props.inputData.confirmPassword;
-
-    function handleIsDuplicateId(id){
-              // 재고 상태 수량만큼 감소
-        duplicateMutate(id, {
-        onSuccess: (success) => {
-            console.log("중복체크 완료.", success);
-            alert(success.message);
-        },
-        onError: (error) => {
-            console.error('상품을 재고 변경 처리를 수행하던 중 오류가 발생했습니다.', error);
-        },
-        });
-    }
+    let isPwEqual = props.inputData.userPassword == props.inputData.confirmPassword;
+    // 비밀번호 형식 검증을 위한 정규 표현식 (영문자, 특수문자 중 하나 포함하고 8글자~30글자 사이만 허용한다는 정규표현식 조건)
+    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_`])[A-Za-z\d\W_`]{8,30}$/;
+    // 비밀번호가 정규 표현식에 부합하는지 확인
+    const isPasswordRegexValid = passwordRegex.test(props.inputData.userPassword);
+    // 비밀번호 길이와 형식이 모두 조건에 부합하는지 확인
+    const isPasswordValid = isPwEqual && isPasswordRegexValid;
 
     return (
         <div>
             {/* 회원정보를 입력해주세요! */}
-            <strong className={styles.noti}>환영합니다! 회원정보를 입력해주세요!</strong>
+            <strong style={{ fontSize: '20px', fontWeight: 'bold', color: '#CC0000' }}>환영합니다! 회원정보를 입력해주세요!</strong>
 
             {/* 회원정보 입력란 */}
             <ul className={styles.inputWrap}>
@@ -131,7 +143,7 @@ export default function JoinForm(props) {
                 {/* 아이디 */}
                 <li className={styles.inputContainer}>
                     <div className={styles.left}>아이디</div>
-                    <div style={{gap: '0.5em'}} className={styles.right}>
+                    <div style={{ gap: '0.5em' }} className={styles.right}>
                         <input
                             className='basic_input'
                             type='text'
@@ -149,12 +161,13 @@ export default function JoinForm(props) {
                             <button className='original_button' onClick={() => handleIsDuplicateId(props.inputData.userId)}>중복체크</button>
                             {/* 안내 문구 */}
                             {
-                                idDuplicateCheck
+                                isIdRegexValid
                                     ?
-                                    <span style={{ color: 'green', marginLeft: '10px' }}>인증이 완료되었습니다. 더 이상 수정할 수 없습니다.</span>
+                                    <span style={{ color: 'green', marginLeft: '10px' }}>조건에 부합합니다.</span>
                                     :
-                                    <span style={{ color: 'var(--main-red)', marginLeft: '10px' }}><i class="fa-solid fa-arrow-left"></i>중복 체크를 진행해야 합니다.</span>
+                                    <span style={{ color: 'var(--main-red)', marginLeft: '10px' }}>8글자 이상 20글자 미만의 아이디를 입력해주세요!</span>
                             }
+
                         </div>
                     </div>
                 </li>
@@ -177,7 +190,13 @@ export default function JoinForm(props) {
                                 )
                             }}
                         />
-                        <div className={styles.notification}>영문 및 특수문자, 숫자 조합의 8자리 이상 입력해주시기 바랍니다.</div>
+                        <div className={styles.notification}>
+                            {isPasswordRegexValid ? (
+                                <span style={{ color: 'green' }}>조건에 부합합니다.</span>
+                            ) : (
+                                <span style={{ color: 'var(--main-red)' }}>영문 및 특수문자, 숫자 조합의 8자리 이상 입력해주시기 바랍니다.</span>
+                            )}
+                        </div>
                     </div>
                 </li>
 
@@ -197,12 +216,16 @@ export default function JoinForm(props) {
                                 )
                             }}
                         />
-                        <div className={styles.notification}>비밀번호 확인을 위해 다시 한 번 입력해주십시오.</div>
+                        <div className={styles.notification}>
+                            {isPasswordValid ? (
+                                <span style={{ color: 'green' }}>비밀번호가 일치합니다.</span>
+                            ) : (
+                                <span style={{ color: 'var(--main-red)' }}>비밀번호가 일치하지 않습니다.</span>
+                            )}
+                        </div>
                     </div>
                 </li>
-                {confirmPassword ? null : <div className={styles.errorMessage}>
-                    비밀번호가 일치하지 않습니다!
-                </div>}
+
 
                 {/* 이메일 */}
                 <li className={styles.inputContainer}>
@@ -258,7 +281,7 @@ export default function JoinForm(props) {
 
                 {/* 이름 */}
                 <li className={styles.inputContainer}>
-                    <div className={styles.left}>이름</div>
+                    <div className={styles.left}>담당자명</div>
                     <div className={styles.right}>
                         <input
                             className='basic_input'
@@ -276,9 +299,9 @@ export default function JoinForm(props) {
                     </div>
                 </li>
 
-                {/* 휴대폰 번호 */}
+                {/* 담당자 연락처 */}
                 <li className={styles.inputContainer}>
-                    <div className={styles.left}>휴대폰 번호</div>
+                    <div className={styles.left}>담당자 연락처</div>
                     <div className={styles.right}>
                         <input
                             className={styles.phoneNum}

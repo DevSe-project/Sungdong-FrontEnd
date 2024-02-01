@@ -1,10 +1,16 @@
-.body{
+.body {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     min-width: fit-content;
+}
+
+.notification {
+    display: flex;
+    align-items: center;
+    vertical-align:middle;
 }
 
 label {
@@ -14,12 +20,6 @@ label {
 .inputWrap {
     display: flex;
     flex-direction: column;
-}
-
-.noti {
-    font-size: 20px;
-    font-weight: bold;
-    color: green;
 }
 
 .indivisualMembers {
@@ -149,7 +149,7 @@ label {
 }
 
 .logo {
-    cursor : pointer;
+    cursor: pointer;
     justify-content: left;
     align-items: center;
 }
@@ -161,7 +161,7 @@ label {
     font-weight: bold;
 }
 
-.policyContainer{
+.policyContainer {
     justify-content: center;
     align-items: center;
     border-top: 1px solid gray;
@@ -209,8 +209,9 @@ label {
     border-radius: 1dvb;
     width: 470px;
     max-height: 10vh;
-    overflow-y:scroll; /* 스크롤 생성 */
-    background-color:F3F3F3;
+    overflow-y: scroll;
+    /* 스크롤 생성 */
+    background-color: F3F3F3;
 }
 
 .policyDetail_null {
@@ -259,8 +260,8 @@ label {
 }
 
 .disabled {
-color: darkgray;
-border-left: 2px solid gray;
-border-right: 2px solid gray;
-cursor: not-allowed;
+    color: darkgray;
+    border-left: 2px solid gray;
+    border-right: 2px solid gray;
+    cursor: not-allowed;
 }
