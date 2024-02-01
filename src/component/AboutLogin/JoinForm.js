@@ -6,6 +6,13 @@ import { useErrorHandling } from "../../customFn/ErrorHandling";
 
 export default function JoinForm(props) {
     const {handleUnauthorizedError, handleOtherErrors} = useErrorHandling();
+
+    // id 중복 체크
+    const [idDuplicateCheck, setIdDuplicateCheck] = useState(false);
+    const fetchIdDuplicateCheck = (id) => {
+        
+    }
+
     // 주소입력 API
     const [address, setAddress] = useState("");
     const openPopup = (setAddress) => {
@@ -137,8 +144,18 @@ export default function JoinForm(props) {
                                 )
                             }}
                         />
-                        <button className="original_button" onClick={()=> handleIsDuplicateId(props.inputData.userId)}>중복체크</button>
-                        <div className={styles.notification}> ?~??자리의 영문,숫자를 입력해주십시오.</div>
+                        <div className={styles.notification}>
+                            {/* 중복 체크 */}
+                            <button className='original_button' onClick={() => handleIsDuplicateId(props.inputData.userId)}>중복체크</button>
+                            {/* 안내 문구 */}
+                            {
+                                idDuplicateCheck
+                                    ?
+                                    <span style={{ color: 'green', marginLeft: '10px' }}>인증이 완료되었습니다. 더 이상 수정할 수 없습니다.</span>
+                                    :
+                                    <span style={{ color: 'var(--main-red)', marginLeft: '10px' }}><i class="fa-solid fa-arrow-left"></i>중복 체크를 진행해야 합니다.</span>
+                            }
+                        </div>
                     </div>
                 </li>
                 <div className={styles.warnningMessage}>
@@ -440,6 +457,7 @@ export default function JoinForm(props) {
                             disabled={apiResponse.valid_cnt}
                         />
                         <div className={styles.notification}>
+                            {/* 안내 문구 */}
                             {
                                 apiResponse.valid_cnt
                                     ?
@@ -472,6 +490,7 @@ export default function JoinForm(props) {
                             disabled={apiResponse.valid_cnt}
                         />
                         <div className={styles.notification}>
+                            {/* 안내 문구 */}
                             {
                                 apiResponse.valid_cnt
                                     ?
@@ -504,6 +523,7 @@ export default function JoinForm(props) {
                             disabled={apiResponse.valid_cnt}
                         />
                         <div className={styles.notification}>
+                            {/* 안내 문구 */}
                             {
                                 apiResponse.valid_cnt
                                     ?
@@ -519,16 +539,16 @@ export default function JoinForm(props) {
             <div>
                 <div style={{ display: 'flex', margin: '10px 20px 10px 20px', alignItems: 'center', gap: '16px' }}>
                     {/* 인증버튼 */}
-                    <button 
-                    style={{width: '10em'}}
-                    className='original_button' onClick={() => {
-                        callCheckCorInfoApi(
-                            props.inputData.corporationData.cor_num,
-                            props.inputData.corporationData.cor_startDate,
-                            props.inputData.corporationData.cor_ceoName,
-                        );
-                    }
-                    }>기업정보 인증</button>
+                    <button
+                        style={{ width: '10em' }}
+                        className='original_button' onClick={() => {
+                            callCheckCorInfoApi(
+                                props.inputData.corporationData.cor_num,
+                                props.inputData.corporationData.cor_startDate,
+                                props.inputData.corporationData.cor_ceoName,
+                            );
+                        }
+                        }>기업정보 인증</button>
                     {/* 확인문구 */}
                     {
                         isCallApi ?
