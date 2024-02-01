@@ -138,9 +138,11 @@ textarea {
   --main-color-heavy: rgb(31, 10, 2);
   --main-color-original: rgb(204, 94, 53);
   --main-color-original-hover: rgb(174, 79, 44);
+  --main-color-original-active: rgb(71, 23, 5);
   --text-hover-color: orangered;
   --main-red: #CC0000;
   --main-red-hover: #fd4a4a;
+  --main-red-active: #550909;
   --list-margin: 0 10px 0px 10px;
   --list-padding: 10px 20px 10px 20px;
 }
@@ -434,6 +436,12 @@ input[type="checkbox"] {
   transition: background-color 0.3s;
 }
 
+.white_button:active {
+  border: 1px solid black;
+  background-color: #969696;
+  transition: background-color 0.3s;
+}
+
 .original_button {
   border: 1px solid lightgray;
   background-color: var(--main-color-original);
@@ -443,7 +451,12 @@ input[type="checkbox"] {
 }
 
 .original_button:hover {
-  background-color: var(--text-hover-color);
+  background-color: var(--main-color-original-hover);
+  transition: background-color 0.3s;
+}
+
+.original_button:active {
+  background-color: var(--main-color-original-active);
   transition: background-color 0.3s;
 }
 
@@ -455,6 +468,11 @@ input[type="checkbox"] {
 
 .red_button:hover {
   background-color: var(--main-red-hover);
+  transition: background-color 0.3s;
+}
+
+.red_button:active {
+  background-color: var(--main-red-active);
   transition: background-color 0.3s;
 }
 
@@ -473,6 +491,12 @@ input[type="checkbox"] {
   transition: background-color 0.3s;
 }
 
+.white_round_button:active {
+  border: 1px solid black;
+  background-color: #969696;
+  transition: background-color 0.3s;
+}
+
 .original_round_button {
   border: 1px solid lightgray;
   border-radius: 1vh;
@@ -483,19 +507,29 @@ input[type="checkbox"] {
 }
 
 .original_round_button:hover {
-  background-color: var(--text-hover-color);
+  background-color: var(--main-color-original-hover);
+  transition: background-color 0.3s;
+}
+
+.original_round_button:active {
+  background-color: var(--main-color-original-active);
   transition: background-color 0.3s;
 }
 
 .red_round_button {
   border: 1px solid lightgray;
   border-radius: 1vh;
-  background-color: var(--main-red-hover);
+  background-color: var(--main-red);
   padding: 5px 20px
 }
 
 .red_round_button:hover {
   background-color: var(--main-red-hover);
+  transition: background-color 0.3s;
+}
+
+.red_round_button:active {
+  background-color: var(--main-red-active);
   transition: background-color 0.3s;
 }
 
