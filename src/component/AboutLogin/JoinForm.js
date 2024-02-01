@@ -108,6 +108,7 @@ export default function JoinForm(props) {
                 onError: (error) => {
                     setIdDuplicateCheck(false);
                     console.error(error);
+                    alert(error);
                 },
             });
         } else {
@@ -115,12 +116,13 @@ export default function JoinForm(props) {
         }
     }
 
-    // 아이디 중복체크
+    // 아이디 중복체크 및 정규 표현식에 부합하는지 확인
     const [idDuplicateCheck, setIdDuplicateCheck] = useState(false);
+    const [isIdRegexValid, setIsIdRegexValid] = useState(true); // 초기값을 true로 설정(초기에는 경고문구가 안뜨도록)
+    const [isIdChanged, setIsIdChanged] = useState(false); // 아이디가 변경되었는지 여부를 추적하는 상태
+
     // 아이디가 8글자 이상 20글자 미만인지를 확인하는 정규 표현식
     const userIdRegex = /^.{8,19}$/;
-    // 정규 표현식에 부합하는지 확인
-    const isIdRegexValid = userIdRegex.test(props.inputData.userId);
 
     //비밀번호, 비빈번호 재입력 일치유무 체크
     let isPwEqual = props.inputData.userPassword == props.inputData.confirmPassword;
@@ -130,6 +132,9 @@ export default function JoinForm(props) {
     const isPasswordRegexValid = passwordRegex.test(props.inputData.userPassword);
     // 비밀번호 길이와 형식이 모두 조건에 부합하는지 확인
     const isPasswordValid = isPwEqual && isPasswordRegexValid;
+
+    // 이메일 정규 표현식
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     return (
         <div>
@@ -151,26 +156,28 @@ export default function JoinForm(props) {
                             name="id"
                             value={props.inputData.userId}
                             onChange={(e) => {
-                                props.setInputData(
-                                    (prevData) => ({ ...prevData, userId: e.target.value })
-                                )
+                                const newId = e.target.value;
+                                // 아이디가 변경되었음을 표시
+                                setIsIdChanged(true);
+                                // 아이디 변경 시 중복 체크 상태 초기화
+                                setIdDuplicateCheck(false);
+                                // 아이디가 정규 표현식에 부합하는지 확인하여 상태 업데이트
+                                setIsIdRegexValid(userIdRegex.test(newId));
+                                // 아이디 상태 업데이트
+                                props.setInputData(prevData => ({ ...prevData, userId: newId }));
                             }}
+                            style={{ backgroundColor: isIdRegexValid && idDuplicateCheck ? 'rgb(240, 255, 230)' : '' }}
                         />
                         <div className={styles.notification}>
                             {/* 중복 체크 */}
                             <button className='original_button' onClick={() => handleIsDuplicateId(props.inputData.userId)}>중복체크</button>
-                            {/* 안내 문구 */}
-                            {
-                                isIdRegexValid
-                                    ?
-                                    <span style={{ color: 'green', marginLeft: '10px' }}>조건에 부합합니다.</span>
-                                    :
-                                    <span style={{ color: 'var(--main-red)', marginLeft: '10px' }}>8글자 이상 20글자 미만의 아이디를 입력해주세요!</span>
-                            }
-
+                            {/* 경고 문구 */}
+                            {isIdChanged && !idDuplicateCheck && <span style={{ color: 'var(--main-red)', marginLeft: '10px' }}>중복 체크를 해야 합니다.</span>}
+                            {!isIdRegexValid && <span style={{ color: 'var(--main-red)', marginLeft: '10px' }}>아이디는 8~20글자여야 합니다.</span>}
                         </div>
                     </div>
                 </li>
+
                 <div className={styles.warnningMessage}>
                 </div>
 
@@ -189,13 +196,10 @@ export default function JoinForm(props) {
                                     (prevData) => ({ ...prevData, userPassword: e.target.value })
                                 )
                             }}
+                            style={{ backgroundColor: isPasswordRegexValid ? 'rgb(240, 255, 230)' : '' }}
                         />
                         <div className={styles.notification}>
-                            {isPasswordRegexValid ? (
-                                <span style={{ color: 'green' }}>조건에 부합합니다.</span>
-                            ) : (
-                                <span style={{ color: 'var(--main-red)' }}>영문 및 특수문자, 숫자 조합의 8자리 이상 입력해주시기 바랍니다.</span>
-                            )}
+                            {isPasswordRegexValid ? '' : <span style={{ color: 'var(--main-red)' }}>영문 및 특수문자, 숫자 조합의 8자리 이상 입력해주시기 바랍니다.</span>}
                         </div>
                     </div>
                 </li>
@@ -215,13 +219,10 @@ export default function JoinForm(props) {
                                     (prevData) => ({ ...prevData, confirmPassword: e.target.value })
                                 )
                             }}
+                            style={{ backgroundColor: isPasswordValid ? 'rgb(240, 255, 230)' : '' }}
                         />
                         <div className={styles.notification}>
-                            {isPasswordValid ? (
-                                <span style={{ color: 'green' }}>비밀번호가 일치합니다.</span>
-                            ) : (
-                                <span style={{ color: 'var(--main-red)' }}>비밀번호가 일치하지 않습니다.</span>
-                            )}
+                            {isPasswordValid ? null : <span style={{ color: 'var(--main-red)' }}>비밀번호가 일치하지 않습니다.</span>}
                         </div>
                     </div>
                 </li>
@@ -242,8 +243,12 @@ export default function JoinForm(props) {
                                     (prevData) => ({ ...prevData, email: e.target.value })
                                 )
                             }}
+                            style={{ backgroundColor: emailRegex.test(props.inputData.email) ? 'rgb(240, 255, 230)' : '' }}
                         />
                         <div className={styles.notification}>
+                            {emailRegex.test(props.inputData.email) ? null : (
+                                <span style={{ color: 'var(--main-red)' }}>올바른 이메일 형식이 아닙니다.</span>
+                            )}
                             <strong>이메일 서비스를 받으시겠습니까?</strong>
                             <div className={styles.YesNo}>
                                 <input
@@ -278,6 +283,8 @@ export default function JoinForm(props) {
                         </div>
                     </div>
                 </li>
+
+
 
                 {/* 이름 */}
                 <li className={styles.inputContainer}>
