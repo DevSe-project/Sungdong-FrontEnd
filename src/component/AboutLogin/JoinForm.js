@@ -1,8 +1,11 @@
 import { useState } from "react";
 import styles from './RelativeJoin.module.css';
+import { QueryClient, useMutation } from "@tanstack/react-query";
+import axios from "../../axios";
+import { useErrorHandling } from "../../customFn/ErrorHandling";
 
 export default function JoinForm(props) {
-
+    const {handleUnauthorizedError, handleOtherErrors} = useErrorHandling();
     // 주소입력 API
     const [address, setAddress] = useState("");
     const openPopup = (setAddress) => {
@@ -65,10 +68,49 @@ export default function JoinForm(props) {
         }
     };
 
+      //주문 데이터 fetch
+    const fetchDuplicatedData = async(userID) => {
+        try{
+        const response = await axios.post("/auth/duplicate", 
+            JSON.stringify({userId: userID}),
+            {
+            headers : {
+                "Content-Type" : "application/json",
+            }
+            }
+        )
+        return response.data;
+        } catch (error) {
+        // 서버 응답이 실패인 경우
+        if (error.response && error.response.status === 409) {
+            // 서버가 401 UnAuthorazation를 반환한 경우
+            handleUnauthorizedError(error.response.data.message);
+            return new Error(error.response.data.message);
+        } else {
+            handleOtherErrors('예기치 못한 오류가 발생했습니다.');
+            return new Error(error.response.data.message);
+        }
+    }
+    };
+
+    const { mutate:duplicateMutate } = useMutation({mutationFn: fetchDuplicatedData})
 
 
     //비밀번호, 비빈번호 재입력 일치유무 체크
     let confirmPassword = props.inputData.userPassword == props.inputData.confirmPassword;
+
+    function handleIsDuplicateId(id){
+              // 재고 상태 수량만큼 감소
+        duplicateMutate(id, {
+        onSuccess: (success) => {
+            console.log("중복체크 완료.", success);
+            alert(success.message);
+        },
+        onError: (error) => {
+            console.error('상품을 재고 변경 처리를 수행하던 중 오류가 발생했습니다.', error);
+        },
+        });
+    }
 
     return (
         <div>
@@ -82,7 +124,7 @@ export default function JoinForm(props) {
                 {/* 아이디 */}
                 <li className={styles.inputContainer}>
                     <div className={styles.left}>아이디</div>
-                    <div className={styles.right}>
+                    <div style={{gap: '0.5em'}} className={styles.right}>
                         <input
                             className='basic_input'
                             type='text'
@@ -95,6 +137,7 @@ export default function JoinForm(props) {
                                 )
                             }}
                         />
+                        <button className="original_button" onClick={()=> handleIsDuplicateId(props.inputData.userId)}>중복체크</button>
                         <div className={styles.notification}> ?~??자리의 영문,숫자를 입력해주십시오.</div>
                     </div>
                 </li>
