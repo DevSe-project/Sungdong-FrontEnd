@@ -1,6 +1,5 @@
 import { useState } from "react";
 import styles from './RelativeJoin.module.css';
-import { QueryClient } from "@tanstack/react-query";
 
 export default function JoinForm(props) {
 
@@ -70,14 +69,6 @@ export default function JoinForm(props) {
 
     //비밀번호, 비빈번호 재입력 일치유무 체크
     let confirmPassword = props.inputData.userPassword == props.inputData.confirmPassword;
-
-    // 기업 정보
-    const CorData = () => {
-        return (
-            <>
-            </>
-        )
-    }
 
     return (
         <div>
