@@ -145,7 +145,7 @@ label {
 }
 
 .errorMessage {
-    color: #FF3333;
+    color: var(--main-red);
 }
 
 .logo {

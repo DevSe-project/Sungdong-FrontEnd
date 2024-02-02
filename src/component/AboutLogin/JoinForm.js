@@ -116,13 +116,15 @@ export default function JoinForm(props) {
         }
     }
 
+    // 입력이 시작됐는지 추적
+    const [isRegexValid, setIsRegexValid] = useState(false);
+
     // 아이디 중복체크 및 정규 표현식에 부합하는지 확인
     const [idDuplicateCheck, setIdDuplicateCheck] = useState(false);
+    const userIdRegex = /^.{8,19}$/; // 아이디가 8글자 이상 20글자 미만인지를 확인하는 정규 표현식
     const [isIdRegexValid, setIsIdRegexValid] = useState(true); // 초기값을 true로 설정(초기에는 경고문구가 안뜨도록)
     const [isIdChanged, setIsIdChanged] = useState(false); // 아이디가 변경되었는지 여부를 추적하는 상태
 
-    // 아이디가 8글자 이상 20글자 미만인지를 확인하는 정규 표현식
-    const userIdRegex = /^.{8,19}$/;
 
     //비밀번호, 비빈번호 재입력 일치유무 체크
     let isPwEqual = props.inputData.userPassword == props.inputData.confirmPassword;
@@ -135,6 +137,13 @@ export default function JoinForm(props) {
 
     // 이메일 정규 표현식
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    // 이름 정규표현식
+    const nameRegex = /^[a-zA-Z가-힣]{2,30}$/;
+
+    // 기타Input 정규표현식
+    const customRegex = /^[a-zA-Z가-힣\s()]{1,50}$/;
+
 
     return (
         <div>
@@ -199,7 +208,7 @@ export default function JoinForm(props) {
                             style={{ backgroundColor: isPasswordRegexValid ? 'rgb(240, 255, 230)' : '' }}
                         />
                         <div className={styles.notification}>
-                            {isPasswordRegexValid ? '' : <span style={{ color: 'var(--main-red)' }}>영문 및 특수문자, 숫자 조합의 8자리 이상 입력해주시기 바랍니다.</span>}
+                            {isPasswordRegexValid ? '' : <span className={styles.errorMessage}>영문 및 특수문자, 숫자 조합의 8자리 이상 입력해주시기 바랍니다.</span>}
                         </div>
                     </div>
                 </li>
@@ -222,7 +231,7 @@ export default function JoinForm(props) {
                             style={{ backgroundColor: isPasswordValid ? 'rgb(240, 255, 230)' : '' }}
                         />
                         <div className={styles.notification}>
-                            {isPasswordValid ? null : <span style={{ color: 'var(--main-red)' }}>비밀번호가 일치하지 않습니다.</span>}
+                            {isPasswordValid ? null : <span className={styles.errorMessage}>비밀번호가 일치하지 않습니다.</span>}
                         </div>
                     </div>
                 </li>
@@ -247,7 +256,7 @@ export default function JoinForm(props) {
                         />
                         <div className={styles.notification}>
                             {emailRegex.test(props.inputData.email) ? null : (
-                                <span style={{ color: 'var(--main-red)' }}>올바른 이메일 형식이 아닙니다.</span>
+                                <span className={styles.errorMessage}>올바른 이메일 형식이 아닙니다.</span>
                             )}
                             <strong>이메일 서비스를 받으시겠습니까?</strong>
                             <div className={styles.YesNo}>
@@ -301,8 +310,11 @@ export default function JoinForm(props) {
                                     (prevData) => ({ ...prevData, name: e.target.value })
                                 )
                             }}
+                            style={{ backgroundColor: nameRegex.test(props.inputData.name) ? 'rgb(240, 255, 230)' : '' }}
                         />
-                        <div className={styles.notification}>실명을 입력해주세요</div>
+                        <div className={styles.notification}>
+                            {nameRegex.test(props.inputData.name) ? '' : <span className={styles.errorMessage}>올바르지 않은 이름입니다.</span>}
+                        </div>
                     </div>
                 </li>
 
@@ -485,6 +497,7 @@ export default function JoinForm(props) {
                                 )
                             }}
                             disabled={apiResponse.valid_cnt}
+                            style={{ backgroundColor: apiResponse.valid_cnt ? 'rgb(240, 255, 230)' : '' }}
                         />
                         <div className={styles.notification}>
                             {/* 안내 문구 */}
@@ -493,7 +506,7 @@ export default function JoinForm(props) {
                                     ?
                                     <span style={{ color: 'green' }}>인증이 완료되었습니다. 더 이상 수정할 수 없습니다.</span>
                                     :
-                                    <span style={{ color: 'var(--main-red)' }}>기업인증 필수 항목: 하이픈('-')을 생략한 번호를 기입하십시오.</span>
+                                    <span className={styles.errorMessage}>기업인증 필수 항목: 하이픈('-')을 생략한 번호를 기입하십시오.</span>
                             }
                         </div>
                     </div>
@@ -518,6 +531,7 @@ export default function JoinForm(props) {
                                 }))
                             }}
                             disabled={apiResponse.valid_cnt}
+                            style={{ backgroundColor: apiResponse.valid_cnt ? 'rgb(240, 255, 230)' : '' }}
                         />
                         <div className={styles.notification}>
                             {/* 안내 문구 */}
@@ -526,7 +540,7 @@ export default function JoinForm(props) {
                                     ?
                                     <span style={{ color: 'green' }}>인증이 완료되었습니다. 더 이상 수정할 수 없습니다.</span>
                                     :
-                                    <span style={{ color: 'var(--main-red)' }}>기업인증 필수 항목: 하이픈('-')을 생략한 번호를 기입하십시오.</span>
+                                    <span className={styles.errorMessage}>기업인증 필수 항목: 하이픈('-')을 생략한 번호를 기입하십시오.</span>
                             }
                         </div>
                     </div>
@@ -551,6 +565,7 @@ export default function JoinForm(props) {
                                 }))
                             }}
                             disabled={apiResponse.valid_cnt}
+                            style={{ backgroundColor: apiResponse.valid_cnt ? 'rgb(240, 255, 230)' : '' }}
                         />
                         <div className={styles.notification}>
                             {/* 안내 문구 */}
@@ -559,7 +574,7 @@ export default function JoinForm(props) {
                                     ?
                                     <span style={{ color: 'green' }}>인증이 완료되었습니다. 더 이상 수정할 수 없습니다.</span>
                                     :
-                                    <span style={{ color: 'var(--main-red)' }}>기업인증 필수 항목</span>
+                                    <span className={styles.errorMessage}>기업인증 필수 항목</span>
                             }
                         </div>
                     </div>
@@ -617,6 +632,7 @@ export default function JoinForm(props) {
                                     })
                                 )
                             }}
+                            style={{ backgroundColor: customRegex.test(props.inputData.corporationData.cor_corName) ? 'rgb(240, 255, 230)' : '' }}
                         />
                     </div>
                 </li>
@@ -706,6 +722,7 @@ export default function JoinForm(props) {
                                     }
                                 }
                             ))}
+                            style={{ backgroundColor: customRegex.test(props.inputData.corporationData.cor_sector) ? 'rgb(240, 255, 230)' : '' }}
                         />
                     </div>
                 </li>
@@ -727,6 +744,7 @@ export default function JoinForm(props) {
                                     }
                                 }
                             ))}
+                            style={{ backgroundColor: customRegex.test(props.inputData.corporationData.cor_category) ? 'rgb(240, 255, 230)' : '' }}
                         />
                     </div>
                 </li>
