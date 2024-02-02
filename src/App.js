@@ -50,6 +50,7 @@ import { AdminCategoryEdit } from './component/AboutAdmin/Category/AdminCategory
 import { AdminSoldList } from './component/AboutAdmin/Sold/AdminSoldList';
 import { AdminNotSoldList } from './component/AboutAdmin/Sold/AdminNotSoldList';
 import { AdminRefund } from './component/AboutAdmin/Refund/AdminRefund';
+import AdminUserList from './component/AboutAdmin/Users/AdminUserList';
 import AdminNotice from './component/AboutAdmin/Notice/AdminNotice';
 import DeliveryManagement from "./component/AboutAdmin/SD_Delivery/State_M/DeliveryManagement";
 import TotalCal_Manage from "./component/AboutAdmin/SD_Account/TOTAL/Manage/TotalCal_Manage";
@@ -66,7 +67,6 @@ import { useQuery } from "@tanstack/react-query";
 import { getDocs, collection } from 'firebase/firestore'
 import { AccountBook } from "./component/AboutMyPage/AccountBook/AccountBook";
 import { DepositHistory } from "./component/AboutMyPage/AccountBook/DepositHistory";
-import Manage_Users from "./component/AboutAdmin/Users/Manage_Users";
 import { EstimateBox } from "./component/AboutEstimate/EstimateBox";
 import { EstimateManager } from "./component/AboutEstimate/EstimateManager";
 import { TackBackRequest } from "./component/AboutTakeBack/TakeBackRequest";
@@ -754,7 +754,7 @@ export default function App() {
         <Route path='/adminMain/customerCenter/notice' element={<AdminNotice />} />
 
         {/* 회원관리 - 고객관리 */}
-        <Route path='/adminMain/user' element={<Manage_Users />} />
+        <Route path='/adminMain/user' element={<AdminUserList />} />
         {/* 회원관리 - 회원가입 코드 관리 */}
         <Route path='/adminMain/printCode' element={<ManageCode />} />
 

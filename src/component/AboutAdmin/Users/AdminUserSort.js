@@ -1,9 +1,8 @@
-// Sort_UserList.js
 import React from 'react';
-import styles from './Sort_UserList.module.css';
+import styles from './AdminUserSort.module.css';
 import { useUserFilterActions, useUserSort } from '../../../Store/DataStore';
 
-const SortUserList = (props) => {
+const AdminUserSort = (props) => {
     const userSort = useUserSort();
     const {setUserSort} = useUserFilterActions();
 
@@ -59,4 +58,4 @@ const SortUserList = (props) => {
     );
 };
 
-export default SortUserList;
+export default AdminUserSort;

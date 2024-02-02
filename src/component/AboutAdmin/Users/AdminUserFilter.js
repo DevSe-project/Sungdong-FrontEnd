@@ -1,8 +1,8 @@
 import React from 'react';
-import styles from './FiterSearch_User.module.css';
+import styles from './AdminUserFilter.module.css';
 import { useUserFilter, useUserFilterActions } from '../../../Store/DataStore';
 
-export default function FilterSearchUser(props) {
+export default function AdminUserFilter(props) {
     const userFilter = useUserFilter();
     const { setUserFilter,resetUserFilter } = useUserFilterActions();
 

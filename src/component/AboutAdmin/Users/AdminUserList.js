@@ -2,13 +2,13 @@ import React, { useState, useMemo } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AdminHeader } from '../Layout/Header/AdminHeader';
 import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
-import SortUserList from '../Users/SortUserList';
-import FilterSearchUser from '../Users/FilterSearchUser';
-import styles from './Manage_Users.module.css';
+import styles from './AdminUserList.module.css';
 import axios from '../../../axios';
 import { useUserFilter, useUserSort } from '../../../Store/DataStore';
+import AdminUserFilter from './AdminUserFilter';
+import AdminUserSort from './AdminUserSort';
 
-export default function Manage_Users() {
+export default function AdminUserList() {
     const userFilter = useUserFilter();
     const queryClient = useQueryClient();
     const userSort = useUserSort();
@@ -150,8 +150,8 @@ export default function Manage_Users() {
                 <AdminMenuData />
                 <div className={styles.mainContainer}>
                     <div className={styles.filtSortContainer}>
-                        <FilterSearchUser onFiltering={onFiltering} />
-                        <SortUserList sortBy={sortBy} onSort={handleSort} />
+                        <AdminUserFilter onFiltering={onFiltering} />
+                        <AdminUserSort sortBy={sortBy} onSort={handleSort} />
                     </div>
 
                     <table style={{marginTop: '10px'}}>
