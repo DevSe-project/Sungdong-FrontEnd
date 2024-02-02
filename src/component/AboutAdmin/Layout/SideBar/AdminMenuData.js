@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from './AdminMenuData.module.css'
-export function AdminMenuData(props){
+export function AdminMenuData(props) {
   const navigate = useNavigate();
   const location = useLocation();
   const [topTab, setTopTab] = useState(null); // 현재 활성화된 탭을 추적
@@ -61,10 +61,10 @@ export function AdminMenuData(props){
         item: '배송 관리',
       },
       subMenuItems: [
-      {
-        item: '배송 상태 관리',
-        link: '/adminMain/SD_Delivery/DeliveryManager',
-      },],
+        {
+          item: '배송 상태 관리',
+          link: '/adminMain/SD_Delivery/DeliveryManager',
+        },],
     },
     {
       id: 3,
@@ -113,33 +113,32 @@ export function AdminMenuData(props){
     sessionStorage.setItem('AdmintabState', JSON.stringify(id));
   }
 
-  //서브메뉴 열림창 변수 초기화
-  const [subMenuStates, setSubMenuStates] = useState([menuData.map(() => false)]);
+  // 서브메뉴 열림창 변수 초기화
+  const [subMenuStates, setSubMenuStates] = useState(menuData.map(() => false));
 
   function toggleSubMenu(index) {
     setSubMenuStates(prevStates => {
-      // 이전 데이터의 index중 선택한 index와 일치하는 항목만 true로 바꾸고 나머지는 false로 하여 한 번에 하나만 열리도록 설정
-      const newSubMenuStates = prevStates.map((state, idx) => idx === index ? ! state : false); 
+      const newSubMenuStates = prevStates.map((state, idx) => idx === index ? !state : false);
       return newSubMenuStates;
-    })
+    });
   }
 
-  return(
+  return (
     <div
-    className={styles.menuLocation}>
-    {/* 메뉴 loop */}
+      className={styles.menuLocation}>
+      {/* 메뉴 loop */}
       {menuData.map((item, index) => (
         <li
           key={index}
           id={item.id}  // data-id 속성을 사용하여 탭의 id를 저장
-          style={{ boxShadow: `0px 2px 4px 1px rgba(0, 0, 0, 0.2)`}}
+          style={{ boxShadow: `0px 2px 4px 1px rgba(0, 0, 0, 0.2)` }}
           className={`admin-menuItem
           menutab-item ${topTab === item.id ? 'active' : ''}`}
-          onClick={() => { 
+          onClick={() => {
             saveTab(item.id)
-            toggleSubMenu(index) 
+            toggleSubMenu(index)
           }}
-          
+
         >
           <span
             className={styles.link}>
@@ -148,7 +147,7 @@ export function AdminMenuData(props){
           {subMenuStates[index] === true &&
             <ul
               className={styles.subMenu}
-              >
+            >
               {item.subMenuItems.map((subMenuItem, subMenuItemindex) => (
                 <li
                   onClick={() => {
