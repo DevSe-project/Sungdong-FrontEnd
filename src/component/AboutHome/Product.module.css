@@ -48,7 +48,7 @@
   display: flex;
   flex-direction: column;
   justify-content: left;
-  align-items: start;
+  align-items: flex-start;
 }
 
 .product_price {
@@ -69,7 +69,7 @@
 .discountSection {
   display: flex;
   flex-direction: column;
-  align-items: start;
+  align-items: flex-start;
   justify-content: flex-start;
   padding-bottom: 1.5em;
   margin-top: -15px;
@@ -77,7 +77,7 @@
 
 .discountSort{
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: center;
   gap: 0.5em;
 }
