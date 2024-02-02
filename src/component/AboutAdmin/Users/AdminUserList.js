@@ -176,7 +176,7 @@ export default function AdminUserList() {
                                     <td>{user.cor_tel}</td>
                                     <td>{user.hasCMS === 1 ? "동의" : "비동의"}</td>
                                     <td>
-                                        <button className={styles.button}
+                                        <button className='original_round_button'
                                             onClick={() => handleDelete(user.id)}>
                                             회원 삭제
                                         </button>

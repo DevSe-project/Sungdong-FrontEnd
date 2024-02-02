@@ -53,7 +53,7 @@ const AdminUserSort = (props) => {
                 ))}
             </div>
 
-            <button className={styles.button} onClick={props.onSort}>정렬하기</button>
+            <button style={{marginTop: '16px'}} className='original_round_button' onClick={props.onSort}>정렬하기</button>
         </div>
     );
 };

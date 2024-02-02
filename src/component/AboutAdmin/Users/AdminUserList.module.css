@@ -12,31 +12,10 @@
     gap: 10px;
     height: max-content;
 }
+
 .FilterSearch_User {
     flex: 50%;
 }
 .Sort_UserList {
     flex: 50%;
-}
-
-.userTable {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-.button {
-    background-color: var(--main-color-original);
-    color: white;
-    border: none;
-    border-radius: 1dvh;
-    padding: 0.5em 1.3em;
-    cursor: pointer;
-    font-size: 18px;
-    transition: background-color 0.3s;
-}
-
-
-.button:hover {
-    background-color: var(--main-color-original-hover);
 }
