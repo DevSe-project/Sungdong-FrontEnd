@@ -160,10 +160,10 @@ export function Delivery(props){
             <div key={key} className={styles.deliveryNowItem}>
               <img className={styles.img} src={product.product_image_original} alt="주문상품"/>
               <div className={styles.deliveryNowInformation}>
-                <span style={{fontWeight: '450'}}>{product.product_title}, {product.order_cnt}개 </span>
-                <span>규격 : {product.product_spec && product.product_spec}</span>
-                <span>옵션 : {product.selectedOption && product.selectedOption}</span>
-                <span style={{fontWeight: '650'}}>{parseInt(product.order_productPrice).toLocaleString()}원</span>
+                <span className={styles.itemTitle}>{product.product_title}, {product.order_cnt}개 </span>
+                <span className={styles.itemOptions}>규격 : {product.product_spec && product.product_spec}</span>
+                <span className={styles.itemOptions}>옵션 : {product.selectedOption && product.selectedOption}</span>
+                <span className={styles.itemTitle}>{parseInt(product.order_productPrice).toLocaleString()}원</span>
               </div>
             </div>
             )}

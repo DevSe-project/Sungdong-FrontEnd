@@ -377,6 +377,7 @@ input[type="checkbox"] {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  flex: 1;
   width: 100%;
   margin-top: 1em;
   gap: 1em;

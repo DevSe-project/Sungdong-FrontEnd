@@ -205,10 +205,10 @@
 .sticky{
   top: 100px;
   position: sticky;
-  z-index: 989;
+  z-index: 999;
   height: 40px;
   margin-bottom: 1em;
-  width: 90%;
+  width: 100%;
 }
 
 /* 스켈레톤 부분 */

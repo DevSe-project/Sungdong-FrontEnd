@@ -11,10 +11,12 @@
 
 /* 큰 박스 틀 */
 .deliveryList{
-  width: 50em;
+  flex: 1;
+  width: 80%;
   border: 1px solid var(--background-color-active);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   padding: 2em;
+  margin: 1em;
   text-align: left;
   border-radius: 1em;
   font-weight: 350;
@@ -42,7 +44,7 @@
 /* 아이템 주문 상태 및 내역 창 */
 .deliveryNow{
   margin-top: 0.5em;
-  width: 80%;
+  width: 100%;
   border: 1px solid lightgray;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   border-radius: 0.6em;
@@ -55,7 +57,7 @@
 .deliveryNowItem{
   display: flex;
   flex-direction: row;
-  align-items: self-start;
+  align-items: start;
   padding: 1em;
   gap: 2em;
 }
@@ -130,6 +132,15 @@
   border: 1px solid gray;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   border-radius: 2em;
+}
+
+.itemTitle{
+  font-size: clamp(0.8em, 1.2vw, 1.3em);
+  font-weight: 650;
+}
+
+.itemOptions{
+  font-size: clamp(0.6em, 1vw, 1em);
 }
 
 /* 스켈레톤 부분 */
