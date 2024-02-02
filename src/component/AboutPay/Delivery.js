@@ -5,71 +5,20 @@ import { useDataActions, useOrderData } from '../../Store/DataStore';
 import axios from '../../axios';
 import { GetCookie } from '../../customFn/GetCookie';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useErrorHandling } from '../../customFn/ErrorHandling';
+import { useFetch } from '../../customFn/useFetch';
 
 export function Delivery(props){
-  const {handleForbiddenError, handleOtherErrors, handleUnauthorizedError} = useErrorHandling();
-
+  const {fetchServer, fetchGetServer}= useFetch();
   const {setDetailData} = useDataActions();
 
   //주문 데이터 fetch 
   const fetchOrderData = async() => {
-    try{
-      const token = GetCookie('jwt_token');
-      const response = await axios.get("/order/list", 
-        {
-          headers : {
-            "Content-Type" : "application/json",
-            'Authorization': `Bearer ${token}`,
-          }
-        }
-      )
-      return response.data;
-    } catch (error) {
-      // 서버 응답이 실패인 경우
-      if (error.response && error.response.status === 401) {
-          // 서버가 401 UnAuthorazation를 반환한 경우
-          handleUnauthorizedError(error.response.data.message);
-          return {};
-      } else if (error.response && error.response.status === 403) {
-          handleForbiddenError(error.response.data.message);
-          return {};
-      } else {
-          handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
-          return {};
-      }
-    }
+    return fetchGetServer('/order/list', 1);
   }
 
   //상품 주문 정보 요청 함수
   const orderRequest = async (order_id) => {
-    try {
-      const token = GetCookie('jwt_token');
-      const response = await axios.post("/order/findSelectOrderList", 
-        JSON.stringify({order_id: order_id}),
-        {
-          headers : {
-            "Content-Type" : "application/json",
-            'Authorization': `Bearer ${token}`,
-          }
-        }
-      )
-      // 성공 시 추가된 상품 정보를 반환합니다.
-      return response.data;
-    } catch (error) {
-      // 실패 시 예외를 throw합니다.
-      if (error.response && error.response.status === 401) {
-        // 서버가 401 UnAuthorazation를 반환한 경우
-        handleUnauthorizedError(error.response.data.message);
-        return {};
-      } else if (error.response && error.response.status === 403) {
-        handleForbiddenError(error.response.data.message);
-        return {};
-      } else {
-        handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
-        return {};
-      }    
-    }
+    return fetchServer(order_id, 'post', '/order/findSelectOrderList', 1);
   };
 
   const { isLoading, isError, error, data:order } = useQuery({queryKey:['order'], queryFn: ()=> fetchOrderData()});
@@ -101,7 +50,10 @@ export function Delivery(props){
 
 
   function detailOrder(item){
-    orderListMutation(item.order_id,{
+    const jsonOrder = {
+      order_id: item.order_id
+    }
+    orderListMutation(jsonOrder,{
       onSuccess: (data) => {
         console.log(data);
         const orderdata = data.data;
@@ -132,7 +84,7 @@ export function Delivery(props){
       이 검색 되었습니다. */}
       </h3>}
       {order ?
-      order.result.map((item, key)=> 
+      order.map((item, key)=> 
       <div key={key} className={styles.deliveryList}>
         <div className={styles.orderDate}>
           <h4 style={{fontWeight: '850'}}>{new Date(item.order_date).toLocaleDateString()} 주문</h4>

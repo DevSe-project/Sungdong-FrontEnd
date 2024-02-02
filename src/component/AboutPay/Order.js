@@ -1,50 +1,21 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './Order.module.css'
 import { useEffect } from 'react';
-import axios from '../../axios';
-import { GetCookie } from '../../customFn/GetCookie';
 import { useQuery } from '@tanstack/react-query';
-import { useListActions, useOrderList } from '../../Store/DataStore';
-import { useErrorHandling } from '../../customFn/ErrorHandling';
+import { useFetch } from '../../customFn/useFetch';
 
 
 export function Order(props){
-  const {handleForbiddenError, handleOtherErrors, handleUnauthorizedError} = useErrorHandling();
-
+  const { fetchGetServer} = useFetch();
   const navigate = useNavigate();
   const location = useLocation();
 
   //주문 데이터 fetch
   const fetchOrderData = async() => {
-    try{
-      const token = GetCookie('jwt_token');
-      const response = await axios.get("/order/findOne", 
-        {
-          headers : {
-            "Content-Type" : "application/json",
-            'Authorization': `Bearer ${token}`,
-          }
-        }
-      )
-      return response.data;
-    } catch (error) {
-      // 서버 응답이 실패인 경우
-      if (error.response && error.response.status === 401) {
-        // 서버가 401 UnAuthorazation를 반환한 경우
-        handleUnauthorizedError(error.response.data.message);
-        return {};
-    } else if (error.response && error.response.status === 403) {
-        handleForbiddenError(error.response.data.message);
-        return {};
-    } else {
-        handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
-        return {};
-    }
-  }
+    return fetchGetServer(`/order/findOne`, 1);
 };
 
   const { isLoading, isError, error, data:orderData } = useQuery({queryKey:['orderDetail'], queryFn: ()=> fetchOrderData()});
-
 
   useEffect(() => {
     if (
@@ -74,71 +45,74 @@ export function Order(props){
     { 
       id : 0, 
       title : '성함', 
-      value : orderData?.data[0].order_name,
+      value : orderData?.order_name,
     },
     { 
       id : 1, 
       title : '전화번호', 
-      value : orderData?.data[0].order_tel,
+      value : orderData?.order_tel,
     },
     { 
       id : 2, 
       title : '주소', 
       value : 
-      `${orderData?.data[0]?.roadAddress} 
-      (${orderData?.data[0]?.bname}, 
-        ${orderData?.data[0]?.buildingName 
-      ? orderData?.data[0]?.buildingName
-      : orderData?.data[0]?.jibunAddress})
-      ${orderData?.data[0]?.addressDetail}` 
+      `${orderData?.roadAddress} 
+      (${orderData?.bname}, 
+        ${orderData?.buildingName 
+      ? orderData?.buildingName
+      : orderData?.jibunAddress})
+      ${orderData?.addressDetail}` 
     },
     { 
       id : 3, 
       title : '배송방식', 
       value : 
-      orderData?.data[0]?.deliveryType &&
-      orderData?.data[0]?.deliveryType === '화물'
+      orderData?.deliveryType &&
+      orderData?.deliveryType === '화물'
 
-      ? orderData?.data[0]?.delivery_selectedCor === 'kr.daesin' 
-      ? `${orderData?.data[0] && orderData?.data[0]?.deliveryType} (배송 업체 : 대신화물)` 
-      : `${orderData?.data[0] && orderData?.data[0]?.deliveryType} (배송 업체 : 경동화물)`
+      ? orderData?.delivery_selectedCor === 'kr.daesin' 
+      ? `${orderData && orderData?.deliveryType} (배송 업체 : 대신화물)` 
+      : `${orderData && orderData?.deliveryType} (배송 업체 : 경동화물)`
 
-      : orderData?.data[0]?.deliveryType === '성동택배'
+      : orderData?.deliveryType === '성동택배'
 
-      ? `${orderData?.data[0]?.deliveryType} 
-      (배송 예정일 : ${orderData?.data[0] && orderData?.data[0]?.delivery_date})`
-      : orderData?.data[0]?.deliveryType
+      ? `${orderData?.deliveryType} 
+      (배송 예정일 : ${orderData && orderData?.delivery_date})`
+      : orderData?.deliveryType
     },
     { 
       id : 4, 
       title : '배송 메세지', 
-      value : orderData?.data[0]?.delivery_message,
+      value : orderData?.delivery_message,
     },
     { 
       id : 5, 
       title : '성동 메세지', 
-      value : orderData?.data[0]?.smtMessage,
+      value : orderData?.smtMessage,
     },
-  ];
+  ]
+
   const payInputValue = [
+
     { 
       id : 0, 
       title : '결제 방법', 
-      value : orderData?.data[0]?.order_payRoute,
+      value : orderData?.order_payRoute,
     },
     {
       id : 1, 
       title : '증빙 서류 발급', 
-      value : orderData?.data[0]?.order_moneyReceipt,
+      value : orderData?.order_moneyReceipt,
     },
     {
       id: 2,
       title : '명세서',
-      value : orderData?.data[0]?.printFax === true 
-      ? `명세서 실물 발부 + 출력 (FAX : ${orderData?.data[0]?.order_faxNum})`
+      value : orderData?.printFax === true 
+      ? `명세서 실물 발부 + 출력 (FAX : ${orderData?.order_faxNum})`
       : `명세서 실물 발부`
     }
-  ]
+  ];
+
   if(isLoading){
     return <p>Loading...</p>
   }

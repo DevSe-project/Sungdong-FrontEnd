@@ -4,13 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import { useDataActions, useDeliveryInfo, useListActions, useOrderActions, useOrderInfo, useOrderList, useUserData } from '../../Store/DataStore';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from '../../axios';
-import { GetCookie } from '../../customFn/GetCookie';
-import { useErrorHandling } from '../../customFn/ErrorHandling';
+import { useFetch } from '../../customFn/useFetch';
 
 
 export function Receipt(props){
   const navigate = useNavigate();
-  const {handleForbiddenError, handleOtherErrors, handleUnauthorizedError} = useErrorHandling();
+  const {fetchServer} = useFetch();
 
   const userData = useUserData();
   const orderList = useOrderList();
@@ -20,67 +19,11 @@ export function Receipt(props){
 
   //주문 목록 추가 요청 함수
   const orderTo = async (orderData) => {
-    try {
-      const token = GetCookie('jwt_token');
-      const response = await axios.post("/order/create", 
-        JSON.stringify(orderData),
-        {
-          headers : {
-            "Content-Type" : "application/json",
-            'Authorization': `Bearer ${token}`,
-          }
-        }
-      )
-      // 성공 시 추가된 상품 정보를 반환합니다.
-      return response.data;
-    } catch (error) {
-      // 서버 응답이 실패인 경우
-      if (error.response && error.response.status === 401) {
-        // 서버가 401 UnAuthorazation를 반환한 경우
-        handleUnauthorizedError(error.response.data.message);
-        throw new Error(error.response.data.message)
-      } else if (error.response && error.response.status === 403) {
-          handleForbiddenError(error.response.data.message);
-          throw new Error(error.response.data.message)
-      } else if(error.response && error.response.status === 400) {
-        handleOtherErrors(error.response.data.message);
-        throw new Error(error.response.data.message)
-      } else {
-          handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
-          throw new Error(error.response.data.message)
-      }
-    }
+    return fetchServer(orderData, 'post', '/order/create', 1);
   };
   //재고 감소 요청
   const lowSupply = async (filteredData) => {
-    try {
-      const response = await axios.put(`/product/supplyLow`, 
-        JSON.stringify(filteredData),
-        {
-          headers : {
-            "Content-Type" : "application/json",
-          }
-        }
-      )
-      // 성공 시 추가된 상품 정보를 반환합니다.
-      return response.data;
-    } catch (error) {
-      // 서버 응답이 실패인 경우
-      if (error.response && error.response.status === 401) {
-        // 서버가 401 UnAuthorazation를 반환한 경우
-        handleUnauthorizedError(error.response.data.message);
-        throw new Error(error.response.data.message)
-      } else if (error.response && error.response.status === 403) {
-          handleForbiddenError(error.response.data.message);
-          throw new Error(error.response.data.message)
-      } else if(error.response && error.response.status === 400) {
-        handleOtherErrors(error.response.data.message);
-        throw new Error(error.response.data.message)
-      } else {
-          handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
-          throw new Error(error.response.data.message)
-      }
-    }
+    return fetchServer(filteredData, 'put', '/product/supplyLow', 1);
   };
 
   const fetchDeletedProducts = async(productId) => {
@@ -95,36 +38,7 @@ export function Receipt(props){
 
     //주문 리스트 요청 함수
     const orderListTo = async (orderData) => {
-      try {
-        const token = GetCookie('jwt_token');
-        const response = await axios.post("/order/findList", 
-          JSON.stringify(orderData),
-          {
-            headers : {
-              "Content-Type" : "application/json",
-              'Authorization': `Bearer ${token}`,
-            }
-          }
-        )
-        // 성공 시 추가된 상품 정보를 반환합니다.
-        return response.data;
-      } catch (error) {
-        // 서버 응답이 실패인 경우
-        if (error.response && error.response.status === 401) {
-          // 서버가 401 UnAuthorazation를 반환한 경우
-          handleUnauthorizedError(error.response.data.message);
-          throw new Error(error.response.data.message)
-        } else if (error.response && error.response.status === 403) {
-            handleForbiddenError(error.response.data.message);
-            throw new Error(error.response.data.message)
-        } else if(error.response && error.response.status === 400) {
-          handleOtherErrors(error.response.data.message);
-          throw new Error(error.response.data.message)
-        } else {
-            handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
-            throw new Error(error.response.data.message)
-        }
-      }
+      return fetchServer(orderData, 'post', '/order/findList', 1);
     };
 
   //데이터 재고 감소 요청 함수

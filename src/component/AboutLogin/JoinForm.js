@@ -1,12 +1,10 @@
 import { useState } from "react";
 import styles from './RelativeJoin.module.css';
 import { QueryClient, useMutation } from "@tanstack/react-query";
-import axios from "../../axios";
-import { useErrorHandling } from "../../customFn/ErrorHandling";
+import { useFetch } from "../../customFn/useFetch";
 
 export default function JoinForm(props) {
-    const { handleUnauthorizedError, handleOtherErrors } = useErrorHandling();
-
+    const fetchServer = useFetch();
     // 주소입력 API
     const [address, setAddress] = useState("");
     const openPopup = (setAddress) => {
@@ -71,28 +69,8 @@ export default function JoinForm(props) {
 
     //주문 데이터 fetch
     const fetchDuplicatedData = async (userID) => {
-        try {
-            const response = await axios.post("/auth/duplicate",
-                JSON.stringify({ userId: userID }),
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                    }
-                }
-            )
-
-            return response.data;
-        } catch (error) {
-            // 서버 응답이 실패인 경우
-            if (error.response && error.response.status === 409) {
-                // 서버가 401 UnAuthorazation를 반환한 경우
-                handleUnauthorizedError(error.response.data.message);
-                throw new Error(error.response.data.message);
-            } else {
-                handleOtherErrors('예기치 못한 오류가 발생했습니다.');
-                throw new Error(error.response.data.message);
-            }
-        }
+        const result = fetchServer(userID, 'post', '/auth/duplicate', 1);
+        return result;
     };
 
     // 아이디 중복체크 API

@@ -3,17 +3,16 @@ import styles from './Modal.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useDataActions, useModal, useModalActions, useUserData } from '../../Store/DataStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from '../../axios';
-import { useErrorHandling } from '../../customFn/ErrorHandling';
+import { useFetch } from '../../customFn/useFetch';
 
 export default function CodeInputModal() {
   const userData = useUserData();
   const { setUserData } = useDataActions();
   const { selectedModalClose, closeModal } = useModalActions();
   const queryClient = useQueryClient();
+  const fetchServer = useFetch();
 
   const navigate = useNavigate();
-  const {handleOtherErrors} = useErrorHandling();
 
   // esc키를 누르면 모달창 닫기.
   useEffect(() => {
@@ -32,32 +31,8 @@ export default function CodeInputModal() {
 
     //코드 데이터 생성 fetch
     const fetchCheckCode = async (inputCode) => {
-      try {
-      const response = await axios.post("/auth/checkCode",
-          JSON.stringify({
-            user_code: inputCode
-          }),
-          {
-            credentials: 'include', // withCredentials: true 와 같은 효과
-            headers: {
-                "Content-Type": "application/json",
-            }
-          }
-      )
-      // 성공 시 추가된 상품 정보를 반환합니다.
-      return response.data;
-  } catch (error) {
-      // 서버 응답이 실패인 경우
-      if (error.response && error.response.status === 400) {
-        // 서버가 400 Bad Request를 반환한 경우
-        alert(error.response.data.message);          
-        return console.error(error.response.data.message);
-        // 서버 응답이 실패인 경우
-      } else {
-          handleOtherErrors('회원 인증을 처리하는 중 오류가 발생했습니다.');
-          return {};
-      }
-  }
+      const result = fetchServer(inputCode, 'post', '/auth/checkCode', 1);
+      return result;
   };
 
   // 인증코드 입력 state
