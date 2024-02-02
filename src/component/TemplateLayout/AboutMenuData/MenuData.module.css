@@ -8,7 +8,6 @@
   position: sticky;
   top: 85px;
   transition: transform 0.5s ease;
-  /* 변환 효과를 부드럽게 적용합니다. */
 }
 
 /* 네비게이션 내부 링크 스타일링 (옵션) */
@@ -21,32 +20,16 @@
   cursor: pointer;
 }
 
-/* .subMenu{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-} */
-
 .subMenu {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  transition: 0.3s ease;
-  /* max-height 속성에 변환 효과를 적용하여 부드러운 슬라이딩을 만듭니다. */
 }
-
-.menu-item.active .subMenu {
-  max-height: 1000px;
-  /* 클릭 시 최대 높이를 설정하여 확장될 수 있도록 합니다. */
-}
-
 
 .sub_item {
   padding: 1em;
-  /* 상하 좌우 padding을 동일하게 설정 */
   width: 100%;
   font-size: large;
   white-space: nowrap;
@@ -55,5 +38,4 @@
 .sub_item:hover {
   background-color: lightgray;
   transition: background-color 0.5s ease;
-  /* 배경색 변화에 대한 부드러운 애니메이션 적용 */
 }
