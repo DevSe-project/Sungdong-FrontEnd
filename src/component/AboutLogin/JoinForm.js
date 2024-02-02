@@ -115,12 +115,45 @@ export default function JoinForm(props) {
 
     // 이메일 정규 표현식
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
     // 이름 정규표현식
     const nameRegex = /^[a-zA-Z가-힣]{2,30}$/;
 
     // 기타Input 정규표현식
     const customRegex = /^[a-zA-Z가-힣\s()]{1,50}$/;
+
+
+    const handleChange = (e, index, num) => {
+        if (num !== undefined) {
+            // 대표번호 입력 필드의 경우
+            const { value } = e.target;
+            // 입력된 값이 숫자인지 확인
+            if (/^\d*$/.test(value)) {
+                // 숫자인 경우만 setState를 사용하여 값을 업데이트합니다.
+                props.setInputData((prevData) => ({
+                    ...prevData,
+                    corporationData: {
+                        ...prevData.corporationData,
+                        cor_tel: {
+                            ...prevData.corporationData.cor_tel,
+                            [num]: value
+                        }
+                    }
+                }));
+            }
+        } else {
+            // 다른 입력 필드의 경우
+            const { value } = e.target;
+            // setState를 사용하여 값을 업데이트합니다.
+            props.setInputData((prevData) => ({
+                ...prevData,
+                corporationData: {
+                    ...prevData.corporationData,
+                    cor_corName: value
+                }
+            }));
+        }
+    };
+
 
 
     return (
@@ -364,12 +397,13 @@ export default function JoinForm(props) {
                                 <input
                                     type="radio"
                                     name="smsService"
-                                    id="SMS_N"
+                                    id="SMS_N" 
                                     value={0}
                                     checked={props.inputData.smsService === 0}
                                     onChange={(e) => {
                                         props.setInputData(
-                                            (prevData) => ({ ...prevData, smsService: 0 })
+                                            (prevData) => 
+                                            ({ ...prevData, smsService: 0 })
                                         )
                                     }}
                                 />
@@ -454,109 +488,38 @@ export default function JoinForm(props) {
 
             {/* 목록 */}
             <ul className={styles.inputWrap}>
-                {/* 사업자등록번호 */}
-                <li className={styles.inputContainer}>
-                    <div className={styles.left}>사업자등록번호</div>
-                    <div className={styles.right}>
-                        <input
-                            className='basic_input'
-                            type='text'
-                            placeholder='예)5898812345'
-                            value={props.inputData.corporationData.cor_num}
-                            onChange={(e) => {
-                                props.setInputData(
-                                    (prevData) => ({
-                                        ...prevData,
-                                        corporationData: {
-                                            ...prevData.corporationData,
-                                            cor_num: e.target.value
-                                        }
-                                    })
-                                )
-                            }}
-                            disabled={apiResponse.valid_cnt}
-                            style={{ backgroundColor: apiResponse.valid_cnt ? 'rgb(240, 255, 230)' : '' }}
-                        />
-                        <div className={styles.notification}>
-                            {/* 안내 문구 */}
-                            {
-                                apiResponse.valid_cnt
-                                    ?
+                {[
+                    { label: '사업자등록번호', placeholder: '예)5898812345', value: props.inputData.corporationData.cor_num, msg: '기업인증 필수 항목: 하이픈(\'-\')을 생략한 번호를 기입하십시오.' },
+                    { label: '개업연월일', placeholder: '예)20201206', value: props.cor_startDate, msg: '기업인증 필수 항목: 하이픈(\'-\')을 생략한 번호를 기입하십시오.' },
+                    { label: '대표명', placeholder: '예)홍길동', value: props.inputData.corporationData.cor_ceoName, msg: '사업자 상의 대표명을 기입해주십시오.' }
+                ].map((item, index) => (
+                    <li key={index} className={styles.inputContainer}>
+                        <div className={styles.left}>{item.label}</div>
+                        <div className={styles.right}>
+                            <input
+                                className='basic_input'
+                                type='text'
+                                placeholder={item.placeholder}
+                                value={item.value}
+                                onChange={(e) => {
+                                    const newData = { ...props.inputData };
+                                    newData.corporationData[item.name] = e.target.value;
+                                    props.setInputData(newData);
+                                }}
+                                disabled={apiResponse.valid_cnt}
+                                style={{ backgroundColor: apiResponse.valid_cnt ? 'rgb(240, 255, 230)' : '' }}
+                            />
+                            <div className={styles.notification}>
+                                {/* 안내 문구 */}
+                                {apiResponse.valid_cnt ? (
                                     <span style={{ color: 'green' }}>인증이 완료되었습니다. 더 이상 수정할 수 없습니다.</span>
-                                    :
-                                    <span className={styles.errorMessage}>기업인증 필수 항목: 하이픈('-')을 생략한 번호를 기입하십시오.</span>
-                            }
+                                ) : (
+                                    <span className={styles.errorMessage}>{item.msg}</span>
+                                )}
+                            </div>
                         </div>
-                    </div>
-                </li>
-
-                {/* 개업연월일 */}
-                <li className={styles.inputContainer}>
-                    <div className={styles.left}>개업연월일</div>
-                    <div className={styles.right}>
-                        <input
-                            type="text"
-                            placeholder="예)20201206"
-                            className="basic_input"
-                            value={props.cor_startDate}
-                            onChange={(e) => {
-                                props.setInputData((prevData) => ({
-                                    ...prevData,
-                                    corporationData: {
-                                        ...prevData.corporationData,
-                                        cor_startDate: e.target.value
-                                    }
-                                }))
-                            }}
-                            disabled={apiResponse.valid_cnt}
-                            style={{ backgroundColor: apiResponse.valid_cnt ? 'rgb(240, 255, 230)' : '' }}
-                        />
-                        <div className={styles.notification}>
-                            {/* 안내 문구 */}
-                            {
-                                apiResponse.valid_cnt
-                                    ?
-                                    <span style={{ color: 'green' }}>인증이 완료되었습니다. 더 이상 수정할 수 없습니다.</span>
-                                    :
-                                    <span className={styles.errorMessage}>기업인증 필수 항목: 하이픈('-')을 생략한 번호를 기입하십시오.</span>
-                            }
-                        </div>
-                    </div>
-                </li>
-
-                {/* 대표명 */}
-                <li className={styles.inputContainer}>
-                    <div className={styles.left}>대표명</div>
-                    <div className={styles.right}>
-                        <input
-                            className='basic_input'
-                            type='text'
-                            placeholder={'예)홍길동'}
-                            value={props.inputData.corporationData.cor_ceoName}
-                            onChange={(e) => {
-                                props.setInputData(prevData => ({
-                                    ...prevData,
-                                    corporationData: {
-                                        ...prevData.corporationData,
-                                        cor_ceoName: e.target.value
-                                    }
-                                }))
-                            }}
-                            disabled={apiResponse.valid_cnt}
-                            style={{ backgroundColor: apiResponse.valid_cnt ? 'rgb(240, 255, 230)' : '' }}
-                        />
-                        <div className={styles.notification}>
-                            {/* 안내 문구 */}
-                            {
-                                apiResponse.valid_cnt
-                                    ?
-                                    <span style={{ color: 'green' }}>인증이 완료되었습니다. 더 이상 수정할 수 없습니다.</span>
-                                    :
-                                    <span className={styles.errorMessage}>기업인증 필수 항목</span>
-                            }
-                        </div>
-                    </div>
-                </li>
+                    </li>
+                ))}
             </ul>
             {/* 인증버튼 및 확인문구 */}
             <div>
@@ -564,279 +527,90 @@ export default function JoinForm(props) {
                     {/* 인증버튼 */}
                     <button
                         style={{ width: '10em' }}
-                        className='original_button' onClick={() => {
-                            callCheckCorInfoApi(
-                                props.inputData.corporationData.cor_num,
-                                props.inputData.corporationData.cor_startDate,
-                                props.inputData.corporationData.cor_ceoName,
-                            );
-                        }
-                        }>기업정보 인증</button>
+                        className='original_button'
+                        onClick={() => {
+                            const { cor_num, cor_startDate, cor_ceoName } = props.inputData.corporationData;
+                            callCheckCorInfoApi(cor_num, cor_startDate, cor_ceoName);
+                        }}
+                    >
+                        기업정보 인증
+                    </button>
                     {/* 확인문구 */}
-                    {
-                        isCallApi ?
-                            apiResponse.valid_cnt
-                                ?
-                                <strong style={{ color: 'green' }}>인증이 완료되었습니다.</strong>
-                                :
-                                <strong style={{ color: 'red' }}>국세청에 등록되지 않은 기업 정보입니다.</strong>
-                            :
-                            null
-                    }
+                    {isCallApi && (
+                        <strong style={{ color: apiResponse.valid_cnt ? 'green' : 'red' }}>
+                            {apiResponse.valid_cnt ? '인증이 완료되었습니다.' : '국세청에 등록되지 않은 기업 정보입니다.'}
+                        </strong>
+                    )}
                 </div>
             </div>
+
             <br />
-            {/* -----------------------------기업 정보----------------------------- */}
+
             {/* -----------------------------기업 정보----------------------------- */}
             <div className={styles.indivisualMembers}>기업정보</div>
             <ul className={styles.inputWrap}>
-                {/* 기업명 */}
-                <li className={styles.inputContainer}>
-                    <div className={styles.left}>기업명</div>
-                    <div className={styles.right}>
-                        <input
-                            className='basic_input'
-                            type='text'
-                            placeholder={'예) OO전자'}
-                            value={props.inputData.corporationData.cor_corName}
-                            onChange={(e) => {
-                                props.setInputData(
-                                    (prevData) => ({
-                                        ...prevData,
-                                        corporationData: {
-                                            ...prevData.corporationData,
-                                            cor_corName: e.target.value
-                                        }
-                                    })
-                                )
-                            }}
-                            style={{ backgroundColor: customRegex.test(props.inputData.corporationData.cor_corName) ? 'rgb(240, 255, 230)' : '' }}
-                        />
-                    </div>
-                </li>
-
-                {/* 대표번호 */}
-                <li className={styles.inputContainer}>
-                    <div className={styles.left}>대표번호</div>
-                    <div className={styles.right}>
-                        <input
-                            className={styles.phoneNum}
-                            type="text"
-                            placeholder={'예) 010'}
-                            maxLength="3"
-                            size="6"
-                            value={props.inputData.corporationData.cor_tel.num1}
-                            onChange={(e) => {
-                                props.setInputData(prevData => ({
-                                    ...prevData,
-                                    corporationData: {
-                                        ...prevData.corporationData,
-                                        cor_tel: {
-                                            ...prevData.corporationData.cor_tel,
-                                            num1: e.target.value
-                                        }
-                                    }
-                                }))
-                            }}
-                        />
-                        <input
-                            className={styles.phoneNum}
-                            type='text'
-                            placeholder={'예) 1234'}
-                            maxLength="4"
-                            size="8"
-                            value={props.inputData.corporationData.cor_tel.num2}
-                            onChange={(e) => {
-                                props.setInputData(prevData => ({
-                                    ...prevData,
-                                    corporationData: {
-                                        ...prevData.corporationData,
-                                        cor_tel: {
-                                            ...prevData.corporationData.cor_tel,
-                                            num2: e.target.value
-                                        }
-                                    }
-                                }))
-                            }}
-                        />
-                        <input
-                            className={styles.phoneNum}
-                            type='text'
-                            placeholder={'예) 5678'}
-                            maxLength="4"
-                            size="8"
-                            value={props.inputData.corporationData.cor_tel.num3}
-                            onChange={(e) => {
-                                props.setInputData(prevData => ({
-                                    ...prevData,
-                                    corporationData: {
-                                        ...prevData.corporationData,
-                                        cor_tel: {
-                                            ...prevData.corporationData.cor_tel,
-                                            num3: e.target.value
-                                        }
-                                    }
-                                }))
-                            }}
-                        />
-                    </div>
-                </li>
-
-                {/* 업태 */}
-                <li className={styles.inputContainer}>
-                    <div className={styles.left}>업태</div>
-                    <div className={styles.right}>
-                        <input
-                            className='basic_input'
-                            type='text'
-                            placeholder='도매 및 소매업'
-                            value={props.inputData.corporationData.cor_sector}
-                            onChange={(e) => props.setInputData(prevData => (
-                                {
-                                    ...prevData,
-                                    corporationData: {
-                                        ...prevData.corporationData,
-                                        cor_sector: e.target.value
-                                    }
-                                }
-                            ))}
-                            style={{ backgroundColor: customRegex.test(props.inputData.corporationData.cor_sector) ? 'rgb(240, 255, 230)' : '' }}
-                        />
-                    </div>
-                </li>
-                {/* 종목 */}
-                <li className={styles.inputContainer}>
-                    <div className={styles.left}>종목</div>
-                    <div className={styles.right}>
-                        <input
-                            className="basic_input"
-                            type='text'
-                            placeholder='예) 연마재, 안전용품'
-                            value={props.inputData.corporationData.cor_category}
-                            onChange={(e) => props.setInputData(prevData => (
-                                {
-                                    ...prevData,
-                                    corporationData: {
-                                        ...prevData.corporationData,
-                                        cor_category: e.target.value
-                                    }
-                                }
-                            ))}
-                            style={{ backgroundColor: customRegex.test(props.inputData.corporationData.cor_category) ? 'rgb(240, 255, 230)' : '' }}
-                        />
-                    </div>
-                </li>
-                {/* FAX */}
-                <li className={styles.inputContainer}>
-                    <div className={styles.left}>FAX</div>
-                    <div className={styles.right}>
-                        {/* 첫자리 */}
-                        <input
-                            className={styles.phoneNum}
-                            type='text'
-                            placeholder='예)052'
-                            maxLength='4'
-                            size='8'
-                            value={props.inputData.corporationData.cor_fax.fax_num1}
-                            onChange={e => props.setInputData(prevData => (
-                                {
-                                    ...prevData,
-                                    corporationData: {
-                                        ...prevData.corporationData,
-                                        cor_fax: {
-                                            ...prevData.corporationData.cor_fax,
-                                            fax_num1: e.target.value
-                                        }
-                                    }
-                                }
-                            ))}
-                        />
-                        {/* 가운데 */}
-                        <input
-                            className={styles.phoneNum}
-                            type='text'
-                            placeholder='예)1234'
-                            maxLength='4'
-                            size='8'
-                            value={props.inputData.corporationData.cor_fax.fax_num2}
-                            onChange={e => props.setInputData(prevData => (
-                                {
-                                    ...prevData,
-                                    corporationData: {
-                                        ...prevData.corporationData,
-                                        cor_fax: {
-                                            ...prevData.corporationData.cor_fax,
-                                            fax_num2: e.target.value
-                                        }
-                                    }
-                                }
-                            ))}
-                        />
-                        {/* 마지막 */}
-                        <input
-                            className={styles.phoneNum}
-                            type='text'
-                            placeholder='예)5678'
-                            maxLength='4'
-                            size='8'
-                            value={props.inputData.corporationData.cor_fax.fax_num3}
-                            onChange={e => props.setInputData(prevData => (
-                                {
-                                    ...prevData,
-                                    corporationData: {
-                                        ...prevData.corporationData,
-                                        cor_fax: {
-                                            ...prevData.corporationData.cor_fax,
-                                            fax_num3: e.target.value
-                                        }
-                                    }
-                                }
-                            ))}
-                        />
-                    </div>
-                </li>
-
+                {[
+                    { label: '기업명', placeholder: '예) OO전자', value: props.inputData.corporationData.cor_corName },
+                    { label: '대표번호', placeholder: '예) 010', value: props.inputData.corporationData.cor_tel, type: 'phone' },
+                    { label: '업태', placeholder: '도매 및 소매업', value: props.inputData.corporationData.cor_sector },
+                    { label: '종목', placeholder: '예) 연마재, 안전용품', value: props.inputData.corporationData.cor_category },
+                    { label: 'FAX', placeholder: '예) 052', value: props.inputData.corporationData.cor_fax, type: 'phone' }
+                ].map((item, index) => (
+                    <li key={index} className={styles.inputContainer}>
+                        <div className={styles.left}>{item.label}</div>
+                        <div className={styles.right}>
+                            {item.type === 'phone' ? (
+                                ['num1', 'num2', 'num3'].map((num, idx) => (
+                                    <input
+                                        key={idx}
+                                        className={styles.phoneNum}
+                                        type='text'
+                                        placeholder={item.placeholder}
+                                        maxLength='4'
+                                        size='8'
+                                        value={item.value[num]}
+                                        onChange={(e) => handleChange(e, index, num)}
+                                    />
+                                ))
+                            ) : (
+                                <input
+                                    className='basic_input'
+                                    type='text'
+                                    placeholder={item.placeholder}
+                                    value={item.value}
+                                    onChange={(e) => handleChange(e, index)}
+                                    style={{ backgroundColor: customRegex.test(item.value) ? 'rgb(240, 255, 230)' : '' }}
+                                />
+                            )}
+                        </div>
+                    </li>
+                ))}
                 {/* 회원구분 체크박스 */}
                 <li className={styles.inputContainer}>
                     <div className={styles.left}>회원구분</div>
                     <div className={styles.right}>
                         <div className='basic_input'>
-                            <div className={styles.typeMember}>
-                                <label htmlFor="endUser">
+                            {[
+                                { id: 'endUser', label: '실사용자' },
+                                { id: 'suplier', label: '납품' }
+                            ].map((radio, idx) => (
+                                <div className={styles.typeMember} key={idx}>
                                     <input
                                         type="radio"
-                                        id="endUser"
+                                        id={radio.id}
                                         name="userType"
                                         value={props.inputData.userType}
-                                        checked={props.inputData.userType_id === 1}
-                                        onChange={() => {
-                                            props.setInputData(
-                                                (prevData) => ({ ...prevData, userType_id: 1 })
-                                            )
-                                        }}
+                                        checked={props.inputData.userType_id === (idx + 1)}
+                                        onChange={() => props.setInputData((prevData) => ({ ...prevData, userType_id: (idx + 1) }))}
                                     />
-                                    실사용자</label>
-                            </div>
-                            <div className={styles.typeMember}>
-                                <label htmlFor="suplier">
-                                    <input
-                                        type="radio"
-                                        id="suplier"
-                                        name="userType"
-                                        value={props.inputData.userType}
-                                        checked={props.inputData.userType_id === 2}
-                                        onChange={() => {
-                                            props.setInputData(
-                                                (prevData) => ({ ...prevData, userType_id: 2 })
-                                            )
-                                        }}
-                                    />
-                                    납품</label>
-                            </div>
+                                    <label htmlFor={radio.id}>{radio.label}</label>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </li>
             </ul >
+
         </div >
     )
 }
