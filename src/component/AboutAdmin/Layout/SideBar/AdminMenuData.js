@@ -108,18 +108,20 @@ export function AdminMenuData(props){
     },
   ];
 
-  //서브메뉴 열림창 변수 초기화
-  const [subMenuStates, setSubMenuStates] = useState([menuData.map(() => false)]);
 
   function saveTab(id) {
     sessionStorage.setItem('AdmintabState', JSON.stringify(id));
   }
 
+  //서브메뉴 열림창 변수 초기화
+  const [subMenuStates, setSubMenuStates] = useState([menuData.map(() => false)]);
+
   function toggleSubMenu(index) {
-    const newSubMenuStates = Array.from({ length: menuData.length }, () => false); // 모든 서브메뉴를 닫도록 초기화
-    // subMenuStates 배열의 해당 인덱스의 값을 반전시킴
-    newSubMenuStates[index] = !newSubMenuStates[index];
-    setSubMenuStates(newSubMenuStates);
+    setSubMenuStates(prevStates => {
+      // 이전 데이터의 index중 선택한 index와 일치하는 항목만 true로 바꾸고 나머지는 false로 하여 한 번에 하나만 열리도록 설정
+      const newSubMenuStates = prevStates.map((state, idx) => idx === index ? ! state : false); 
+      return newSubMenuStates;
+    })
   }
 
   return(
