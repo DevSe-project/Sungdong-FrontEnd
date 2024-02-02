@@ -82,7 +82,7 @@ export function MenuData(props) {
           item: '장바구니 목록',
           link: '/basket',
           require: GetCookie('jwt_token') !== null
-        },        
+        },
         {
           item: '주문/배송 현황',
           link: '/delivery',
@@ -172,24 +172,24 @@ export function MenuData(props) {
     },
   ];
 
-  //서브메뉴 열림창 변수 초기화
-  const [subMenuStates, setSubMenuStates] = useState([menuData.map(() => false)]);
-
   function saveTab(id) {
     sessionStorage.setItem('tabState', JSON.stringify(id));
   }
 
+  // 서브메뉴 열림창 변수 초기화
+  const [subMenuStates, setSubMenuStates] = useState(menuData.map(() => false));
+
   function toggleSubMenu(index) {
-    const newSubMenuStates = Array.from({ length: menuData.length }, () => false); // 모든 서브메뉴를 닫도록 초기화
-    // subMenuStates 배열의 해당 인덱스의 값을 반전시킴
-    newSubMenuStates[index] = !newSubMenuStates[index];
-    setSubMenuStates(newSubMenuStates);
+    setSubMenuStates(prevStates => {
+      const newSubMenuStates = prevStates.map((state, idx) => idx === index ? !state : false);
+      return newSubMenuStates;
+    });
   }
 
   return (
     <div
       className={styles.menuLocation}>
-      <WelcomeModule/>
+      <WelcomeModule />
       {/* 메뉴 loop */}
       {menuData.map((item, index) => (
         <li
