@@ -4,16 +4,50 @@ import { useEffect, useState } from 'react';
 import { useDataActions, useOrderData } from '../../Store/DataStore';
 import axios from '../../axios';
 import { GetCookie } from '../../customFn/GetCookie';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useFetch } from '../../customFn/useFetch';
-
+import Pagenation from '../../customFn/Pagenation'
 export function Delivery(props){
+  
   const {fetchServer, fetchGetServer}= useFetch();
   const {setDetailData} = useDataActions();
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const queryClient = useQueryClient();
+
+  // 페이지를 변경할 때 호출되는 함수
+  const fetchPageChange = async (pageNumber) => {
+    return await fetchServer({}, 'post', '/order/list', pageNumber);
+  };
+
+  const {mutate:pageMutaion} = useMutation({mutationFn: fetchPageChange})
+
+
+  function handlePageChange(pageNumber){
+    pageMutaion(pageNumber, {
+      onSuccess: (data) => {
+        setCurrentPage(data.data.currentPage);
+        setTotalPages(data.data.totalPages);
+        queryClient.setQueryData(['order'], () => {
+          return data.data.data
+        })
+      },
+      onError: (error) => {
+        return console.error(error.message);
+      },
+    })
+  }
+
   //주문 데이터 fetch 
   const fetchOrderData = async() => {
-    return fetchGetServer('/order/list', 1);
+    const data = await fetchGetServer('/order/list', 1);
+
+    // 게시물과 페이지 정보를 상태로 업데이트
+    setCurrentPage(data.currentPage);
+    setTotalPages(data.totalPages);
+    return data.data;
   }
 
   //상품 주문 정보 요청 함수
@@ -45,9 +79,6 @@ export function Delivery(props){
       alert("배송 준비 중일때는 조회하실 수 없습니다.")
     }
   }
-  // 게시물 데이터와 페이지 번호 상태 관리    
-  const [currentPage, setCurrentPage] = useState(1);
-
 
   function detailOrder(item){
     const jsonOrder = {
@@ -153,33 +184,7 @@ export function Delivery(props){
       </div>
     </div>
     }
-    <div className={styles.buttonContainer}>
-      {/* 이전 페이지 */}
-      <button
-        className={styles.pageButton} 
-        onClick={()=> {
-          if(currentPage !== 1){
-            setCurrentPage(currentPage - 1)
-          } else {
-            alert("해당 페이지가 가장 첫 페이지 입니다.")
-      }}}>
-      <i className="far fa-angle-left"/>
-      </button>
-      <div className={styles.pageButton}>
-        {currentPage}
-      </div>
-        {/* 다음 페이지 */}
-      <button
-      className={styles.pageButton}
-      onClick={()=> {
-        if(order.length > 5){
-          setCurrentPage(currentPage + 1)
-        } else {
-          alert("다음 페이지가 없습니다.")
-        }}}>
-          <i className="far fa-angle-right"/>
-      </button>
-    </div>
+    <Pagenation currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange}/>
   </div>
   )
 }

@@ -1,14 +1,14 @@
 import React from 'react';
 
-const usePagination = ({ currentPage, totalPages, onPageChange }) => {
+const Pagination = ({ currentPage, totalPages, onPageChange }) => {
     return (
-    <div id="pagination-container">
+    <div className="buttonContainer">
     {/* 페이지네이션을 화면에 표시 */}
     {Array.from({ length: totalPages }, (_, index) => index + 1).map(pageNumber => (
         <span
         key={pageNumber}
         onClick={() => onPageChange(pageNumber)}
-        className={pageNumber === currentPage ? 'current-page' : ''}
+        className={pageNumber == currentPage ? "onPageButton" : "offPageButton"}
         >
         {pageNumber}
         </span>
@@ -17,4 +17,4 @@ const usePagination = ({ currentPage, totalPages, onPageChange }) => {
     );
 };
 
-export default usePagination;
+export default Pagination;
