@@ -95,9 +95,68 @@ const fetchGetServer = async (router, pageNumber) => {
     }
 };
 
+const fetchAddPostServer = async (item, fetchType, router, pageNumber, postCnt) => {
+    try {
+    const token = GetCookie("jwt_token");
+    const response = await axios[fetchType](`${router}?page=${pageNumber}&post=${postCnt}`,
+        JSON.stringify(item), 
+        {
+        headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+        },
+    });
+    return response.data;
+    } catch (error) {
+    if (error.response && error.response.status === 400) {
+        handleOtherErrors(error.response.data.message);
+        throw new Error(error.response.data.message)
+    } else if (error.response && error.response.status === 401) {
+        handleUnauthorizedError(error.response.data.message);
+        throw new Error(error.response.data.message)
+    } else if (error.response && error.response.status === 403) {
+        handleForbiddenError(error.response.data.message);
+        throw new Error(error.response.data.message)
+    } else {
+        handleOtherErrors(error.response.data.message);
+        throw new Error(error.response.data.message)
+    }
+    }
+};
+
+const fetchGetAddPostServer = async (router, pageNumber, postCnt) => {
+    try {
+    const token = GetCookie("jwt_token");
+    const response = await axios.get(`${router}?page=${pageNumber}&post=${postCnt}`, 
+        {
+        headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+        },
+    });
+    return response.data.data;
+    } catch (error) {
+    if (error.response && error.response.status === 400) {
+        handleOtherErrors(error.response.data.message);
+        throw new Error(error.response.data.message)
+    } else if (error.response && error.response.status === 401) {
+        handleUnauthorizedError(error.response.data.message);
+        throw new Error(error.response.data.message)
+    } else if (error.response && error.response.status === 403) {
+        handleForbiddenError(error.response.data.message);
+        throw new Error(error.response.data.message)
+    } else {
+        handleOtherErrors(error.response.data.message);
+        throw new Error(error.response.data.message)
+    }
+    }
+};
+
 return {
     fetchServer,
     fetchGetServer,
+    fetchAddPostServer,
+    fetchGetAddPostServer,
     handleForbiddenError,
     handleOtherErrors,
     handleUnauthorizedError,
