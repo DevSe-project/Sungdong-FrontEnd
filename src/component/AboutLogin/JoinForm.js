@@ -94,7 +94,7 @@ export default function JoinForm(props) {
         }
     }
 
-    // 입력이 시작됐는지 추적
+    // 입력이 시작됐는지 추적(모든 정규식 값을 관리하도록 만들 예정)
     const [isRegexValid, setIsRegexValid] = useState(false);
 
     // 아이디 중복체크 및 정규 표현식에 부합하는지 확인
@@ -153,14 +153,6 @@ export default function JoinForm(props) {
             }));
         }
     };
-
-
-
-    // 이름 정규표현식
-    const nameRegex = /^[a-zA-Z가-힣]{2,30}$/;
-
-    // 기타Input 정규표현식
-    const customRegex = /^[a-zA-Z가-힣\s()]{1,50}$/;
 
 
     return (
