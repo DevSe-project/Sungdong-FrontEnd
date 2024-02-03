@@ -31,6 +31,13 @@ const handleOtherErrors = (errorMessage) => {
     setErrorDisplayed(true);
 };
 
+const handleNoAlertOtherErrors = (errorMessage) => {
+    if (!errorDisplayed) {
+        console.error(errorMessage)
+    }
+    setErrorDisplayed(true);
+};
+
 const fetchServer = async (item, fetchType, router, pageNumber) => {
     try {
     const token = GetCookie("jwt_token");
@@ -90,6 +97,10 @@ const fetchGetServer = async (router, pageNumber) => {
 
 return {
     fetchServer,
-    fetchGetServer
+    fetchGetServer,
+    handleForbiddenError,
+    handleOtherErrors,
+    handleUnauthorizedError,
+    handleNoAlertOtherErrors
 };
 };
