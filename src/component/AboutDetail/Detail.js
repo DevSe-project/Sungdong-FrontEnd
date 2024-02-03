@@ -249,8 +249,19 @@ function basketThis(product, count){
             <div className={styles.headRight}>
               <div className={styles.textBox}>
                 {data !== null
-                ? detailData.product_title
+                ? <span>{detailData.product_title}</span>
                 : <div className={styles.skeleton}>&nbsp;</div>}
+                <div style={{display: 'flex', gap: '0.5em'}}>
+                  (
+                  {data !== null
+                  ? <span>{detailData.product_model}</span>
+                  : <div className={styles.skeleton}>&nbsp;</div>}
+                  /
+                  {data !== null
+                  ? <span>{detailData.product_spec}</span>
+                  : <div className={styles.skeleton}>&nbsp;</div>}
+                  )
+                </div>
               </div>
               <h4 className={styles.h4}>
                 {data !== null

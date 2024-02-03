@@ -6,7 +6,7 @@ import axios from '../../axios';
 import { GetCookie } from '../../customFn/GetCookie';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useFetch } from '../../customFn/useFetch';
-import Pagenation from '../../customFn/Pagenation'
+import Pagination from '../../customFn/Pagination'
 export function Delivery(props){
   
   const {fetchServer, fetchGetServer}= useFetch();
@@ -194,7 +194,7 @@ export function Delivery(props){
       </div>
     </div>
     }
-    <Pagenation currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange}/>
+    <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange}/>
   </div>
   )
 }

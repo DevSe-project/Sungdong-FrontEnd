@@ -92,8 +92,6 @@ export default function App() {
 
   //데이터 fetch
   const fetchData = async () => {
-    // const querySnapshot = await getDocs(collection(db, 'ProductData')); // 'ProductData'는 컬렉션 이름
-    // return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
     try {
       const response = await axios.get("/product/list",
         {
@@ -112,8 +110,6 @@ export default function App() {
 
   //카테고리 데이터 fetch
   const fetchCategoryData = async () => {
-    // const querySnapshot = await getDocs(collection(db, 'CategoryData')); // 'ProductData'는 컬렉션 이름
-    // return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
     try {
       const response = await axios.get("/category/list",
         {

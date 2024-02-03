@@ -5,7 +5,7 @@ import { useCartList, useDataActions, useListActions, useOrderActions, useOrderD
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { StepModule } from '../AboutPay/StepModule';
 import { useFetch } from '../../customFn/useFetch';
-import Pagenation from '../../customFn/Pagenation'
+import Pagination from '../../customFn/Pagination'
 
 import axios from '../../axios';
 export function Basket(props){
@@ -362,7 +362,7 @@ export function Basket(props){
                 </div>
             </div>
           </div>
-          <Pagenation currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange}/>
+          <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange}/>
 
 
           {/* 다음 단계 버튼 */}
