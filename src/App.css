@@ -535,21 +535,36 @@ input[type="checkbox"] {
 }
 
 .buttonContainer{
-  font-size: 1.2em;
-  margin-top: 1em;
+  font-size: 1.3em;
   display: flex;
   flex-direction: row;
   justify-content: center;
-  gap: 0.5em;
+  gap: 1em;
+  color: white;
+  border: 1px solid lightgray;
+  background-color: white;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .onPageButton{
-  color: red;
+  color: var(--main-red);
+  font-weight: bold;
   cursor: pointer;
 }
 
 .offPageButton{
+  color: black;
   cursor: pointer;
+}
+
+.nextPageButton{
+  width: 100%;
+  color: black;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 /* Date */
