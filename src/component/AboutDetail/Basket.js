@@ -5,13 +5,19 @@ import { useCartList, useDataActions, useListActions, useOrderActions, useOrderD
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { StepModule } from '../AboutPay/StepModule';
 import { useFetch } from '../../customFn/useFetch';
+import Pagenation from '../../customFn/Pagenation'
+
 import axios from '../../axios';
 export function Basket(props){
   const {fetchServer, fetchGetServer} = useFetch();
 
   //장바구니 데이터 fetch
   const fetchCartData = async() => {
-    return fetchGetServer(`/cart/list`, 1);
+    const data = await fetchGetServer(`/cart/list`, 1);
+    setCurrentPage(data.currentPage);
+    setTotalPages(data.totalPages);
+
+    return data.data
   };
 
 
@@ -28,6 +34,9 @@ export function Basket(props){
 
   const queryClient = useQueryClient();
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
   // 배송가
   const delivery = 3000;
 
@@ -36,10 +45,6 @@ export function Basket(props){
 
   // 전체 선택 체크박스 상태를 저장할 상태 변수
   const [selectAll, setSelectAll] = useState(false);
-
-
-  // 게시물 데이터와 페이지 번호 상태 관리    
-  const [currentPage, setCurrentPage] = useState(1);
 
   //장바구니 데이터 fetch
   const orderToFetch = async(product) => {
@@ -57,6 +62,43 @@ export function Basket(props){
   
     fetchData();
   }, [basketList])
+
+  //-------------------------페이지 설정------------------------------
+
+  // 페이지를 변경할 때 호출되는 함수
+  const fetchPageChange = async (pageNumber) => {
+    return await fetchServer({}, 'post', '/cart/list', pageNumber);
+  };
+
+
+  const {mutate:pageMutaion} = useMutation({mutationFn: fetchPageChange})
+
+
+  function handlePageChange(pageNumber){
+    pageMutaion(pageNumber, {
+      onSuccess: (data) => {
+        setCurrentPage(data.data.currentPage);
+        setTotalPages(data.data.totalPages);
+        queryClient.setQueryData(['cart'], () => {
+          return data.data.data
+        })
+      },
+      onError: (error) => {
+        return console.error(error.message);
+      },
+    })
+  }
+
+    //처음 마운트 될때 페이지 설정.
+    useEffect(() => {
+      const fetchData = async () => {
+          const data = await fetchGetServer('/cart/list', 1);
+          setCurrentPage(data.currentPage);
+          setTotalPages(data.totalPages);
+      };
+  
+      fetchData();
+    }, [])
 
   //----------------------체크박스------------------------
   // 전체 선택 체크박스 클릭 시 호출되는 함수
@@ -320,33 +362,7 @@ export function Basket(props){
                 </div>
             </div>
           </div>
-          <div className={styles.buttonContainer}>
-            {/* 이전 페이지 */}
-            <button
-            className={styles.moveButton} 
-            onClick={()=> {
-              if(currentPage !== 1){
-                setCurrentPage(currentPage - 1)
-              } else {
-                alert("해당 페이지가 가장 첫 페이지 입니다.")
-              }}}>
-                <i className="far fa-angle-left"/>
-            </button>
-            <div className={styles.moveButton}>
-              {currentPage}
-            </div>
-            {/* 다음 페이지 */}
-            <button
-            className={styles.moveButton}
-            onClick={()=> {
-              if(basketList.length > 5){
-                setCurrentPage(currentPage + 1)
-              } else {
-                alert("다음 페이지가 없습니다.")
-              }}}>
-                <i className="far fa-angle-right"/>
-            </button>
-          </div>
+          <Pagenation currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange}/>
 
 
           {/* 다음 단계 버튼 */}
