@@ -382,6 +382,7 @@ input[type="checkbox"] {
   margin-top: 1em;
   gap: 1em;
 }
+
 /* -------------------------모달------------------------- */
 
 /* 모달 CSS */
@@ -463,7 +464,8 @@ input[type="checkbox"] {
 
 .red_button {
   border: 1px solid lightgray;
-  background-color: var(--main-red-hover);
+  background-color: var(--main-red);
+  color: white;
   padding: 5px 20px
 }
 
@@ -518,10 +520,13 @@ input[type="checkbox"] {
 }
 
 .red_round_button {
+  align-items: center;
   border: 1px solid lightgray;
   border-radius: 1vh;
   background-color: var(--main-red);
-  padding: 5px 20px
+  color: white;
+  padding: 5px 20px;
+  cursor: pointer;
 }
 
 .red_round_button:hover {
@@ -534,7 +539,7 @@ input[type="checkbox"] {
   transition: background-color 0.3s;
 }
 
-.buttonContainer{
+.buttonContainer {
   font-size: 1.3em;
   display: flex;
   flex-direction: row;
@@ -548,18 +553,18 @@ input[type="checkbox"] {
   transition: background-color 0.3s ease;
 }
 
-.onPageButton{
+.onPageButton {
   color: var(--main-red);
   font-weight: bold;
   cursor: pointer;
 }
 
-.offPageButton{
+.offPageButton {
   color: black;
   cursor: pointer;
 }
 
-.nextPageButton{
+.nextPageButton {
   width: 100%;
   color: black;
   border: none;
