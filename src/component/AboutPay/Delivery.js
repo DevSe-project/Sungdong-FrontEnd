@@ -138,9 +138,8 @@ export function Delivery(props){
               </h5>
               <i style={{color: '#ccc'}} className="fas fa-trash-alt"></i>
             </div> 
-            {item.products && [item.products.trim()].map((product,key) => 
+            {item.products && JSON.parse('[' + item.products + ']').map((product,key) => 
             <div key={key} className={styles.deliveryNowItem}>
-              {console.log("item", product)}
               <img className={styles.img} src={product.product_image_original} alt="주문상품"/>
               <div className={styles.deliveryNowInformation}>
                 <span className={styles.itemTitle}>{product.product_title}, {product.order_cnt}개 </span>
