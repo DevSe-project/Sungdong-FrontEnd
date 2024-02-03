@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { useModalActions } from "../../../../Store/DataStore";
-import styles from './DeliveryModalStyles.module.css';
+import styles from './Deli_Modal.module.css';
 import axios from '../../../../axios';
 import { GetCookie } from "../../../../customFn/GetCookie";
 
 // 배송 상태 수정 모달 컴포넌트
-export default function DeliveryStateModal(props) {
+export default function Deli_StateModal(props) {
     // 모달 닫기 함수 가져오기
     const { selectedModalClose } = useModalActions();
     // 가져온 데이터 저장 상태

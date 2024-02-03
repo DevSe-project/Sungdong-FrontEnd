@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useModalActions, useModalState } from '../../../../Store/DataStore';
-import styles from './Deli_InquireTable.module.css';
-import InvoiceModal from '../Modal/InvoiceModal';
-import DeliveryStateModal from '../Modal/DeliveryStateModal';
+import styles from './Deli_Modal.module.css';
 import axios from '../../../../axios';
 import { GetCookie } from '../../../../customFn/GetCookie';
+import Deli_StateModal from './Deli_StateModal';
+import Deli_InvoiceModal from './Deli_InvoiceModal';
 
 
-export default function Deli_InquireTable() {
+export default function Deli_List() {
 
     // relative modal state
     const { isModal, modalName } = useModalState();
@@ -217,11 +217,10 @@ export default function Deli_InquireTable() {
                                 getCurrentPagePosts()?.map((item, index) => (
                                     <tr key={index}>
                                         {/* 체크박스 */}
-                                        <td>
-                                            <input type='checkbox'
-                                                checked={checkedItems.includes(item.order_id) ? true : false}
-                                                onChange={(e) => handlePerCheckbox(e.target.checked, item.order_id)} />
-                                        </td>
+                                        <td><input
+                                            type='checkbox'
+                                            checked={checkedItems.includes(item.order_id) ? true : false}
+                                            onChange={(e) => handlePerCheckbox(e.target.checked, item.order_id)} /></td>
                                         {/* 주문번호 */}
                                         <td>{item.order_id}</td>
                                         {/* 택배사 */}
@@ -272,7 +271,7 @@ export default function Deli_InquireTable() {
                     {
                         isModal && modalName === 'DeliveryStateModal'
                             ?
-                            <DeliveryStateModal
+                            <Deli_StateModal
                                 checkedItems={checkedItems}
                                 setCheckedItems={setCheckedItems}
                                 updateAllState={updateAllState}
@@ -285,7 +284,7 @@ export default function Deli_InquireTable() {
                     {
                         isModal && modalName === 'InvoiceModal'
                             ?
-                            <InvoiceModal
+                            <Deli_InvoiceModal
                                 checkedItems={checkedItems}
                                 setCheckedItems={setCheckedItems}
                                 parseDeliveryState={parseDeliveryState}

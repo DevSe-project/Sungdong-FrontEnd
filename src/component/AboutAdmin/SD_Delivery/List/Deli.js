@@ -2,11 +2,11 @@
 import { AdminHeader } from '../../Layout/Header/AdminHeader';
 import { AdminMenuData } from '../../Layout/SideBar/AdminMenuData';
 import Deli_Filter from '../Filter/Deli_Filter';
-import Deli_InquireTable from '../InquireTable/Deli_InquireTable';
-import styles from './DeliveryManagement.module.css';
+import Deli_List from './Deli_List';
+import styles from './Deli.module.css';
 
 
-export default function DeliveryManagement() {
+export default function Deli() {
 
 
 
@@ -31,7 +31,7 @@ export default function DeliveryManagement() {
                     <Deli_Filter />
 
                     {/* Delivery InquireTable Header */}
-                    <Deli_InquireTable />
+                    <Deli_List />
 
                 </div>
 
