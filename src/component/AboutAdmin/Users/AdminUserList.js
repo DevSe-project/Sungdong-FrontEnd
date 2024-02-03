@@ -16,77 +16,78 @@ export default function AdminUserList() {
     //유저 데이터 fetch
     const fetchAllUserData = async () => {
         try {
-        const response = await axios.get("/auth/userAll",
-            {
-                headers: {
-                    "Content-Type": "application/json",
+            const response = await axios.get("/auth/userAll",
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    }
                 }
-            }
-        )
-        // 성공 시 추가된 상품 정보를 반환합니다.
-        return response.data.data;
-    } catch (error) {
-        // 실패 시 예외를 throw합니다.
-        throw new Error('확인 중 오류가 발생했습니다.');
-    }
+            )
+            // 성공 시 추가된 상품 정보를 반환합니다.
+            return response.data.data;
+        } catch (error) {
+            // 실패 시 예외를 throw합니다.
+            throw new Error('확인 중 오류가 발생했습니다.');
+        }
     };
 
 
     //유저 필터링 fetch
     const fetchFilteredUserData = async (userFilterData) => {
         try {
-        const response = await axios.post("/auth/userFilter",
-            JSON.stringify(
-                userFilterData
-            ),
-            {
-                headers: {
-                    "Content-Type": "application/json",
+            const response = await axios.post("/auth/userFilter",
+                JSON.stringify(
+                    userFilterData
+                ),
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    }
                 }
-            }
-        )
-        // 성공 시 추가된 상품 정보를 반환합니다.
-        return response.data;
-    } catch (error) {
-        // 실패 시 예외를 throw합니다.
-        throw new Error('조건에 일치하는 유저가 없습니다.');
-    }
+            )
+            // 성공 시 추가된 상품 정보를 반환합니다.
+            return response.data;
+        } catch (error) {
+            // 실패 시 예외를 throw합니다.
+            throw new Error('조건에 일치하는 유저가 없습니다.');
+        }
     };
 
     //유저 필터링 fetch
     const fetchSortedUserData = async (userFilterData) => {
         try {
-        const response = await axios.post("/auth/userSort",
-            JSON.stringify(
-                userFilterData
-            ),
-            {
-                headers: {
-                    "Content-Type": "application/json",
+            const response = await axios.post("/auth/userSort",
+                JSON.stringify(
+                    userFilterData
+                ),
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    }
                 }
-            }
-        )
-        // 성공 시 추가된 상품 정보를 반환합니다.
-        return response.data;
-    } catch (error) {
-        // 실패 시 예외를 throw합니다.
-        throw new Error('정렬할 순위가 없습니다.');
-    }
+            )
+            // 성공 시 추가된 상품 정보를 반환합니다.
+            return response.data;
+        } catch (error) {
+            // 실패 시 예외를 throw합니다.
+            throw new Error('정렬할 순위가 없습니다.');
+        }
     };
 
-    const { data:users, isError, isLoading } = useQuery({
+    const { data: users, isError, isLoading } = useQuery({
         queryKey: ['users'],
         queryFn: fetchAllUserData
     })
 
 
-    const {mutate:filterMutation} = useMutation({mutationFn: fetchFilteredUserData})
-    const {mutate:sortMutation} = useMutation({mutationFn: fetchSortedUserData})
+    const { mutate: filterMutation } = useMutation({ mutationFn: fetchFilteredUserData })
+    const { mutate: sortMutation } = useMutation({ mutationFn: fetchSortedUserData })
 
 
 
+    // 유저 필터링
     const onFiltering = () => {
-        filterMutation(userFilter,{
+        filterMutation(userFilter, {
             onSuccess: (data) => {
                 console.log('user Filtered successfully:', data);
                 alert(data.message);
@@ -100,15 +101,28 @@ export default function AdminUserList() {
                 // 에러 처리 또는 메시지 표시
                 alert(error.message);
             },
-            });
+        });
+    };
+
+    // 게시물 데이터와 페이지 번호 상태 관리    
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(5);
+
+    // 현재 페이지에 해당하는 게시물 목록 가져오기
+    const getCurrentPagePosts = () => {
+        if (!users) {
+            return [];
+        }
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        return users.slice(startIndex, startIndex + itemsPerPage);
     };
 
 
 
     const [sortBy, setSortBy] = useState([]);
-    
+
     const handleSort = () => {
-        sortMutation(userSort,{
+        sortMutation(userSort, {
             onSuccess: (data) => {
                 console.log('user Sorted successfully:', data);
                 alert(data.message);
@@ -122,7 +136,7 @@ export default function AdminUserList() {
                 // 에러 처리 또는 메시지 표시
                 alert(error.message);
             },
-            });
+        });
     };
 
     useMemo(() => {
@@ -153,8 +167,41 @@ export default function AdminUserList() {
                         <AdminUserFilter onFiltering={onFiltering} />
                         <AdminUserSort sortBy={sortBy} onSort={handleSort} />
                     </div>
+                    {/* Header */}
+                    <div className='MediumHeader'>
+                        <div className='HeaderTxt'>
+                            목록
+                        </div>
+                        <select
+                            className='select'
+                            value={itemsPerPage}
+                            onChange={(e) => setItemsPerPage(Number(e.target.value))}
+                        >
+                            <option value={5}>5</option>
+                            <option value={10}>10</option>
+                            <option value={15}>15</option>
+                        </select>
+                    </div>
+                    {/* 선택항목일괄처리 */}
+                    <div className={styles.selectedHandler}>
+                        {[
+                            { item: '선택항목 상태 수정', function: () => { } },
+                            { item: '선택항목 송장 입력/수정', function: () => { } },
+                            { item: '선택항목 배송 취소(삭제)', function: () => { } },
+                        ].map((item, index) => {
+                            return (
+                                <button
+                                    className='white_button'
+                                    onClick={item.function}
+                                    key={index}>
+                                    {item.item}
+                                </button>
+                            );
+                        })}
 
-                    <table style={{marginTop: '10px'}}>
+                    </div>
+
+                    <table style={{ marginTop: '10px' }}>
                         <thead>
                             <tr>
                                 <th>구분</th>
@@ -167,7 +214,7 @@ export default function AdminUserList() {
                             </tr>
                         </thead>
                         <tbody>
-                            {users.map((user, index) => (
+                            {getCurrentPagePosts().map((user, index) => (
                                 <tr key={index}>
                                     <td>{user.userType_id === 1 ? "실 사용자" : "납품업자"}</td>
                                     <td>{user.cor_corName}</td>

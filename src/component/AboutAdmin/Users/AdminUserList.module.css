@@ -3,7 +3,11 @@
 }
 
 .mainContainer {
+    display: flex;
+    flex-direction: column;
     margin: 1em;
+    padding: 1em;
+    gap: 1em;
     flex: 1;
 }
 
@@ -18,4 +22,11 @@
 }
 .Sort_UserList {
     flex: 50%;
+}
+
+/* --------Selected Handler */
+.selectedHandler {
+    display: flex;
+    margin-bottom: 10px;
+    gap: 10px;
 }
