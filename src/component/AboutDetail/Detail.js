@@ -159,7 +159,7 @@ function buyThis(product, count){
 
 // 장바구니 담기 함수
 function basketThis(product, count){
-  if(product.option0 !== null && (optionSelected === "" || optionSelected === null)){
+  if(product.option0 !== "" && (optionSelected === "" || optionSelected === null)){
     alert("옵션 선택 후 상품을 추가해주세요");
     return;
   }
