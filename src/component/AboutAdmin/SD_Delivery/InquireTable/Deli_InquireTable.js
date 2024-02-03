@@ -173,28 +173,21 @@ export default function Deli_InquireTable() {
                     </div>
                     {/* 선택항목일괄처리 */}
                     <div className={styles.selectedHandler}>
-                        {/* 배송상태 수정 */}
-                        <button
-                            className='white_button'
-                            onClick={() => { handleModalOpen('DeliveryStateModal') }}>
-                            선택 항목 배송상태 수정
-                        </button>
-                        {/* 송장 수정 */}
-                        <button
-                            className='white_button'
-                            // 송장수정 fn
-                            onClick={() => { handleModalOpen('InvoiceModal') }}>
-                            선택 항목 송장 수정
-                        </button>
-                        {/* 일괄 배송 취소 */}
-                        <button
-                            className='white_button'
-                            onClick={() => {
-                                deleteData()
-                            }}>
-                            {/* 배송 상태 리스트에서 삭제 */}
-                            선택 항목 배송 취소
-                        </button>
+                        {[
+                            { item: '선택항목 상태 수정', function: () => handleModalOpen('DeliveryStateModal') },
+                            { item: '선택항목 송장 입력/수정', function: () => handleModalOpen('InvoiceModal') },
+                            { item: '선택항목 배송 취소(삭제)', function: () => deleteData() },
+                        ].map((item, index) => {
+                            return (
+                                <button
+                                    className='white_button'
+                                    onClick={item.function}
+                                    key={index}>
+                                    {item.item}
+                                </button>
+                            );
+                        })}
+
                     </div>
                     {/* Main - 배송관리 테이블 리스트업 */}
                     <table>
