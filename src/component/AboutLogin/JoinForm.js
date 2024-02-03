@@ -156,6 +156,13 @@ export default function JoinForm(props) {
 
 
 
+    // 이름 정규표현식
+    const nameRegex = /^[a-zA-Z가-힣]{2,30}$/;
+
+    // 기타Input 정규표현식
+    const customRegex = /^[a-zA-Z가-힣\s()]{1,50}$/;
+
+
     return (
         <div>
             {/* 회원정보를 입력해주세요! */}
