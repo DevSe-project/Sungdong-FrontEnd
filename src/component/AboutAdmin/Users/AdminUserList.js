@@ -4,11 +4,12 @@ import { AdminHeader } from '../Layout/Header/AdminHeader';
 import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
 import styles from './AdminUserList.module.css';
 import axios from '../../../axios';
-import { useUserFilter, useUserSort } from '../../../Store/DataStore';
+import { useModalActions, useModalState, useUserFilter, useUserSort } from '../../../Store/DataStore';
 import AdminUserFilter from './AdminUserFilter';
 import AdminUserSort from './AdminUserSort';
 
 export default function AdminUserList() {
+
     const userFilter = useUserFilter();
     const queryClient = useQueryClient();
     const userSort = useUserSort();
@@ -251,24 +252,6 @@ export default function AdminUserList() {
                             <option value={15}>15</option>
                         </select>
                     </div>
-                    {/* 선택항목일괄처리 */}
-                    <div className={styles.selectedHandler}>
-                        {[
-                            { item: '선택항목 상태 수정', function: () => { } },
-                            { item: '선택항목 송장 입력/수정', function: () => { } },
-                            { item: '선택항목 배송 취소(삭제)', function: () => { } },
-                        ].map((item, index) => {
-                            return (
-                                <button
-                                    className='white_button'
-                                    onClick={item.function}
-                                    key={index}>
-                                    {item.item}
-                                </button>
-                            );
-                        })}
-
-                    </div>
 
                     <table style={{ marginTop: '10px' }}>
                         <thead>
@@ -277,13 +260,42 @@ export default function AdminUserList() {
                                     type='checkbox'
                                     checked={checkedItems.length === getCurrentPagePosts().length ? true : false}
                                     onChange={(e) => handleAllCheckbox(e.target.checked)} /></th>
-                                <th>구분</th>
+                                <th>
+                                    <span>거래처 유형</span>
+                                    <select style={{ marginLeft: '5px' }} className='select'>
+                                        <option value={0}>----</option>
+                                        <option value={'실 사용자'}>실 사용자</option>
+                                        <option value={'납품 업자'}>납품 업자</option>
+                                    </select>
+                                </th>
                                 <th>업체명(상호명)</th>
-                                <th>등급</th>
+                                <th>
+                                    <span>등급</span>
+                                    <select style={{ marginLeft: '5px' }} className='select'>
+                                        <option value={0}>----</option>
+                                        <option value={'A'}>A</option>
+                                        <option value={'B'}>B</option>
+                                        <option value={'C'}>C</option>
+                                        <option value={'D'}>D</option>
+                                    </select>
+                                </th>
                                 <th>주소</th>
                                 <th>연락처</th>
-                                <th>CMS 여부</th>
-                                <th>작업</th>
+                                <th>
+                                    <span>CMS 여부</span>
+                                    <select style={{ marginLeft: '5px' }} className='select'>
+                                        <option value={0}>----</option>
+                                        <option value={true}>동의</option>
+                                        <option value={false}>비동의</option>
+                                    </select>
+
+                                </th>
+                                <th>
+                                    <span>작업</span>
+                                    <button style={{ marginLeft: '5px' }} className='white_round_button'>
+                                        일괄 삭제
+                                    </button>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -308,9 +320,9 @@ export default function AdminUserList() {
                                     <td>{user.hasCMS === 1 ? "동의" : "비동의"}</td>
                                     {/* 삭제 */}
                                     <td>
-                                        <button className='original_round_button'
+                                        <button className='white_button'
                                             onClick={() => handleDelete()}>
-                                            회원 삭제
+                                            수정
                                         </button>
                                     </td>
                                 </tr>
