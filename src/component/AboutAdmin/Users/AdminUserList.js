@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { AdminHeader } from '../Layout/Header/AdminHeader';
 import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
@@ -15,6 +15,22 @@ export default function AdminUserList() {
     const userSort = useUserSort();
 
     const [sortBy, setSortBy] = useState([]);
+    const [matchedData, setMatchedData] = useState([]);
+
+    useEffect(() => {
+        fetchMatchedData();
+    }, [fetchMatchedData])
+
+    const fetchMatchedData = () => {
+        if(!checkedItems) {
+            return;
+        }
+        const data = checkedItems.map(users_id => {
+            const matchingData = users.find(item => item.users_id === users_id);
+            return matchingData;
+        });
+        setMatchedData(matchedData);
+    }
 
 
     // ------------------------------서버 통신------------------------------ //
@@ -212,6 +228,44 @@ export default function AdminUserList() {
         }
     }
 
+    const batchUpdateValue = (key, val) => {
+        setMatchedData(prevData => {
+            prevData.map(item => ({
+                ...item,
+                [key] : val
+            }))
+        })
+    }
+
+    const handleSelectChange = async (e) => {
+        const { value } = e.target.value;
+        // 선택된 값(value)과 체크된 항목(checkedItems)을 사용하여 일괄 변경 API 호출
+        try {
+            const response = await axios.post(
+                "/auth/update",
+                JSON.stringify({
+                    user_ids: checkedItems,
+                    update_value: value
+                }),
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    }
+                }
+            );
+            // 변경 성공 시 메시지 표시
+            alert(response.data.message);
+            // 변경된 데이터를 쿼리 데이터로 업데이트
+            queryClient.setQueryData(['users'], () => {
+                return response.data.updated_users;
+            });
+        } catch (error) {
+            // 변경 실패 시 에러 메시지 표시
+            console.error('일괄 변경 실패:', error);
+            alert('일괄 변경에 실패했습니다.');
+        }
+    };
+
     useMemo(() => {
         // data나 sortBy가 변경될 때마다 정렬
         // handleSort();
@@ -262,7 +316,7 @@ export default function AdminUserList() {
                                     onChange={(e) => handleAllCheckbox(e.target.checked)} /></th>
                                 <th>
                                     <span>거래처 유형</span>
-                                    <select style={{ marginLeft: '5px' }} className='select'>
+                                    <select style={{ marginLeft: '5px' }} className='select' onChange={e => batchUpdateValue(matchedData.userType_id, e)}>
                                         <option value={0}>----</option>
                                         <option value={'실 사용자'}>실 사용자</option>
                                         <option value={'납품 업자'}>납품 업자</option>
@@ -271,7 +325,7 @@ export default function AdminUserList() {
                                 <th>업체명(상호명)</th>
                                 <th>
                                     <span>등급</span>
-                                    <select style={{ marginLeft: '5px' }} className='select'>
+                                    <select style={{ marginLeft: '5px' }} className='select' onChange={e => batchUpdateValue(matchedData.grade, e)}>
                                         <option value={0}>----</option>
                                         <option value={'A'}>A</option>
                                         <option value={'B'}>B</option>
