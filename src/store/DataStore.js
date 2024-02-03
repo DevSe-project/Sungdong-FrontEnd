@@ -287,17 +287,17 @@ export const useSetLogin = () => useLoginStore((state) => state.actions);
 
 export const useSearchStore = create((set) => ({
   seperateSearchTerm: {
-    productCode: "",
-    productName: "",
-    productBrand: "",
-    productSpec: "",
-    productOption: ""
+    product_id: "",
+    product_title: "",
+    product_brand: "",
+    product_spec: "",
+    product_model: ""
   },
   actions: {
     setSeperateSearchTerm: (fieldName, value) =>
       set((state) => ({ seperateSearchTerm: { ...state.seperateSearchTerm, [fieldName]: value } })),
     resetSeperateSearchTerm: () =>
-      set({ seperateSearchTerm: { productName: "", productCode: "", productBrand: "", productOption: "" } }),
+      set({ seperateSearchTerm: { product_id: "", product_title: "", product_brand: "", product_spec: "", product_model: "" } }),
   }
 }));
 export const useSeperateSearchTerm = () => useSearchStore((state) => state.seperateSearchTerm);
@@ -353,6 +353,7 @@ export const useProductStore = create((set) => ({
     product_id: '',
     product_spec: '',
     product_title: '',
+    product_model: '',
     product_content: '',
     product_price: '',
     product_supply: 1,
@@ -409,6 +410,7 @@ export const useProductStore = create((set) => ({
         product: {
           product_id: '',
           product_spec: '',
+          product_model: '',
           product_title: '',
           product_content: '',
           product_price: '',
