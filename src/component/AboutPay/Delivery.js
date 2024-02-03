@@ -44,11 +44,22 @@ export function Delivery(props){
   const fetchOrderData = async() => {
     const data = await fetchGetServer('/order/list', 1);
 
-    // 게시물과 페이지 정보를 상태로 업데이트
+    // 게시물과 페이지 정보를 받아올 때 마다 업데이트
     setCurrentPage(data.currentPage);
     setTotalPages(data.totalPages);
-    return JSON.parse(JSON.stringify(data.data));
+    return data.data;
   }
+
+  //처음 마운트 될때 페이지 설정.
+  useEffect(() => {
+    const fetchOrderData = async () => {
+        const data = await fetchGetServer('/order/list', 1);
+        setCurrentPage(data.currentPage);
+        setTotalPages(data.totalPages);
+    };
+
+    fetchOrderData();
+  }, [])
 
   //상품 주문 정보 요청 함수
   const orderRequest = async (order_id) => {
