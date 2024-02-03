@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useModalActions, useModalState } from '../../../../Store/DataStore';
-import styles from './Deli_Modal.module.css';
+import styles from './Deli_List.module.css';
 import axios from '../../../../axios';
 import { GetCookie } from '../../../../customFn/GetCookie';
 import Deli_StateModal from './Deli_StateModal';
