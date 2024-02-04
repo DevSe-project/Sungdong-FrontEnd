@@ -5,3 +5,9 @@
     font-size: 20px;
     font-weight: bold;
 }
+
+.tr {
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+}

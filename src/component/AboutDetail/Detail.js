@@ -7,13 +7,12 @@ import { useDataActions, useDetailData, useListActions, useOrderActions, useWish
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import axios from '../../axios'
 import { GetCookie } from '../../customFn/GetCookie'
-import { useErrorHandling } from '../../customFn/ErrorHandling'
+import { useFetch } from '../../customFn/useFetch'
 export function Detail(props) {
 
   const detailData = useDetailData();
+  const {fetchServer} = useFetch();
 
-  const {handleForbiddenError, handleOtherErrors, handleUnauthorizedError} = useErrorHandling();
-  
   const {setDetailData, setUserData} = useDataActions();
   const {resetOrderInfo, setOrderInformation} = useOrderActions();
 
@@ -60,114 +59,18 @@ export function Detail(props) {
 
     //장바구니 추가 함수
     const addToCart = async (product) => {
-      if (isLoading) {
-        // 데이터가 없으면 아무것도 하지 않고 종료
-        return;
-      }
-      try {
-        const token = GetCookie("jwt_token");
-        const response = await axios.post("/cart/create", 
-          JSON.stringify(product),
-          {
-            headers : {
-              "Content-Type" : "application/json",
-              "Authorization" : `Bearer ${token}`,
-            }
-          }
-        )
-        // 성공 시 추가된 상품 정보를 반환합니다.
-        return response.data;
-      } catch (error) {
-        // 서버 응답이 실패인 경우
-        if (error.response && error.response.status === 400) {
-          // 서버가 400 Bad Request를 반환한 경우
-          alert(error.response.data.message);          
-          return console.error(error.response.data.message);
-          // 서버 응답이 실패인 경우
-        } else if (error.response && error.response.status === 401) {
-            // 서버가 401 UnAuthorazation를 반환한 경우
-            handleUnauthorizedError(error.response.data.message);
-            return {};
-        } else if (error.response && error.response.status === 403) {
-            handleForbiddenError(error.response.data.message);
-            return {};
-        } else {
-            handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
-            return {};
-        }
-      }
+      return fetchServer(product, `post`, `/cart/create`, 1);
     };
   
   //결제하기 fetch
   const addToOrder = async(product) => {
-    try{
-      const token = GetCookie('jwt_token');
-      const response = await axios.post("/order/write",
-        JSON.stringify(
-          product
-        ),
-        {
-          headers : {
-            "Content-Type" : "application/json",
-            'Authorization': `Bearer ${token}`,
-          }
-        }
-      )
-      return response.data;
-    } catch (error) {
-      // 서버 응답이 실패인 경우
-      if (error.response && error.response.status === 401) {
-        // 서버가 401 UnAuthorazation를 반환한 경우
-        handleUnauthorizedError(error.response.data.message);
-        return {};
-    } else if (error.response && error.response.status === 403) {
-        handleForbiddenError(error.response.data.message);
-        return {};
-    } else {
-        handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
-        return {};
-    }
-  }
+    return fetchServer(product, `post`, `/order/write`, 1);
 };
 
     //견적함 추가 함수
     const addToEstimate = async (product) => {
-      if (isLoading) {
-        // 데이터가 없으면 아무것도 하지 않고 종료
-        return;
-      }
-      try {
-        const token = GetCookie('jwt_token');
-        const response = await axios.post("/estimate/box", 
-          JSON.stringify({
-            ...product,
-            optionSelect: optionSelected ? optionSelected : null,
-            cnt: count,
-          }),
-          {
-            headers : {
-              "Content-Type" : "application/json",
-              'Authorization': `Bearer ${token}`
-            }
-          }
-        )
-        // 성공 시 추가된 상품 정보를 반환합니다.
-        return response.data;
-      } catch (error) {
-        // 서버 응답이 실패인 경우
-        if (error.response && error.response.status === 401) {
-          // 서버가 401 UnAuthorazation를 반환한 경우
-          handleUnauthorizedError(error.response.data.message);
-          return {};
-      } else if (error.response && error.response.status === 403) {
-          handleForbiddenError(error.response.data.message);
-          return {};
-      } else {
-          handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
-          return {};
-      }
-    }
-  };
+      return fetchServer(product, `post`, `/estimate/create`, 1);
+    };
   
     //장바구니 추가 함수
     const { mutate:cartMutate } = useMutation({mutationFn: addToCart})
@@ -256,7 +159,7 @@ function buyThis(product, count){
 
 // 장바구니 담기 함수
 function basketThis(product, count){
-  if(product.option0 !== null && (optionSelected === "" || optionSelected === null)){
+  if(product.option0 !== "" && (optionSelected === "" || optionSelected === null)){
     alert("옵션 선택 후 상품을 추가해주세요");
     return;
   }
@@ -346,8 +249,19 @@ function basketThis(product, count){
             <div className={styles.headRight}>
               <div className={styles.textBox}>
                 {data !== null
-                ? detailData.product_title
+                ? <span>{detailData.product_title}</span>
                 : <div className={styles.skeleton}>&nbsp;</div>}
+                <div style={{display: 'flex', gap: '0.5em'}}>
+                  (
+                  {data !== null
+                  ? <span>{detailData.product_model}</span>
+                  : <div className={styles.skeleton}>&nbsp;</div>}
+                  /
+                  {data !== null
+                  ? <span>{detailData.product_spec}</span>
+                  : <div className={styles.skeleton}>&nbsp;</div>}
+                  )
+                </div>
               </div>
               <h4 className={styles.h4}>
                 {data !== null

@@ -244,6 +244,7 @@ export function AdminDetail() {
               <div className={styles.headRight}>
                 <div className={styles.textBox}>
                   <input style={{width: '20em'}}className={styles.input} onChange={(e)=>setProduct("product_title", e.target.value)} type='text' placeholder='상품명을 입력해주세요'/>
+                  <input style={{width: '20em'}}className={styles.input} onChange={(e)=>setProduct("product_model", e.target.value)} type='text' placeholder='모델명을 입력해주세요'/>
                   <input style={{width: '20em'}}className={styles.input} onChange={(e)=>setProduct("product_spec", e.target.value)} type='text' placeholder='규격을 입력해주세요'/>
                 </div>
                 <h4 className={styles.h4}>

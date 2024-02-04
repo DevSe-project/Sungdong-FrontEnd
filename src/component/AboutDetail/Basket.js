@@ -2,47 +2,23 @@ import { useEffect, useState } from 'react';
 import styles from './Basket.module.css'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useCartList, useDataActions, useListActions, useOrderActions, useOrderData, useOrderList } from '../../Store/DataStore';
-import axios from '../../axios';
-import { GetCookie } from '../../customFn/GetCookie';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useErrorHandling } from '../../customFn/ErrorHandling';
-import Cookies from 'js-cookie';
 import { StepModule } from '../AboutPay/StepModule';
+import { useFetch } from '../../customFn/useFetch';
+import Pagination from '../../customFn/Pagination'
+
+import axios from '../../axios';
 export function Basket(props){
-  const {handleForbiddenError, handleOtherErrors, handleUnauthorizedError} = useErrorHandling();
+  const {fetchServer, fetchGetServer} = useFetch();
 
   //장바구니 데이터 fetch
   const fetchCartData = async() => {
-    try{
-      const token = GetCookie('jwt_token');
-      const response = await axios.get("/cart/list", 
-        {
-          headers : {
-            "Content-Type" : "application/json",
-            'Authorization': `Bearer ${token}`,
-          }
-        }
-      )
-      return response.data.data;
-    } catch (error) {
-      // 서버 응답이 실패인 경우
-      if (error.response && error.response.status === 401) {
-        // 서버가 401 UnAuthorazation를 반환한 경우
-        handleUnauthorizedError(error.response.data.message);
-        throw new Error(error.response.data.message)
-      } else if (error.response && error.response.status === 403) {
-          handleForbiddenError(error.response.data.message);
-          throw new Error(error.response.data.message)
-      } else if(error.response && error.response.status === 400) {
-        handleOtherErrors(error.response.data.message);
-        throw new Error(error.response.data.message)
-      } else {
-          handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
-          throw new Error(error.response.data.message)
-      }
-    }
-  };
+    const data = await fetchGetServer(`/cart/list`, 1);
+    setCurrentPage(data.currentPage);
+    setTotalPages(data.totalPages);
 
+    return data.data
+  };
 
   // 장바구니 데이터 불러오기
   const { isLoading, isError, error, data:basketList } = useQuery({queryKey:['cart'], queryFn: ()=> fetchCartData()});
@@ -57,6 +33,9 @@ export function Basket(props){
 
   const queryClient = useQueryClient();
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
   // 배송가
   const delivery = 3000;
 
@@ -66,43 +45,9 @@ export function Basket(props){
   // 전체 선택 체크박스 상태를 저장할 상태 변수
   const [selectAll, setSelectAll] = useState(false);
 
-
-  // 게시물 데이터와 페이지 번호 상태 관리    
-  const [currentPage, setCurrentPage] = useState(1);
-
   //장바구니 데이터 fetch
   const orderToFetch = async(product) => {
-    try{
-    const token = GetCookie('jwt_token');
-    const response = await axios.post("/order/write",
-        JSON.stringify(
-        product
-        ),
-        {
-        headers : {
-            "Content-Type" : "application/json",
-            'Authorization': `Bearer ${token}`,
-        }
-        }
-    )
-    return response.data;
-    } catch (error) {
-    // 서버 응답이 실패인 경우
-    if (error.response && error.response.status === 401) {
-        // 서버가 401 UnAuthorazation를 반환한 경우
-        handleUnauthorizedError(error.response.data.message);
-        throw new Error(error.response.data.message)
-    } else if (error.response && error.response.status === 403) {
-        handleForbiddenError(error.response.data.message);
-        throw new Error(error.response.data.message)
-    } else if(error.response && error.response.status === 400) {
-      handleOtherErrors(error.response.data.message);
-      throw new Error(error.response.data.message)
-    } else {
-        handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
-        throw new Error(error.response.data.message)
-    }
-}
+    return fetchServer(product, `post`, `/order/write`, 1);
 };
 
 
@@ -116,6 +61,43 @@ export function Basket(props){
   
     fetchData();
   }, [basketList])
+
+  //-------------------------페이지 설정------------------------------
+
+  // 페이지를 변경할 때 호출되는 함수
+  const fetchPageChange = async (pageNumber) => {
+    return await fetchServer({}, 'post', '/cart/list', pageNumber);
+  };
+
+
+  const {mutate:pageMutaion} = useMutation({mutationFn: fetchPageChange})
+
+
+  function handlePageChange(pageNumber){
+    pageMutaion(pageNumber, {
+      onSuccess: (data) => {
+        setCurrentPage(data.data.currentPage);
+        setTotalPages(data.data.totalPages);
+        queryClient.setQueryData(['cart'], () => {
+          return data.data.data
+        })
+      },
+      onError: (error) => {
+        return console.error(error.message);
+      },
+    })
+  }
+
+    //처음 마운트 될때 페이지 설정.
+    useEffect(() => {
+      const fetchData = async () => {
+          const data = await fetchGetServer('/cart/list', 1);
+          setCurrentPage(data.currentPage);
+          setTotalPages(data.totalPages);
+      };
+  
+      fetchData();
+    }, [])
 
   //----------------------체크박스------------------------
   // 전체 선택 체크박스 클릭 시 호출되는 함수
@@ -244,7 +226,7 @@ export function Basket(props){
           props.setActiveTab(2);
           },
           onError: (error) => {
-            alert(error.message);
+            return console.error(error.message);
           },
       });
   }
@@ -379,33 +361,7 @@ export function Basket(props){
                 </div>
             </div>
           </div>
-          <div className={styles.buttonContainer}>
-            {/* 이전 페이지 */}
-            <button
-            className={styles.moveButton} 
-            onClick={()=> {
-              if(currentPage !== 1){
-                setCurrentPage(currentPage - 1)
-              } else {
-                alert("해당 페이지가 가장 첫 페이지 입니다.")
-              }}}>
-                <i className="far fa-angle-left"/>
-            </button>
-            <div className={styles.moveButton}>
-              {currentPage}
-            </div>
-            {/* 다음 페이지 */}
-            <button
-            className={styles.moveButton}
-            onClick={()=> {
-              if(basketList.length > 5){
-                setCurrentPage(currentPage + 1)
-              } else {
-                alert("다음 페이지가 없습니다.")
-              }}}>
-                <i className="far fa-angle-right"/>
-            </button>
-          </div>
+          <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange}/>
 
 
           {/* 다음 단계 버튼 */}

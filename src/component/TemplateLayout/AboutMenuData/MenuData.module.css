@@ -1,13 +1,13 @@
 /* -------------------- TopBanner -------------------- */
 /* 위치 조정 */
-.menuLocation{
+.menuLocation {
   width: 200px;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   list-style: none;
   position: sticky;
   top: 85px;
-  transition: transform 0.5s ease; /* 변환 효과를 부드럽게 적용합니다. */
+  transition: transform 0.5s ease;
 }
 
 /* 네비게이션 내부 링크 스타일링 (옵션) */
@@ -16,25 +16,26 @@
   color: black;
   font-size: 1.2em;
   font-weight: 550;
-  text-wrap: nowrap;
+  white-space: nowrap;
   cursor: pointer;
 }
 
-.subMenu{
+.subMenu {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
-.sub_item{
-  padding-top: 1em;
-  padding-bottom: 1em;
+.sub_item {
+  padding: 1em;
   width: 100%;
   font-size: large;
-  text-wrap: nowrap;
+  white-space: nowrap;
 }
-.sub_item:hover{
+
+.sub_item:hover {
   background-color: lightgray;
   transition: background-color 0.5s ease;
 }

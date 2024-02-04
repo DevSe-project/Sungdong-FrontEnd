@@ -29,7 +29,7 @@
   box-sizing: border-box;
   background-color: beige;
   width: 25em;
-  height: 37em;
+  height: auto;
   overflow: hidden;
   border: 1px solid lightgray;
   object-fit: cover;
@@ -43,7 +43,7 @@
   border: 1px solid lightgray;
   gap: 1em;
   padding: 1em;
-  height: 37em;
+  height: auto;
 }
 
 .priceTag{
@@ -64,7 +64,6 @@
   justify-content: center;
   align-items: center;
   padding: 1.5em;
-  height: 100%;
   font-size: 1.2em;
   border-top: 1px solid lightgray;
   border-bottom: 1px solid lightgray;

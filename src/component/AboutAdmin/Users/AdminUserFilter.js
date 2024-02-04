@@ -1,8 +1,8 @@
 import React from 'react';
-import styles from './FiterSearch_User.module.css';
+import styles from './AdminUserFilter.module.css';
 import { useUserFilter, useUserFilterActions } from '../../../Store/DataStore';
 
-export default function FilterSearchUser(props) {
+export default function AdminUserFilter(props) {
     const userFilter = useUserFilter();
     const { setUserFilter,resetUserFilter } = useUserFilterActions();
 
@@ -84,8 +84,8 @@ export default function FilterSearchUser(props) {
 
             {/* Button */}
             <div style={{display: 'flex', justifyContent: 'center', gap: '0.5em'}}>
-                <button type='reset' className={styles.buttonReset} onClick={()=>resetUserFilter()}>초기화</button>
-                <button className={styles.button} onClick={()=>props.onFiltering()}>검색하기</button>
+                <button type='reset' className='white_round_button' onClick={()=>resetUserFilter()}>초기화</button>
+                <button className='original_round_button' onClick={()=>props.onFiltering()}>검색하기</button>
             </div>
         </div>
     );

@@ -1,9 +1,8 @@
-// Sort_UserList.js
 import React from 'react';
-import styles from './Sort_UserList.module.css';
+import styles from './AdminUserSort.module.css';
 import { useUserFilterActions, useUserSort } from '../../../Store/DataStore';
 
-const SortUserList = (props) => {
+const AdminUserSort = (props) => {
     const userSort = useUserSort();
     const {setUserSort} = useUserFilterActions();
 
@@ -54,9 +53,9 @@ const SortUserList = (props) => {
                 ))}
             </div>
 
-            <button className={styles.button} onClick={props.onSort}>정렬하기</button>
+            <button style={{marginTop: '16px'}} className='original_round_button' onClick={props.onSort}>정렬하기</button>
         </div>
     );
 };
 
-export default SortUserList;
+export default AdminUserSort;

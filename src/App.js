@@ -50,8 +50,9 @@ import { AdminCategoryEdit } from './component/AboutAdmin/Category/AdminCategory
 import { AdminSoldList } from './component/AboutAdmin/Sold/AdminSoldList';
 import { AdminNotSoldList } from './component/AboutAdmin/Sold/AdminNotSoldList';
 import { AdminRefund } from './component/AboutAdmin/Refund/AdminRefund';
+import AdminUserList from './component/AboutAdmin/Users/AdminUserList';
 import AdminNotice from './component/AboutAdmin/Notice/AdminNotice';
-import DeliveryManagement from "./component/AboutAdmin/SD_Delivery/State_M/DeliveryManagement";
+import Deli from "./component/AboutAdmin/SD_Delivery/List/Deli";
 import TotalCal_Manage from "./component/AboutAdmin/SD_Account/TOTAL/Manage/TotalCal_Manage";
 import CMSaccount_Manage from "./component/AboutAdmin/SD_Account/CMS/Manage/CMSaccount_Manage";
 
@@ -66,7 +67,6 @@ import { useQuery } from "@tanstack/react-query";
 import { getDocs, collection } from 'firebase/firestore'
 import { AccountBook } from "./component/AboutMyPage/AccountBook/AccountBook";
 import { DepositHistory } from "./component/AboutMyPage/AccountBook/DepositHistory";
-import Manage_Users from "./component/AboutAdmin/Users/Manage_Users";
 import { EstimateBox } from "./component/AboutEstimate/EstimateBox";
 import { EstimateManager } from "./component/AboutEstimate/EstimateManager";
 import { TackBackRequest } from "./component/AboutTakeBack/TakeBackRequest";
@@ -92,8 +92,6 @@ export default function App() {
 
   //데이터 fetch
   const fetchData = async () => {
-    // const querySnapshot = await getDocs(collection(db, 'ProductData')); // 'ProductData'는 컬렉션 이름
-    // return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
     try {
       const response = await axios.get("/product/list",
         {
@@ -112,8 +110,6 @@ export default function App() {
 
   //카테고리 데이터 fetch
   const fetchCategoryData = async () => {
-    // const querySnapshot = await getDocs(collection(db, 'CategoryData')); // 'ProductData'는 컬렉션 이름
-    // return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
     try {
       const response = await axios.get("/category/list",
         {
@@ -743,7 +739,7 @@ export default function App() {
         <Route path='/adminMain/refund' element={<AdminRefund />} />
 
         {/* 배송관리 - 배송 상태 관리 */}
-        <Route path='/adminMain/SD_delivery/DeliveryManager' element={<DeliveryManagement />} />
+        <Route path='/adminMain/SD_delivery/DeliveryManager' element={<Deli />} />
 
         {/* 정산관리 - 누적정산 */}
         <Route path='/adminMain/SD_account/total' element={<TotalCal_Manage />} />
@@ -754,7 +750,7 @@ export default function App() {
         <Route path='/adminMain/customerCenter/notice' element={<AdminNotice />} />
 
         {/* 회원관리 - 고객관리 */}
-        <Route path='/adminMain/user' element={<Manage_Users />} />
+        <Route path='/adminMain/user' element={<AdminUserList />} />
         {/* 회원관리 - 회원가입 코드 관리 */}
         <Route path='/adminMain/printCode' element={<ManageCode />} />
 

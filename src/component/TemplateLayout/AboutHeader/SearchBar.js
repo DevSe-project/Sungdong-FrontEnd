@@ -60,18 +60,7 @@ export function SearchBar() {
 
   const handleKeyDown = (event) => {
     // 방향키로 선택한 결과 항목 인덱스 업데이트
-    if (event.key === 'ArrowDown') { // 아래 방향키
-      event.preventDefault();
-      setSelectedResultIndex((prevIndex) =>
-        prevIndex < results.length - 1 ? prevIndex + 1 : prevIndex
-      );
-    } else if (event.key === 'ArrowUp') { // 위 방향키
-      event.preventDefault();
-      setSelectedResultIndex((prevIndex) =>
-        prevIndex > 0 ? prevIndex - 1 : -1
-      );
-    } else if (event.key === 'Enter') {
-      // Enter 키를 누르면 선택한 결과 항목을 검색어로 설정
+    if (event.key === 'Enter') {
       if(selectedResultIndex !== -1) {
         setSearchTerm(results[selectedResultIndex]);
         switch (searchFilter) {
@@ -170,25 +159,6 @@ export function SearchBar() {
   return (
     <div>
       <div className={styles.searchInputContainer}>
-        <select 
-        className={styles.select}
-        name="searchFilter"
-        value={searchFilter}              
-        onChange={(e)=>setSearchFilter(e.target.value)}
-        >
-          <option value='상품명'>
-            상품명
-          </option>
-          <option value='코드'>
-            코드
-          </option>
-          <option value='브랜드'>
-            브랜드
-          </option>
-          <option value='옵션'>
-            옵션
-          </option>
-        </select>
         <input
           ref={inputRef}
           className={styles.searchInput}
@@ -198,22 +168,6 @@ export function SearchBar() {
           onChange={handleSearch}
           onKeyDown={handleKeyDown} // onKeyDown 이벤트 핸들러 추가
         />
-        <ul 
-        className={searchTerm !== "" 
-        && results.length > 0 
-        ? styles.result
-        : null}>
-          {results && results.map((result, index) => (
-            <li
-              key={index}
-              className={index === selectedResultIndex 
-                ? styles.selected 
-                : styles.resultInner}
-            >
-              {result}
-            </li>
-          ))}
-        </ul>
         {/* 돋보기 아이콘 */}
         <i 
         onClick={() => {

@@ -274,11 +274,11 @@ export default function AdminNotice() {
                   <td>{item.date}</td>
                   {/* 삭제 */}
                   <td style={{ display: 'flex', justifyContent: 'center' }}>
-                    <div className={styles.post_del_button}
+                    <button className='white_button'
                       onClick={() => deletePostMutation.mutate()
                       }>
                       삭제
-                    </div>
+                    </button>
                   </td>
                   {/* 수정 모달 */}
                   {isModal && modalName === 'edit' &&

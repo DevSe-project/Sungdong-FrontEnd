@@ -4,72 +4,66 @@ import { useEffect, useState } from 'react';
 import { useDataActions, useOrderData } from '../../Store/DataStore';
 import axios from '../../axios';
 import { GetCookie } from '../../customFn/GetCookie';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { useErrorHandling } from '../../customFn/ErrorHandling';
-
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useFetch } from '../../customFn/useFetch';
+import Pagination from '../../customFn/Pagination'
 export function Delivery(props){
-  const {handleForbiddenError, handleOtherErrors, handleUnauthorizedError} = useErrorHandling();
-
+  
+  const {fetchServer, fetchGetServer}= useFetch();
   const {setDetailData} = useDataActions();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const queryClient = useQueryClient();
+
+  // 페이지를 변경할 때 호출되는 함수
+  const fetchPageChange = async (pageNumber) => {
+    return await fetchServer({}, 'post', '/order/list', pageNumber);
+  };
+
+  const {mutate:pageMutaion} = useMutation({mutationFn: fetchPageChange})
+
+
+  function handlePageChange(pageNumber){
+    pageMutaion(pageNumber, {
+      onSuccess: (data) => {
+        setCurrentPage(data.data.currentPage);
+        setTotalPages(data.data.totalPages);
+        queryClient.setQueryData(['order'], () => {
+          return data.data.data
+        })
+      },
+      onError: (error) => {
+        return console.error(error.message);
+      },
+    })
+  }
 
   //주문 데이터 fetch 
   const fetchOrderData = async() => {
-    try{
-      const token = GetCookie('jwt_token');
-      const response = await axios.get("/order/list", 
-        {
-          headers : {
-            "Content-Type" : "application/json",
-            'Authorization': `Bearer ${token}`,
-          }
-        }
-      )
-      return response.data;
-    } catch (error) {
-      // 서버 응답이 실패인 경우
-      if (error.response && error.response.status === 401) {
-          // 서버가 401 UnAuthorazation를 반환한 경우
-          handleUnauthorizedError(error.response.data.message);
-          return {};
-      } else if (error.response && error.response.status === 403) {
-          handleForbiddenError(error.response.data.message);
-          return {};
-      } else {
-          handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
-          return {};
-      }
-    }
+    const data = await fetchGetServer('/order/list', 1);
+
+    // 게시물과 페이지 정보를 받아올 때 마다 업데이트
+    setCurrentPage(data.currentPage);
+    setTotalPages(data.totalPages);
+    return data.data;
   }
+
+  //처음 마운트 될때 페이지 설정.
+  useEffect(() => {
+    const fetchOrderData = async () => {
+        const data = await fetchGetServer('/order/list', 1);
+        setCurrentPage(data.currentPage);
+        setTotalPages(data.totalPages);
+    };
+
+    fetchOrderData();
+  }, [])
 
   //상품 주문 정보 요청 함수
   const orderRequest = async (order_id) => {
-    try {
-      const token = GetCookie('jwt_token');
-      const response = await axios.post("/order/findSelectOrderList", 
-        JSON.stringify({order_id: order_id}),
-        {
-          headers : {
-            "Content-Type" : "application/json",
-            'Authorization': `Bearer ${token}`,
-          }
-        }
-      )
-      // 성공 시 추가된 상품 정보를 반환합니다.
-      return response.data;
-    } catch (error) {
-      // 실패 시 예외를 throw합니다.
-      if (error.response && error.response.status === 401) {
-        // 서버가 401 UnAuthorazation를 반환한 경우
-        handleUnauthorizedError(error.response.data.message);
-        return {};
-      } else if (error.response && error.response.status === 403) {
-        handleForbiddenError(error.response.data.message);
-        return {};
-      } else {
-        handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
-        return {};
-      }    
-    }
+    return fetchServer(order_id, 'post', '/order/findSelectOrderList', 1);
   };
 
   const { isLoading, isError, error, data:order } = useQuery({queryKey:['order'], queryFn: ()=> fetchOrderData()});
@@ -96,12 +90,12 @@ export function Delivery(props){
       alert("배송 준비 중일때는 조회하실 수 없습니다.")
     }
   }
-  // 게시물 데이터와 페이지 번호 상태 관리    
-  const [currentPage, setCurrentPage] = useState(1);
-
 
   function detailOrder(item){
-    orderListMutation(item.order_id,{
+    const jsonOrder = {
+      order_id: item.order_id
+    }
+    orderListMutation(jsonOrder,{
       onSuccess: (data) => {
         console.log(data);
         const orderdata = data.data;
@@ -122,7 +116,6 @@ export function Delivery(props){
     return <p>에러 : {error.message}</p>;
   }
 
-
   return(
     <div className={styles.container}>
       {props.resultSearch &&
@@ -132,7 +125,7 @@ export function Delivery(props){
       이 검색 되었습니다. */}
       </h3>}
       {order ?
-      order.result.map((item, key)=> 
+      order.map((item, key)=> 
       <div key={key} className={styles.deliveryList}>
         <div className={styles.orderDate}>
           <h4 style={{fontWeight: '850'}}>{new Date(item.order_date).toLocaleDateString()} 주문</h4>
@@ -155,8 +148,8 @@ export function Delivery(props){
               <p style={{color: 'orangered', fontWeight: '550'}}>{item.delivery_date && `🚚 배송 예정 : ${new Date(item.delivery_date).toLocaleDateString()}`}</p>
               </h5>
               <i style={{color: '#ccc'}} className="fas fa-trash-alt"></i>
-            </div>
-            {item.products.map((product,key) => 
+            </div> 
+            {item.products && JSON.parse('[' + item.products + ']').map((product,key) => 
             <div key={key} className={styles.deliveryNowItem}>
               <img className={styles.img} src={product.product_image_original} alt="주문상품"/>
               <div className={styles.deliveryNowInformation}>
@@ -201,33 +194,7 @@ export function Delivery(props){
       </div>
     </div>
     }
-    <div className={styles.buttonContainer}>
-      {/* 이전 페이지 */}
-      <button
-        className={styles.pageButton} 
-        onClick={()=> {
-          if(currentPage !== 1){
-            setCurrentPage(currentPage - 1)
-          } else {
-            alert("해당 페이지가 가장 첫 페이지 입니다.")
-      }}}>
-      <i className="far fa-angle-left"/>
-      </button>
-      <div className={styles.pageButton}>
-        {currentPage}
-      </div>
-        {/* 다음 페이지 */}
-      <button
-      className={styles.pageButton}
-      onClick={()=> {
-        if(order.length > 5){
-          setCurrentPage(currentPage + 1)
-        } else {
-          alert("다음 페이지가 없습니다.")
-        }}}>
-          <i className="far fa-angle-right"/>
-      </button>
-    </div>
+    <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange}/>
   </div>
   )
 }

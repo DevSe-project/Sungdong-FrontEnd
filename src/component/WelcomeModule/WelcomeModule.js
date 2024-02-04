@@ -1,13 +1,13 @@
 import styles from './WelcomeModule.module.css';
 import { useQuery } from '@tanstack/react-query';
-import axios from '../../axios';
 import { GetCookie } from '../../customFn/GetCookie';
 import { useNavigate } from 'react-router-dom';
-import { useErrorHandling } from '../../customFn/ErrorHandling';
+import { useFetch } from '../../customFn/useFetch'
+import axios from '../../axios';
 
 export default function WelcomeModule() {
     const navigate = useNavigate();
-    const {handleForbiddenError, handleOtherErrors, handleUnauthorizedError} = useErrorHandling();
+    const {handleForbiddenError, handleOtherErrors, handleNoAlertOtherErrors} = useFetch();
 
     // -----UserData fetch
     const fetchUserData = async () => {
@@ -27,19 +27,19 @@ export default function WelcomeModule() {
             // 서버 응답이 실패인 경우
             if (error.response && error.response.status === 401) {
                 // 서버가 401 UnAuthorazation를 반환한 경우
-                handleUnauthorizedError(error.response.data.message);
-                return {};
+                handleNoAlertOtherErrors(error.response.data.message);
+                return new Error(error.response.data.message);
             } else if (error.response && error.response.status === 403) {
                 handleForbiddenError(error.response.data.message);
-                return {};
+                throw new Error(error.response.data.message);
             } else {
-                handleOtherErrors('상품을 장바구니에 추가하는 중 오류가 발생했습니다.');
-                return {};
+                handleOtherErrors(error.response.data.message);
+                throw new Error(error.response.data.message);
             }
         }
     }
 
-    const { isLoading, isError, data: userData } = useQuery({
+    const { isLoading, isError, error, data: userData } = useQuery({
         queryKey: ['user'],
         queryFn: fetchUserData,
     });
@@ -48,15 +48,7 @@ export default function WelcomeModule() {
         return <p>Loading..</p>;
     }
     if (isError) {
-        return (
-            <div>
-                <input></input>
-                <input></input>
-                <div>
-                    <button>로그인</button>
-                </div>
-            </div>
-        )
+        return <p>{error.message}</p>
     }
 
 

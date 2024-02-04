@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useModalActions, useModalState } from '../../../../Store/DataStore';
-import styles from './Deli_InquireTable.module.css';
-import InvoiceModal from '../Modal/InvoiceModal';
-import DeliveryStateModal from '../Modal/DeliveryStateModal';
+import styles from './Deli_List.module.css';
 import axios from '../../../../axios';
 import { GetCookie } from '../../../../customFn/GetCookie';
+import Deli_StateModal from './Deli_StateModal';
+import Deli_InvoiceModal from './Deli_InvoiceModal';
 
 
-export default function Deli_InquireTable() {
+export default function Deli_List() {
 
     // relative modal state
     const { isModal, modalName } = useModalState();
@@ -173,28 +173,21 @@ export default function Deli_InquireTable() {
                     </div>
                     {/* 선택항목일괄처리 */}
                     <div className={styles.selectedHandler}>
-                        {/* 배송상태 수정 */}
-                        <button
-                            className='white_button'
-                            onClick={() => { handleModalOpen('DeliveryStateModal') }}>
-                            선택 항목 배송상태 수정
-                        </button>
-                        {/* 송장 수정 */}
-                        <button
-                            className='white_button'
-                            // 송장수정 fn
-                            onClick={() => { handleModalOpen('InvoiceModal') }}>
-                            선택 항목 송장 수정
-                        </button>
-                        {/* 일괄 배송 취소 */}
-                        <button
-                            className='white_button'
-                            onClick={() => {
-                                deleteData()
-                            }}>
-                            {/* 배송 상태 리스트에서 삭제 */}
-                            선택 항목 배송 취소
-                        </button>
+                        {[
+                            { item: '선택항목 상태 수정', function: () => handleModalOpen('DeliveryStateModal') },
+                            { item: '선택항목 송장 입력/수정', function: () => handleModalOpen('InvoiceModal') },
+                            { item: '선택항목 배송 취소(삭제)', function: () => deleteData() },
+                        ].map((item, index) => {
+                            return (
+                                <button
+                                    className='white_button'
+                                    onClick={item.function}
+                                    key={index}>
+                                    {item.item}
+                                </button>
+                            );
+                        })}
+
                     </div>
                     {/* Main - 배송관리 테이블 리스트업 */}
                     <table>
@@ -224,11 +217,10 @@ export default function Deli_InquireTable() {
                                 getCurrentPagePosts()?.map((item, index) => (
                                     <tr key={index}>
                                         {/* 체크박스 */}
-                                        <td>
-                                            <input type='checkbox'
-                                                checked={checkedItems.includes(item.order_id) ? true : false}
-                                                onChange={(e) => handlePerCheckbox(e.target.checked, item.order_id)} />
-                                        </td>
+                                        <td><input
+                                            type='checkbox'
+                                            checked={checkedItems.includes(item.order_id) ? true : false}
+                                            onChange={(e) => handlePerCheckbox(e.target.checked, item.order_id)} /></td>
                                         {/* 주문번호 */}
                                         <td>{item.order_id}</td>
                                         {/* 택배사 */}
@@ -279,7 +271,7 @@ export default function Deli_InquireTable() {
                     {
                         isModal && modalName === 'DeliveryStateModal'
                             ?
-                            <DeliveryStateModal
+                            <Deli_StateModal
                                 checkedItems={checkedItems}
                                 setCheckedItems={setCheckedItems}
                                 updateAllState={updateAllState}
@@ -292,7 +284,7 @@ export default function Deli_InquireTable() {
                     {
                         isModal && modalName === 'InvoiceModal'
                             ?
-                            <InvoiceModal
+                            <Deli_InvoiceModal
                                 checkedItems={checkedItems}
                                 setCheckedItems={setCheckedItems}
                                 parseDeliveryState={parseDeliveryState}
