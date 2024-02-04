@@ -9,6 +9,7 @@ import { useFetch} from "../../../customFn/useFetch"
 import Pagination from "../../../customFn/Pagination";
 export function Category(){
   const seperateSearchTerm = useSeperateSearchTerm();
+  const {resetSeperateSearchTerm} = useSearchActions();
   const searchList = useSearchList();
   const navigate = useNavigate();
   // 체크박스를 통해 선택한 상품들을 저장할 상태 변수
@@ -48,8 +49,7 @@ export function Category(){
   useEffect(() => {
     return () => {
       // 컴포넌트가 언마운트될 때 검색창 상태 리셋
-      useSearchStore.persist.clearStorage();
-      window.location.reload();
+      resetSeperateSearchTerm();
     };
   }, []);
 
@@ -178,7 +178,7 @@ export function Category(){
 
     //장바구니 추가 함수
     const addToCart = async (product) => {
-      fetchServer(product, 'post', '/cart/create', 1)
+      return await fetchServer(product, `post`, `/cart/create`, 1)
     };
 
     //장바구니 추가 함수
@@ -195,8 +195,6 @@ export function Category(){
       alert("필수 옵션을 선택해주세요!");
       return;
   }
-
-  console.log(selectedItems)
 
       basketMutation(selectedItems,{
         onSuccess: (cartData) => {

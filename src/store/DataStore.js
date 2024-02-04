@@ -376,6 +376,8 @@ export const useSearchStore = create(
     {
       name: 'searchTerm',
       storage: createJSONStorage(() => sessionStorage),
+      version: 1,
+      partialize: (state) => ({ seperateSearchTerm: state.seperateSearchTerm }),
     }
   )
 );
