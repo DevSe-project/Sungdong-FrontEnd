@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { createJSONStorage, persist } from 'zustand/middleware'
 
 // ------------------------------데이터 STORE----------------------------//
 
@@ -285,21 +286,29 @@ export const useSetLogin = () => useLoginStore((state) => state.actions);
 
 /* ----------------SEARCH STORE---------------- */
 
-export const useSearchStore = create((set) => ({
-  seperateSearchTerm: {
-    product_id: "",
-    product_title: "",
-    product_brand: "",
-    product_spec: "",
-    product_model: ""
-  },
-  actions: {
-    setSeperateSearchTerm: (fieldName, value) =>
-      set((state) => ({ seperateSearchTerm: { ...state.seperateSearchTerm, [fieldName]: value } })),
-    resetSeperateSearchTerm: () =>
-      set({ seperateSearchTerm: { product_id: "", product_title: "", product_brand: "", product_spec: "", product_model: "" } }),
-  }
-}));
+export const useSearchStore = create(
+  persist(
+    (set) => ({
+      seperateSearchTerm: {
+        product_id: "",
+        product_title: "",
+        product_brand: "",
+        product_spec: "",
+        product_model: ""
+      },
+      actions: {
+        setSeperateSearchTerm: (fieldName, value) =>
+          set((state) => ({ seperateSearchTerm: { ...state.seperateSearchTerm, [fieldName]: value } })),
+        resetSeperateSearchTerm: () =>
+          set({ seperateSearchTerm: { product_id: "", product_title: "", product_brand: "", product_spec: "", product_model: "" } }),
+      }
+    }),
+    {
+      name: 'searchTerm',
+      storage: createJSONStorage(() => sessionStorage),
+    }
+  )
+);
 export const useSeperateSearchTerm = () => useSearchStore((state) => state.seperateSearchTerm);
 export const useSearchActions = () => useSearchStore((state) => state.actions);
 
