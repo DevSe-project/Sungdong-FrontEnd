@@ -15,10 +15,9 @@ export function SeperateSearchBar() {
 
   //검색 요청
   const handleSearch = async (search) => {
-    return await fetchAddPostServer(search, `post`, `/search/list`, 1, 10);
+    return await fetchAddPostServer([search], `post`, `/search/list`, 1, 10);
   };
 
-      
   //검색 요청 Mutate
   const { mutate:searchMutate } = useMutation({mutationFn: handleSearch})
   

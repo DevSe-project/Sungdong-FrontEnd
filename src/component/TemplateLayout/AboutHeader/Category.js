@@ -2,19 +2,20 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from './Category.module.css'
 import React from 'react';
-import { useCartList, useCategoryData, useListActions, useSearchActions, useSearchList, useSearchStore, useSeperateSearchTerm } from "../../../Store/DataStore";
+import { useCartList, useCategoryData, useListActions, useSearchActions, useSearchList, useSearchStore, useSearchTerm, useSeperateSearchTerm } from "../../../Store/DataStore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CategoryFilter } from "./CategoryFilter";
 import { useFetch} from "../../../customFn/useFetch"
 import Pagination from "../../../customFn/Pagination";
 export function Category(){
   const seperateSearchTerm = useSeperateSearchTerm();
+  const searchTerm = useSearchTerm();
   const {resetSeperateSearchTerm} = useSearchActions();
   const searchList = useSearchList();
   const navigate = useNavigate();
   // 체크박스를 통해 선택한 상품들을 저장할 상태 변수
   const [selectedItems, setSelectedItems] = useState([]);
-  const {setSearchList, resetSearchList, setSearchCnt, setSearchCntUp, setSearchCntDown, setSearchOption} = useListActions();
+  const {setSearchList, resetSearchList, setSearchCnt, setSearchCntUp, setSearchCntDown, setSearchOption, resetSearchTerm} = useListActions();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [postCnt, setPostCnt] = useState(10);
@@ -22,7 +23,7 @@ export function Category(){
   const {fetchAddPostServer, fetchServer} = useFetch();
 
   const fetchSearchData = async() => {
-    const data = await fetchAddPostServer(seperateSearchTerm, 'post', '/search/list', currentPage, postCnt);
+    const data = await fetchAddPostServer(searchTerm.search === "" ? [seperateSearchTerm] : searchTerm, 'post', '/search/list', currentPage, postCnt);
 
     setCurrentPage(data.data.currentPage);
     setTotalPages(data.data.totalPages);
@@ -50,13 +51,14 @@ export function Category(){
   useEffect(() => {
     return () => {
       // 컴포넌트가 언마운트될 때 검색창 상태 리셋
-      resetSeperateSearchTerm();
+      useSearchStore.persist.clearStorage();
+      window.location.reload();
     };
   }, []);
 
   // 페이지를 변경할 때 호출되는 함수
   const fetchPageChange = async (pageNumber) => {
-    return await fetchAddPostServer(seperateSearchTerm, 'post', '/search/list', pageNumber, postCnt);
+    return await fetchAddPostServer([seperateSearchTerm], 'post', '/search/list', pageNumber, postCnt);
   };
 
 

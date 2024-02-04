@@ -359,6 +359,9 @@ export const useSetLogin = () => useLoginStore((state) => state.actions);
 export const useSearchStore = create(
   persist(
     (set) => ({
+      searchTerm: {
+        search: ""
+      },
       seperateSearchTerm: {
         product_id: "",
         product_title: "",
@@ -367,20 +370,26 @@ export const useSearchStore = create(
         product_model: ""
       },
       actions: {
+        setSearchTerm: (fieldName, value) =>
+          set((state) => ({ searchTerm: { ...state.searchTerm, [fieldName]: value } })),
         setSeperateSearchTerm: (fieldName, value) =>
           set((state) => ({ seperateSearchTerm: { ...state.seperateSearchTerm, [fieldName]: value } })),
         resetSeperateSearchTerm: () =>
           set({ seperateSearchTerm: { product_id: "", product_title: "", product_brand: "", product_spec: "", product_model: "" } }),
+        resetSearchTerm: () =>
+          set({ searchTerm: { search: "" } }),
       }
     }),
     {
       name: 'searchTerm',
       storage: createJSONStorage(() => sessionStorage),
       version: 1,
-      partialize: (state) => ({ seperateSearchTerm: state.seperateSearchTerm }),
+      partialize: (state) => ({ seperateSearchTerm: state.seperateSearchTerm, searchTerm: state.searchTerm }),
     }
   )
 );
+
+export const useSearchTerm = () => useSearchStore((state) => state.searchTerm);
 export const useSeperateSearchTerm = () => useSearchStore((state) => state.seperateSearchTerm);
 export const useSearchActions = () => useSearchStore((state) => state.actions);
 
