@@ -15,7 +15,7 @@ export function OrderStep({setActiveTab, activeTab}){
     const delivery = 3000;
 
     const [openDeliveryModal, setOpenDeliveryModal] = useState(true);
-  // 일정 시간 후 팝업 닫음
+    // 일정 시간 후 팝업 닫음
     useEffect(()=> {
         const opentime = setInterval(() => {
         setOpenDeliveryModal((prev) => !prev)
@@ -24,7 +24,20 @@ export function OrderStep({setActiveTab, activeTab}){
         return () => clearInterval(opentime)
     }, [])
 
-      // 장바구니 탭 - 결제 탭에서 뒤로가기 시 뒤로가기 방지 후 장바구니 탭으로 이동
+    //새로고침 전 경고
+    useEffect(() => {
+        const handleBeforeUnload = (e) => {
+        e.preventDefault();
+        };
+    
+        window.addEventListener('beforeunload', handleBeforeUnload);
+    
+        return () => {
+        window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);
+
+    // 장바구니 탭 - 결제 탭에서 뒤로가기 시 뒤로가기 방지 후 장바구니 탭으로 이동
     useEffect(() => {
         const handleBack = (e) => {
         e.preventDefault();
