@@ -380,17 +380,24 @@ export default function AdminUserList() {
                 <th>업체명(상호명)</th>
                 {/* 고객 구분, CMS여부 */}
                 {[
-                  { name: '고객 구분', option: ['실사용자', '납품업자'] },
-                  { name: 'CMS여부', option: ['A', 'B', 'C', 'D'] }
-                ].map((item, index) => (
+                  { name: '고객 구분', valList: ['실사용자', '납품업자'] },
+                  { name: '담당자', valList: ['박형조', '엄지석', '김태훈'], val: '박형조' },
+                  { name: 'CMS여부', valList: ['A', 'B', 'C', 'D'] }
+                ].map((customItem, index) => (
                   <th key={index}>
-                    <span>{item.name}</span>
-                    <select className='select'>
-                      <option value="">----</option> {/* 기본 옵션을 설정 */}
-                      {item.option.map((option, optionIndex) => (
-                        <option key={optionIndex} value={option}>{option}</option>
-                      ))}
-                    </select>
+                    {editIndex == 'allEdit' ?
+                      <>
+                        <span>{customItem.name}</span>
+                        <select className='select'>
+                          <option value="">----</option> {/* 기본 옵션을 설정 */}
+                          {customItem.valList.map((valList, valListIndex) => (
+                            <option key={valListIndex} value={valList}>{valList}</option>
+                          ))}
+                        </select>
+                      </>
+                      :
+                      customItem.name
+                    }
                   </th>
                 ))}
                 {/* 주소 */}
@@ -399,8 +406,7 @@ export default function AdminUserList() {
                 <th>연락처</th>
                 {/* 메뉴 아이콘 */}
                 <th style={{ width: '20px' }}>
-                  {editIndex == 'top'
-                    ?
+                  {editIndex == 'allEdit' ?
                     <div className="dropdown-menu"> {/* 아이콘 */}
                       {/* 삭제 버튼 */}
                       <button className='white_button' onClick={() => handleDelete()}>삭제</button>
@@ -409,8 +415,11 @@ export default function AdminUserList() {
                     </div>
                     :
                     <div className='icon' onClick={() => {
-                      {/* 메뉴 */ }
-                      setEditIndex('top');
+                      if(checkedItems.length) {
+                        setEditIndex('allEdit');
+                      } else {
+                        alert('선택된 고객이 없습니다.');
+                      }
                     }}><i class="fa-solid fa-ellipsis"></i></div>
                   }
                 </th>
@@ -431,6 +440,7 @@ export default function AdminUserList() {
                   {[
                     { name: '고객명', val: user.cor_corName },
                     { name: '고객 구분', valList: ['실사용자', '납품업자'], val: user.userType_id == 1 ? '실사용자' : '납품업자' },
+                    { name: '담당자', valList: ['박형조', '엄지석', '김태훈'], val: '박형조' },
                     { name: 'CMS여부', valList: ['A', 'B', 'C', 'D'], val: user.hasCMS ? '동의' : '비동의' },
                   ].map((customItem, editIdx) => (
                     <td key={editIdx}>
