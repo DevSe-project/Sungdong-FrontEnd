@@ -658,3 +658,13 @@ input[type="checkbox"] {
   padding: 1em;
   gap: 1em;
 }
+
+
+/* -------------------------ellipsis------------------------- */
+.icon {
+}
+.icon:hover {
+  cursor: pointer;
+  font-size: x-large;
+  transition: 0.5s
+}
