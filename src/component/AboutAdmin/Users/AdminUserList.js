@@ -17,9 +17,6 @@ export default function AdminUserList() {
     const [sortBy, setSortBy] = useState([]);
     const [matchedData, setMatchedData] = useState([]);
 
-    useEffect(() => {
-        fetchMatchedData();
-    }, [fetchMatchedData])
 
     const fetchMatchedData = () => {
         if(!checkedItems) {
@@ -31,6 +28,10 @@ export default function AdminUserList() {
         });
         setMatchedData(matchedData);
     }
+
+    useEffect(() => {
+        fetchMatchedData();
+    }, [fetchMatchedData])
 
 
     // ------------------------------서버 통신------------------------------ //
@@ -156,7 +157,7 @@ export default function AdminUserList() {
                 onSuccess: (data) => {
                     console.log('user Delete successfully:', data);
                     alert(data.message);
-                    queryClient.setQueryData(['users'], () => {
+                    queryClient.invalidateQueries(['users'], () => {
                         return data.data
                     })
                 },
@@ -238,7 +239,7 @@ export default function AdminUserList() {
     }
 
     const handleSelectChange = async (e) => {
-        const { value } = e.target.value;
+        const { value } = e.target;
         // 선택된 값(value)과 체크된 항목(checkedItems)을 사용하여 일괄 변경 API 호출
         try {
             const response = await axios.post(
@@ -310,6 +311,11 @@ export default function AdminUserList() {
                     <table style={{ marginTop: '10px' }}>
                         <thead>
                             <tr>
+                                {[
+                                    {name: '거래처 유형', option: ['----','실사용자', '납품업자']},
+                                    {name: 'CMS여부'},
+                                    {name: '작업'},
+                                ]}
                                 <th><input
                                     type='checkbox'
                                     checked={checkedItems.length === getCurrentPagePosts().length ? true : false}
