@@ -61,16 +61,85 @@ const useListStore = create((set) => ({
   wishList: [],
   orderList: [],
   cartList: [],
+  searchList: [],
   noticePostList: [],
 
 
   actions: {
+    //찜
     setWishList: (val) =>
       set((prev) => ({
         wishList: val
       })),
-    // 주문
 
+    //검색결과
+    setSearchList: (val) =>
+      set((state) => ({
+        searchList: val
+      })),
+
+    resetSearchList: (val) =>
+      set((state) => ({
+        searchList: []
+      })),
+
+    //검색리스트 옵션 SET
+    setSearchOption: (item, value) =>
+    set((state) => ({
+      searchList: state.searchList.map((list) => {
+        if (list.product_id === item.product_id) {
+          return {
+            ...list,
+            selectedOption: value,
+          };
+        }
+        return list;
+      }),
+    })),
+
+    //검색리스트 수량 SET
+    setSearchCnt: (item, value) =>
+      set((state) => ({
+        searchList: state.searchList.map((list) => {
+          if (list.product_id === item.product_id) {
+            return {
+              ...list,
+              cnt: value,
+            };
+          }
+          return list;
+        }),
+      })),
+  
+    //검색리스트 수량 UP
+    setSearchCntUp: (item) =>
+      set((state) => ({
+        searchList: state.searchList.map((list) => {
+          if (list.product_id === item.product_id) {
+            return {
+              ...list,
+              cnt: (parseInt(list.cnt ? list.cnt : 0) + 1).toString(),
+            };
+          }
+          return list;
+        }),
+      })),
+  
+    //검색리스트 수량 DOWN
+    setSearchCntDown: (item) =>
+      set((state) => ({
+        searchList: state.searchList.map((list) => {
+          if (list.product_id === item.product_id) {
+            return {
+              ...list,
+              cnt: (parseInt(list.cnt ? list.cnt : 0) - 1).toString(),
+            };
+          }
+          return list;
+        }),
+      })),
+
+    // 주문
     setOrderList: (val) =>
       set((state) => ({
         orderList: val
@@ -146,6 +215,7 @@ const useListStore = create((set) => ({
 // 선택자 생성, 상태가 변경될 때마다 구성요소가 업데이트 되기 때문에 반복적 렌더링 방지, 
 // 실수로 전체 스토어를 렌더링 하는 일 방지.
 export const useWishList = () => useListStore((state) => state.wishList);
+export const useSearchList = () => useListStore((state) => state.searchList);
 export const useCartList = () => useListStore((state) => state.cartList);
 export const useOrderList = () => useListStore((state) => state.orderList);
 export const useNoticePostList = () => useListStore((state) => state.noticePostList);

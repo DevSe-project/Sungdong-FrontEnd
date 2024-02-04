@@ -2,20 +2,23 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from './Category.module.css'
 import React from 'react';
-import { useCartList, useCategoryData, useListActions, useSearchActions, useSearchStore, useSeperateSearchTerm } from "../../../Store/DataStore";
+import { useCartList, useCategoryData, useListActions, useSearchActions, useSearchList, useSearchStore, useSeperateSearchTerm } from "../../../Store/DataStore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CategoryFilter } from "./CategoryFilter";
 import { useFetch} from "../../../customFn/useFetch"
 import Pagination from "../../../customFn/Pagination";
 export function Category(){
   const seperateSearchTerm = useSeperateSearchTerm();
-  const {resetSeperateSearchTerm} = useSearchActions();
-
+  const searchList = useSearchList();
+  const navigate = useNavigate();
+  // 체크박스를 통해 선택한 상품들을 저장할 상태 변수
+  const [selectedItems, setSelectedItems] = useState([]);
+  const {setSearchList, resetSearchList, setSearchCnt, setSearchCntUp, setSearchCntDown, setSearchOption} = useListActions();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [postCnt, setPostCnt] = useState(5);
   //검색 결과 데이터 fetch
-  const {fetchGetAddPostServer, fetchAddPostServer, fetchServer } = useFetch();
+  const {fetchAddPostServer, fetchServer} = useFetch();
 
   const fetchSearchData = async() => {
     const data = await fetchAddPostServer(seperateSearchTerm, 'post', '/search/list', currentPage, postCnt);
@@ -26,6 +29,18 @@ export function Category(){
   }
   
   const { isLoading, isError, error, data:product } = useQuery({queryKey: ['search'], queryFn: ()=> fetchSearchData()});
+
+  //product가 마운트 되면 searchList에 담음(cnt등을 위함)
+  useEffect(()=> {
+    function fetchData(){
+      if ((product && searchList.length === 0) || (product && product.data.map(item => searchList.length > 0 && searchList.map(list => item !== list)))) {
+        resetSearchList();
+        setSearchList(product.data);
+      }
+    };
+  
+    fetchData();
+  }, [product])
   
   //-------------------------페이지 설정------------------------------
 
@@ -76,75 +91,16 @@ export function Category(){
       fetchData();
     }, [product])
 
-//---------------------------- 장바구니 추가 관련 -----------------------
-
-    //장바구니 추가 함수
-    const addToCart = async (product) => {
-      fetchServer(product, 'post', '/cart/create', 1)
-    };
-  
-
-
-    //장바구니 추가 함수
-    const { basketMutation } = useMutation({mutationFn: addToCart,
-      onSuccess: (cartData) => {
-        // 메세지 표시
-        alert(cartData.message);
-        console.log('상품이 장바구니에 추가되었습니다.', cartData);
-        // 장바구니 상태를 다시 불러와 갱신합니다.
-        queryClient.invalidateQueries(['cart']);
-        // 선택된 아이템들 초기화
-        setSelectedItems([]);
-        // 장바구니로 이동
-        navigate("/basket");
-      },
-      onError: (error) => {
-        // 상품 추가 실패 시, 에러 처리를 수행합니다.
-        console.error('상품을 장바구니에 추가하는 중 오류가 발생했습니다.', error);
-      },
-    })
-
-
-    const categoryData = useCategoryData();
-    const cartList = useCartList();
-    const { setBasketList } = useListActions();
-    
-    // 카테고리
-    const [filterSearch, setFilterSearch] = useState("");
-    
-    // 필터된 항목을 저장할 상태 변수
-    const [filteredItems, setFilteredItems] = useState([]);
-
-    const navigate = useNavigate();
-    
-    // 체크박스를 통해 선택한 상품들을 저장할 상태 변수
-    const [selectedItems, setSelectedItems] = useState([]);
-  
-    //Td 선택시 Modal State 변수
-    const [selectedData, setSelectedData] = useState(null);
-    
-    //옵션 선택 state
-    const [optionSelected, setOptionSelected] = useState(filteredItems.map(() => ""));
-
 //------------------------------------------------------
-
-    // 아이템 클릭 모달 핸들러
-    const handleItemClick = (itemId) => {
-      if (selectedData === itemId) {
-        // 이미 선택된 아이템을 클릭한 경우 모달을 닫음
-        setSelectedData(null);
-      } else {
-        setSelectedData(itemId);
-      }
-    };
     
     // 체크박스 클릭 시 호출되는 함수
     function checkedBox(product) {
-      if (selectedItems.includes(product)) { //productID가 중복이면 true == 이미 체크박스가 클릭되어 있으면
-        setSelectedItems(selectedItems.filter((item) => item !== product)); //체크박스를 해제함 == 선택한 상품 저장 변수에서 제외
+      if (selectedItems.find(item => item.product_id === product.product_id)) { //productID가 중복이면 true == 이미 체크박스가 클릭되어 있으면
+        setSelectedItems(selectedItems.filter((item) => item.product_id !== product.product_id)); //체크박스를 해제함 == 선택한 상품 저장 변수에서 제외
       } else {
         setSelectedItems([...selectedItems, product]); //selectedItems의 배열과 productID 배열을 합쳐 다시 selectedItems에 저장
       }
+      console.log(selectedItems)
     };
 
     const optionCreator = (item) => {
@@ -153,7 +109,10 @@ export function Category(){
         options.push(item[`option${i}`])
       }
       return(
-        <select>
+        <select value={item.selectedOption} onChange={(e)=> setSearchOption(item, e.target.value)}>
+          <option value="">
+            선택
+          </option>
         {options.length > 0 && options.map((option, key) => {
         return (
           option !== "" &&
@@ -172,54 +131,118 @@ export function Category(){
     const lengthTarget = e.target.value;
 
     if (lengthTarget >= 0 && lengthTarget.length <= 3) {
-      const updatedItems = filteredItems.map((item) => {
-        if (item.id === prevItem.id) {  
-          return { ...item, cnt: lengthTarget };
-        }
-      return item; // 다른 아이템은 그대로 반환
-      });
-      setFilteredItems(updatedItems);
+      const isSelected = selectedItems.some(item => item.product_id === prevItem.product_id);
+      if(isSelected){
+        setSelectedItems(selectedItems.filter(item => item.product_id !== prevItem.product_id));
+        setSearchCnt(prevItem, lengthTarget);
+      } else {
+        setSearchCnt(prevItem, lengthTarget);
+      }
     }
   };
 
   // 수량 DOWN
   function handleDelItem(prevItem) {
-    const updatedItems = filteredItems.map((item) => {
-      if (item.id === prevItem.id) {
-        if (item.cnt > 1) {
-          return { ...item, cnt: parseInt(item.cnt) - 1 };
-        } else {
-          alert("수량은 1보다 커야합니다.");
-          return item; // 1이하로 내릴 수 없으면 기존 아이템 반환
-        }
+    if (prevItem.cnt > 1) {
+      const isSelected = selectedItems.some(item => item.product_id === prevItem.product_id);
+      if(isSelected){
+        setSelectedItems(selectedItems.filter(item => item.product_id !== prevItem.product_id));
+        setSearchCntDown(prevItem);
       }
-      return item; // 다른 아이템은 그대로 반환
-    });
-
-    setFilteredItems(updatedItems);
+      else {
+        setSearchCntDown(prevItem);
+      }
+    } else {
+      alert("수량은 1보다 커야합니다.");
+      return prevItem; // 1이하로 내릴 수 없으면 기존 아이템 반환
+    }
   }
     
 
   // 수량 UP
   function handleAddItem(prevItem) {
-    const updatedItems = filteredItems.map((item) => {
-      if (item.id === prevItem.id) {
-        if (item.cnt < 999) {
-          return { ...item, cnt: parseInt(item.cnt) + 1 };
-        } else {
-          alert("수량은 999보다 작아야합니다.");
-          return item; // 999 이상으로 올릴 수 없으면 기존 아이템 반환
-        }
+    if (prevItem.cnt < 999) {
+      const isSelected = selectedItems.some(item => item.product_id === prevItem.product_id);
+      if(isSelected){
+        setSelectedItems(selectedItems.filter(item => item.product_id !== prevItem.product_id));
+        setSearchCntUp(prevItem);
+      } else {
+        setSearchCntUp(prevItem);
       }
-      return item; // 다른 아이템은 그대로 반환
-    });
-
-    setFilteredItems(updatedItems);
+    } else {
+      alert("수량은 999보다 작아야합니다.");
+      return prevItem; // 999 이상으로 올릴 수 없으면 기존 아이템 반환
+    }
   }
   //-------------------장바구니 담기------------------------
+
+    //장바구니 추가 함수
+    const addToCart = async (product) => {
+      fetchServer(product, 'post', '/cart/create', 1)
+    };
+
+    //장바구니 추가 함수
+    const { mutate:basketMutation } = useMutation({mutationFn: addToCart});
+
     function basketRelatedData() {
-        basketMutation(selectedItems);
+      if (selectedItems.length === 0) {
+        alert("먼저 담을 상품을 체크해주세요!");
+        return;
+      }
+    
+      if (selectedItems.some((item) => 
+      item.option0 !== '' && (item.selectedOption === undefined || item.selectedOption === null || item.selectedOption === ''))) {
+      alert("필수 옵션을 선택해주세요!");
+      return;
+  }
+
+  console.log(selectedItems)
+
+      basketMutation(selectedItems,{
+        onSuccess: (cartData) => {
+          // 메세지 표시
+          alert(cartData.message);
+          console.log('상품이 장바구니에 추가되었습니다.', cartData);
+          // 장바구니 상태를 다시 불러와 갱신합니다.
+          queryClient.invalidateQueries(['cart']);
+          // 장바구니로 이동
+          navigate("/basket");
+        },
+        onError: (error) => {
+          // 상품 추가 실패 시, 에러 처리를 수행합니다.
+          console.error('상품을 장바구니에 추가하는 중 오류가 발생했습니다.', error);
+        },
+      })// 상품을 장바구니에 추가하는 것을 호출    
     }
+  
+    //--- 검색결과 알림문 ---
+
+    function searchRender(){
+      const searchTermText = [];
+
+      if (seperateSearchTerm.product_title !== '') {
+        searchTermText.push(`상품명: ${seperateSearchTerm.product_title}`);
+      }
+
+      if (seperateSearchTerm.product_id !== '') {
+        searchTermText.push(`상품코드: ${seperateSearchTerm.product_id}`);
+      }
+
+      if (seperateSearchTerm.product_brand !== '') {
+        searchTermText.push(`브랜드: ${seperateSearchTerm.product_brand}`);
+      }
+
+      if (seperateSearchTerm.product_spec !== '') {
+        searchTermText.push(`규격: ${seperateSearchTerm.product_spec}`);
+      }
+
+      if (seperateSearchTerm.product_model !== '') {
+        searchTermText.push(`모델명: ${seperateSearchTerm.product_model}`);
+      }
+    return (
+      <span>{searchTermText.length > 0 ? <><span style={{color: '#CC0000', fontWeight: 'bolder'}}>"{searchTermText.join(' 및 ')}"</span>에 대하여</> : '검색 조건이 없습니다.'}</span>
+    )
+  }
 
     if(isLoading){
       return <p>Loading..</p>;
@@ -232,13 +255,10 @@ export function Category(){
       <div className={styles.topTitle}>
         <h1>검색 결과</h1>
       </div>
-      <h3 style={{margin: '1em'}}>
-      {/* 상품명 : {categoryData.search.name}, 상품코드 : {categoryData.search.code}
-      , 브랜드 : {categoryData.search.brand} 옵션 : {categoryData.search.option}*/}
-      {/* categoryData.items.length */}
-      <span style={{color: '#CC0000', fontWeight: '650', margin: '0.5em'}}>{product ? product.data.length : 0}건</span>
-      이 검색 되었습니다.
-      </h3>
+      <h5 style={{margin: '1em'}}>
+        {searchRender()}
+      <span style={{color: '#CC0000', fontWeight: '650', margin: '0.5em'}}>{product ? product.data.length : 0}건<span style={{color: 'black'}}>이 검색 되었습니다.</span></span>
+      </h5>
       {/* 카테고리 목록 TABLE */}
       <div className={styles.buttonBox}>
         <button className={styles.button} onClick={()=> navigate("/basket")}>
@@ -252,32 +272,42 @@ export function Category(){
       <div className={styles.tableLocation}>
       <table className={styles.table}>
         <thead 
-        style={{backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)'}}
+        style={{height: '5em', backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)'}}
         >
           <tr>
-            <th>이미지</th>
+            <th rowSpan={2}>이미지</th>
             <th>상품코드</th>
-            <th>상세보기</th>
-            <th>상품명</th>
+            <th>품명</th>
+            <th>브랜드</th>
             <th>단위</th>
             <th>표준가</th>
-            <th style={{fontWeight: '650'}}>공급가</th>
-            <th>더보기</th>
+            <th style={{fontWeight: '650'}}>공급단가</th>
+            <th rowSpan={2}>수량</th>
+            <th rowSpan={2}><input type='checkbox' disabled/></th>
+          </tr>
+          <tr>
+            <th>규격</th>
+            <th>모델명</th>
+            <th>옵션</th>
+            <th>적용률</th>
+            <th>할인금액</th>
+            <th>공급가</th>
           </tr>
         </thead>
         <tbody>
-          {product && product.data.map((item, index)=> (
+          {product && searchList.map((item, index)=> (
           <React.Fragment key={index}>
             <tr className={styles.list}>
-              <td><img src={item.product_image_mini} alt='이미지'></img></td>
+              <td rowSpan={2}><img className={styles.thumnail} src={item.product_image_original} alt='이미지'></img></td>
               <td>{item.product_id}</td>
               <td 
                 className={styles.detailView}
+                style={{fontSize: '1.1em', fontWeight: '550'}}
                 onClick={()=>navigate(`/detail/${item.product_id}`)}>
-                상세보기
+                {item.product_title}
               </td>
-              <td className={styles.detailView} onClick={()=>handleItemClick(item.product_id)}>
-                <h5 style={{fontSize: '1.1em', fontWeight: '550'}}>{item.product_title}</h5>
+              <td>
+                <h5>{item.product_brand}</h5>
               </td>
               <td>EA</td>
               <td>
@@ -292,90 +322,61 @@ export function Category(){
                   .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
                 : `${parseInt(item.product_price).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
               </td>
-              <td 
-                className={styles.detailView}
-                onClick={()=>handleItemClick(item.product_id)}>
-                더보기&nbsp;{selectedData === item.product_id  
-                ? <i className="fa-sharp fa-solid fa-caret-up"></i>
-                : <i className="fa-sharp fa-solid fa-caret-down"></i>}&nbsp;
+              <td style={{width: '15%'}} rowSpan={2}>
+                <button 
+                className={styles.editButton}
+                onClick={()=>handleDelItem(item)}
+                >
+                  -
+                </button>                          
+                <input value={item.cnt ? item.cnt : item.cnt = 1} className={styles.input} onChange={(e)=>maxLengthCheck(e,item)} type='text' placeholder='숫자만 입력'/>
+                <button 
+                className={styles.editButton}
+                onClick={()=>handleAddItem(item)}
+                >
+                  +
+                </button>              
+              </td>
+              <td rowSpan={2}>
+                <input 
+                checked={selectedItems.includes(item)}
+                onChange={() => checkedBox(item)}
+                type='checkbox'
+                /> 
               </td>
             </tr>
-              {/* 모달 */}
-              {selectedData === item.product_id && (
-              <tr>
-                <td colSpan="8">
-                  <table className={styles.modalTr}>
-                    <thead style={{ backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.6)'}}>
-                      <tr>
-                        <th style={{width: '25%'}}>
-                          브랜드
-                        </th>
-                        <th style={{width: '10%'}}>
-                          옵션
-                        </th>
-                        <th style={{width: '20%'}}>
-                          개수
-                        </th>
-                        <th style={{width: '10%'}}>
-                          적용률
-                        </th>
-                        <th style={{width: '10%'}}>
-                          할인금액
-                        </th>
-                        <th style={{width: '10%', fontWeight: '650'}}>
-                          공급가
-                        </th>
-                        <th style={{width: '20%'}}>
-                          <button className={styles.button} onClick={()=> basketRelatedData()}>장바구니 추가</button>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                          <tr>
-                            <td>
-                              {item.product_brand}
-                            </td>
-                            <td>
-                              {optionCreator(item)}
-                            </td>
-                            <td>
-                              {item.product_supply}
-                            </td>
-                            <td>
-                              {item.product_discount}%
-                            </td>
-                            <td style={{fontWeight: '550'}}>
-                              {item.product_discount
-                              ? `${((item.product_price / 100) * item.product_discount)
-                              .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
-                              : parseInt('0').toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
-                            </td>
-                            <td style={{fontWeight: '750'}}>
-                            {item.product_discount
-                              ? `${(item.product_price - (item.product_price / 100) * item.product_discount)
-                                .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
-                              : `${parseInt(item.product_price).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
-                            </td>
-                            <td>
-                              <input 
-                              checked={selectedItems.includes(item)}
-                              onChange={() => checkedBox(item)}
-                              type='checkbox'
-                              />   
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </td>
-                  </tr>
-      
-                  )}
-                  </React.Fragment>
-                  ))
-                }
-              </tbody>
-            </table>
-          </div>
+            <tr>
+              <td>
+                {item.product_spec}
+              </td>
+              <td>
+                {item.product_model}
+              </td>
+              <td>
+                {item.option0 === '' ? <span>옵션없음</span> : optionCreator(item)}
+              </td>
+              <td>
+                {item.product_discount}%
+              </td>
+              <td style={{fontWeight: '550'}}>
+                {item.product_discount
+                ? `${(((item.product_price / 100) * item.product_discount) * (item.cnt ? item.cnt : 1))
+                .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
+                : parseInt('0').toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
+              </td>
+              <td style={{fontWeight: '750'}}>
+              {item.product_discount
+                ? `${((item.product_price * (item.cnt ? item.cnt : 1)) - ((item.product_price / 100) * item.product_discount) * (item.cnt ? item.cnt : 1))
+                  .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
+                : `${parseInt(item.product_price * (item.cnt ? item.cnt : 1)).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
+              </td>
+            </tr>
+          </React.Fragment>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
 
       {/* 페이지 컨테이너 */}
       <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange}/>

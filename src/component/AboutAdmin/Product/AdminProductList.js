@@ -150,7 +150,7 @@ export function AdminProductList(){
                 {data && getCurrentPagePosts().map((item, index)=> (
                 <React.Fragment key={index}>
                   <tr className={styles.list}>
-                    <td><img src={item.product_image_mini} alt='이미지'></img></td>
+                    <td><img src={item.product_image_original} alt='이미지'></img></td>
                     <td>{item.product_id}</td>
                     <td 
                       className={styles.detailView}
