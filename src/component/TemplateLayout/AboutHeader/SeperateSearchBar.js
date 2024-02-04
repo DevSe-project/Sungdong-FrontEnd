@@ -2,15 +2,16 @@ import styles from './SeperateSearchBar.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useSearchActions, useSeperateSearchTerm } from '../../../Store/DataStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
 import { useFetch } from '../../../customFn/useFetch';
+import { useEffect } from 'react';
 
 export function SeperateSearchBar() {
   const navigate = useNavigate();
   const seperateSearchTerm = useSeperateSearchTerm();
-  const {setSeperateSearchTerm,resetSeperateSearchTerm} = useSearchActions();
+  const {setSeperateSearchTerm} = useSearchActions();
   const queryClient = useQueryClient();
   const {fetchAddPostServer} = useFetch();
+
 
   //검색 요청
   const handleSearch = async (search) => {
@@ -19,18 +20,19 @@ export function SeperateSearchBar() {
 
       
   //검색 요청 Mutate
-  const { searchMutate } = useMutation({mutationFn: handleSearch})
+  const { mutate:searchMutate } = useMutation({mutationFn: handleSearch})
   
 
-  const handleKeyDown = (event, search) => {
+  const handleKeyDown = event => {
     if (event.key === 'Enter') {
-        searchMutate(search, {   
+      searchMutate(seperateSearchTerm, {   
         onSuccess: (data) => {
           // 메세지 표시
           alert(data.message);
           console.log('분리된 검색창 : 검색되었습니다.', data);
-          // 다른 사용자들에게 영향을 주지 않고 현재 사용자의 컴포넌트에서만 새로운 데이터를 가져오기
-          queryClient.invalidateQueries(['search'], { refetchActive: false });
+          queryClient.setQueryData(['search'], () => {
+            return data.data
+          })          
           // 카테고리로 이동
           navigate("/category");
         },
@@ -48,8 +50,9 @@ export function SeperateSearchBar() {
         // 메세지 표시
         alert(data.message);
         console.log('분리된 검색창 : 검색되었습니다.', data);
-        // 다른 사용자들에게 영향을 주지 않고 현재 사용자의 컴포넌트에서만 새로운 데이터를 가져오기
-        queryClient.invalidateQueries(['search'], { refetchActive: false });
+        queryClient.setQueryData(['search'], () => {
+          return data.data
+        })        
         // 카테고리로 이동
         navigate("/category");
       },
