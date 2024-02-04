@@ -1,17 +1,19 @@
 .main{
   display: flex;
   flex-direction: column;
-  width: 100%;
+  justify-content: center;
+  align-items: center;
 }
 /* 테이블 탭 */
 .table{
-  width: 80%;
+  width: 100%;
   border-top: 3px solid var(--background-color-set);
   border-bottom: 1px solid lightgray;
   text-align: center;
 }
 
 .tableLocation{
+  width: 80%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -20,9 +22,8 @@
 
 .topTitle{
   width: 80%;
-  margin: 2em;
+  margin-top: 2em;
   padding-bottom: 1%;
-  margin-left: 10%;
   margin-right: 0;
   display: flex;
   flex-direction: row;
@@ -132,7 +133,6 @@
 .buttonBox{
   width: 80%;
   display: flex;
-  margin-left: 10%;
   margin-top: 0.5em;
   margin-bottom: 0.5em;
   flex-direction: row;

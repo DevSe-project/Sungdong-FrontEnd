@@ -17,7 +17,7 @@ export function Category(){
   const {setSearchList, resetSearchList, setSearchCnt, setSearchCntUp, setSearchCntDown, setSearchOption} = useListActions();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [postCnt, setPostCnt] = useState(5);
+  const [postCnt, setPostCnt] = useState(10);
   //검색 결과 데이터 fetch
   const {fetchAddPostServer, fetchServer} = useFetch();
 
@@ -26,6 +26,7 @@ export function Category(){
 
     setCurrentPage(data.data.currentPage);
     setTotalPages(data.data.totalPages);
+    setPostCnt(data.data.postsPerPage);
     return data.data;
   }
   
@@ -67,6 +68,7 @@ export function Category(){
       onSuccess: (data) => {
         setCurrentPage(data.data.currentPage);
         setTotalPages(data.data.totalPages);
+        setPostCnt(data.data.postsPerPage);
         queryClient.setQueryData(['search'], () => {
           return data.data
         })
@@ -85,6 +87,7 @@ export function Category(){
         if(product){
           setCurrentPage(product.currentPage);
           setTotalPages(product.totalPages);
+          setPostCnt(product.postsPerPage);
         }
       };
   
@@ -268,114 +271,114 @@ export function Category(){
       </div>
       {/* 카테고리 결과 List */}
       <div className={styles.tableLocation}>
-      <table className={styles.table}>
-        <thead 
-        style={{height: '5em', backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)'}}
-        >
-          <tr>
-            <th rowSpan={2}>이미지</th>
-            <th>상품코드</th>
-            <th>품명</th>
-            <th>브랜드</th>
-            <th>단위</th>
-            <th>표준가</th>
-            <th style={{fontWeight: '650'}}>공급단가</th>
-            <th rowSpan={2}>수량</th>
-            <th rowSpan={2}><input type='checkbox' disabled/></th>
-          </tr>
-          <tr>
-            <th>규격</th>
-            <th>모델명</th>
-            <th>옵션</th>
-            <th>적용률</th>
-            <th>할인금액</th>
-            <th>공급가</th>
-          </tr>
-        </thead>
-        <tbody>
-          {product && searchList.map((item, index)=> (
-          <React.Fragment key={index}>
-            <tr className={styles.list}>
-              <td rowSpan={2}><img className={styles.thumnail} src={item.product_image_original} alt='이미지'></img></td>
-              <td>{item.product_id}</td>
-              <td 
-                className={styles.detailView}
-                style={{fontSize: '1.1em', fontWeight: '550'}}
-                onClick={()=>navigate(`/detail/${item.product_id}`)}>
-                {item.product_title}
-              </td>
-              <td>
-                <h5>{item.product_brand}</h5>
-              </td>
-              <td>EA</td>
-              <td>
-                {item.product_discount
-                ? `${parseInt(item.product_price)
-                  .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
-                : parseInt(item.product_price).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
-              </td>
-              <td style={{fontWeight: '750'}}>
-              {item.product_discount
-                ? `${(item.product_price - (item.product_price / 100) * item.product_discount)
-                  .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
-                : `${parseInt(item.product_price).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
-              </td>
-              <td style={{width: '15%'}} rowSpan={2}>
-                <button 
-                className={styles.editButton}
-                onClick={()=>handleDelItem(item)}
-                >
-                  -
-                </button>                          
-                <input value={item.cnt ? item.cnt : item.cnt = 1} className={styles.input} onChange={(e)=>maxLengthCheck(e,item)} type='text' placeholder='숫자만 입력'/>
-                <button 
-                className={styles.editButton}
-                onClick={()=>handleAddItem(item)}
-                >
-                  +
-                </button>              
-              </td>
-              <td rowSpan={2}>
-                <input 
-                checked={selectedItems.includes(item)}
-                onChange={() => checkedBox(item)}
-                type='checkbox'
-                /> 
-              </td>
+        <table className={styles.table}>
+          <thead 
+          style={{height: '5em', backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)'}}
+          >
+            <tr>
+              <th rowSpan={2}>이미지</th>
+              <th>상품코드</th>
+              <th>품명</th>
+              <th>브랜드</th>
+              <th>단위</th>
+              <th>표준가</th>
+              <th style={{fontWeight: '650'}}>공급단가</th>
+              <th rowSpan={2}>수량</th>
+              <th rowSpan={2}><input type='checkbox' disabled/></th>
             </tr>
             <tr>
-              <td>
-                {item.product_spec}
-              </td>
-              <td>
-                {item.product_model}
-              </td>
-              <td>
-                {item.option0 === '' ? <span>옵션없음</span> : optionCreator(item)}
-              </td>
-              <td>
-                {item.product_discount}%
-              </td>
-              <td style={{fontWeight: '550'}}>
-                {item.product_discount
-                ? `${(((item.product_price / 100) * item.product_discount) * (item.cnt ? item.cnt : 1))
-                .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
-                : parseInt('0').toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
-              </td>
-              <td style={{fontWeight: '750'}}>
-              {item.product_discount
-                ? `${((item.product_price * (item.cnt ? item.cnt : 1)) - ((item.product_price / 100) * item.product_discount) * (item.cnt ? item.cnt : 1))
-                  .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
-                : `${parseInt(item.product_price * (item.cnt ? item.cnt : 1)).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
-              </td>
+              <th>규격</th>
+              <th>모델명</th>
+              <th>옵션</th>
+              <th>적용률</th>
+              <th>할인금액</th>
+              <th>공급가</th>
             </tr>
-          </React.Fragment>
-          ))
-        }
-      </tbody>
-    </table>
-  </div>
-
+          </thead>
+          <tbody>
+            {product && searchList.map((item, index)=> (
+            <React.Fragment key={index}>
+              <tr className={styles.list}>
+                <td rowSpan={2}><img className={styles.thumnail} src={item.product_image_original} alt='이미지'></img></td>
+                <td>{item.product_id}</td>
+                <td 
+                  className={styles.detailView}
+                  style={{fontSize: '1.1em', fontWeight: '550'}}
+                  onClick={()=>navigate(`/detail/${item.product_id}`)}>
+                  {item.product_title}
+                </td>
+                <td>
+                  <h5>{item.product_brand}</h5>
+                </td>
+                <td>EA</td>
+                <td>
+                  {item.product_discount
+                  ? `${parseInt(item.product_price)
+                    .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
+                  : parseInt(item.product_price).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
+                </td>
+                <td style={{fontWeight: '750'}}>
+                {item.product_discount
+                  ? `${(item.product_price - (item.product_price / 100) * item.product_discount)
+                    .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
+                  : `${parseInt(item.product_price).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
+                </td>
+                <td style={{width: '15%'}} rowSpan={2}>
+                  <button 
+                  className={styles.editButton}
+                  onClick={()=>handleDelItem(item)}
+                  >
+                    -
+                  </button>                          
+                  <input value={item.cnt ? item.cnt : item.cnt = 1} className={styles.input} onChange={(e)=>maxLengthCheck(e,item)} type='text' placeholder='숫자만 입력'/>
+                  <button 
+                  className={styles.editButton}
+                  onClick={()=>handleAddItem(item)}
+                  >
+                    +
+                  </button>              
+                </td>
+                <td rowSpan={2}>
+                  <input 
+                  checked={selectedItems.includes(item)}
+                  onChange={() => checkedBox(item)}
+                  type='checkbox'
+                  /> 
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  {item.product_spec}
+                </td>
+                <td>
+                  {item.product_model}
+                </td>
+                <td>
+                  {item.option0 === '' ? <span>옵션없음</span> : optionCreator(item)}
+                </td>
+                <td>
+                  {item.product_discount}%
+                </td>
+                <td style={{fontWeight: '550'}}>
+                  {item.product_discount
+                  ? `${(((item.product_price / 100) * item.product_discount) * (item.cnt ? item.cnt : 1))
+                  .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
+                  : parseInt('0').toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
+                </td>
+                <td style={{fontWeight: '750'}}>
+                {item.product_discount
+                  ? `${((item.product_price * (item.cnt ? item.cnt : 1)) - ((item.product_price / 100) * item.product_discount) * (item.cnt ? item.cnt : 1))
+                    .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
+                  : `${parseInt(item.product_price * (item.cnt ? item.cnt : 1)).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
+                </td>
+              </tr>
+            </React.Fragment>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+      
       {/* 페이지 컨테이너 */}
       <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange}/>
     </div>

@@ -15,7 +15,7 @@ export function SeperateSearchBar() {
 
   //검색 요청
   const handleSearch = async (search) => {
-    return await fetchAddPostServer(search, `post`, `/search/list`, 1, 5);
+    return await fetchAddPostServer(search, `post`, `/search/list`, 1, 10);
   };
 
       

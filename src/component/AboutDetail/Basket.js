@@ -20,7 +20,6 @@ export function Basket(props){
     return data.data
   };
 
-
   // 장바구니 데이터 불러오기
   const { isLoading, isError, error, data:basketList } = useQuery({queryKey:['cart'], queryFn: ()=> fetchCartData()});
 
