@@ -415,7 +415,7 @@ export default function AdminUserList() {
                     </div>
                     :
                     <div className='icon' onClick={() => {
-                      if(checkedItems.length) {
+                      if (checkedItems.length) {
                         setEditIndex('allEdit');
                       } else {
                         alert('선택된 고객이 없습니다.');
@@ -441,7 +441,7 @@ export default function AdminUserList() {
                     { name: '고객명', val: user.cor_corName },
                     { name: '고객 구분', valList: ['실사용자', '납품업자'], val: user.userType_id == 1 ? '실사용자' : '납품업자' },
                     { name: '담당자', valList: ['박형조', '엄지석', '김태훈'], val: '박형조' },
-                    { name: 'CMS여부', valList: ['A', 'B', 'C', 'D'], val: user.hasCMS ? '동의' : '비동의' },
+                    { name: 'CMS여부', valList: [true, false], val: user.hasCMS ? '동의' : '비동의' },
                   ].map((customItem, editIdx) => (
                     <td key={editIdx}>
                       {editIndex === index ?
