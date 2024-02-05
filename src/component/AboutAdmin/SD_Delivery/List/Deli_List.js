@@ -146,7 +146,10 @@ export default function Deli_List() {
             <select
               className='select'
               value={itemsPerPage}
-              onChange={(e) => setItemsPerPage(Number(e.target.value))}
+              onChange={(e) => {
+                setItemsPerPage(Number(e.target.value));
+                window.location.reload();
+              }}
             >
               <option value={5}>5</option>
               <option value={10}>10</option>
