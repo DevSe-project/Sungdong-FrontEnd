@@ -17,28 +17,40 @@ export default function Deli_List() {
   const { isModal, modalName } = useModalState();
   const { selectedModalOpen } = useModalActions();;
 
-  const [postData, setPostData] = useState([]);
-
   // 게시물 데이터와 페이지 번호 상태 관리    
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
 
-  const { fetchGetAddPostServer } = useFetch();
-
-  const fetchingData = async () => {
-    const data = await fetchGetAddPostServer(`/delivery/all`, currentPage, itemsPerPage);
-    return data;
+  // FetchData
+  const fetchDeliveryData = async () => {
+    try {
+      const token = GetCookie('jwt_token');
+      const response = await axios.get(`/delivery/all`, {
+        params: {
+          page: currentPage,
+          pagePosts: itemsPerPage
+        },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        }
+      });
+      console.log(response.data.message);
+      return response.data.data.data;
+    } catch (error) {
+      throw new Error('배송 데이터 불러오기 중 오류가 발생하였습니다.');
+    }
   }
 
   // useEffect를 사용하여 페이지 번호나 페이지 당 항목 수가 변경될 때마다 새로운 데이터를 가져옴
   useEffect(() => {
-    fetchingData();
+    fetchDeliveryData();
   }, [currentPage, itemsPerPage]);
   // 데이터 상태 관리
   const { isLoading, isError, error, data: deliveryData } = useQuery({
-    queryKey: [`delivery`], // currentPage, itemPerPage가 변경될 때마다 재실행하기 위함
-    queryFn: fetchingData,
+    queryKey: [`delivery`, currentPage, itemsPerPage], // currentPage, itemPerPage가 변경될 때마다 재실행하기 위함
+    queryFn: fetchDeliveryData,
   });
 
   // 업데이트된 데이터의 체크 상태를 관리하는 state
@@ -73,7 +85,7 @@ export default function Deli_List() {
 
     if (checked) {
       // 전체 선택 클릭 시 데이터의 모든 아이템(id)를 담은 배열로 checkItems 상태 업데이트
-      let idArray = deliveryData.data.map((item) => item.order_id);
+      let idArray = deliveryData.map((item) => item.order_id);
       setCheckedItems(idArray);
     } else {
       // 모두 체킹 해제
@@ -148,7 +160,6 @@ export default function Deli_List() {
               value={itemsPerPage}
               onChange={(e) => {
                 setItemsPerPage(Number(e.target.value));
-                window.location.reload();
               }}
             >
               <option value={5}>5</option>
@@ -182,7 +193,7 @@ export default function Deli_List() {
               <tr>
                 <th>
                   <input type='checkbox'
-                    checked={checkedItems.length === deliveryData.data.length ? true : false}
+                    checked={checkedItems.length === deliveryData.length ? true : false}
                     onChange={(e) => handleAllCheckbox(e)} />
                 </th>
                 <th>주문번호</th>
@@ -200,7 +211,7 @@ export default function Deli_List() {
             {/* 데이터 맵핑 */}
             <tbody>
               {
-                deliveryData?.data.map((item, index) => (
+                deliveryData?.map((item, index) => (
                   <tr key={index}>
                     {/* 체크박스 */}
                     <td><input
@@ -250,7 +261,7 @@ export default function Deli_List() {
               <Deli_StateModal
                 checkedItems={checkedItems}
                 setCheckedItems={setCheckedItems}
-                deliveryData={deliveryData.data}
+                deliveryData={deliveryData}
               />
               :
               null
@@ -263,7 +274,7 @@ export default function Deli_List() {
                 checkedItems={checkedItems}
                 setCheckedItems={setCheckedItems}
                 parseDeliveryState={parseDeliveryState}
-                deliveryData={deliveryData.data}
+                deliveryData={deliveryData}
               />
               :
               null
