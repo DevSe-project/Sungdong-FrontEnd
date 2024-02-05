@@ -7,6 +7,7 @@ import axios from '../../../axios';
 import { useModalActions, useModalState, useUserFilter, useUserSort } from '../../../Store/DataStore';
 import AdminUserFilter from './AdminUserFilter';
 import AdminUserSort from './AdminUserSort';
+import { GetCookie } from '../../../customFn/GetCookie';
 
 export default function AdminUserList() {
 
@@ -14,7 +15,7 @@ export default function AdminUserList() {
   const queryClient = useQueryClient(); // 리액트 쿼리 클라이언트
   const userSort = useUserSort(); // 유저정렬 zustand
   const [currentPage, setCurrentPage] = useState(1); // 게시물 데이터와 페이지 번호 상태 관리 
-  const [itemsPerPage, setItemsPerPage] = useState(5); // 아아템 포스팅 개수
+  const [itemsPerPage, setItemsPerPage] = useState(10); // 아아템 포스팅 개수
   const [checkedItems, setCheckedItems] = useState([]); // 수정할 데이터의 체크 상태를 관리하는 state(users_id를 담음)
   const [sortBy, setSortBy] = useState([]); // 정렬 . . . 
   const [matchedData, setMatchedData] = useState([]); // 서버의 user데이터를 불러올 state
@@ -36,7 +37,7 @@ export default function AdminUserList() {
       return;
     }
     const data = checkedItems.map(users_id => {
-      const matchingData = users.find(item => item.users_id === users_id);
+      const matchingData = userData.find(item => item.users_id === users_id);
       return matchingData;
     });
     setMatchedData(data);
@@ -48,24 +49,32 @@ export default function AdminUserList() {
 
 
   // ------------------------------서버 통신------------------------------ //
-  //유저 데이터 fetch
-  const fetchAllUserData = async () => {
+  // 유저 데이터 Fetch
+  const fetchUsersData = async () => {
     try {
-      const response = await axios.get(
-        "/auth/userAll",
-        {
-          headers: {
-            "Content-Type": "application/json",
-          }
+      const token = GetCookie('jwt_token');
+      const response = await axios.get(`/auth/userAllOfPage`, {
+        params: {
+          page: currentPage,
+          pagePosts: itemsPerPage
+        },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
         }
-      )
-      // 성공 시 추가된 상품 정보를 반환합니다.
-      return response.data.data;
+      });
+      console.log(response.data.message);
+      return response.data.data.data;
     } catch (error) {
-      // 실패 시 예외를 throw합니다.
-      throw new Error('확인 중 오류가 발생했습니다.');
+      throw new Error('배송 데이터 불러오기 중 오류가 발생하였습니다.');
     }
-  };
+  }
+
+  // useEffect를 사용하여 페이지 번호나 페이지 당 항목 수가 변경될 때마다 새로운 데이터를 가져옴
+  useEffect(() => {
+    fetchUsersData();
+  }, [currentPage, itemsPerPage]);
+
   //유저 필터링 Fetch
   const fetchFilteredUserData = async (userFilterData) => {
     try {
@@ -225,10 +234,11 @@ export default function AdminUserList() {
     }
   }
 
-  const { data: users, isError, isLoading } = useQuery({
-    queryKey: ['users'],
-    queryFn: fetchAllUserData
-  })
+  // 데이터 상태 관리
+  const { isLoading, isError, error, data: userData } = useQuery({
+    queryKey: [`users`, currentPage, itemsPerPage], // currentPage, itemPerPage가 변경될 때마다 재실행하기 위함
+    queryFn: fetchUsersData,
+  });
 
   // mutate 정의
   const { mutate: filterMutation } = useMutation({ mutationFn: fetchFilteredUserData }); // 필터링
@@ -247,26 +257,13 @@ export default function AdminUserList() {
     }
   }, [matchedData]);
 
-
-
-
-  // 현재 페이지에 해당하는 게시물 목록 가져오기
-  const getCurrentPagePosts = () => {
-    if (!users) {
-      return [];
-    }
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    return users.slice(startIndex, startIndex + itemsPerPage);
-  };
-
-
   // 전체 체크박스 업데이트
   function handleAllCheckbox(isChecked) {
     const checked = isChecked;
 
     if (checked) {
       // 전체 선택 클릭 시 데이터의 모든 아이템(id)를 담은 배열로 checkItems 상태 업데이트
-      let idArray = getCurrentPagePosts()?.map((item) => item.users_id);
+      let idArray = userData?.map((item) => item.users_id);
       setCheckedItems(idArray);
       console.log(checkedItems);
     } else {
@@ -330,7 +327,7 @@ export default function AdminUserList() {
   useMemo(() => {
     // data나 sortBy가 변경될 때마다 정렬
     // handleSort();
-  }, [users, sortBy]);
+  }, [userData, sortBy]);
 
 
 
@@ -364,7 +361,8 @@ export default function AdminUserList() {
             >
               <option value={5}>5</option>
               <option value={10}>10</option>
-              <option value={15}>15</option>
+              <option value={20}>20</option>
+              <option value={30}>30</option>
             </select>
           </div>
 
@@ -374,7 +372,7 @@ export default function AdminUserList() {
                 {/* 전체 체크박스 관리 체크박스 */}
                 <th><input
                   type='checkbox'
-                  checked={checkedItems.length === getCurrentPagePosts().length ? true : false}
+                  checked={checkedItems.length === userData.length ? true : false}
                   onChange={(e) => handleAllCheckbox(e.target.checked)} /></th>
                 {/* 업체명(상호명) */}
                 <th>업체명(상호명)</th>
@@ -426,7 +424,7 @@ export default function AdminUserList() {
               </tr>
             </thead>
             <tbody>
-              {getCurrentPagePosts().map((user, index) => (
+              {userData?.map((user, index) => (
                 <tr key={index}>
                   {/* 체크박스 */}
                   <td>
