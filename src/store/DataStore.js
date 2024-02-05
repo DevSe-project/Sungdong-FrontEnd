@@ -85,17 +85,17 @@ const useListStore = create((set) => ({
 
     //검색리스트 옵션 SET
     setSearchOption: (item, value) =>
-    set((state) => ({
-      searchList: state.searchList.map((list) => {
-        if (list.product_id === item.product_id) {
-          return {
-            ...list,
-            selectedOption: value,
-          };
-        }
-        return list;
-      }),
-    })),
+      set((state) => ({
+        searchList: state.searchList.map((list) => {
+          if (list.product_id === item.product_id) {
+            return {
+              ...list,
+              selectedOption: value,
+            };
+          }
+          return list;
+        }),
+      })),
 
     //검색리스트 수량 SET
     setSearchCnt: (item, value) =>
@@ -110,7 +110,7 @@ const useListStore = create((set) => ({
           return list;
         }),
       })),
-  
+
     //검색리스트 수량 UP
     setSearchCntUp: (item) =>
       set((state) => ({
@@ -124,7 +124,7 @@ const useListStore = create((set) => ({
           return list;
         }),
       })),
-  
+
     //검색리스트 수량 DOWN
     setSearchCntDown: (item) =>
       set((state) => ({
@@ -154,51 +154,51 @@ const useListStore = create((set) => ({
     setCartList: (data) =>
       set((state) => ({
         cartList: [
-          ...data.map((item) => ({...item})),
+          ...data.map((item) => ({ ...item })),
         ],
       })),
 
     //카트수량 SET
     setCartCnt: (item, value) =>
-    set((state) => ({
-      cartList: state.cartList.map((list) => {
-        if (list.cart_product_id === item.cart_product_id) {
-          return {
-            ...list,
-            cart_cnt: value,
-          };
-        }
-        return list;
-      }),
-    })),
+      set((state) => ({
+        cartList: state.cartList.map((list) => {
+          if (list.cart_product_id === item.cart_product_id) {
+            return {
+              ...list,
+              cart_cnt: value,
+            };
+          }
+          return list;
+        }),
+      })),
 
     //카트수량 UP
     setCartCntUp: (item) =>
-    set((state) => ({
-      cartList: state.cartList.map((list) => {
-        if (list.cart_product_id === item.cart_product_id) {
-          return {
-            ...list,
-            cart_cnt: (parseInt(list.cart_cnt) + 1).toString(),
-          };
-        }
-        return list;
-      }),
-    })),
+      set((state) => ({
+        cartList: state.cartList.map((list) => {
+          if (list.cart_product_id === item.cart_product_id) {
+            return {
+              ...list,
+              cart_cnt: (parseInt(list.cart_cnt) + 1).toString(),
+            };
+          }
+          return list;
+        }),
+      })),
 
     //카트수량 DOWN
     setCartCntDown: (item) =>
-    set((state) => ({
-      cartList: state.cartList.map((list) => {
-        if (list.cart_product_id === item.cart_product_id) {
-          return {
-            ...list,
-            cart_cnt: (parseInt(list.cart_cnt) - 1).toString(),
-          };
-        }
-        return list;
-      }),
-    })),
+      set((state) => ({
+        cartList: state.cartList.map((list) => {
+          if (list.cart_product_id === item.cart_product_id) {
+            return {
+              ...list,
+              cart_cnt: (parseInt(list.cart_cnt) - 1).toString(),
+            };
+          }
+          return list;
+        }),
+      })),
 
     // 공지사항
     setNoticePostList: (val) => {
@@ -477,7 +477,7 @@ export const useProductStore = create((set) => ({
     editProduct: (data) =>
       set((state) => ({ product: data })),
     editOptionProduct: (data) =>
-      set((state) => ({ 
+      set((state) => ({
         product: {
           ...state.product,
           option: {
