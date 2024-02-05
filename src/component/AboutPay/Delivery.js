@@ -140,7 +140,7 @@ export function Delivery(props){
               <h5 style={{fontWeight: '650'}}>
               {item.orderState === 0 ? '결제 대기' 
               : item.orderState === 1 ? '결제 완료'
-              : item.orderState === 2 ? '배송 준비중'
+              : item.orderState === 2 ? '배송 준비'
               : item.orderState === 3 ? '배송 중'
               : item.orderState === 4 ? '배송 완료' 
               : '누락된 상품(고객센터 문의)' }

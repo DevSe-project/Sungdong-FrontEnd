@@ -19,8 +19,12 @@ export function Category(){
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [postCnt, setPostCnt] = useState(10);
+  const [totalRows, setTotalRows] = useState(0);
   //검색 결과 데이터 fetch
   const {fetchAddPostServer, fetchServer} = useFetch();
+
+  const [filterData, setFilterData] = useState([]);
+
 
   const fetchSearchData = async() => {
     const data = await fetchAddPostServer(searchTerm.search === "" ? [seperateSearchTerm] : searchTerm, 'post', '/search/list', currentPage, postCnt);
@@ -28,6 +32,8 @@ export function Category(){
     setCurrentPage(data.data.currentPage);
     setTotalPages(data.data.totalPages);
     setPostCnt(data.data.postsPerPage);
+    setTotalRows(data.data.totalRows);
+    setFilterData(data.data.datas);
     return data.data;
   }
   
@@ -71,6 +77,8 @@ export function Category(){
         setCurrentPage(data.data.currentPage);
         setTotalPages(data.data.totalPages);
         setPostCnt(data.data.postsPerPage);
+        setTotalRows(data.data.totalRows);
+        setFilterData(data.data.datas);
         queryClient.setQueryData(['search'], () => {
           return data.data
         })
@@ -90,6 +98,8 @@ export function Category(){
           setCurrentPage(product.currentPage);
           setTotalPages(product.totalPages);
           setPostCnt(product.postsPerPage);
+          setTotalRows(product.totalRows);
+          setFilterData(product.datas);
         }
       };
   
@@ -258,9 +268,10 @@ export function Category(){
       <div className={styles.topTitle}>
         <h1>검색 결과</h1>
       </div>
+      <CategoryFilter searchList={searchList} filterData={filterData}/>
       <h5 style={{margin: '1em'}}>
         {searchRender()}
-      <span style={{color: '#CC0000', fontWeight: '650', margin: '0.5em'}}>{product ? product.data.length : 0}건<span style={{color: 'black'}}>이 검색 되었습니다.</span></span>
+      <span style={{color: '#CC0000', fontWeight: '650', margin: '0.5em'}}>{product ? totalRows : 0}건<span style={{color: 'black'}}>이 검색 되었습니다.</span></span>
       </h5>
       {/* 카테고리 목록 TABLE */}
       <div className={styles.buttonBox}>
