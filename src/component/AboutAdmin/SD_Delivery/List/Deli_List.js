@@ -22,7 +22,7 @@ export default function Deli_List() {
     const fetchDeliveryData = async () => {
         try {
             const token = GetCookie('jwt_token');
-            const response = await axios.get(`/delivery/deliveries`,
+            const response = await axios.get(`/delivery/all`,
                 {
                     headers: {
                         "Content-Type": "application/json",
@@ -102,11 +102,14 @@ export default function Deli_List() {
 
     // 현재 페이지에 해당하는 게시물 목록 가져오기
     const getCurrentPagePosts = () => {
+        console.log('불러오는 중..');
         if (!deliveryData) {
+            console.log('불러들인 데이터가 없습니다.');
             return [];
         }
         const startIndex = (currentPage - 1) * itemsPerPage;
         return deliveryData.slice(startIndex, startIndex + itemsPerPage);
+        console.log('데이터를 불러들이기에 성공했습니다.');
     };
 
 
@@ -226,9 +229,9 @@ export default function Deli_List() {
                                         {/* 택배사 */}
                                         <td>{item.delivery_selectedCor}</td>
                                         {/* 송장 번호 */}
-                                        <td>{item.delivery_num}</td>
+                                        <td>{item.delivery_invoiceNumber}</td>
                                         {/* 배송상태 */}
-                                        <td>{parseDeliveryState(item.delivery_state)}</td>
+                                        <td>{parseDeliveryState(item.orderState)}</td>
                                         {/* 주문일자 */}
                                         <td>{item.order_date}</td>
                                         {/* 상품번호 */}
