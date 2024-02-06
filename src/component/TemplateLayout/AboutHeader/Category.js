@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from './Category.module.css'
 import React from 'react';
-import { useCartList, useCategoryData, useListActions, useSearchActions, useSearchList, useSearchStore, useSearchTerm, useSeperateSearchTerm } from "../../../Store/DataStore";
+import { useListActions, useSearchActions, useSearchList, useSearchStore, useSearchTerm, useSeperateSearchTerm } from "../../../Store/DataStore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CategoryFilter } from "./CategoryFilter";
 import { useFetch } from "../../../customFn/useFetch"
@@ -21,7 +21,7 @@ export function Category() {
   const [postCnt, setPostCnt] = useState(10);
   const [totalRows, setTotalRows] = useState(0);
   //검색 결과 데이터 fetch
-  const {fetchAddPostServer, fetchServer} = useFetch();
+  const { fetchAddPostServer, fetchServer } = useFetch();
 
   const [filterData, setFilterData] = useState([]);
 
@@ -91,20 +91,20 @@ export function Category() {
 
   const queryClient = useQueryClient();
 
-    //마운트 될때 페이지 설정.
-    useEffect(() => {
-      const fetchData = async () => {
-        if(product){
-          setCurrentPage(product.currentPage);
-          setTotalPages(product.totalPages);
-          setPostCnt(product.postsPerPage);
-          setTotalRows(product.totalRows);
-          setFilterData(product.datas);
-        }
-      };
-  
-      fetchData();
-    }, [product])
+  //마운트 될때 페이지 설정.
+  useEffect(() => {
+    const fetchData = async () => {
+      if (product) {
+        setCurrentPage(product.currentPage);
+        setTotalPages(product.totalPages);
+        setPostCnt(product.postsPerPage);
+        setTotalRows(product.totalRows);
+        setFilterData(product.datas);
+      }
+    };
+
+    fetchData();
+  }, [product])
 
   //------------------------------------------------------
 
@@ -268,10 +268,10 @@ export function Category() {
       <div className={styles.topTitle}>
         <h1>검색 결과</h1>
       </div>
-      <CategoryFilter searchList={searchList} filterData={filterData}/>
-      <h5 style={{margin: '1em'}}>
+      <CategoryFilter searchList={searchList} filterData={filterData} postCnt={postCnt} setFilterData={setFilterData} setCurrentPage={setCurrentPage} setTotalPages={setTotalPages} setPostCnt={setPostCnt} setTotalRows={setTotalRows} />
+      <h5 style={{ margin: '1em' }}>
         {searchRender()}
-      <span style={{color: '#CC0000', fontWeight: '650', margin: '0.5em'}}>{product ? totalRows : 0}건<span style={{color: 'black'}}>이 검색 되었습니다.</span></span>
+        <span style={{ color: '#CC0000', fontWeight: '650', margin: '0.5em' }}>{product ? totalRows : 0}건<span style={{ color: 'black' }}>이 검색 되었습니다.</span></span>
       </h5>
       {/* 카테고리 목록 TABLE */}
       <div className={styles.buttonBox}>

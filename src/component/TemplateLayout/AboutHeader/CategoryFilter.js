@@ -1,12 +1,57 @@
 import React, { useState } from 'react';
 import styles from './CategoryFilter.module.css';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useFetch } from '../../../customFn/useFetch';
 
-export function CategoryFilter({ searchList, filterData }) {
+export function CategoryFilter({ filterData, postCnt, setCurrentPage, setTotalPages, setPostCnt, setTotalRows, setFilterData }) {
   const { isLoading, isError, error, data: categoryData } = useQuery({ queryKey: ['category'] });
   const [editIndex, setEditIndex] = useState([]);
+  const { fetchAddPostServer } = useFetch();
+  const queryClient = useQueryClient();
 
-  // handleToggleEdit 함수를 수정하여 editIndex를 배열에서 단일 값으로 업데이트합니다.
+  // 카테고리를 클릭했을 때 호출되는 함수
+  const fetchFilterCategory = async (categoryId) => {
+    const getSearch = JSON.parse(sessionStorage.getItem('searchTerm'));
+    return await fetchAddPostServer([getSearch.state.searchTerm.search === '' ? [getSearch.state.seperateSearchTerm] : getSearch.state.searchTerm.search, categoryId], 'post', '/search/list', 1, postCnt);
+  };
+
+
+  const { mutate: filterMutaion } = useMutation({ mutationFn: fetchFilterCategory })
+
+
+  function handleCategoryClick(type, categoryId) {
+    let idData;
+    if (type === 'parentsCategory') {
+      idData = {
+        parentsCategory_id: categoryId
+      }
+    } else {
+      idData = {
+        category_id: categoryId
+      }
+    }
+    filterMutaion(idData, {
+      onSuccess: (data) => {
+        setCurrentPage(data.data.currentPage);
+        setTotalPages(data.data.totalPages);
+        setPostCnt(data.data.postsPerPage);
+        setTotalRows(data.data.totalRows);
+        setFilterData(data.data.datas);
+        queryClient.setQueryData(['search'], () => {
+          return data.data
+        })
+      },
+      onError: (error) => {
+        return console.error(error.message);
+      },
+    })
+  }
+
+
+
+
+
+  //하위 카테고리 드롭 앤 다운 부분
   const handleToggleEdit = (index) => {
     if (editIndex.includes(index)) {
       setEditIndex(editIndex.filter((item) => item !== index));
@@ -39,6 +84,7 @@ export function CategoryFilter({ searchList, filterData }) {
             return parentCategoryItem && parentCategoryItem.parentsCategory_id === topLevelCategoryItem.category_id;
           })
           .map((filteredParentCategoryItem) => {
+            const parentCategoryId = filteredParentCategoryItem?.category_id;
             const parentCategoryName = filteredParentCategoryItem?.name;
             const parentCategoryCount = filterData.filter((item) => item.parentsCategory_id === filteredParentCategoryItem.category_id).length;
 
@@ -49,16 +95,19 @@ export function CategoryFilter({ searchList, filterData }) {
                 return categoryItem && categoryItem.parentsCategory_id === filteredParentCategoryItem.category_id;
               })
               .map((filteredChildCategoryItem) => {
+                const childCategoryId = filteredChildCategoryItem?.category_id;
                 const childCategoryName = filteredChildCategoryItem?.name;
                 const childCategoryCount = filterData.filter((item) => item.category_id === filteredChildCategoryItem.category_id).length;
 
                 return {
+                  id: childCategoryId,
                   title: childCategoryName,
                   count: childCategoryCount,
                 };
               });
 
             return {
+              id: parentCategoryId,
               title: parentCategoryName,
               count: parentCategoryCount,
               content: childCategories,
@@ -88,31 +137,6 @@ export function CategoryFilter({ searchList, filterData }) {
       }))
     }
   ];
-  // 카테고리 필터 클릭 시 진행 함수
-  function handleCategoryClick(item, contentItem) {
-    let filtered;
-
-    switch (item.label) {
-      case '브랜드':
-        filtered = searchList.filter((item) => item.product_brand === contentItem.title);
-        break;
-      case '원산지':
-        filtered = searchList.filter((item) => item.product_madeIn === contentItem.title);
-        break;
-      case '카테고리':
-        filtered = searchList.filter((item) => item.category_id === contentItem.title);
-        break;
-      default:
-        filtered = [];
-    }
-
-    //클릭 시 로직
-    const addCntList = filtered.map((item, index) => ({
-      ...item,
-      listId: index,
-    }));
-
-  };
 
   if (isLoading) {
     return <p>Loading..</p>;
@@ -125,7 +149,7 @@ export function CategoryFilter({ searchList, filterData }) {
     <div className={styles.main}>
       <div className={styles.filterUI}>
         {/* categoryData.categories.map((item, key)) => */}
-        {categoryFilter.map((item, key) =>
+        {categoryFilter?.map((item, key) =>
           <React.Fragment key={key}>
             {/* 필터 별 라벨 */}
             <div className={styles.label}>
@@ -135,19 +159,18 @@ export function CategoryFilter({ searchList, filterData }) {
               {item.prevContent && Array.isArray(item.prevContent) && item.prevContent.map((topLevelCategory, topLevelIndex) => (
                 <ul key={topLevelIndex} className={styles.listPosition}>
                   {/* 최상위 카테고리 항목 */}
-                  <li
-                    className={styles.contentItem}
-                    onClick={() => handleCategoryClick(item, topLevelCategory)}>
-                    <span className={styles.topFont}>{topLevelCategory.title}<span className={styles.lowFont} style={{fontWeight: '550'}}>({topLevelCategory.count})</span></span>
+                  <li>
+                    <span className={styles.topFont}>{topLevelCategory.title}<span className={styles.lowFont} style={{ fontWeight: '550' }}>({topLevelCategory.count})</span></span>
                   </li>
                   {topLevelCategory.content && Array.isArray(topLevelCategory.content) && topLevelCategory.content.map((parentCategory, parentIndex) => (
                     <ul className={styles.listLowPosition} key={parentIndex}>
                       {/* 부모 카테고리 항목 */}
-                      <li
-                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                        className={styles.contentItem}
-                        onClick={() => handleCategoryClick(item, parentCategory)}>
-                        <span className={styles.lowFont} style={{fontWeight: '650'}}>{parentCategory.title} ({parentCategory.count})</span>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <li
+                          className={styles.contentItem}
+                          onClick={() => handleCategoryClick('parentsCategory', parentCategory.id)}>
+                          <span className={styles.lowFont} style={{ fontWeight: '650' }}>{parentCategory.title} ({parentCategory.count})</span>
+                        </li>
                         <button
                           className="white_button"
                           style={{ marginLeft: '0.3em', padding: '0.5em', width: '0.5em', height: '1em', display: 'flex', justifyContent: 'center', alignItems: 'center' }}
@@ -155,13 +178,15 @@ export function CategoryFilter({ searchList, filterData }) {
                         >
                           {editIndex.includes(parentCategory.title) ? <i className="fas fa-caret-up" /> : <i className="fas fa-caret-down" />}
                         </button>
-                      </li>
+                      </div>
                       {editIndex.includes(parentCategory.title) && parentCategory.content && Array.isArray(parentCategory.content) && parentCategory.content.map((childCategory, childIndex) => (
-                        <ul className={styles.listLowestPosition}>
+                        <ul
+                          key={childIndex}
+                          className={styles.listLowestPosition}
+                        >
                           <li
-                            key={childIndex}
                             className={styles.contentItem}
-                            onClick={() => handleCategoryClick(item, childCategory)}>
+                            onClick={() => handleCategoryClick('category', childCategory.id)}>
                             <span className={styles.lowFont}>{childCategory.title} ({childCategory.count})</span>
                           </li>
                         </ul>
