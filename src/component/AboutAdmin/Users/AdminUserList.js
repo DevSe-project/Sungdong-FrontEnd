@@ -157,6 +157,9 @@ export default function AdminUserList() {
     }
   };
   const { mutate: editMutation } = useMutation({ mutationFn: fetchEditUser }) // 수정
+  const handleEdit = async() => {
+
+  }
 
 
   // User Delete
@@ -456,7 +459,7 @@ export default function AdminUserList() {
                         {/* 수정 버튼 */}
                         <button className='white_button' onClick={() => editMutation(matchedData)}>수정</button>
                         {/* 삭제 버튼 */}
-                        <button className='white_button' onClick={() => fetchDeleteUser(user.users_id)}>삭제</button>
+                        <button className='white_button' onClick={() => handleDelete(user.users_id)}>삭제</button>
                         {/* 취소 버튼 */}
                         <button className='white_button' onClick={() => setEditIndex(null)}>취소</button>
                       </div>
