@@ -3,6 +3,7 @@ import { useModalActions } from "../../../../Store/DataStore";
 import styles from './Deli_Modal.module.css';
 import axios from '../../../../axios';
 import { GetCookie } from "../../../../customFn/GetCookie";
+import { useFetch } from "../../../../customFn/useFetch";
 
 // 배송 상태 수정 모달 컴포넌트
 export default function Deli_StateModal(props) {
@@ -10,6 +11,8 @@ export default function Deli_StateModal(props) {
     const { selectedModalClose } = useModalActions();
     // 가져온 데이터 저장 상태
     const [fetchedData, setFetchedData] = useState([]);
+    // useFetch
+    const { fetchServer } = useFetch();
 
 
     // ESC 키로 모달 닫기 이벤트 리스너 등록
@@ -52,7 +55,7 @@ export default function Deli_StateModal(props) {
         setFetchedData((prevData) =>
             prevData.map((item) => ({
                 ...item,
-                delivery_state: val,
+                orderState: val,
             }))
         );
     }
@@ -67,7 +70,7 @@ export default function Deli_StateModal(props) {
                 if (item.order_id === order_id) {
                     return {
                         ...item,
-                        delivery_state: selectedStatus
+                        orderState: selectedStatus
                     };
                 }
                 return item;
@@ -78,7 +81,10 @@ export default function Deli_StateModal(props) {
             alert("잘못된 선택입니다.");
         }
     }
-
+    
+    const sendApi = async() => {
+        fetchServer()
+    }
     // 배송 상태 변경 함수
     const sendUpdateStateApiToServer = async () => {
         try {
@@ -87,7 +93,7 @@ export default function Deli_StateModal(props) {
             // 변경된 배송 상태 데이터 추출
             const updatedData = fetchedData.map(item => ({
                 order_id: item.order_id,//식별자
-                delivery_state: item.delivery_state
+                orderState: item.orderState
             }));
 
             const response = await axios.put(
@@ -159,8 +165,8 @@ export default function Deli_StateModal(props) {
                                     <select
                                         className='select'
                                         value={
-                                            fetchedData.length > 0 && fetchedData.every(item => item?.delivery_state === fetchedData[0]?.delivery_state)
-                                                ? fetchedData[0].delivery_state
+                                            fetchedData.length > 0 && fetchedData.every(item => item?.orderState === fetchedData[0]?.orderState)
+                                                ? fetchedData[0].orderState
                                                 : 0
                                         }
                                         onChange={(e) => {
@@ -197,7 +203,7 @@ export default function Deli_StateModal(props) {
                                     <td>
                                         <select
                                             className='select'
-                                            value={item.delivery_state}
+                                            value={item.orderState}
                                             onChange={(e) => {
                                                 handlePerStatus(item.order_id, e);
                                             }}

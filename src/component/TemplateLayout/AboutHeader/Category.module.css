@@ -13,7 +13,7 @@
 }
 
 .tableLocation{
-  width: 80%;
+  width: 90%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -21,7 +21,7 @@
 }
 
 .topTitle{
-  width: 80%;
+  width: 90%;
   margin-top: 2em;
   padding-bottom: 1%;
   margin-right: 0;
@@ -131,7 +131,7 @@
 }
 
 .buttonBox{
-  width: 80%;
+  width: 90%;
   display: flex;
   margin-top: 0.5em;
   margin-bottom: 0.5em;

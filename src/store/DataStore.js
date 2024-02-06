@@ -85,17 +85,17 @@ const useListStore = create((set) => ({
 
     //검색리스트 옵션 SET
     setSearchOption: (item, value) =>
-    set((state) => ({
-      searchList: state.searchList.map((list) => {
-        if (list.product_id === item.product_id) {
-          return {
-            ...list,
-            selectedOption: value,
-          };
-        }
-        return list;
-      }),
-    })),
+      set((state) => ({
+        searchList: state.searchList.map((list) => {
+          if (list.product_id === item.product_id) {
+            return {
+              ...list,
+              selectedOption: value,
+            };
+          }
+          return list;
+        }),
+      })),
 
     //검색리스트 수량 SET
     setSearchCnt: (item, value) =>
@@ -110,7 +110,7 @@ const useListStore = create((set) => ({
           return list;
         }),
       })),
-  
+
     //검색리스트 수량 UP
     setSearchCntUp: (item) =>
       set((state) => ({
@@ -124,7 +124,7 @@ const useListStore = create((set) => ({
           return list;
         }),
       })),
-  
+
     //검색리스트 수량 DOWN
     setSearchCntDown: (item) =>
       set((state) => ({
@@ -154,51 +154,51 @@ const useListStore = create((set) => ({
     setCartList: (data) =>
       set((state) => ({
         cartList: [
-          ...data.map((item) => ({...item})),
+          ...data.map((item) => ({ ...item })),
         ],
       })),
 
     //카트수량 SET
     setCartCnt: (item, value) =>
-    set((state) => ({
-      cartList: state.cartList.map((list) => {
-        if (list.cart_product_id === item.cart_product_id) {
-          return {
-            ...list,
-            cart_cnt: value,
-          };
-        }
-        return list;
-      }),
-    })),
+      set((state) => ({
+        cartList: state.cartList.map((list) => {
+          if (list.cart_product_id === item.cart_product_id) {
+            return {
+              ...list,
+              cart_cnt: value,
+            };
+          }
+          return list;
+        }),
+      })),
 
     //카트수량 UP
     setCartCntUp: (item) =>
-    set((state) => ({
-      cartList: state.cartList.map((list) => {
-        if (list.cart_product_id === item.cart_product_id) {
-          return {
-            ...list,
-            cart_cnt: (parseInt(list.cart_cnt) + 1).toString(),
-          };
-        }
-        return list;
-      }),
-    })),
+      set((state) => ({
+        cartList: state.cartList.map((list) => {
+          if (list.cart_product_id === item.cart_product_id) {
+            return {
+              ...list,
+              cart_cnt: (parseInt(list.cart_cnt) + 1).toString(),
+            };
+          }
+          return list;
+        }),
+      })),
 
     //카트수량 DOWN
     setCartCntDown: (item) =>
-    set((state) => ({
-      cartList: state.cartList.map((list) => {
-        if (list.cart_product_id === item.cart_product_id) {
-          return {
-            ...list,
-            cart_cnt: (parseInt(list.cart_cnt) - 1).toString(),
-          };
-        }
-        return list;
-      }),
-    })),
+      set((state) => ({
+        cartList: state.cartList.map((list) => {
+          if (list.cart_product_id === item.cart_product_id) {
+            return {
+              ...list,
+              cart_cnt: (parseInt(list.cart_cnt) - 1).toString(),
+            };
+          }
+          return list;
+        }),
+      })),
 
     // 공지사항
     setNoticePostList: (val) => {
@@ -359,6 +359,9 @@ export const useSetLogin = () => useLoginStore((state) => state.actions);
 export const useSearchStore = create(
   persist(
     (set) => ({
+      searchTerm: {
+        search: ""
+      },
       seperateSearchTerm: {
         product_id: "",
         product_title: "",
@@ -367,20 +370,26 @@ export const useSearchStore = create(
         product_model: ""
       },
       actions: {
+        setSearchTerm: (fieldName, value) =>
+          set((state) => ({ searchTerm: { ...state.searchTerm, [fieldName]: value } })),
         setSeperateSearchTerm: (fieldName, value) =>
           set((state) => ({ seperateSearchTerm: { ...state.seperateSearchTerm, [fieldName]: value } })),
         resetSeperateSearchTerm: () =>
           set({ seperateSearchTerm: { product_id: "", product_title: "", product_brand: "", product_spec: "", product_model: "" } }),
+        resetSearchTerm: () =>
+          set({ searchTerm: { search: "" } }),
       }
     }),
     {
       name: 'searchTerm',
       storage: createJSONStorage(() => sessionStorage),
       version: 1,
-      partialize: (state) => ({ seperateSearchTerm: state.seperateSearchTerm }),
+      partialize: (state) => ({ seperateSearchTerm: state.seperateSearchTerm, searchTerm: state.searchTerm }),
     }
   )
 );
+
+export const useSearchTerm = () => useSearchStore((state) => state.searchTerm);
 export const useSeperateSearchTerm = () => useSearchStore((state) => state.seperateSearchTerm);
 export const useSearchActions = () => useSearchStore((state) => state.actions);
 
@@ -468,7 +477,7 @@ export const useProductStore = create((set) => ({
     editProduct: (data) =>
       set((state) => ({ product: data })),
     editOptionProduct: (data) =>
-      set((state) => ({ 
+      set((state) => ({
         product: {
           ...state.product,
           option: {

@@ -167,7 +167,7 @@ export default function Deli_InvoiceModal(props) {
                                                 onChange={(e) => updateInvoiceNumber(e.target.value, item.order_id)}
                                             />
                                         </td>
-                                        <td>{props.parseDeliveryState(item.delivery_state)}</td>
+                                        <td>{props.parseDeliveryState(item.orderState)}</td>
                                         {/* 주문일자 */}
                                         <td>{item.order_date}</td>
                                         {/* 상품코드 */}

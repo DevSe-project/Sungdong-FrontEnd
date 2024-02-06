@@ -10,7 +10,7 @@ export default function CodeInputModal() {
   const { setUserData } = useDataActions();
   const { selectedModalClose, closeModal } = useModalActions();
   const queryClient = useQueryClient();
-  const fetchServer = useFetch();
+  const { fetchNonPageServer } = useFetch();
 
   const navigate = useNavigate();
 
@@ -29,24 +29,24 @@ export default function CodeInputModal() {
     };
   }, [selectedModalClose]);
 
-    //코드 데이터 생성 fetch
-    const fetchCheckCode = async (inputCode) => {
-      const result = fetchServer(inputCode, 'post', '/auth/checkCode', 1);
-      return result;
+  //코드 데이터 생성 fetch
+  const fetchCheckCode = async (inputCode) => {
+    const result = await fetchNonPageServer({ user_code: inputCode }, `post`, `/auth/checkCode`, 1);
+    return result;
   };
 
   // 인증코드 입력 state
   const [inputCode, setInputCode] = useState('');
-  const {mutate:checkCodeMutation} = useMutation({mutationFn: fetchCheckCode})
+  const { mutate: checkCodeMutation } = useMutation({ mutationFn: fetchCheckCode })
 
   // 유효코드 체크
   const confirmCode = () => {
-    checkCodeMutation(inputCode,{
+    checkCodeMutation(inputCode, {
       onSuccess: (data) => {
         console.log('유효한 코드 :', data);
         alert(data.message);
         closeModal();
-        navigate("/join");        
+        navigate("/join");
       },
       onError: (error) => {
         closeModal();
@@ -92,7 +92,7 @@ export default function CodeInputModal() {
           {/* 회원가입 진행 Button */}
           <div
             className={styles.goProve}
-            onClick={()=>confirmCode()}
+            onClick={() => confirmCode()}
           >
             인증하기
           </div>

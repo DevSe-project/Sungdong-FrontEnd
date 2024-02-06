@@ -31,8 +31,6 @@
 .category {
   padding: 1em;
   font-size: large;
-  white-space: wrap;
-  word-wrap: wrap;
   text-align: center;
   color: black;
 }
@@ -41,4 +39,10 @@
   background-color: var(--background-color-set);
   color: #FFF;
   border-radius: 1dvb;
+}
+
+.subMenuContainer{
+  display: flex;
+  flex-direction: row;
+
 }
