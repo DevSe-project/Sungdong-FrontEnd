@@ -1,6 +1,6 @@
 import styles from './SeperateSearchBar.module.css';
 import { useNavigate } from 'react-router-dom';
-import { useSearchActions, useSeperateSearchTerm } from '../../../Store/DataStore';
+import { useSearchActions, useSearchFilterData, useSearchTerm, useSeperateSearchTerm } from '../../../Store/DataStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useFetch } from '../../../customFn/useFetch';
 import { useEffect } from 'react';
@@ -8,14 +8,15 @@ import { useEffect } from 'react';
 export function SeperateSearchBar() {
   const navigate = useNavigate();
   const seperateSearchTerm = useSeperateSearchTerm();
-  const { setSeperateSearchTerm } = useSearchActions();
+  const { setSeperateSearchTerm, setFilterData } = useSearchActions();
   const queryClient = useQueryClient();
   const { fetchAddPostServer } = useFetch();
 
 
   //검색 요청
-  const handleSearch = async (search) => {
-    return await fetchAddPostServer([search], `post`, `/search/list`, 1, 10);
+  const handleSearch = async (seperateSearchTerm) => {
+    const getSearch = JSON.parse(sessionStorage.getItem('searchTerm'));
+    return await fetchAddPostServer([getSearch.state.searchTerm, seperateSearchTerm], `post`, `/search/list`, 1, 10);
   };
 
   //검색 요청 Mutate
@@ -27,14 +28,13 @@ export function SeperateSearchBar() {
       searchMutate(seperateSearchTerm, {
         onSuccess: (data) => {
           // 메세지 표시
-          alert(data.message);
           console.log('분리된 검색창 : 검색되었습니다.', data);
           queryClient.setQueryData(['search'], () => {
             return data.data
           })
+          setFilterData(data.data.datas);
           // 카테고리로 이동
           navigate("/category");
-          window.location.reload();
         },
         onError: (error) => {
           //에러 처리
@@ -48,14 +48,13 @@ export function SeperateSearchBar() {
     searchMutate(search, {
       onSuccess: (data) => {
         // 메세지 표시
-        alert(data.message);
         console.log('분리된 검색창 : 검색되었습니다.', data);
         queryClient.setQueryData(['search'], () => {
           return data.data
         })
+        setFilterData(data.data.datas);
         // 카테고리로 이동
         navigate("/category");
-        window.location.reload();
       },
       onError: (error) => {
         //에러 처리

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from './Category.module.css'
 import React from 'react';
-import { useListActions, useSearchActions, useSearchList, useSearchStore, useSearchTerm, useSeperateSearchTerm } from "../../../Store/DataStore";
+import { useListActions, useSearchActions, useSearchFilterData, useSearchList, useSearchStore, useSearchTerm, useSeperateSearchTerm } from "../../../Store/DataStore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CategoryFilter } from "./CategoryFilter";
 import { useFetch } from "../../../customFn/useFetch"
@@ -10,7 +10,8 @@ import Pagination from "../../../customFn/Pagination";
 export function Category() {
   const seperateSearchTerm = useSeperateSearchTerm();
   const searchTerm = useSearchTerm();
-  const { resetSeperateSearchTerm } = useSearchActions();
+  const { resetSeperateSearchTerm, setFilterData } = useSearchActions();
+  const filterData = useSearchFilterData();
   const searchList = useSearchList();
   const navigate = useNavigate();
   // 체크박스를 통해 선택한 상품들을 저장할 상태 변수
@@ -23,12 +24,10 @@ export function Category() {
   //검색 결과 데이터 fetch
   const { fetchAddPostServer, fetchServer } = useFetch();
 
-  const [filterData, setFilterData] = useState([]);
-
 
   const fetchSearchData = async () => {
     const getSearch = JSON.parse(sessionStorage.getItem('searchTerm'));
-    const data = await fetchAddPostServer([getSearch.state.searchTerm.search === '' ? getSearch.state.seperateSearchTerm : getSearch.state.searchTerm.search], 'post', '/search/list', 1, postCnt);
+    const data = await fetchAddPostServer([getSearch.state.searchTerm, getSearch.state.seperateSearchTerm], 'post', '/search/list', 1, postCnt);
     setCurrentPage(data.data.currentPage);
     setTotalPages(data.data.totalPages);
     setPostCnt(data.data.postsPerPage);
@@ -66,7 +65,7 @@ export function Category() {
   // 페이지를 변경할 때 호출되는 함수
   const fetchPageChange = async (pageNumber) => {
     const getSearch = JSON.parse(sessionStorage.getItem('searchTerm'));
-    return await fetchAddPostServer([getSearch.state.searchTerm.search === '' ? [getSearch.state.seperateSearchTerm] : getSearch.state.searchTerm.search], 'post', '/search/list', pageNumber, postCnt);
+    return await fetchAddPostServer([getSearch.state.searchTerm, getSearch.state.seperateSearchTerm], 'post', '/search/list', pageNumber, postCnt);
   };
 
 
@@ -105,17 +104,6 @@ export function Category() {
 
     fetchData();
   }, [product])
-
-  //마운트 될때 페이지 설정.
-  useEffect(() => {
-    const fetchData = async () => {
-      if (product) {
-        setFilterData(product.datas);
-      }
-    };
-
-    fetchData();
-  }, [])
 
   //------------------------------------------------------
 
@@ -279,7 +267,7 @@ export function Category() {
       <div className={styles.topTitle}>
         <h1>검색 결과</h1>
       </div>
-      <CategoryFilter searchList={searchList} filterData={filterData} postCnt={postCnt} setFilterData={setFilterData} setCurrentPage={setCurrentPage} setTotalPages={setTotalPages} setPostCnt={setPostCnt} setTotalRows={setTotalRows} />
+      <CategoryFilter searchList={searchList} postCnt={postCnt} setCurrentPage={setCurrentPage} setTotalPages={setTotalPages} setPostCnt={setPostCnt} setTotalRows={setTotalRows} />
       <h5 style={{ margin: '1em' }}>
         {searchRender()}
         <span style={{ color: '#CC0000', fontWeight: '650', margin: '0.5em' }}>{product ? totalRows : 0}건<span style={{ color: 'black' }}>이 검색 되었습니다.</span></span>

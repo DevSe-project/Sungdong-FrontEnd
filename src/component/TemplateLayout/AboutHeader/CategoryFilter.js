@@ -2,17 +2,20 @@ import React, { useState } from 'react';
 import styles from './CategoryFilter.module.css';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useFetch } from '../../../customFn/useFetch';
+import { useSearchActions, useSearchFilterData } from '../../../Store/DataStore';
 
-export function CategoryFilter({ filterData, postCnt, setCurrentPage, setTotalPages, setPostCnt, setTotalRows, setFilterData }) {
+export function CategoryFilter({ postCnt, setCurrentPage, setTotalPages, setPostCnt, setTotalRows }) {
   const { isLoading, isError, error, data: categoryData } = useQuery({ queryKey: ['category'] });
   const [editIndex, setEditIndex] = useState([]);
   const { fetchAddPostServer } = useFetch();
+  const filterData = useSearchFilterData();
+  const {setFilterData} = useSearchActions();
   const queryClient = useQueryClient();
 
   // 카테고리를 클릭했을 때 호출되는 함수
   const fetchFilterCategory = async (categoryId) => {
     const getSearch = JSON.parse(sessionStorage.getItem('searchTerm'));
-    return await fetchAddPostServer([getSearch.state.searchTerm.search === '' ? getSearch.state.seperateSearchTerm : getSearch.state.searchTerm.search, categoryId], 'post', '/search/list', 1, postCnt);
+    return await fetchAddPostServer([getSearch.state.searchTerm, getSearch.state.seperateSearchTerm, categoryId], 'post', '/search/list', 1, postCnt);
   };
 
 
