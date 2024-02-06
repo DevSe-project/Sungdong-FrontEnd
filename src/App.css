@@ -272,50 +272,31 @@ i.fa-solid.fa-heart {
 
 .categorymenu-item {
   padding: 0.8em;
-  position: relative;
   cursor: pointer;
 }
 
-.categorymenu-item::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  width: 0;
-  height: 0;
-  background-color: var(--background-color-set);
-  transition: all 350ms;
+.categorymenu-item:hover {
+  color: #808080;
 }
 
-.categorymenu-item:hover::after {
-  left: 0;
-  width: 100%;
-  height: 3px;
-}
-
-.categorymenu-item .sub-menu {
-  border-radius: 1dvb;
-  background-color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+.sub-menu {
   z-index: 990;
   text-align: center;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
   display: block;
   position: absolute;
   top: 100%;
-  left: -25%;
-  width: 100%;
+  width: 105%;
+  left: -2.5%;
 }
 
 .categorymenu-item.open{
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
   border-radius: 1em 1em 0 0;
+  color: var(--background-color-active);
 }
 
-.categorymenu-item.open .sub-menu {
-  display: block;
-}
 
 .categorytab-item {
   padding: 1em;
