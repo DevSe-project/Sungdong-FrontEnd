@@ -8,12 +8,14 @@ import { useModalActions, useModalState, useUserFilter, useUserSort } from '../.
 import AdminUserFilter from './AdminUserFilter';
 import AdminUserSort from './AdminUserSort';
 import { GetCookie } from '../../../customFn/GetCookie';
+import { useFetch } from '../../../customFn/useFetch';
 
 export default function AdminUserList() {
 
   const userFilter = useUserFilter(); // 유저필터 zustand
   const queryClient = useQueryClient(); // 리액트 쿼리 클라이언트
   const userSort = useUserSort(); // 유저정렬 zustand
+  const { fetchServer } = useFetch();
   const [currentPage, setCurrentPage] = useState(1); // 게시물 데이터와 페이지 번호 상태 관리 
   const [itemsPerPage, setItemsPerPage] = useState(10); // 아아템 포스팅 개수
   const [checkedItems, setCheckedItems] = useState([]); // 수정할 데이터의 체크 상태를 관리하는 state(users_id를 담음)
@@ -37,7 +39,7 @@ export default function AdminUserList() {
       return;
     }
     const data = checkedItems.map(users_id => {
-      const matchingData = userData.find(item => item.users_id === users_id);
+      const matchingData = matchedData.find(item => item.users_id === users_id);
       return matchingData;
     });
     setMatchedData(data);
@@ -70,11 +72,6 @@ export default function AdminUserList() {
     }
   }
 
-  // useEffect를 사용하여 페이지 번호나 페이지 당 항목 수가 변경될 때마다 새로운 데이터를 가져옴
-  useEffect(() => {
-    fetchUsersData();
-  }, [currentPage, itemsPerPage]);
-
   //유저 필터링 Fetch
   const fetchFilteredUserData = async (userFilterData) => {
     try {
@@ -95,7 +92,7 @@ export default function AdminUserList() {
       throw new Error('조건에 일치하는 유저가 없습니다.');
     }
   }
-  // 유저 필터링 handler
+  const { mutate: filterMutation } = useMutation({ mutationFn: fetchFilteredUserData });
   const onFiltering = () => {
     filterMutation(userFilter, {
       onSuccess: (data) => {
@@ -113,28 +110,13 @@ export default function AdminUserList() {
       },
     });
   };
-  //유저 정렬 Fetch
+
+
+  // 정렬 
   const fetchSortedUserData = async (userFilterData) => {
-    try {
-      const response = await axios.post(
-        "/auth/userSort",
-        JSON.stringify(
-          userFilterData
-        ),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          }
-        }
-      )
-      // 성공 시 추가된 상품 정보를 반환합니다.
-      return response.data;
-    } catch (error) {
-      // 실패 시 예외를 throw합니다.
-      throw new Error('정렬할 순위가 없습니다.');
-    }
+    fetchServer(userFilterData, `post`, `/auth/userSort`, currentPage);
   };
-  // 유저 정렬 handler
+  const { mutate: sortMutation } = useMutation({ mutationFn: fetchSortedUserData }); // 정렬
   const handleSort = () => {
     sortMutation(userSort, {
       onSuccess: (data) => {
@@ -152,71 +134,45 @@ export default function AdminUserList() {
       },
     });
   };
-  // 서버에 수정된 데이터를 반영하는 함수
-  const fetchEditUserData = async (editedData) => {
-    try {
-      if (editedData) {
-        // 수정된 데이터를 서버에 반영한다.
-        const response = await axios.post(
-          "/update", // 수정을 처리하는 API 엔드포인트
-          editedData // 수정된 데이터
-        );
-        // 서버 응답을 받았을 때의 처리
-        console.log('Update success:', response.data);
-        alert('Update success');
-        // 수정된 데이터를 서버에 반영한 후 해당 쿼리를 재호출하여 화면을 갱신한다.
-        queryClient.invalidateQueries(['users']);
-      } else {
-        // 수정된 데이터가 없다면 경고 메시지를 표시한다.
-        alert('No data to update');
-      }
-    } catch (error) {
-      // 서버 요청 실패 시 에러 처리
-      console.error('Update failed:', error);
-      alert('Update failed');
-    }
-  };
+
+
+
   // 유저 수정 handler
-  const editHandler = async (index) => {
+  const fetchEditUser = async (matchedData) => {
     try {
       if (window.confirm('수정사항을 반영하시겠습니까?')) {
-        // 수정할 데이터를 가져옴
-        const userData = matchedData[index];
-        // 수정된 데이터
-        const editedData = '123';
         // 수정된 데이터를 서버에 반영
-        await fetchEditUserData(userData);
+        await fetchServer(matchedData, 'post', '/userUpdate', currentPage);
+        // 수정 후, 현재 페이지를 다시 불러올 수 있도록 queryClient를 사용하여 캐시된 데이터를 무효화합니다.
+        queryClient.invalidateQueries('userData');
+        // 수정 후, editIndex를 초기화합니다.
+        setEditIndex(null);
+        // 알림 표시
+        alert('수정이 완료되었습니다.');
       }
     } catch (error) {
       // 오류 처리
       console.error('유저 수정 실패:', error);
       alert('유저 수정에 실패했습니다.');
     }
-  }
-  // 유저 삭제 fetch
-  const fetchDeleteUserData = async (id) => {
-    try {
-      const response = await axios.post(
-        "auth/userDel",
-        JSON.stringify(
-          id
-        ),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          }
-        }
-      )
+  };
+  const { mutate: editMutation } = useMutation({ mutationFn: fetchEditUser }) // 수정
 
+
+  // User Delete
+  const fetchDeleteUser = async (userID) => {
+    try {
+      const response = await axios.delete(`/auth/userDelete/${userID}`,
+      )
       return response.data;
     } catch (error) {
-      throw new Error('고객 삭제 요청이 정상적으로 처리되지 않았습니다.');
+      throw error;
     }
   }
-  // 유저 삭제 handler
-  const handleDelete = () => {
+  const { mutate: deleteMutation } = useMutation({ mutationFn: fetchDeleteUser }); // 삭제
+  const handleDelete = (userID) => {
     if (window.confirm('선택된 고객을 정말 삭제하시겠습니까?')) {
-      deleteMutation(checkedItems, {
+      deleteMutation(userID, {
         onSuccess: (data) => {
           console.log('user Delete successfully:', data);
           alert(data.message);
@@ -240,22 +196,20 @@ export default function AdminUserList() {
     queryFn: fetchUsersData,
   });
 
-  // mutate 정의
-  const { mutate: filterMutation } = useMutation({ mutationFn: fetchFilteredUserData }); // 필터링
-  const { mutate: sortMutation } = useMutation({ mutationFn: fetchSortedUserData }); // 정렬
-  const { mutate: editMutation } = useMutation({ mutationFn: fetchEditUserData })
-  const { mutate: deleteMutation } = useMutation({ mutationFn: fetchDeleteUserData }); // 삭제
-  // ------------------------------서버 통신------------------------------ //
-
-  // matchedData 업데이트 시 실행
+  // useEffect를 사용하여 페이지 번호나 페이지 당 항목 수가 변경될 때마다 새로운 데이터를 가져옴
   useEffect(() => {
-    if (editIndex !== null) {
-      const userData = matchedData[editIndex];
-      if (userData) {
-        fetchEditUserData(userData);
+    const fetchData = async () => {
+      try {
+        const data = await fetchUsersData();
+        setMatchedData(data);
+      } catch (error) {
+        throw new Error('데이터를 볼러오는 데 실패했습니다.', error);
       }
     }
-  }, [matchedData]);
+
+    fetchData();
+  }, [currentPage, itemsPerPage]);
+  // ------------------------------서버 통신------------------------------ //
 
   // 전체 체크박스 업데이트
   function handleAllCheckbox(isChecked) {
@@ -263,7 +217,7 @@ export default function AdminUserList() {
 
     if (checked) {
       // 전체 선택 클릭 시 데이터의 모든 아이템(id)를 담은 배열로 checkItems 상태 업데이트
-      let idArray = userData?.map((item) => item.users_id);
+      let idArray = matchedData?.map((item) => item.users_id);
       setCheckedItems(idArray);
       console.log(checkedItems);
     } else {
@@ -372,13 +326,14 @@ export default function AdminUserList() {
                 {/* 전체 체크박스 관리 체크박스 */}
                 <th><input
                   type='checkbox'
-                  checked={checkedItems.length === userData.length ? true : false}
+                  checked={checkedItems.length === matchedData.length ? true : false}
                   onChange={(e) => handleAllCheckbox(e.target.checked)} /></th>
                 {/* 업체명(상호명) */}
                 <th>업체명(상호명)</th>
                 {/* 고객 구분, CMS여부 */}
                 {[
                   { name: '고객 구분', valList: ['실사용자', '납품업자'] },
+                  { name: '등급', valList: ['A', 'B', 'C', 'D'] },
                   { name: '담당자', valList: ['박형조', '엄지석', '김태훈'], val: '박형조' },
                   { name: 'CMS여부', valList: ['A', 'B', 'C', 'D'] }
                 ].map((customItem, index) => (
@@ -409,7 +364,10 @@ export default function AdminUserList() {
                       {/* 삭제 버튼 */}
                       <button className='white_button' onClick={() => handleDelete()}>삭제</button>
                       {/* 취소 버튼 */}
-                      <button className='white_button' onClick={() => setEditIndex('none')}>취소</button>
+                      <button className='white_button' onClick={() => {
+                        setEditIndex('none');
+                        setCheckedItems([]);
+                      }}>취소</button>
                     </div>
                     :
                     <div className='icon' onClick={() => {
@@ -424,7 +382,7 @@ export default function AdminUserList() {
               </tr>
             </thead>
             <tbody>
-              {userData?.map((user, index) => (
+              {matchedData?.map((user, index) => (
                 <tr key={index}>
                   {/* 체크박스 */}
                   <td>
@@ -436,49 +394,77 @@ export default function AdminUserList() {
                   </td>
                   {/* 고객 구분, CMS여부 */}
                   {[
-                    { name: '고객명', val: user.cor_corName },
-                    { name: '고객 구분', valList: ['실사용자', '납품업자'], val: user.userType_id == 1 ? '실사용자' : '납품업자' },
-                    { name: '담당자', valList: ['박형조', '엄지석', '김태훈'], val: '박형조' },
-                    { name: 'CMS여부', valList: [true, false], val: user.hasCMS ? '동의' : '비동의' },
+                    { name: '고객명', val: user.cor_corName, key: 'cor_corName' },
+                    { name: '고객 구분', valList: ['실사용자', '납품업자'], val: user.userType_id == 1 ? '실사용자' : '납품업자', key: 'userType_id' },
+                    { name: '등급', valList: ['A', 'B', 'C', 'D'], val: user.grade ? user.grade : <span style={{ color: 'var(--main-red' }}>미정</span>, key: 'grade' },
+                    { name: '담당자', valList: ['박형조', '엄지석', '김태훈'], val: user.manager_name, key: 'manager_name' },
+                    { name: 'CMS여부', valList: ['동의', '비동의'], val: user.hasCMS ? '동의' : '비동의', key: 'hasCMS' },
                   ].map((customItem, editIdx) => (
                     <td key={editIdx}>
                       {editIndex === index ?
                         customItem.valList ?
-                          <select className='select'>
+                          <select
+                            className='select'
+                            value={customItem.val}
+                            onChange={(e) => {
+                              const editData = e.target.value;
+                              const newData = matchedData.map((item, idx) => {
+                                if (idx === index) {
+                                  return { ...item, [customItem.key]: editData };
+                                }
+                                return item;
+                              });
+                              setMatchedData(newData);
+                            }}
+                          >
                             {customItem.valList.map((valList, valListIndex) => (
                               <option key={valListIndex} value={valList}>{valList}</option>
                             ))}
                           </select>
                           :
-                          <input className='white_button' type='text' value={customItem.name} onChange={(e) => {
-
-                          }} />
+                          <input
+                            className='white_button'
+                            type='text'
+                            value={customItem.val}
+                            onChange={(e) => {
+                              const editData = e.target.value;
+                              const newData = matchedData.map((item, idx) => {
+                                if (idx === index) {
+                                  return { ...item, [customItem.key]: editData };
+                                }
+                                return item;
+                              });
+                              setMatchedData(newData);
+                            }}
+                          />
                         :
                         customItem.val
                       }
                     </td>
                   ))}
 
+
                   {/* 주소 */}
                   <td>{user.bname} {user.roadAddress}({user.zonecode})</td>
                   {/* 연락처 */}
                   <td>{user.cor_tel}</td>
                   {/* 수정/삭제 드롭다운 메뉴 */}
+                  {/* 수정/삭제 드롭다운 메뉴 */}
                   <td style={{ width: '20px' }}>
-                    {index === editIndex
-                      ?
-                      <div className="dropdown-menu"> {/* 아이콘 */}
+                    {index === editIndex ? (
+                      <div className="dropdown-menu">
                         {/* 수정 버튼 */}
-                        <button className='white_button' onClick={() => editHandler(user)}>수정</button>
+                        <button className='white_button' onClick={() => editMutation(matchedData)}>수정</button>
                         {/* 삭제 버튼 */}
-                        <button className='white_button' onClick={() => handleDelete(user)}>삭제</button>
+                        <button className='white_button' onClick={() => fetchDeleteUser(user.users_id)}>삭제</button>
                         {/* 취소 버튼 */}
                         <button className='white_button' onClick={() => setEditIndex(null)}>취소</button>
                       </div>
-                      :
+                    ) : (
                       <div className='ellipsis' onClick={() => handleToggleEdit(index)}><i class="fa-solid fa-ellipsis"></i></div>
-                    }
+                    )}
                   </td>
+
                 </tr>
               ))}
             </tbody>
