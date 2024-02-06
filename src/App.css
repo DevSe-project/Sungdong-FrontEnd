@@ -305,7 +305,12 @@ i.fa-solid.fa-heart {
   position: absolute;
   top: 100%;
   left: -25%;
-  width: 150%;
+  width: 100%;
+}
+
+.categorymenu-item.open{
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 1em 1em 0 0;
 }
 
 .categorymenu-item.open .sub-menu {

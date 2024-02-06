@@ -35,6 +35,36 @@ export const useFetch = () => {
 		setErrorDisplayed(true);
 	};
 
+
+	const fetchNonPageServer = async (item, fetchType, router) => {
+		try {
+			const token = GetCookie("jwt_token");
+			const response = await axios[fetchType](`${router}`,
+				JSON.stringify(item),
+				{
+					headers: {
+						"Content-Type": "application/json",
+						"Authorization": `Bearer ${token}`,
+					},
+				});
+			return response.data;
+		} catch (error) {
+			if (error.response && error.response.status === 400) {
+				handleOtherErrors(error.response.data.message);
+				throw new Error(error.response.data.message)
+			} else if (error.response && error.response.status === 401) {
+				handleUnauthorizedError(error.response.data.message);
+				throw new Error(error.response.data.message)
+			} else if (error.response && error.response.status === 403) {
+				handleForbiddenError(error.response.data.message);
+				throw new Error(error.response.data.message)
+			} else {
+				handleOtherErrors(error.response.data.message);
+				throw new Error(error.response.data.message)
+			}
+		}
+	};
+
 	const fetchServer = async (item, fetchType, router, pageNumber) => {
 		try {
 			const token = GetCookie("jwt_token");
@@ -150,6 +180,7 @@ export const useFetch = () => {
 	};
 
 	return {
+		fetchNonPageServer,
 		fetchServer,
 		fetchGetServer,
 		fetchAddPostServer,

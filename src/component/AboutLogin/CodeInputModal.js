@@ -10,7 +10,7 @@ export default function CodeInputModal() {
   const { setUserData } = useDataActions();
   const { selectedModalClose, closeModal } = useModalActions();
   const queryClient = useQueryClient();
-  const fetchServer = useFetch();
+  const {fetchNonPageServer} = useFetch();
 
   const navigate = useNavigate();
 
@@ -31,7 +31,7 @@ export default function CodeInputModal() {
 
     //코드 데이터 생성 fetch
     const fetchCheckCode = async (inputCode) => {
-      const result = fetchServer(inputCode, 'post', '/auth/checkCode', 1);
+      const result = await fetchNonPageServer({user_code: inputCode}, `post`, `/auth/checkCode`, 1);
       return result;
   };
 
