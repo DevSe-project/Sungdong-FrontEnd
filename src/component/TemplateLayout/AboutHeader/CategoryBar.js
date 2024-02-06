@@ -44,23 +44,21 @@ export function CategoryBar(props) {
   //서브메뉴 열림창 변수 초기화
   const [subMenuStates, setSubMenuStates] = useState(categoryData?.length > 0 ? categoryData.map(() => false) : []);
 
-  const handleTabClick = (tabItem) => {
-    sessionStorage.setItem('categoryTabState', JSON.stringify(tabItem.id));
-  };
-
-  const handleMouseEnter = (index) => {
+  const handleSubMenuOnOff = (index) => {
     // 해당 인덱스의 메뉴를 열기 위해 true로 설정
     const newSubMenuStates = [...subMenuStates];
-    newSubMenuStates[index] = true;
+    // 열려있는 다른 서브메뉴를 닫기
+    for (let i = 0; i < newSubMenuStates.length; i++) {
+      if (i !== index) {
+        newSubMenuStates[i] = false;
+      }
+    }
+    // 클릭한 인덱스의 서브메뉴를 열거나 닫기
+    newSubMenuStates[index] = !subMenuStates[index];
+
     setSubMenuStates(newSubMenuStates);
   };
 
-  const handleMouseLeave = (index) => {
-    // 해당 인덱스의 메뉴를 닫기 위해 false로 설정
-    const newSubMenuStates = [...subMenuStates];
-    newSubMenuStates[index] = false;
-    setSubMenuStates(newSubMenuStates);
-  };
 
   // esc키를 누르면 모달창 닫기.
   useEffect(() => {
@@ -96,10 +94,8 @@ export function CategoryBar(props) {
                 (
                   <li
                     key={index}
-                    onMouseEnter={() => handleMouseEnter(index)}
-                    onMouseLeave={() => handleMouseLeave(index)}
                     className={`categorymenu-item ${subMenuStates[index] && 'open'} + categorytab-item ${activeTab === item.category_id ? 'active' : ''}`}
-                    onClick={() => { handleTabClick(item) }}
+                    onClick={() => { handleSubMenuOnOff(index) }}
                   >
                     <span
                       onClick={() => handleCategoryChange(item.category_id)}
@@ -108,7 +104,7 @@ export function CategoryBar(props) {
                     </span>
                     {/* 서브메뉴 loop */}
                     {subMenuStates[index] && (
-                      <ul onMouseLeave={() => handleMouseLeave(index)} className="sub-menu">
+                      <ul className="sub-menu">
                         {categoryData && categoryData
                           .filter((category) => category.parentsCategory_id === item.category_id)
                           .map((category, subIndex) => (
