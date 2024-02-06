@@ -12,31 +12,52 @@
   position: fixed;
   top: 80px;
   width: 100%;
+  display: flex;
+  justify-content: center;
+  background-color: white;
 }
 
 .categoryBarContainer {
-  width: 100%;
+  width: 80%;
   background-color: #FFF;
   position: relative;
-  display: flex;
   align-items: center;
-  justify-content: space-evenly;
   text-align: center;
   white-space: nowrap;
   list-style-type: none;
   border-bottom: 1px solid lightgray;
-  border-left: 1px solid lightgray;
+  display: grid; /* 그리드 컨테이너로 선언 */
+  grid-template-columns: repeat(auto-fill, minmax(calc(15% - 20px), 1fr)); /* 그리드의 열을 유연하게 생성하되 최대 너비를 초과하지 않게 설정 */
+  gap: 1em; /* 그리드 아이템 간의 간격 */
+  justify-content: space-around; /* 그리드 아이템을 가로 방향으로 중앙 정렬 */
 }
 
 .category {
-  padding: 1em;
-  font-size: large;
-  text-align: center;
+  background-color: lightgray;
   color: black;
+  margin: 1em;
+  margin-bottom: 0.2em;
+  width: 15em;
+  padding: 1em;
+  font-size: small;
+  text-align: left;
+  border-radius: 1dvb;
+}
+
+.category_low {
+  color: black;
+  width: 15em;
+  padding: 0.7em;
+  font-size: small;
+  text-align: left;
+}
+
+.category_low:hover{
+  color: var(--background-color-active);
 }
 
 .category:hover {
-  background-color: var(--background-color-set);
+  background-color: var(--background-color-active);
   color: #FFF;
   border-radius: 1dvb;
 }
@@ -44,5 +65,28 @@
 .subMenuContainer{
   display: flex;
   flex-direction: row;
+  background-color: white;
+  border-radius: 1dvb;
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
+  display: grid; /* 그리드 컨테이너로 선언 */
+  grid-template-columns: repeat(auto-fill, minmax(calc(20% - 20px), 1fr)); /* 그리드의 열을 유연하게 생성하되 최대 너비를 초과하지 않게 설정 */
+  justify-content: space-around; /* 그리드 아이템을 가로 방향으로 중앙 정렬 */
+  margin-left: 10px;
+}
 
+.listStyle{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  max-height: 28em;
+}
+
+.listStyle_low{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  overflow-y: auto;
+  height: 13em;
 }

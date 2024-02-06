@@ -3,19 +3,20 @@ import styles from './SearchBar.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useFetch } from '../../../customFn/useFetch';
-import { useSearchActions, useSearchTerm } from '../../../Store/DataStore';
+import { useSearchActions, useSearchTerm, useSeperateSearchTerm } from '../../../Store/DataStore';
 
 export function SearchBar() {
   const navigate = useNavigate();
   const searchTerm = useSearchTerm();
-  const {setSearchTerm} = useSearchActions();
+  const {setSearchTerm, setFilterData} = useSearchActions();
 
   const {fetchAddPostServer} = useFetch();
   const queryClient = useQueryClient();
 
   //검색 요청
   const handleSearch = async (search) => {
-    return await fetchAddPostServer(search, `post`, `/search/list`, 1, 10);
+    const getSearch = JSON.parse(sessionStorage.getItem('searchTerm'));
+    return await fetchAddPostServer([search, getSearch.state.seperateSearchTerm], `post`, `/search/list`, 1, 10);
   };
 
   //검색 요청 Mutate
@@ -33,11 +34,11 @@ export function SearchBar() {
       searchMutate(searchTerm, {   
         onSuccess: (data) => {
           // 메세지 표시
-          alert(data.message);
           console.log('검색 : 검색되었습니다.', data);
           queryClient.setQueryData(['search'], () => {
             return data.data
           })          
+          setFilterData(data.data.datas);
           // 카테고리로 이동
           navigate("/category");
         },
@@ -53,11 +54,11 @@ export function SearchBar() {
     searchMutate(searchTerm, {   
       onSuccess: (data) => {
         // 메세지 표시
-        alert(data.message);
         console.log('검색 : 검색되었습니다.', data);
         queryClient.setQueryData(['search'], () => {
           return data.data
         })          
+        setFilterData(data.data.datas);
         // 카테고리로 이동
         navigate("/category");
       },

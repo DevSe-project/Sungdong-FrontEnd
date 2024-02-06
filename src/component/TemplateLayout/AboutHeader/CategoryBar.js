@@ -1,39 +1,17 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './CategoryBar.module.css'
 import { useEffect, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { useModalActions } from '../../../Store/DataStore';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useModalActions, useSearchActions } from '../../../Store/DataStore';
+import { useFetch } from '../../../customFn/useFetch';
 
 export function CategoryBar(props) {
   const { isLoading, isError, error, data: categoryData } = useQuery({ queryKey: ['category'] });
   const { selectedModalClose } = useModalActions();
+  const {setFilterData} = useSearchActions();
 
-  // 선택된 카테고리 변경 핸들러 (우선순위 : 1. 소 카테고리 2. 대 카테고리)
-  const handleCategoryChange = (category) => {
-    // 큰 카테고리에 해당하는 탭만을 찾기위해 subCategory는 삭제
-    sessionStorage.removeItem('subCategory');
-    sessionStorage.removeItem('filterSearch');
-    sessionStorage.setItem('category', JSON.stringify(category));
-    navigate("/category");
-  };
-  const location = useLocation();
   const [activeTab, setActiveTab] = useState(null); // 현재 활성화된 탭을 추적
-
-  useEffect(() => {
-    if (sessionStorage.getItem('filterSearch')) {
-      sessionStorage.removeItem('tabState');
-      setActiveTab(null);
-    } else {
-      const tabstate = JSON.parse(sessionStorage.getItem('categoryTabState'));
-      setActiveTab(tabstate);
-    }
-
-    if (location.pathname !== '/category') {
-      sessionStorage.removeItem('tabState');
-      setActiveTab(null);
-    }
-  }, [location])
-
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   //서브메뉴 열림창 변수 초기화
   const [subMenuStates, setSubMenuStates] = useState(categoryData?.length > 0 ? categoryData.map(() => false) : []);
@@ -61,6 +39,44 @@ export function CategoryBar(props) {
     });
   }
 
+  const {fetchAddPostServer} = useFetch();
+
+  // 카테고리를 클릭했을 때 호출되는 함수
+  const fetchFilterCategory = async (categoryId) => {
+    const getSearch = JSON.parse(sessionStorage.getItem('searchTerm'));
+    return await fetchAddPostServer([getSearch.state.searchTerm, getSearch.state.seperateSearchTerm, categoryId], 'post', '/search/list', 1, 10);
+  };
+
+  const { mutate: filterMutaion } = useMutation({ mutationFn: fetchFilterCategory })
+
+
+  function handleSearch(type, categoryId) {
+    let idData;
+    if (type === 'parents') {
+      idData = {
+        parentsCategory_id: categoryId
+      }
+    } else if(type === 'children') {
+      idData = {
+        category_id: categoryId
+      }
+    } else {
+      idData = categoryId
+    }
+    filterMutaion(idData, {
+      onSuccess: (data) => {
+        setFilterData(data.data.datas);
+        selectedModalClose();
+        queryClient.setQueryData(['search'], () => {
+          return data.data
+        })
+        navigate("/category");
+      },
+      onError: (error) => {
+        return console.error(error.message);
+      },
+    })
+  }
 
   // esc키를 누르면 모달창 닫기.
   useEffect(() => {
@@ -97,7 +113,9 @@ export function CategoryBar(props) {
                   <li
                     key={index}
                     className={`categorymenu-item ${subMenuStates[index] && 'open'} + categorytab-item ${activeTab === item.category_id ? 'active' : ''}`}
-                    onClick={() => { toggleSubMenu(index) }}
+                    onClick={() => { 
+                      toggleSubMenu(index); 
+                    }}
                   >
                     <span>
                       {item.name}
@@ -105,16 +123,32 @@ export function CategoryBar(props) {
                     {/* 서브메뉴 loop */}
                     {subMenuStates[index] && (
                       <ul className="sub-menu">
-                        <div style={{display:'flex'}}>
+                        <div className={styles.subMenuContainer}>
                           {categoryData && categoryData
                             .filter((category) => category.parentsCategory_id === item.category_id)
                             .map((category, subIndex) => (
-                              <li
-                                className={styles.category}
-                                key={subIndex} // 수정: index 대신 subIndex를 사용
-                              >
-                                {category.name}
-                              </li>
+                              <div className={styles.listStyle} key={subIndex}>
+                                <li
+                                  onClick={()=> handleSearch('parents', category.category_id)}
+                                  className={styles.category}
+                                >
+                                  {category.name}
+                                </li>
+                                <ul className={styles.listStyle_low}>
+                                  {categoryData && categoryData
+                                    .filter((lowCategory) => lowCategory.parentsCategory_id === category.category_id)
+                                    .map((low, lowIndex) => (
+                                      <li 
+                                      key={lowIndex} 
+                                      className={styles.category_low}
+                                      onClick={()=> handleSearch('children', low.category_id)}
+                                      >
+                                        {low.name}
+                                      </li>
+                                    ))
+                                  }
+                                </ul>
+                              </div>
                             ))}
                         </div>
                       </ul>
