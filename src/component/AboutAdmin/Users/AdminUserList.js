@@ -33,23 +33,6 @@ export default function AdminUserList() {
     }
   };
 
-
-  const fetchMatchedData = () => {
-    if (!checkedItems) {
-      return;
-    }
-    const data = checkedItems.map(users_id => {
-      const matchingData = matchedData.find(item => item.users_id === users_id);
-      return matchingData;
-    });
-    setMatchedData(data);
-  }
-
-  useEffect(() => {
-    fetchMatchedData();
-  }, [checkedItems])
-
-
   // ------------------------------서버 통신------------------------------ //
   // 유저 데이터 상태 관리
   const fetchUsersData = async () => {
@@ -151,32 +134,49 @@ export default function AdminUserList() {
     });
   };
 
-  // 고객 수정
-  const handleEdit = async (matchedData) => { // 
+  // 고객 단일 수정
+  const handleEdit = async (userData) => { // 
     try {
       const confirmMessage = '수정사항을 반영하시겠습니까?';
       const confirmed = window.confirm(confirmMessage);
       if (!confirmed) return;
 
-      await editMutation(matchedData);
+      await editMutation(userData);
     } catch (error) {
       console.error('유저 수정 실패:', error);
       alert('유저 수정에 실패했습니다.');
     }
   };
-  const handleEditSuccess = (data) => { // 성공 시
-    console.log('user Edit successfully:', data);
+  const handleBulkEdit = async () => { // 전체 수정 함수
+    try {
+      const confirmMessage = '수정사항을 반영하시겠습니까?';
+      const confirmed = window.confirm(confirmMessage);
+      if (!confirmed) return;
+      const bulkUserData = []; // 수정된 데이터를 담을 배열을 초기화
+      // 선택된 모든 사용자의 수정된 데이터를 추출하여 배열에 추가합니다.
+      checkedItems.forEach((userId) => {
+        const editedUserData = matchedData.find((user) => user.users_id === userId);
+        bulkUserData.push(editedUserData);
+      });
+      await editMutation(bulkUserData); // 수정된 사용자 데이터 서버로 전송
+    } catch (error) {
+      console.error('전체 수정 실패:', error);
+      alert('전체 수정에 실패했습니다.');
+    }
+  };
+  const handleEditSuccess = (data) => { // 수정 성공
+    console.log('수정 성공:', data);
     alert('수정이 완료되었습니다.');
     queryClient.invalidateQueries('userData');
     setEditIndex(null);
   };
-  const handleEditError = (error) => { // 실패 시
-    console.error('user Edit failed:', error);
-    alert('유저 수정에 실패했습니다.');
+  const handleEditError = (error) => { // 수정 실패
+    console.error('수정 실패:', error);
+    alert('수정에 실패했습니다.');
   };
-  const fetchEditUser = async (userData) => {
+  const fetchEditUser = async (userData) => { // Fetching
     try {
-      const response = await axios.post('/editUser', userData);
+      const response = await axios.post('/userUpdate', userData);
       return response.data;
     } catch (error) {
       throw error;
@@ -466,12 +466,11 @@ export default function AdminUserList() {
                   {/* 연락처 */}
                   <td>{user.cor_tel}</td>
                   {/* 수정/삭제 드롭다운 메뉴 */}
-                  {/* 수정/삭제 드롭다운 메뉴 */}
                   <td style={{ width: '20px' }}>
                     {index === editIndex ? (
                       <div className="dropdown-menu">
                         {/* 수정 버튼 */}
-                        <button className='white_button' onClick={() => handleEdit(matchedData)}>수정</button>
+                        <button className='white_button' onClick={() => handleEdit(user)}>수정</button>
                         {/* 삭제 버튼 */}
                         <button className='white_button' onClick={() => handleDelete(user.users_id)}>삭제</button>
                         {/* 취소 버튼 */}
@@ -481,7 +480,6 @@ export default function AdminUserList() {
                       <div className='ellipsis' onClick={() => handleToggleEdit(index)}><i class="fa-solid fa-ellipsis"></i></div>
                     )}
                   </td>
-
                 </tr>
               ))}
             </tbody>
