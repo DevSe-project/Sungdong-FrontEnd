@@ -51,7 +51,7 @@ export default function AdminUserList() {
 
 
   // ------------------------------서버 통신------------------------------ //
-  // 유저 데이터 Fetch
+  // 유저 데이터 상태 관리
   const fetchUsersData = async () => {
     try {
       const token = GetCookie('jwt_token');
@@ -71,6 +71,22 @@ export default function AdminUserList() {
       throw new Error('배송 데이터 불러오기 중 오류가 발생하였습니다.');
     }
   }
+  const { isLoading, isError, error, data: userData } = useQuery({
+    queryKey: [`users`, currentPage, itemsPerPage], // currentPage, itemPerPage가 변경될 때마다 재실행하기 위함
+    queryFn: fetchUsersData,
+  });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchUsersData();
+        setMatchedData(data);
+      } catch (error) {
+        throw new Error('데이터를 볼러오는 데 실패했습니다.', error);
+      }
+    }
+
+    fetchData();
+  }, [currentPage, itemsPerPage]);
 
   //유저 필터링 Fetch
   const fetchFilteredUserData = async (userFilterData) => {
@@ -135,83 +151,81 @@ export default function AdminUserList() {
     });
   };
 
-
-
-  // 유저 수정 handler
-  const fetchEditUser = async (matchedData) => {
+  // 고객 수정
+  const handleEdit = async (matchedData) => { // 
     try {
-      if (window.confirm('수정사항을 반영하시겠습니까?')) {
-        // 수정된 데이터를 서버에 반영
-        await fetchServer(matchedData, 'post', '/userUpdate', currentPage);
-        // 수정 후, 현재 페이지를 다시 불러올 수 있도록 queryClient를 사용하여 캐시된 데이터를 무효화합니다.
-        queryClient.invalidateQueries('userData');
-        // 수정 후, editIndex를 초기화합니다.
-        setEditIndex(null);
-        // 알림 표시
-        alert('수정이 완료되었습니다.');
-      }
+      const confirmMessage = '수정사항을 반영하시겠습니까?';
+      const confirmed = window.confirm(confirmMessage);
+      if (!confirmed) return;
+
+      await editMutation(matchedData);
     } catch (error) {
-      // 오류 처리
       console.error('유저 수정 실패:', error);
       alert('유저 수정에 실패했습니다.');
     }
   };
-  const { mutate: editMutation } = useMutation({ mutationFn: fetchEditUser }) // 수정
-  const handleEdit = async() => {
-
-  }
-
-
-  // User Delete
-  const fetchDeleteUser = async (userID) => {
+  const handleEditSuccess = (data) => { // 성공 시
+    console.log('user Edit successfully:', data);
+    alert('수정이 완료되었습니다.');
+    queryClient.invalidateQueries('userData');
+    setEditIndex(null);
+  };
+  const handleEditError = (error) => { // 실패 시
+    console.error('user Edit failed:', error);
+    alert('유저 수정에 실패했습니다.');
+  };
+  const fetchEditUser = async (userData) => {
     try {
-      const response = await axios.delete(`/auth/userDelete/${userID}`,
-      )
+      const response = await axios.post('/editUser', userData);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  };
+  const { mutate: editMutation } = useMutation({ // Mutation
+    mutationFn: fetchEditUser,
+    onSuccess: handleEditSuccess,
+    onError: handleEditError,
+  });
+
+
+  // 고객 삭제
+  const fetchDeleteUser = async (userID) => { // Fetching
+    try {
+      const response = await axios.delete(`/auth/userDelete/${userID}`,)
       return response.data;
     } catch (error) {
       throw error;
     }
   }
-  const { mutate: deleteMutation } = useMutation({ mutationFn: fetchDeleteUser }); // 삭제
-  const handleDelete = (userID) => {
-    if (window.confirm('선택된 고객을 정말 삭제하시겠습니까?')) {
-      deleteMutation(userID, {
-        onSuccess: (data) => {
-          console.log('user Delete successfully:', data);
-          alert(data.message);
-          queryClient.invalidateQueries(['users'], () => {
-            return data.data
-          })
-        },
-        onError: (error) => {
-          console.error('user Delete failed:', error);
-          alert(error.message);
-        }
-      })
-    } else {
-      alert('취소되었습니다');
-    }
-  }
+  const handleDelete = async (userID) => { // 사용 부분
+    try {
+      const confirmMessage = '선택된 고객을 정말 삭제하시겠습니까?';
+      const confirmed = window.confirm(confirmMessage);
+      if (!confirmed) return;
 
-  // 데이터 상태 관리
-  const { isLoading, isError, error, data: userData } = useQuery({
-    queryKey: [`users`, currentPage, itemsPerPage], // currentPage, itemPerPage가 변경될 때마다 재실행하기 위함
-    queryFn: fetchUsersData,
+      await deleteMutation(userID);
+    } catch (error) {
+      handleDeleteError(error);
+    }
+  };
+  const handleDeleteSuccess = (data) => { // 성공 시
+    console.log('user Delete successfully:', data);
+    alert(data.message);
+    queryClient.invalidateQueries(['users']);
+    window.location.reload();
+  };
+  const handleDeleteError = (error) => { // 실패 시
+    console.error('user Delete failed:', error);
+    alert(error.message);
+  };
+  const { mutate: deleteMutation } = useMutation({ // Mutation
+    mutationFn: fetchDeleteUser,
+    onSuccess: handleDeleteSuccess,
+    onError: handleDeleteError,
   });
 
-  // useEffect를 사용하여 페이지 번호나 페이지 당 항목 수가 변경될 때마다 새로운 데이터를 가져옴
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await fetchUsersData();
-        setMatchedData(data);
-      } catch (error) {
-        throw new Error('데이터를 볼러오는 데 실패했습니다.', error);
-      }
-    }
 
-    fetchData();
-  }, [currentPage, itemsPerPage]);
   // ------------------------------서버 통신------------------------------ //
 
   // 전체 체크박스 업데이트
@@ -457,7 +471,7 @@ export default function AdminUserList() {
                     {index === editIndex ? (
                       <div className="dropdown-menu">
                         {/* 수정 버튼 */}
-                        <button className='white_button' onClick={() => editMutation(matchedData)}>수정</button>
+                        <button className='white_button' onClick={() => handleEdit(matchedData)}>수정</button>
                         {/* 삭제 버튼 */}
                         <button className='white_button' onClick={() => handleDelete(user.users_id)}>삭제</button>
                         {/* 취소 버튼 */}
