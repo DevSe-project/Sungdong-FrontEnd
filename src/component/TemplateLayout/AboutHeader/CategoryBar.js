@@ -44,20 +44,28 @@ export function CategoryBar(props) {
   //서브메뉴 열림창 변수 초기화
   const [subMenuStates, setSubMenuStates] = useState(categoryData?.length > 0 ? categoryData.map(() => false) : []);
 
-  const handleSubMenuOnOff = (index) => {
-    // 해당 인덱스의 메뉴를 열기 위해 true로 설정
-    const newSubMenuStates = [...subMenuStates];
-    // 열려있는 다른 서브메뉴를 닫기
-    for (let i = 0; i < newSubMenuStates.length; i++) {
-      if (i !== index) {
-        newSubMenuStates[i] = false;
-      }
-    }
-    // 클릭한 인덱스의 서브메뉴를 열거나 닫기
-    newSubMenuStates[index] = !subMenuStates[index];
+  // 방법 1 - for문
+  // const handleSubMenuOnOff = (index) => {
+  //   // 해당 인덱스의 메뉴를 열기 위해 true로 설정
+  //   const newSubMenuStates = [...subMenuStates];
+  //   // 열려있는 다른 서브메뉴를 닫기
+  //   for (let i = 0; i < newSubMenuStates.length; i++) {
+  //     if (i !== index) {
+  //       newSubMenuStates[i] = false;
+  //     }
+  //   }
+  //   // 클릭한 인덱스의 서브메뉴를 열거나 닫기
+  //   newSubMenuStates[index] = !subMenuStates[index];
 
-    setSubMenuStates(newSubMenuStates);
-  };
+  //   setSubMenuStates(newSubMenuStates);
+  // };
+  // 방법 2 - mapping
+  function toggleSubMenu(index) {
+    setSubMenuStates(prevStates => {
+      const newSubMenuStates = prevStates.map((state, idx) => idx === index ? !state : false);
+      return newSubMenuStates;
+    });
+  }
 
 
   // esc키를 누르면 모달창 닫기.
@@ -95,11 +103,9 @@ export function CategoryBar(props) {
                   <li
                     key={index}
                     className={`categorymenu-item ${subMenuStates[index] && 'open'} + categorytab-item ${activeTab === item.category_id ? 'active' : ''}`}
-                    onClick={() => { handleSubMenuOnOff(index) }}
+                    onClick={() => { toggleSubMenu(index) }}
                   >
-                    <span
-                      onClick={() => handleCategoryChange(item.category_id)}
-                    >
+                    <span>
                       {item.name}
                     </span>
                     {/* 서브메뉴 loop */}
