@@ -25,10 +25,12 @@ export function CategoryFilter({ filterData, postCnt, setCurrentPage, setTotalPa
       idData = {
         parentsCategory_id: categoryId
       }
-    } else {
+    } else if(type === 'category') {
       idData = {
         category_id: categoryId
       }
+    } else {
+      idData = categoryId
     }
     filterMutaion(idData, {
       onSuccess: (data) => {
@@ -127,6 +129,7 @@ export function CategoryFilter({ filterData, postCnt, setCurrentPage, setTotalPa
       content: isIncludeBrands.map((brand) => ({
         title: brand,
         count: filterData.filter((item) => item.product_brand === brand).length,
+        item: {product_brand: brand}
       }))
     },
     {
@@ -134,6 +137,7 @@ export function CategoryFilter({ filterData, postCnt, setCurrentPage, setTotalPa
       content: isIncludeMaden.map((madeIn) => ({
         title: madeIn,
         count: filterData.filter((item) => item.product_madeIn === madeIn).length,
+        item: {product_madeIn: madeIn}
       }))
     }
   ];
@@ -202,7 +206,7 @@ export function CategoryFilter({ filterData, postCnt, setCurrentPage, setTotalPa
                     key={index}
                     className={styles.contentItem}
                     onClick={() => {
-                      handleCategoryClick(item, contentItem)
+                      handleCategoryClick('extra', contentItem.item)
                     }}>
                     <span className={styles.lowFont}>{contentItem.title}({contentItem.count})</span>
                   </div>
