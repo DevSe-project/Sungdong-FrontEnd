@@ -359,6 +359,7 @@ export const useSetLogin = () => useLoginStore((state) => state.actions);
 export const useSearchStore = create(
   persist(
     (set) => ({
+      filterData: [],
       searchTerm: {
         search: ""
       },
@@ -370,6 +371,10 @@ export const useSearchStore = create(
         product_model: ""
       },
       actions: {
+        setFilterData: (val) =>
+        set((prev) => ({
+          filterData: val
+        })),
         setSearchTerm: (fieldName, value) =>
           set((state) => ({ searchTerm: { ...state.searchTerm, [fieldName]: value } })),
         setSeperateSearchTerm: (fieldName, value) =>
@@ -384,11 +389,11 @@ export const useSearchStore = create(
       name: 'searchTerm',
       storage: createJSONStorage(() => sessionStorage),
       version: 1,
-      partialize: (state) => ({ seperateSearchTerm: state.seperateSearchTerm, searchTerm: state.searchTerm }),
+      partialize: (state) => ({ seperateSearchTerm: state.seperateSearchTerm, searchTerm: state.searchTerm, filterData: state.filterData }),
     }
   )
 );
-
+export const useSearchFilterData = () => useSearchStore((state) => state.filterData);
 export const useSearchTerm = () => useSearchStore((state) => state.searchTerm);
 export const useSeperateSearchTerm = () => useSearchStore((state) => state.seperateSearchTerm);
 export const useSearchActions = () => useSearchStore((state) => state.actions);
