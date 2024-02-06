@@ -27,13 +27,13 @@ export function Category() {
 
 
   const fetchSearchData = async () => {
-    const getSearch = JSON.parse(sessionStorage.getItem('searchTerm'));
-    const data = await fetchAddPostServer([getSearch.state.searchTerm.search === '' ? [getSearch.state.seperateSearchTerm] : getSearch.state.searchTerm.search], 'post', '/search/list', 1, postCnt);
+    const data = await fetchAddPostServer(searchTerm.search === "" ? [seperateSearchTerm] : searchTerm, 'post', '/search/list', currentPage, postCnt);
     setCurrentPage(data.data.currentPage);
     setTotalPages(data.data.totalPages);
     setPostCnt(data.data.postsPerPage);
     setTotalRows(data.data.totalRows);
     setFilterData(data.data.datas);
+
     return data.data;
   }
 
@@ -79,7 +79,6 @@ export function Category() {
         setTotalPages(data.data.totalPages);
         setPostCnt(data.data.postsPerPage);
         setTotalRows(data.data.totalRows);
-        setFilterData(data.data.datas);
         queryClient.setQueryData(['search'], () => {
           return data.data
         })
@@ -100,12 +99,22 @@ export function Category() {
         setTotalPages(product.totalPages);
         setPostCnt(product.postsPerPage);
         setTotalRows(product.totalRows);
-        setFilterData(product.datas);
       }
     };
 
     fetchData();
   }, [product])
+
+  //마운트 될때 페이지 설정.
+  useEffect(() => {
+    const fetchData = async () => {
+      if (product) {
+        setFilterData(product.datas);
+      }
+    };
+
+    fetchData();
+  }, [])
 
   //------------------------------------------------------
 

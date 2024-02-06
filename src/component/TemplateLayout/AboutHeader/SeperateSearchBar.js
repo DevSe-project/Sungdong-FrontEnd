@@ -34,6 +34,7 @@ export function SeperateSearchBar() {
           })
           // 카테고리로 이동
           navigate("/category");
+          window.location.reload();
         },
         onError: (error) => {
           //에러 처리
@@ -54,6 +55,7 @@ export function SeperateSearchBar() {
         })
         // 카테고리로 이동
         navigate("/category");
+        window.location.reload();
       },
       onError: (error) => {
         //에러 처리

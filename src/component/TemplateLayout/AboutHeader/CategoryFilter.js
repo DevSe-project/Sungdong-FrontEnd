@@ -38,7 +38,6 @@ export function CategoryFilter({ filterData, postCnt, setCurrentPage, setTotalPa
         setTotalPages(data.data.totalPages);
         setPostCnt(data.data.postsPerPage);
         setTotalRows(data.data.totalRows);
-        setFilterData(data.data.datas);
         queryClient.setQueryData(['search'], () => {
           return data.data
         })
