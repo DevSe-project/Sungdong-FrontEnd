@@ -125,37 +125,33 @@ export default function JoinForm(props) {
     const customRegex = /^[a-zA-Z가-힣\s()]{1,50}$/;
 
 
-    const handleChange = (e, index, num) => {
-        if (num !== undefined) {
-            // 대표번호 입력 필드의 경우
-            const { value } = e.target;
-            // 입력된 값이 숫자인지 확인
-            if (/^\d*$/.test(value)) {
-                // 숫자인 경우만 setState를 사용하여 값을 업데이트합니다.
-                props.setInputData((prevData) => ({
+    const handleChange = (e, numberItem, fieldName) => {
+        const { value } = e.target; // e.target.value를 value에 할당(객체 자체 할당 기법 숙지!)
+        if (numberItem !== undefined) { // 대표번호 입력 필드의 경우
+            if (/^\d*$/.test(value)) { // 입력된 값이 숫자인지 확인
+                props.setInputData((prevData) => ({ // 숫자인 경우만 setState를 사용하여 값을 업데이트
                     ...prevData,
                     corporationData: {
                         ...prevData.corporationData,
                         cor_tel: {
                             ...prevData.corporationData.cor_tel,
-                            [num]: value
+                            [numberItem]: value
                         }
                     }
                 }));
             }
         } else {
-            // 다른 입력 필드의 경우
-            const { value } = e.target;
             // setState를 사용하여 값을 업데이트합니다.
             props.setInputData((prevData) => ({
                 ...prevData,
                 corporationData: {
                     ...prevData.corporationData,
-                    cor_corName: value
+                    [fieldName]: value
                 }
             }));
         }
     };
+
 
 
     return (
@@ -560,26 +556,26 @@ export default function JoinForm(props) {
             <div className={styles.indivisualMembers}>기업정보</div>
             <ul className={styles.inputWrap}>
                 {[
-                    { label: '기업명', placeholder: '예) OO전자', value: props.inputData.corporationData.cor_corName },
+                    { label: '기업명', placeholder: '예) OO전자', fieldName: 'cor_corName', value: props.inputData.corporationData.cor_corName },
                     { label: '대표번호', placeholder: '예) 010', value: props.inputData.corporationData.cor_tel, type: 'phone' },
-                    { label: '업태', placeholder: '도매 및 소매업', value: props.inputData.corporationData.cor_sector },
-                    { label: '종목', placeholder: '예) 연마재, 안전용품', value: props.inputData.corporationData.cor_category },
+                    { label: '업태', placeholder: '도매 및 소매업', fieldName: 'cor_sector', value: props.inputData.corporationData.cor_sector },
+                    { label: '종목', placeholder: '예) 연마재, 안전용품', fieldName: 'cor_category', value: props.inputData.corporationData.cor_category },
                     { label: 'FAX', placeholder: '예) 052', value: props.inputData.corporationData.cor_fax, type: 'phone' }
                 ].map((item, index) => (
                     <li key={index} className={styles.inputContainer}>
                         <div className={styles.left}>{item.label}</div>
                         <div className={styles.right}>
                             {item.type === 'phone' ? (
-                                ['num1', 'num2', 'num3'].map((num, idx) => (
+                                ['num1', 'num2', 'num3'].map((numberItem, numberIndex) => (
                                     <input
-                                        key={idx}
+                                        key={numberIndex}
                                         className={styles.phoneNum}
                                         type='text'
                                         placeholder={item.placeholder}
                                         maxLength='4'
                                         size='8'
-                                        value={item.value[num]}
-                                        onChange={(e) => handleChange(e, index, num)}
+                                        value={item.value[numberItem]}
+                                        onChange={(e) => handleChange(e, index, numberItem)}
                                     />
                                 ))
                             ) : (
@@ -588,7 +584,7 @@ export default function JoinForm(props) {
                                     type='text'
                                     placeholder={item.placeholder}
                                     value={item.value}
-                                    onChange={(e) => handleChange(e, index)}
+                                    onChange={(e) => handleChange(e, undefined, item.fieldName)}
                                     style={{ backgroundColor: customRegex.test(item.value) ? 'rgb(240, 255, 230)' : '' }}
                                 />
                             )}
