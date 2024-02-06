@@ -4,7 +4,7 @@ import { QueryClient, useMutation } from "@tanstack/react-query";
 import { useFetch } from "../../customFn/useFetch";
 
 export default function JoinForm(props) {
-    const fetchServer = useFetch();
+    const { fetchServer } = useFetch();
     // 주소입력 API
     const [address, setAddress] = useState("");
     const openPopup = (setAddress) => {
@@ -31,6 +31,9 @@ export default function JoinForm(props) {
     // 기업정보 진위확인 API
     const callCheckCorInfoApi = async (corNum, corStartDate, corCeoName) => {
         setIsCallApi(isCallApi + 1);
+        console.log(corNum);
+        console.log(corStartDate);
+        console.log(corCeoName);
         console.log(isCallApi);
         try {
             const response = await fetch(API_ENDPOINT, {
@@ -67,9 +70,9 @@ export default function JoinForm(props) {
         }
     };
 
-    //주문 데이터 fetch
+    //아이디 입력 데이터 fetch(중복체크)
     const fetchDuplicatedData = async (userID) => {
-        const result = fetchServer(userID, 'post', '/auth/duplicate', 1);
+        const result = await fetchServer({ userId: userID }, 'post', '/auth/duplicate', 1);
         return result;
     };
 
@@ -396,13 +399,13 @@ export default function JoinForm(props) {
                                 <input
                                     type="radio"
                                     name="smsService"
-                                    id="SMS_N" 
+                                    id="SMS_N"
                                     value={0}
                                     checked={props.inputData.smsService === 0}
                                     onChange={(e) => {
                                         props.setInputData(
-                                            (prevData) => 
-                                            ({ ...prevData, smsService: 0 })
+                                            (prevData) =>
+                                                ({ ...prevData, smsService: 0 })
                                         )
                                     }}
                                 />
@@ -487,38 +490,46 @@ export default function JoinForm(props) {
 
             {/* 목록 */}
             <ul className={styles.inputWrap}>
-                {[
-                    { label: '사업자등록번호', placeholder: '예)5898812345', value: props.inputData.corporationData.cor_num, msg: '기업인증 필수 항목: 하이픈(\'-\')을 생략한 번호를 기입하십시오.' },
-                    { label: '개업연월일', placeholder: '예)20201206', value: props.cor_startDate, msg: '기업인증 필수 항목: 하이픈(\'-\')을 생략한 번호를 기입하십시오.' },
-                    { label: '대표명', placeholder: '예)홍길동', value: props.inputData.corporationData.cor_ceoName, msg: '사업자 상의 대표명을 기입해주십시오.' }
-                ].map((item, index) => (
-                    <li key={index} className={styles.inputContainer}>
-                        <div className={styles.left}>{item.label}</div>
-                        <div className={styles.right}>
-                            <input
-                                className='basic_input'
-                                type='text'
-                                placeholder={item.placeholder}
-                                value={item.value}
-                                onChange={(e) => {
-                                    const newData = { ...props.inputData };
-                                    newData.corporationData[item.name] = e.target.value;
-                                    props.setInputData(newData);
-                                }}
-                                disabled={apiResponse.valid_cnt}
-                                style={{ backgroundColor: apiResponse.valid_cnt ? 'rgb(240, 255, 230)' : '' }}
-                            />
-                            <div className={styles.notification}>
-                                {/* 안내 문구 */}
-                                {apiResponse.valid_cnt ? (
-                                    <span style={{ color: 'green' }}>인증이 완료되었습니다. 더 이상 수정할 수 없습니다.</span>
-                                ) : (
-                                    <span className={styles.errorMessage}>{item.msg}</span>
-                                )}
+                <ul className={styles.inputWrap}>
+                    {[
+                        { label: '사업자등록번호', placeholder: '예)5898812345', key: 'cor_num', value: props.inputData.corporationData.cor_num, msg: '기업인증 필수 항목: 하이픈(\'-\')을 생략한 번호를 기입하십시오.' },
+                        { label: '개업연월일', placeholder: '예)20201206', key: 'cor_startDate', value: props.inputData.corporationData.cor_startDate, msg: '기업인증 필수 항목: 하이픈(\'-\')을 생략한 번호를 기입하십시오.' },
+                        { label: '대표명', placeholder: '예)홍길동', key: 'cor_ceoName', value: props.inputData.corporationData.cor_ceoName, msg: '사업자 상의 대표명을 기입해주십시오.' }
+                    ].map((item, index) => (
+                        <li key={index} className={styles.inputContainer}>
+                            <div className={styles.left}>{item.label}</div>
+                            <div className={styles.right}>
+                                <input
+                                    className='basic_input'
+                                    type='text'
+                                    placeholder={item.placeholder}
+                                    value={item.value}
+                                    onChange={(e) => {
+                                        const newData = {
+                                            ...props.inputData,
+                                            corporationData: {
+                                                ...props.inputData.corporationData,
+                                                [item.key]: e.target.value
+                                            }
+                                        };
+                                        props.setInputData(newData);
+                                    }}
+                                    disabled={apiResponse.valid_cnt}
+                                    style={{ backgroundColor: apiResponse.valid_cnt ? 'rgb(240, 255, 230)' : '' }}
+                                />
+                                <div className={styles.notification}>
+                                    {/* 안내 문구 */}
+                                    {apiResponse.valid_cnt ? (
+                                        <span style={{ color: 'green' }}>인증이 완료되었습니다. 더 이상 수정할 수 없습니다.</span>
+                                    ) : (
+                                        <span className={styles.errorMessage}>{item.msg}</span>
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                    </li>
-                ))}
+                        </li>
+                    ))}
+                </ul>
+
             </ul>
             {/* 인증버튼 및 확인문구 */}
             <div>
