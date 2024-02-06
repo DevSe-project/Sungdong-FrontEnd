@@ -27,8 +27,8 @@ export function Category() {
 
 
   const fetchSearchData = async () => {
-    const data = await fetchAddPostServer(searchTerm.search === "" ? [seperateSearchTerm] : searchTerm, 'post', '/search/list', currentPage, postCnt);
-
+    const getSearch = JSON.parse(sessionStorage.getItem('searchTerm'));
+    const data = await fetchAddPostServer([getSearch.state.searchTerm.search === '' ? [getSearch.state.seperateSearchTerm] : getSearch.state.searchTerm.search], 'post', '/search/list', 1, postCnt);
     setCurrentPage(data.data.currentPage);
     setTotalPages(data.data.totalPages);
     setPostCnt(data.data.postsPerPage);
@@ -64,7 +64,8 @@ export function Category() {
 
   // 페이지를 변경할 때 호출되는 함수
   const fetchPageChange = async (pageNumber) => {
-    return await fetchAddPostServer([seperateSearchTerm], 'post', '/search/list', pageNumber, postCnt);
+    const getSearch = JSON.parse(sessionStorage.getItem('searchTerm'));
+    return await fetchAddPostServer([getSearch.state.searchTerm.search === '' ? [getSearch.state.seperateSearchTerm] : getSearch.state.searchTerm.search], 'post', '/search/list', pageNumber, postCnt);
   };
 
 
