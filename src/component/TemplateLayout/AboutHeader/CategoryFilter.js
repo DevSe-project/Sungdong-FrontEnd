@@ -12,7 +12,7 @@ export function CategoryFilter({ filterData, postCnt, setCurrentPage, setTotalPa
   // 카테고리를 클릭했을 때 호출되는 함수
   const fetchFilterCategory = async (categoryId) => {
     const getSearch = JSON.parse(sessionStorage.getItem('searchTerm'));
-    return await fetchAddPostServer([getSearch.state.searchTerm.search === '' ? [getSearch.state.seperateSearchTerm] : getSearch.state.searchTerm.search, categoryId], 'post', '/search/list', 1, postCnt);
+    return await fetchAddPostServer([getSearch.state.searchTerm.search === '' ? getSearch.state.seperateSearchTerm : getSearch.state.searchTerm.search, categoryId], 'post', '/search/list', 1, postCnt);
   };
 
 

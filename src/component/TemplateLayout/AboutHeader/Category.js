@@ -27,7 +27,8 @@ export function Category() {
 
 
   const fetchSearchData = async () => {
-    const data = await fetchAddPostServer(searchTerm.search === "" ? [seperateSearchTerm] : searchTerm, 'post', '/search/list', currentPage, postCnt);
+    const getSearch = JSON.parse(sessionStorage.getItem('searchTerm'));
+    const data = await fetchAddPostServer([getSearch.state.searchTerm.search === '' ? getSearch.state.seperateSearchTerm : getSearch.state.searchTerm.search], 'post', '/search/list', 1, postCnt);
     setCurrentPage(data.data.currentPage);
     setTotalPages(data.data.totalPages);
     setPostCnt(data.data.postsPerPage);
