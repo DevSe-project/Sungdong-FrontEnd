@@ -292,6 +292,22 @@ export default function AdminUserList() {
     }
   };
 
+  const parseValue = (item, index) => {
+    if (typeof item === 'number') {
+      if (item === 1)
+        return <option key={index} value={item}>실사용자</option>;
+      else if (item === 2)
+        return <option key={index} value={item}>납품업체</option>;
+    } else if (typeof item === 'boolean') {
+      if (item === true)
+        return <option key={index} value={item}>동의</option>;
+      else if (item === false)
+        return <option key={index} value={item}>비동의</option>;
+    }
+    return <option key={index} value={item}>{item}</option>;
+  }
+
+
   useMemo(() => {
     // data나 sortBy가 변경될 때마다 정렬
     // handleSort();
@@ -358,7 +374,7 @@ export default function AdminUserList() {
                         <select className='select'>
                           <option value="">----</option> {/* 기본 옵션을 설정 */}
                           {customItem.valList.map((valList, valListIndex) => (
-                            <option key={valListIndex} value={valList}>{valList}</option>
+                            parseValue(valList, valListIndex)
                           ))}
                         </select>
                       </>
@@ -409,10 +425,10 @@ export default function AdminUserList() {
                   {/* 고객 구분, CMS여부 */}
                   {[
                     { name: '고객명', val: user.cor_corName, key: 'cor_corName' },
-                    { name: '고객 구분', valList: ['실사용자', '납품업자'], val: user.userType_id == 1 ? '실사용자' : '납품업자', key: 'userType_id' },
+                    { name: '고객 구분', valList: [1, 2], val: user.userType_id, key: 'userType_id' },
                     { name: '등급', valList: ['A', 'B', 'C', 'D'], val: user.grade ? user.grade : <span style={{ color: 'var(--main-red' }}>미정</span>, key: 'grade' },
                     { name: '담당자', valList: ['박형조', '엄지석', '김태훈'], val: user.manager_name, key: 'manager_name' },
-                    { name: 'CMS여부', valList: ['동의', '비동의'], val: user.hasCMS ? '동의' : '비동의', key: 'hasCMS' },
+                    { name: 'CMS여부', valList: [true, false], val: user.hasCMS, key: 'hasCMS' },
                   ].map((customItem, editIdx) => (
                     <td key={editIdx}>
                       {editIndex === index ?
@@ -431,8 +447,18 @@ export default function AdminUserList() {
                               setMatchedData(newData);
                             }}
                           >
-                            {customItem.valList.map((valList, valListIndex) => (
-                              <option key={valListIndex} value={valList}>{valList}</option>
+                            {customItem.valList.map((item, index) => (
+                              <option key={index} value={item}>{
+                                editIdx == 1 ?
+                                  item === 1 ?
+                                    '실사용자' : '납품업자'
+                                  :
+                                  editIdx == 4 ?
+                                    item ?
+                                      '동의' : '비동의'
+                                    :
+                                    item
+                              }</option>
                             ))}
                           </select>
                           :
@@ -452,7 +478,20 @@ export default function AdminUserList() {
                             }}
                           />
                         :
-                        customItem.val
+                        customItem.key === 'hasCMS'
+                          ?
+                          customItem.val
+                            ? '동의'
+                            :
+                            '비동의'
+                          : customItem.key == 'userType_id'
+                            ?
+                            customItem.val == 1 ?
+                              '실사용자'
+                              :
+                              '납품업체'
+                            :
+                            customItem.val
                       }
                     </td>
                   ))}
@@ -467,7 +506,7 @@ export default function AdminUserList() {
                     {index === editIndex ? (
                       <div className="dropdown-menu">
                         {/* 수정 버튼 */}
-                        <button className='white_button' onClick={() => {handleEdit(user); console.log(user);}}>수정</button>
+                        <button className='white_button' onClick={() => { handleEdit(user); console.log(user); }}>수정</button>
                         {/* 삭제 버튼 */}
                         <button className='white_button' onClick={() => handleDelete(user.users_id)}>삭제</button>
                         {/* 취소 버튼 */}
