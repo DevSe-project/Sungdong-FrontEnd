@@ -110,12 +110,32 @@ export function Category() {
 
   //------------------------------------------------------
 
+  // 전체 선택 체크박스 상태를 저장할 상태 변수
+  const [selectAll, setSelectAll] = useState(false);
+
+  // 전체 선택 체크박스 클릭 시 호출되는 함수
+  function handleSelectAllChange() {
+    setSelectAll(!selectAll);
+
+    if (!selectAll) {
+      const allId = product && searchList.map((item) => item);
+      setSelectedItems(allId);
+    } else {
+      setSelectedItems([]);
+    }
+  };
+
   // 체크박스 클릭 시 호출되는 함수
   function checkedBox(product) {
     if (selectedItems.find(item => item.product_id === product.product_id)) { //productID가 중복이면 true == 이미 체크박스가 클릭되어 있으면
       setSelectedItems(selectedItems.filter((item) => item.product_id !== product.product_id)); //체크박스를 해제함 == 선택한 상품 저장 변수에서 제외
+      setSelectAll(false); // 선택 해제될 때 부모 체크박스 해제
     } else {
       setSelectedItems([...selectedItems, product]); //selectedItems의 배열과 productID 배열을 합쳐 다시 selectedItems에 저장
+      if (selectedItems.length + 1 === searchList.length) { 
+        // 내부 체크박스가 모두 선택되었는지 확인
+        setSelectAll(true)
+      }
     }
     console.log(selectedItems)
   };
@@ -299,7 +319,12 @@ export function Category() {
               <th>표준가</th>
               <th style={{ fontWeight: '650' }}>공급단가</th>
               <th rowSpan={2}>수량</th>
-              <th rowSpan={2}><input type='checkbox' disabled /></th>
+              <th rowSpan={2}>
+                <input
+                  type='checkbox'
+                  checked={selectAll}
+                  onChange={() => handleSelectAllChange()} />
+              </th>
             </tr>
             <tr>
               <th>규격</th>

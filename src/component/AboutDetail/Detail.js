@@ -106,6 +106,7 @@ function setEstimateItem(product, count){
       onSuccess: (ebData) => {
     // 메세지 표시
     console.log('상품을 견적함에 추가하였습니다.', ebData);
+    queryClient.invalidateQueries(['estimateBox']);
     // 추가 안내 메세지
     alert("견적함에 해당 상품을 추가하였습니다.");
     navigate("/estimateBox");

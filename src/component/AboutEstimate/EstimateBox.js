@@ -9,9 +9,9 @@ import { useFetch } from '../../customFn/useFetch';
 export function EstimateBox() {
   const [selectedItems, setSelectedItems] = useState([]);
   const estimateList = useEstimateList();
-  const {setEstimateList, resetEstimateList, setEstimateCnt, setEstimateCntUp, setEstimateCntDown} = useListActions();
+  const { setEstimateList, resetEstimateList, setEstimateCnt, setEstimateCntUp, setEstimateCntDown } = useListActions();
   const queryClient = useQueryClient();
-  const {fetchServer} = useFetch();
+  const { fetchServer } = useFetch();
   //fetch
   const fetchData = async () => {
     try {
@@ -47,15 +47,34 @@ export function EstimateBox() {
 
   const navigate = useNavigate();
 
+    // 전체 선택 체크박스 상태를 저장할 상태 변수
+    const [selectAll, setSelectAll] = useState(false);
+
+    // 전체 선택 체크박스 클릭 시 호출되는 함수
+    function handleSelectAllChange() {
+      setSelectAll(!selectAll);
+  
+      if (!selectAll) {
+        const allId = estiData && estimateList.map((item) => item);
+        setSelectedItems(allId);
+      } else {
+        setSelectedItems([]);
+      }
+    };
+
 
   // 체크박스 클릭 시 호출되는 함수
   function checkedBox(product) {
     if (selectedItems.find(item => item.estimateBox_product_id === product.estimateBox_product_id)) { //productID가 중복이면 true == 이미 체크박스가 클릭되어 있으면
       setSelectedItems(selectedItems.filter((item) => item.estimateBox_product_id !== product.estimateBox_product_id)); //체크박스를 해제함 == 선택한 상품 저장 변수에서 제외
+      setSelectAll(false); // 선택 해제될 때 부모 체크박스 해제
     } else {
       setSelectedItems([...selectedItems, product]); //selectedItems의 배열과 productID 배열을 합쳐 다시 selectedItems에 저장
+      if (selectedItems.length + 1 === estimateList.length) { 
+        // 내부 체크박스가 모두 선택되었는지 확인
+        setSelectAll(true)
+      }
     }
-    console.log(selectedItems)
   };
 
 
@@ -90,7 +109,7 @@ export function EstimateBox() {
     })// 상품을 장바구니에 추가하는 것을 호출    
   }
 
-    // --------- 수량 변경 부분 ----------
+  // --------- 수량 변경 부분 ----------
 
   // 수량 최대입력 글자(제한 길이 변수)
   const maxLengthCheck = (e, prevItem) => {
@@ -141,40 +160,40 @@ export function EstimateBox() {
     }
   }
 
-    //-------------------상품삭제--------------------
+  //-------------------상품삭제--------------------
 
-    const fetchDeletedProducts = async (productId) => {
-      try {
-        const response = await axios.delete(`/estimate/delete/${productId}`,
-        )
-        return response.data;
-      } catch (error) {
-        throw error;
-      }
+  const fetchDeletedProducts = async (productId) => {
+    try {
+      const response = await axios.delete(`/estimate/delete/${productId}`,
+      )
+      return response.data;
+    } catch (error) {
+      throw error;
     }
-  
-    // 상품 삭제를 처리하는 뮤테이션
-    const { mutate: deleteProductMutation } = useMutation({ mutationFn: fetchDeletedProducts })
-  
-    //상품 목록 삭제 함수
-    const deletedList = () => {
-      const isConfirmed = window.confirm('정말로 삭제하시겠습니까?');
-      if (isConfirmed) {
-        const itemsId = selectedItems.map(item => item.estimateBox_product_id)
-        deleteProductMutation(itemsId, {
-          onSuccess: (data) => {
-            alert(data.message);
-            // 상품 삭제 성공 시 상품 목록을 다시 불러옴
-            queryClient.invalidateQueries(['estimateBox']);
-            window.location.reload();
-          },
-          onError: (error) => {
-            // 상품 삭제 실패 시, 에러 처리를 수행합니다.
-            alert(error.message);
-          },
-        });
-      }
-    };
+  }
+
+  // 상품 삭제를 처리하는 뮤테이션
+  const { mutate: deleteProductMutation } = useMutation({ mutationFn: fetchDeletedProducts })
+
+  //상품 목록 삭제 함수
+  const deletedList = () => {
+    const isConfirmed = window.confirm('정말로 삭제하시겠습니까?');
+    if (isConfirmed) {
+      const itemsId = selectedItems.map(item => item.estimateBox_product_id)
+      deleteProductMutation(itemsId, {
+        onSuccess: (data) => {
+          alert(data.message);
+          // 상품 삭제 성공 시 상품 목록을 다시 불러옴
+          queryClient.invalidateQueries(['estimateBox']);
+          window.location.reload();
+        },
+        onError: (error) => {
+          // 상품 삭제 실패 시, 에러 처리를 수행합니다.
+          alert(error.message);
+        },
+      });
+    }
+  };
 
 
   if (isLoading) {
@@ -213,7 +232,12 @@ export function EstimateBox() {
               <th>표준가</th>
               <th style={{ fontWeight: '650' }}>공급단가</th>
               <th rowSpan={2}>수량</th>
-              <th rowSpan={2}><input type='checkbox' /></th>
+              <th rowSpan={2}>
+                <input
+                  type='checkbox'
+                  checked={selectAll}
+                  onChange={() => handleSelectAllChange()} />
+              </th>
             </tr>
             <tr>
               <th>규격</th>
@@ -307,20 +331,36 @@ export function EstimateBox() {
             <tr>
               <th colSpan={2} rowSpan={2}>합계</th>
               <th colSpan={4} rowSpan={2}></th>
-              <th style={{height: '3em'}}>공급가액</th>
+              <th style={{ height: '3em' }}>총 공급가액</th>
               <th rowSpan={2}></th>
-              <th style={{height: '3em'}}>선택항목 공급가액</th>
+              <th style={{ height: '3em' }}>선택항목 공급가액</th>
             </tr>
             <tr>
-              <td>0</td>
-              <td>0</td>
+              <td style={{ fontWeight: '850' }}>
+                {
+                  estimateList.length > 0 ?
+                    estimateList.reduce((sum, item) =>
+                      sum + parseInt((item.estimateBox_price * item.estimateBox_cnt) - (item.estimateBox_price / 100) * item.product_discount * item.estimateBox_cnt)
+                      , 0).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })
+                    : 0
+                }
+              </td>
+              <td style={{ fontWeight: '850' }}>
+                {
+                  selectedItems.length > 0 ?
+                    selectedItems.reduce((sum, item) =>
+                      sum + parseInt((item.estimateBox_price * item.estimateBox_cnt) - (item.estimateBox_price / 100) * item.product_discount * item.estimateBox_cnt)
+                      , 0).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })
+                    : 0
+                }
+              </td>
             </tr>
           </tfoot>
         </table>
       </div>
       <div className={styles.buttonContainer}>
         <button className={styles.pageButton}>견적하기</button>
-        <button className={styles.pageButton} onClick={()=> deletedList()}>삭제</button>
+        <button className={styles.pageButton} onClick={() => deletedList()}>삭제</button>
       </div>
     </div>
   )
