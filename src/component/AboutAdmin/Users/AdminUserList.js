@@ -32,6 +32,28 @@ export default function AdminUserList() {
       setEditIndex(index);
     }
   };
+// 편집 상태 & 입력된 정보 & 체크리스트 초기화
+  const initializingData = () => {
+    if (editIndex !== null) {
+      setEditIndex(null);
+      fetchData();
+      setCheckedItems([]);
+    }
+  }
+  // esc키를 누르면 모달창 닫기.
+  useEffect(() => {
+    const exit_esc = (event) => {
+      if (event.key === 'Escape') {
+        initializingData();
+      }
+    };
+
+    window.addEventListener('keydown', exit_esc);
+
+    return () => {
+      window.removeEventListener('keydown', exit_esc);
+    };
+  }, [initializingData]);
 
   // ------------------------------서버 통신------------------------------ //
   // 유저 데이터 상태 관리
@@ -58,16 +80,15 @@ export default function AdminUserList() {
     queryKey: [`users`, currentPage, itemsPerPage], // currentPage, itemPerPage가 변경될 때마다 재실행하기 위함
     queryFn: fetchUsersData,
   });
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await fetchUsersData();
-        setMatchedData(data);
-      } catch (error) {
-        throw new Error('데이터를 볼러오는 데 실패했습니다.', error);
-      }
+  const fetchData = async () => {
+    try {
+      const data = await fetchUsersData();
+      setMatchedData(data);
+    } catch (error) {
+      throw new Error('데이터를 볼러오는 데 실패했습니다.', error);
     }
-
+  }
+  useEffect(() => {
     fetchData();
   }, [currentPage, itemsPerPage]);
 
@@ -362,10 +383,10 @@ export default function AdminUserList() {
                 <th>업체명(상호명)</th>
                 {/* 고객 구분, CMS여부 */}
                 {[
-                  { name: '고객 구분', valList: ['실사용자', '납품업자'] },
-                  { name: '등급', valList: ['A', 'B', 'C', 'D'] },
+                  { name: '고객 구분', valList: ['실사용자', '납품업자'], val: '' },
+                  { name: '등급', valList: ['A', 'B', 'C', 'D'], val: '' },
                   { name: '담당자', valList: ['박형조', '엄지석', '김태훈'], val: '박형조' },
-                  { name: 'CMS여부', valList: ['A', 'B', 'C', 'D'] }
+                  { name: 'CMS여부', valList: ['A', 'B', 'C', 'D'], val: '' }
                 ].map((customItem, index) => (
                   <th key={index}>
                     {editIndex == 'allEdit' ?
@@ -392,7 +413,9 @@ export default function AdminUserList() {
                   {editIndex == 'allEdit' ?
                     <div className="dropdown-menu"> {/* 아이콘 */}
                       {/* 삭제 버튼 */}
-                      <button className='white_button' onClick={() => handleDelete()}>삭제</button>
+                      <button className='white_button' onClick={() => handleDelete(checkedItems)}>삭제</button>
+                      {/* 수정 버튼 */}
+                      <button className='white_button' onClick={() => handleBulkEdit()}>수정</button>
                       {/* 취소 버튼 */}
                       <button className='white_button' onClick={() => {
                         setEditIndex('none');
@@ -427,7 +450,7 @@ export default function AdminUserList() {
                     { name: '고객명', val: user.cor_corName, key: 'cor_corName' },
                     { name: '고객 구분', valList: [1, 2], val: user.userType_id, key: 'userType_id' },
                     { name: '등급', valList: ['A', 'B', 'C', 'D'], val: user.grade ? user.grade : <span style={{ color: 'var(--main-red' }}>미정</span>, key: 'grade' },
-                    { name: '담당자', valList: ['박형조', '엄지석', '김태훈'], val: user.manager_name, key: 'manager_name' },
+                    { name: '담당자', valList: ['박형조', '엄지석', '김태훈'], val: user.manager_name ? user.manager_name : <span style={{ color: 'var(--main-red' }}>미정</span>, key: 'manager_name' },
                     { name: 'CMS여부', valList: [true, false], val: user.hasCMS, key: 'hasCMS' },
                   ].map((customItem, editIdx) => (
                     <td key={editIdx}>
@@ -447,7 +470,9 @@ export default function AdminUserList() {
                               setMatchedData(newData);
                             }}
                           >
+                            <option value={null}>---</option>
                             {customItem.valList.map((item, index) => (
+
                               <option key={index} value={item}>{
                                 editIdx == 1 ?
                                   item === 1 ?
@@ -510,7 +535,7 @@ export default function AdminUserList() {
                         {/* 삭제 버튼 */}
                         <button className='white_button' onClick={() => handleDelete(user.users_id)}>삭제</button>
                         {/* 취소 버튼 */}
-                        <button className='white_button' onClick={() => setEditIndex(null)}>취소</button>
+                        <button className='white_button' onClick={() => initializingData()}>취소</button>
                       </div>
                     ) : (
                       <div className='ellipsis' onClick={() => handleToggleEdit(index)}><i class="fa-solid fa-ellipsis"></i></div>
