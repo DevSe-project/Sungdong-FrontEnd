@@ -62,6 +62,7 @@ const useListStore = create((set) => ({
   orderList: [],
   cartList: [],
   searchList: [],
+  estimateList: [],
   noticePostList: [],
 
 
@@ -83,6 +84,17 @@ const useListStore = create((set) => ({
         searchList: []
       })),
 
+    //견적함
+    setEstimateList: (val) =>
+      set((state) => ({
+        estimateList: val
+      })),
+
+    resetEstimateList: (val) =>
+      set((state) => ({
+        estimateList: []
+      })),
+
     //검색리스트 옵션 SET
     setSearchOption: (item, value) =>
       set((state) => ({
@@ -91,6 +103,48 @@ const useListStore = create((set) => ({
             return {
               ...list,
               selectedOption: value,
+            };
+          }
+          return list;
+        }),
+      })),
+
+    //검색리스트 수량 SET
+    setEstimateCnt: (item, value) =>
+      set((state) => ({
+        estimateList: state.estimateList.map((list) => {
+          if (list.estimateBox_product_id === item.estimateBox_product_id) {
+            return {
+              ...list,
+              estimateBox_cnt: value,
+            };
+          }
+          return list;
+        }),
+      })),
+
+    //검색리스트 수량 UP
+    setEstimateCntUp: (item) =>
+      set((state) => ({
+        estimateList: state.estimateList.map((list) => {
+          if (list.estimateBox_product_id === item.estimateBox_product_id) {
+            return {
+              ...list,
+              estimateBox_cnt: (parseInt(list.estimateBox_cnt) + 1).toString(),
+            };
+          }
+          return list;
+        }),
+      })),
+
+    //검색리스트 수량 DOWN
+    setEstimateCntDown: (item) =>
+      set((state) => ({
+        estimateList: state.estimateList.map((list) => {
+          if (list.estimateBox_product_id === item.estimateBox_product_id) {
+            return {
+              ...list,
+              estimateBox_cnt: (parseInt(list.estimateBox_cnt) - 1).toString(),
             };
           }
           return list;
@@ -219,6 +273,7 @@ export const useSearchList = () => useListStore((state) => state.searchList);
 export const useCartList = () => useListStore((state) => state.cartList);
 export const useOrderList = () => useListStore((state) => state.orderList);
 export const useNoticePostList = () => useListStore((state) => state.noticePostList);
+export const useEstimateList = () => useListStore((state) => state.estimateList);
 
 // 🎉  모든 액션 상태를 위한 한개의 선택자 생성 -> 상태가 자주 변경되지 않기 때문에 모든 액션상태를 모음.
 export const useListActions = () => useListStore((state) => state.actions);
@@ -372,9 +427,9 @@ export const useSearchStore = create(
       },
       actions: {
         setFilterData: (val) =>
-        set((prev) => ({
-          filterData: val
-        })),
+          set((prev) => ({
+            filterData: val
+          })),
         setSearchTerm: (fieldName, value) =>
           set((state) => ({ searchTerm: { ...state.searchTerm, [fieldName]: value } })),
         setSeperateSearchTerm: (fieldName, value) =>

@@ -108,6 +108,7 @@ function setEstimateItem(product, count){
     console.log('상품을 견적함에 추가하였습니다.', ebData);
     // 추가 안내 메세지
     alert("견적함에 해당 상품을 추가하였습니다.");
+    navigate("/estimateBox");
     },
     onError: (error) => {
       // 상품 추가 실패 시, 에러 처리를 수행합니다.

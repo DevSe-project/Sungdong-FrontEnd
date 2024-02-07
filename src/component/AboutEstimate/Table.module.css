@@ -1,16 +1,15 @@
 .body{
-  width: 90%;
   display: flex;
-  margin-left: 5%;
   flex-direction: column;
-  gap: 1em;
+  justify-content: center;
+  align-items: center;
 }
 
 /* 헤드라인 */
 
 .head{
-  width: 100%;
-  margin: 2em;
+  width: 90%;
+  margin-top: 2em;
   padding-bottom: 1%;
   margin-right: 0;
   display: flex;
@@ -23,13 +22,13 @@
 /* 표 */
 
 .tablebody{
-  margin-left: 1%;
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 2em;
   overflow-x: hidden;
   align-items: center;
+  justify-content: center;
 }
 
 .deleteBox{
@@ -44,13 +43,24 @@
 .table{
   justify-content: center;
   align-items: center;
-  width: 80%;
+  width: 90%;
   border-top: 3px solid gray;
   border-bottom: 1px solid lightgray;
 }
 
 .name{
   width: 50%;
+}
+
+.thumnail{
+  background-size: cover;
+  box-sizing: border-box;
+  background-color: beige;
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  border: 1px solid lightgray;
+  object-fit: cover;
 }
 
 /* 버튼 */
@@ -87,10 +97,42 @@
   gap: 0.5em;
 }
 
+.buttonBox{
+  width: 90%;
+  display: flex;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5em;
+}
+
 .pageButton{
   border: 1px solid lightgray;
   background-color: white;
   padding: 0.5em;
   padding-left: 1.5em;
   padding-right: 1.5em;
+}
+
+.input{
+  border: 2px solid lightgray;
+  border-radius: 0.5em;
+  width: 5em;
+  height: 3em;
+  text-align: center;
+}
+
+.editButton{
+  border: none;
+  width: 1.1em;
+  border-radius: 0.2em;
+  background-color: var(--background-color-set);
+  color: white;
+  font-weight: 550;
+  font-size: 1.5em;
+  cursor : pointer;
+  text-align: center;
+  margin: 0.1em;
 }
