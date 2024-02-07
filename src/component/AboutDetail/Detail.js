@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react'
 import { TabInfo } from './TabInfo'
 import { useDataActions, useDetailData, useListActions, useOrderActions, useWishList } from '../../Store/DataStore'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import axios from '../../axios'
 import { GetCookie } from '../../customFn/GetCookie'
 import { useFetch } from '../../customFn/useFetch'
 export function Detail(props) {
@@ -69,7 +68,7 @@ export function Detail(props) {
 
     //견적함 추가 함수
     const addToEstimate = async (product) => {
-      return fetchServer(product, `post`, `/estimate/create`, 1);
+      return fetchServer(product, `post`, `/estimate/initBox`, 1);
     };
   
     //장바구니 추가 함수
@@ -96,8 +95,13 @@ export function Detail(props) {
 }
 
 function setEstimateItem(product, count){
+  const newProduct = {
+    ...product,
+    cnt: count,
+    selectedOption: optionSelected ? optionSelected : null
+  }
 
-  addEstimateBox({product, count},
+  addEstimateBox(newProduct,
     {
       onSuccess: (ebData) => {
     // 메세지 표시
