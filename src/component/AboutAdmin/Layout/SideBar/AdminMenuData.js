@@ -102,6 +102,10 @@ export function AdminMenuData(props) {
         link: '/adminMain/user'
       },
       {
+        item: '내 고객 관리',
+        link: '/adminMain/myUser'
+      },
+      {
         item: '회원가입 코드 관리',
         link: '/adminMain/printCode'
       }],

@@ -1159,6 +1159,7 @@ export const useUserFilterStore = create((set) => ({
     cor_num: '',
     userType_id: '',
     grade: '',
+    managers_id: '',
   },
   userSort: {
     first: '',
