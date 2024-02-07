@@ -176,7 +176,7 @@ export default function AdminUserList() {
   };
   const fetchEditUser = async (userData) => { // Fetching
     try {
-      const response = await axios.post('/userUpdate', userData);
+      const response = await axios.post('/auth/userUpdate', userData);
       return response.data;
     } catch (error) {
       throw error;
@@ -224,9 +224,6 @@ export default function AdminUserList() {
     onSuccess: handleDeleteSuccess,
     onError: handleDeleteError,
   });
-
-
-  // ------------------------------서버 통신------------------------------ //
 
   // 전체 체크박스 업데이트
   function handleAllCheckbox(isChecked) {
@@ -470,7 +467,7 @@ export default function AdminUserList() {
                     {index === editIndex ? (
                       <div className="dropdown-menu">
                         {/* 수정 버튼 */}
-                        <button className='white_button' onClick={() => handleEdit(user)}>수정</button>
+                        <button className='white_button' onClick={() => {handleEdit(user); console.log(user);}}>수정</button>
                         {/* 삭제 버튼 */}
                         <button className='white_button' onClick={() => handleDelete(user.users_id)}>삭제</button>
                         {/* 취소 버튼 */}
