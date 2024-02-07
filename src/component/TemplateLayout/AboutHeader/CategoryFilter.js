@@ -258,7 +258,7 @@ export function CategoryFilter({ postCnt, setCurrentPage, setTotalPages, setPost
                     }}>
                     <span className={styles.lowFont}>
                       {activeFilters.includes(contentItem.title) ?
-                        <span style={{ color: 'orangeRed' }}>{contentItem.title}({contentItem.count})</span> :
+                        <span style={{ color: 'orangeRed' }} onClick={() => removeFilter(contentItem.title)}>{contentItem.title}({contentItem.count})</span> :
                         <span>{contentItem.title}({contentItem.count})</span>
                       }
                     </span>
