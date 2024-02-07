@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './CategoryFilter.module.css';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useFetch } from '../../../customFn/useFetch';
-import { useSearchActions, useSearchFilterData } from '../../../Store/DataStore';
+import { useListActions, useSearchFilterData, useSearchList } from '../../../Store/DataStore';
 
-export function CategoryFilter({ postCnt, setCurrentPage, setTotalPages, setPostCnt, setTotalRows }) {
+export function CategoryFilter({ postCnt, setCurrentPage, setTotalPages, setPostCnt, setTotalRows, filteredProductList, setFilteredProductList }) {
   const { isLoading, isError, error, data: categoryData } = useQuery({ queryKey: ['category'] });
   const [editIndex, setEditIndex] = useState([]);
   const { fetchAddPostServer } = useFetch();
   const filterData = useSearchFilterData();
-  const {setFilterData} = useSearchActions();
+  const searchList = useSearchList();
   const queryClient = useQueryClient();
 
   // 카테고리를 클릭했을 때 호출되는 함수
@@ -28,12 +28,10 @@ export function CategoryFilter({ postCnt, setCurrentPage, setTotalPages, setPost
       idData = {
         parentsCategory_id: categoryId
       }
-    } else if(type === 'category') {
+    } else if (type === 'category') {
       idData = {
         category_id: categoryId
       }
-    } else {
-      idData = categoryId
     }
     filterMutaion(idData, {
       onSuccess: (data) => {
@@ -51,9 +49,57 @@ export function CategoryFilter({ postCnt, setCurrentPage, setTotalPages, setPost
     })
   }
 
+  //------------------브랜드, 원산지 등 동적 필터링 부분----------------------
 
+  // 전체 상품 리스트와 현재 적용된 필터 상태 정의
+  const [activeFilters, setActiveFilters] = useState([]);
 
+  // 필터 추가 핸들러
+  const addFilter = (filterType) => {
+    if (!activeFilters.includes(filterType)) {
+      setActiveFilters(prevFilters => [...prevFilters, filterType]);
+    }
+  };
 
+  // 필터 제거 핸들러
+  const removeFilter = (filterType) => {
+    setActiveFilters(prevFilters => prevFilters.filter(filter => filter !== filterType));
+  };
+
+  // 필터링된 상품 리스트 업데이트
+  useEffect(() => {
+    let updatedProductList = searchList;
+
+    // 각 활성 필터에 대해 필터링된 상품 리스트를 적용
+    updatedProductList = updatedProductList.filter(product => {
+      return activeFilters.every(filter => {
+        // 각 필터마다 사용자가 선택한 값에 따라 동적으로 필터링
+        if (product.product_brand.includes(filter) | product.product_madeIn.includes(filter)) {
+          return true;
+        }
+        return false;
+      });
+    });
+
+    setFilteredProductList(updatedProductList);
+  }, [activeFilters, searchList]);
+
+  // 필터 상자 시각화를 위한 JSX
+  const renderFilterBox = () => {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'row', gap: '0.5em', alignItems: 'center' }}>
+        {activeFilters.map((filter, index) => (
+          <div className='red_round_button' style={{ borderRadius: '5dvw', alignItems: 'center', display: 'flex', gap: '0.5em', fontSize: '0.8em' }} key={index} onClick={() => removeFilter(filter)}>
+            <span>{filter}</span>
+            <span style={{ fontWeight: '850' }}>  X</span>
+          </div>
+        ))}
+        <button className="white_button" onClick={() => window.location.reload()}>초기화</button>
+      </div>
+    );
+  };
+
+  //--------------------------------------------------------------------------
 
   //하위 카테고리 드롭 앤 다운 부분
   const handleToggleEdit = (index) => {
@@ -131,7 +177,7 @@ export function CategoryFilter({ postCnt, setCurrentPage, setTotalPages, setPost
       content: isIncludeBrands.map((brand) => ({
         title: brand,
         count: filterData.filter((item) => item.product_brand === brand).length,
-        item: {product_brand: brand}
+        item: { product_brand: brand }
       }))
     },
     {
@@ -139,7 +185,7 @@ export function CategoryFilter({ postCnt, setCurrentPage, setTotalPages, setPost
       content: isIncludeMaden.map((madeIn) => ({
         title: madeIn,
         count: filterData.filter((item) => item.product_madeIn === madeIn).length,
-        item: {product_madeIn: madeIn}
+        item: { product_madeIn: madeIn }
       }))
     }
   ];
@@ -208,15 +254,21 @@ export function CategoryFilter({ postCnt, setCurrentPage, setTotalPages, setPost
                     key={index}
                     className={styles.contentItem}
                     onClick={() => {
-                      handleCategoryClick('extra', contentItem.item)
+                      addFilter(contentItem.title)
                     }}>
-                    <span className={styles.lowFont}>{contentItem.title}({contentItem.count})</span>
+                    <span className={styles.lowFont}>
+                      {activeFilters.includes(contentItem.title) ?
+                        <span style={{ color: 'orangeRed' }}>{contentItem.title}({contentItem.count})</span> :
+                        <span>{contentItem.title}({contentItem.count})</span>
+                      }
+                    </span>
                   </div>
                 )
                 : item.content}
             </div>
           </React.Fragment>
         )}
+        {renderFilterBox()}
       </div>
     </div>
   )

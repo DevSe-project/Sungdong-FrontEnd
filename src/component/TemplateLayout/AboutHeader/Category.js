@@ -9,21 +9,24 @@ import { useFetch } from "../../../customFn/useFetch"
 import Pagination from "../../../customFn/Pagination";
 export function Category() {
   const seperateSearchTerm = useSeperateSearchTerm();
-  const searchTerm = useSearchTerm();
-  const { resetSeperateSearchTerm, setFilterData } = useSearchActions();
-  const filterData = useSearchFilterData();
+  const { setFilterData } = useSearchActions();
   const searchList = useSearchList();
   const navigate = useNavigate();
   // 체크박스를 통해 선택한 상품들을 저장할 상태 변수
   const [selectedItems, setSelectedItems] = useState([]);
-  const { setSearchList, resetSearchList, setSearchCnt, setSearchCntUp, setSearchCntDown, setSearchOption, resetSearchTerm } = useListActions();
+  const { setSearchList, resetSearchList, setSearchCnt, setSearchCntUp, setSearchCntDown, setSearchOption } = useListActions();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [postCnt, setPostCnt] = useState(10);
   const [totalRows, setTotalRows] = useState(0);
   //검색 결과 데이터 fetch
   const { fetchAddPostServer, fetchServer } = useFetch();
+  const [filteredProductList, setFilteredProductList] = useState([]);
 
+  // 필터링된 상품 리스트 초기화
+  useEffect(() => {
+    setFilteredProductList(searchList);
+  }, [searchList]);
 
   const fetchSearchData = async () => {
     const getSearch = JSON.parse(sessionStorage.getItem('searchTerm'));
@@ -267,10 +270,10 @@ export function Category() {
       <div className={styles.topTitle}>
         <h1>검색 결과</h1>
       </div>
-      <CategoryFilter searchList={searchList} postCnt={postCnt} setCurrentPage={setCurrentPage} setTotalPages={setTotalPages} setPostCnt={setPostCnt} setTotalRows={setTotalRows} />
+      <CategoryFilter filteredProductList={filteredProductList} setFilteredProductList={setFilteredProductList} postCnt={postCnt} setCurrentPage={setCurrentPage} setTotalPages={setTotalPages} setPostCnt={setPostCnt} setTotalRows={setTotalRows} />
       <h5 style={{ margin: '1em' }}>
         {searchRender()}
-        <span style={{ color: '#CC0000', fontWeight: '650', margin: '0.5em' }}>{product ? totalRows : 0}건<span style={{ color: 'black' }}>이 검색 되었습니다.</span></span>
+        <span style={{ color: '#CC0000', fontWeight: '650', margin: '0.5em' }}>{product ? filteredProductList.length : 0}건<span style={{ color: 'black' }}>이 검색 되었습니다.</span></span>
       </h5>
       {/* 카테고리 목록 TABLE */}
       <div className={styles.buttonBox}>
@@ -308,7 +311,7 @@ export function Category() {
             </tr>
           </thead>
           <tbody>
-            {product && searchList.map((item, index) => (
+            {product && searchList && filteredProductList.map((item, index) => (
               <React.Fragment key={index}>
                 <tr className={styles.list}>
                   <td rowSpan={2}><img className={styles.thumnail} src={item.product_image_original} alt='이미지'></img></td>
