@@ -1,18 +1,19 @@
 import axios from '../../axios';
 import styles from './Table.module.css';
 import { GetCookie } from '../../customFn/GetCookie';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import React from 'react';
-import { useEstimateActions, useEstimateData, useEstimateProductData } from '../../Store/DataStore';
+import React, { useEffect } from 'react';
+import { useEstimateActions, useEstimateData, useEstimateProductData, useUserData } from '../../Store/DataStore';
 import { useFetch } from '../../customFn/useFetch';
 export function EstimateWrite() {
   const estimateData = useEstimateProductData();
   const estimateInputData = useEstimateData();
-  const {setVendorData, setSupplierData} = useEstimateActions();
+  const { setVendorData, setSupplierData } = useEstimateActions();
   const queryClient = useQueryClient();
   const { fetchServer } = useFetch();
   //fetch
+  const { isLoading, isError, error, data: userData } = useQuery({queryKey: ['user']})
 
   function handleCancelButton() {
     const isConfirmed = window.confirm('정말로 취소하시겠습니까?\n현재까지 작성 내용은 저장되지 않습니다.');
@@ -21,14 +22,25 @@ export function EstimateWrite() {
     }
   }
 
+  //정보 자동 입력
+  useEffect(() => {
+    if (userData) {
+      setSupplierData("estimate_corName", userData.cor_corName);
+      setSupplierData("estimate_cor_tel", userData.cor_tel);
+      setSupplierData("estimate_email", userData.email);
+      setSupplierData("estimate_cor_fax", userData.cor_fax);
+      setSupplierData("estimate_cor_ceoName", userData.cor_ceoName);
+    }
+  }, [userData]);
+
   const objVendorSupplier = (fieldType) => [
-    {title: '거래처명', contents: supplierVendorInfo(fieldType, 'estimate_corName')},
-    {title: '담당자명', contents: supplierVendorInfo(fieldType, 'estimate_managerName')},
-    {title: '주소', contents: supplierVendorInfo(fieldType, 'estimate_address')},
-    {title: '전화번호', contents: supplierVendorInfo(fieldType, 'estimate_cor_tel')},
-    {title: '대표자명', contents: supplierVendorInfo(fieldType, 'estimate_cor_ceoName')},
-    {title: 'FAX', contents: supplierVendorInfo(fieldType, 'estimate_cor_fax')},
-    {title: 'E-Mail', contents: supplierVendorInfo(fieldType, 'estimate_email')},
+    { title: '거래처명', contents: supplierVendorInfo(fieldType, 'estimate_corName') },
+    { title: '담당자명', contents: supplierVendorInfo(fieldType, 'estimate_managerName') },
+    { title: '주소', contents: supplierVendorInfo(fieldType, 'estimate_address') },
+    { title: '전화번호', contents: supplierVendorInfo(fieldType, 'estimate_cor_tel') },
+    { title: '대표자명', contents: supplierVendorInfo(fieldType, 'estimate_cor_ceoName') },
+    { title: 'FAX', contents: supplierVendorInfo(fieldType, 'estimate_cor_fax') },
+    { title: 'E-Mail', contents: supplierVendorInfo(fieldType, 'estimate_email') },
   ]
 
   //반복되는 인풋란(주문) 렌더링
@@ -45,15 +57,22 @@ export function EstimateWrite() {
 
   const handleVendorField = (fieldName, value) => {
     // setOrderInformation 메서드를 사용하여 특정 필드를 변경
-    setVendorData(fieldName,value);
+    setVendorData(fieldName, value);
   };
 
   const handleSupplierField = (fieldName, value) => {
     // setOrderInformation 메서드를 사용하여 특정 필드를 변경
-    setSupplierData(fieldName,value);
+    setSupplierData(fieldName, value);
   };
 
   const navigate = useNavigate();
+
+  if (isLoading) {
+    return <p>Loading..</p>;
+  }
+  if (isError) {
+      return <p>{error.message}</p>
+  }
 
   return (
     <div className={styles.body}>
@@ -70,18 +89,14 @@ export function EstimateWrite() {
           </div>
           <table className={styles.table}>
             <tr>
-              <th>
-                구분
-              </th>
-              <th>
-                내용
-              </th>
+              <th>구분</th>
+              <th>내용</th>
             </tr>
-            {objVendorSupplier('피공급자').map((item => 
-            <tr>
-              <th>{item.title}</th>
-              <td>{item.contents}</td>
-            </tr>
+            {objVendorSupplier('피공급자').map((item =>
+              <tr>
+                <th>{item.title}</th>
+                <td>{item.contents}</td>
+              </tr>
             ))}
           </table>
         </div>
@@ -91,18 +106,14 @@ export function EstimateWrite() {
           </div>
           <table className={styles.table}>
             <tr>
-              <th>
-                구분
-              </th>
-              <th>
-                내용
-              </th>
+              <th>구분</th>
+              <th>내용</th>
             </tr>
-            {objVendorSupplier('공급자').map((item => 
-            <tr>
-              <th>{item.title}</th>
-              <td>{item.contents}</td>
-            </tr>
+            {objVendorSupplier('공급자').map((item =>
+              <tr>
+                <th>{item.title}</th>
+                <td>{item.contents}</td>
+              </tr>
             ))}
           </table>
         </div>
