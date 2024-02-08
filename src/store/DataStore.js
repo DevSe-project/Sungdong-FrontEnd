@@ -458,12 +458,11 @@ export const useEstimateStore = create(
   persist(
     (set) => ({
       estimateData: {
-        estimate_amountDiscount: '',
-        estimate_amountDiscountPrice: '',
-        estimate_due: '',
-        estimate_writedDate: '',
-        estimate_Expire: '',
-        estimate_isIncludeVAT: false,
+        estimate_amountDiscount: 0, //총 금액 할인율
+        estimate_due: '', //납기일
+        estimate_expire: '', //견적 유효기간
+        estimate_isIncludeVAT: 'false', //부가세 구분
+        estimate_etc: '', //비고
         supplier: {
           estimate_corName: '',
           estimate_managerName: '',
@@ -524,29 +523,28 @@ export const useEstimateStore = create(
         resetEstimateData: () =>
           set({
             estimateData: {
-              estimate_eachProductApply: '',
-              estimate_amountDiscount: 0,
-              estimate_writedDate: '',
-              estimate_expire: '',
-              isIncludeVAT: 'false',
-              estimate_etc: '',
+              estimate_amountDiscount: 0, //총 금액 할인율
+              estimate_due: '', //납기일
+              estimate_expire: '', //견적 유효기간
+              estimate_isIncludeVAT: 'false', //부가세 구분
+              estimate_etc: '', //비고
               supplier: {
-                estimate_supplier_corName: '',
-                estimate_supplier_managerName: '',
-                estimate_supplier_address: '',
-                estimate_supplier_cor_ceoName: '',
-                estimate_supplier_cor_tel: '',
-                estimate_supplier_cor_fax: '',
-                estimate_supplier_email: ''
+                estimate_corName: '',
+                estimate_managerName: '',
+                estimate_address: '',
+                estimate_cor_ceoName: '',
+                estimate_cor_tel: '',
+                estimate_cor_fax: '',
+                estimate_email: ''
               },
               vendor: {
-                estimate_vendor_corName: '',
-                estimate_vendor_managerName: '',
-                estimate_vendor_address: '',
-                estimate_vendor_cor_ceoName: '',
-                estimate_vendor_cor_tel: '',
-                estimate_vendor_cor_fax: '',
-                estimate_vendor_email: ''
+                estimate_corName: '',
+                estimate_managerName: '',
+                estimate_address: '',
+                estimate_cor_ceoName: '',
+                estimate_cor_tel: '',
+                estimate_cor_fax: '',
+                estimate_email: ''
               }
             }
           }),

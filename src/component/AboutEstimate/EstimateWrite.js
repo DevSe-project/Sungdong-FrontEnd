@@ -17,12 +17,15 @@ export function EstimateWrite() {
 
   // 전체 선택 체크박스 상태를 저장할 상태 변수
   const [selectAll, setSelectAll] = useState(false);
+
+  //금액 관련 변수
   const priceOne = (item) => item.estimateBox_price - item.estimateBox_price * (item.product_discount / 100);
   const price = (item) => item.estimateBox_price * item.estimateBox_cnt - item.estimateBox_price * (item.product_discount / 100) * item.estimateBox_cnt;
   const profit = (item) => ((item.estimateBox_price - (item.estimateBox_price * (item.product_discount / 100))) * (item.product_profit / 100))
   const totalAmount = estimateData.reduce((sum, item) => sum + parseInt(price(item)) + profit(item) * item.estimateBox_cnt, 0);
   const totalDiscount = totalAmount * (estimateInputData.estimate_amountDiscount / 100);
   const VAT = (totalAmount - totalDiscount) / 10;
+
   //fetch
   const { isLoading, isError, error, data: userData } = useQuery({ queryKey: ['user'] })
 
@@ -35,14 +38,7 @@ export function EstimateWrite() {
     }
   }
 
-  useEffect(() => {
-    return () => {
-      // 컴포넌트가 언마운트될 때 상태 리셋
-      useEstimateStore.persist.clearStorage();
-      window.location.reload();
-    };
-  }, []);
-
+  //유효기간 날짜 세팅
   function formatDate(dateString) {
     // dateString이 'YYYY-MM-DD' 형식이라고 가정합니다.
     const date = new Date(dateString);
@@ -64,6 +60,14 @@ export function EstimateWrite() {
     const day = String(oneWeekLater.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
+
+  useEffect(() => {
+    return () => {
+      // 컴포넌트가 언마운트될 때 상태 리셋
+      useEstimateStore.persist.clearStorage();
+      window.location.reload();
+    };
+  }, []);
 
   //정보 자동 입력
   useEffect(() => {
@@ -124,8 +128,8 @@ export function EstimateWrite() {
 
   // 체크박스 클릭 시 호출되는 함수
   function checkedBox(product) {
-    if (selectedItems.find(item => item.product_id === product.product_id)) { //productID가 중복이면 true == 이미 체크박스가 클릭되어 있으면
-      setSelectedItems(selectedItems.filter((item) => item.product_id !== product.product_id)); //체크박스를 해제함 == 선택한 상품 저장 변수에서 제외
+    if (selectedItems.find(item => item.estimateBox_product_id === product.estimateBox_product_id)) { //productID가 중복이면 true == 이미 체크박스가 클릭되어 있으면
+      setSelectedItems(selectedItems.filter((item) => item.estimateBox_product_id !== product.estimateBox_product_id)); //체크박스를 해제함 == 선택한 상품 저장 변수에서 제외
       setSelectAll(false);
     } else {
       setSelectedItems([...selectedItems, product]); //selectedItems의 배열과 productID 배열을 합쳐 다시 selectedItems에 저장
@@ -369,7 +373,7 @@ export function EstimateWrite() {
                   </td>
                   <td>
                     <input
-                      checked={selectedItems.some(select => select.product_id === item.product_id)}
+                      checked={selectedItems.some(select => select.estimateBox_product_id === item.estimateBox_product_id)}
                       onChange={() => checkedBox(item)}
                       type='checkbox'
                     />
@@ -418,7 +422,7 @@ export function EstimateWrite() {
         </table>
       </div>
       <div className={styles.buttonContainer}>
-        <button className="original_button">작성 완료 및 출력</button>
+        <button className="original_button" onClick={()=>window.print()}>작성 완료 및 출력</button>
         <button className={styles.pageButton} onClick={() => handleCancelButton()}>취소</button>
       </div>
     </div>
