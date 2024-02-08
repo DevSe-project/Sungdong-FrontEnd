@@ -458,12 +458,12 @@ export const useEstimateStore = create(
   persist(
     (set) => ({
       estimateData: {
-        estimate_eachProductApply: '',
         estimate_amountDiscount: '',
         estimate_amountDiscountPrice: '',
+        estimate_due: '',
         estimate_writedDate: '',
         estimate_Expire: '',
-        isIncludeVAT: false,
+        estimate_isIncludeVAT: false,
         supplier: {
           estimate_corName: '',
           estimate_managerName: '',
@@ -486,7 +486,19 @@ export const useEstimateStore = create(
       estimateProductData: [],
       actions: {
         setProductData: (value) =>
-          set((state) => ({ estimateProductData: { ...state.estimateProductData, value } })),
+          set((state) => ({ estimateProductData: value })),
+        setProfit: (items, value) =>
+          set((state) => ({
+            estimateProductData: state.estimateProductData.map((list) => {
+              if (items.some((item) => item.estimateBox_product_id === list.estimateBox_product_id)) {
+                return {
+                  ...list,
+                  product_profit: value,
+                };
+              }
+              return list;
+            }),
+          })),
         setEstimateData: (fieldName, value) =>
           set((state) => ({ estimateData: { ...state.estimateData, [fieldName]: value } })),
         setVendorData: (fieldName, value) =>
@@ -513,11 +525,11 @@ export const useEstimateStore = create(
           set({
             estimateData: {
               estimate_eachProductApply: '',
-              estimate_amountDiscount: '',
-              estimate_amountDiscountPrice: '',
+              estimate_amountDiscount: 0,
               estimate_writedDate: '',
-              estimate_Expire: '',
-              isIncludeVAT: false,
+              estimate_expire: '',
+              isIncludeVAT: 'false',
+              estimate_etc: '',
               supplier: {
                 estimate_supplier_corName: '',
                 estimate_supplier_managerName: '',

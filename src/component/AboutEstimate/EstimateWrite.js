@@ -3,23 +3,66 @@ import styles from './Table.module.css';
 import { GetCookie } from '../../customFn/GetCookie';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import React, { useEffect } from 'react';
-import { useEstimateActions, useEstimateData, useEstimateProductData, useUserData } from '../../Store/DataStore';
+import React, { useEffect, useState } from 'react';
+import { useEstimateActions, useEstimateData, useEstimateProductData, useEstimateStore, useUserData } from '../../Store/DataStore';
 import { useFetch } from '../../customFn/useFetch';
 export function EstimateWrite() {
   const estimateData = useEstimateProductData();
   const estimateInputData = useEstimateData();
-  const { setVendorData, setSupplierData } = useEstimateActions();
+  const { setVendorData, setSupplierData, setEstimateData, setProfit } = useEstimateActions();
   const queryClient = useQueryClient();
   const { fetchServer } = useFetch();
+  // 체크박스를 통해 선택한 상품들을 저장할 상태 변수
+  const [selectedItems, setSelectedItems] = useState([]);
+
+  // 전체 선택 체크박스 상태를 저장할 상태 변수
+  const [selectAll, setSelectAll] = useState(false);
+  const priceOne = (item) => item.estimateBox_price - item.estimateBox_price * (item.product_discount / 100);
+  const price = (item) => item.estimateBox_price * item.estimateBox_cnt - item.estimateBox_price * (item.product_discount / 100) * item.estimateBox_cnt;
+  const profit = (item) => ((item.estimateBox_price - (item.estimateBox_price * (item.product_discount / 100))) * (item.product_profit / 100))
+  const totalAmount = estimateData.reduce((sum, item) => sum + parseInt(price(item)) + profit(item) * item.estimateBox_cnt, 0);
+  const totalDiscount = totalAmount * (estimateInputData.estimate_amountDiscount / 100);
+  const VAT = (totalAmount - totalDiscount) / 10;
   //fetch
-  const { isLoading, isError, error, data: userData } = useQuery({queryKey: ['user']})
+  const { isLoading, isError, error, data: userData } = useQuery({ queryKey: ['user'] })
 
   function handleCancelButton() {
     const isConfirmed = window.confirm('정말로 취소하시겠습니까?\n현재까지 작성 내용은 저장되지 않습니다.');
     if (isConfirmed) {
+      useEstimateStore.persist.clearStorage();
+      window.location.reload();
       navigate("/");
     }
+  }
+
+  useEffect(() => {
+    return () => {
+      // 컴포넌트가 언마운트될 때 상태 리셋
+      useEstimateStore.persist.clearStorage();
+      window.location.reload();
+    };
+  }, []);
+
+  function formatDate(dateString) {
+    // dateString이 'YYYY-MM-DD' 형식이라고 가정합니다.
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  function getOneWeekLaterDate() {
+    // 오늘 날짜를 가져옵니다.
+    const today = new Date();
+    // 일주일 후의 날짜를 구합니다.
+    const oneWeekLater = new Date(today);
+    oneWeekLater.setDate(oneWeekLater.getDate() + 7);
+    // YYYY-MM-DD 형식으로 변환하여 반환합니다.
+    const year = oneWeekLater.getFullYear();
+    const month = String(oneWeekLater.getMonth() + 1).padStart(2, '0');
+    const day = String(oneWeekLater.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
   //정보 자동 입력
@@ -30,6 +73,7 @@ export function EstimateWrite() {
       setSupplierData("estimate_email", userData.email);
       setSupplierData("estimate_cor_fax", userData.cor_fax);
       setSupplierData("estimate_cor_ceoName", userData.cor_ceoName);
+      setEstimateData("estimate_expire", getOneWeekLaterDate())
     }
   }, [userData]);
 
@@ -37,8 +81,8 @@ export function EstimateWrite() {
     { title: '거래처명', contents: supplierVendorInfo(fieldType, 'estimate_corName') },
     { title: '담당자명', contents: supplierVendorInfo(fieldType, 'estimate_managerName') },
     { title: '주소', contents: supplierVendorInfo(fieldType, 'estimate_address') },
-    { title: '전화번호', contents: supplierVendorInfo(fieldType, 'estimate_cor_tel') },
     { title: '대표자명', contents: supplierVendorInfo(fieldType, 'estimate_cor_ceoName') },
+    { title: '전화번호', contents: supplierVendorInfo(fieldType, 'estimate_cor_tel') },
     { title: 'FAX', contents: supplierVendorInfo(fieldType, 'estimate_cor_fax') },
     { title: 'E-Mail', contents: supplierVendorInfo(fieldType, 'estimate_email') },
   ]
@@ -65,13 +109,63 @@ export function EstimateWrite() {
     setSupplierData(fieldName, value);
   };
 
+  //----------------------체크박스------------------------
+  // 전체 선택 체크박스 클릭 시 호출되는 함수
+  function handleSelectAllChange() {
+    setSelectAll(!selectAll);
+
+    if (!selectAll) {
+      const allId = estimateData.map((item) => item);
+      setSelectedItems(allId);
+    } else {
+      setSelectedItems([]);
+    }
+  };
+
+  // 체크박스 클릭 시 호출되는 함수
+  function checkedBox(product) {
+    if (selectedItems.find(item => item.product_id === product.product_id)) { //productID가 중복이면 true == 이미 체크박스가 클릭되어 있으면
+      setSelectedItems(selectedItems.filter((item) => item.product_id !== product.product_id)); //체크박스를 해제함 == 선택한 상품 저장 변수에서 제외
+      setSelectAll(false);
+    } else {
+      setSelectedItems([...selectedItems, product]); //selectedItems의 배열과 productID 배열을 합쳐 다시 selectedItems에 저장
+      if (selectedItems.length + 1 === estimateData.length) {
+        setSelectAll(true);
+      }
+    }
+  };
+
+  function addEachProduct(item, supplyCnt) {
+    if (selectedItems.length < 1) {
+      alert("먼저 적용률을 적용할 상품을 선택 후 입력해주세요!");
+      return;
+    }
+    const numericValue = supplyCnt.replace(/\D/g, '');
+    if (numericValue > -1 && numericValue <= 100) {
+      setProfit(item, numericValue)
+    } else {
+      alert("0~100까지 적용이 가능합니다.");
+      return;
+    }
+  }
+
+  function addAmountDiscount(supplyCnt) {
+    const numericValue = supplyCnt.replace(/\D/g, '');
+    if (numericValue > -1 && numericValue <= 100) {
+      setEstimateData("estimate_amountDiscount", numericValue)
+    } else {
+      alert("0~100까지 적용이 가능합니다.");
+      return;
+    }
+  }
+
   const navigate = useNavigate();
 
   if (isLoading) {
     return <p>Loading..</p>;
   }
   if (isError) {
-      return <p>{error.message}</p>
+    return <p>{error.message}</p>
   }
 
   return (
@@ -126,65 +220,63 @@ export function EstimateWrite() {
             <tr>
               <th>총금액</th>
               <td><input className={styles.input} value={
-                estimateData.value.length > 0 ?
-                  estimateData.value.reduce((sum, item) =>
-                    sum + parseInt((item.estimateBox_price * item.estimateBox_cnt) - (item.estimateBox_price / 100) * item.product_discount * item.estimateBox_cnt)
-                    , 0).toLocaleString('ko-KR')
-                  : 0
+                parseInt(totalAmount).toLocaleString('ko-kr')
               } disabled /> 원
               </td>
               <th>상품별 적용율</th>
-              <td><input className={styles.input} /> %</td>
+              <td><input className={styles.input} onChange={(e) => addEachProduct(selectedItems, e.target.value)} /> %</td>
               <th rowSpan={6}>비고</th>
-              <td rowSpan={6}><input type='textarea' className={styles.textArea} /></td>
+              <td rowSpan={6}><textarea className={styles.textArea} onChange={(e) => setEstimateData("estimate_etc", e.target.value)} /></td>
             </tr>
             <tr>
               <th>총금액 할인율</th>
-              <td><input className={styles.input} /> %</td>
+              <td><input className={styles.input} value={estimateInputData.estimate_amountDiscount} onChange={(e) => addAmountDiscount(e.target.value)} /> %</td>
               <th>총이익금액</th>
-              <td><input className={styles.input} disabled /> 원</td>
+              <td><input className={styles.input} disabled value={
+                ((parseInt(totalAmount - totalDiscount))
+                  -
+                  (parseInt(estimateData.reduce((sum, item) =>
+                    sum + parseInt(price(item)), 0)))).toLocaleString('ko-kr')
+              } /> 원</td>
             </tr>
             <tr>
               <th>총금액 할인금액</th>
-              <td><input className={styles.input} /> 원</td>
-              <th>부가세</th>
-              <td>
-                <input className={styles.input} value={estimateData.value.length > 0 ?
-                  parseInt(estimateData.value.reduce((sum, item) =>
-                    sum + parseInt((item.estimateBox_price * item.estimateBox_cnt) - (item.estimateBox_price / 100) * item.product_discount * item.estimateBox_cnt) / 10
-                    , 0)).toLocaleString('ko-kr')
-                  : 0} disabled /> 원
-              </td>
+              <td><input className={styles.input} value={
+                parseInt(totalDiscount).toLocaleString('ko-KR')
+              } disabled /> 원</td>
+              {estimateInputData.estimate_isIncludeVAT !== 'true' &&
+                <>
+                  <th>부가세</th>
+                  <td>
+                    <input className={styles.input} value={estimateData.length > 0 ?
+                      parseInt(VAT).toLocaleString('ko-kr')
+                      : 0} disabled /> 원
+                  </td>
+                </>
+              }
             </tr>
             <tr>
               <th>최종금액</th>
-              <td><input className={styles.input} value={parseInt(estimateData.value.reduce((sum, item) =>
-                sum + parseInt((item.estimateBox_price * item.estimateBox_cnt) - (item.estimateBox_price / 100) * item.product_discount * item.estimateBox_cnt)
-                , 0)).toLocaleString('ko-kr')} disabled /> 원</td>
-              <th>최종금액+부가세</th>
-              <td>
-                <input className={styles.input} value={estimateData.value.length > 0 ?
-                  parseInt(parseInt(estimateData.value.reduce((sum, item) =>
-                    sum + parseInt((item.estimateBox_price * item.estimateBox_cnt) - (item.estimateBox_price / 100) * item.product_discount * item.estimateBox_cnt)
-                    , 0)) +
-                    parseInt(estimateData.value.reduce((sum, item) =>
-                      sum + parseInt((item.estimateBox_price * item.estimateBox_cnt) - (item.estimateBox_price / 100) * item.product_discount * item.estimateBox_cnt) / 10
-                      , 0))).toLocaleString('ko-kr')
-                  : 0} disabled /> 원
-              </td>
+              <td><input className={styles.input} value={parseInt(totalAmount - totalDiscount).toLocaleString('ko-kr')} disabled /> 원</td>
+              {estimateInputData.estimate_isIncludeVAT !== 'true' &&
+                <>
+                  <th>최종금액+부가세</th>
+                  <td>
+                    <input className={styles.input} value={
+                      parseInt((totalAmount - totalDiscount) + VAT).toLocaleString('ko-kr')
+                    } disabled /> 원
+                  </td>
+                </>
+              }
             </tr>
             <tr>
               <th>견적 유효기간</th>
-              <td><input className={styles.input} type='date' /></td>
+              <td><input className={styles.input} type='date' value={estimateInputData.estimate_expire} onChange={(e)=>setEstimateData("estimate_expire", formatDate(e.target.value))} /></td>
               <th>부가세 구분</th>
               <td>
-                <label><input type="radio" name="VAT" />부가세 포함</label>
-                <label><input type="radio" name="VAT" />부가세 별도</label>
+                <label><input type="radio" name="VAT" value={"true"} onChange={(e) => setEstimateData("estimate_isIncludeVAT", e.target.value)} />부가세 포함</label>
+                <label><input type="radio" name="VAT" value={"false"} onChange={(e) => setEstimateData("estimate_isIncludeVAT", e.target.value)} />부가세 별도</label>
               </td>
-            </tr>
-            <tr>
-              <th>견적 작성일자</th>
-              <td><input className={styles.input} type='date' /></td>
             </tr>
           </tbody>
         </table>
@@ -192,7 +284,7 @@ export function EstimateWrite() {
 
       {/* 견적 상품 */}
       <div className={styles.buttonBox}>
-        <span>납기일 :</span><input className={styles.input} style={{ width: '7em' }} />일
+        <span>납기일 :</span><input className={styles.input} style={{ width: '7em' }} value={estimateInputData.estimate_due} onChange={(e) => setEstimateData("estimate_due", e.target.value)} />일
       </div>
       {/* 테이블 */}
       <div className={styles.tablebody}>
@@ -216,55 +308,71 @@ export function EstimateWrite() {
               <th>납기일</th>
               <th>비고</th>
               <th>내품정보</th>
+              <th>
+                <input
+                  type='checkbox'
+                  checked={selectAll}
+                  onChange={() => handleSelectAllChange()} />
+              </th>
             </tr>
           </thead>
           <tbody>
-            {estimateData.value.map((item, index) => (
+            {estimateData.map((item, index) => (
               <React.Fragment key={index}>
                 <tr className={styles.list}>
                   <td>{index + 1}</td>
                   <td>성동상품</td>
                   <td>{item.product_id}</td>
-                  <td>{item.product_title}</td>
+                  <td>{item.product_title}{item.estimateBox_selectedOption && `(${item.estimateBox_selectedOption})`}</td>
                   <td>{item.product_brand}</td>
                   <td>{item.product_spec}</td>
                   <td>EA</td>
                   <td>{item.estimateBox_cnt}</td>
                   <td>
                     {item.product_discount
-                      ? `${(item.product_price - (item.product_price / 100) * item.product_discount)
+                      ? `${priceOne(item)
                         .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
                       : `${parseInt(item.product_price).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
                   </td>
                   <td>
                     {item.product_discount
-                      ? `${(item.product_price - (item.product_price / 100) * item.product_discount)
+                      ? `${(priceOne(item) + profit(item))
                         .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
-                      : `${parseInt(item.product_price).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
+                      : `${parseInt(item.estimateBox_price + profit(item)).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
                   </td>
                   <td>
-                    적용율%
+                    {item.product_profit ? item.product_profit : item.product_profit = 0}%
                   </td>
                   <td>
                     {item.product_discount
-                      ? `${(parseInt((item.estimateBox_price) * item.estimateBox_cnt) - (item.estimateBox_price / 100) * item.product_discount * item.estimateBox_cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
-                      : `${parseInt(item.estimateBox_price * item.estimateBox_cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}                  </td>
-                  <td>
-                    {item.product_discount
-                      ? `${(parseInt((item.estimateBox_price) * item.estimateBox_cnt) - (item.estimateBox_price / 100) * item.product_discount * item.estimateBox_cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
+                      ? `${(parseInt(price(item))).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
                       : `${parseInt(item.estimateBox_price * item.estimateBox_cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
                   </td>
                   <td>
-                    이익금액
+                    {`${parseInt(price(item) + profit(item) * item.estimateBox_cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
                   </td>
                   <td>
-                    납기일
+                    {
+                      (parseInt(price(item) + profit(item) * item.estimateBox_cnt)
+                        -
+                      parseInt(price(item))).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })
+                    }
                   </td>
                   <td>
-                    비고
+                    {estimateInputData.estimate_due ? estimateInputData.estimate_due : 0}일
                   </td>
                   <td>
-                    내품정보
+                    <input className={styles.input}></input>
+                  </td>
+                  <td>
+                    <input className={styles.input}></input>
+                  </td>
+                  <td>
+                    <input
+                      checked={selectedItems.some(select => select.product_id === item.product_id)}
+                      onChange={() => checkedBox(item)}
+                      type='checkbox'
+                    />
                   </td>
                 </tr>
               </React.Fragment>
@@ -279,22 +387,30 @@ export function EstimateWrite() {
               <td></td>
               <td></td>
               <td></td>
-              <td>합계</td>
+              <td style={{ color: '#CC0000' }}>합계</td>
               <td></td>
-              <td>{estimateData.value.length}(건)</td>
+              <td style={{ color: 'blue' }}>{estimateData.length}(건)</td>
               <td></td>
-              <td>{estimateData.value.reduce((sum, item) => sum + parseInt(item.estimateBox_cnt), 0)}</td>
+              <td style={{ color: 'blue' }}>{estimateData.reduce((sum, item) => sum + parseInt(item.estimateBox_cnt), 0)}</td>
               <td></td>
               <td></td>
               <td></td>
               <td></td>
               <td style={{ fontWeight: '850' }}>
                 {
-                  estimateData.value.length > 0 ?
-                    estimateData.value.reduce((sum, item) =>
-                      sum + parseInt((item.estimateBox_price * item.estimateBox_cnt) - (item.estimateBox_price / 100) * item.product_discount * item.estimateBox_cnt)
+                  estimateData.length > 0 ?
+                    estimateData.reduce((sum, item) =>
+                      sum + parseInt(price(item) + profit(item) * item.estimateBox_cnt)
                       , 0).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })
                     : 0
+                }
+              </td>
+              <td style={{ fontWeight: '850' }}>
+                {
+                  parseInt(totalAmount -
+                    estimateData.reduce((sum, item) =>
+                      sum + parseInt(price(item))
+                      , 0)).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })
                 }
               </td>
             </tr>
