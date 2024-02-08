@@ -4,11 +4,12 @@ import { GetCookie } from '../../customFn/GetCookie';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
-import { useEstimateList, useListActions } from '../../Store/DataStore';
+import { useDataActions, useEstimateActions, useEstimateList, useListActions } from '../../Store/DataStore';
 import { useFetch } from '../../customFn/useFetch';
 export function EstimateBox() {
   const [selectedItems, setSelectedItems] = useState([]);
   const estimateList = useEstimateList();
+  const {setProductData} = useEstimateActions();
   const { setEstimateList, resetEstimateList, setEstimateCnt, setEstimateCntUp, setEstimateCntDown } = useListActions();
   const queryClient = useQueryClient();
   const { fetchServer } = useFetch();
@@ -107,6 +108,16 @@ export function EstimateBox() {
         console.error('상품을 장바구니에 추가하는 중 오류가 발생했습니다.', error);
       },
     })// 상품을 장바구니에 추가하는 것을 호출    
+  }
+
+  function handleEstimateWrite() {
+    if (selectedItems.length === 0) {
+      alert("먼저 담을 상품을 체크해주세요!");
+      return;
+    }
+
+    setProductData(selectedItems);
+    navigate("/estimateWrite");
   }
 
   // --------- 수량 변경 부분 ----------
@@ -283,7 +294,7 @@ export function EstimateBox() {
                     >
                       -
                     </button>
-                    <input value={item.estimateBox_cnt} className={styles.input} onChange={(e) => maxLengthCheck(e, item)} type='text' placeholder='숫자만 입력' />
+                    <input value={item.estimateBox_cnt} className={styles.inputCnt} onChange={(e) => maxLengthCheck(e, item)} type='text' placeholder='숫자만 입력' />
                     <button
                       className={styles.editButton}
                       onClick={() => handleAddItem(item)}
@@ -332,19 +343,9 @@ export function EstimateBox() {
               <th colSpan={2} rowSpan={2}>합계</th>
               <th colSpan={4} rowSpan={2}></th>
               <th style={{ height: '3em' }}>총 공급가액</th>
-              <th rowSpan={2}></th>
-              <th style={{ height: '3em' }}>선택항목 공급가액</th>
+              <th rowSpan={2} colSpan={2}></th>
             </tr>
             <tr>
-              <td style={{ fontWeight: '850' }}>
-                {
-                  estimateList.length > 0 ?
-                    estimateList.reduce((sum, item) =>
-                      sum + parseInt((item.estimateBox_price * item.estimateBox_cnt) - (item.estimateBox_price / 100) * item.product_discount * item.estimateBox_cnt)
-                      , 0).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })
-                    : 0
-                }
-              </td>
               <td style={{ fontWeight: '850' }}>
                 {
                   selectedItems.length > 0 ?
@@ -359,7 +360,7 @@ export function EstimateBox() {
         </table>
       </div>
       <div className={styles.buttonContainer}>
-        <button className={styles.pageButton}>견적하기</button>
+        <button className={styles.pageButton} onClick={() => handleEstimateWrite()}>견적 작성하기</button>
         <button className={styles.pageButton} onClick={() => deletedList()}>삭제</button>
       </div>
     </div>

@@ -119,8 +119,24 @@
 .input{
   border: 2px solid lightgray;
   border-radius: 0.5em;
+  width: 80%;
+  height: 3em;
+  text-align: center;
+}
+
+.inputCnt{
+  border: 2px solid lightgray;
+  border-radius: 0.5em;
   width: 5em;
   height: 3em;
+  text-align: center;
+}
+
+.textArea{
+  border: 2px solid lightgray;
+  border-radius: 0.5em;
+  width: 95%;
+  height: 100%;
   text-align: center;
 }
 
@@ -135,4 +151,18 @@
   cursor : pointer;
   text-align: center;
   margin: 0.1em;
+}
+
+.twoComponent {
+  margin-left: 5%;
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sideComponent {
+  flex: 0 0 50%; /* 너비 설정을 flex 속성으로 지정 */
+  margin-bottom: 1em;
+  margin-top: 1em;
 }

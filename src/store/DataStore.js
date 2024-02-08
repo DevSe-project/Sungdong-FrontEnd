@@ -15,6 +15,7 @@ const useDataStore = create((set) => ({
       set((prev) => ({
         detailData: input
       })),
+
     setOrderData: (input) => //주문을 끝난 후 상품 주문 데이터들 표기에 사용
       set((prev) => ({
         orderData: input
@@ -31,7 +32,6 @@ const useDataStore = create((set) => ({
       set((prev) => ({
         userData: input
       })),
-
     // 오늘의 주제
     setTodayTopicData: (input) =>
       set((prev) => ({
@@ -452,6 +452,107 @@ export const useSearchFilterData = () => useSearchStore((state) => state.filterD
 export const useSearchTerm = () => useSearchStore((state) => state.searchTerm);
 export const useSeperateSearchTerm = () => useSearchStore((state) => state.seperateSearchTerm);
 export const useSearchActions = () => useSearchStore((state) => state.actions);
+
+/*-----------------ESTIMATE STORE----------------*/
+export const useEstimateStore = create(
+  persist(
+    (set) => ({
+      estimateData: {
+        estimate_eachProductApply: '',
+        estimate_amountDiscount: '',
+        estimate_amountDiscountPrice: '',
+        estimate_writedDate: '',
+        estimate_Expire: '',
+        isIncludeVAT: false,
+        supplier: {
+          estimate_corName: '',
+          estimate_managerName: '',
+          estimate_address: '',
+          estimate_cor_ceoName: '',
+          estimate_cor_tel: '',
+          estimate_cor_fax: '',
+          estimate_email: ''
+        },
+        vendor: {
+          estimate_corName: '',
+          estimate_managerName: '',
+          estimate_address: '',
+          estimate_cor_ceoName: '',
+          estimate_cor_tel: '',
+          estimate_cor_fax: '',
+          estimate_email: ''
+        }
+      },
+      estimateProductData: [],
+      actions: {
+        setProductData: (value) =>
+          set((state) => ({ estimateProductData: { ...state.estimateProductData, value } })),
+        setEstimateData: (fieldName, value) =>
+          set((state) => ({ estimateData: { ...state.estimateData, [fieldName]: value } })),
+        setVendorData: (fieldName, value) =>
+          set((state) => ({
+            estimateData: {
+              ...state.estimateData,
+              vendor: {
+                ...state.estimateData.vendor,
+                [fieldName]: value,
+              },
+            },
+          })),
+        setSupplierData: (fieldName, value) =>
+          set((state) => ({
+            estimateData: {
+              ...state.estimateData,
+              supplier: {
+                ...state.estimateData.supplier,
+                [fieldName]: value,
+              },
+            },
+          })),
+        resetEstimateData: () =>
+          set({
+            estimateData: {
+              estimate_eachProductApply: '',
+              estimate_amountDiscount: '',
+              estimate_amountDiscountPrice: '',
+              estimate_writedDate: '',
+              estimate_Expire: '',
+              isIncludeVAT: false,
+              supplier: {
+                estimate_supplier_corName: '',
+                estimate_supplier_managerName: '',
+                estimate_supplier_address: '',
+                estimate_supplier_cor_ceoName: '',
+                estimate_supplier_cor_tel: '',
+                estimate_supplier_cor_fax: '',
+                estimate_supplier_email: ''
+              },
+              vendor: {
+                estimate_vendor_corName: '',
+                estimate_vendor_managerName: '',
+                estimate_vendor_address: '',
+                estimate_vendor_cor_ceoName: '',
+                estimate_vendor_cor_tel: '',
+                estimate_vendor_cor_fax: '',
+                estimate_vendor_email: ''
+              }
+            }
+          }),
+        resetEstimateProductData: () =>
+          set({ estimateProductData: [] }),
+      }
+    }),
+    {
+      name: 'estimateWrite',
+      storage: createJSONStorage(() => sessionStorage),
+      version: 1,
+      partialize: (state) => ({ estimateData: state.estimateData, estimateProductData: state.estimateProductData }),
+    }
+  )
+);
+export const useEstimateData = () => useEstimateStore((state) => state.estimateData);
+export const useEstimateProductData = () => useEstimateStore((state) => state.estimateProductData);
+export const useEstimateActions = () => useEstimateStore((state) => state.actions);
 
 /* ----------------TAKEBACK STORE---------------- */
 export const useTakeBackStore = create((set) => ({
