@@ -81,7 +81,7 @@ export default function AdminUserFilter(props) {
                     </select>
                 </div>
 
-                <div>
+                <div className={styles.searchGroup}>
                     <label htmlFor='manager'>담당자</label>
                     <select
                         className={styles.select} id="manager"

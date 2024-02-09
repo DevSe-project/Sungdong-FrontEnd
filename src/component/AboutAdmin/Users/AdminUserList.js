@@ -32,7 +32,7 @@ export default function AdminUserList() {
       setEditIndex(index);
     }
   };
-// 편집 상태 & 입력된 정보 & 체크리스트 초기화
+  // 편집 상태 & 입력된 정보 & 체크리스트 초기화
   const initializingData = () => {
     if (editIndex !== null) {
       setEditIndex(null);
@@ -319,11 +319,15 @@ export default function AdminUserList() {
         return <option key={index} value={item}>실사용자</option>;
       else if (item === 2)
         return <option key={index} value={item}>납품업체</option>;
+      else
+        return <option>선택</option>;
     } else if (typeof item === 'boolean') {
       if (item === true)
         return <option key={index} value={item}>동의</option>;
       else if (item === false)
         return <option key={index} value={item}>비동의</option>;
+      else
+        return <option>선택</option>;
     }
     return <option key={index} value={item}>{item}</option>;
   }
@@ -383,17 +387,16 @@ export default function AdminUserList() {
                 <th>업체명(상호명)</th>
                 {/* 고객 구분, CMS여부 */}
                 {[
-                  { name: '고객 구분', valList: ['실사용자', '납품업자'], val: '' },
+                  { name: '고객 구분', valList: [1, 2], val: '' },
                   { name: '등급', valList: ['A', 'B', 'C', 'D'], val: '' },
                   { name: '담당자', valList: ['박형조', '엄지석', '김태훈'], val: '박형조' },
-                  { name: 'CMS여부', valList: ['A', 'B', 'C', 'D'], val: '' }
+                  { name: 'CMS여부', valList: [true, false], val: '' }
                 ].map((customItem, index) => (
                   <th key={index}>
                     {editIndex == 'allEdit' ?
                       <>
                         <span>{customItem.name}</span>
                         <select className='select'>
-                          <option value="">----</option> {/* 기본 옵션을 설정 */}
                           {customItem.valList.map((valList, valListIndex) => (
                             parseValue(valList, valListIndex)
                           ))}
@@ -412,10 +415,10 @@ export default function AdminUserList() {
                 <th style={{ width: '20px' }}>
                   {editIndex == 'allEdit' ?
                     <div className="dropdown-menu"> {/* 아이콘 */}
-                      {/* 삭제 버튼 */}
-                      <button className='white_button' onClick={() => handleDelete(checkedItems)}>삭제</button>
                       {/* 수정 버튼 */}
                       <button className='white_button' onClick={() => handleBulkEdit()}>수정</button>
+                      {/* 삭제 버튼 */}
+                      <button className='white_button' onClick={() => handleDelete(checkedItems)}>삭제</button>
                       {/* 취소 버튼 */}
                       <button className='white_button' onClick={() => {
                         setEditIndex('none');
@@ -472,18 +475,18 @@ export default function AdminUserList() {
                           >
                             <option value={null}>---</option>
                             {customItem.valList.map((item, index) => (
-
-                              <option key={index} value={item}>{
-                                editIdx == 1 ?
-                                  item === 1 ?
-                                    '실사용자' : '납품업자'
-                                  :
-                                  editIdx == 4 ?
-                                    item ?
-                                      '동의' : '비동의'
-                                    :
-                                    item
-                              }</option>
+                              // <option key={index} value={item}>{
+                              //   editIdx == 1 ?
+                              //     item === 1 ?
+                              //       '실사용자' : '납품업자'
+                              //     :
+                              //     editIdx == 4 ?
+                              //       item ?
+                              //         '동의' : '비동의'
+                              //       :
+                              //       item
+                              // }</option>
+                              parseValue(item, index)
                             ))}
                           </select>
                           :
@@ -538,7 +541,7 @@ export default function AdminUserList() {
                         <button className='white_button' onClick={() => initializingData()}>취소</button>
                       </div>
                     ) : (
-                      <div className='ellipsis' onClick={() => handleToggleEdit(index)}><i class="fa-solid fa-ellipsis"></i></div>
+                      <div className='ellipsis' onClick={() => { handleToggleEdit(index); setCheckedItems([]); }}><i class="fa-solid fa-ellipsis"></i></div>
                     )}
                   </td>
                 </tr>
