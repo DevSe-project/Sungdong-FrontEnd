@@ -1,0 +1,221 @@
+import { forwardRef } from "react"
+import { useEstimateData, useEstimateProductData } from "../../Store/DataStore";
+import styles from './Print.module.css'
+
+const EstimatePrint = forwardRef((props, ref) => {
+  const estimateInputData = useEstimateData();
+  const estimateData = useEstimateProductData();
+  //금액 관련 변수
+  const priceOne = (item) => item.estimateBox_price - item.estimateBox_price * (item.product_discount / 100);
+  const price = (item) => item.estimateBox_price * item.estimateBox_cnt - item.estimateBox_price * (item.product_discount / 100) * item.estimateBox_cnt;
+  const profit = (item) => ((item.estimateBox_price - (item.estimateBox_price * (item.product_discount / 100))) * (item.product_profit / 100))
+  const totalAmount = estimateData.reduce((sum, item) => sum + parseInt(price(item)) + profit(item) * item.estimateBox_cnt, 0);
+  const totalDiscount = totalAmount * (estimateInputData.estimate_amountDiscount / 100);
+  const VAT = (totalAmount - totalDiscount) / 10;
+
+  function formatDate() {
+    // dateString이 'YYYY-MM-DD' 형식이라고 가정합니다.
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  return (
+    <section ref={ref}>
+      <div className={styles.header}>
+        <h1 style={{ fontSize: '30px', fontWeight: '850' }}>견  적  서</h1>
+        <h1 style={{ fontSize: '30px', fontWeight: '850' }}>{estimateInputData.supplier.estimate_corName}</h1>
+      </div>
+      <div className={styles.header}>
+        <div className={styles.body}>
+          <div className={styles.inputInfo}>
+            <div className={styles.mainInfo}>
+              <span>{estimateInputData.vendor.estimate_corName}</span>
+            </div>
+            <div className={styles.footerInfo}>
+              <span>귀중</span>
+            </div>
+          </div>
+          <div className={styles.inputInfo}>
+            <div className={styles.mainInfo}>
+              <span>{estimateInputData.vendor.estimate_managerName}</span>
+            </div>
+            <div className={styles.footerInfo}>
+              <span>귀하</span>
+            </div>
+          </div>
+          <div className={styles.inputInfo}>
+            <div className={styles.headerInfo}>
+              <span>견적일 : </span>
+            </div>
+            <div className={styles.bodyInfo}>
+              <span style={{ whiteSpace: 'nowrap' }}>{formatDate()} (유효기간 : {estimateInputData.estimate_expire})</span>
+            </div>
+          </div>
+          <div className={styles.inputInfo}>
+            <div className={styles.headerInfo}>
+              <span>합계금액 : </span>
+            </div>
+            <div className={styles.mainInfo} style={{ width: '65%' }}>
+              <span>
+                {parseInt(totalAmount).toLocaleString('ko-kr')}
+              </span>
+            </div>
+            <div className={styles.footerInfo}>
+              <span style={{ whiteSpace: 'nowrap' }}>{estimateInputData.estimate_isIncludeVAT === 'true' ? "(VAT 포함)" : "(VAT 별도)"}</span>
+            </div>
+          </div>
+        </div>
+        <div className={styles.body}>
+          <div className={styles.inputInfo}>
+            <div className={styles.headerInfo}>
+              <span>T E L : </span>
+            </div>
+            <div className={styles.mainInfo} style={{ width: '65%' }}>
+              <span>
+                {estimateInputData.supplier.estimate_cor_tel}
+              </span>
+            </div>
+          </div>
+          <div className={styles.inputInfo}>
+            <div className={styles.headerInfo}>
+              <span>F A X : </span>
+            </div>
+            <div className={styles.mainInfo} style={{ width: '65%' }}>
+              <span>
+                {estimateInputData.supplier.estimate_cor_fax}
+              </span>
+            </div>
+          </div>
+          <div className={styles.inputInfo}>
+            <div className={styles.headerInfo}>
+              <span>담당자 연락처 : </span>
+            </div>
+            <div className={styles.mainInfo} style={{ width: '65%' }}>
+              <span>
+                {props.manager_tel}
+              </span>
+            </div>
+          </div>
+          <div className={styles.inputInfo}>
+            <div className={styles.headerInfo}>
+              <span>담당자 : </span>
+            </div>
+            <div className={styles.mainInfo} style={{ width: '65%' }}>
+              <span>
+                {estimateInputData.supplier.estimate_managerName}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style={{ width: '99.9%', height: '100%', marginTop: '1em', border: '1px solid black' }}>
+        <div style={{ width: '100%', height: '10em', borderBottom: '1px solid black' }}>
+          <div>
+            <span>[기타] </span>
+          </div>
+          <div className={styles.mainInfo}>
+            <span>{estimateInputData.estimate_etc}</span>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th style={{backgroundColor: 'white', border: '1px solid black'}}>순번</th>
+              <th style={{backgroundColor: 'white', border: '1px solid black'}}>브랜드 및 상품코드</th>
+              <th style={{backgroundColor: 'white', border: '1px solid black'}}>품명 및 규격</th>
+              <th style={{backgroundColor: 'white', border: '1px solid black'}}>수량</th>
+              <th style={{backgroundColor: 'white', border: '1px solid black'}}>단위</th>
+              <th style={{backgroundColor: 'white', border: '1px solid black'}}>표준단가</th>
+              <th style={{backgroundColor: 'white', border: '1px solid black'}}>단가</th>
+              <th style={{backgroundColor: 'white', border: '1px solid black'}}>금액</th>
+              <th style={{backgroundColor: 'white', border: '1px solid black'}}>표준납기</th>
+              <th style={{backgroundColor: 'white', border: '1px solid black'}}>비고</th>
+            </tr>
+          </thead>
+          <tbody>
+            {estimateData.map((item, index) =>
+              <tr key={index}>
+                <td style={{backgroundColor: 'white', border: '1px solid black'}}>{index + 1}</td>
+                <td style={{backgroundColor: 'white', border: '1px solid black'}}>
+                  <span>{item.product_brand}</span><br />
+                  <span>{item.product_id}</span>
+                </td>
+                <td style={{backgroundColor: 'white', border: '1px solid black'}}>
+                  <span>{item.product_title}</span><br />
+                  <span>{item.product_spec}</span>
+                </td>
+                <td style={{backgroundColor: 'white', border: '1px solid black'}}>
+                  <span>{item.estimateBox_cnt}</span>
+                </td>
+                <td style={{backgroundColor: 'white', border: '1px solid black'}}>
+                  <span>EA</span>
+                </td>
+                <td style={{backgroundColor: 'white', border: '1px solid black'}}>
+                  <span>{parseInt(item.product_price).toLocaleString('ko-kr')}</span>
+                </td>
+                <td style={{backgroundColor: 'white', border: '1px solid black'}}>
+                  {item.product_discount
+                    ? `${(priceOne(item) + profit(item))
+                      .toLocaleString('ko-KR')}`
+                    : `${parseInt(item.estimateBox_price + profit(item)).toLocaleString('ko-KR')}`}
+                </td>
+                <td style={{backgroundColor: 'white', border: '1px solid black'}}>
+                  {`${parseInt(props.price(item) + profit(item) * item.estimateBox_cnt).toLocaleString('ko-KR')}`}
+                </td>
+                <td style={{backgroundColor: 'white', border: '1px solid black'}}> 
+                  <span>{estimateInputData.estimate_due}일</span>
+                </td>
+                <td style={{backgroundColor: 'white', border: '1px solid black'}}>
+                </td>
+              </tr>
+            )}
+          </tbody>
+          <tfoot>
+            <tr style={{height: '2em'}}>
+              <th style={{backgroundColor: 'white', border: '1px solid black'}} colSpan={3}>견적금액</th>
+              <th style={{backgroundColor: 'white', border: '1px solid black'}} colSpan={5}>
+                <span>{parseInt(totalAmount).toLocaleString()}</span>
+              </th>
+              <th style={{backgroundColor: 'white', border: '1px solid black'}}></th>
+              <th style={{backgroundColor: 'white', border: '1px solid black'}}></th>
+            </tr>
+            <tr style={{height: '2em'}}>
+              <th style={{backgroundColor: 'white', border: '1px solid black'}} colSpan={3}>총할인금액</th>
+              <th style={{backgroundColor: 'white', border: '1px solid black'}} colSpan={5}>
+                <span>{parseInt(totalDiscount).toLocaleString()}</span>
+              </th>
+              <th style={{backgroundColor: 'white', border: '1px solid black'}}></th>
+              <th style={{backgroundColor: 'white', border: '1px solid black'}}></th>
+            </tr>
+            <tr style={{height: '2em'}}>
+              <th style={{backgroundColor: 'white', border: '1px solid black'}} colSpan={3}>최종금액</th>
+              <th style={{backgroundColor: 'white', border: '1px solid black'}} colSpan={5}>
+                <span>{parseInt(totalAmount - totalDiscount).toLocaleString()}</span>
+              </th>
+              <th style={{backgroundColor: 'white', border: '1px solid black'}} ></th>
+              <th style={{backgroundColor: 'white', border: '1px solid black'}}></th>
+            </tr>
+          </tfoot>
+        </table>
+        <div style={{display: 'flex', justifyContent: 'flex-end', marginTop: '1em', paddingBottom: '1em', paddingRight: '1em', borderBottom: '1px solid black'}}>
+          <span>마지막페이지 입니다.</span>
+        </div>
+        <div style={{display: 'flex', justifyContent: 'flex-end', marginTop: '1em', paddingBottom: '1em', paddingRight: '1em', borderBottom: '1px solid black'}}>
+          <span>견적 유효기간 : {estimateInputData.estimate_expire}</span>
+        </div>
+        <p style={{padding: '1em'}}>
+          주의 : 
+          <div className={styles.bodyInfo}>1. 견적유효기간내 제조사 사정, 환율변동 등으로 가격 변동이 있을 수 있음.<br/>
+                2. 견적서와 상이한 수량 또는 제품 주문 시 가격 변동될 수 있음.<br/>
+                3. 표준납기일은 재고가 없을 경우 예상 납기일이며 재고유무는 성동물산에서 확인 바랍니다.
+          </div>
+        </p>
+      </div>
+    </section>
+  )
+});
+
+export default EstimatePrint;

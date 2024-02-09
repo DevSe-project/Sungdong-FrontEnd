@@ -3,9 +3,11 @@ import styles from './Table.module.css';
 import { GetCookie } from '../../customFn/GetCookie';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useEstimateActions, useEstimateData, useEstimateProductData, useEstimateStore, useUserData } from '../../Store/DataStore';
 import { useFetch } from '../../customFn/useFetch';
+import ReactToPrint from 'react-to-print';
+import EstimatePrint from './EstimatePrint';
 export function EstimateWrite() {
   const estimateData = useEstimateProductData();
   const estimateInputData = useEstimateData();
@@ -26,6 +28,8 @@ export function EstimateWrite() {
   const totalDiscount = totalAmount * (estimateInputData.estimate_amountDiscount / 100);
   const VAT = (totalAmount - totalDiscount) / 10;
 
+  const ref = useRef();
+
   //fetch
   const { isLoading, isError, error, data: userData } = useQuery({ queryKey: ['user'] })
 
@@ -39,9 +43,9 @@ export function EstimateWrite() {
   }
 
   //유효기간 날짜 세팅
-  function formatDate(dateString) {
+  function formatDate() {
     // dateString이 'YYYY-MM-DD' 형식이라고 가정합니다.
-    const date = new Date(dateString);
+    const date = new Date();
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
@@ -422,8 +426,13 @@ export function EstimateWrite() {
         </table>
       </div>
       <div className={styles.buttonContainer}>
-        <button className="original_button" onClick={()=>window.print()}>작성 완료 및 출력</button>
+        <ReactToPrint 
+        trigger={() => <button className="original_button">작성 완료 및 출력</button>}
+        content={()=> ref.current}/>
         <button className={styles.pageButton} onClick={() => handleCancelButton()}>취소</button>
+      </div>
+      <div style={{display: 'none'}}>
+        <EstimatePrint ref={ref} price={price} priceOne={priceOne} profit={profit} VAT={VAT} totalAmount={totalAmount} totalDiscount={totalDiscount} manager_tel={userData.tel} estimateData={estimateData}/>
       </div>
     </div>
   )

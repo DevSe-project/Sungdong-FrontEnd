@@ -78,6 +78,7 @@ import axios from "./axios";
 import { GetCookie } from "./customFn/GetCookie";
 import { OrderStep } from "./component/AboutPay/OrderStep";
 import { EstimateWrite } from "./component/AboutEstimate/EstimateWrite";
+import EstimatePrint from "./component/AboutEstimate/EstimatePrint";
 
 
 export default function App() {
@@ -561,6 +562,10 @@ export default function App() {
               </div>
             </div>
           </>} />
+
+        <Route path='/estimatePrint' element={
+          <EstimatePrint/>
+        } />
 
         {/* 반품 관련 */}
         {/* 반품 신청 */}
