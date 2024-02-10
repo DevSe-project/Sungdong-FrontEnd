@@ -4,14 +4,16 @@ import { GetCookie } from '../../customFn/GetCookie';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useRef, useState } from 'react';
-import { useEstimateActions, useEstimateData, useEstimateProductData, useEstimateStore, useUserData } from '../../Store/DataStore';
+import { useEstimateActions, useEstimateData, useEstimateInfo, useEstimateProduct, useEstimateProductData, useEstimateStore, useUserData } from '../../Store/DataStore';
 import { useFetch } from '../../customFn/useFetch';
-import ReactToPrint from 'react-to-print';
+import ReactToPrint, { useReactToPrint } from 'react-to-print';
 import EstimatePrint from './EstimatePrint';
 export function EstimateWrite() {
   const estimateData = useEstimateProductData();
   const estimateInputData = useEstimateData();
-  const { setVendorData, setSupplierData, setEstimateData, setProfit } = useEstimateActions();
+  const { setVendorData, setSupplierData, setEstimateData, setProfit, setProductEtc, setTsInfo, setEstimateInfo, setEstimateProduct } = useEstimateActions();
+  const estimateInfo = useEstimateInfo();
+  const estimateProduct = useEstimateProduct();
   const queryClient = useQueryClient();
   const { fetchServer } = useFetch();
   // 체크박스를 통해 선택한 상품들을 저장할 상태 변수
@@ -30,6 +32,15 @@ export function EstimateWrite() {
 
   const ref = useRef();
 
+  const handlePrint = useReactToPrint({
+    content: () => ref.current,
+    onAfterPrint: () => {
+      navigate("/estimateManager");
+    },
+  });
+
+
+
   //fetch
   const { isLoading, isError, error, data: userData } = useQuery({ queryKey: ['user'] })
 
@@ -41,6 +52,12 @@ export function EstimateWrite() {
       navigate("/");
     }
   }
+
+  useEffect(() => {
+    if (estimateProduct.length > 0 && estimateInfo) {
+      handlePrint();
+    }
+  }, [estimateInfo, estimateProduct]);
 
   //유효기간 날짜 세팅
   function formatDate() {
@@ -166,6 +183,65 @@ export function EstimateWrite() {
       return;
     }
   }
+
+
+  //견적 추가 함수
+  const addToEstimate = async (product) => {
+    return fetchServer(product, `post`, `/estimate/create`, 1);
+  };
+
+  //견적 추가 함수
+  const findToEstimate = async () => {
+    return fetchServer({}, `post`, `/estimate/findList`, 1);
+  };
+
+  //견적 추가 함수
+  const { mutate:addEstimate } = useMutation({mutationFn : addToEstimate});
+
+  const { mutate:lastItem } = useMutation({mutationFn : findToEstimate});
+
+// submit 버튼
+async function submitEstimate(product, info) {
+    try {
+      // 견적 리스트업에 저장
+      await new Promise((resolve, reject) => {
+        const newData = [
+          info,
+          product
+        ];
+        addEstimate(newData, {
+          onSuccess: (success) => {
+            console.log("견적리스트를 업데이트 하였습니다.", success);
+            resolve();
+          },
+          onError: (error) => {
+            console.error('견적리스트 리스트업을 수행하던 중 오류가 발생했습니다.', error);
+            reject(error);
+          },
+        });
+      });
+      await new Promise((resolve, reject) => {
+        lastItem({}, {
+          onSuccess: (success) => {
+            // 메세지 표시
+            alert(success.message);
+            console.log('최근 견적을 불러오는 데 성공하였습니다.', success);
+            // 주문 상태를 다시 불러와 갱신합니다.
+            setEstimateProduct(success.data.listData);
+            setEstimateInfo(success.data.infoData);
+            resolve();
+          },
+          onError: (error) => {
+            console.error('주문을 처리하던 중 오류가 발생했습니다.', error);
+            reject(error);
+          },
+        });
+      });
+    } catch (error) {
+      console.error('주문 처리 중에 오류가 발생했습니다:', error.message);
+      alert(error.message)
+    }
+}
 
   const navigate = useNavigate();
 
@@ -370,10 +446,10 @@ export function EstimateWrite() {
                     {estimateInputData.estimate_due ? estimateInputData.estimate_due : 0}일
                   </td>
                   <td>
-                    <input className={styles.input}></input>
+                    <input className={styles.input} value={item.product_etc} onChange={(e)=>setProductEtc(item, e.target.value)}></input>
                   </td>
                   <td>
-                    <input className={styles.input}></input>
+                    <input className={styles.input} value={item.product_ts} onChange={(e)=>setTsInfo(item, e.target.value)}></input>
                   </td>
                   <td>
                     <input
@@ -426,13 +502,11 @@ export function EstimateWrite() {
         </table>
       </div>
       <div className={styles.buttonContainer}>
-        <ReactToPrint 
-        trigger={() => <button className="original_button">작성 완료 및 출력</button>}
-        content={()=> ref.current}/>
+        <button className="original_button" onClick={()=> submitEstimate(estimateData, estimateInputData)}>작성 완료 및 출력</button>
         <button className={styles.pageButton} onClick={() => handleCancelButton()}>취소</button>
       </div>
       <div style={{display: 'none'}}>
-        <EstimatePrint ref={ref} price={price} priceOne={priceOne} profit={profit} VAT={VAT} totalAmount={totalAmount} totalDiscount={totalDiscount} manager_tel={userData.tel} estimateData={estimateData}/>
+        <EstimatePrint ref={ref} price={price} priceOne={priceOne} profit={profit} VAT={VAT} totalAmount={totalAmount} totalDiscount={totalDiscount} manager_tel={userData.tel} estimateInfo={estimateInfo} estimateData={estimateProduct}/>
       </div>
     </div>
   )

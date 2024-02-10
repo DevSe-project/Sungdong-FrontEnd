@@ -483,9 +483,51 @@ export const useEstimateStore = create(
         }
       },
       estimateProductData: [],
+      estimateInfo: [],
+      estimateProduct: [],
       actions: {
         setProductData: (value) =>
           set((state) => ({ estimateProductData: value })),
+        setEstimateInfo: (value) =>
+          set((state) => ({ estimateInfo: value })),
+        setEstimateProduct: (value) =>
+          set((state) => ({ estimateProduct: value })),
+        setProfit: (items, value) =>
+          set((state) => ({
+            estimateProductData: state.estimateProductData.map((list) => {
+              if (items.some((item) => item.estimateBox_product_id === list.estimateBox_product_id)) {
+                return {
+                  ...list,
+                  product_profit: value,
+                };
+              }
+              return list;
+            }),
+          })),
+        setProductEtc: (items, value) =>
+          set((state) => ({
+            estimateProductData: state.estimateProductData.map((list) => {
+              if (items.estimateBox_product_id === list.estimateBox_product_id) {
+                return {
+                  ...list,
+                  product_etc: value,
+                };
+              }
+              return list;
+            }),
+          })),
+        setTsInfo: (items, value) =>
+          set((state) => ({
+            estimateProductData: state.estimateProductData.map((list) => {
+              if (items.estimateBox_product_id === list.estimateBox_product_id) {
+                return {
+                  ...list,
+                  product_ts: value,
+                };
+              }
+              return list;
+            }),
+          })),
         setProfit: (items, value) =>
           set((state) => ({
             estimateProductData: state.estimateProductData.map((list) => {
@@ -562,6 +604,8 @@ export const useEstimateStore = create(
 );
 export const useEstimateData = () => useEstimateStore((state) => state.estimateData);
 export const useEstimateProductData = () => useEstimateStore((state) => state.estimateProductData);
+export const useEstimateInfo = () => useEstimateStore((state) => state.estimateInfo);
+export const useEstimateProduct = () => useEstimateStore((state) => state.estimateProduct);
 export const useEstimateActions = () => useEstimateStore((state) => state.actions);
 
 /* ----------------TAKEBACK STORE---------------- */

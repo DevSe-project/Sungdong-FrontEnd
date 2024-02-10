@@ -1,16 +1,16 @@
 import { forwardRef } from "react"
-import { useEstimateData, useEstimateProductData } from "../../Store/DataStore";
 import styles from './Print.module.css'
+import { useEstimateInfo, useEstimateProduct } from "../../Store/DataStore";
 
 const EstimatePrint = forwardRef((props, ref) => {
-  const estimateInputData = useEstimateData();
-  const estimateData = useEstimateProductData();
+  const estimateData = useEstimateProduct();
+  const estimateInfo = useEstimateInfo();
   //금액 관련 변수
-  const priceOne = (item) => item.estimateBox_price - item.estimateBox_price * (item.product_discount / 100);
-  const price = (item) => item.estimateBox_price * item.estimateBox_cnt - item.estimateBox_price * (item.product_discount / 100) * item.estimateBox_cnt;
-  const profit = (item) => ((item.estimateBox_price - (item.estimateBox_price * (item.product_discount / 100))) * (item.product_profit / 100))
-  const totalAmount = estimateData.reduce((sum, item) => sum + parseInt(price(item)) + profit(item) * item.estimateBox_cnt, 0);
-  const totalDiscount = totalAmount * (estimateInputData.estimate_amountDiscount / 100);
+  const priceOne = (item) => item.estimate_price - item.estimate_price * (item.product_discount / 100);
+  const price = (item) => item.estimate_price * item.estimate_cnt - item.estimate_price * (item.product_discount / 100) * item.estimate_cnt;
+  const profit = (item) => ((item.estimate_price - (item.estimate_price * (item.product_discount / 100))) * (item.product_profit / 100))
+  const totalAmount = estimateData?.reduce((sum, item) => sum + parseInt(price(item)) + profit(item) * item.estimate_cnt, 0);
+  const totalDiscount = totalAmount * (estimateInfo?.estimate_amountDiscount / 100);
   const VAT = (totalAmount - totalDiscount) / 10;
 
   function formatDate() {
@@ -26,13 +26,13 @@ const EstimatePrint = forwardRef((props, ref) => {
     <section ref={ref}>
       <div className={styles.header}>
         <h1 style={{ fontSize: '30px', fontWeight: '850' }}>견  적  서</h1>
-        <h1 style={{ fontSize: '30px', fontWeight: '850' }}>{estimateInputData.supplier.estimate_corName}</h1>
+        <h1 style={{ fontSize: '30px', fontWeight: '850' }}>{estimateInfo?.estimate_supplier_corName}</h1>
       </div>
       <div className={styles.header}>
         <div className={styles.body}>
           <div className={styles.inputInfo}>
             <div className={styles.mainInfo}>
-              <span>{estimateInputData.vendor.estimate_corName}</span>
+              <span>{estimateInfo?.estimate_vendor_corName}</span>
             </div>
             <div className={styles.footerInfo}>
               <span>귀중</span>
@@ -40,7 +40,7 @@ const EstimatePrint = forwardRef((props, ref) => {
           </div>
           <div className={styles.inputInfo}>
             <div className={styles.mainInfo}>
-              <span>{estimateInputData.vendor.estimate_managerName}</span>
+              <span>{estimateInfo?.estimate_vendor_managerName}</span>
             </div>
             <div className={styles.footerInfo}>
               <span>귀하</span>
@@ -51,7 +51,7 @@ const EstimatePrint = forwardRef((props, ref) => {
               <span>견적일 : </span>
             </div>
             <div className={styles.bodyInfo}>
-              <span style={{ whiteSpace: 'nowrap' }}>{formatDate()} (유효기간 : {estimateInputData.estimate_expire})</span>
+              <span style={{ whiteSpace: 'nowrap' }}>{formatDate()} (유효기간 : {estimateInfo?.estimate_expire})</span>
             </div>
           </div>
           <div className={styles.inputInfo}>
@@ -64,7 +64,7 @@ const EstimatePrint = forwardRef((props, ref) => {
               </span>
             </div>
             <div className={styles.footerInfo}>
-              <span style={{ whiteSpace: 'nowrap' }}>{estimateInputData.estimate_isIncludeVAT === 'true' ? "(VAT 포함)" : "(VAT 별도)"}</span>
+              <span style={{ whiteSpace: 'nowrap' }}>{estimateInfo?.estimate_isIncludeVAT === 'true' ? "(VAT 포함)" : "(VAT 별도)"}</span>
             </div>
           </div>
         </div>
@@ -75,7 +75,7 @@ const EstimatePrint = forwardRef((props, ref) => {
             </div>
             <div className={styles.mainInfo} style={{ width: '65%' }}>
               <span>
-                {estimateInputData.supplier.estimate_cor_tel}
+                {estimateInfo?.estimate_supplier_cor_tel}
               </span>
             </div>
           </div>
@@ -85,7 +85,7 @@ const EstimatePrint = forwardRef((props, ref) => {
             </div>
             <div className={styles.mainInfo} style={{ width: '65%' }}>
               <span>
-                {estimateInputData.supplier.estimate_cor_fax}
+                {estimateInfo?.estimate_supplier_cor_fax}
               </span>
             </div>
           </div>
@@ -105,7 +105,7 @@ const EstimatePrint = forwardRef((props, ref) => {
             </div>
             <div className={styles.mainInfo} style={{ width: '65%' }}>
               <span>
-                {estimateInputData.supplier.estimate_managerName}
+                {estimateInfo?.estimate_supplier_managerName}
               </span>
             </div>
           </div>
@@ -117,7 +117,7 @@ const EstimatePrint = forwardRef((props, ref) => {
             <span>[기타] </span>
           </div>
           <div className={styles.mainInfo}>
-            <span>{estimateInputData.estimate_etc}</span>
+            <span>{estimateInfo?.estimate_etc}</span>
           </div>
         </div>
         <table>
@@ -136,7 +136,7 @@ const EstimatePrint = forwardRef((props, ref) => {
             </tr>
           </thead>
           <tbody>
-            {estimateData.map((item, index) =>
+            {estimateData?.map((item, index) =>
               <tr key={index}>
                 <td style={{backgroundColor: 'white', border: '1px solid black'}}>{index + 1}</td>
                 <td style={{backgroundColor: 'white', border: '1px solid black'}}>
@@ -148,7 +148,7 @@ const EstimatePrint = forwardRef((props, ref) => {
                   <span>{item.product_spec}</span>
                 </td>
                 <td style={{backgroundColor: 'white', border: '1px solid black'}}>
-                  <span>{item.estimateBox_cnt}</span>
+                  <span>{item.estimate_cnt}</span>
                 </td>
                 <td style={{backgroundColor: 'white', border: '1px solid black'}}>
                   <span>EA</span>
@@ -158,17 +158,18 @@ const EstimatePrint = forwardRef((props, ref) => {
                 </td>
                 <td style={{backgroundColor: 'white', border: '1px solid black'}}>
                   {item.product_discount
-                    ? `${(priceOne(item) + profit(item))
+                    ? `${parseInt(priceOne(item) + profit(item))
                       .toLocaleString('ko-KR')}`
-                    : `${parseInt(item.estimateBox_price + profit(item)).toLocaleString('ko-KR')}`}
+                    : `${parseInt(parseInt(item.estimate_price) + profit(item)).toLocaleString('ko-KR')}`}
                 </td>
                 <td style={{backgroundColor: 'white', border: '1px solid black'}}>
-                  {`${parseInt(props.price(item) + profit(item) * item.estimateBox_cnt).toLocaleString('ko-KR')}`}
+                  {`${parseInt(price(item) + profit(item) * item.estimate_cnt).toLocaleString('ko-KR')}`}
                 </td>
                 <td style={{backgroundColor: 'white', border: '1px solid black'}}> 
-                  <span>{estimateInputData.estimate_due}일</span>
+                  <span>{estimateInfo?.estimate_due}일</span>
                 </td>
                 <td style={{backgroundColor: 'white', border: '1px solid black'}}>
+                  <span>{item.product_etc && item.product_etc}</span>
                 </td>
               </tr>
             )}
@@ -204,7 +205,7 @@ const EstimatePrint = forwardRef((props, ref) => {
           <span>마지막페이지 입니다.</span>
         </div>
         <div style={{display: 'flex', justifyContent: 'flex-end', marginTop: '1em', paddingBottom: '1em', paddingRight: '1em', borderBottom: '1px solid black'}}>
-          <span>견적 유효기간 : {estimateInputData.estimate_expire}</span>
+          <span>견적 유효기간 : {estimateInfo?.estimate_expire}</span>
         </div>
         <p style={{padding: '1em'}}>
           주의 : 
