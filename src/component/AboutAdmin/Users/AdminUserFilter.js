@@ -81,18 +81,21 @@ export default function AdminUserFilter(props) {
                     </select>
                 </div>
 
-                <div className={styles.searchGroup}>
-                    <label htmlFor='manager'>담당자</label>
-                    <select
-                        className={styles.select} id="manager"
-                        value={userFilter.managers_id}
-                        onChange={e => setUserFilter("managers_id", e.target_value)}>
-                        <option value="">담당자</option>
-                        <option value="">박형조</option>
-                        <option>엄지석</option>
-                        <option>김태훈</option>
-                    </select>
-                </div>
+                { // AdminMyUserList에서 전달된 who가 있다면 담당자 필터를 none표시
+                    props.who ?
+                        null : <div className={styles.searchGroup}>
+                            <label htmlFor='manager'>담당자</label>
+                            <select
+                                className={styles.select} id="manager"
+                                value={userFilter.managers_id}
+                                onChange={e => setUserFilter("managers_id", e.target_value)}>
+                                <option value="">담당자</option>
+                                <option value="박형조">박형조</option>
+                                <option value="엄지석">엄지석</option>
+                                <option value="김태훈">김태훈</option>
+                            </select>
+                        </div>
+                }
             </div>
 
             {/* Button */}
