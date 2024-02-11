@@ -13,15 +13,6 @@ const EstimatePrint = forwardRef((props, ref) => {
   const totalDiscount = totalAmount * (estimateInfo?.estimate_amountDiscount / 100);
   const VAT = (totalAmount - totalDiscount) / 10;
 
-  function formatDate() {
-    // dateString이 'YYYY-MM-DD' 형식이라고 가정합니다.
-    const date = new Date();
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
-
   return (
     <section ref={ref}>
       <div className={styles.header}>
@@ -51,7 +42,7 @@ const EstimatePrint = forwardRef((props, ref) => {
               <span>견적일 : </span>
             </div>
             <div className={styles.bodyInfo}>
-              <span style={{ whiteSpace: 'nowrap' }}>{formatDate()} (유효기간 : {estimateInfo?.estimate_expire})</span>
+              <span style={{ whiteSpace: 'nowrap' }}>{new Date().toLocaleDateString()} (유효기간 : {new Date(estimateInfo?.estimate_expire).toLocaleDateString()})</span>
             </div>
           </div>
           <div className={styles.inputInfo}>
@@ -205,7 +196,7 @@ const EstimatePrint = forwardRef((props, ref) => {
           <span>마지막페이지 입니다.</span>
         </div>
         <div style={{display: 'flex', justifyContent: 'flex-end', marginTop: '1em', paddingBottom: '1em', paddingRight: '1em', borderBottom: '1px solid black'}}>
-          <span>견적 유효기간 : {estimateInfo?.estimate_expire}</span>
+          <span>견적 유효기간 : {new Date(estimateInfo?.estimate_expire).toLocaleDateString()}</span>
         </div>
         <p style={{padding: '1em'}}>
           주의 : 
@@ -215,6 +206,11 @@ const EstimatePrint = forwardRef((props, ref) => {
           </div>
         </p>
       </div>
+      <footer style={{position: 'fixed', bottom: 0}}>
+        <div>
+          <span>견적번호 : {estimateInfo?.estimate_id}</span>
+        </div>
+      </footer>
     </section>
   )
 });

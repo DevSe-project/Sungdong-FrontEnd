@@ -205,8 +205,12 @@ export function EstimateWrite() {
     try {
       // 견적 리스트업에 저장
       await new Promise((resolve, reject) => {
+        const newInfo = {
+          ...info,
+          estimate_amount: parseInt(totalAmount - totalDiscount)
+        }
         const newData = [
-          info,
+          newInfo,
           product
         ];
         addEstimate(newData, {
@@ -505,8 +509,8 @@ export function EstimateWrite() {
         <button className="original_button" onClick={() => submitEstimate(estimateData, estimateInputData)}>작성 완료 및 출력</button>
         <button className={styles.pageButton} onClick={() => handleCancelButton()}>취소</button>
       </div>
-      <div style={{ display: 'none' }}>
-        <EstimatePrint ref={ref} price={price} priceOne={priceOne} profit={profit} VAT={VAT} totalAmount={totalAmount} totalDiscount={totalDiscount} manager_tel={userData.tel} estimateInfo={estimateInfo} estimateData={estimateProduct} />
+      <div style={{display: 'none'}}>
+        <EstimatePrint ref={ref} manager_tel={userData.tel}/>
       </div>
     </div>
   )
