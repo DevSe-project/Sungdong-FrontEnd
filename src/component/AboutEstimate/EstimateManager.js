@@ -4,7 +4,7 @@ import styles from './Table.module.css';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { GetCookie } from '../../customFn/GetCookie';
 import { useFetch } from '../../customFn/useFetch';
-import { useEstimateActions, useEstimateInfo, useEstimateProduct } from '../../Store/DataStore';
+import { useEstimateActions, useEstimateInfo, useEstimateProduct } from '../../store/DataStore';
 import { useReactToPrint } from 'react-to-print';
 import EstimatePrint from './EstimatePrint';
 
@@ -96,7 +96,7 @@ async function submitEstimate(info) {
           </thead>
           <tbody>
           {estimateListData.map((item, index) => (
-            <tr>
+            <tr key={index}>
               <td>{index + 1}</td>
               <td>{item.estimate_id}</td>
               <td>{new Date(item.estimate_date).toLocaleString()}</td>
