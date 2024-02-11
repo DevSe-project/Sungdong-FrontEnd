@@ -275,7 +275,7 @@ export default function JoinForm(props) {
                                     id="email_Y"
                                     name="emailService"
                                     value={1}
-                                    checked={props.inputData.emailService === 1}
+                                    checked={props.inputData.emailService == true}
                                     onChange={(e) => {
                                         props.setInputData(
                                             (prevData) => ({ ...prevData, emailService: 1 })
@@ -290,7 +290,7 @@ export default function JoinForm(props) {
                                     id="email_N"
                                     name="emailService"
                                     value={0}
-                                    checked={props.inputData.emailService === 0}
+                                    checked={props.inputData.emailService == false}
                                     onChange={(e) => {
                                         props.setInputData(
                                             (prevData) => ({ ...prevData, emailService: 0 })
@@ -383,7 +383,7 @@ export default function JoinForm(props) {
                                     name="smsService"
                                     id="SMS_Y"
                                     value={1}
-                                    checked={props.inputData.smsService === 1}
+                                    checked={props.inputData.smsService == true}
                                     onChange={(e) => {
                                         props.setInputData(
                                             (prevData) => ({ ...prevData, smsService: 1 })
@@ -398,12 +398,12 @@ export default function JoinForm(props) {
                                     name="smsService"
                                     id="SMS_N"
                                     value={0}
-                                    checked={props.inputData.smsService === 0}
+                                    checked={props.inputData.smsService == false}
                                     onChange={(e) => {
                                         props.setInputData(
                                             (prevData) =>
                                                 ({ ...prevData, smsService: 0 })
-                                        )
+                                        );
                                     }}
                                 />
                                 <label htmlFor="SMS_N">아니오</label>
