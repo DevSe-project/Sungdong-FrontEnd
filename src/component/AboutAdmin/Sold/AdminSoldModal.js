@@ -1,7 +1,7 @@
 import { React, useEffect, useState } from 'react';
 import styles from './AdminSoldModal.module.css';
 import { useNavigate } from 'react-router-dom';
-import { useModalActions, useModalState } from '../../../Store/DataStore';
+import { useModalActions, useModalState } from '../../../store/DataStore';
 
 
 export default function AdminSoldModal({item}) {

@@ -5,7 +5,7 @@ import styles from './TopBanner.module.css';
 import { SearchBar } from './SearchBar';
 import { SeperateSearchBar } from './SeperateSearchBar';
 import { CategoryBar } from './CategoryBar';
-import { useModalActions, useModalState } from '../../../Store/DataStore';
+import { useModalActions, useModalState } from '../../../store/DataStore';
 import { GetCookie } from '../../../customFn/GetCookie';
 import axios from '../../../axios';
 import { useQueryClient } from '@tanstack/react-query';

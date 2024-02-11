@@ -4,7 +4,7 @@ import { AdminHeader } from '../Layout/Header/AdminHeader'
 import { AdminMenuData } from '../Layout/SideBar/AdminMenuData'
 import { useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useProduct, useProductActions } from '../../../Store/DataStore';
+import { useProduct, useProductActions } from '../../../store/DataStore';
 import { GetCookie } from '../../../customFn/GetCookie';
 import axios from '../../../axios';
 export function AdminCategoryEdit(props){

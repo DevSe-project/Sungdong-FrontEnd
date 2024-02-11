@@ -3,7 +3,7 @@ import styles from './SearchBar.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useFetch } from '../../../customFn/useFetch';
-import { useSearchActions, useSearchTerm, useSeperateSearchTerm } from '../../../Store/DataStore';
+import { useSearchActions, useSearchTerm, useSeperateSearchTerm } from '../../../store/DataStore';
 
 export function SearchBar() {
   const navigate = useNavigate();

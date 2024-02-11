@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import styles from './Delivery.module.css'
 import { useEffect, useState } from 'react';
-import { useDataActions } from '../../Store/DataStore';
+import { useDataActions } from '../../store/DataStore';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useFetch } from '../../customFn/useFetch';
 import Pagination from '../../customFn/Pagination'

@@ -4,7 +4,7 @@ import { AdminHeader } from '../Layout/Header/AdminHeader';
 import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
 import styles from './AdminUserList.module.css';
 import axios from '../../../axios';
-import { useModalActions, useModalState, useUserFilter, useUserSort } from '../../../Store/DataStore';
+import { useModalActions, useModalState, useUserFilter, useUserSort } from '../../../store/DataStore';
 import AdminUserFilter from './AdminUserFilter';
 import AdminUserSort from './AdminUserSort';
 import { GetCookie } from '../../../customFn/GetCookie';

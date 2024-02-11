@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useProductFilter, useProductFilterActions } from '../../../Store/DataStore'
+import { useProductFilter, useProductFilterActions } from '../../../store/DataStore'
 import styles from './AdminProductFilter.module.css'
 export function AdminProductFilter({handleSearch}){
   const productFilter = useProductFilter();

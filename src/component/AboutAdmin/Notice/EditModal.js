@@ -1,6 +1,6 @@
 import styles from './WriteEditModal.module.css';
 import { useEffect, useState } from 'react';
-import { useModalActions, useModalState, useNotice, useNoticeActions, useNoticePostList } from "../../../Store/DataStore";
+import { useModalActions, useModalState, useNotice, useNoticeActions, useNoticePostList } from "../../../store/DataStore";
 
 export default function EditModal({handleConfirmSD}) {
     // call_modalZustand

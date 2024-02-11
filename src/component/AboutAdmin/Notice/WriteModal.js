@@ -1,6 +1,6 @@
 import styles from "./WriteEditModal.module.css";
 import { useEffect } from 'react';
-import { useModalActions, useModalState, useNotice, useNoticeActions } from "../../../Store/DataStore";
+import { useModalActions, useModalState, useNotice, useNoticeActions } from "../../../store/DataStore";
 
 
 export default function WriteModal({ addPost }) {

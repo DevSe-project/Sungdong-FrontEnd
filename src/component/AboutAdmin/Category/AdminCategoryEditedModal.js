@@ -1,7 +1,7 @@
 import { React, useEffect, useState } from 'react';
 import styles from './AdminCategoryModal.module.css';
 import { useNavigate } from 'react-router-dom';
-import { useModalActions, useModalState } from '../../../Store/DataStore';
+import { useModalActions, useModalState } from '../../../store/DataStore';
 import { GetCookie } from '../../../customFn/GetCookie';
 import axios from '../../../axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';

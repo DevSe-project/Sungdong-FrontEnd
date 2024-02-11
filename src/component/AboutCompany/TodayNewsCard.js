@@ -2,7 +2,7 @@ import styles from './TodayNewsCard.module.css'
 import image from '../../image/page_ready.png'
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useTopicData } from '../../Store/DataStore';
+import { useTopicData } from '../../store/DataStore';
 export function TodayNewsCard(props){
   const navigate = useNavigate();
   const {todayTopicData} = useTopicData();

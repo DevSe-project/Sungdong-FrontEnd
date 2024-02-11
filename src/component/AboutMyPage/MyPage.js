@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./Mypage.module.css";
 import ModifyPW from "./ModifyPW";
-import { useModalState } from "../../Store/DataStore";
+import { useModalState } from "../../store/DataStore";
 import { useNavigate } from "react-router-dom";
 import { GetCookie } from "../../customFn/GetCookie";
 import { useQuery } from "@tanstack/react-query";

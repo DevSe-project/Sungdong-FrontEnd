@@ -62,7 +62,7 @@ import { MenuData } from './component/TemplateLayout/AboutMenuData/MenuData';
 import { Footer } from './component/TemplateLayout/AboutFooter/Footer';
 
 // State Management (Zustand) Store
-import { useUserData, useDataActions, useListActions, useOrderData, useIsLogin, useSetLogin, useModalActions, useModalState } from "./Store/DataStore";
+import { useUserData, useDataActions, useListActions, useOrderData, useIsLogin, useSetLogin, useModalActions, useModalState } from "./store/DataStore";
 import { useQuery } from "@tanstack/react-query";
 import { getDocs, collection } from 'firebase/firestore'
 import { AccountBook } from "./component/AboutMyPage/AccountBook/AccountBook";

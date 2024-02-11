@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from 'react';
 import styles from './ModifyPW.module.css';
-import { useDataActions, useModal, useModalActions, useUserData } from '../../Store/DataStore';
+import { useDataActions, useModal, useModalActions, useUserData } from '../../store/DataStore';
 
 export default function ModifyPW(props) {
     

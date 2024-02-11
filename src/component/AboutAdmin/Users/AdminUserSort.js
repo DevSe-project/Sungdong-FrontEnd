@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './AdminUserSort.module.css';
-import { useUserFilterActions, useUserSort } from '../../../Store/DataStore';
+import { useUserFilterActions, useUserSort } from '../../../store/DataStore';
 
 const AdminUserSort = (props) => {
     const userSort = useUserSort();

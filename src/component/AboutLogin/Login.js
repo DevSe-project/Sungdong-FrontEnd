@@ -5,7 +5,7 @@ import { useState } from 'react';
 import FindModal from './FindModal';
 import CodeInputModal from './CodeInputModal';
 import axios from '../../axios';
-import { useDataActions, useIsLogin, useModal, useModalActions, useModalState, useSetLogin, useUserData } from '../../Store/DataStore';
+import { useDataActions, useIsLogin, useModal, useModalActions, useModalState, useSetLogin, useUserData } from '../../store/DataStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export function Login(props) {

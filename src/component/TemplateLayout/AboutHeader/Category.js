@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from './Category.module.css'
 import React from 'react';
-import { useListActions, useSearchActions, useSearchFilterData, useSearchList, useSearchStore, useSearchTerm, useSeperateSearchTerm } from "../../../Store/DataStore";
+import { useListActions, useSearchActions, useSearchFilterData, useSearchList, useSearchStore, useSearchTerm, useSeperateSearchTerm } from "../../../store/DataStore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CategoryFilter } from "./CategoryFilter";
 import { useFetch } from "../../../customFn/useFetch"

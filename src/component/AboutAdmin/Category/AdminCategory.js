@@ -5,7 +5,7 @@ import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useModalActions, useModalState } from '../../../Store/DataStore';
+import { useModalActions, useModalState } from '../../../store/DataStore';
 import AdminCategoryAddedModal from './AdminCategoryAddedModal';
 import AdminCategoryEditedModal from './AdminCategoryEditedModal';
 export function AdminCategory(props) {

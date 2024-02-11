@@ -3,7 +3,7 @@ import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner'
 import { useEffect, useRef, useState } from 'react'
 import { TodayNewsCard } from './TodayNewsCard'
 import { TodayNewsList } from './TodayNewsList'
-import { useTopicData } from '../../Store/DataStore'
+import { useTopicData } from '../../store/DataStore'
 export function TodayNews(){
   const {todayTopicData} = useTopicData();
   const [filterList, setFilterList] = useState(false);

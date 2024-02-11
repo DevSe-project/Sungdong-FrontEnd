@@ -3,7 +3,7 @@ import styles from "./AdminNotice.module.css";
 import { AdminHeader } from '../Layout/Header/AdminHeader';
 import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
 import EditModal from "./EditModal";
-import { useListActions, useNoticePostList, useModalActions, useModalState, useNoticeActions, useNotice } from "../../../Store/DataStore";
+import { useListActions, useNoticePostList, useModalActions, useModalState, useNoticeActions, useNotice } from "../../../store/DataStore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import WriteModal from "./WriteModal";
 import axios from "axios";

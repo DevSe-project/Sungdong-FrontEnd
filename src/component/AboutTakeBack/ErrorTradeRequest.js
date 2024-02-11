@@ -1,7 +1,7 @@
 import styles from './Table.module.css';
 import { ErrorTradeFilter } from './ErrorTradeFilter';
 import ErrorTradeModal from './ErrorTradeModal';
-import { useModalActions, useModalState } from '../../Store/DataStore';
+import { useModalActions, useModalState } from '../../store/DataStore';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { GetCookie } from '../../customFn/GetCookie';

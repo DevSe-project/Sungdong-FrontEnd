@@ -1,7 +1,7 @@
 import { React, useEffect, useState } from 'react';
 import styles from './Modal.module.css';
 import { useNavigate } from 'react-router-dom';
-import { useDataActions, useModal, useModalActions, useUserData } from '../../Store/DataStore';
+import { useDataActions, useModal, useModalActions, useUserData } from '../../store/DataStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useFetch } from '../../customFn/useFetch';
 

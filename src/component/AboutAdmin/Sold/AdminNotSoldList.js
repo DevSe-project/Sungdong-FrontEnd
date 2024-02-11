@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import AdminSoldModal from './AdminSoldModal';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { useModalActions, useModalState } from '../../../Store/DataStore';
+import { useModalActions, useModalState } from '../../../store/DataStore';
 export function AdminNotSoldList(props){
   // 필터된 항목을 저장할 상태 변수
   const [filteredItems, setFilteredItems] = useState([]);

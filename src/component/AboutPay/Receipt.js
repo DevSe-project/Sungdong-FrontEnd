@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import styles from './Receipt.module.css'
 import { useNavigate } from 'react-router-dom';
-import { useDataActions, useDeliveryInfo, useListActions, useOrderActions, useOrderInfo, useOrderList, useUserData } from '../../Store/DataStore';
+import { useDataActions, useDeliveryInfo, useListActions, useOrderActions, useOrderInfo, useOrderList, useUserData } from '../../store/DataStore';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axios from '../../axios';
 import { useFetch } from '../../customFn/useFetch';

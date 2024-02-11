@@ -1,4 +1,4 @@
-import { useDeliveryFilter } from '../../../../Store/DataStore';
+import { useDeliveryFilter } from '../../../../store/DataStore';
 import styles from './Deli_Filter.module.css';
 import { useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';

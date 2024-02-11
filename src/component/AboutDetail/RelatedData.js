@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import styles from './RelatedData.module.css'
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useCartList, useListActions } from '../../Store/DataStore';
+import { useCartList, useListActions } from '../../store/DataStore';
 import { useQuery } from '@tanstack/react-query';
 import { GetCookie } from '../../customFn/GetCookie';
 export function RelatedData({detailData}) {

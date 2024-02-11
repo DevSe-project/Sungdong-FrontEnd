@@ -1,4 +1,4 @@
-import { useListActions, useListStore, useWishList } from '../../Store/DataStore';
+import { useListActions, useListStore, useWishList } from '../../store/DataStore';
 import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner'
 import styles from './LikeItem.module.css'
 import { useState } from 'react';

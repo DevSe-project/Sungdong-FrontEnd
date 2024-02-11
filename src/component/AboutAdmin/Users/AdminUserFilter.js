@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './AdminUserFilter.module.css';
-import { useUserFilter, useUserFilterActions } from '../../../Store/DataStore';
+import { useUserFilter, useUserFilterActions } from '../../../store/DataStore';
 
 export default function AdminUserFilter(props) {
     const userFilter = useUserFilter();

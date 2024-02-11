@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from './Step.module.css'
-import { useListActions, useOrderData, useOrderList } from "../../Store/DataStore";
+import { useListActions, useOrderData, useOrderList } from "../../store/DataStore";
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { StepModule } from "./StepModule";
 

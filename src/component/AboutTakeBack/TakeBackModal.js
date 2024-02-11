@@ -1,6 +1,6 @@
 import styles from './Modal.module.css';
 import { useEffect, useState } from 'react';
-import { useModalActions, useTakeBack, useTakeBackActions } from '../../Store/DataStore';
+import { useModalActions, useTakeBack, useTakeBackActions } from '../../store/DataStore';
 import { GetCookie } from '../../customFn/GetCookie';
 import axios from 'axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';

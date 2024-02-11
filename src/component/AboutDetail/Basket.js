@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import styles from './Basket.module.css'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { useCartList, useDataActions, useListActions, useOrderActions, useOrderData, useOrderList } from '../../Store/DataStore';
+import { useCartList, useDataActions, useListActions, useOrderActions, useOrderData, useOrderList } from '../../store/DataStore';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { StepModule } from '../AboutPay/StepModule';
 import { useFetch } from '../../customFn/useFetch';

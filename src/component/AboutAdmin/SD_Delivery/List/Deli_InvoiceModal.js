@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useModalActions } from '../../../../Store/DataStore';
+import { useModalActions } from '../../../../store/DataStore';
 import styles from './Deli_Modal.module.css';
 import { GetCookie } from '../../../../customFn/GetCookie';
 import axios from '../../../../axios';

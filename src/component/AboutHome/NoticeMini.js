@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useListActions, useNoticePostList } from "../../Store/DataStore";
+import { useListActions, useNoticePostList } from "../../store/DataStore";
 import { NoticePostObj } from "../Data/NoticePostObj";
 import styles from "./NoticeMini.module.css";
 import { useNavigate } from "react-router-dom";

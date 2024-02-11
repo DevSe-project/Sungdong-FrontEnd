@@ -1,6 +1,6 @@
 import { forwardRef } from "react"
 import styles from './Print.module.css'
-import { useEstimateInfo, useEstimateProduct } from "../../Store/DataStore";
+import { useEstimateInfo, useEstimateProduct } from "../../store/DataStore";
 
 const EstimatePrint = forwardRef((props, ref) => {
   const estimateData = useEstimateProduct();

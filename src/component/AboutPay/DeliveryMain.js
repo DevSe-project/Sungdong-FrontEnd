@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Delivery } from './Delivery'
 import styles from './DeliveryMain.module.css'
-import { useOrderData } from '../../Store/DataStore'
+import { useOrderData } from '../../store/DataStore'
 export function DeliveryMain(props){
 
   // // 검색 로직

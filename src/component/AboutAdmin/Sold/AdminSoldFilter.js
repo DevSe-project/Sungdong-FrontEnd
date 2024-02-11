@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from 'react';
-import { useOrderFilter, useOrderFilterActions } from '../../../Store/DataStore';
+import { useOrderFilter, useOrderFilterActions } from '../../../store/DataStore';
 import styles from './AdminSoldFilter.module.css';
 export function AdminSoldFilter({handelSearch}){
 

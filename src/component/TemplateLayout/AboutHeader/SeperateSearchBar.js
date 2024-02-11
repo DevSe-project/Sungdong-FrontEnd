@@ -1,6 +1,6 @@
 import styles from './SeperateSearchBar.module.css';
 import { useNavigate } from 'react-router-dom';
-import { useSearchActions, useSearchFilterData, useSearchTerm, useSeperateSearchTerm } from '../../../Store/DataStore';
+import { useSearchActions, useSearchFilterData, useSearchTerm, useSeperateSearchTerm } from '../../../store/DataStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useFetch } from '../../../customFn/useFetch';
 import { useEffect } from 'react';

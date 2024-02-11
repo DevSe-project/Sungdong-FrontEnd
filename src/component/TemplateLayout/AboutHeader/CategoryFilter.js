@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './CategoryFilter.module.css';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useFetch } from '../../../customFn/useFetch';
-import { useListActions, useSearchFilterData, useSearchList } from '../../../Store/DataStore';
+import { useListActions, useSearchFilterData, useSearchList } from '../../../store/DataStore';
 
 export function CategoryFilter({ postCnt, setCurrentPage, setTotalPages, setPostCnt, setTotalRows, filteredProductList, setFilteredProductList }) {
   const { isLoading, isError, error, data: categoryData } = useQuery({ queryKey: ['category'] });

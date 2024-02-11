@@ -3,7 +3,7 @@ import styles from './AdminDetail.module.css';
 import { AdminHeader } from '../Layout/Header/AdminHeader';
 import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
 import { AdminTabInfo } from '../TabInfo/AdminTabInfo';
-import { useProduct, useProductActions } from '../../../Store/DataStore';
+import { useProduct, useProductActions } from '../../../store/DataStore';
 import axios from '../../../axios';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';

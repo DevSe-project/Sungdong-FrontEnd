@@ -4,7 +4,7 @@ import { GetCookie } from '../../customFn/GetCookie';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useRef, useState } from 'react';
-import { useEstimateActions, useEstimateData, useEstimateInfo, useEstimateProduct, useEstimateProductData, useEstimateStore, useUserData } from '../../Store/DataStore';
+import { useEstimateActions, useEstimateData, useEstimateInfo, useEstimateProduct, useEstimateProductData, useEstimateStore, useUserData } from '../../store/DataStore';
 import { useFetch } from '../../customFn/useFetch';
 import ReactToPrint, { useReactToPrint } from 'react-to-print';
 import EstimatePrint from './EstimatePrint';
@@ -196,12 +196,12 @@ export function EstimateWrite() {
   };
 
   //견적 추가 함수
-  const { mutate:addEstimate } = useMutation({mutationFn : addToEstimate});
+  const { mutate: addEstimate } = useMutation({ mutationFn: addToEstimate });
 
-  const { mutate:lastItem } = useMutation({mutationFn : findToEstimate});
+  const { mutate: lastItem } = useMutation({ mutationFn: findToEstimate });
 
-// submit 버튼
-async function submitEstimate(product, info) {
+  // submit 버튼
+  async function submitEstimate(product, info) {
     try {
       // 견적 리스트업에 저장
       await new Promise((resolve, reject) => {
@@ -241,7 +241,7 @@ async function submitEstimate(product, info) {
       console.error('주문 처리 중에 오류가 발생했습니다:', error.message);
       alert(error.message)
     }
-}
+  }
 
   const navigate = useNavigate();
 
@@ -355,7 +355,7 @@ async function submitEstimate(product, info) {
             </tr>
             <tr>
               <th>견적 유효기간</th>
-              <td><input className={styles.input} type='date' value={estimateInputData.estimate_expire} onChange={(e)=>setEstimateData("estimate_expire", formatDate(e.target.value))} /></td>
+              <td><input className={styles.input} type='date' value={estimateInputData.estimate_expire} onChange={(e) => setEstimateData("estimate_expire", formatDate(e.target.value))} /></td>
               <th>부가세 구분</th>
               <td>
                 <label><input type="radio" name="VAT" value={"true"} onChange={(e) => setEstimateData("estimate_isIncludeVAT", e.target.value)} />부가세 포함</label>
@@ -439,17 +439,17 @@ async function submitEstimate(product, info) {
                     {
                       (parseInt(price(item) + profit(item) * item.estimateBox_cnt)
                         -
-                      parseInt(price(item))).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })
+                        parseInt(price(item))).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })
                     }
                   </td>
                   <td>
                     {estimateInputData.estimate_due ? estimateInputData.estimate_due : 0}일
                   </td>
                   <td>
-                    <input className={styles.input} value={item.product_etc} onChange={(e)=>setProductEtc(item, e.target.value)}></input>
+                    <input className={styles.input} value={item.product_etc} onChange={(e) => setProductEtc(item, e.target.value)}></input>
                   </td>
                   <td>
-                    <input className={styles.input} value={item.product_ts} onChange={(e)=>setTsInfo(item, e.target.value)}></input>
+                    <input className={styles.input} value={item.product_ts} onChange={(e) => setTsInfo(item, e.target.value)}></input>
                   </td>
                   <td>
                     <input
@@ -502,11 +502,11 @@ async function submitEstimate(product, info) {
         </table>
       </div>
       <div className={styles.buttonContainer}>
-        <button className="original_button" onClick={()=> submitEstimate(estimateData, estimateInputData)}>작성 완료 및 출력</button>
+        <button className="original_button" onClick={() => submitEstimate(estimateData, estimateInputData)}>작성 완료 및 출력</button>
         <button className={styles.pageButton} onClick={() => handleCancelButton()}>취소</button>
       </div>
-      <div style={{display: 'none'}}>
-        <EstimatePrint ref={ref} price={price} priceOne={priceOne} profit={profit} VAT={VAT} totalAmount={totalAmount} totalDiscount={totalDiscount} manager_tel={userData.tel} estimateInfo={estimateInfo} estimateData={estimateProduct}/>
+      <div style={{ display: 'none' }}>
+        <EstimatePrint ref={ref} price={price} priceOne={priceOne} profit={profit} VAT={VAT} totalAmount={totalAmount} totalDiscount={totalDiscount} manager_tel={userData.tel} estimateInfo={estimateInfo} estimateData={estimateProduct} />
       </div>
     </div>
   )

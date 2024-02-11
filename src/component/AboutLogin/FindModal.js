@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from 'react';
 import styles from './Modal.module.css';
-import { useDataActions, useModalActions, useModalState, useUserData } from '../../Store/DataStore';
+import { useDataActions, useModalActions, useModalState, useUserData } from '../../store/DataStore';
 import FindId from './FindId';
 import FindPw from './FindPw';
 import axios from '../../axios';

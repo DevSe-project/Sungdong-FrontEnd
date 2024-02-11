@@ -6,7 +6,7 @@ import React from 'react';
 import styles from './AdminProductList.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useProductFilter } from '../../../Store/DataStore';
+import { useProductFilter } from '../../../store/DataStore';
 import axios from '../../../axios';
 export function AdminProductList(){
   
