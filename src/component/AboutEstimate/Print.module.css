@@ -1,8 +1,49 @@
+.header{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .body{
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: 2em;
+}
+
+.inputInfo{
+  border-bottom: 1.5px solid black;
+  height: 35px;
+  width: 20em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mainInfo{
+  display: flex;
+  justify-content: center;
+  width: 90%;
+}
+
+.bodyInfo{
+  display: flex;
+  justify-content: flex-start;
+  width: 80%;
+}
+
+.headerInfo{
+  display: flex;
+  justify-content: center;
+  white-space: nowrap;
+  width: 20%;
+}
+
+.footerInfo{
+  display: flex;
+  justify-content: center;
+  width: 10%;
 }
 
 /* 헤드라인 */

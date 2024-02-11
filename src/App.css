@@ -654,3 +654,9 @@ input[type="checkbox"] {
   font-size: x-large;
   transition: 0.5s
 }
+
+/* ------------------------ Print ----------------------- */
+@page {
+  size: A4;
+  margin: 10mm;
+}

@@ -32,26 +32,31 @@ export default function AdminUserList() {
       setEditIndex(index);
     }
   };
-
-
-  const fetchMatchedData = () => {
-    if (!checkedItems) {
-      return;
+  // 편집 상태 & 입력된 정보 & 체크리스트 초기화
+  const initializingData = () => {
+    if (editIndex !== null) {
+      setEditIndex(null);
+      fetchData();
+      setCheckedItems([]);
     }
-    const data = checkedItems.map(users_id => {
-      const matchingData = matchedData.find(item => item.users_id === users_id);
-      return matchingData;
-    });
-    setMatchedData(data);
   }
-
+  // esc키를 누르면 모달창 닫기.
   useEffect(() => {
-    fetchMatchedData();
-  }, [checkedItems])
+    const exit_esc = (event) => {
+      if (event.key === 'Escape') {
+        initializingData();
+      }
+    };
 
+    window.addEventListener('keydown', exit_esc);
+
+    return () => {
+      window.removeEventListener('keydown', exit_esc);
+    };
+  }, [initializingData]);
 
   // ------------------------------서버 통신------------------------------ //
-  // 유저 데이터 Fetch
+  // 유저 데이터 상태 관리
   const fetchUsersData = async () => {
     try {
       const token = GetCookie('jwt_token');
@@ -71,6 +76,21 @@ export default function AdminUserList() {
       throw new Error('배송 데이터 불러오기 중 오류가 발생하였습니다.');
     }
   }
+  const { isLoading, isError, error, data: userData } = useQuery({
+    queryKey: [`users`, currentPage, itemsPerPage], // currentPage, itemPerPage가 변경될 때마다 재실행하기 위함
+    queryFn: fetchUsersData,
+  });
+  const fetchData = async () => {
+    try {
+      const data = await fetchUsersData();
+      setMatchedData(data);
+    } catch (error) {
+      throw new Error('데이터를 볼러오는 데 실패했습니다.', error);
+    }
+  }
+  useEffect(() => {
+    fetchData();
+  }, [currentPage, itemsPerPage]);
 
   //유저 필터링 Fetch
   const fetchFilteredUserData = async (userFilterData) => {
@@ -135,84 +155,96 @@ export default function AdminUserList() {
     });
   };
 
-
-
-  // 유저 수정 handler
-  const fetchEditUser = async (matchedData) => {
+  // 고객 단일 수정
+  const handleEdit = async (userData) => { // 
     try {
-      if (window.confirm('수정사항을 반영하시겠습니까?')) {
-        // 수정된 데이터를 서버에 반영
-        await fetchServer(matchedData, 'post', '/userUpdate', currentPage);
-        // 수정 후, 현재 페이지를 다시 불러올 수 있도록 queryClient를 사용하여 캐시된 데이터를 무효화합니다.
-        queryClient.invalidateQueries('userData');
-        // 수정 후, editIndex를 초기화합니다.
-        setEditIndex(null);
-        // 알림 표시
-        alert('수정이 완료되었습니다.');
-      }
+      const confirmMessage = '수정사항을 반영하시겠습니까?';
+      const confirmed = window.confirm(confirmMessage);
+      if (!confirmed) return;
+
+      await editMutation(userData);
     } catch (error) {
-      // 오류 처리
       console.error('유저 수정 실패:', error);
       alert('유저 수정에 실패했습니다.');
     }
   };
-  const { mutate: editMutation } = useMutation({ mutationFn: fetchEditUser }) // 수정
-  const handleEdit = async() => {
-
-  }
-
-
-  // User Delete
-  const fetchDeleteUser = async (userID) => {
+  const handleBulkEdit = async () => { // 전체 수정 함수
     try {
-      const response = await axios.delete(`/auth/userDelete/${userID}`,
-      )
+      const confirmMessage = '수정사항을 반영하시겠습니까?';
+      const confirmed = window.confirm(confirmMessage);
+      if (!confirmed) return;
+      const bulkUserData = []; // 수정된 데이터를 담을 배열을 초기화
+      // 선택된 모든 사용자의 수정된 데이터를 추출하여 배열에 추가합니다.
+      checkedItems.forEach((userId) => {
+        const editedUserData = matchedData.find((user) => user.users_id === userId);
+        bulkUserData.push(editedUserData);
+      });
+      await editMutation(bulkUserData); // 수정된 사용자 데이터 서버로 전송
+    } catch (error) {
+      console.error('전체 수정 실패:', error);
+      alert('전체 수정에 실패했습니다.');
+    }
+  };
+  const handleEditSuccess = (data) => { // 수정 성공
+    console.log('수정 성공:', data);
+    alert('수정이 완료되었습니다.');
+    queryClient.invalidateQueries('userData');
+    setEditIndex(null);
+  };
+  const handleEditError = (error) => { // 수정 실패
+    console.error('수정 실패:', error);
+    alert('수정에 실패했습니다.');
+  };
+  const fetchEditUser = async (userData) => { // Fetching
+    try {
+      const response = await axios.post('/auth/userUpdate', userData);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  };
+  const { mutate: editMutation } = useMutation({ // Mutation
+    mutationFn: fetchEditUser,
+    onSuccess: handleEditSuccess,
+    onError: handleEditError,
+  });
+
+
+  // 고객 삭제
+  const fetchDeleteUser = async (userID) => { // Fetching
+    try {
+      const response = await axios.delete(`/auth/userDelete/${userID}`,)
       return response.data;
     } catch (error) {
       throw error;
     }
   }
-  const { mutate: deleteMutation } = useMutation({ mutationFn: fetchDeleteUser }); // 삭제
-  const handleDelete = (userID) => {
-    if (window.confirm('선택된 고객을 정말 삭제하시겠습니까?')) {
-      deleteMutation(userID, {
-        onSuccess: (data) => {
-          console.log('user Delete successfully:', data);
-          alert(data.message);
-          queryClient.invalidateQueries(['users'], () => {
-            return data.data
-          })
-        },
-        onError: (error) => {
-          console.error('user Delete failed:', error);
-          alert(error.message);
-        }
-      })
-    } else {
-      alert('취소되었습니다');
-    }
-  }
+  const handleDelete = async (userID) => { // 사용 부분
+    try {
+      const confirmMessage = '선택된 고객을 정말 삭제하시겠습니까?';
+      const confirmed = window.confirm(confirmMessage);
+      if (!confirmed) return;
 
-  // 데이터 상태 관리
-  const { isLoading, isError, error, data: userData } = useQuery({
-    queryKey: [`users`, currentPage, itemsPerPage], // currentPage, itemPerPage가 변경될 때마다 재실행하기 위함
-    queryFn: fetchUsersData,
+      await deleteMutation(userID);
+    } catch (error) {
+      handleDeleteError(error);
+    }
+  };
+  const handleDeleteSuccess = (data) => { // 성공 시
+    console.log('user Delete successfully:', data);
+    alert(data.message);
+    queryClient.invalidateQueries(['users']);
+    window.location.reload();
+  };
+  const handleDeleteError = (error) => { // 실패 시
+    console.error('user Delete failed:', error);
+    alert(error.message);
+  };
+  const { mutate: deleteMutation } = useMutation({ // Mutation
+    mutationFn: fetchDeleteUser,
+    onSuccess: handleDeleteSuccess,
+    onError: handleDeleteError,
   });
-
-  // useEffect를 사용하여 페이지 번호나 페이지 당 항목 수가 변경될 때마다 새로운 데이터를 가져옴
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await fetchUsersData();
-        setMatchedData(data);
-      } catch (error) {
-        throw new Error('데이터를 볼러오는 데 실패했습니다.', error);
-      }
-    }
-
-    fetchData();
-  }, [currentPage, itemsPerPage]);
-  // ------------------------------서버 통신------------------------------ //
 
   // 전체 체크박스 업데이트
   function handleAllCheckbox(isChecked) {
@@ -281,6 +313,26 @@ export default function AdminUserList() {
     }
   };
 
+  const parseValue = (item, index) => {
+    if (typeof item === 'number') {
+      if (item === 1)
+        return <option key={index} value={item}>실사용자</option>;
+      else if (item === 2)
+        return <option key={index} value={item}>납품업체</option>;
+      else
+        return <option>선택</option>;
+    } else if (typeof item === 'boolean') {
+      if (item === true)
+        return <option key={index} value={item}>동의</option>;
+      else if (item === false)
+        return <option key={index} value={item}>비동의</option>;
+      else
+        return <option>선택</option>;
+    }
+    return <option key={index} value={item}>{item}</option>;
+  }
+
+
   useMemo(() => {
     // data나 sortBy가 변경될 때마다 정렬
     // handleSort();
@@ -335,19 +387,18 @@ export default function AdminUserList() {
                 <th>업체명(상호명)</th>
                 {/* 고객 구분, CMS여부 */}
                 {[
-                  { name: '고객 구분', valList: ['실사용자', '납품업자'] },
-                  { name: '등급', valList: ['A', 'B', 'C', 'D'] },
+                  { name: '고객 구분', valList: [1, 2], val: '' },
+                  { name: '등급', valList: ['A', 'B', 'C', 'D'], val: '' },
                   { name: '담당자', valList: ['박형조', '엄지석', '김태훈'], val: '박형조' },
-                  { name: 'CMS여부', valList: ['A', 'B', 'C', 'D'] }
+                  { name: 'CMS여부', valList: [true, false], val: '' }
                 ].map((customItem, index) => (
                   <th key={index}>
                     {editIndex == 'allEdit' ?
                       <>
                         <span>{customItem.name}</span>
                         <select className='select'>
-                          <option value="">----</option> {/* 기본 옵션을 설정 */}
                           {customItem.valList.map((valList, valListIndex) => (
-                            <option key={valListIndex} value={valList}>{valList}</option>
+                            parseValue(valList, valListIndex)
                           ))}
                         </select>
                       </>
@@ -364,8 +415,10 @@ export default function AdminUserList() {
                 <th style={{ width: '20px' }}>
                   {editIndex == 'allEdit' ?
                     <div className="dropdown-menu"> {/* 아이콘 */}
+                      {/* 수정 버튼 */}
+                      <button className='white_button' onClick={() => handleBulkEdit()}>수정</button>
                       {/* 삭제 버튼 */}
-                      <button className='white_button' onClick={() => handleDelete()}>삭제</button>
+                      <button className='white_button' onClick={() => handleDelete(checkedItems)}>삭제</button>
                       {/* 취소 버튼 */}
                       <button className='white_button' onClick={() => {
                         setEditIndex('none');
@@ -398,10 +451,10 @@ export default function AdminUserList() {
                   {/* 고객 구분, CMS여부 */}
                   {[
                     { name: '고객명', val: user.cor_corName, key: 'cor_corName' },
-                    { name: '고객 구분', valList: ['실사용자', '납품업자'], val: user.userType_id == 1 ? '실사용자' : '납품업자', key: 'userType_id' },
+                    { name: '고객 구분', valList: [1, 2], val: user.userType_id, key: 'userType_id' },
                     { name: '등급', valList: ['A', 'B', 'C', 'D'], val: user.grade ? user.grade : <span style={{ color: 'var(--main-red' }}>미정</span>, key: 'grade' },
-                    { name: '담당자', valList: ['박형조', '엄지석', '김태훈'], val: user.manager_name, key: 'manager_name' },
-                    { name: 'CMS여부', valList: ['동의', '비동의'], val: user.hasCMS ? '동의' : '비동의', key: 'hasCMS' },
+                    { name: '담당자', valList: ['박형조', '엄지석', '김태훈'], val: user.manager_name ? user.manager_name : <span style={{ color: 'var(--main-red' }}>미정</span>, key: 'manager_name' },
+                    { name: 'CMS여부', valList: [true, false], val: user.hasCMS, key: 'hasCMS' },
                   ].map((customItem, editIdx) => (
                     <td key={editIdx}>
                       {editIndex === index ?
@@ -420,8 +473,20 @@ export default function AdminUserList() {
                               setMatchedData(newData);
                             }}
                           >
-                            {customItem.valList.map((valList, valListIndex) => (
-                              <option key={valListIndex} value={valList}>{valList}</option>
+                            <option value={null}>---</option>
+                            {customItem.valList.map((item, index) => (
+                              // <option key={index} value={item}>{
+                              //   editIdx == 1 ?
+                              //     item === 1 ?
+                              //       '실사용자' : '납품업자'
+                              //     :
+                              //     editIdx == 4 ?
+                              //       item ?
+                              //         '동의' : '비동의'
+                              //       :
+                              //       item
+                              // }</option>
+                              parseValue(item, index)
                             ))}
                           </select>
                           :
@@ -441,7 +506,20 @@ export default function AdminUserList() {
                             }}
                           />
                         :
-                        customItem.val
+                        customItem.key === 'hasCMS'
+                          ?
+                          customItem.val
+                            ? '동의'
+                            :
+                            '비동의'
+                          : customItem.key == 'userType_id'
+                            ?
+                            customItem.val == 1 ?
+                              '실사용자'
+                              :
+                              '납품업체'
+                            :
+                            customItem.val
                       }
                     </td>
                   ))}
@@ -452,22 +530,20 @@ export default function AdminUserList() {
                   {/* 연락처 */}
                   <td>{user.cor_tel}</td>
                   {/* 수정/삭제 드롭다운 메뉴 */}
-                  {/* 수정/삭제 드롭다운 메뉴 */}
                   <td style={{ width: '20px' }}>
                     {index === editIndex ? (
                       <div className="dropdown-menu">
                         {/* 수정 버튼 */}
-                        <button className='white_button' onClick={() => editMutation(matchedData)}>수정</button>
+                        <button className='white_button' onClick={() => { handleEdit(user); console.log(user); }}>수정</button>
                         {/* 삭제 버튼 */}
                         <button className='white_button' onClick={() => handleDelete(user.users_id)}>삭제</button>
                         {/* 취소 버튼 */}
-                        <button className='white_button' onClick={() => setEditIndex(null)}>취소</button>
+                        <button className='white_button' onClick={() => initializingData()}>취소</button>
                       </div>
                     ) : (
-                      <div className='ellipsis' onClick={() => handleToggleEdit(index)}><i class="fa-solid fa-ellipsis"></i></div>
+                      <div className='ellipsis' onClick={() => { handleToggleEdit(index); setCheckedItems([]); }}><i class="fa-solid fa-ellipsis"></i></div>
                     )}
                   </td>
-
                 </tr>
               ))}
             </tbody>

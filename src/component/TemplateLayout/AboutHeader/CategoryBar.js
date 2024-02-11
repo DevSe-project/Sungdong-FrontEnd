@@ -117,7 +117,7 @@ export function CategoryBar(props) {
                       toggleSubMenu(index); 
                     }}
                   >
-                    <span>
+                    <span style={{fontSize: '0.85em'}}>
                       {item.name}
                     </span>
                     {/* 서브메뉴 loop */}

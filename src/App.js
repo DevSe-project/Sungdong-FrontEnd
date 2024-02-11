@@ -77,6 +77,8 @@ import { AdminEditDetail } from "./component/AboutAdmin/Detail/AdminEditDetail";
 import axios from "./axios";
 import { GetCookie } from "./customFn/GetCookie";
 import { OrderStep } from "./component/AboutPay/OrderStep";
+import { EstimateWrite } from "./component/AboutEstimate/EstimateWrite";
+import EstimatePrint from "./component/AboutEstimate/EstimatePrint";
 
 
 export default function App() {
@@ -517,6 +519,28 @@ export default function App() {
             </div>
           </>} />
 
+        <Route path='/estimateWrite' element={
+          <>
+            {/* 최상단배너 */}
+            <TopBanner
+              category_dynamicStyle={category_dynamicStyle}
+              menuOnClick={menuOnClick}
+              text_dynamicStyle={text_dynamicStyle}
+              menu_dynamicStyle={menu_dynamicStyle}
+            />
+            <div className='main'>
+              <div style={{float: 'left'}}>
+                <MenuData />
+              </div>      
+              <div className='container'>
+                <EstimateWrite />
+                <footer className='footer'>
+                  <Footer />
+                </footer>
+              </div>
+            </div>
+          </>} />
+
         <Route path='/estimateManager' element={
           <>
             {/* 최상단배너 */}
@@ -538,6 +562,10 @@ export default function App() {
               </div>
             </div>
           </>} />
+
+        <Route path='/estimatePrint' element={
+          <EstimatePrint/>
+        } />
 
         {/* 반품 관련 */}
         {/* 반품 신청 */}

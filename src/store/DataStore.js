@@ -15,6 +15,7 @@ const useDataStore = create((set) => ({
       set((prev) => ({
         detailData: input
       })),
+
     setOrderData: (input) => //주문을 끝난 후 상품 주문 데이터들 표기에 사용
       set((prev) => ({
         orderData: input
@@ -31,7 +32,6 @@ const useDataStore = create((set) => ({
       set((prev) => ({
         userData: input
       })),
-
     // 오늘의 주제
     setTodayTopicData: (input) =>
       set((prev) => ({
@@ -62,6 +62,7 @@ const useListStore = create((set) => ({
   orderList: [],
   cartList: [],
   searchList: [],
+  estimateList: [],
   noticePostList: [],
 
 
@@ -83,6 +84,17 @@ const useListStore = create((set) => ({
         searchList: []
       })),
 
+    //견적함
+    setEstimateList: (val) =>
+      set((state) => ({
+        estimateList: val
+      })),
+
+    resetEstimateList: (val) =>
+      set((state) => ({
+        estimateList: []
+      })),
+
     //검색리스트 옵션 SET
     setSearchOption: (item, value) =>
       set((state) => ({
@@ -91,6 +103,48 @@ const useListStore = create((set) => ({
             return {
               ...list,
               selectedOption: value,
+            };
+          }
+          return list;
+        }),
+      })),
+
+    //검색리스트 수량 SET
+    setEstimateCnt: (item, value) =>
+      set((state) => ({
+        estimateList: state.estimateList.map((list) => {
+          if (list.estimateBox_product_id === item.estimateBox_product_id) {
+            return {
+              ...list,
+              estimateBox_cnt: value,
+            };
+          }
+          return list;
+        }),
+      })),
+
+    //검색리스트 수량 UP
+    setEstimateCntUp: (item) =>
+      set((state) => ({
+        estimateList: state.estimateList.map((list) => {
+          if (list.estimateBox_product_id === item.estimateBox_product_id) {
+            return {
+              ...list,
+              estimateBox_cnt: (parseInt(list.estimateBox_cnt) + 1).toString(),
+            };
+          }
+          return list;
+        }),
+      })),
+
+    //검색리스트 수량 DOWN
+    setEstimateCntDown: (item) =>
+      set((state) => ({
+        estimateList: state.estimateList.map((list) => {
+          if (list.estimateBox_product_id === item.estimateBox_product_id) {
+            return {
+              ...list,
+              estimateBox_cnt: (parseInt(list.estimateBox_cnt) - 1).toString(),
             };
           }
           return list;
@@ -219,6 +273,7 @@ export const useSearchList = () => useListStore((state) => state.searchList);
 export const useCartList = () => useListStore((state) => state.cartList);
 export const useOrderList = () => useListStore((state) => state.orderList);
 export const useNoticePostList = () => useListStore((state) => state.noticePostList);
+export const useEstimateList = () => useListStore((state) => state.estimateList);
 
 // 🎉  모든 액션 상태를 위한 한개의 선택자 생성 -> 상태가 자주 변경되지 않기 때문에 모든 액션상태를 모음.
 export const useListActions = () => useListStore((state) => state.actions);
@@ -372,9 +427,9 @@ export const useSearchStore = create(
       },
       actions: {
         setFilterData: (val) =>
-        set((prev) => ({
-          filterData: val
-        })),
+          set((prev) => ({
+            filterData: val
+          })),
         setSearchTerm: (fieldName, value) =>
           set((state) => ({ searchTerm: { ...state.searchTerm, [fieldName]: value } })),
         setSeperateSearchTerm: (fieldName, value) =>
@@ -397,6 +452,161 @@ export const useSearchFilterData = () => useSearchStore((state) => state.filterD
 export const useSearchTerm = () => useSearchStore((state) => state.searchTerm);
 export const useSeperateSearchTerm = () => useSearchStore((state) => state.seperateSearchTerm);
 export const useSearchActions = () => useSearchStore((state) => state.actions);
+
+/*-----------------ESTIMATE STORE----------------*/
+export const useEstimateStore = create(
+  persist(
+    (set) => ({
+      estimateData: {
+        estimate_amountDiscount: 0, //총 금액 할인율
+        estimate_due: '', //납기일
+        estimate_expire: '', //견적 유효기간
+        estimate_isIncludeVAT: 'false', //부가세 구분
+        estimate_etc: '', //비고
+        supplier: {
+          estimate_corName: '',
+          estimate_managerName: '',
+          estimate_address: '',
+          estimate_cor_ceoName: '',
+          estimate_cor_tel: '',
+          estimate_cor_fax: '',
+          estimate_email: ''
+        },
+        vendor: {
+          estimate_corName: '',
+          estimate_managerName: '',
+          estimate_address: '',
+          estimate_cor_ceoName: '',
+          estimate_cor_tel: '',
+          estimate_cor_fax: '',
+          estimate_email: ''
+        }
+      },
+      estimateProductData: [],
+      estimateInfo: [],
+      estimateProduct: [],
+      actions: {
+        setProductData: (value) =>
+          set((state) => ({ estimateProductData: value })),
+        setEstimateInfo: (value) =>
+          set((state) => ({ estimateInfo: value })),
+        setEstimateProduct: (value) =>
+          set((state) => ({ estimateProduct: value })),
+        setProfit: (items, value) =>
+          set((state) => ({
+            estimateProductData: state.estimateProductData.map((list) => {
+              if (items.some((item) => item.estimateBox_product_id === list.estimateBox_product_id)) {
+                return {
+                  ...list,
+                  product_profit: value,
+                };
+              }
+              return list;
+            }),
+          })),
+        setProductEtc: (items, value) =>
+          set((state) => ({
+            estimateProductData: state.estimateProductData.map((list) => {
+              if (items.estimateBox_product_id === list.estimateBox_product_id) {
+                return {
+                  ...list,
+                  product_etc: value,
+                };
+              }
+              return list;
+            }),
+          })),
+        setTsInfo: (items, value) =>
+          set((state) => ({
+            estimateProductData: state.estimateProductData.map((list) => {
+              if (items.estimateBox_product_id === list.estimateBox_product_id) {
+                return {
+                  ...list,
+                  product_ts: value,
+                };
+              }
+              return list;
+            }),
+          })),
+        setProfit: (items, value) =>
+          set((state) => ({
+            estimateProductData: state.estimateProductData.map((list) => {
+              if (items.some((item) => item.estimateBox_product_id === list.estimateBox_product_id)) {
+                return {
+                  ...list,
+                  product_profit: value,
+                };
+              }
+              return list;
+            }),
+          })),
+        setEstimateData: (fieldName, value) =>
+          set((state) => ({ estimateData: { ...state.estimateData, [fieldName]: value } })),
+        setVendorData: (fieldName, value) =>
+          set((state) => ({
+            estimateData: {
+              ...state.estimateData,
+              vendor: {
+                ...state.estimateData.vendor,
+                [fieldName]: value,
+              },
+            },
+          })),
+        setSupplierData: (fieldName, value) =>
+          set((state) => ({
+            estimateData: {
+              ...state.estimateData,
+              supplier: {
+                ...state.estimateData.supplier,
+                [fieldName]: value,
+              },
+            },
+          })),
+        resetEstimateData: () =>
+          set({
+            estimateData: {
+              estimate_amountDiscount: 0, //총 금액 할인율
+              estimate_due: '', //납기일
+              estimate_expire: '', //견적 유효기간
+              estimate_isIncludeVAT: 'false', //부가세 구분
+              estimate_etc: '', //비고
+              supplier: {
+                estimate_corName: '',
+                estimate_managerName: '',
+                estimate_address: '',
+                estimate_cor_ceoName: '',
+                estimate_cor_tel: '',
+                estimate_cor_fax: '',
+                estimate_email: ''
+              },
+              vendor: {
+                estimate_corName: '',
+                estimate_managerName: '',
+                estimate_address: '',
+                estimate_cor_ceoName: '',
+                estimate_cor_tel: '',
+                estimate_cor_fax: '',
+                estimate_email: ''
+              }
+            }
+          }),
+        resetEstimateProductData: () =>
+          set({ estimateProductData: [] }),
+      }
+    }),
+    {
+      name: 'estimateWrite',
+      storage: createJSONStorage(() => sessionStorage),
+      version: 1,
+      partialize: (state) => ({ estimateData: state.estimateData, estimateProductData: state.estimateProductData }),
+    }
+  )
+);
+export const useEstimateData = () => useEstimateStore((state) => state.estimateData);
+export const useEstimateProductData = () => useEstimateStore((state) => state.estimateProductData);
+export const useEstimateInfo = () => useEstimateStore((state) => state.estimateInfo);
+export const useEstimateProduct = () => useEstimateStore((state) => state.estimateProduct);
+export const useEstimateActions = () => useEstimateStore((state) => state.actions);
 
 /* ----------------TAKEBACK STORE---------------- */
 export const useTakeBackStore = create((set) => ({
@@ -993,6 +1203,7 @@ export const useUserFilterStore = create((set) => ({
     cor_num: '',
     userType_id: '',
     grade: '',
+    managers_id: '',
   },
   userSort: {
     first: '',

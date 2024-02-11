@@ -134,8 +134,8 @@ export default function JoinForm(props) {
                     ...prevData,
                     corporationData: {
                         ...prevData.corporationData,
-                        fieldName: {
-                            ...prevData.corporationData.cor_tel,
+                        [fieldName]: {
+                            ...prevData.corporationData[fieldName], // fieldName 변수를 대괄호 표기법으로 사용하여 객체 속성에 접근
                             [numberItem]: value
                         }
                     }
@@ -561,7 +561,7 @@ export default function JoinForm(props) {
                     { label: '대표번호', placeholder: '예) 010', fieldName: 'cor_tel', value: props.inputData.corporationData.cor_tel, type: 'phone' },
                     { label: '업태', placeholder: '도매 및 소매업', fieldName: 'cor_sector', value: props.inputData.corporationData.cor_sector },
                     { label: '종목', placeholder: '예) 연마재, 안전용품', fieldName: 'cor_category', value: props.inputData.corporationData.cor_category },
-                    { label: 'FAX', placeholder: '예) 052', fieldName:'cor_fax', value: props.inputData.corporationData.cor_fax, type: 'phone' }
+                    { label: 'FAX', placeholder: '예) 052', fieldName: 'cor_fax', value: props.inputData.corporationData.cor_fax, type: 'phone' }
                 ].map((item, index) => (
                     <li key={index} className={styles.inputContainer}>
                         <div className={styles.left}>{item.label}</div>
