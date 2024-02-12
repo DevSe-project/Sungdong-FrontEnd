@@ -13,7 +13,15 @@ export function EstimateManager(){
   const estimateInfo = useEstimateInfo();
   const estimateProduct = useEstimateProduct();
   const { fetchServer } = useFetch();
-  const { setVendorData, setSupplierData, setEstimateData, setProfit, setProductEtc, setTsInfo, setEstimateInfo, setEstimateProduct } = useEstimateActions();
+  const { resetEstimateProduct, resetEstimateInfo, setEstimateInfo, setEstimateProduct } = useEstimateActions();
+
+  useEffect(() => {
+    return () => {
+      resetEstimateProduct();
+      resetEstimateInfo();
+      // 컴포넌트가 언마운트될 때 Product 상태 리셋
+    };
+  }, []);
 
 
   //fetch

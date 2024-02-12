@@ -198,13 +198,13 @@ const EstimatePrint = forwardRef((props, ref) => {
         <div style={{display: 'flex', justifyContent: 'flex-end', marginTop: '1em', paddingBottom: '1em', paddingRight: '1em', borderBottom: '1px solid black'}}>
           <span>견적 유효기간 : {new Date(estimateInfo?.estimate_expire).toLocaleDateString()}</span>
         </div>
-        <p style={{padding: '1em'}}>
+        <div style={{padding: '1em'}}>
           주의 : 
-          <div className={styles.bodyInfo}>1. 견적유효기간내 제조사 사정, 환율변동 등으로 가격 변동이 있을 수 있음.<br/>
+          <p className={styles.bodyInfo}>1. 견적유효기간내 제조사 사정, 환율변동 등으로 가격 변동이 있을 수 있음.<br/>
                 2. 견적서와 상이한 수량 또는 제품 주문 시 가격 변동될 수 있음.<br/>
                 3. 표준납기일은 재고가 없을 경우 예상 납기일이며 재고유무는 성동물산에서 확인 바랍니다.
-          </div>
-        </p>
+          </p>
+        </div>
       </div>
       <footer style={{position: 'fixed', bottom: 0}}>
         <div>

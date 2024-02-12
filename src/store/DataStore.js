@@ -592,6 +592,10 @@ export const useEstimateStore = create(
           }),
         resetEstimateProductData: () =>
           set({ estimateProductData: [] }),
+        resetEstimateInfo: () =>
+          set({ estimateInfo: [] }),
+        resetEstimateProduct: () =>
+          set({ estimateProduct: [] }),
       }
     }),
     {
