@@ -200,6 +200,12 @@ textarea {
   height: 3px;
 }
 
+/* 활성화된 탭 아이템 스타일 */
+.admin-menuItem.active span {
+  color: var(--background-color-clicked) !important;
+  cursor: pointer;
+}
+
 
 /* 일반 홈페이지 메뉴 탭 */
 .menu-item {
