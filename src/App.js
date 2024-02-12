@@ -51,7 +51,6 @@ import { AdminSoldList } from './component/AboutAdmin/Sold/AdminSoldList';
 import { AdminNotSoldList } from './component/AboutAdmin/Sold/AdminNotSoldList';
 import { AdminRefund } from './component/AboutAdmin/Refund/AdminRefund';
 import AdminUserList from './component/AboutAdmin/Users/AdminUserList';
-import AdminMyUserList from "./component/AboutAdmin/Users/AdminMyUserList";
 import AdminNotice from './component/AboutAdmin/Notice/AdminNotice';
 import Deli from "./component/AboutAdmin/SD_Delivery/List/Deli";
 import TotalCal_Manage from "./component/AboutAdmin/SD_Account/TOTAL/Manage/TotalCal_Manage";
@@ -80,7 +79,6 @@ import { GetCookie } from "./customFn/GetCookie";
 import { OrderStep } from "./component/AboutPay/OrderStep";
 import { EstimateWrite } from "./component/AboutEstimate/EstimateWrite";
 import EstimatePrint from "./component/AboutEstimate/EstimatePrint";
-import AdmiNMyUserList from "./component/AboutAdmin/Users/AdminMyUserList";
 
 
 export default function App() {
@@ -781,8 +779,6 @@ export default function App() {
 
         {/* 회원관리 - 고객관리 */}
         <Route path='/adminMain/user' element={<AdminUserList />} />
-        {/* 회원관리 - 내고객관리 */}
-        <Route path='/adminMain/myUser' element={<AdminMyUserList />} />
         {/* 회원관리 - 회원가입 코드 관리 */}
         <Route path='/adminMain/printCode' element={<ManageCode />} />
 
