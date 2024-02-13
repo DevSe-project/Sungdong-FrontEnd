@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AdminHeader } from '../Layout/Header/AdminHeader';
 import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
 import { AdminProductFilter}  from '../Product/AdminProductFilter';
@@ -8,7 +8,9 @@ import { useNavigate } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useProductFilter } from '../../../store/DataStore';
 import axios from '../../../axios';
-export function AdminProductList(){
+import { useFetch } from '../../../customFn/useFetch';
+import Pagination from '../../../customFn/Pagination';
+export function AdminProductList({productCurrentPage, productTotalPage}){
   
   //Td 선택시 Modal State 변수
   const [selectedData, setSelectedData] = useState(null);
@@ -19,8 +21,44 @@ export function AdminProductList(){
 
   const queryClient = useQueryClient();
 
+  const {fetchServer} = useFetch();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
   //데이터 불러오기
   const { isLoading, isError, error, data } = useQuery({queryKey:['data']});
+
+  useEffect(() => {
+    if(data){
+      setCurrentPage(productCurrentPage);
+      setTotalPages(productTotalPage);
+    }
+  }, [data, productCurrentPage, productTotalPage])
+
+
+  // 페이지를 변경할 때 호출되는 함수
+  const fetchPageChange = async (pageNumber) => {
+    return await fetchServer({}, 'post', '/product/list', pageNumber);
+  };
+
+  const { mutate: pageMutaion } = useMutation({ mutationFn: fetchPageChange })
+
+
+  function handlePageChange(pageNumber) {
+    pageMutaion(pageNumber, {
+      onSuccess: (data) => {
+        setCurrentPage(data.data.currentPage);
+        setTotalPages(data.data.totalPages);
+        queryClient.setQueryData(['product'], () => {
+          return data.data.data
+        })
+      },
+      onError: (error) => {
+        return console.error(error.message);
+      },
+    })
+  }
 
   // 아이템 수정 핸들러
   function handleEditItem(item) {
@@ -38,14 +76,6 @@ export function AdminProductList(){
     }
   };
   
-  // 게시물 데이터와 페이지 번호 상태 관리    
-  const [currentPage, setCurrentPage] = useState(1);
-  // 현재 페이지에 해당하는 게시물 목록 가져오기
-  const getCurrentPagePosts = () => {
-    const startIndex = (currentPage - 1) * 5; // 한 페이지에 5개씩 표시
-    return data.slice(startIndex, startIndex + 5);
-  };
-
   const fetchFilteredProducts = async (filter) => {
     try {
       const response = await axios.get(`/product`, { params: filter });
@@ -147,10 +177,10 @@ export function AdminProductList(){
                 </tr>
               </thead>
               <tbody>
-                {data && getCurrentPagePosts().map((item, index)=> (
+                {data.map((item, index)=> (
                 <React.Fragment key={index}>
                   <tr className={styles.list}>
-                    <td><img src={item.product_image_original} alt='이미지'></img></td>
+                    <td><img className={styles.thumnail} src={item.product_image_original} alt='이미지'></img></td>
                     <td>{item.product_id}</td>
                     <td 
                       className={styles.detailView}
@@ -253,33 +283,7 @@ export function AdminProductList(){
               </tbody>
             </table>
           </div>
-          <div className={styles.buttonContainer}>
-            {/* 이전 페이지 */}
-            <button
-            className={styles.button} 
-            onClick={()=> {
-              if(currentPage !== 1){
-                setCurrentPage(currentPage - 1)
-              } else {
-                alert("해당 페이지가 가장 첫 페이지 입니다.")
-              }}}>
-                <i className="far fa-angle-left"/>
-            </button>
-            <div className={styles.button}>
-              {currentPage}
-            </div>
-            {/* 다음 페이지 */}
-            <button
-            className={styles.button}
-            onClick={()=> {
-              if(data.length > (currentPage * 5)){
-                setCurrentPage(currentPage + 1);
-              } else {
-                alert("다음 페이지가 없습니다.")
-              }}}>
-                <i className="far fa-angle-right"/>
-            </button>
-          </div>
+          <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
         </div>
       </div>
     </div>

@@ -94,7 +94,6 @@ export function EstimateFilter(){
 
   const filterList = [
     { label : '조회일자', content : DateFilter()},
-    { label : '출력', content : detailSearch()},
   ]
   return(
     <div style={{width: '100%'}}>
@@ -117,15 +116,6 @@ export function EstimateFilter(){
           <input className={styles.button} type='reset'/>
         </div>
       </form>
-    </div>
-  )
-}
-
-function detailSearch(){
-  return(
-    <div style={{display: 'flex', gap: '1em'}}>
-      <button className={styles.button}>인쇄</button>
-      <button className={styles.button}>액셀</button>
     </div>
   )
 }

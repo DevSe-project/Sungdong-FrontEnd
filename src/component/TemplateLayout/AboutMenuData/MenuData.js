@@ -1,21 +1,15 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useMatch, useNavigate, useResolvedPath } from "react-router-dom";
 import styles from './MenuData.module.css'
 import { GetCookie } from "../../../customFn/GetCookie";
 import WelcomeModule from "../../WelcomeModule/WelcomeModule";
 export function MenuData(props) {
   const navigate = useNavigate();
   const location = useLocation();
-  const [topTab, setTopTab] = useState(null); // 현재 활성화된 탭을 추적
-  useEffect(() => {
-    const tabstate = JSON.parse(sessionStorage.getItem('tabState'));
-    setTopTab(tabstate);
-    // 경로에 따른 상태 초기화
-    if (location.pathname === '/' || location.pathname === '/login' || location.pathname === '/category') {
-      sessionStorage.removeItem('tabState');
-      setTopTab(null);
-    }
-  }, [location]); // 두 번째 매개변수를 빈 배열로 설정하여 최초 렌더링 시에만 실행
+  const current = location.pathname;
+  // const { pathname, search, hash } = useResolvedPath(to);
+  // const match = useMatch({ path: pathname, end: true });
+  
 
   const menuData = [
     {
@@ -81,11 +75,6 @@ export function MenuData(props) {
         {
           item: '장바구니 목록',
           link: '/basket',
-          require: GetCookie('jwt_token') !== null
-        },
-        {
-          item: '주문/배송 현황',
-          link: '/delivery',
           require: GetCookie('jwt_token') !== null
         },
       ],
@@ -171,13 +160,8 @@ export function MenuData(props) {
         }],
     },
   ];
-
-  function saveTab(id) {
-    sessionStorage.setItem('tabState', JSON.stringify(id));
-  }
-
   // 서브메뉴 열림창 변수 초기화
-  const [subMenuStates, setSubMenuStates] = useState(menuData.map(() => false));
+  const [subMenuStates, setSubMenuStates] = useState(Array(menuData.length).fill(false));
 
   function toggleSubMenu(index) {
     setSubMenuStates(prevStates => {
@@ -194,10 +178,8 @@ export function MenuData(props) {
       {menuData.map((item, index) => (
         <li
           key={index}
-          id={item.id}  // data-id 속성을 사용하여 탭의 id를 저장
           style={{ boxShadow: `0px 2px 4px 1px rgba(0, 0, 0, 0.2)` }}
-          className={`menu-item
-          menutab-item ${topTab === item.id ? 'active' : ''}`}
+          className={`menu-item ${item.subMenuItems ? item.subMenuItems.some((subitem) => subitem.link === current) && 'active' : item.title.link === current && 'active'}`}
           onClick={() => {
             if (item.require === false) {
               alert("로그인이 필요한 서비스입니다.");
@@ -208,35 +190,37 @@ export function MenuData(props) {
               navigate(`${item.title.link}`)
               return;
             }
-            saveTab(item.id);
             toggleSubMenu(index);
           }}
         >
           <span className={styles.link}>
             {item.title.item}
           </span>
-          {subMenuStates[index] === true &&
+          {(subMenuStates[index] === true || item.subMenuItems?.some((item) => item.link === current)) &&
             <ul
               className={styles.subMenu}
             >
               {item.subMenuItems.map((subMenuItem, subMenuItemindex) => (
-                <li
-                  onClick={() => {
+                <NavLink
+                  key={subMenuItemindex}
+                  onClick={(event) => {
                     if (subMenuItem.require === false) {
                       alert("로그인이 필요한 서비스입니다.");
                       navigate("/login");
+                      event.preventDefault()
                       return;
                     }
                     if (subMenuItem.link === 'outLink') {
                       window.open(`https://www.sendbill.co.kr/RESTful/purchase/taxBill/inquire`, '_blank', 'width=1000,height=800');
+                      event.preventDefault()
                       return;
                     }
-                    navigate(`${subMenuItem.link}`)
                   }}
-                  className={styles.sub_item}
-                  key={subMenuItemindex}>
+                  to={subMenuItem.link}
+                  className={`${styles.sub_item} ${subMenuItem.link === current ? styles.active : ''}`}
+                  >
                   {subMenuItem.item}
-                </li>
+                </NavLink>
               ))}
             </ul>
           }
