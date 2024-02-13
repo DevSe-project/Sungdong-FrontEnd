@@ -1,14 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './AdminCategory.module.css';
 import { AdminHeader } from '../Layout/Header/AdminHeader';
 import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useModalActions, useModalState } from '../../../store/DataStore';
 import AdminCategoryAddedModal from './AdminCategoryAddedModal';
 import AdminCategoryEditedModal from './AdminCategoryEditedModal';
-export function AdminCategory(props) {
+import { useFetch } from '../../../customFn/useFetch';
+import Pagination from '../../../customFn/Pagination';
+export function AdminCategory({productCurrentPage, productTotalPage}) {
 
   const navigate = useNavigate();
 
@@ -17,11 +19,45 @@ export function AdminCategory(props) {
   const [selectedCategory, setSelectedCategory] = useState({ big: null, medium: null, low: null });
   const { isModal, modalName } = useModalState();
   const { selectedModalOpen, setModalName, closeModal } = useModalActions();
+  const queryClient = useQueryClient();
+  const {fetchServer} = useFetch();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const { data:data } = useQuery({queryKey:['data']});
+
+  useEffect(() => {
+    if(data){
+      setCurrentPage(productCurrentPage);
+      setTotalPages(productTotalPage);
+    }
+  }, [data, productCurrentPage, productTotalPage])
+
+
+  // 페이지를 변경할 때 호출되는 함수
+  const fetchPageChange = async (pageNumber) => {
+    return await fetchServer({}, 'post', '/product/list', pageNumber);
+  };
+
+  const { mutate: pageMutaion } = useMutation({ mutationFn: fetchPageChange })
+
+
+  function handlePageChange(pageNumber) {
+    pageMutaion(pageNumber, {
+      onSuccess: (data) => {
+        setCurrentPage(data.data.currentPage);
+        setTotalPages(data.data.totalPages);
+        queryClient.setQueryData(['product'], () => {
+          return data.data.data
+        })
+      },
+      onError: (error) => {
+        return console.error(error.message);
+      },
+    })
+  }
+
 
   const { isLoading, isError, error, data: categoryData } = useQuery({ queryKey: ['category'] });
-
-  // 게시물 데이터와 페이지 번호 상태 관리    
-  const [currentPage, setCurrentPage] = useState(1);
 
   const handleCategoryClick = (categoryType, category) => {
     if (categoryType === "big") {
@@ -43,12 +79,6 @@ export function AdminCategory(props) {
       ...prevState,
       [categoryType]: category,
     }));
-  };
-
-  // 현재 페이지에 해당하는 게시물 목록 가져오기
-  const getCurrentPagePosts = () => {
-    const startIndex = (currentPage - 1) * 5; // 한 페이지에 5개씩 표시
-    return props.data.slice(startIndex, startIndex + 5);
   };
 
   //대 카테고리 필터링
@@ -211,11 +241,11 @@ export function AdminCategory(props) {
                 </tr>
               </thead>
               <tbody>
-                {props.data
-                  ? getCurrentPagePosts().map((item, index) => (
+                {data
+                  ? data.map((item, index) => (
                     <React.Fragment key={index}>
                       <tr className={styles.list}>
-                        <td><img src={item.product_image_mini} alt='이미지'></img></td>
+                        <td><img className={styles.thumnail} src={item.product_image_original} alt='이미지'></img></td>
                         <td>{item.product_id}</td>
                         <td style={{ fontSize: '1em', fontWeight: '550' }}>
                           {[categoryData.find((category) => category.category_id === item.parentsCategory_id)?.name, categoryData.find((category) => category.category_id === item.category_id)?.name].filter(Boolean).join(' - ')}
@@ -248,35 +278,7 @@ export function AdminCategory(props) {
               </tbody>
             </table>
           </div>
-          <div className={styles.buttonContainer}>
-            {/* 이전 페이지 */}
-            <button
-              className={styles.button}
-              onClick={() => {
-                if (currentPage !== 1) {
-                  setCurrentPage(currentPage - 1)
-                } else {
-                  alert("해당 페이지가 가장 첫 페이지 입니다.")
-                }
-              }}>
-              <i className="far fa-angle-left" />
-            </button>
-            <div className={styles.button}>
-              {currentPage}
-            </div>
-            {/* 다음 페이지 */}
-            <button
-              className={styles.button}
-              onClick={() => {
-                if (props.data.length > (currentPage * 5)) {
-                  setCurrentPage(currentPage + 1)
-                } else {
-                  alert("다음 페이지가 없습니다.")
-                }
-              }}>
-              <i className="far fa-angle-right" />
-            </button>
-          </div>
+          <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
         </div>
         {(modalName === "대" || modalName === "중" || modalName === "소")
           ? isModal &&

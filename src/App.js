@@ -79,35 +79,30 @@ import { GetCookie } from "./customFn/GetCookie";
 import { OrderStep } from "./component/AboutPay/OrderStep";
 import { EstimateWrite } from "./component/AboutEstimate/EstimateWrite";
 import EstimatePrint from "./component/AboutEstimate/EstimatePrint";
+import { useFetch } from "./customFn/useFetch";
 
 
 export default function App() {
   const navigate = useNavigate();
   // 주문 스탭 부분 State
-  const [activeTab, setActiveTab] = useState(1); // 현재 활성화된 스탭을 추적하는 State 
+  const [activeTab, setActiveTab] = useState(1); // 주문 - 현재 활성화된 스탭을 추적하는 State 
 
-  // 데이터액션 State 불러오기
-  const { setOrderData, setUserData, setCategoryData, setTodayTopicData } = useDataActions();
-
-  // 리스트 State 불러오기
+  // 찜 리스트 State 불러오기
   const { setWishList } = useListActions();
+
+  //FETCH CUSTOM HOOK
+  const {fetchServer, fetchGetServer} = useFetch();
+
+  //상품 페이지 State
+  const [productCurrentPage, setProductCurrentPage] = useState(1);
+  const [productTotalPage, setProductTotalPage] = useState(1);
 
   //데이터 fetch
   const fetchData = async () => {
-    try {
-      const response = await axios.get("/product/list",
-        {
-          headers: {
-            "Content-Type": "application/json",
-          }
-        }
-      )
-      // 성공 시 추가된 상품 정보를 반환합니다.
-      return response.data.data;
-    } catch (error) {
-      // 실패 시 예외를 throw합니다.
-      throw new Error('확인 중 오류가 발생했습니다.');
-    }
+    const data = await fetchGetServer('/product/list', 1);
+    setProductCurrentPage(data.currentPage);
+    setProductTotalPage(data.totalPages);
+    return data.data
   };
 
   //카테고리 데이터 fetch
@@ -751,16 +746,16 @@ export default function App() {
         {/* 상품관리 - 상품등록 */}
         <Route path='/adminMain/addProduct' element={<AdminDetail />} />
         {/* 상품관리 - 상품조회 */}
-        <Route path='/adminMain/searchProduct' element={<AdminProductList />} />
+        <Route path='/adminMain/searchProduct' element={<AdminProductList productCurrentPage={productCurrentPage} productTotalPage={productTotalPage}/>} />
         {/* 상품관리 - 상품수정 */}
         <Route path='/adminMain/editProduct/:id' element={<AdminEditDetail />} />
         {/* 상품관리 - 카테고리 */}
-        <Route path='/adminMain/category' element={<AdminCategory data={data} />} />
+        <Route path='/adminMain/category' element={<AdminCategory productCurrentPage={productCurrentPage} productTotalPage={productTotalPage}/>} />
         {/* 상품관리 - 카테고리 수정 */}
-        <Route path='/adminMain/categoryEdit/:id' element={<AdminCategoryEdit data={data} />} />
+        <Route path='/adminMain/categoryEdit/:id' element={<AdminCategoryEdit />} />
 
         {/* 주문관리 - 주문 관리*/}
-        <Route path='/adminMain/sold' element={<AdminSoldList data={data} />} />
+        <Route path='/adminMain/sold' element={<AdminSoldList />} />
         {/* 주문관리 - 미결제 주문 관리 */}
         <Route path='/adminMain/yetPay' element={<AdminNotSoldList />} />
         {/* 주문관리 - 반품 관리 */}
