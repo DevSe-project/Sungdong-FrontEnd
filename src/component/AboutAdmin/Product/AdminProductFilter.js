@@ -63,8 +63,9 @@ export function AdminProductFilter({ handleSearch }) {
     return (
       <div style={{ display: 'flex', gap: '1em' }}>
         <select className={styles.select} value={productFilter.dateType} onChange={(e) => setProductFilter('dateType', e.target.value)}>
-          <option value={'product_created'}>상품 등록일</option>
-          <option value={'product_updated'}>최종 수정일</option>
+          <option value="">선택</option>
+          <option value={'created'}>상품 등록일</option>
+          <option value={'updated'}>최종 수정일</option>
         </select>
         <div>
           <input className={styles.select} type='date' value={productFilter.date.start} onChange={(e) => setProductDate('start', e.target.value)}></input>
@@ -206,7 +207,10 @@ export function AdminProductFilter({ handleSearch }) {
         ))}
         <div style={{ display: 'flex', gap: '0.5em' }}>
           <input className={styles.button} value='검색' onClick={() => handleSearch()} />
-          <input className={styles.button} type='reset' onClick={() => resetProductFilter()} />
+          <input className={styles.button} type='reset' onClick={() => {
+            resetProductFilter()
+            window.location.reload();
+            }} />
         </div>
       </form>
     </div>
