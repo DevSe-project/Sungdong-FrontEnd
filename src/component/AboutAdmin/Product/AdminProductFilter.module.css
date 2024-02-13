@@ -54,6 +54,8 @@
 }
 
 .input:hover,
-.select:hover {
+.select:hover,
+.input:focus,
+.select:focus {
     border-color: rgb(174, 79, 44);
 }

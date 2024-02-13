@@ -21,20 +21,24 @@ export function AdminProductList({productCurrentPage, productTotalPage}){
 
   const queryClient = useQueryClient();
 
-  const {fetchServer} = useFetch();
+  const {fetchServer, fetchGetServer} = useFetch();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
   //데이터 불러오기
-  const { isLoading, isError, error, data } = useQuery({queryKey:['data']});
+  const fetchData = async () => {
+    const data = await fetchGetServer('/product/list', 1);
+    setCurrentPage(data.currentPage);
+    setTotalPages(data.totalPages);
+    return data.data
+  };
 
-  useEffect(() => {
-    if(data){
-      setCurrentPage(productCurrentPage);
-      setTotalPages(productTotalPage);
-    }
-  }, [data, productCurrentPage, productTotalPage])
+  // react-query : 서버에서 받아온 데이터 캐싱, 변수에 저장
+  const { isLoading, isError, error, data } = useQuery({
+    queryKey: ['product'],
+    queryFn: () => fetchData()
+  });
 
 
   // 페이지를 변경할 때 호출되는 함수
@@ -75,15 +79,40 @@ export function AdminProductList({productCurrentPage, productTotalPage}){
       setSelectedData(itemId);
     }
   };
+
+  /*---------- 필터 검색 ----------*/
   
   const fetchFilteredProducts = async (filter) => {
-    try {
-      const response = await axios.get(`/product`, { params: filter });
-      return response.data;
-    } catch (error) {
-      throw new Error('상품 데이터를 불러오던 중 오류가 발생했습니다.');
-    }
+    return await fetchServer(filter, `post`, `/product/filter`, 1);
   };
+
+  const { mutate: filterMutation } = useMutation({ mutationFn: fetchFilteredProducts })
+
+
+  const handleSearch = () => {
+    if(productFilter.state.length === 0){
+      alert("판매 상태는 적어도 1개 이상은 체크하여야 합니다!");
+      return;
+    }
+    if(productFilter.category.highId !== '' && productFilter.category.middleId === ''){
+      alert("주의 ! : 대 카테고리만은 상품에 색인되지 않습니다. \n중 카테고리까지 선택하여야 필터링이 적용됩니다!");
+    } 
+    // 검색 버튼 클릭 시에만 서버에 요청
+    filterMutation(productFilter, {
+      onSuccess: (data) => {
+        alert(data.message)
+        setCurrentPage(data.data.currentPage);
+        setTotalPages(data.data.totalPages);
+        queryClient.setQueryData(['product'], () => {
+          return data.data.data
+        })
+      },
+      onError: (error) => {
+        return console.error(error.message);
+      },
+    })  };
+
+  /* ------ 상품 삭제 요청 ------ */
 
   const fetchDeletedProducts = async(productId) => {
     try {
@@ -96,12 +125,6 @@ export function AdminProductList({productCurrentPage, productTotalPage}){
 
   // 상품 삭제를 처리하는 뮤테이션
   const {mutate:deleteProductMutation} = useMutation({mutationFn: fetchDeletedProducts})
-
-
-  const handleSearch = () => {
-    // 검색 버튼 클릭 시에만 서버에 요청
-    fetchFilteredProducts(productFilter);
-  };
 
   const handleDeleted = (item) => {
     const isConfirmed = window.confirm('정말로 삭제하시겠습니까?');
@@ -119,6 +142,8 @@ export function AdminProductList({productCurrentPage, productTotalPage}){
       });
     }
   }
+
+  /*----------------------------------*/
 
   const optionCreator = (item) => {
     let options = [];
