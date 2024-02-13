@@ -1,21 +1,48 @@
-.container {
+/* WelcomeModule.module.css */
+
+.wrapper {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 10px;
-    background-color: var(--main-color-light);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+    justify-content: center;
+}
+
+.container {
+    width: 100%;
+    padding: 5px 25px;
+    border-bottom: 3px solid #CC0000;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);
 }
 
 .header {
-    font-size: 20px;
-    font-weight: bold;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1px;
 }
-.contents {
+
+.corName {
+    font-weight: 900;
+}
+
+.welcomeMessage {
+    
+}
+
+.items {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    font-size: 14px;
+}
+
+.orderList {
     display: flex;
-    flex-direction: column;
-    justify-content: left;
-    text-align: left;
+    align-items: center;
+}
+
+.title {
+}
+
+.content {
+    border-radius: 2vh;
+    padding: 10px;
 }

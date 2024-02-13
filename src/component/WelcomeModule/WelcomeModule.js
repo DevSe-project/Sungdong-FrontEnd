@@ -2,7 +2,7 @@ import styles from './WelcomeModule.module.css';
 import { useQuery } from '@tanstack/react-query';
 import { GetCookie } from '../../customFn/GetCookie';
 import { useNavigate } from 'react-router-dom';
-import { useFetch } from '../../customFn/useFetch'
+import { useFetch } from '../../customFn/useFetch';
 import axios from '../../axios';
 
 export default function WelcomeModule() {
@@ -40,10 +40,9 @@ export default function WelcomeModule() {
   }
   // userData fetch
   const { isUserLoading, isUserError, userError, data: userData } = useQuery({
-    queryKey: ['user'],
+    queryKey: ['welcome'],
     queryFn: fetchUserData,
   });
-
 
   if (isUserLoading) {
     return <p>Loading..</p>;
@@ -53,27 +52,36 @@ export default function WelcomeModule() {
     return <p style={{ color: 'red' }}>User Error: {userError.message}</p>
   }
   return (
-    <div >
+    <div className={styles.wrapper}>
       {userData && GetCookie('jwt_token') !== null &&
         <div className={styles.container}>
           {/* 환영문구 */}
           <div className={styles.header}>
-            <span style={{ textAlign: 'left' }}>
+            <span className={styles.corName}>
               {/* 기업명 */}
-              <span style={{ fontWeight: '900' }}>{userData.cor_corName ? userData.cor_corName : '렌더링 중'}</span> 님</span>
+              <span style={{ fontWeight: '900' }}>{userData.cor_corName ? userData.cor_corName : '렌더링 중'}</span> 님
+            </span>
             {/* 환영문구 */}
-            <span style={{ textAlign: 'right' }}> 환영합니다.</span>
+            <span className={styles.welcomeMessage}> 환영합니다.</span>
           </div>
           {/* 아이템 */}
-          <div className={styles.contents} style={{ fontSize: "14px" }}>
-            {/* 주문 */}
-            <dl>
-              <dt>주문건</dt> {userData.ordersCount}
-              <dt>배송준비</dt> {userData.preparing_orders}
-              <dt>배송중</dt> {userData.shipping_orders}
-              <dt>배송완료</dt> {userData.completed_orders}
-            </dl>
+          <div className={styles.items}>
+            {/* 요소들을 맵핑하여 표시합니다. */}
+            {[
+              { title: '주문건', content: userData.ordersCount},
+              { title: '미발송', content: userData.preparing_orders},
+              { title: '발송중', content: userData.shipping_orders},
+              { title: '완료건', content: userData.completed_orders}
+            ].map((item, index) => (
+              <div key={index} className={styles.orderList}>
+                <div className={styles.title}>{item.title}</div>
+                {/* styles 객체 내부에 정의된 클래스 이름을 동적으로 결정하여 적용합니다. */}
+                <div className={styles.content}>{item.content}</div>
+              </div>
+            ))}
           </div>
+
+
         </div>
       }
     </div>
