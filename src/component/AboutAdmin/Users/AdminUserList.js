@@ -9,6 +9,7 @@ import AdminUserFilter from './AdminUserFilter';
 import AdminUserSort from './AdminUserSort';
 import { GetCookie } from '../../../customFn/GetCookie';
 import { useFetch } from '../../../customFn/useFetch';
+import { check } from 'fontawesome';
 
 export default function AdminUserList() {
 
@@ -163,20 +164,22 @@ export default function AdminUserList() {
       if (!confirmed) return;
 
       await editMutation(userData);
+      window.location.reload();
     } catch (error) {
       console.error('유저 수정 실패:', error);
       alert('유저 수정에 실패했습니다.');
     }
   };
-  const handleBulkEdit = async () => { // 전체 수정 함수
+  // 전체 수정 함수(정상작동 확인))
+  const handleBulkEdit = async () => {
     try {
       const confirmMessage = '수정사항을 반영하시겠습니까?';
       const confirmed = window.confirm(confirmMessage);
       if (!confirmed) return;
       const bulkUserData = []; // 수정된 데이터를 담을 배열을 초기화
       // 선택된 모든 사용자의 수정된 데이터를 추출하여 배열에 추가합니다.
-      checkedItems.forEach((userId) => {
-        const editedUserData = matchedData.find((user) => user.users_id === userId);
+      checkedItems.forEach((checkedID) => {
+        const editedUserData = matchedData.find((user) => user.users_id === checkedID);
         bulkUserData.push(editedUserData);
       });
       await editMutation(bulkUserData); // 수정된 사용자 데이터 서버로 전송
@@ -275,14 +278,35 @@ export default function AdminUserList() {
     }
   }
 
-  const batchUpdateValue = (key, val) => {
-    setMatchedData(prevData => {
-      prevData.map(item => ({
-        ...item,
-        [key]: val
-      }))
-    })
-  }
+  // 변경사항 업데이트
+  const updateValue = (e, itemKey, itemIndex) => {
+    console.log(checkedItems.length);
+    // 여러 항목 업데이트
+    if (checkedItems.length > 0) {
+      const editData = e.target.value;
+      const updateData = matchedData.map((item) => {
+        // checkedItems에 포함된 사용자의 id와 일치하는 사용자의 데이터만 업데이트
+        if (checkedItems.includes(item.users_id)) {
+          return { ...item, [itemKey]: editData };
+        }
+        return item;
+      });
+      setMatchedData(updateData);
+    }
+    // 단일 항목 업데이트
+    else {
+      const editData = e.target.value;
+      const newData = matchedData.map((item, idx) => {
+        if (idx === itemIndex) {
+          return { ...item, [itemKey]: editData };
+        }
+        return item;
+      });
+      setMatchedData(newData);
+    }
+  };
+
+
 
   const handleSelectChange = async (e) => {
     const { value } = e.target;
@@ -313,25 +337,26 @@ export default function AdminUserList() {
     }
   };
 
-  const parseValue = (item, index) => {
-    if (typeof item === 'number') {
-      if (item === 1)
-        return <option key={index} value={item}>실사용자</option>;
-      else if (item === 2)
-        return <option key={index} value={item}>납품업체</option>;
+  const parseOptionValue = (item, listItem) => {
+    if (item.key == 'userType_id') { // 고객구분
+      switch (listItem) {
+        case 1:
+          return <span>실사용자</span>;
+        case 2:
+          return <span>납품업체</span>;
+        case 3:
+          return <span>관리자</span>;
+        case 4:
+          return <span>총괄 관리자</span>;
+      }
+    } else if (item.key == 'hasCMS') { // CMS동의 여부
+      if (listItem == true)
+        return <span>동의</span>;
       else
-        return <option>선택</option>;
-    } else if (typeof item === 'boolean') {
-      if (item === true)
-        return <option key={index} value={item}>동의</option>;
-      else if (item === false)
-        return <option key={index} value={item}>비동의</option>;
-      else
-        return <option>선택</option>;
+        return <span>비동의</span>;
     }
-    return <option key={index} value={item}>{item}</option>;
+    return <span>{listItem}</span>;
   }
-
 
   useMemo(() => {
     // data나 sortBy가 변경될 때마다 정렬
@@ -379,41 +404,52 @@ export default function AdminUserList() {
             <thead>
               <tr>
                 {/* 전체 체크박스 관리 체크박스 */}
-                <th><input
-                  type='checkbox'
-                  checked={checkedItems.length === matchedData.length ? true : false}
-                  onChange={(e) => handleAllCheckbox(e.target.checked)} /></th>
+                <th>
+                  <input
+                    type='checkbox'
+                    checked={checkedItems.length === matchedData.length ? true : false}
+                    onChange={(e) => handleAllCheckbox(e.target.checked)}
+                  />
+                </th>
                 {/* 업체명(상호명) */}
                 <th>업체명(상호명)</th>
                 {/* 고객 구분, CMS여부 */}
                 {[
-                  { name: '고객 구분', valList: [1, 2], val: '' },
-                  { name: '등급', valList: ['A', 'B', 'C', 'D'], val: '' },
-                  { name: '담당자', valList: ['박형조', '엄지석', '김태훈'], val: '박형조' },
-                  { name: 'CMS여부', valList: [true, false], val: '' }
+                  { title: '고객 구분', valList: [1, 2, 3, 4], val: '', key: 'userType_id' },
+                  { title: '등급', valList: ['A', 'B', 'C', 'D'], val: '', key: 'grade' },
+                  { title: '담당자', valList: ['박형조', '엄지석', '김태훈'], val: '', key: 'name' },
+                  { title: 'CMS여부', valList: [true, false], val: '', key: 'hasCMS' },
                 ].map((customItem, index) => (
                   <th key={index}>
-                    {editIndex == 'allEdit' ?
+                    {editIndex === 'allEdit' ?
                       <>
-                        <span>{customItem.name}</span>
-                        <select className='select'>
-                          {customItem.valList.map((valList, valListIndex) => (
-                            parseValue(valList, valListIndex)
+                        <span>{customItem.title}</span>
+                        <select
+                          className='select'
+                          value={customItem.val}
+                          onChange={e => updateValue(e, customItem.key, index)}
+                        >
+                          <option value={null}>선택</option>
+                          {customItem.valList.map((valListItem, valListIndex) => (
+                            <option key={valListIndex} value={valListItem}>
+                              {parseOptionValue(customItem, valListItem)}
+                            </option>
                           ))}
                         </select>
                       </>
                       :
-                      customItem.name
+                      customItem.title
                     }
                   </th>
                 ))}
+
                 {/* 주소 */}
                 <th>주소</th>
                 {/* 연락처 */}
                 <th>연락처</th>
                 {/* 메뉴 아이콘 */}
                 <th style={{ width: '20px' }}>
-                  {editIndex == 'allEdit' ?
+                  {editIndex === 'allEdit' ?
                     <div className="dropdown-menu"> {/* 아이콘 */}
                       {/* 수정 버튼 */}
                       <button className='white_button' onClick={() => handleBulkEdit()}>수정</button>
@@ -432,7 +468,7 @@ export default function AdminUserList() {
                       } else {
                         alert('선택된 고객이 없습니다.');
                       }
-                    }}><i class="fa-solid fa-ellipsis"></i></div>
+                    }}><i className="fa-solid fa-ellipsis"></i></div>
                   }
                 </th>
               </tr>
@@ -448,13 +484,13 @@ export default function AdminUserList() {
                       onChange={(e) => handlePerCheckbox(e.target.checked, user.users_id)}
                     />
                   </td>
-                  {/* 고객 구분, CMS여부 */}
+                  {/* name: 상호명, val: db의 현재 값, valList: 선택할 값 */}
                   {[
-                    { name: '고객명', val: user.cor_corName, key: 'cor_corName' },
-                    { name: '고객 구분', valList: [1, 2], val: user.userType_id, key: 'userType_id' },
-                    { name: '등급', valList: ['A', 'B', 'C', 'D'], val: user.grade ? user.grade : <span style={{ color: 'var(--main-red' }}>미정</span>, key: 'grade' },
-                    { name: '담당자', valList: ['박형조', '엄지석', '김태훈'], val: user.manager_name ? user.manager_name : <span style={{ color: 'var(--main-red' }}>미정</span>, key: 'manager_name' },
-                    { name: 'CMS여부', valList: [true, false], val: user.hasCMS, key: 'hasCMS' },
+                    { title: '고객명', val: user.cor_corName, key: 'cor_corName' },
+                    { title: '고객 구분', valList: [1, 2, 3, 4], val: user.userType_id, key: 'userType_id' },
+                    { title: '등급', valList: ['A', 'B', 'C', 'D'], val: user.grade, key: 'grade' },
+                    { title: '담당자', valList: ['박형조', '엄지석', '김태훈'], val: user.name ? user.name : <span style={{ color: 'var(--main-red' }}>배정 필요</span>, key: 'name' },
+                    { title: 'CMS여부', valList: [true, false], val: user.hasCMS, key: 'hasCMS' },
                   ].map((customItem, editIdx) => (
                     <td key={editIdx}>
                       {editIndex === index ?
@@ -462,31 +498,11 @@ export default function AdminUserList() {
                           <select
                             className='select'
                             value={customItem.val}
-                            onChange={(e) => {
-                              const editData = e.target.value;
-                              const newData = matchedData.map((item, idx) => {
-                                if (idx === index) {
-                                  return { ...item, [customItem.key]: editData };
-                                }
-                                return item;
-                              });
-                              setMatchedData(newData);
-                            }}
+                            onChange={e => updateValue(e, customItem.key, index)}
                           >
                             <option value={null}>---</option>
                             {customItem.valList.map((item, index) => (
-                              // <option key={index} value={item}>{
-                              //   editIdx == 1 ?
-                              //     item === 1 ?
-                              //       '실사용자' : '납품업자'
-                              //     :
-                              //     editIdx == 4 ?
-                              //       item ?
-                              //         '동의' : '비동의'
-                              //       :
-                              //       item
-                              // }</option>
-                              parseValue(item, index)
+                              <option key={index} value={item}>{parseOptionValue(customItem, item)}</option>
                             ))}
                           </select>
                           :
@@ -506,20 +522,7 @@ export default function AdminUserList() {
                             }}
                           />
                         :
-                        customItem.key === 'hasCMS'
-                          ?
-                          customItem.val
-                            ? '동의'
-                            :
-                            '비동의'
-                          : customItem.key == 'userType_id'
-                            ?
-                            customItem.val == 1 ?
-                              '실사용자'
-                              :
-                              '납품업체'
-                            :
-                            customItem.val
+                        parseOptionValue(customItem, customItem.val)
                       }
                     </td>
                   ))}
