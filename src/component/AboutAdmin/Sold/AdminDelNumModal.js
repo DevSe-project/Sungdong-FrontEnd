@@ -83,6 +83,8 @@ const { handleChangeDelNumMutate } = useMutation({mutationFn: fetchUpdateData,
                 <th>주문상품</th>
                 <th>주문일자</th>
                 <th>주문가</th>
+                <th>주문자 성함</th>
+                <th>주문자 연락처</th>
                 <th>배송사</th>
                 <th>송장번호</th>
               </tr>
@@ -107,7 +109,13 @@ const { handleChangeDelNumMutate } = useMutation({mutationFn: fetchUpdateData,
                 </td>
                 <td style={{fontWeight: '750'}}>
                   \{parseInt(item.value.order_payAmount).toLocaleString()}
-                </td>                
+                </td>    
+                <td>
+                  {item.value.order_name}
+                </td>
+                <td>
+                  {item.value.order_tel}
+                </td>            
                 <td>
                   {item.value.deliveryType}                  
                 </td>
