@@ -22,7 +22,7 @@ export default function AdminNotice() {
   const fetchDeletedData = async (item) => {
     try {
       const token = GetCookie('jwt_token');
-      const response = await axios.delete("/notice",
+      const response = await axios.delete("/notice/delete",
         JSON.stringify(item),
         {
           headers: {
@@ -55,10 +55,10 @@ export default function AdminNotice() {
   })
 
 
-  const fetchUpdateData = async () => {
+  const fetchCreatePost = async () => {
     try {
       const token = GetCookie('jwt_token');
-      const response = await axios.post("/notice",
+      const response = await axios.post("/notice/create",
         JSON.stringify(
           notice
         ),
@@ -76,32 +76,8 @@ export default function AdminNotice() {
       throw new Error('상품을 추가하는 중 오류가 발생했습니다.');
     }
   }
-
-  const fetchUpdatedData = async () => {
-    try {
-      const token = GetCookie('jwt_token');
-      const response = await axios.put("/notice",
-        JSON.stringify(
-          notice
-        ),
-        {
-          headers: {
-            "Content-Type": "application/json",
-            'Authorization': `Bearer ${token}`
-          }
-        }
-      )
-      // 성공 시 추가된 상품 정보를 반환합니다.
-      return response.data;
-    } catch (error) {
-      // 실패 시 예외를 throw합니다.
-      throw new Error('상품을 추가하는 중 오류가 발생했습니다.');
-    }
-  }
-
-
-  const { addPostMutation } = useMutation({
-    mutationFn: fetchUpdateData,
+  const { createPostMutation } = useMutation({
+    mutationFn: fetchCreatePost,
     onSuccess: (data) => {
       // 메세지 표시
       alert(data.message);
@@ -114,56 +90,13 @@ export default function AdminNotice() {
       console.error('상태를 변경하던 중 오류가 발생했습니다.', error);
     },
   })
-
-  const { editPostMutation } = useMutation({
-    mutationFn: fetchUpdatedData,
-    onSuccess: (data) => {
-      // 메세지 표시
-      alert(data.message);
-      console.log('게시글이 업데이트 되었습니다.', data);
-      // 상태를 다시 불러와 갱신합니다.
-      useQueryClient.invalidateQueries(['notice']);
-    },
-    onError: (error) => {
-      // 실패 시, 에러 처리를 수행합니다.
-      console.error('상태를 변경하던 중 오류가 발생했습니다.', error);
-    },
-  })
-
-  /* 추후 - 파일 업로드 로직
-  const [selectedFile, setSelectedFile] = useState(null); // 파일 업로드 state
-
-  const handleFileChange = (e) => {
-      const file = e.target.files[0];
-      setSelectedFile(file);
-  };
-
-  const handleUpload = () => {
-      if (selectedFile) {
-          // 파일 업로드 로직을 구현합니다.
-          // 여기에서 서버로 파일을 업로드하거나 다른 작업을 수행할 수 있습니다.
-          // 선택한 파일은 selectedFile 변수에 있습니다.
-          // 예를 들어, axios를 사용하여 서버로 파일을 업로드하는 방법:
-          // const formData = new FormData();
-          // formData.append('file', selectedFile);
-          // axios.post('/upload', formData)
-          //   .then(response => {
-          //     // 파일 업로드 성공 시 처리
-          //   })
-          //   .catch(error => {
-          //     // 업로드 실패 시 처리
-          //   });
-      }
-  };
-  */
-
   const addPost = () => {
     // 입력 조건 부여
     const isCheckInputLength = notice.title.length > 2 && notice.writer.length > 2 && notice.contents.length > 10;
 
     // 조건에 부합한다면
     if (isCheckInputLength) {
-      addPostMutation.mutate();
+      createPostMutation.mutate();
       // 모달 닫기
       closeModal();
       resetNoticeData();
@@ -174,6 +107,42 @@ export default function AdminNotice() {
       alert("제목을 2글자 이상, 작성자 명을 2글자 이상, 본문 내용을 10글자 이상 작성하십시오.");
     }
   };
+
+  const fetchUpdatePost = async () => {
+    try {
+      const token = GetCookie('jwt_token');
+      const response = await axios.put("/notice/edit",
+        JSON.stringify(
+          notice
+        ),
+        {
+          headers: {
+            "Content-Type": "application/json",
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      )
+      // 성공 시 추가된 상품 정보를 반환합니다.
+      return response.data;
+    } catch (error) {
+      // 실패 시 예외를 throw합니다.
+      throw new Error('상품을 추가하는 중 오류가 발생했습니다.');
+    }
+  }
+  const { editPostMutation } = useMutation({
+    mutationFn: fetchUpdatePost,
+    onSuccess: (data) => {
+      // 메세지 표시
+      alert(data.message);
+      console.log('게시글이 업데이트 되었습니다.', data);
+      // 상태를 다시 불러와 갱신합니다.
+      useQueryClient.invalidateQueries(['notice']);
+    },
+    onError: (error) => {
+      // 실패 시, 에러 처리를 수행합니다.
+      console.error('상태를 변경하던 중 오류가 발생했습니다.', error);
+    },
+  })
 
   function handleConfirmSD() {
     // 입력 조건 부여
@@ -231,7 +200,7 @@ export default function AdminNotice() {
             <div className={styles.left}>
               <div className={styles.left_inner}>
                 <div className={styles.writeNotice_icon}>Click <i className="fa-solid fa-arrow-down"></i></div>
-                <div className={styles.write} onClick={() => { selectedModalOpen('write') }}>글 작성</div>
+                <div className='original_button' onClick={() => { selectedModalOpen('write') }}>글 작성</div>
               </div>
             </div>
             {/* 뭐 넣을지 미정 */}
