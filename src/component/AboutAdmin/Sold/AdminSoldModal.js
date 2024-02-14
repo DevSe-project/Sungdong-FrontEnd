@@ -32,12 +32,12 @@ export default function AdminSoldModal({item}) {
     { 
       id : 0, 
       title : '성함', 
-      value : item.ordered_receiver && item.ordered_receiver,
+      value : item.order_name && item.order_name,
     },
     { 
       id : 1, 
       title : '전화번호', 
-      value : item.order_phone && item.order_phone,
+      value : item.order_tel && item.order_tel,
     },
     { 
       id : 2, 
@@ -56,9 +56,9 @@ export default function AdminSoldModal({item}) {
       value : item.deliveryType &&
       item.deliveryType === '화물'
 
-      ? item.deliverySelect === '대신화물' 
-      ? `${item.deliveryType && item.deliveryType} (배송 업체 : 대신화물)` 
-      : `${item.deliveryType && item.deliveryType} (배송 업체 : 경동화물)`
+      ? item.deliverySelect === 'kr.kdexp' 
+      ? `${item.deliveryType && item.deliveryType} (배송 업체 : 경동화물)`
+      : `${item.deliveryType && item.deliveryType} (배송 업체 : 대신화물)` 
 
       : item.deliveryType &&
       item.deliveryType === '성동택배'
@@ -82,21 +82,20 @@ export default function AdminSoldModal({item}) {
     { 
       id : 6, 
       title : '결제 방법', 
-      value : item.payRoute && item.payRoute,
+      value : item.order_payRoute && item.order_payRoute,
     },
     {
       id : 7, 
       title : '증빙 서류 발급', 
-      value : item.moneyReceipt && item.moneyReceipt,
+      value : item.order_moneyReceipt && item.order_moneyReceipt,
     },
     {
       id: 8,
       title : '명세서',
-      value : item.moneyReceipt 
+      value : item.order_moneyReceipt 
       && item.printFax
-      ? item.printFax === true
-      ? `출력 (FAX 번호 : ${item.faxNum})`
-      : item.printFax
+      && item.printFax === 1
+      ? `출력 (FAX 번호 : ${item.order_faxNum})`
       : '발행안함'
     }
   ];

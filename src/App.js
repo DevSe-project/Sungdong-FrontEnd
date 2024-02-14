@@ -160,18 +160,6 @@ export default function App() {
     queryFn: () => fetchNoticeData()
   })
 
-  // const { data: users } = useQuery({
-  //   queryKey: ['users'],
-  //   queryFn: () => fetchUserData()
-  // })
-
-
-
-  // const { data:tokenData } = useQuery({
-  //   queryKey: ['token'],
-  //   queryFn: () => fetchTokenData()
-  // })
-
   // 찜 데이터(캐쉬) 불러오기
   useEffect(() => {
     //localStorage에서 likelist를 파싱 

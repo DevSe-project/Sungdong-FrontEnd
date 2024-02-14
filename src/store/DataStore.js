@@ -984,15 +984,15 @@ export const useOrderListStore = create((set) => ({
   actions: {
     toggleSelectList: (valueID, value) =>
       set((state) => ({
-        selectList: state.selectList.some(item => item.orderId === valueID)
-          ? state.selectList.filter(item => item.orderId !== valueID)
-          : [...state.selectList, { orderId: valueID, value: value }],
+        selectList: state.selectList.some(item => item.order_id === valueID)
+          ? state.selectList.filter(item => item.order_id !== valueID)
+          : [...state.selectList, { order_id: valueID, value: value }],
       })),
     toggleAllSelect: (selectAll, value) =>
       set((state) => ({
         selectList: selectAll
           ? value.map((item) => ({
-            orderId: item.orderId,
+            order_id: item.order_id,
             value: item,
           }))
           : [], // 모두 선택 해제 시 빈 배열로 설정
@@ -1000,7 +1000,7 @@ export const useOrderListStore = create((set) => ({
     setSelectListValue: (item, fieldkey, value) =>
       set((state) => ({
         selectList: state.selectList.map((list) => {
-          if (list.orderId === item.orderId) {
+          if (list.order_id === item.order_id) {
             return {
               ...list,
               value: {
