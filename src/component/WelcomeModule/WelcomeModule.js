@@ -55,33 +55,36 @@ export default function WelcomeModule() {
     <div className={styles.wrapper}>
       {userData && GetCookie('jwt_token') !== null &&
         <div className={styles.container}>
+
           {/* 환영문구 */}
           <div className={styles.header}>
-            <span className={styles.corName}>
-              {/* 기업명 */}
-              <span style={{ fontWeight: '900' }}>{userData.cor_corName ? userData.cor_corName : '렌더링 중'}</span> 님
-            </span>
-            {/* 환영문구 */}
-            <span className={styles.welcomeMessage}> 환영합니다.</span>
-          </div>
-          {/* 아이템 */}
-          <div className={styles.items}>
-            {/* 요소들을 맵핑하여 표시합니다. */}
-            {[
-              { title: '주문건', content: userData.ordersCount},
-              { title: '미발송', content: userData.preparing_orders},
-              { title: '발송중', content: userData.shipping_orders},
-              { title: '완료건', content: userData.completed_orders}
-            ].map((item, index) => (
-              <div key={index} className={styles.orderList}>
-                <div className={styles.title}>{item.title}</div>
-                {/* styles 객체 내부에 정의된 클래스 이름을 동적으로 결정하여 적용합니다. */}
-                <div className={styles.content}>{item.content}</div>
-              </div>
-            ))}
+            <div className={styles.corName_container}>
+              {/* USER 아이콘 */} <i class="fa-solid fa-user"></i>
+              {/* 기업명 */} <span style={{ fontWeight: '900' }}>{userData.cor_corName ? userData.cor_corName : '렌더링 중'}</span> 님
+            </div>
+            {/* 문구 */} <div className={styles.welcomeMessage}> 환영합니다 <i class="fa-solid fa-exclamation"></i></div>
           </div>
 
-
+          {/* 주문현황 */}
+          <div className={styles.itemContainer}>
+            <div className={styles.itemsTitle}>주문 현황</div>
+            {/* 아이템 */}
+            <div className={styles.items}>
+              {/* 요소들을 맵핑하여 표시합니다. */}
+              {[
+                { title: '신규주문', content: userData.ordersCount },
+                { title: '배송준비', content: userData.preparing_orders },
+                { title: '배송중', content: userData.shipping_orders },
+                { title: '배송완료', content: userData.completed_orders },
+              ].map((item, index) => (
+                <div key={index} className={styles.orderList}>
+                  <div className={styles.title}>{item.title}</div>
+                  {/* styles 객체 내부에 정의된 클래스 이름을 동적으로 결정하여 적용합니다. */}
+                  <div className={styles.content}>{item.content}</div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       }
     </div>
