@@ -14,8 +14,6 @@ export function AdminCategory({productCurrentPage, productTotalPage}) {
 
   const navigate = useNavigate();
 
-  const [middleCategory, setMiddleCategory] = useState([]);
-  const [lowCategory, setLowCategory] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState({ big: null, medium: null, low: null });
   const { isModal, modalName } = useModalState();
   const { selectedModalOpen, setModalName, closeModal } = useModalActions();
@@ -88,14 +86,12 @@ export function AdminCategory({productCurrentPage, productTotalPage}) {
 
   //중 카테고리 필터링
   function FilteredMiddleCategoryData(itemId) {
-    const newData = categoryData.filter(element => new RegExp(`^${itemId}[a-z]$`).test(element.category_id));
-    setMiddleCategory(newData);
+    return categoryData.filter(element => new RegExp(`^${itemId}[a-z]$`).test(element.category_id));
   }
 
   //소 카테고리 필터링
   function FilteredLowCategoryData(itemId) {
-    const newData = categoryData.filter(element => new RegExp(`^${itemId}[1-9]|[1-9][0-9]|100.{3,}$`).test(element.category_id));
-    setLowCategory(newData);
+    return categoryData.filter(element => new RegExp(`^${itemId}[1-9]|[1-9][0-9]|100.{3,}$`).test(element.category_id));
   }
 
   //카테고리 추가에 필요한 함수
@@ -159,9 +155,7 @@ export function AdminCategory({productCurrentPage, productTotalPage}) {
                   {categoryData
                     && FilteredHighCategoryData().map((item, index) => (
                       <div onClick={() => {
-                        setLowCategory([]);
                         handleCategoryClick('big', item.category_id);
-                        FilteredMiddleCategoryData(item.category_id)
                       }}
                         key={index}
                         className={styles.categoryInner}
@@ -179,10 +173,10 @@ export function AdminCategory({productCurrentPage, productTotalPage}) {
               </div>
               <div className={styles.categoryContainer}>
                 <div style={{ overflowY: 'auto' }}>
-                  {middleCategory != null && middleCategory.map((item, index) => (
+                  {selectedCategory.big != null 
+                  && FilteredMiddleCategoryData(selectedCategory.big).map((item, index) => (
                     <div
                       onClick={() => {
-                        FilteredLowCategoryData(item.category_id)
                         handleCategoryClick('medium', item.category_id);
                       }}
                       key={index}
@@ -205,7 +199,8 @@ export function AdminCategory({productCurrentPage, productTotalPage}) {
               </div>
               <div className={styles.categoryContainer}>
                 <div style={{ overflowY: 'auto' }}>
-                  {lowCategory != null && lowCategory.map((item, index) => (
+                  {selectedCategory.medium != null 
+                  && FilteredLowCategoryData(selectedCategory.medium).map((item, index) => (
                     <div
                       key={index}
                       className={styles.categoryInner}

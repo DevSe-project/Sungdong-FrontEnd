@@ -795,16 +795,10 @@ export const useProductActions = () => useProductStore((state) => state.actions)
 /* ----------------ProductFilter STORE---------------- */
 export const useProductFilterStore = create((set) => ({
   productFilter: {
-    title: '',
-    brand: '',
-    productId: '',
-    state: {
-      전체: false,
-      판매대기: false,
-      판매중: false,
-      판매중단: false,
-      판매종료: false
-    },
+    product_title: '',
+    product_brand: '',
+    product_id: '',
+    state: [],
     category: {
       highId: '',
       middleId: '',
@@ -815,8 +809,7 @@ export const useProductFilterStore = create((set) => ({
       start: '',
       end: ''
     },
-    supply: '',
-    option: '',
+    product_supply: '',
   },
   actions: {
     setProductFilter: (fieldName, value) =>
@@ -824,16 +817,10 @@ export const useProductFilterStore = create((set) => ({
     resetProductFilter: () =>
       set({
         productFilter: {
-          title: '',
-          brand: '',
-          productId: '',
-          state: {
-            전체: false,
-            판매대기: false,
-            판매중: false,
-            판매중단: false,
-            판매종료: false
-          },
+          product_title: '',
+          product_brand: '',
+          product_id: '',
+          state: [],
           category: {
             highId: '',
             middleId: '',
@@ -844,8 +831,7 @@ export const useProductFilterStore = create((set) => ({
             start: '',
             end: ''
           },
-          supply: '',
-          option: '',
+          product_supply: '',
         }
       }),
     setProductCategory: (fieldName, value) =>
@@ -868,33 +854,55 @@ export const useProductFilterStore = create((set) => ({
           },
         },
       })),
-    setCheckboxState: (fieldName) =>
-      set((state) => ({
-        productFilter: {
-          ...state.productFilter,
-          state: {
-            ...state.productFilter.state,
-            [fieldName]: !state[fieldName],
-          },
-        },
-      })),
-    setAllCheckboxState: () =>
+      setCheckboxState: (fieldName) =>
       set((state) => {
-        const allChecked = Object.values(state.productFilter.state).every((value) => value);
-        const updatedState = {};
-
-        Object.keys(state.productFilter.state).forEach((key) => {
-          updatedState[key] = !allChecked;
-        });
-
+          // Check if fieldName is already present in the state
+          const isFieldPresent = state.productFilter.state.find(item => item === fieldName);
+          
+          if (isFieldPresent) {
+            // If fieldName is already present, filter it out
+            return {
+              ...state,
+              productFilter: {
+                ...state.productFilter,
+                state: state.productFilter.state.filter(item => item !== fieldName)
+              }
+            };
+          } else {
+            // If fieldName is not present, add it to the state
+            return {
+              ...state,
+              productFilter: {
+                ...state.productFilter,
+                state: [...state.productFilter.state, fieldName]
+              }
+            };
+          }
+        }
+      ),    
+    setAllCheckboxState: (selectAll) =>
+    set((state) => {
+      // Check if selectAll is true
+      if (selectAll === true) {
+        // If selectAll is true, return a new state with all fields selected
         return {
           ...state,
           productFilter: {
             ...state.productFilter,
-            state: updatedState,
-          },
+            state: [] // Select all fields
+          }
         };
-      }),
+      } else if (selectAll === false) {
+        // If selectAll is false, deselect all fields
+        return {
+          ...state,
+          productFilter: {
+            ...state.productFilter,
+            state: ["판매대기", "판매중", "판매완료", "판매중단"] // Deselect all fields
+          }
+        };
+      }
+    })
   }
 }));
 export const useProductFilter = () => useProductFilterStore((state) => state.productFilter);
@@ -976,15 +984,15 @@ export const useOrderListStore = create((set) => ({
   actions: {
     toggleSelectList: (valueID, value) =>
       set((state) => ({
-        selectList: state.selectList.some(item => item.orderId === valueID)
-          ? state.selectList.filter(item => item.orderId !== valueID)
-          : [...state.selectList, { orderId: valueID, value: value }],
+        selectList: state.selectList.some(item => item.order_id === valueID)
+          ? state.selectList.filter(item => item.order_id !== valueID)
+          : [...state.selectList, { order_id: valueID, value: value }],
       })),
     toggleAllSelect: (selectAll, value) =>
       set((state) => ({
         selectList: selectAll
           ? value.map((item) => ({
-            orderId: item.orderId,
+            order_id: item.order_id,
             value: item,
           }))
           : [], // 모두 선택 해제 시 빈 배열로 설정
@@ -992,7 +1000,7 @@ export const useOrderListStore = create((set) => ({
     setSelectListValue: (item, fieldkey, value) =>
       set((state) => ({
         selectList: state.selectList.map((list) => {
-          if (list.orderId === item.orderId) {
+          if (list.order_id === item.order_id) {
             return {
               ...list,
               value: {

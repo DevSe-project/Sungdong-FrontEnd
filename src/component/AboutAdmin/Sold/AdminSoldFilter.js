@@ -15,19 +15,6 @@ export function AdminSoldFilter({handelSearch}){
       // 컴포넌트가 언마운트될 때 order 필터 상태 리셋
     };
   }, []);
-
-  function orderStatus(){
-    return(
-      <div style={{display: 'flex', gap: '0.5em'}}>
-        <div>
-          <select className={styles.select} value={orderFilter.orderState} onChange={(e)=>setOrderFilter("orderState", e.target.value)} name="orderState">
-            <option name="orderState" value={1}>신규 주문</option>
-            <option name="orderState" value={2}>발송 완료(배송 대기중)</option>
-          </select>
-        </div>
-      </div>
-    )
-  }
   
   function deliveryFilter(){
     return(
@@ -70,7 +57,6 @@ function searchTerm(){
       <div className={styles.searchFilterList}>
         <select className={styles.select} name='filterDate' value={orderFilter.deliveryType} onChange={(e)=>setOrderFilter("deliveryType", e.target.value)} >
           <option name='filterDate' value="orderDate">결제일</option>
-          <option name='filterDate' value="delivery_addDate">발송처리일</option>
         </select>
       </div>
       <div className={styles.searchFilterList}>
@@ -84,7 +70,6 @@ function searchTerm(){
 
   const filterList = [
     { label : '조회기간', content : searchTerm()},
-    { label : '주문상태', content : orderStatus()},
     { label : '배송방법', content : deliveryFilter()},
     { label : '상세조건', content : detailFilter()},
   ]

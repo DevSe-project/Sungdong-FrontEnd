@@ -109,40 +109,43 @@ export default function AdminCancelModal() {
             style={{backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)'}}
             >
               <tr>
-                <th style={{width:'10%'}}>상품코드</th>
-                <th style={{width:'10%'}}>주문번호</th>
-                <th style={{width:'10%'}}>상품명</th>
-                <th style={{width:'10%'}}>옵션</th>
-                <th style={{width:'10%'}}>주문량</th>
-                <th style={{width:'10%'}}>공급가</th>
-                <th style={{width:'10%', fontWeight: '650'}}>주문가</th>
+                <th>주문번호</th>
+                <th>주문상태</th>
+                <th>주문상품</th>
+                <th>주문일자</th>
+                <th>주문가</th>
+                <th>주문자 성함</th>
+                <th>주문자 연락처</th>
                 <th style={{width:'10%'}}>취소사유</th>
               </tr>
             </thead>
             <tbody>
             {selectList.map((item, key)=> (
               <tr key={key} className={styles.list}>
-              <td>{item.value.ProductId}</td>
-              <td>
-                {item.orderId}
-              </td>
-              <td>
-              <h5 style={{fontSize: '1.1em', fontWeight: '550'}}>
-                {data.some((data)=> (data.id === item.value.ProductId))
-                  ? data.find((data) => data.id === item.value.ProductId).title
-                  : '상품제목없음'
-                }
-              </h5>
-              </td>
-              <td>{data.some((data)=> (data.id === item.value.ProductId)).option
-                  ? "옵션있음"
-                  : '옵션없음'
-                }</td>
-              <td>{item.value.order_cnt}</td>
-              <td>\{item.value.order_productPrice.toLocaleString()}</td>
-              <td style={{fontWeight: '750'}}>
-                \{item.value.order_payAmount.toLocaleString()}
-              </td>
+                <td>
+                  {item.value.order_id}
+                </td>
+                <td>
+                  {item.value.orderState === 1 ? "신규주문" :
+                  item.value.orderState === 2 && "발송완료" }
+                </td>
+                <td>
+                <h5 style={{fontSize: '1.1em', fontWeight: '550'}}>
+                  {item.value.product_title} {(item.value.product_length-1) > 0 && `외 ${item.value.product_length-1}건`}
+                </h5>
+                </td>
+                <td>
+                  {new Date(item.value.order_date).toLocaleString()}
+                </td>
+                <td style={{fontWeight: '750'}}>
+                  \{parseInt(item.value.order_payAmount).toLocaleString()}
+                </td>
+                <td>
+                  {item.value.order_name}
+                </td>
+                <td>
+                  {item.value.order_tel}
+                </td>
                 <td><input type='text' value={item.value.cancelReason} onChange={(e)=>setSelectListValue(item, "cancelReason", e.target.value)}/></td>
               </tr>
             ))}
