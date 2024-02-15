@@ -130,202 +130,198 @@ export function AdminSoldList() {
   }
 
   return (
-    <div>
-      <AdminHeader />
-      <div className={styles.main}>
-        <AdminMenuData />
-        <main className={styles.container}>
-          <div className={styles.bodyHeader}>
-            <h1>결제완료 주문 및 발송 처리</h1>
+    <div className={styles.main}>
+      <main className={styles.container}>
+        <div className={styles.bodyHeader}>
+          <h1>결제완료 주문 및 발송 처리</h1>
+        </div>
+        {/* 필터 */}
+        <AdminSoldFilter handelSearch={handleSearch} />
+        {/* 목록 */}
+        <div className={styles.tableLocation}>
+          {/* 목록 상위 타이틀 */}
+          <div className={styles.listContainer}>
+            <h4 style={{ fontWeight: '650' }}>목록</h4>
+            <div style={{ display: 'flex', gap: '1em' }}>
+              <select defaultValue={itemsPerPage} onChange={(e) => setItemsPerPage(e.target.value)}>
+                <option value={5}>5개씩 보기</option>
+                <option value={10}>10개씩 보기</option>
+                <option value={50}>50개씩 보기</option>
+                <option value={100}>100개씩 보기</option>
+              </select>
+            </div>
           </div>
-          {/* 필터 */}
-          <AdminSoldFilter handelSearch={handleSearch} />
-          {/* 목록 */}
-          <div className={styles.tableLocation}>
-            {/* 목록 상위 타이틀 */}
-            <div className={styles.listContainer}>
-              <h4 style={{ fontWeight: '650' }}>목록</h4>
-              <div style={{ display: 'flex', gap: '1em' }}>
-                <select defaultValue={itemsPerPage} onChange={(e) => setItemsPerPage(e.target.value)}>
-                  <option value={5}>5개씩 보기</option>
-                  <option value={10}>10개씩 보기</option>
-                  <option value={50}>50개씩 보기</option>
-                  <option value={100}>100개씩 보기</option>
-                </select>
-              </div>
-            </div>
-            {/* 발주, 발송, 취소 처리 박스 */}
-            <div className={styles.manageBox}>
-              <button onClick={() => handleDelNumInput()} className={styles.button}>발송처리</button>
-              <button onClick={() => handleCancel()} className={styles.button}>취소처리</button>
-            </div>
-            {/* 리스트 출력 */}
-            <table className={styles.table}>
-              <thead
-                style={{ backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)' }}
-              >
-                <tr>
-                  <th><input type='checkbox'
-                    checked={selectList.length === ordered.length && ordered.length > 0}
-                    onChange={handleToggleAllSelect} />
-                  </th>
-                  <th>주문번호</th>
-                  <th>배송사</th>
-                  <th>주문상태</th>
-                  <th>주문상품</th>
-                  <th>주문일자</th>
-                  <th>주문가</th>
-                  <th>주문자 정보</th>
-                </tr>
-              </thead>
-              <tbody>
-                {ordered.length > 0
-                  ? ordered.map((item, index) => (
-                    <React.Fragment key={index}>
-                      <tr className={styles.list}>
-                        <td><input type="checkbox" name="list" checked={selectList.some((filter) => filter.order_id === item.order_id)} onChange={() => toggleSelectList(item.order_id, item)} /></td>
-                        <td>
-                          {item.order_id}
-                        </td>
-                        <td>
-                          {item.deliveryType &&
-                            item.deliveryType === '화물'
+          {/* 발주, 발송, 취소 처리 박스 */}
+          <div className={styles.manageBox}>
+            <button onClick={() => handleDelNumInput()} className={styles.button}>발송처리</button>
+            <button onClick={() => handleCancel()} className={styles.button}>취소처리</button>
+          </div>
+          {/* 리스트 출력 */}
+          <table className={styles.table}>
+            <thead
+              style={{ backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)' }}
+            >
+              <tr>
+                <th><input type='checkbox'
+                  checked={selectList.length === ordered.length && ordered.length > 0}
+                  onChange={handleToggleAllSelect} />
+                </th>
+                <th>주문번호</th>
+                <th>배송사</th>
+                <th>주문상태</th>
+                <th>주문상품</th>
+                <th>주문일자</th>
+                <th>주문가</th>
+                <th>주문자 정보</th>
+              </tr>
+            </thead>
+            <tbody>
+              {ordered.length > 0
+                ? ordered.map((item, index) => (
+                  <React.Fragment key={index}>
+                    <tr className={styles.list}>
+                      <td><input type="checkbox" name="list" checked={selectList.some((filter) => filter.order_id === item.order_id)} onChange={() => toggleSelectList(item.order_id, item)} /></td>
+                      <td>
+                        {item.order_id}
+                      </td>
+                      <td>
+                        {item.deliveryType &&
+                          item.deliveryType === '화물'
 
-                            ? item.deliverySelect === 'kr.kdexp'
-                              ? `${item.deliveryType && item.deliveryType} (배송 업체 : 경동화물)`
-                              : `${item.deliveryType && item.deliveryType} (배송 업체 : 대신화물)`
+                          ? item.deliverySelect === 'kr.kdexp'
+                            ? `${item.deliveryType && item.deliveryType} (배송 업체 : 경동화물)`
+                            : `${item.deliveryType && item.deliveryType} (배송 업체 : 대신화물)`
 
-                            : item.deliveryType &&
-                              item.deliveryType === '성동택배'
+                          : item.deliveryType &&
+                            item.deliveryType === '성동택배'
 
-                              ? `${item.deliveryType && item.deliveryType} 
+                            ? `${item.deliveryType && item.deliveryType} 
                               (배송 예정일 : ${item.delivery_date && new Date(item.delivery_date).toLocaleDateString()})`
-                              : item.deliveryType && item.deliveryType === '일반택배'
-                                ? `${item.deliveryType} (배송 업체 : 대한통운)`
-                                : '직접 픽업'}
-                        </td>
-                        <td>
-                          {item.orderState === 1 ? "신규주문" :
-                            item.orderState === 2 && "발송완료"}
-                        </td>
-                        <td onClick={() => {
-                          if (selectedData?.some((selectItem) => selectItem.order_id === item.order_id)) {
-                            setSelectedData(null);
-                          } else
-                            handleOpenItem(item.order_id);
-                        }}>
-                          <h5 style={{ fontSize: '1.1em', fontWeight: '550' }}>
-                            {item.product_title} {(item.product_length - 1) > 0 && `외 ${item.product_length - 1}건`}
-                          </h5>
-                        </td>
-                        <td>
-                          {new Date(item.order_date).toLocaleString()}
-                        </td>
-                        <td style={{ fontWeight: '750' }}>
-                          \{parseInt(item.order_payAmount).toLocaleString()}
-                        </td>
-                        <td
-                          className={styles.detailView}
-                          onClick={() => selectedModalOpen(item.order_id)}>
-                          보기
+                            : item.deliveryType && item.deliveryType === '일반택배'
+                              ? `${item.deliveryType} (배송 업체 : 대한통운)`
+                              : '직접 픽업'}
+                      </td>
+                      <td>
+                        {item.orderState === 1 ? "신규주문" :
+                          item.orderState === 2 && "발송완료"}
+                      </td>
+                      <td onClick={() => {
+                        if (selectedData?.some((selectItem) => selectItem.order_id === item.order_id)) {
+                          setSelectedData(null);
+                        } else
+                          handleOpenItem(item.order_id);
+                      }}>
+                        <h5 style={{ fontSize: '1.1em', fontWeight: '550' }}>
+                          {item.product_title} {(item.product_length - 1) > 0 && `외 ${item.product_length - 1}건`}
+                        </h5>
+                      </td>
+                      <td>
+                        {new Date(item.order_date).toLocaleString()}
+                      </td>
+                      <td style={{ fontWeight: '750' }}>
+                        \{parseInt(item.order_payAmount).toLocaleString()}
+                      </td>
+                      <td
+                        className={styles.detailView}
+                        onClick={() => selectedModalOpen(item.order_id)}>
+                        보기
+                      </td>
+                    </tr>
+                    {/* 아이템 모달 */}
+                    {selectedData?.some((selectItem) => selectItem.order_id === item.order_id) && (
+                      <tr>
+                        <td colSpan="8">
+                          <table className={styles.colTable}>
+                            <thead style={{ backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.6)' }}>
+                              <tr>
+                                <th>
+                                  이미지
+                                </th>
+                                <th>
+                                  품명
+                                </th>
+                                <th>
+                                  상품코드
+                                </th>
+                                <th style={{ width: '25%' }}>
+                                  브랜드
+                                </th>
+                                <th style={{ width: '10%' }}>
+                                  선택 옵션
+                                </th>
+                                <th style={{ width: '20%' }}>
+                                  재고
+                                </th>
+                                <th style={{ width: '20%' }}>
+                                  공급가
+                                </th>
+                                <th style={{ width: '20%' }}>
+                                  주문량
+                                </th>
+                                <th style={{ width: '10%', fontWeight: '650' }}>
+                                  주문가
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {selectedData?.map((itemData, index) =>
+                                <tr key={index}>
+                                  <td>
+                                    <img className={styles.thumnail} src={itemData.product_image_original} alt='이미지' />
+                                  </td>
+                                  <td>
+                                    {itemData.product_title}
+                                  </td>
+                                  <td>
+                                    {itemData.product_id}
+                                  </td>
+                                  <td>
+                                    {itemData.product_brand}
+                                  </td>
+                                  <td>
+                                    {itemData.selectedOption}
+                                  </td>
+                                  <td>
+                                    {itemData.product_supply}
+                                  </td>
+                                  <td style={{ fontWeight: '750' }}>
+                                    {itemData.product_discount
+                                      ? `${parseInt(itemData.product_price - (itemData.product_price / 100) * itemData.product_discount)
+                                        .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
+                                      : `${parseInt(itemData.product_price).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
+                                  </td>
+                                  <td>
+                                    {itemData.order_cnt}
+                                  </td>
+                                  <td style={{ fontWeight: '750' }}>
+                                    {parseInt(itemData.order_productPrice)
+                                      .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
+                                  </td>
+                                </tr>
+                              )}
+                            </tbody>
+                          </table>
                         </td>
                       </tr>
-                      {/* 아이템 모달 */}
-                      {selectedData?.some((selectItem) => selectItem.order_id === item.order_id) && (
-                        <tr>
-                          <td colSpan="8">
-                            <table className={styles.colTable}>
-                              <thead style={{ backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.6)' }}>
-                                <tr>
-                                  <th>
-                                    이미지
-                                  </th>
-                                  <th>
-                                    품명
-                                  </th>
-                                  <th>
-                                    상품코드
-                                  </th>
-                                  <th style={{ width: '25%' }}>
-                                    브랜드
-                                  </th>
-                                  <th style={{ width: '10%' }}>
-                                    선택 옵션
-                                  </th>
-                                  <th style={{ width: '20%' }}>
-                                    재고
-                                  </th>
-                                  <th style={{ width: '20%' }}>
-                                    공급가
-                                  </th>
-                                  <th style={{ width: '20%' }}>
-                                    주문량
-                                  </th>
-                                  <th style={{ width: '10%', fontWeight: '650' }}>
-                                    주문가
-                                  </th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {selectedData?.map((itemData, index) =>
-                                  <tr key={index}>
-                                    <td>
-                                      <img className={styles.thumnail} src={itemData.product_image_original} alt='이미지' />
-                                    </td>
-                                    <td>
-                                      {itemData.product_title}
-                                    </td>
-                                    <td>
-                                      {itemData.product_id}
-                                    </td>
-                                    <td>
-                                      {itemData.product_brand}
-                                    </td>
-                                    <td>
-                                      {itemData.selectedOption}
-                                    </td>
-                                    <td>
-                                      {itemData.product_supply}
-                                    </td>
-                                    <td style={{ fontWeight: '750' }}>
-                                      {itemData.product_discount
-                                        ? `${parseInt(itemData.product_price - (itemData.product_price / 100) * itemData.product_discount)
-                                          .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
-                                        : `${parseInt(itemData.product_price).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
-                                    </td>
-                                    <td>
-                                      {itemData.order_cnt}
-                                    </td>
-                                    <td style={{ fontWeight: '750' }}>
-                                      {parseInt(itemData.order_productPrice)
-                                        .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
-                                    </td>
-                                  </tr>
-                                )}
-                              </tbody>
-                            </table>
-                          </td>
-                        </tr>
 
-                      )}
-                      {/* 주문서 정보 모달 */}
-                      {modalName === item.order_id && <AdminSoldModal item={item} />}
-                    </React.Fragment>
-                  ))
-                  : <tr><td colSpan="10">불러들일 데이터가 없습니다.</td></tr>
-                }
-              </tbody>
-            </table>
-            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
-          </div>
-        </main>
-        {modalName === "발송"
-          ?
-          isModal && <AdminDelNumModal />
-          : modalName === "취소" &&
-          isModal && <AdminCancelModal />
-        }
-      </div>
+                    )}
+                    {/* 주문서 정보 모달 */}
+                    {modalName === item.order_id && <AdminSoldModal item={item} />}
+                  </React.Fragment>
+                ))
+                : <tr><td colSpan="10">불러들일 데이터가 없습니다.</td></tr>
+              }
+            </tbody>
+          </table>
+          <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+        </div>
+      </main>
+      {modalName === "발송"
+        ?
+        isModal && <AdminDelNumModal />
+        : modalName === "취소" &&
+        isModal && <AdminCancelModal />
+      }
     </div>
   )
 }
