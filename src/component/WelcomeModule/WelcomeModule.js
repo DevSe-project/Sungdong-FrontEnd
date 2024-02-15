@@ -79,7 +79,7 @@ export default function WelcomeModule() {
               {[
                 { title: '신규주문', content: userData.ordersCount },
                 { title: '배송준비', content: userData.preparing_orders },
-                { title: '배송중', content: userData.shipping_orders },
+                { title: '배송진행', content: userData.shipping_orders },
                 { title: '배송완료', content: userData.completed_orders },
               ].map((item, index) => (
                 <div key={index} className={styles.orderList}>

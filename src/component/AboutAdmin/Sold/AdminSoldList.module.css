@@ -9,7 +9,22 @@
   align-items: center;
 }
 
-.tableLocation {
+.bodyHeader{
+  width: 100%;
+  text-align: left;
+  padding: 5px;
+  border-bottom: 3px solid var(--background-color-set);
+}
+/* 관련상품 탭 */
+.table{
+  width: 100%;
+  border-top: 3px solid var(--background-color-set);
+  border-bottom: 1px solid lightgray;
+  text-align: center;
+  align-items: center;
+}
+
+.tableLocation{
   display: flex;
   width: 90%;
   flex-direction: column;
