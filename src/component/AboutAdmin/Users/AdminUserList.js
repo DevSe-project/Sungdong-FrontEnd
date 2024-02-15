@@ -306,37 +306,6 @@ export default function AdminUserList() {
     }
   };
 
-
-
-  const handleSelectChange = async (e) => {
-    const { value } = e.target;
-    // 선택된 값(value)과 체크된 항목(checkedItems)을 사용하여 일괄 변경 API 호출
-    try {
-      const response = await axios.post(
-        "/auth/update",
-        JSON.stringify({
-          user_ids: checkedItems,
-          update_value: value
-        }),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          }
-        }
-      );
-      // 변경 성공 시 메시지 표시
-      alert(response.data.message);
-      // 변경된 데이터를 쿼리 데이터로 업데이트
-      queryClient.setQueryData(['users'], () => {
-        return response.data.updated_users;
-      });
-    } catch (error) {
-      // 변경 실패 시 에러 메시지 표시
-      console.error('일괄 변경 실패:', error);
-      alert('일괄 변경에 실패했습니다.');
-    }
-  };
-
   const parseOptionValue = (item, listItem) => {
     if (item.key == 'userType_id') { // 고객구분
       switch (listItem) {
@@ -348,9 +317,11 @@ export default function AdminUserList() {
           return <span>관리자</span>;
         case 4:
           return <span>총괄 관리자</span>;
+        default:
+          return <span>Error</span>
       }
     } else if (item.key == 'hasCMS') { // CMS동의 여부
-      if (listItem == true)
+      if (listItem)
         return <span>동의</span>;
       else
         return <span>비동의</span>;
@@ -418,7 +389,7 @@ export default function AdminUserList() {
                   { title: '고객 구분', valList: [1, 2, 3, 4], val: '', key: 'userType_id' },
                   { title: '등급', valList: ['A', 'B', 'C', 'D'], val: '', key: 'grade' },
                   { title: '담당자', valList: ['박형조', '엄지석', '김태훈'], val: '', key: 'name' },
-                  { title: 'CMS여부', valList: [true, false], val: '', key: 'hasCMS' },
+                  { title: 'CMS여부', valList: [1, 0], val: '', key: 'hasCMS' },
                 ].map((customItem, index) => (
                   <th key={index}>
                     {editIndex === 'allEdit' ?
@@ -452,7 +423,7 @@ export default function AdminUserList() {
                   {editIndex === 'allEdit' ?
                     <div className="dropdown-menu"> {/* 아이콘 */}
                       {/* 수정 버튼 */}
-                      <button className='white_button' onClick={() => handleBulkEdit()}>수정</button>
+                      <button className='white_button' onClick={() => { handleBulkEdit(); window.location.reload(); }}>수정</button>
                       {/* 삭제 버튼 */}
                       <button className='white_button' onClick={() => handleDelete(checkedItems)}>삭제</button>
                       {/* 취소 버튼 */}
@@ -490,7 +461,7 @@ export default function AdminUserList() {
                     { title: '고객 구분', valList: [1, 2, 3, 4], val: user.userType_id, key: 'userType_id' },
                     { title: '등급', valList: ['A', 'B', 'C', 'D'], val: user.grade, key: 'grade' },
                     { title: '담당자', valList: ['박형조', '엄지석', '김태훈'], val: user.name ? user.name : <span style={{ color: 'var(--main-red' }}>배정 필요</span>, key: 'name' },
-                    { title: 'CMS여부', valList: [true, false], val: user.hasCMS, key: 'hasCMS' },
+                    { title: 'CMS여부', valList: [1, 0], val: user.hasCMS, key: 'hasCMS' },
                   ].map((customItem, editIdx) => (
                     <td key={editIdx}>
                       {editIndex === index ?
@@ -500,7 +471,6 @@ export default function AdminUserList() {
                             value={customItem.val}
                             onChange={e => updateValue(e, customItem.key, index)}
                           >
-                            <option value={null}>---</option>
                             {customItem.valList.map((item, index) => (
                               <option key={index} value={item}>{parseOptionValue(customItem, item)}</option>
                             ))}
