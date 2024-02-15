@@ -2,8 +2,7 @@
 .body {
     display: flex;
     flex-direction: column;
-    margin: 1em;
-    padding: 1em;
+    width: 100%;
     gap: 1em;
 }  
 

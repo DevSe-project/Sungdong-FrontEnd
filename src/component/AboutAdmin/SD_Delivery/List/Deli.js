@@ -8,35 +8,22 @@ import styles from './Deli.module.css';
 
 export default function Deli() {
 
+  return (
+    <div className={styles.body}>
+      {/* Main */}
+      <div className={styles.main}>
 
+        {/* Post */}
+        <div className='LargeHeader'>배송 상태 관리</div>
 
-    return (
-        // Full Screen
-        <div>
+        {/* Filter Container */}
+        <Deli_Filter />
 
-            <AdminHeader />
+        {/* Delivery InquireTable Header */}
+        <Deli_List />
 
-            {/* Body */}
-            <div className={styles.body}>
+      </div>
 
-                <AdminMenuData />
-
-                {/* Main */}
-                <div className={styles.main}>
-
-                    {/* Post */}
-                    <div className='LargeHeader'> 배송 상태 관리  </div>
-
-                    {/* Filter Container */}
-                    <Deli_Filter />
-
-                    {/* Delivery InquireTable Header */}
-                    <Deli_List />
-
-                </div>
-
-            </div>
-
-        </div>
-    )
+    </div>
+  )
 }

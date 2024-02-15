@@ -1,7 +1,6 @@
 .main{
   display: flex;
   flex-direction: column;
-  width: 93%;
   border: 1px solid lightgray;
   align-items: center;
   justify-content: flex-start;

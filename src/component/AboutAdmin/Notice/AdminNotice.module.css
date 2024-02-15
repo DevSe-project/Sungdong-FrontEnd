@@ -1,14 +1,8 @@
 .body {
   display: flex;
-  width: 100%;
-}
-.main {
-  margin: 12px;
-  display: flex;
+  margin: 1em;
+  padding: 1em;
   flex-direction: column;
-}
-.sidebar {
-  width: fit-content;
 }
 /* ----------------------------------------- */
 .flex_container {
@@ -18,7 +12,7 @@
 .left {
   background-color: var(--main-color-middle);
   border-radius: 1dvh;
-  width: 25vw;
+  width: 20vw;
   height: 160px;
   display: flex;
   flex-direction: column;
@@ -54,7 +48,7 @@
 .right {
   background-color: var(--main-color-light);
   border-radius: 1vh;
-  width: 62.1vw;
+  width: 67.8vw;
   height: 160px;
   display: flex;
   flex-direction: column;

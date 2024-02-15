@@ -345,184 +345,178 @@ export default function AdminUserList() {
   }
 
   return (
-    <div>
-      <AdminHeader />
-      <div className={styles.body}>
-        <AdminMenuData />
-        <div className={styles.mainContainer}>
-          <div className={styles.filtSortContainer}>
-            <AdminUserFilter onFiltering={onFiltering} />
-            <AdminUserSort sortBy={sortBy} onSort={handleSort} />
-          </div>
-          {/* Header */}
-          <div className='MediumHeader'>
-            <div className='HeaderTxt'>
-              목록
-            </div>
-            <select
-              className='select'
-              value={itemsPerPage}
-              onChange={(e) => setItemsPerPage(Number(e.target.value))}
-            >
-              <option value={5}>5</option>
-              <option value={10}>10</option>
-              <option value={20}>20</option>
-              <option value={30}>30</option>
-            </select>
-          </div>
-
-          <table style={{ marginTop: '10px' }}>
-            <thead>
-              <tr>
-                {/* 전체 체크박스 관리 체크박스 */}
-                <th>
-                  <input
-                    type='checkbox'
-                    checked={checkedItems.length === matchedData.length ? true : false}
-                    onChange={(e) => handleAllCheckbox(e.target.checked)}
-                  />
-                </th>
-                {/* 업체명(상호명) */}
-                <th>업체명(상호명)</th>
-                {/* 고객 구분, CMS여부 */}
-                {[
-                  { title: '고객 구분', valList: [1, 2, 3, 4], val: '', key: 'userType_id' },
-                  { title: '등급', valList: ['A', 'B', 'C', 'D'], val: '', key: 'grade' },
-                  { title: '담당자', valList: ['박형조', '엄지석', '김태훈'], val: '', key: 'name' },
-                  { title: 'CMS여부', valList: [1, 0], val: '', key: 'hasCMS' },
-                ].map((customItem, index) => (
-                  <th key={index}>
-                    {editIndex === 'allEdit' ?
-                      <>
-                        <span>{customItem.title}</span>
-                        <select
-                          className='select'
-                          value={customItem.val}
-                          onChange={e => updateValue(e, customItem.key, index)}
-                        >
-                          <option value={null}>선택</option>
-                          {customItem.valList.map((valListItem, valListIndex) => (
-                            <option key={valListIndex} value={valListItem}>
-                              {parseOptionValue(customItem, valListItem)}
-                            </option>
-                          ))}
-                        </select>
-                      </>
-                      :
-                      customItem.title
-                    }
-                  </th>
-                ))}
-
-                {/* 주소 */}
-                <th>주소</th>
-                {/* 연락처 */}
-                <th>연락처</th>
-                {/* 메뉴 아이콘 */}
-                <th style={{ width: '20px' }}>
-                  {editIndex === 'allEdit' ?
-                    <div className="dropdown-menu"> {/* 아이콘 */}
-                      {/* 수정 버튼 */}
-                      <button className='white_button' onClick={() => { handleBulkEdit(); window.location.reload(); }}>수정</button>
-                      {/* 삭제 버튼 */}
-                      <button className='white_button' onClick={() => handleDelete(checkedItems)}>삭제</button>
-                      {/* 취소 버튼 */}
-                      <button className='white_button' onClick={() => {
-                        setEditIndex('none');
-                        setCheckedItems([]);
-                      }}>취소</button>
-                    </div>
-                    :
-                    <div className='icon' onClick={() => {
-                      if (checkedItems.length) {
-                        setEditIndex('allEdit');
-                      } else {
-                        alert('선택된 고객이 없습니다.');
-                      }
-                    }}><i className="fa-solid fa-ellipsis"></i></div>
-                  }
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {matchedData?.map((user, index) => (
-                <tr key={index}>
-                  {/* 체크박스 */}
-                  <td>
-                    <input
-                      type='checkbox'
-                      checked={checkedItems.includes(user.users_id)}
-                      onChange={(e) => handlePerCheckbox(e.target.checked, user.users_id)}
-                    />
-                  </td>
-                  {/* name: 상호명, val: db의 현재 값, valList: 선택할 값 */}
-                  {[
-                    { title: '고객명', val: user.cor_corName, key: 'cor_corName' },
-                    { title: '고객 구분', valList: [1, 2, 3, 4], val: user.userType_id, key: 'userType_id' },
-                    { title: '등급', valList: ['A', 'B', 'C', 'D'], val: user.grade, key: 'grade' },
-                    { title: '담당자', valList: ['박형조', '엄지석', '김태훈'], val: user.name ? user.name : <span style={{ color: 'var(--main-red' }}>배정 필요</span>, key: 'name' },
-                    { title: 'CMS여부', valList: [1, 0], val: user.hasCMS, key: 'hasCMS' },
-                  ].map((customItem, editIdx) => (
-                    <td key={editIdx}>
-                      {editIndex === index ?
-                        customItem.valList ?
-                          <select
-                            className='select'
-                            value={customItem.val}
-                            onChange={e => updateValue(e, customItem.key, index)}
-                          >
-                            {customItem.valList.map((item, index) => (
-                              <option key={index} value={item}>{parseOptionValue(customItem, item)}</option>
-                            ))}
-                          </select>
-                          :
-                          <input
-                            className='white_button'
-                            type='text'
-                            value={customItem.val}
-                            onChange={(e) => {
-                              const editData = e.target.value;
-                              const newData = matchedData.map((item, idx) => {
-                                if (idx === index) {
-                                  return { ...item, [customItem.key]: editData };
-                                }
-                                return item;
-                              });
-                              setMatchedData(newData);
-                            }}
-                          />
-                        :
-                        parseOptionValue(customItem, customItem.val)
-                      }
-                    </td>
-                  ))}
-
-
-                  {/* 주소 */}
-                  <td>{user.bname} {user.roadAddress}({user.zonecode})</td>
-                  {/* 연락처 */}
-                  <td>{user.cor_tel}</td>
-                  {/* 수정/삭제 드롭다운 메뉴 */}
-                  <td style={{ width: '20px' }}>
-                    {index === editIndex ? (
-                      <div className="dropdown-menu">
-                        {/* 수정 버튼 */}
-                        <button className='white_button' onClick={() => { handleEdit(user); console.log(user); }}>수정</button>
-                        {/* 삭제 버튼 */}
-                        <button className='white_button' onClick={() => handleDelete(user.users_id)}>삭제</button>
-                        {/* 취소 버튼 */}
-                        <button className='white_button' onClick={() => initializingData()}>취소</button>
-                      </div>
-                    ) : (
-                      <div className='ellipsis' onClick={() => { handleToggleEdit(index); setCheckedItems([]); }}><i class="fa-solid fa-ellipsis"></i></div>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+    <div className={styles.mainContainer}>
+      <div className={styles.filtSortContainer}>
+        <AdminUserFilter onFiltering={onFiltering} />
+        <AdminUserSort sortBy={sortBy} onSort={handleSort} />
       </div>
+      {/* Header */}
+      <div className='MediumHeader'>
+        <div className='HeaderTxt'>
+          목록
+        </div>
+        <select
+          className='select'
+          value={itemsPerPage}
+          onChange={(e) => setItemsPerPage(Number(e.target.value))}
+        >
+          <option value={5}>5</option>
+          <option value={10}>10</option>
+          <option value={20}>20</option>
+          <option value={30}>30</option>
+        </select>
+      </div>
+
+      <table style={{ marginTop: '10px' }}>
+        <thead>
+          <tr>
+            {/* 전체 체크박스 관리 체크박스 */}
+            <th>
+              <input
+                type='checkbox'
+                checked={checkedItems.length === matchedData.length ? true : false}
+                onChange={(e) => handleAllCheckbox(e.target.checked)}
+              />
+            </th>
+            {/* 업체명(상호명) */}
+            <th>업체명(상호명)</th>
+            {/* 고객 구분, CMS여부 */}
+            {[
+              { title: '고객 구분', valList: [1, 2, 3, 4], val: '', key: 'userType_id' },
+              { title: '등급', valList: ['A', 'B', 'C', 'D'], val: '', key: 'grade' },
+              { title: '담당자', valList: ['박형조', '엄지석', '김태훈'], val: '', key: 'name' },
+              { title: 'CMS여부', valList: [1, 0], val: '', key: 'hasCMS' },
+            ].map((customItem, index) => (
+              <th key={index}>
+                {editIndex === 'allEdit' ?
+                  <>
+                    <span>{customItem.title}</span>
+                    <select
+                      className='select'
+                      value={customItem.val}
+                      onChange={e => updateValue(e, customItem.key, index)}
+                    >
+                      <option value={null}>선택</option>
+                      {customItem.valList.map((valListItem, valListIndex) => (
+                        <option key={valListIndex} value={valListItem}>
+                          {parseOptionValue(customItem, valListItem)}
+                        </option>
+                      ))}
+                    </select>
+                  </>
+                  :
+                  customItem.title
+                }
+              </th>
+            ))}
+
+            {/* 주소 */}
+            <th>주소</th>
+            {/* 연락처 */}
+            <th>연락처</th>
+            {/* 메뉴 아이콘 */}
+            <th style={{ width: '20px' }}>
+              {editIndex === 'allEdit' ?
+                <div className="dropdown-menu"> {/* 아이콘 */}
+                  {/* 수정 버튼 */}
+                  <button className='white_button' onClick={() => { handleBulkEdit(); window.location.reload(); }}>수정</button>
+                  {/* 삭제 버튼 */}
+                  <button className='white_button' onClick={() => handleDelete(checkedItems)}>삭제</button>
+                  {/* 취소 버튼 */}
+                  <button className='white_button' onClick={() => {
+                    setEditIndex('none');
+                    setCheckedItems([]);
+                  }}>취소</button>
+                </div>
+                :
+                <div className='icon' onClick={() => {
+                  if (checkedItems.length) {
+                    setEditIndex('allEdit');
+                  } else {
+                    alert('선택된 고객이 없습니다.');
+                  }
+                }}><i className="fa-solid fa-ellipsis"></i></div>
+              }
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {matchedData?.map((user, index) => (
+            <tr key={index}>
+              {/* 체크박스 */}
+              <td>
+                <input
+                  type='checkbox'
+                  checked={checkedItems.includes(user.users_id)}
+                  onChange={(e) => handlePerCheckbox(e.target.checked, user.users_id)}
+                />
+              </td>
+              {/* name: 상호명, val: db의 현재 값, valList: 선택할 값 */}
+              {[
+                { title: '고객명', val: user.cor_corName, key: 'cor_corName' },
+                { title: '고객 구분', valList: [1, 2, 3, 4], val: user.userType_id, key: 'userType_id' },
+                { title: '등급', valList: ['A', 'B', 'C', 'D'], val: user.grade, key: 'grade' },
+                { title: '담당자', valList: ['박형조', '엄지석', '김태훈'], val: user.name ? user.name : <span style={{ color: 'var(--main-red' }}>배정 필요</span>, key: 'name' },
+                { title: 'CMS여부', valList: [1, 0], val: user.hasCMS, key: 'hasCMS' },
+              ].map((customItem, editIdx) => (
+                <td key={editIdx}>
+                  {editIndex === index ?
+                    customItem.valList ?
+                      <select
+                        className='select'
+                        value={customItem.val}
+                        onChange={e => updateValue(e, customItem.key, index)}
+                      >
+                        {customItem.valList.map((item, index) => (
+                          <option key={index} value={item}>{parseOptionValue(customItem, item)}</option>
+                        ))}
+                      </select>
+                      :
+                      <input
+                        className='white_button'
+                        type='text'
+                        value={customItem.val}
+                        onChange={(e) => {
+                          const editData = e.target.value;
+                          const newData = matchedData.map((item, idx) => {
+                            if (idx === index) {
+                              return { ...item, [customItem.key]: editData };
+                            }
+                            return item;
+                          });
+                          setMatchedData(newData);
+                        }}
+                      />
+                    :
+                    parseOptionValue(customItem, customItem.val)
+                  }
+                </td>
+              ))}
+
+
+              {/* 주소 */}
+              <td>{user.bname} {user.roadAddress}({user.zonecode})</td>
+              {/* 연락처 */}
+              <td>{user.cor_tel}</td>
+              {/* 수정/삭제 드롭다운 메뉴 */}
+              <td style={{ width: '20px' }}>
+                {index === editIndex ? (
+                  <div className="dropdown-menu">
+                    {/* 수정 버튼 */}
+                    <button className='white_button' onClick={() => { handleEdit(user); console.log(user); }}>수정</button>
+                    {/* 삭제 버튼 */}
+                    <button className='white_button' onClick={() => handleDelete(user.users_id)}>삭제</button>
+                    {/* 취소 버튼 */}
+                    <button className='white_button' onClick={() => initializingData()}>취소</button>
+                  </div>
+                ) : (
+                  <div className='ellipsis' onClick={() => { handleToggleEdit(index); setCheckedItems([]); }}><i class="fa-solid fa-ellipsis"></i></div>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div >
   );
 }

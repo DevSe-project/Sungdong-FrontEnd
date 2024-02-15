@@ -59,7 +59,8 @@ export default function WelcomeModule() {
           {/* 환영문구 */}
           <div className={styles.header}>
             <div className={styles.corName_container}>
-              {/* USER 아이콘 */} <i class="fa-solid fa-user"></i>
+              {/* 아이콘 */}
+              <i class="fa-solid fa-user"></i>
               {/* 기업명 */} <span style={{ fontWeight: '900' }}>{userData.cor_corName ? userData.cor_corName : '렌더링 중'}</span> 님
             </div>
             {/* 문구 */} <div className={styles.welcomeMessage}> 환영합니다 <i class="fa-solid fa-exclamation"></i></div>
@@ -67,7 +68,11 @@ export default function WelcomeModule() {
 
           {/* 주문현황 */}
           <div className={styles.itemContainer}>
-            <div className={styles.itemsTitle}>주문 현황</div>
+            <div className={styles.itemsTitle}>
+              <span>주문 현황</span>
+              {userData.userType_id > 2 ? <span className={styles.goAdmin} onClick={() => navigate('/adminMain')}>Admin<i class="fa-solid fa-gears"></i></span> : null}
+            </div>
+
             {/* 아이템 */}
             <div className={styles.items}>
               {/* 요소들을 맵핑하여 표시합니다. */}

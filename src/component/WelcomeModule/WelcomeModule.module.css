@@ -35,9 +35,19 @@
     flex-direction: column;
 }
 .itemsTitle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-top: 10px;
     font-weight: bold;
     text-align: left;
+}
+.goAdmin {
+    font-size: 14px;
+}
+.goAdmin:hover {
+    cursor: pointer;
+    color: var(--main-color-original);
 }
 .items {
     display: grid;

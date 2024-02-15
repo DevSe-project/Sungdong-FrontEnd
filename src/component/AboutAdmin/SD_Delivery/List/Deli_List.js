@@ -145,7 +145,7 @@ export default function Deli_List() {
   }
 
   return (
-    <div style={{ width: '100%' }}>
+    <>
       {deliveryData ?
         <div className={styles.body}>
           {/* Header */}
@@ -280,6 +280,6 @@ export default function Deli_List() {
         </div>
         :
         <p>정보를 불러오지 못했습니다.</p>}
-    </div>
+    </>
   );
 }

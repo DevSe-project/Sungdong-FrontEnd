@@ -1,7 +1,7 @@
 import { db } from "./firebase"; // 파이어베이스 데이터베이스 임포트
 import './App.css';
 import { useEffect, useState } from 'react';
-import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation, Outlet } from 'react-router-dom';
 
 // Data 객체들 불러오기
 import { OrderObj } from './component/Data/OrderObj';
@@ -91,7 +91,7 @@ export default function App() {
   const { setWishList } = useListActions();
 
   //FETCH CUSTOM HOOK
-  const {fetchServer, fetchGetServer} = useFetch();
+  const { fetchServer, fetchGetServer } = useFetch();
 
   //상품 페이지 State
   const [productCurrentPage, setProductCurrentPage] = useState(1);
@@ -728,42 +728,43 @@ export default function App() {
           </>
         } />
 
-        {/* 관리자페이지 - 메인 */}
-        <Route path='/adminMain' element={<AdminMain />} />
+        {/* 관리자 Main Route */}
+        <Route path='/adminMain' element={<AdminMain />}>
+          {/* 상품관리 - 상품등록 */}
+          <Route path='addProduct' element={<AdminDetail />} />
+          {/* 상품관리 - 상품조회 */}
+          <Route path='searchProduct' element={<AdminProductList productCurrentPage={productCurrentPage} productTotalPage={productTotalPage} />} />
+          {/* 상품관리 - 상품수정 */}
+          <Route path='editProduct/:id' element={<AdminEditDetail />} />
+          {/* 상품관리 - 카테고리 */}
+          <Route path='category' element={<AdminCategory productCurrentPage={productCurrentPage} productTotalPage={productTotalPage} />} />
+          {/* 상품관리 - 카테고리 수정 */}
+          <Route path='categoryEdit/:id' element={<AdminCategoryEdit />} />
 
-        {/* 상품관리 - 상품등록 */}
-        <Route path='/adminMain/addProduct' element={<AdminDetail />} />
-        {/* 상품관리 - 상품조회 */}
-        <Route path='/adminMain/searchProduct' element={<AdminProductList productCurrentPage={productCurrentPage} productTotalPage={productTotalPage}/>} />
-        {/* 상품관리 - 상품수정 */}
-        <Route path='/adminMain/editProduct/:id' element={<AdminEditDetail />} />
-        {/* 상품관리 - 카테고리 */}
-        <Route path='/adminMain/category' element={<AdminCategory productCurrentPage={productCurrentPage} productTotalPage={productTotalPage}/>} />
-        {/* 상품관리 - 카테고리 수정 */}
-        <Route path='/adminMain/categoryEdit/:id' element={<AdminCategoryEdit />} />
+          {/* 주문관리 - 주문 관리*/}
+          <Route path='sold' element={<AdminSoldList />} />
+          {/* 주문관리 - 미결제 주문 관리 */}
+          <Route path='yetPay' element={<AdminNotSoldList />} />
+          {/* 주문관리 - 반품 관리 */}
+          <Route path='refund' element={<AdminRefund />} />
 
-        {/* 주문관리 - 주문 관리*/}
-        <Route path='/adminMain/sold' element={<AdminSoldList />} />
-        {/* 주문관리 - 미결제 주문 관리 */}
-        <Route path='/adminMain/yetPay' element={<AdminNotSoldList />} />
-        {/* 주문관리 - 반품 관리 */}
-        <Route path='/adminMain/refund' element={<AdminRefund />} />
+          {/* 배송관리 - 배송 상태 관리 */}
+          <Route path='SD_delivery/DeliveryManager' element={<Deli />} />
 
-        {/* 배송관리 - 배송 상태 관리 */}
-        <Route path='/adminMain/SD_delivery/DeliveryManager' element={<Deli />} />
+          {/* 정산관리 - 누적정산 */}
+          <Route path='SD_account/total' element={<TotalCal_Manage />} />
+          {/* 정산관리 - CMS정산 */}
+          <Route path='SD_account/cms' element={<CMSaccount_Manage />} />
 
-        {/* 정산관리 - 누적정산 */}
-        <Route path='/adminMain/SD_account/total' element={<TotalCal_Manage />} />
-        {/* 정산관리 - CMS정산 */}
-        <Route path='/adminMain/SD_account/cms' element={<CMSaccount_Manage />} />
+          {/* 고객센터 - 공지사항 */}
+          <Route path='customerCenter/notice' element={<AdminNotice />} />
 
-        {/* 고객센터 - 공지사항 */}
-        <Route path='/adminMain/customerCenter/notice' element={<AdminNotice />} />
+          {/* 회원관리 - 고객관리 */}
+          <Route path='user' element={<AdminUserList />} />
+          {/* 회원관리 - 회원가입 코드 관리 */}
+          <Route path='printCode' element={<ManageCode />} />
+        </Route>
 
-        {/* 회원관리 - 고객관리 */}
-        <Route path='/adminMain/user' element={<AdminUserList />} />
-        {/* 회원관리 - 회원가입 코드 관리 */}
-        <Route path='/adminMain/printCode' element={<ManageCode />} />
 
       </Routes>
     </div>
