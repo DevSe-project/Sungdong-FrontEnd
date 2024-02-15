@@ -8,11 +8,12 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useModalActions, useModalState, useOrderSelectList, useOrderSelectListActions } from '../../../store/DataStore';
 import { useFetch } from '../../../customFn/useFetch';
 import Pagination from '../../../customFn/Pagination';
+import AdminCancelModal from './AdminCancelModal';
 
 export function AdminNotSoldList(props) {
 
   //ZUSTAND STATE
-  const { modalName } = useModalState();
+  const { isModal, modalName } = useModalState();
   const { selectedModalOpen } = useModalActions();
   const queryClient = useQueryClient();
 
@@ -64,9 +65,10 @@ export function AdminNotSoldList(props) {
       orderState: 1
     }
     const data = await fetchAddPostServer(limit, `post`, `/order/all`, 1, itemsPerPage ? itemsPerPage : 10);
-    setCurrentPage(data.currentPage);
-    setTotalPages(data.totalPages);
-    return data.data[0] !== undefined ? data.data[0] : [];
+    console.log(data)
+    setCurrentPage(data.data.currentPage);
+    setTotalPages(data.data.totalPages);
+    return data.data.data[0];
   }
 
   // Fetch
@@ -98,6 +100,14 @@ export function AdminNotSoldList(props) {
     })
   }
 
+  //취소 처리 핸들러
+  const handleCancel = () => {
+    if (selectList.length !== 0) {
+      selectedModalOpen("취소");
+    } else {
+      alert("주문이 한 개라도 체크가 되어 있어야 취소처리가 가능합니다.");
+    }
+  }
 
   // 데이터 로딩 중 또는 에러 발생 시 처리
   if (isLoading) {
@@ -116,6 +126,10 @@ export function AdminNotSoldList(props) {
           {/* 리스트 출력 */}
           <div className={styles.bodyHeader}>
             <h1>미결제 주문 관리</h1>
+          </div>
+          {/* 발주, 발송, 취소 처리 박스 */}
+          <div className={styles.manageBox}>
+            <button onClick={() => handleCancel()} className={styles.button}>취소처리</button>
           </div>
           <div className={styles.tableLocation}>
             <table className={styles.table}>
@@ -239,7 +253,7 @@ export function AdminNotSoldList(props) {
                                       {itemData.product_brand}
                                     </td>
                                     <td>
-                                      {itemData.selectedOption}
+                                      {itemData.selectedOption ? itemData.selectedOption : '없음'}
                                     </td>
                                     <td>
                                       {itemData.product_supply}
@@ -277,6 +291,9 @@ export function AdminNotSoldList(props) {
           </div>
         </div>
       </div>
+      {modalName === "취소" &&
+        isModal && <AdminCancelModal />
+      }
     </div>
   )
 }

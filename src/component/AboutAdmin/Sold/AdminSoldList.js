@@ -24,6 +24,13 @@ export function AdminSoldList() {
   const [selectedData, setSelectedData] = useState(null);
   const queryClient = useQueryClient();
 
+  //ZUSTAND STATE
+  const { isModal, modalName } = useModalState();
+  const { selectedModalOpen } = useModalActions();
+  const selectList = useOrderSelectList();
+  const { toggleSelectList, toggleAllSelect } = useOrderSelectListActions();
+
+
   //데이터 불러오기
   const fetchData = async () => {
     const data = await fetchGetAddPostServer(`/order/all`, currentPage, itemsPerPage);
@@ -32,42 +39,34 @@ export function AdminSoldList() {
     return data.data[0];
   }
 
-    // 페이지를 변경할 때 호출되는 함수
-    const fetchPageChange = async (pageNumber) => {
-      return await fetchAddPostServer({}, 'post', '/order/all', pageNumber, itemsPerPage);
-    };
-  
-    const { mutate: pageMutaion } = useMutation({ mutationFn: fetchPageChange })
-  
-  
-    function handlePageChange(pageNumber) {
-      pageMutaion(pageNumber, {
-        onSuccess: (data) => {
-          setCurrentPage(data.data.currentPage);
-          setTotalPages(data.data.totalPages);
-          queryClient.setQueryData(['order'], () => {
-            return data.data.data[0]
-          })
-        },
-        onError: (error) => {
-          return console.error(error.message);
-        },
-      })
-    }
+  // 페이지를 변경할 때 호출되는 함수
+  const fetchPageChange = async (pageNumber) => {
+    return await fetchAddPostServer({}, 'post', '/order/all', pageNumber, itemsPerPage);
+  };
+
+  const { mutate: pageMutaion } = useMutation({ mutationFn: fetchPageChange })
+
+
+  function handlePageChange(pageNumber) {
+    pageMutaion(pageNumber, {
+      onSuccess: (data) => {
+        setCurrentPage(data.data.currentPage);
+        setTotalPages(data.data.totalPages);
+        queryClient.setQueryData(['order'], () => {
+          return data.data.data[0]
+        })
+      },
+      onError: (error) => {
+        return console.error(error.message);
+      },
+    })
+  }
 
   // Fetch
   const { isLoading, isError, error, data: ordered } = useQuery({
     queryKey: [`order`, currentPage, itemsPerPage],
     queryFn: () => fetchData()
   }) // currentPage, itemPerPage가 변경될 때마다 재실행하기 위함
-
-
-  //ZUSTAND STATE
-  const { isModal, modalName } = useModalState();
-  const { selectedModalOpen } = useModalActions();
-  const selectList = useOrderSelectList();
-  const { toggleSelectList, toggleAllSelect } = useOrderSelectListActions();
-
 
   //전체 선택 핸들러
   const handleToggleAllSelect = () => {
@@ -147,7 +146,7 @@ export function AdminSoldList() {
             <div className={styles.listContainer}>
               <h4 style={{ fontWeight: '650' }}>목록</h4>
               <div style={{ display: 'flex', gap: '1em' }}>
-                <select defaultValue={itemsPerPage} onChange={(e)=>setItemsPerPage(e.target.value)}>
+                <select defaultValue={itemsPerPage} onChange={(e) => setItemsPerPage(e.target.value)}>
                   <option value={5}>5개씩 보기</option>
                   <option value={10}>10개씩 보기</option>
                   <option value={50}>50개씩 보기</option>
