@@ -102,7 +102,9 @@ export default function AdminCancelModal() {
                   {item.value.order_id}
                 </td>
                 <td>
-                  {item.value.orderState === 1 ? "신규주문" :
+                  {
+                  item.value.orderState === 0 ? "미결제" :
+                  item.value.orderState === 1 ? "신규주문" :
                   item.value.orderState === 2 && "발송완료" }
                 </td>
                 <td>
