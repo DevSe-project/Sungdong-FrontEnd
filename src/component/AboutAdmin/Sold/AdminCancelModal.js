@@ -3,8 +3,7 @@ import styles from './AdminSoldModal.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useModalActions, useModalState, useOrderSelectList, useOrderSelectListActions } from '../../../store/DataStore';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { GetCookie } from '../../../customFn/GetCookie';
-import axios from 'axios';
+import { useFetch } from '../../../customFn/useFetch'
 
 export default function AdminCancelModal() {
 
@@ -14,11 +13,11 @@ export default function AdminCancelModal() {
   const { modalName } = useModalState();
   const {selectedModalOpen, selectedModalClose} = useModalActions();
 
-  const { data, isLoading, isError, error } = useQuery({queryKey: ['data']});
-
   const queryClient = useQueryClient();
 
   const navigate = useNavigate();
+
+  const { fetchNonPageServer } = useFetch();
 
   // esc키를 누르면 모달창 닫기.
   useEffect(() => {
@@ -36,53 +35,30 @@ export default function AdminCancelModal() {
   }, [selectedModalClose]);
 
   //fetch 함수
-  const fetchUpdateData = async () => {
-      try {
-        const token = GetCookie('jwt_token');
-        const selectedItemsData = selectList.map((item) => ({
-          orderId: item.orderId,
-          cancelReason: item.value.cancelReason
-        }))
-        const response = await axios.patch("/order", 
-          JSON.stringify(
-            selectedItemsData
-          ),
-          {
-            headers : {
-              "Content-Type" : "application/json",
-              'Authorization': `Bearer ${token}`
-            }
-          }
-        )
-        // 성공 시 추가된 상품 정보를 반환합니다.
-        return response.data;
-      } catch (error) {
-        // 실패 시 예외를 throw합니다.
-        throw new Error('상품을 추가하는 중 오류가 발생했습니다.');
-      }
+  const fetchUpdateData = async (selectList) => {
+      return await fetchNonPageServer(selectList, `put`, `/order/cancel`)
     };
     
 
  //주문 취소 함수
-  const { cancelOrderMutate } = useMutation({mutationFn: fetchUpdateData,
+  const { mutate:cancelOrderMutate } = useMutation({mutationFn: fetchUpdateData})
+
+
+  const handleOrderCanceled = (selectList) => {
+    cancelOrderMutate(selectList,{
     onSuccess: (data) => {
       // 메세지 표시
       alert(data.message);
       console.log('상품이 취소처리 되었습니다.', data);
       // 상태를 다시 불러와 갱신합니다.
       queryClient.invalidateQueries(['order']);
+      selectedModalClose(modalName);
     },
     onError: (error) => {
       // 실패 시, 에러 처리를 수행합니다.
       console.error('주문 상태를 변경하던 중 오류가 발생했습니다.', error);
     },
   })
-
-  if (isLoading) {
-    return <p>Loading..</p>;
-  }
-  if (isError) {
-    return <p>에러 : {error.message}</p>;
   }
 
   return (
@@ -154,7 +130,7 @@ export default function AdminCancelModal() {
         </div>
         <div className={styles.buttonBox}>
           <button onClick={()=> selectedModalClose(modalName)} className={styles.selectButton}>취소</button>
-          <button  className={styles.selectedButton} onClick={()=> selectList.some((item) => item.value.cancelReason) !== "" && cancelOrderMutate.mutate()}>{selectList.length}건 일괄처리</button>
+          <button  className={styles.selectedButton} onClick={()=> selectList.some((item) => item.value.cancelReason) !== "" && handleOrderCanceled(selectList)}>{selectList.length}건 일괄처리</button>
         </div>
       </div>
     </div>

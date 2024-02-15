@@ -43,7 +43,7 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     font-size: 14px;
-    padding: 14px;
+    padding: 0.5em;
     border: 3px solid var(--main-color-light);
     border-radius: 1vh;
 }

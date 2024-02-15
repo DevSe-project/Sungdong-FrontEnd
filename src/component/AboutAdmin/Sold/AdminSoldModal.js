@@ -64,7 +64,7 @@ export default function AdminSoldModal({item}) {
       item.deliveryType === '성동택배'
 
       ? `${item.deliveryType && item.deliveryType} 
-      (배송 예정일 : ${item.delivery_date && item.delivery_date})`
+      (배송 예정일 : ${item.delivery_date && new Date(item.delivery_date).toLocaleDateString()})`
       : item.deliveryType && item.deliveryType === '일반택배'
       ? `${item.deliveryType} (배송사 : 대한통운)`
       : '없음'
