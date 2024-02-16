@@ -1,9 +1,9 @@
 /* 헤드라인 및 바디 기본설정 */
-.main{
+.main {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  flex-direction: column;
   width: 100%;
+  justify-content: center;
 }
 
 .container{ 
@@ -11,25 +11,23 @@
   display: flex;
   flex-direction: column;
   margin: 1em;
-  padding : 1em;
-  gap: 1em;
+  padding: 1em;
   justify-content: center;
   align-items: center;
 }
 
 .bodyHeader{
-  width: 99%;
+  width: 100%;
   text-align: left;
   padding: 5px;
   border-bottom: 3px solid var(--background-color-set);
 }
-
 /* 관련상품 탭 */
 .table{
   width: 100%;
-  border-top: 3px solid gray;
   border-bottom: 1px solid lightgray;
   text-align: center;
+  align-items: center;
 }
 
 .tableLocation{

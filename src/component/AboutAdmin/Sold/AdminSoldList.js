@@ -262,22 +262,22 @@ export function AdminSoldList() {
                                 <th>
                                   상품코드
                                 </th>
-                                <th style={{ width: '25%' }}>
+                                <th>
                                   브랜드
                                 </th>
-                                <th style={{ width: '10%' }}>
+                                <th>
                                   선택 옵션
                                 </th>
-                                <th style={{ width: '20%' }}>
+                                <th>
                                   재고
                                 </th>
-                                <th style={{ width: '20%' }}>
+                                <th>
                                   공급가
                                 </th>
-                                <th style={{ width: '20%' }}>
+                                <th>
                                   주문량
                                 </th>
-                                <th style={{ width: '10%', fontWeight: '650' }}>
+                                <th style={{ fontWeight: '650' }}>
                                   주문가
                                 </th>
                               </tr>

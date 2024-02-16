@@ -59,18 +59,16 @@ export default function WelcomeModule() {
           {/* 환영문구 */}
           <div className={styles.header}>
             <div className={styles.corName_container}>
-              {/* 아이콘 */}
-              <i class="fa-solid fa-user"></i>
-              {/* 기업명 */} <span style={{ fontWeight: '900' }}>{userData.cor_corName ? userData.cor_corName : '렌더링 중'}</span> 님
+              {/* 기업명 */} <span style={{ fontWeight: '900'}}><i className="fa-solid fa-user" /> {userData.cor_corName ? <span style={{textDecoration: 'underline', color: 'orangered'}}>{userData.cor_corName}</span> : '렌더링 중'}님</span> 
             </div>
-            {/* 문구 */} <div className={styles.welcomeMessage}> 환영합니다 <i class="fa-solid fa-exclamation"></i></div>
+            {/* 문구 */} <div className={styles.welcomeMessage}>반갑습니다 <i className="fa-solid fa-exclamation"></i></div>
           </div>
 
           {/* 주문현황 */}
           <div className={styles.itemContainer}>
             <div className={styles.itemsTitle}>
               <span>주문 현황</span>
-              {userData.userType_id > 2 ? <span className={styles.goAdmin} onClick={() => navigate('/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj')}>Admin<i class="fa-solid fa-gears"></i></span> : null}
+              {userData.userType_id > 2 ? <span className={styles.goAdmin} onClick={() => navigate('/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj')}>Admin <i className="fas fa-cog"/></span> : null}
             </div>
 
             {/* 아이템 */}

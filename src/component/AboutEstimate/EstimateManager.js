@@ -120,7 +120,7 @@ async function submitEstimate(info) {
       </div>
     </div>
     <div style={{display: 'none'}}>
-      <EstimatePrint ref={ref}  manager_tel={userData.tel}/>
+      <EstimatePrint ref={ref}  manager_tel={userData?.tel}/>
     </div>
   </div>
   )

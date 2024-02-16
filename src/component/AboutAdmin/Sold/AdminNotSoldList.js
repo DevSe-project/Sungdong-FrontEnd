@@ -116,16 +116,15 @@ export function AdminNotSoldList(props) {
 
   return (
     <div className={styles.main}>
-      <div className={styles.container}>
+      <main className={styles.container}>
         {/* 리스트 출력 */}
         <div className={styles.bodyHeader}>
           <h1>미결제 주문 관리</h1>
         </div>
-        {/* 발주, 발송, 취소 처리 박스 */}
-        <div className={styles.manageBox}>
-          <button onClick={() => handleCancel()} className={styles.button}>취소처리</button>
-        </div>
         <div className={styles.tableLocation}>
+          <div className={styles.manageBox}>
+            <button onClick={() => handleCancel()} className={styles.button}>취소처리</button>
+          </div>
           <table className={styles.table}>
             <thead
               style={{ backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)' }}
@@ -283,7 +282,7 @@ export function AdminNotSoldList(props) {
           </table>
           <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
         </div>
-      </div>
+      </main>
       {
         modalName === "취소" &&
         isModal && <AdminCancelModal />
