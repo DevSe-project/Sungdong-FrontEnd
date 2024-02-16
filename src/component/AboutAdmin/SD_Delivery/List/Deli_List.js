@@ -4,6 +4,7 @@ import { useModalActions, useModalState } from '../../../../store/DataStore';
 import styles from './Deli_List.module.css';
 import axios from '../../../../axios';
 import { GetCookie } from '../../../../customFn/GetCookie';
+import Deli_Filter from '../Filter/Deli_Filter';
 import Deli_StateModal from './Deli_StateModal';
 import Deli_InvoiceModal from './Deli_InvoiceModal';
 import Pagination from '../../../../customFn/Pagination';
@@ -145,141 +146,142 @@ export default function Deli_List() {
   }
 
   return (
-    <>
-      {deliveryData ?
-        <div className={styles.body}>
-          {/* Header */}
-          <div className='MediumHeader'>
-            <div className='HeaderTxt'>
-              목록
-            </div>
-            <select
-              className='select'
-              value={itemsPerPage}
-              onChange={(e) => {
-                setItemsPerPage(Number(e.target.value));
-              }}
-            >
-              <option value={5}>5</option>
-              <option value={10}>10</option>
-              <option value={20}>20</option>
-              <option value={30}>30</option>
-            </select>
-          </div>
-          {/* 선택항목일괄처리 */}
-          <div className={styles.selectedHandler}>
-            {[
-              { item: '선택항목 상태 수정', function: () => handleModalOpen('DeliveryStateModal') },
-              { item: '선택항목 송장 입력/수정', function: () => handleModalOpen('InvoiceModal') },
-              { item: '선택항목 배송 취소(삭제)', function: () => deleteData() },
-            ].map((item, index) => {
-              return (
-                <button
-                  className='white_button'
-                  onClick={item.function}
-                  key={index}>
-                  {item.item}
-                </button>
-              );
-            })}
+    <div className={styles.body}>
+      {/* Post */}
+      <div className='LargeHeader'>배송 상태 관리</div>
 
-          </div>
-          {/* Main - 배송관리 테이블 리스트업 */}
-          <table>
-            {/* 필드명 */}
-            <thead>
-              <tr>
-                <th>
-                  <input type='checkbox'
-                    checked={checkedItems.length === deliveryData.length ? true : false}
-                    onChange={(e) => handleAllCheckbox(e)} />
-                </th>
-                <th>주문번호</th>
-                <th>택배사</th>
-                <th>송장 번호</th>
-                <th>처리상태</th>
-                <th>주문일자</th>
-                <th>상품코드</th>
-                <th>상품명</th>
-                <th>옵션명</th>
-                <th>표준가</th>
-                <th>공급가</th>
-              </tr>
-            </thead>
-            {/* 데이터 맵핑 */}
-            <tbody>
-              {
-                deliveryData?.map((item, index) => (
-                  <tr key={index}>
-                    {/* 체크박스 */}
-                    <td><input
-                      type='checkbox'
-                      checked={checkedItems.includes(item.order_id) ? true : false}
-                      onChange={(e) => handlePerCheckbox(e.target.checked, item.order_id)} /></td>
-                    {/* 주문번호 */}
-                    <td>{item.order_id}</td>
-                    {/* 택배사 */}
-                    <td>{item.delivery_selectedCor}</td>
-                    {/* 송장 번호 */}
-                    <td>{item.delivery_num == '' ? '입력 필요' : item.delivery_num}</td>
-                    {/* 배송상태 */}
-                    <td>{parseDeliveryState(item.orderState)}</td>
-                    {/* 주문일자 */}
-                    <td>{item.order_date}</td>
-                    {/* 상품번호 */}
-                    <td>{item.product_id}</td>
-                    {/* 상품명 */}
-                    <td>{item.product_title}</td>
-                    {/* 옵션 상세 - 선택 옵션이 있을 경우만 표시*/}
-                    <td>{item.optionSelected ? item.optionSelected : "-"}</td>
-                    {/* 표준가 */}
-                    <td>{item.product_price}</td>
-                    {/* 공급가 */}
-                    <td>{item.discountPrice}</td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
+      {/* Filter Container */}
+      <Deli_Filter />
 
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <div style={{ width: '50px', fontSize: '14px' }}>
-              {/* 페이지 이동 컴포넌트 */}
-              <Pagination
-                currentPage={currentPage}
-                totalPages={deliveryData.totalPages}
-                onPageChange={(pageNumber) => setCurrentPage(pageNumber)}
-              />
-            </div>
-          </div>
-
-          {/* 배송 상태 변경 모달 */}
-          {
-            isModal && modalName === 'DeliveryStateModal'
-              ?
-              <Deli_StateModal
-                checkedItems={checkedItems}
-                setCheckedItems={setCheckedItems}
-                deliveryData={deliveryData}
-              />
-              :
-              null
-          }
-          {/* 송장 변경 모달 */}
-          {
-            isModal && modalName === 'InvoiceModal'
-              ?
-              <Deli_InvoiceModal
-                checkedItems={checkedItems}
-                setCheckedItems={setCheckedItems}
-                parseDeliveryState={parseDeliveryState}
-                deliveryData={deliveryData}
-              />
-              :
-              null
-          }
+      {/* Header */}
+      <div className='MediumHeader'>
+        <div className='HeaderTxt'>
+          목록
         </div>
-        :
-        <p>정보를 불러오지 못했습니다.</p>}
-    </>
+        <select
+          className='select'
+          value={itemsPerPage}
+          onChange={(e) => {
+            setItemsPerPage(Number(e.target.value));
+          }}
+        >
+          <option value={5}>5</option>
+          <option value={10}>10</option>
+          <option value={20}>20</option>
+          <option value={30}>30</option>
+        </select>
+      </div>
+      {/* 선택항목일괄처리 */}
+      <div className={styles.selectedHandler}>
+        {[
+          { item: '선택항목 상태 수정', function: () => handleModalOpen('DeliveryStateModal') },
+          { item: '선택항목 송장 입력/수정', function: () => handleModalOpen('InvoiceModal') },
+          { item: '선택항목 배송 취소(삭제)', function: () => deleteData() },
+        ].map((item, index) => {
+          return (
+            <button
+              className='white_button'
+              onClick={item.function}
+              key={index}>
+              {item.item}
+            </button>
+          );
+        })}
+
+      </div>
+      {/* Main - 배송관리 테이블 리스트업 */}
+      <table>
+        {/* 필드명 */}
+        <thead>
+          <tr>
+            <th>
+              <input type='checkbox'
+                checked={checkedItems.length === deliveryData.length ? true : false}
+                onChange={(e) => handleAllCheckbox(e)} />
+            </th>
+            <th>주문번호</th>
+            <th>택배사</th>
+            <th>송장 번호</th>
+            <th>처리상태</th>
+            <th>주문일자</th>
+            <th>상품코드</th>
+            <th>상품명</th>
+            <th>옵션명</th>
+            <th>표준가</th>
+            <th>공급가</th>
+          </tr>
+        </thead>
+        {/* 데이터 맵핑 */}
+        <tbody>
+          {
+            deliveryData?.map((item, index) => (
+              <tr key={index}>
+                {/* 체크박스 */}
+                <td><input
+                  type='checkbox'
+                  checked={checkedItems.includes(item.order_id) ? true : false}
+                  onChange={(e) => handlePerCheckbox(e.target.checked, item.order_id)} /></td>
+                {/* 주문번호 */}
+                <td>{item.order_id}</td>
+                {/* 택배사 */}
+                <td>{item.delivery_selectedCor}</td>
+                {/* 송장 번호 */}
+                <td>{item.delivery_num == '' ? '입력 필요' : item.delivery_num}</td>
+                {/* 배송상태 */}
+                <td>{parseDeliveryState(item.orderState)}</td>
+                {/* 주문일자 */}
+                <td>{item.order_date}</td>
+                {/* 상품번호 */}
+                <td>{item.product_id}</td>
+                {/* 상품명 */}
+                <td>{item.product_title}</td>
+                {/* 옵션 상세 - 선택 옵션이 있을 경우만 표시*/}
+                <td>{item.optionSelected ? item.optionSelected : "-"}</td>
+                {/* 표준가 */}
+                <td>{item.product_price}</td>
+                {/* 공급가 */}
+                <td>{item.discountPrice}</td>
+              </tr>
+            ))}
+        </tbody>
+      </table>
+
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <div style={{ width: '50px', fontSize: '14px' }}>
+          {/* 페이지 이동 컴포넌트 */}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={deliveryData.totalPages}
+            onPageChange={(pageNumber) => setCurrentPage(pageNumber)}
+          />
+        </div>
+      </div>
+
+      {/* 배송 상태 변경 모달 */}
+      {
+        isModal && modalName === 'DeliveryStateModal'
+          ?
+          <Deli_StateModal
+            checkedItems={checkedItems}
+            setCheckedItems={setCheckedItems}
+            deliveryData={deliveryData}
+          />
+          :
+          null
+      }
+      {/* 송장 변경 모달 */}
+      {
+        isModal && modalName === 'InvoiceModal'
+          ?
+          <Deli_InvoiceModal
+            checkedItems={checkedItems}
+            setCheckedItems={setCheckedItems}
+            parseDeliveryState={parseDeliveryState}
+            deliveryData={deliveryData}
+          />
+          :
+          null
+      }
+    </div>
   );
 }

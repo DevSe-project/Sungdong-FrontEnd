@@ -52,7 +52,7 @@ export function AdminMenuData(props) {
       subMenuItems: [
         {
           item: '배송 상태 관리',
-          link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/SD_Delivery/DeliveryManager',
+          link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/SD_Delivery/Delivery',
         },],
     },
     {
