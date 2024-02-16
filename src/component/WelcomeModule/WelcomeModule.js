@@ -70,7 +70,7 @@ export default function WelcomeModule() {
           <div className={styles.itemContainer}>
             <div className={styles.itemsTitle}>
               <span>주문 현황</span>
-              {userData.userType_id > 2 ? <span className={styles.goAdmin} onClick={() => navigate('/adminMain')}>Admin<i class="fa-solid fa-gears"></i></span> : null}
+              {userData.userType_id > 2 ? <span className={styles.goAdmin} onClick={() => navigate('/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj')}>Admin<i class="fa-solid fa-gears"></i></span> : null}
             </div>
 
             {/* 아이템 */}

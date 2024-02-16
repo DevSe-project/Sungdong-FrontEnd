@@ -729,7 +729,7 @@ export default function App() {
         } />
 
         {/* 관리자 Main Route */}
-        <Route path='/adminMain' element={<AdminMain />}>
+        <Route path='/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj' element={<AdminMain />}>
           {/* 상품관리 - 상품등록 */}
           <Route path='addProduct' element={<AdminDetail />} />
           {/* 상품관리 - 상품조회 */}

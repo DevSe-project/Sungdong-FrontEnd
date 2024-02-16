@@ -13,15 +13,15 @@ export function AdminMenuData(props) {
       },
       subMenuItems: [{
         item: '상품 등록',
-        link: '/adminMain/addProduct'
+        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/addProduct'
       },
       {
         item: '상품 조회/수정',
-        link: '/adminMain/searchProduct'
+        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/searchProduct'
       },
       {
         item: '카테고리 관리',
-        link: '/adminMain/category',
+        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/category',
       }],
     },
     {
@@ -32,15 +32,15 @@ export function AdminMenuData(props) {
       subMenuItems: [
         {
           item: '결제완료 주문',
-          link: '/adminMain/sold',
+          link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/sold',
         },
         {
           item: '미결제 주문',
-          link: '/adminMain/yetPay',
+          link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/yetPay',
         },
         {
           item: '반품/교환/취소',
-          link: '/adminMain/refund'
+          link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/refund'
         }
       ],
     },
@@ -52,7 +52,7 @@ export function AdminMenuData(props) {
       subMenuItems: [
         {
           item: '배송 상태 관리',
-          link: '/adminMain/SD_Delivery/DeliveryManager',
+          link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/SD_Delivery/DeliveryManager',
         },],
     },
     {
@@ -62,11 +62,11 @@ export function AdminMenuData(props) {
       },
       subMenuItems: [{
         item: 'CMS 정산',
-        link: '/adminMain/SD_account/cms'
+        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/SD_account/cms'
       },
       {
         item: '누적 정산',
-        link: '/adminMain/SD_account/total'
+        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/SD_account/total'
       }],
     },
     {
@@ -77,7 +77,7 @@ export function AdminMenuData(props) {
       subMenuItems: [
         {
           item: '공지사항',
-          link: '/adminMain/customerCenter/notice'
+          link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/customerCenter/notice'
         },
       ],
     },
@@ -88,11 +88,11 @@ export function AdminMenuData(props) {
       },
       subMenuItems: [{
         item: '회원 관리',
-        link: '/adminMain/user'
+        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/user'
       },
       {
         item: '회원가입 코드 관리',
-        link: '/adminMain/printCode'
+        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/printCode'
       }],
     },
   ];

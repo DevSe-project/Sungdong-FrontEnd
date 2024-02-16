@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styles from './RelativeJoin.module.css';
-import { QueryClient, useMutation } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useFetch } from "../../customFn/useFetch";
 
 export default function JoinForm(props) {
