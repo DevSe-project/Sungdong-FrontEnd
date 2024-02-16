@@ -1,8 +1,10 @@
 .body {
   display: flex;
-  margin: 1em;
-  padding: 1em;
   flex-direction: column;
+  width: 100%;
+  margin: 1em;
+  gap: 1em;
+  flex: 1;
 }
 /* ----------------------------------------- */
 .flex_container {
@@ -10,76 +12,44 @@
   gap: 10px;
 }
 .left {
-  background-color: var(--main-color-middle);
+  background-color: var(--main-color-heavy);
   border-radius: 1dvh;
-  width: 20vw;
-  height: 160px;
+  box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
+  flex: 1;
   align-items: center;
   justify-content: center;
+  padding: 3em;
+  gap: 10px;
 }
 .writeNotice_icon {
-  width: 100%;
   font-size: 24px;
   font-weight: bold;
   color: white;
 }
-.write {
-  background-color: var(--main-color-original);
-  color: white;
-  margin-top: 1em;
-  border: none;
-  border-radius: 1vh;
-  padding: 0.7em 1.5em;
-  font-size: 1.1em;
-  font-weight: bold;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 1dvh;
-  cursor: pointer;
-}
-
-.write:hover {
-  background-color: var(--main-color-original-hover);
-}
 /* ----------------------------------------- */
 .right {
-  background-color: var(--main-color-light);
-  border-radius: 1vh;
-  width: 67.8vw;
-  height: 160px;
+  box-shadow: var(--shadow);
+  border-radius: 1dvh;
+  box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
+  flex: 5;
   align-items: center;
   justify-content: center;
+  padding: 3em;
+  gap: 10px;
 }
 .none_title {
-  width: 100%;
   font-size: 24px;
   font-weight: bold;
   color: black;
 }
 .none_contents {
-  background-color: var(--main-color-original);
-  color: white;
-  margin-top: 1em;
-  width: 300px;
-  height: 50px;
-  font-size: 1.3em;
-  font-weight: bold;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 1dvh;
-
+  font-size: 16px;
 }
 /* ----------------------------------------- */
-/* NoticePostList */
-.noticePostList {
-  margin-top: 16px;
-}
 .post_del_button {
   border: 1px solid lightgray;
   background-color: var(--main-red);

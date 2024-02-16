@@ -52,7 +52,7 @@ import { AdminNotSoldList } from './component/AboutAdmin/Sold/AdminNotSoldList';
 import { AdminRefund } from './component/AboutAdmin/Refund/AdminRefund';
 import AdminUserList from './component/AboutAdmin/Users/AdminUserList';
 import AdminNotice from './component/AboutAdmin/Notice/AdminNotice';
-import Deli from "./component/AboutAdmin/SD_Delivery/List/Deli";
+import Deli_List from "./component/AboutAdmin/SD_Delivery/List/Deli_List";
 import TotalCal_Manage from "./component/AboutAdmin/SD_Account/TOTAL/Manage/TotalCal_Manage";
 import CMSaccount_Manage from "./component/AboutAdmin/SD_Account/CMS/Manage/CMSaccount_Manage";
 
@@ -75,7 +75,6 @@ import { ErrorTrade } from "./component/AboutTakeBack/ErrorTradeRequest";
 import { ErrorTradeList } from "./component/AboutTakeBack/ErrorTradeList";
 import { AdminEditDetail } from "./component/AboutAdmin/Detail/AdminEditDetail";
 import axios from "./axios";
-import { GetCookie } from "./customFn/GetCookie";
 import { OrderStep } from "./component/AboutPay/OrderStep";
 import { EstimateWrite } from "./component/AboutEstimate/EstimateWrite";
 import EstimatePrint from "./component/AboutEstimate/EstimatePrint";
@@ -749,7 +748,7 @@ export default function App() {
           <Route path='refund' element={<AdminRefund />} />
 
           {/* 배송관리 - 배송 상태 관리 */}
-          <Route path='SD_delivery/DeliveryManager' element={<Deli />} />
+          <Route path='SD_delivery/Delivery' element={<Deli_List />} />
 
           {/* 정산관리 - 누적정산 */}
           <Route path='SD_account/total' element={<TotalCal_Manage />} />

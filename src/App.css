@@ -144,6 +144,7 @@ textarea {
   --main-red-active: #550909;
   --list-margin: 0 10px 0px 10px;
   --list-padding: 10px 20px 10px 20px;
+  --shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 /* 탭 아이템 스타일 */
@@ -295,7 +296,7 @@ i.fa-solid.fa-heart {
   left: -2.5%;
 }
 
-.categorymenu-item.open{
+.categorymenu-item.open {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
   border-radius: 1em 1em 0 0;
   color: var(--background-color-active);
@@ -652,8 +653,8 @@ input[type="checkbox"] {
 
 
 /* -------------------------ellipsis------------------------- */
-.icon {
-}
+.icon {}
+
 .icon:hover {
   cursor: pointer;
   font-size: x-large;

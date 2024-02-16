@@ -1,8 +1,3 @@
-.body {
-    display: flex;
-    width: 100%;
-}
-
 .mainContainer {
     display: flex;
     flex-direction: column;
