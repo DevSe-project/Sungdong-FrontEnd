@@ -911,23 +911,14 @@ export const useProductFilterActions = () => useProductFilterStore((state) => st
 /* ----------------OrderFilter STORE---------------- */
 export const useOrderFilterStore = create((set) => ({
   orderFilter: {
-    orderState: '',
     dateType: '',
     date: {
       start: '',
       end: ''
     },
     deliveryType: '',
-    deliveryNum: '',
-    detailFilter: {
-      userId: '',
-      orderId: '',
-      productId: '',
-      deliveryNum: '',
-      companyName: '',
-      name: '',
-      tel: '',
-    }
+    selectFilter: '',
+    filterValue: ''
   },
   actions: {
     setOrderFilter: (fieldName, value) =>
@@ -935,22 +926,14 @@ export const useOrderFilterStore = create((set) => ({
     resetOrderFilter: () =>
       set({
         orderFilter: {
-          orderState: '',
           dateType: '',
           date: {
             start: '',
             end: ''
           },
           deliveryType: '',
-          detailFilter: {
-            userId: '',
-            orderId: '',
-            productId: '',
-            deliveryNum: '',
-            companyName: '',
-            name: '',
-            tel: '',
-          }
+          selectFilter: '',
+          filterValue: ''
         }
       }),
     setOrderDetailFilter: (fieldName, value) =>

@@ -29,22 +29,21 @@ export function AdminSoldFilter({ handelSearch }) {
       </div>
     )
   }
-
-  function detailFilter() {
-    return (
-      <div style={{ display: 'flex', gap: '1em' }}>
-        <select className={styles.select} value={detailKey} onChange={(e) => setDetailKey(e.target.value)} name='detailSearch'>
+  
+  function detailFilter(){
+    return(
+      <div style={{display: 'flex', gap: '1em'}}>
+        <select className={styles.select} value={orderFilter.selectFilter} onChange={(e)=>setOrderFilter("selectFilter", e.target.value)} name='detailSearch'>
           <option name="detailSearch" value=''>전체</option>
-          <option name="detailSearch" value="companyName">기업명</option>
-          <option name="detailSearch" value="name">구매자명</option>
-          <option name="detailSearch" value="tel">구매자연락처</option>
-          <option name="detailSearch" value="userId">구매자ID</option>
-          <option name="detailSearch" value="orderId">주문번호</option>
-          <option name="detailSearch" value="productId">상품번호</option>
-          <option name="detailSearch" value="deliveryNum">송장번호</option>
+          <option name="detailSearch" value="o.buildingName">기업명</option>
+          <option name="detailSearch" value="o.order_name">구매자명</option>
+          <option name="detailSearch" value="o.order_tel">구매자연락처</option>
+          <option name="detailSearch" value="o.email">구매자이메일</option>
+          <option name="detailSearch" value="o.order_id">주문번호</option>
+          <option name="detailSearch" value="d.delivery_num">송장번호</option>
         </select>
         <div>
-          <input className={styles.input} type='text' value={orderFilter.detailFilter[detailKey]} onChange={(e) => setOrderDetailFilter(detailKey, e.target.value)} />
+          <input className={styles.input} type='text' value={orderFilter.filterValue} onChange={(e)=>setOrderFilter("filterValue", e.target.value)} />
         </div>
       </div>
     )
@@ -55,7 +54,7 @@ export function AdminSoldFilter({ handelSearch }) {
     return (
       <div style={{ display: 'flex', gap: '1em' }}>
         <div className={styles.searchFilterList}>
-          <select className={styles.select} name='filterDate' value={orderFilter.deliveryType} onChange={(e) => setOrderFilter("deliveryType", e.target.value)} >
+          <select className={styles.select} name='filterDate' value={orderFilter.dateType} onChange={(e) => setOrderFilter("dateType", e.target.value)} >
             <option name='filterDate' value="orderDate">결제일</option>
           </select>
         </div>
@@ -89,9 +88,12 @@ export function AdminSoldFilter({ handelSearch }) {
             </div>
           </div>
         ))}
-        <div style={{ display: 'flex', gap: '0.5em' }}>
-          <input className={styles.button} type='submit' value='검색' onClick={() => handelSearch()} />
-          <input className={styles.button} type='reset' onClick={() => resetOrderFilter()} />
+        <div style={{display: 'flex', gap: '0.5em'}}>
+          <input className={styles.button} value='검색' onClick={() => handelSearch() }/>
+          <input className={styles.button} type='reset' onClick={()=> {
+            resetOrderFilter()
+            window.location.reload();
+            }}/>
         </div>
       </form>
     </div>

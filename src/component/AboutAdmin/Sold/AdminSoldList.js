@@ -1,13 +1,11 @@
 import styles from './AdminSoldList.module.css';
 import { AdminHeader } from '../Layout/Header/AdminHeader';
 import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
-import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import React from 'react';
 import { AdminSoldFilter } from './AdminSoldFilter';
 import AdminSoldModal from './AdminSoldModal';
 import { useModalActions, useModalState, useOrderFilter, useOrderSelectList, useOrderSelectListActions } from '../../../store/DataStore';
-import axios from '../../../axios';
 import AdminDelNumModal from './AdminDelNumModal';
 import AdminCancelModal from './AdminCancelModal';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -16,7 +14,7 @@ import Pagination from '../../../customFn/Pagination';
 
 export function AdminSoldList() {
 
-  const { fetchGetAddPostServer, fetchAddPostServer, fetchNonPageServer } = useFetch();
+  const { fetchGetAddPostServer, fetchAddPostServer, fetchNonPageServer,fetchServer } = useFetch();
   // 게시물 데이터와 페이지 번호 상태 관리    
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -27,6 +25,7 @@ export function AdminSoldList() {
   //ZUSTAND STATE
   const { isModal, modalName } = useModalState();
   const { selectedModalOpen } = useModalActions();
+  const orderFilter = useOrderFilter();
   const selectList = useOrderSelectList();
   const { toggleSelectList, toggleAllSelect } = useOrderSelectListActions();
 
@@ -97,11 +96,31 @@ export function AdminSoldList() {
     })
   }
 
-  //검색 필터링
-  const handleSearch = () => {
-    // 검색 버튼 클릭 시에만 서버에 요청
-    // fetchFilteredOrder(orderFilter);
+  /*---------- 필터 검색 ----------*/
+  
+  const fetchFilteredOrders = async (filter) => {
+    return await fetchServer(filter, `post`, `/order/filter`, 1);
   };
+
+  const { mutate: filterMutation } = useMutation({ mutationFn: fetchFilteredOrders })
+
+
+  const handleSearch = () => {
+
+    // 검색 버튼 클릭 시에만 서버에 요청
+    filterMutation(orderFilter, {
+      onSuccess: (data) => {
+        alert(data.message)
+        setCurrentPage(data.data.currentPage);
+        setTotalPages(data.data.totalPages);
+        queryClient.setQueryData(['order', currentPage, itemsPerPage], () => {
+          return data.data.data;
+        })
+      },
+      onError: (error) => {
+        return console.error(error.message);
+      },
+    })  };
 
   //발송 처리 핸들러
   const handleDelNumInput = () => {
