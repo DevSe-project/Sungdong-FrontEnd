@@ -4,7 +4,7 @@ import { useModalActions, useModalState, useNotice, useNoticeActions } from "../
 
 
 export default function WriteModal({ addPost }) {
-    const { isModal, modalName } = useModalState();
+    const { modalName } = useModalState();
     const { selectedModalClose } = useModalActions();
 
     const notice = useNotice();

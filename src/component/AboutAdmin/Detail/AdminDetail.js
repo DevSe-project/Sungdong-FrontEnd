@@ -1,12 +1,9 @@
 import { useEffect, useState } from 'react';
 import styles from './AdminDetail.module.css';
-import { AdminHeader } from '../Layout/Header/AdminHeader';
-import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
 import { AdminTabInfo } from '../TabInfo/AdminTabInfo';
 import { useProduct, useProductActions } from '../../../store/DataStore';
 import axios from '../../../axios';
 import { useQuery } from '@tanstack/react-query';
-import { useLocation, useNavigate } from 'react-router-dom';
 
 export function AdminDetail() {
   const [isDiscount, setIsDiscount] = useState(false);

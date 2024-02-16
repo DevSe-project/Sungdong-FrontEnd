@@ -89,7 +89,6 @@ export default function JoinForm(props) {
                 onError: (error) => {
                     setIdDuplicateCheck(false);
                     console.error(error);
-                    alert(error);
                 },
             });
         } else {

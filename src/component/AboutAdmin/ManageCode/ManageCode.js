@@ -1,9 +1,5 @@
 
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import styles from './ManageCode.module.css';
-import { AdminHeader } from "../Layout/Header/AdminHeader";
-import { AdminMenuData } from "../Layout/SideBar/AdminMenuData";
 import axios from '../../../axios';
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 

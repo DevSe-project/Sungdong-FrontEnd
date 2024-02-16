@@ -258,7 +258,7 @@ export function AdminCategory({ productCurrentPage, productTotalPage }) {
                       <td
                         className={styles.detailView}
                       >
-                        <button onClick={() => navigate(`/adminMain/categoryEdit/${item.product_id}`)} className={styles.button}>변경</button>
+                        <button onClick={() => navigate(`/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/categoryEdit/${item.product_id}`)} className={styles.button}>변경</button>
                       </td>
                     </tr>
                   </React.Fragment>

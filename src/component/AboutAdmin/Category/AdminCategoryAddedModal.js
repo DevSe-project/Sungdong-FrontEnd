@@ -1,16 +1,12 @@
 import { React, useEffect, useState } from 'react';
 import styles from './AdminCategoryModal.module.css';
-import { useNavigate } from 'react-router-dom';
 import { useModalActions, useModalState } from '../../../store/DataStore';
-import { GetCookie } from '../../../customFn/GetCookie';
 import axios from '../../../axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export default function AdminCategoryAddedModal({selectedCategory, categoryData}) {
 
   const [inputs, setInputs] = useState([]);
-
-  const navigate = useNavigate();
 
   const { modalName } = useModalState();
 

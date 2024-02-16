@@ -1,9 +1,6 @@
-import { AdminHeader } from '../Layout/Header/AdminHeader';
-import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
 import styles from './AdminNotSoldList.module.css';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import AdminSoldModal from './AdminSoldModal';
-import { useNavigate } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useModalActions, useModalState, useOrderSelectList, useOrderSelectListActions } from '../../../store/DataStore';
 import { useFetch } from '../../../customFn/useFetch';

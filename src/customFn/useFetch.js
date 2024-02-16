@@ -25,7 +25,6 @@ export const useFetch = () => {
 	};
 
 	const handleOtherErrors = (errorMessage) => {
-		navigate('/');
 		alert(errorMessage);
 	};
 

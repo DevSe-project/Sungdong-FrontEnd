@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import styles from "./AdminNotice.module.css";
 import EditModal from "./EditModal";
 import { useModalActions, useModalState, useNoticeActions, useNotice } from "../../../store/DataStore";

@@ -1,15 +1,12 @@
-import { React, useEffect, useState } from 'react';
+import { React, useEffect } from 'react';
 import styles from './AdminSoldModal.module.css';
-import { useNavigate } from 'react-router-dom';
 import { useModalActions, useModalState } from '../../../store/DataStore';
 
 
 export default function AdminSoldModal({item}) {
 
-  const navigate = useNavigate();
-
   const { modalName } = useModalState();
-  const {selectedModalOpen, selectedModalClose} = useModalActions();
+  const {selectedModalClose} = useModalActions();
 
   // esc키를 누르면 모달창 닫기.
   useEffect(() => {

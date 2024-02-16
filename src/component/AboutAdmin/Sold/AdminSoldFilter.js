@@ -1,13 +1,11 @@
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useOrderFilter, useOrderFilterActions } from '../../../store/DataStore';
 import styles from './AdminSoldFilter.module.css';
 export function AdminSoldFilter({ handelSearch }) {
 
   const orderFilter = useOrderFilter();
-  const { setOrderFilter, resetOrderFilter, setOrderDetailFilter, setOrderFilterDate } = useOrderFilterActions();
-  const [detailKey, setDetailKey] = useState('');
-
+  const { setOrderFilter, resetOrderFilter, setOrderFilterDate } = useOrderFilterActions();
 
   useEffect(() => {
     return () => {

@@ -80,7 +80,7 @@ export function AdminCategoryEdit(props){
             console.log('해당 상품의 카테고리가 추가/변경 되었습니다.', data);
             // 상태를 다시 불러와 갱신합니다.
             queryClient.invalidateQueries(['data']);
-            navigate("/adminMain/category")
+            navigate("/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/category")
           },
           onError: (error) => {
             // 상품 추가 실패 시, 에러 처리를 수행합니다.
@@ -242,7 +242,7 @@ export function AdminCategoryEdit(props){
             </div>
             <div className={styles.buttonBox}>
               <button onClick={()=> handleConfirmCategory()} className={styles.selectedButton}>변경</button>
-              <button onClick={()=> navigate("/adminMain/category")} className={styles.selectButton}>취소</button>
+              <button onClick={()=> navigate("/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/category")} className={styles.selectButton}>취소</button>
             </div>
           </div>
         </div>

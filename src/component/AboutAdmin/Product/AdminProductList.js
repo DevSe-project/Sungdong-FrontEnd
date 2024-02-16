@@ -1,6 +1,4 @@
-import { useEffect, useState } from 'react';
-import { AdminHeader } from '../Layout/Header/AdminHeader';
-import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
+import { useState } from 'react';
 import { AdminProductFilter } from '../Product/AdminProductFilter';
 import React from 'react';
 import styles from './AdminProductList.module.css';
@@ -66,7 +64,7 @@ export function AdminProductList({ productCurrentPage, productTotalPage }) {
 
   // 아이템 수정 핸들러
   function handleEditItem(item) {
-    navigate(`/adminMain/editProduct/${item.product_id}`);
+    navigate(`/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/editProduct/${item.product_id}`);
   }
 
 

@@ -1,8 +1,7 @@
 import { React, useEffect, useState } from 'react';
 import styles from './AdminSoldModal.module.css';
-import { useNavigate } from 'react-router-dom';
 import { useModalActions, useModalState, useOrderDeliverySet, useOrderSelectList, useOrderSelectListActions } from '../../../store/DataStore';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useFetch } from '../../../customFn/useFetch'
 export default function AdminDelNumModal() {
 
@@ -14,7 +13,6 @@ export default function AdminDelNumModal() {
   const { fetchNonPageServer } = useFetch();
 
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
 
   // esc키를 누르면 모달창 닫기.
   useEffect(() => {

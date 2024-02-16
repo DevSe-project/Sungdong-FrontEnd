@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useProductFilter, useProductFilterActions } from '../../../store/DataStore'
 import styles from './AdminProductFilter.module.css'
 import { useQuery } from '@tanstack/react-query';

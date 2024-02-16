@@ -1,6 +1,5 @@
 import { React, useEffect, useState } from 'react';
 import styles from './AdminSoldModal.module.css';
-import { useNavigate } from 'react-router-dom';
 import { useModalActions, useModalState, useOrderSelectList, useOrderSelectListActions } from '../../../store/DataStore';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useFetch } from '../../../customFn/useFetch'
@@ -11,11 +10,9 @@ export default function AdminCancelModal() {
   const {setSelectListValue} = useOrderSelectListActions();
 
   const { modalName } = useModalState();
-  const {selectedModalOpen, selectedModalClose} = useModalActions();
+  const {selectedModalClose} = useModalActions();
 
   const queryClient = useQueryClient();
-
-  const navigate = useNavigate();
 
   const { fetchNonPageServer } = useFetch();
 

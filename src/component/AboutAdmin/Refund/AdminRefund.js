@@ -1,7 +1,4 @@
-import { AdminHeader } from '../Layout/Header/AdminHeader';
-import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
 import styles from './AdminRefund.module.css';
-import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import React from 'react';
 import { AdminRefundFilter } from '../Refund/AdminRefundFilter';
@@ -17,7 +14,7 @@ export function AdminRefund() {
   const [filteredItems, setFilteredItems] = useState([]);
 
   //ZUSTAND STATE
-  const { isModal, modalName } = useModalState();
+  const { modalName } = useModalState();
   const { selectedModalOpen } = useModalActions();
   const selectList = useOrderSelectList();
   const { toggleSelectList, toggleAllSelect } = useOrderSelectListActions();
@@ -30,7 +27,6 @@ export function AdminRefund() {
   const { isLoading: raeLoading, isError: raeError, data: rae } = useQuery({ queryKey: ['refund'] });
 
 
-  const navigate = useNavigate();
   const [sortOrder, setSortOrder] = useState('asc'); // 초기값으로 오름차순 설정
 
 
