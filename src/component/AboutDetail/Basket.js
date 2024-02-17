@@ -281,7 +281,7 @@ export function Basket(props) {
                     <h5 className={styles.link} onClick={() => navigate(`/detail/${item.product_id}`)}>{item.product_title}</h5>
                     <div>
                       {item.cart_selectedOption && `옵션 : ${item.cart_selectedOption}`}
-                      <p>상품 표준가 : <span className={styles.price}>{parseInt(item.cart_price).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}</span></p>
+                      <p>상품 표준가 : <span className={styles.price}>{parseInt(item.product_price).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}</span></p>
                     </div>
                   </td>
                   {/* 수량 변경 */}
@@ -303,14 +303,14 @@ export function Basket(props) {
                     </div>
                   </td>
                   <td className={styles.price}>
-                    {item.product_discount
+                    {item.cart_discount
                       ?
                       <>
                         <span style={{ color: 'red', fontWeight: '750' }}>
-                          ({item.product_discount}%)
+                          ({parseFloat(item.cart_discount)}%)
                         </span>
                         &nbsp;<i className="fal fa-long-arrow-right" />&nbsp;
-                        {parseInt(item.cart_price * item.cart_cnt - (((item.cart_price / 100) * item.cart_discount) * item.cart_cnt)).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
+                        {parseInt(item.cart_price * item.cart_cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                       </>
                       : `${(item.cart_price * item.cart_cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
                   </td>
@@ -331,7 +331,7 @@ export function Basket(props) {
                   \{
                     selectedItems.length > 0 ?
                       selectedItems.reduce((sum, item) =>
-                        sum + ((item.cart_price * item.cart_cnt) - ((item.cart_price / 100) * item.cart_discount) * item.cart_cnt)
+                        sum + (item.cart_price * item.cart_cnt)
                         , 0).toLocaleString()
                       : 0
                   }
@@ -352,7 +352,7 @@ export function Basket(props) {
                 <h5>\{
                   selectedItems.length > 0 ?
                     selectedItems.reduce((sum, item) =>
-                      sum + ((item.cart_price * item.cart_cnt) - ((item.cart_price / 100) * item.cart_discount) * item.cart_cnt)
+                      sum + (item.cart_price * item.cart_cnt)
                       , delivery).toLocaleString()
                     : 0
                 }

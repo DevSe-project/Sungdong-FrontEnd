@@ -7,12 +7,12 @@ import { useFetch } from '../../customFn/useFetch';
 import { useEstimateActions, useEstimateInfo, useEstimateProduct } from '../../store/DataStore';
 import { useReactToPrint } from 'react-to-print';
 import EstimatePrint from './EstimatePrint';
+import axios from '../../axios';
 
 export function EstimateManager(){
-  const {fetchGetServer} = useFetch();
   const estimateInfo = useEstimateInfo();
   const estimateProduct = useEstimateProduct();
-  const { fetchServer } = useFetch();
+  const { fetchServer,fetchGetServer,handleNoAlertOtherErrors, handleForbiddenError, handleOtherErrors } = useFetch();
   const { resetEstimateProduct, resetEstimateInfo, setEstimateInfo, setEstimateProduct } = useEstimateActions();
 
   useEffect(() => {
@@ -24,8 +24,42 @@ export function EstimateManager(){
   }, []);
 
 
-  //fetch
-  const { data: userData } = useQuery({ queryKey: ['user'] })
+  //fetch -- 유저
+  const fetchUserData = async () => {
+    try {
+      const token = GetCookie('jwt_token');
+      const response = await axios.get("/auth/info",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          }
+        }
+      )
+      // 성공 시 추가된 상품 정보를 반환합니다.
+      return response.data.data || {};
+    } catch (error) {
+      // 서버 응답이 실패인 경우
+      if (error.response && error.response.status === 401) {
+        // 서버가 401 UnAuthorazation를 반환한 경우
+        handleNoAlertOtherErrors(error.response.data.message);
+        return new Error(error.response.data.message);
+      } else if (error.response && error.response.status === 403) {
+        handleForbiddenError(error.response.data.message);
+        throw new Error(error.response.data.message);
+      } else {
+        handleOtherErrors(error.response.data.message);
+        throw new Error(error.response.data.message);
+      }
+    }
+  }
+
+  const { data: userData } = useQuery({
+    queryKey: ['user'],
+    queryFn: fetchUserData
+  });
+
+  //-------------------------------------------------------------
 
   //fetch
   const fetchData = async() => {

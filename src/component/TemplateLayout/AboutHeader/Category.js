@@ -352,16 +352,12 @@ export function Category() {
                   </td>
                   <td>EA</td>
                   <td>
-                    {item.product_discount
-                      ? `${parseInt(item.product_price)
-                        .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
-                      : parseInt(item.product_price).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
+                    {parseInt(item.product_price)
+                        .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })
+                    }
                   </td>
                   <td style={{ fontWeight: '750' }}>
-                    {item.product_discount
-                      ? `${(item.product_price - (item.product_price / 100) * item.product_discount)
-                        .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
-                      : `${parseInt(item.product_price).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
+                    {parseInt(item.product_amount).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                   </td>
                   <td style={{ width: '15%' }} rowSpan={2}>
                     <button
@@ -397,19 +393,15 @@ export function Category() {
                     {item.option0 === '' ? <span>옵션없음</span> : optionCreator(item)}
                   </td>
                   <td>
-                    {item.product_discount}%
+                    {100-parseFloat(item.discount_amount)}%
                   </td>
                   <td style={{ fontWeight: '550' }}>
-                    {item.product_discount
-                      ? `${(((item.product_price / 100) * item.product_discount) * (item.cnt ? item.cnt : 1))
-                        .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
-                      : parseInt('0').toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
+                    {((item.product_price - item.product_amount) * (item.cnt ? item.cnt : 1))
+                        .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                   </td>
                   <td style={{ fontWeight: '750' }}>
-                    {item.product_discount
-                      ? `${((item.product_price * (item.cnt ? item.cnt : 1)) - ((item.product_price / 100) * item.product_discount) * (item.cnt ? item.cnt : 1))
-                        .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
-                      : `${parseInt(item.product_price * (item.cnt ? item.cnt : 1)).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
+                      {(item.product_amount * (item.cnt ? item.cnt : 1))
+                        .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                   </td>
                 </tr>
               </React.Fragment>

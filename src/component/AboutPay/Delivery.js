@@ -154,10 +154,12 @@ export function Delivery(props) {
                       <span className={styles.itemTitle}>{product.product_title}, {product.order_cnt}개 </span>
                       <span className={styles.itemOptions}>규격 : {product.product_spec && product.product_spec}</span>
                       <span className={styles.itemOptions}>옵션 : {product.selectedOption && product.selectedOption}</span>
+                      <span className={styles.itemOptions}>공급단가 : {(product.order_productPrice/product.order_cnt).toLocaleString()}원</span>
                       <span className={styles.itemTitle}>{parseInt(product.order_productPrice).toLocaleString()}원</span>
                     </div>
                   </div>
                 )}
+                <div className={styles.itemTitle} style={{color: '#CC0000', marginTop: '1em'}}>총 주문액 : {parseInt(item.order_payAmount).toLocaleString()}원</div>
               </div>
               <div className={styles.deliveryMenu}>
                 <button
