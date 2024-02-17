@@ -81,7 +81,7 @@ export function Product() {
                         <div style={{ display: 'flex', gap: '0.3em', alignItems: 'center' }}>
                           {/* 공급가 */}
                           <h3 className={styles.price}>
-                            {(item.product_price - (item.product_price / 100) * item.product_discount).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
+                            {parseInt(item.product_amount).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                           </h3>
                         </div>
                       </div>
