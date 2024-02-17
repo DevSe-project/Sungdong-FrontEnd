@@ -7,6 +7,7 @@ import AdminUserFilter from './AdminUserFilter';
 import AdminUserSort from './AdminUserSort';
 import { GetCookie } from '../../../customFn/GetCookie';
 import { useFetch } from '../../../customFn/useFetch';
+import { de } from 'date-fns/locale';
 
 export default function AdminUserList() {
 
@@ -305,17 +306,28 @@ export default function AdminUserList() {
 
   const parseOptionValue = (item, listItem) => {
     if (item.key == 'userType_id') { // 고객구분
-      switch (listItem) {
+      switch (parseInt(listItem, 10)) {
         case 1:
           return <span>실사용자</span>;
         case 2:
           return <span>납품업체</span>;
-        case 3:
+        case 12:
+          return <span>실사용자 B등급</span>;
+        case 13:
+          return <span>실사용자 C등급</span>;
+        case 14:
+          return <span>실사용자 D등급</span>;
+        case 22:
+          return <span>납품업자 B등급</span>;
+        case 23:
+          return <span>납품업자 C등급</span>;
+        case 24:
+          return <span>납품업자 D등급</span>;
+        case 100:
           return <span>관리자</span>;
-        case 4:
-          return <span>총괄 관리자</span>;
         default:
           return <span>Error</span>
+
       }
     } else if (item.key == 'hasCMS') { // CMS동의 여부
       if (listItem)
@@ -379,10 +391,9 @@ export default function AdminUserList() {
             <th>업체명(상호명)</th>
             {/* 고객 구분, CMS여부 */}
             {[
-              { title: '고객 구분', valList: [1, 2, 3, 4], val: '', key: 'userType_id' },
-              { title: '등급', valList: ['A', 'B', 'C', 'D'], val: '', key: 'grade' },
-              { title: '담당자', valList: ['박형조', '엄지석', '김태훈'], val: '', key: 'name' },
-              { title: 'CMS여부', valList: [1, 0], val: '', key: 'hasCMS' },
+              { title: '고객 구분', valList: [1, 2, 12, 13, 14, 22, 23, 24, 100], val: userData.userType_id, key: 'userType_id' },
+              { title: '담당자', valList: ['박형조', '엄지석', '김태훈'], val: userData.name, key: 'name' },
+              { title: 'CMS여부', valList: [1, 0], val: userData.hasCMS, key: 'hasCMS' },
             ].map((customItem, index) => (
               <th key={index}>
                 {editIndex === 'allEdit' ?
@@ -451,8 +462,7 @@ export default function AdminUserList() {
               {/* name: 상호명, val: db의 현재 값, valList: 선택할 값 */}
               {[
                 { title: '고객명', val: user.cor_corName, key: 'cor_corName' },
-                { title: '고객 구분', valList: [1, 2, 3, 4], val: user.userType_id, key: 'userType_id' },
-                { title: '등급', valList: ['A', 'B', 'C', 'D'], val: user.grade, key: 'grade' },
+                { title: '고객 구분', valList: [1, 2, 12, 13, 14, 22, 23, 24, 100], val: user.userType_id, key: 'userType_id' },
                 { title: '담당자', valList: ['박형조', '엄지석', '김태훈'], val: user.name ? user.name : <span style={{ color: 'var(--main-red' }}>배정 필요</span>, key: 'name' },
                 { title: 'CMS여부', valList: [1, 0], val: user.hasCMS, key: 'hasCMS' },
               ].map((customItem, editIdx) => (
