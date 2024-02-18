@@ -270,7 +270,7 @@ export function AdminProductList({ productCurrentPage, productTotalPage }) {
                                 {item.product_supply}
                               </td>
                               <td>
-                                {item.product_discount}%
+                                {100 - parseFloat(item.product_discount)}%
                               </td>
                               <td style={{ fontWeight: '550' }}>
                                 {item.product_discount
