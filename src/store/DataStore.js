@@ -625,7 +625,7 @@ export const useTakeBackStore = create((set) => ({
     }
   },
   takeBackOption: {
-    raeOption: '',
+    raeOption: '반품',
     returnStatus: "",
     barcodeStatus: "",
     wrapStatus: "",
