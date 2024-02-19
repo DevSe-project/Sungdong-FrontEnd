@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useModalActions, useModalState } from '../../store/DataStore';
 import styles from './Table.module.css';
 import { TackBackFilter } from './TakeBackFilter';
@@ -6,43 +6,86 @@ import TakeBackModal from './TakeBackModal';
 import { useState } from 'react';
 import { GetCookie } from '../../customFn/GetCookie';
 import axios from 'axios';
-export function TackBackRequest(){
+import { useFetch } from '../../customFn/useFetch';
+import Pagination from '../../customFn/Pagination';
+export function TackBackRequest() {
   const { isModal } = useModalState();
   const { setIsModal } = useModalActions();
-  const fetchOrderData = async() => {
-    try{
-      const token = GetCookie('jwt_token');
-      const response = await axios.get("/order", 
-        {
-          headers : {
-            "Content-Type" : "application/json",
-            'Authorization': `Bearer ${token}`,
-          }
-        }
-      )
-      return response.data;
-    } catch(error) {
-      throw new Error('주문 내역을 불러오던 중 오류가 발생했습니다.');
-    }
-  }
-  //const { isLoading, isError, error, data:orderData } = useQuery({queryKey:['order'], queryFn: ()=> fetchOrderData();});
-  const { data, isLoading, isError, error } = useQuery({queryKey: ['data']});
-  // 게시물 데이터와 페이지 번호 상태 관리    
+  // 체크박스를 통해 선택한 상품들을 저장할 상태 변수
+  const [selectedItems, setSelectedItems] = useState([]);
+  // 전체 선택 체크박스 상태를 저장할 상태 변수
+  const [selectAll, setSelectAll] = useState(false);
+
+  const { fetchGetServer, fetchServer } = useFetch();
+
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const queryClient = useQueryClient();
+
+  const fetchOrderRefundData = async () => {
+    const data = await fetchGetServer(`order/rae/list`, 1);
+    return data.data;
+  }
+  const { isLoading, isError, error, data: orderData } = useQuery({ queryKey: ['orderRefund'], queryFn: () => fetchOrderRefundData() });
   const [modalItem, setModalItem] = useState([]);
-  //현재 페이지에 해당하는 게시물 목록 가져오기
-  const getCurrentPagePosts = () => {
-    const startIndex = (currentPage - 1) * 5; // 한 페이지에 5개씩 표시
-    return data.length > 0 
-    ? data.slice(startIndex, startIndex + 5)
-    : data.slice(startIndex, startIndex + 5)
-    
-  };
 
   function addRequest(item) {
     setIsModal(true);
     setModalItem(item);
   }
+
+  //-------------------------페이지 설정------------------------------
+
+  // 페이지를 변경할 때 호출되는 함수
+  const fetchPageChange = async (pageNumber) => {
+    return await fetchServer({}, 'post', '/order/rae/list', pageNumber);
+  };
+
+
+  const { mutate: pageMutaion } = useMutation({ mutationFn: fetchPageChange })
+
+
+  function handlePageChange(pageNumber) {
+    pageMutaion(pageNumber, {
+      onSuccess: (data) => {
+        setCurrentPage(data.data.currentPage);
+        setTotalPages(data.data.totalPages);
+        queryClient.setQueryData(['orderRefund'], () => {
+          return data.data.data
+        })
+      },
+      onError: (error) => {
+        return console.error(error.message);
+      },
+    })
+  }
+
+  //----------------------체크박스------------------------
+  // 전체 선택 체크박스 클릭 시 호출되는 함수
+  function handleSelectAllChange() {
+    setSelectAll(!selectAll);
+
+    if (!selectAll) {
+      const allId = orderData?.map((item) => item);
+      setSelectedItems(allId);
+    } else {
+      setSelectedItems([]);
+    }
+  };
+
+  // 체크박스 클릭 시 호출되는 함수
+  function checkedBox(product) {
+    if (selectedItems.find(item => item.order_product_id === product.order_product_id)) { //productID가 중복이면 true == 이미 체크박스가 클릭되어 있으면
+      setSelectedItems(selectedItems.filter((item) => item.order_product_id !== product.order_product_id)); //체크박스를 해제함 == 선택한 상품 저장 변수에서 제외
+      setSelectAll(false);
+    } else {
+      setSelectedItems([...selectedItems, product]); //selectedItems의 배열과 productID 배열을 합쳐 다시 selectedItems에 저장
+      if (selectedItems.length + 1 === orderData?.length) {
+        setSelectAll(true);
+      }
+    }
+  };
 
   if (isLoading) {
     return <p>Loading..</p>;
@@ -50,109 +93,71 @@ export function TackBackRequest(){
   if (isError) {
     return <p>에러 : {error.message}</p>;
   }
-  return(
+  return (
     <div className={styles.body}>
       {/* 헤드라인 */}
       <div className={styles.head}>
-        <h1><i className="fa-solid fa-heart"/> 반품신청</h1>
+        <h1><i className="fa-solid fa-heart" /> 반품신청</h1>
       </div>
       {/* 필터 */}
-      <TackBackFilter/>
+      <TackBackFilter />
       {/* 테이블 */}
+      <div style={{ display: 'flex', justifyContent: 'flex-end', width: '90%' }}>
+        <button
+          className="original_round_button"
+          onClick={() => { addRequest(selectedItems) }}
+        >일괄 신청</button>
+      </div>
       <div className={styles.tablebody}>
         <table className={styles.table}>
           <thead>
             <tr>
-              <th>일자</th>
-              <th>증빙</th>
-              <th>적요</th>
-              <th>단위</th>
-              <th>수량</th>
-              <th>단가</th>
-              <th>판매액</th>
-              <th>할인 및 입금액</th>
-              <th>잔액</th>
-              <th>반품증 작성</th>
-            </tr>
-            <tr>
-              <th colSpan="2">전월이월</th>
-              <th colSpan="6"></th>
-              <th>잔액(숫자값)</th>
-              <th></th>
+              <th>No.</th>
+              <th>주문일자</th>
+              <th>브랜드</th>
+              <th>상품코드</th>
+              <th>상품명</th>
+              <th>규격</th>
+              <th>상품 단가</th>
+              <th>의뢰가능 수량</th>
+              <th>반품가능 금액</th>
+              <th>
+                <input
+                  type='checkbox'
+                  checked={selectAll}
+                  onChange={() => handleSelectAllChange()} />
+              </th>
             </tr>
           </thead>
-          {getCurrentPagePosts().map((item,index) => (
-          <tbody key={index}>
-            <tr>
-              <td>date</td>
-              <td>id값</td>
-              <td>상품명/코드/브랜드/규격</td>
-              <td>EA</td>
-              <td>수량</td>
-              <td>단가</td>
-              <td>판매액</td>
-              <td>입금액</td>
-              <td>잔액</td>
-              <td>
-                <button 
-                className={styles.button}
-                onClick={() => { addRequest(item) }}
-                >작성</button>
-              </td>
-            </tr>
-          </tbody>
+          {orderData && orderData.map((item, index) => (
+            <tbody key={index}>
+              <tr>
+                <td>{index + 1}</td>
+                <td>{new Date(item.order_date).toLocaleString()}</td>
+                <td>{item.product_brand}</td>
+                <td>{item.product_id}</td>
+                <td>{item.product_title}</td>
+                <td>{item.product_spec}</td>
+                <td>{(item.order_productPrice / item.order_cnt).toLocaleString()}</td>
+                <td>{item.order_cnt}</td>
+                <td>{parseInt(item.order_productPrice).toLocaleString()}</td>
+                <td>
+                  <input
+                    checked={selectedItems.some(select => select.order_product_id === item.order_product_id)}
+                    onChange={() => checkedBox(item)}
+                    type='checkbox'
+                  />
+                </td>
+              </tr>
+            </tbody>
           ))}
-          <tfoot>
-            <tr>
-              <th colSpan="2">월계</th>
-              <th colSpan="4"></th>
-              <th>판매액(숫자값)</th>
-              <th>할인 및 입금액</th>
-              <th>잔액(숫자값)</th>
-              <th></th>
-            </tr>
-            <tr>
-              <th colSpan="2">누계</th>
-              <th colSpan="4"></th>
-              <th>판매액(숫자값)</th>
-              <th>입금액</th>
-              <th>잔액(숫자값)</th>
-              <th></th>
-            </tr>
-          </tfoot>
         </table>
-        <div className={styles.buttonContainer}>
-        {/* 이전 페이지 */}
-        <button
-          className={styles.pageButton} 
-          onClick={()=> {
-            if(currentPage !== 1){
-              setCurrentPage(currentPage - 1)
-            } else {
-              alert("해당 페이지가 가장 첫 페이지 입니다.")
-        }}}>
-        <i className="far fa-angle-left"/>
-        </button>
-        <div className={styles.pageButton}>
-          {currentPage}
-        </div>
-          {/* 다음 페이지 */}
-        <button
-        className={styles.pageButton}
-        onClick={()=> {
-          if(data.length > 5){
-            setCurrentPage(currentPage + 1)
-          } else {
-            alert("다음 페이지가 없습니다.")
-          }}}>
-            <i className="far fa-angle-right"/>
-        </button>
       </div>
-      </div>
+      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
       {/* --------------TakeBack-Modal-------------- */}
-        {isModal &&
+      {isModal &&
         <div className={styles.modalOverlay}>
-          <TakeBackModal modalItem={modalItem}/>
+          <TakeBackModal modalItem={modalItem} />
         </div>}
     </div>
   )

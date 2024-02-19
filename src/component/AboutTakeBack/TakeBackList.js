@@ -6,6 +6,15 @@ import axios from 'axios';
 import { GetCookie } from '../../customFn/GetCookie';
 
 export function TakeBackList(){
+  // 체크박스를 통해 선택한 상품들을 저장할 상태 변수
+  const [selectedItems, setSelectedItems] = useState([]);
+  // 전체 선택 체크박스 상태를 저장할 상태 변수
+  const [selectAll, setSelectAll] = useState(false);
+
+  //const { isLoading, isError, error, data:takeBackData } = useQuery({queryKey:['takeBack'], queryFn: ()=> fetchData();});
+  const { data, isLoading, isError, error } = useQuery({queryKey: ['data']});
+
+
   //fetch
   const fetchData = async() => {
     try{
@@ -23,18 +32,7 @@ export function TakeBackList(){
       throw new Error('원장 내역을 불러오던 중 오류가 발생했습니다.');
     }
   }
-  //const { isLoading, isError, error, data:takeBackData } = useQuery({queryKey:['takeBack'], queryFn: ()=> fetchData();});
-  const { data, isLoading, isError, error } = useQuery({queryKey: ['data']});
-  // 게시물 데이터와 페이지 번호 상태 관리    
-  const [currentPage, setCurrentPage] = useState(1);
-  //현재 페이지에 해당하는 게시물 목록 가져오기
-  const getCurrentPagePosts = () => {
-    const startIndex = (currentPage - 1) * 5; // 한 페이지에 5개씩 표시
-    return data.length > 0 
-    ? data.slice(startIndex, startIndex + 5)
-    : data.slice(startIndex, startIndex + 5)
-    
-  };
+
   if (isLoading) {
     return <p>Loading..</p>;
   }
@@ -81,33 +79,6 @@ export function TakeBackList(){
             </tr>
           </tbody>
         </table>
-      </div>
-      <div className={styles.buttonContainer}>
-        {/* 이전 페이지 */}
-        <button
-          className={styles.pageButton} 
-          onClick={()=> {
-            if(currentPage !== 1){
-              setCurrentPage(currentPage - 1)
-            } else {
-              alert("해당 페이지가 가장 첫 페이지 입니다.")
-        }}}>
-        <i className="far fa-angle-left"/>
-        </button>
-        <div className={styles.pageButton}>
-          {currentPage}
-        </div>
-          {/* 다음 페이지 */}
-        <button
-        className={styles.pageButton}
-        onClick={()=> {
-          if(data.length > 5){
-            setCurrentPage(currentPage + 1)
-          } else {
-            alert("다음 페이지가 없습니다.")
-          }}}>
-            <i className="far fa-angle-right"/>
-        </button>
       </div>
     </div>
   )

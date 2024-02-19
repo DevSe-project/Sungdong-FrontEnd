@@ -614,7 +614,18 @@ export const useEstimateActions = () => useEstimateStore((state) => state.action
 
 /* ----------------TAKEBACK STORE---------------- */
 export const useTakeBackStore = create((set) => ({
+  filterOption: {
+    raeOption: '반품',
+    product_title: '',
+    product_brand: '',
+    product_id: '',
+    date: {
+      start: '',
+      end: ''
+    }
+  },
   takeBackOption: {
+    raeOption: '',
     returnStatus: "",
     barcodeStatus: "",
     wrapStatus: "",
@@ -623,17 +634,49 @@ export const useTakeBackStore = create((set) => ({
     reason: "",
   },
   actions: {
+    setTakeBackFilterDate: (fieldName, value) =>
+      set((state) => ({
+        filterOption: {
+          ...state.filterOption,
+          date: {
+            ...state.filterOption.date,
+            [fieldName]: value,
+          },
+        },
+    })),
+    setTakeBackFilterOption: (fieldName, value) =>
+      set((state) => ({ filterOption: { ...state.filterOption, [fieldName]: value } })),
+    resetFilterOption: () =>
+      set({filterOption: {
+        product_title: '',
+        product_brand: '',
+        product_id: '',
+        date: {
+          start: '',
+          end: ''
+        }
+      }}),
     setTakeBackOption: (fieldName, value) =>
       set((state) => ({ takeBackOption: { ...state.takeBackOption, [fieldName]: value } })),
     resetTakeBackOption: () =>
       set({ takeBackOption: { returnStatus: "", barcodeStatus: "", wrapStatus: "", productStatus: "" } }),
   }
 }));
+export const useTakeBackFilter = () => useTakeBackStore((state) => state.filterOption);
 export const useTakeBack = () => useTakeBackStore((state) => state.takeBackOption);
 export const useTakeBackActions = () => useTakeBackStore((state) => state.actions);
 
 /* ----------------ERRORTRADE STORE---------------- */
 export const useErrTradeStore = create((set) => ({
+  filterOption: {
+    product_title: '',
+    product_brand: '',
+    product_id: '',
+    date: {
+      start: '',
+      end: ''
+    }
+  },
   errTradeOption: {
     returnStatus: "",
     barcodeStatus: "",
@@ -643,12 +686,25 @@ export const useErrTradeStore = create((set) => ({
     reason: "",
   },
   actions: {
+    setErrTradeFilterDate: (fieldName, value) =>
+      set((state) => ({
+        filterOption: {
+          ...state.filterOption,
+          date: {
+            ...state.filterOption.date,
+            [fieldName]: value,
+          },
+        },
+    })),
+    setErrTradeFilterOption: (fieldName, value) =>
+      set((state) => ({ filterOption: { ...state.filterOption, [fieldName]: value } })),
     setErrTradeOption: (fieldName, value) =>
       set((state) => ({ errTradeOption: { ...state.errTradeOption, [fieldName]: value } })),
     resetErrTradeOption: () =>
       set({ errTradeOption: { returnStatus: "", barcodeStatus: "", wrapStatus: "", productStatus: "" } }),
   }
 }));
+export const useErrTradeFilter = () => useErrTradeStore((state) => state.filterOption);
 export const useErrTrade = () => useErrTradeStore((state) => state.errTradeOption);
 export const useErrTradeActions = () => useErrTradeStore((state) => state.actions);
 

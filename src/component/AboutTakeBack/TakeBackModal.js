@@ -11,46 +11,46 @@ export default function TakeBackModal({modalItem}) {
   const {setTakeBackOption, resetTakeBackOption} = useTakeBackActions();
   const queryClient = useQueryClient();
 
-  //fetch 함수
-  const tradeFetch = async () => {
-    try {
-      const token = GetCookie('jwt_token');
-      const response = await axios.post("/takeBack", 
-        JSON.stringify({
-          productId: modalItem.id,  // 예시: product가 객체이고 id 속성이 있는 경우
-          optionSelect: modalItem.optionSelect ? modalItem.optionSelect : null,
-          cnt: modalItem.cnt,
-          takeBackOption: takeBackOption
-        }),
-        {
-          headers : {
-            "Content-Type" : "application/json",
-            'Authorization': `Bearer ${token}`,
-          }
-        }
-      )
-      // 성공 시 추가된 상품 정보를 반환합니다.
-      return response.data;
-    } catch (error) {
-      // 실패 시 예외를 throw합니다.
-      throw new Error('상품을 주문 목록에 요청하던 중 오류가 발생했습니다.');
-    }
-  };
+  // //fetch 함수
+  // const tradeFetch = async () => {
+  //   try {
+  //     const token = GetCookie('jwt_token');
+  //     const response = await axios.post("/takeBack", 
+  //       JSON.stringify({
+  //         productId: modalItem.id,
+  //         optionSelect: modalItem.optionSelect ? modalItem.optionSelect : null,
+  //         cnt: modalItem.cnt,
+  //         takeBackOption: takeBackOption
+  //       }),
+  //       {
+  //         headers : {
+  //           "Content-Type" : "application/json",
+  //           'Authorization': `Bearer ${token}`,
+  //         }
+  //       }
+  //     )
+  //     // 성공 시 추가된 상품 정보를 반환합니다.
+  //     return response.data;
+  //   } catch (error) {
+  //     // 실패 시 예외를 throw합니다.
+  //     throw new Error('상품을 주문 목록에 요청하던 중 오류가 발생했습니다.');
+  //   }
+  // };
 
-  //교환 신청 함수
-  const { requestTradeMutation } = useMutation({mutationFn: tradeFetch,
-    onSuccess: (success) => {
-      // 메세지 표시
-      alert(success.message);
-      console.log('반품 신청이 완료되었습니다.', success);
-      // 상태를 다시 불러와 갱신합니다.
-      queryClient.invalidateQueries(['takeBack']);
-    },
-    onError: (error) => {
-      // 상품 추가 실패 시, 에러 처리를 수행합니다.
-      console.error('반품을 신청하는 중 오류가 발생했습니다.', error);
-    },
-  })
+  // //교환 신청 함수
+  // const { requestTradeMutation } = useMutation({mutationFn: tradeFetch,
+  //   onSuccess: (success) => {
+  //     // 메세지 표시
+  //     alert(success.message);
+  //     console.log('반품 신청이 완료되었습니다.', success);
+  //     // 상태를 다시 불러와 갱신합니다.
+  //     queryClient.invalidateQueries(['takeBack']);
+  //   },
+  //   onError: (error) => {
+  //     // 상품 추가 실패 시, 에러 처리를 수행합니다.
+  //     console.error('반품을 신청하는 중 오류가 발생했습니다.', error);
+  //   },
+  // })
 
     // esc키를 누르면 모달창 닫기.
     useEffect(() => {
@@ -142,7 +142,25 @@ export default function TakeBackModal({modalItem}) {
           >
             <option name="productStatus" value="정상작동">정상작동</option>
             <option name="productStatus" value="불량작동">불량작동</option>
-            <option name="productStatus" value="A/S수리">A/S 수리</option>
+          </select>
+        </div>
+      </div>
+    )
+  }
+
+  // 상품 상태 옵션
+  function raeOption(){
+    return(
+      <div style={{display: 'flex', gap: '0.5em'}}>
+        <div>
+          <select 
+          className={styles.inputStyle}  
+          name="reaOption"
+          value={takeBackOption.raeOption}              
+          onChange={(e)=>setTakeBackOption("raeOption", e.target.value)}
+          >
+            <option name="productStatus" value="반품">반품</option>
+            <option name="productStatus" value="불량교환">불량교환</option>
           </select>
         </div>
       </div>
@@ -154,9 +172,8 @@ export default function TakeBackModal({modalItem}) {
     const productList = [
         { label : '상품정보', content : modalItem.title},
         { label : '배송구분', content : '배송구분'},
-        { label : '승인시간', content : '미정'},
         { label : '판매일자', content : '구매한 일자'},
-        { label : '전표번호', content : modalItem.id},
+        { label : '작성구분', content : raeOption()},
         { label : '경과일', content : '구매일로부터 n일'},
       ];
 
@@ -192,12 +209,12 @@ export default function TakeBackModal({modalItem}) {
             <div className={styles.contentContainer}>
                 {/* 제목 */}
                 <div className={styles.title}>
-                    반품증 작성 작업
+                    반품/교환증 작성 작업
                 </div>
                 {/* 작성일과 반품상담자 */}
                 <div className={styles.details}>
                     <div className={styles.date}>
-                        작성일: date
+                        작성일: {new Date().toLocaleDateString()}
                     </div>
                     <div className={styles.writer}>
                         반품상담자: 성동물산(주)
@@ -207,16 +224,30 @@ export default function TakeBackModal({modalItem}) {
                 <div className={styles.contentsBox}>
                     <div className={styles.contents}>
                         <div className={styles.productInfo}>
-                            {productList.map((item,key) => 
-                            <div key={key} className={styles.container}>
-                                <div className={styles.label}>
-                                    {item.label}:
-                                </div>
-                                <div className={styles.content}>
-                                    {item.content}
-                                </div>
-                            </div>
-                            )}
+                            <table>
+                              <thead>
+                                <tr>
+                                  <th>순번</th>
+                                  <th>상품코드</th>
+                                  <th>상품정보</th>
+                                  <th>배송구분</th>
+                                  <th>주문일자</th>
+                                  <th>작성구분</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {modalItem.map((item, index) => 
+                                <tr key={index}>
+                                  <td>{index+1}</td>
+                                  <td>{item.product_id}</td>
+                                  <td>{item.product_brand}/{item.product_title}/{item.product_spec}</td>
+                                  <td>{item.deliveryType}</td>
+                                  <td>{new Date(item.order_date).toLocaleString()}</td>
+                                  <td>{raeOption()}</td>
+                                </tr>
+                                )}
+                              </tbody>
+                            </table>
                         </div>
                         <div className={styles.productInfo}>
                             {takeBackList.map((item,key) => 
@@ -232,7 +263,7 @@ export default function TakeBackModal({modalItem}) {
                         </div>
                         <div className={styles.buttonContainer}>
                           <label>최종 환불금액 : <input className={styles.inputStyle} value={modalItem.price} type='text' disabled/> 원</label>
-                          <button onClick={()=> requestTradeMutation.mutate()} className={styles.button}>반품 신청</button>
+                          {/* <button onClick={()=> requestTradeMutation.mutate()} className={styles.button}>반품 신청</button> */}
                         </div>
                     </div>
                 </div>

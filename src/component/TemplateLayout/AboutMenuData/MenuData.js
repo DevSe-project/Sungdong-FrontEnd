@@ -102,23 +102,13 @@ export function MenuData(props) {
         item: '반품/교환',
       },
       subMenuItems: [{
-        item: '반품신청',
+        item: '반품/교환 신청',
         link: '/return/request',
         require: GetCookie('jwt_token') !== null
       },
       {
-        item: '반품조회',
+        item: '반품/교환 내역조회',
         link: '/return/list',
-        require: GetCookie('jwt_token') !== null
-      },
-      {
-        item: '불량교환신청',
-        link: '/error/request',
-        require: GetCookie('jwt_token') !== null
-      },
-      {
-        item: '불량교환조회',
-        link: '/error/list',
         require: GetCookie('jwt_token') !== null
       },
       ]
