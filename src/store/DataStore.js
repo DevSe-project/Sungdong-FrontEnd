@@ -646,7 +646,7 @@ export const useTakeBackStore = create((set) => ({
         barcodeStatus: '',
         wrapStatus: '',
         productStatus: '',
-        raeOption: '',
+        rae_type: 0,
         name: '',
         rae_count: 1,
         rae_amount: '',

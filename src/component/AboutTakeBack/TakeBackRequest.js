@@ -4,8 +4,6 @@ import styles from './Table.module.css';
 import { TackBackFilter } from './TakeBackFilter';
 import TakeBackModal from './TakeBackModal';
 import { useState } from 'react';
-import { GetCookie } from '../../customFn/GetCookie';
-import axios from 'axios';
 import { useFetch } from '../../customFn/useFetch';
 import Pagination from '../../customFn/Pagination';
 export function TackBackRequest() {
@@ -25,6 +23,8 @@ export function TackBackRequest() {
 
   const fetchOrderRefundData = async () => {
     const data = await fetchGetServer(`order/rae/list`, 1);
+    setCurrentPage(data.currentPage);
+    setTotalPages(data.totalPages);
     return data.data;
   }
   const { isLoading, isError, error, data: orderData } = useQuery({ queryKey: ['orderRefund'], queryFn: () => fetchOrderRefundData() });
@@ -119,7 +119,7 @@ export function TackBackRequest() {
               <th>상품명</th>
               <th>규격</th>
               <th>상품 단가</th>
-              <th>의뢰가능 수량</th>
+              <th>반품가능 수량</th>
               <th>반품가능 금액</th>
               <th>
                 <input
