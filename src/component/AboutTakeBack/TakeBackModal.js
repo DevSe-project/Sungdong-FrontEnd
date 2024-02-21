@@ -8,7 +8,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 export default function TakeBackModal({ modalItem }) {
   const { closeModal } = useModalActions();
   const takeBackOption = useTakeBack();
-  const { setTakeBackOption, resetTakeBackOption } = useTakeBackActions();
+  const { setTakeBackOption, setTakeBackItemOption, resetTakeBackOption } = useTakeBackActions();
   const queryClient = useQueryClient();
   // 선택된 아이템의 인덱스를 상태로 관리합니다.
   const [selectedItem, setSelectedItem] = useState(null);
@@ -18,47 +18,56 @@ export default function TakeBackModal({ modalItem }) {
     setSelectedItem(index); // 선택된 아이템의 인덱스를 업데이트합니다.
   };
 
+  useEffect(() => {
+    setTakeBackOption(modalItem);
+  }, [modalItem])
 
-  // //fetch 함수
-  // const tradeFetch = async () => {
-  //   try {
-  //     const token = GetCookie('jwt_token');
-  //     const response = await axios.post("/takeBack", 
-  //       JSON.stringify({
-  //         productId: modalItem.id,
-  //         optionSelect: modalItem.optionSelect ? modalItem.optionSelect : null,
-  //         cnt: modalItem.cnt,
-  //         takeBackOption: takeBackOption
-  //       }),
-  //       {
-  //         headers : {
-  //           "Content-Type" : "application/json",
-  //           'Authorization': `Bearer ${token}`,
-  //         }
-  //       }
-  //     )
-  //     // 성공 시 추가된 상품 정보를 반환합니다.
-  //     return response.data;
-  //   } catch (error) {
-  //     // 실패 시 예외를 throw합니다.
-  //     throw new Error('상품을 주문 목록에 요청하던 중 오류가 발생했습니다.');
-  //   }
-  // };
+  //fetch 함수
+  const tradeFetch = async () => {
+    try {
+      const token = GetCookie('jwt_token');
+      const response = await axios.post("/takeBack", 
+        JSON.stringify({
+          productId: modalItem.id,
+          optionSelect: modalItem.optionSelect ? modalItem.optionSelect : null,
+          cnt: modalItem.cnt,
+          takeBackOption: takeBackOption
+        }),
+        {
+          headers : {
+            "Content-Type" : "application/json",
+            'Authorization': `Bearer ${token}`,
+          }
+        }
+      )
+      // 성공 시 추가된 상품 정보를 반환합니다.
+      return response.data;
+    } catch (error) {
+      // 실패 시 예외를 throw합니다.
+      throw new Error('상품을 주문 목록에 요청하던 중 오류가 발생했습니다.');
+    }
+  };
 
-  // //교환 신청 함수
-  // const { requestTradeMutation } = useMutation({mutationFn: tradeFetch,
-  //   onSuccess: (success) => {
-  //     // 메세지 표시
-  //     alert(success.message);
-  //     console.log('반품 신청이 완료되었습니다.', success);
-  //     // 상태를 다시 불러와 갱신합니다.
-  //     queryClient.invalidateQueries(['takeBack']);
-  //   },
-  //   onError: (error) => {
-  //     // 상품 추가 실패 시, 에러 처리를 수행합니다.
-  //     console.error('반품을 신청하는 중 오류가 발생했습니다.', error);
-  //   },
-  // })
+  //교환 신청 함수
+  const { mutate:requestTradeMutation } = useMutation({mutationFn: tradeFetch,
+
+  })
+
+  function handleRaeClicked(){
+    requestTradeMutation({
+      onSuccess: (success) => {
+        // 메세지 표시
+        alert(success.message);
+        console.log('반품 신청이 완료되었습니다.', success);
+        // 상태를 다시 불러와 갱신합니다.
+        queryClient.invalidateQueries(['takeBack']);
+      },
+      onError: (error) => {
+        // 상품 추가 실패 시, 에러 처리를 수행합니다.
+        console.error('반품을 신청하는 중 오류가 발생했습니다.', error);
+      },
+    })
+  }
 
   // esc키를 누르면 모달창 닫기.
   useEffect(() => {
@@ -83,8 +92,8 @@ export default function TakeBackModal({ modalItem }) {
         <div>
           <select
             className={styles.inputStyle}
-            value={takeBackOption.returnStatus}
-            onChange={(e) => setTakeBackOption("returnStatus", e.target.value)}
+            value={modalItem.find((item) => item.order_product_id === selectedItem) ? takeBackOption.find((item)=>item.order_product_id === selectedItem)?.returnStatus : ''}
+            onChange={(e) => setTakeBackItemOption(selectedItem, "returnStatus", e.target.value)}
             name="returnStatus"
           >
             <option name="returnStatus" value="영업직원">영업직원</option>
@@ -105,8 +114,8 @@ export default function TakeBackModal({ modalItem }) {
           <select
             className={styles.inputStyle}
             name="barcodeStatus"
-            value={takeBackOption.barcodeStatus}
-            onChange={(e) => setTakeBackOption("barcodeStatus", e.target.value)}
+            value={modalItem.find((item) => item.order_product_id === selectedItem) ? takeBackOption.find((item)=>item.order_product_id === selectedItem)?.barcodeStatus : ''}
+            onChange={(e) => setTakeBackItemOption(selectedItem, "barcodeStatus", e.target.value)}
           >
             <option name="barcodeStatus" value="정상부착">정상부착</option>
             <option name="barcodeStatus" value="미부착">미부착</option>
@@ -125,8 +134,8 @@ export default function TakeBackModal({ modalItem }) {
           <select
             className={styles.inputStyle}
             name="wrapStatus"
-            value={takeBackOption.wrapStatus}
-            onChange={(e) => setTakeBackOption("wrapStatus", e.target.value)}
+            value={modalItem.find((item) => item.order_product_id === selectedItem) ? takeBackOption.find((item)=>item.order_product_id === selectedItem)?.wrapStatus :''}
+            onChange={(e) => setTakeBackItemOption(selectedItem, "wrapStatus", e.target.value)}
           >
             <option name="wrapStatus" value="정상포장">정상포장</option>
             <option name="wrapStatus" value="포장개봉">포장개봉</option>
@@ -145,8 +154,8 @@ export default function TakeBackModal({ modalItem }) {
           <select
             className={styles.inputStyle}
             name="productStatus"
-            value={takeBackOption.productStatus}
-            onChange={(e) => setTakeBackOption("productStatus", e.target.value)}
+            value={modalItem.find((item) => item.order_product_id === selectedItem) ? takeBackOption.find((item)=>item.order_product_id === selectedItem)?.productStatus : ''}
+            onChange={(e) => setTakeBackItemOption(selectedItem, "productStatus", e.target.value)}
           >
             <option name="productStatus" value="정상작동">정상작동</option>
             <option name="productStatus" value="불량작동">불량작동</option>
@@ -164,11 +173,11 @@ export default function TakeBackModal({ modalItem }) {
           <select
             className={styles.inputStyle}
             name="reaOption"
-            value={takeBackOption.raeOption}
-            onChange={(e) => setTakeBackOption("raeOption", e.target.value)}
+            value={modalItem.find((item) => item.order_product_id === selectedItem) ? takeBackOption.find((item)=>item.order_product_id === selectedItem)?.raeOption : ''}
+            onChange={(e) => setTakeBackItemOption(selectedItem, "raeOption", e.target.value)}
           >
-            <option name="productStatus" value="반품">반품</option>
-            <option name="productStatus" value="불량교환">불량교환</option>
+            <option name="raeOption" value="반품">반품</option>
+            <option name="raeOption" value="불량교환">불량교환</option>
           </select>
         </div>
       </div>
@@ -176,23 +185,26 @@ export default function TakeBackModal({ modalItem }) {
   }
 
   const takeBackList = [
-    { label: '작성자', content: <input className={styles.inputStyle} value={takeBackOption.name} onChange={(e) => setTakeBackOption("name", e.target.value)} style={{ width: '100%' }} type='text' /> },
+    { label: '작성자', content: <input className={styles.inputStyle} value={modalItem.find((item) => item.order_product_id === selectedItem) ? takeBackOption.find((item)=>item.order_product_id === selectedItem)?.name : ''} onChange={(e) => setTakeBackItemOption(selectedItem, "name", e.target.value)} style={{ width: '100%' }} type='text' /> },
     { label: '포장상태', content: wrapStatusOption() },
-    { label: '처리사항', content: '반품처리' },
+    { label: '처리사항', content: raeOption() },
     { label: '상품상태', content: productStatusOption() },
     {
       label: '반품수량',
       content:
         <>
-          <input style={{ width: '20%' }} className={styles.inputStyle} type='number' />
+          <input style={{ width: '20%' }} className={styles.inputStyle} type='number' value={modalItem.find((item) => item.order_product_id === selectedItem) ? takeBackOption.find((item)=>item.order_product_id === selectedItem)?.rae_count : ''} onChange={(e) => {
+            setTakeBackItemOption(selectedItem, "rae_count", e.target.value)
+            setTakeBackItemOption(selectedItem, "rae_amount", (modalItem.find((item) => item.order_product_id === selectedItem)?.order_productPrice/modalItem.find((item) => item.order_product_id === selectedItem)?.order_cnt) * e.target.value)
+            }} />
           <span style={{ width: '10%', background: 'lightgray' }} className={styles.inputStyle}>단가</span>
-          <input style={{ width: '20%' }} value={modalItem.find((item) => item.order_product_id === selectedItem)?.order_productPrice/modalItem.find((item) => item.order_product_id === selectedItem)?.order_cnt} className={styles.inputStyle} type='text' disabled />
+          <input style={{ width: '20%' }} value={modalItem.find((item) => item.order_product_id === selectedItem) ? modalItem.find((item) => item.order_product_id === selectedItem)?.order_productPrice/modalItem.find((item) => item.order_product_id === selectedItem)?.order_cnt : ''} className={styles.inputStyle} type='text' disabled />
           <span style={{ width: '10%', background: 'lightgray' }} className={styles.inputStyle}>금액</span>
-          <input style={{ width: '20%' }} value={modalItem.price} className={styles.inputStyle} type='text' disabled />
+          <input style={{ width: '20%' }} value={modalItem.find((item) => item.order_product_id === selectedItem) ? (modalItem.find((item) => item.order_product_id === selectedItem)?.order_productPrice/modalItem.find((item) => item.order_product_id === selectedItem)?.order_cnt) * takeBackOption.find((item)=>item.order_product_id === selectedItem)?.rae_count : ''} className={styles.inputStyle} type='text' disabled />
         </>
     },
     { label: '바코드상태', content: barcodeStatusOption() },
-    { label: '반품사유', content: <input className={styles.inputStyle} value={takeBackOption.reason} onChange={(e) => setTakeBackOption("reason", e.target.value)} style={{ width: '100%' }} type='text' /> },
+    { label: '반품사유', content: <input className={styles.inputStyle} value={modalItem.find((item) => item.order_product_id === selectedItem) ? takeBackOption.find((item)=>item.order_product_id === selectedItem)?.reason : ''} onChange={(e) => setTakeBackItemOption(selectedItem, "reason", e.target.value)} style={{ width: '100%' }} type='text' /> },
     { label: '반품배송', content: returnStatusOption() }
   ]
 
@@ -232,7 +244,6 @@ export default function TakeBackModal({ modalItem }) {
                     <th>상품정보</th>
                     <th>배송구분</th>
                     <th>주문일자</th>
-                    <th>작성구분</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -248,7 +259,6 @@ export default function TakeBackModal({ modalItem }) {
                       <td>{item.product_brand}/{item.product_title}/{item.product_spec}</td>
                       <td>{item.deliveryType}</td>
                       <td>{new Date(item.order_date).toLocaleString()}</td>
-                      <td>{raeOption()}</td>
                     </tr>
                   )}
                 </tbody>
@@ -267,8 +277,8 @@ export default function TakeBackModal({ modalItem }) {
               )}
             </div>
             <div className={styles.buttonContainer}>
-              <label>최종 환불금액 : <input className={styles.inputStyle} value={modalItem.price} type='text' disabled /> 원</label>
-              {/* <button onClick={()=> requestTradeMutation.mutate()} className={styles.button}>반품 신청</button> */}
+              <label>최종 환불금액 : <input className={styles.inputStyle} value={modalItem.find((item) => item.order_product_id === selectedItem) ? takeBackOption.find((item)=>item.order_product_id === selectedItem)?.rae_amount : ''}  type='text' disabled /> 원</label>
+              <button onClick={()=> handleRaeClicked()} className="original_round_button">반품 신청</button>
             </div>
           </div>
         </div>
