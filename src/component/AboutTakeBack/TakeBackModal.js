@@ -66,6 +66,17 @@ export default function TakeBackModal({ modalItem }) {
     };
   }, [closeModal]);
 
+  // 수량 최대입력 글자(제한 길이 변수)
+  const maxLengthCheck = (e, prevItem) => {
+    const lengthTarget = e.target.value;
+
+    if (lengthTarget >= 0 && lengthTarget <= prevItem.order_cnt) {
+        setTakeBackItemOption(selectedItem, "rae_count", e.target.value)
+        setTakeBackItemOption(selectedItem, "rae_amount", (modalItem.find((item) => item.order_product_id === selectedItem)?.order_productPrice/modalItem.find((item) => item.order_product_id === selectedItem)?.order_cnt) * parseInt(e.target.value))
+    } else {
+      return prevItem;
+    }
+  };
   // 반품 상태 옵션
   function returnStatusOption() {
     return (
@@ -179,9 +190,13 @@ export default function TakeBackModal({ modalItem }) {
       label: '반품수량',
       content:
         <>
-          <input style={{ width: '20%' }} className={styles.inputStyle} type='number' value={modalItem.find((item) => item.order_product_id === selectedItem) ? takeBackOption.find((item)=>item.order_product_id === selectedItem)?.rae_count : ''} onChange={(e) => {
-            setTakeBackItemOption(selectedItem, "rae_count", e.target.value)
-            setTakeBackItemOption(selectedItem, "rae_amount", (modalItem.find((item) => item.order_product_id === selectedItem)?.order_productPrice/modalItem.find((item) => item.order_product_id === selectedItem)?.order_cnt) * parseInt(e.target.value))
+          <input 
+          style={{ width: '20%' }} 
+          className={styles.inputStyle} 
+          type='text' 
+          value={modalItem.find((item) => item.order_product_id === selectedItem) ? takeBackOption.find((item)=>item.order_product_id === selectedItem)?.rae_count : ''} 
+          onChange={(e) => {
+            maxLengthCheck(e, modalItem.find((item) => item.order_product_id === selectedItem))
             }} />
           <span style={{ width: '10%', background: 'lightgray' }} className={styles.inputStyle}>단가</span>
           <input style={{ width: '20%' }} value={modalItem.find((item) => item.order_product_id === selectedItem) ? modalItem.find((item) => item.order_product_id === selectedItem)?.order_productPrice/modalItem.find((item) => item.order_product_id === selectedItem)?.order_cnt : ''} className={styles.inputStyle} type='text' disabled />
@@ -265,7 +280,8 @@ export default function TakeBackModal({ modalItem }) {
             </div>
             <div className={styles.buttonContainer}>
               <label>최종 환불금액 : <input className={styles.inputStyle} value={takeBackOption.reduce((sum, item) => 
-                sum + parseInt(item.rae_amount), 0)}  type='text' disabled /> 원</label>
+                sum + parseInt(item.rae_amount), 0) ? takeBackOption.reduce((sum, item) => 
+                sum + parseInt(item.rae_amount), 0) : 0}  type='text' disabled /> 원</label>
               <button onClick={()=> handleRaeClicked()} className="original_round_button">반품 신청</button>
             </div>
           </div>
