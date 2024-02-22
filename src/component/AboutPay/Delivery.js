@@ -1,10 +1,11 @@
 import { useNavigate } from 'react-router-dom'
 import styles from './Delivery.module.css'
 import { useEffect, useState } from 'react';
-import { useDataActions } from '../../Store/DataStore';
+import { useDataActions } from '../../store/DataStore';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useFetch } from '../../customFn/useFetch';
 import Pagination from '../../customFn/Pagination'
+import axios from '../../axios';
 export function Delivery(props) {
 
   const { fetchServer, fetchGetServer } = useFetch();
@@ -95,16 +96,54 @@ export function Delivery(props) {
     }
     orderListMutation(jsonOrder, {
       onSuccess: (data) => {
-        console.log(data);
         const orderdata = data.data;
         setDetailData(...orderdata);
         navigate("/orderDetail");
       },
       onError: (error) => {
         // 상품 삭제 실패 시, 에러 처리를 수행합니다.
-        console.error('상품을 삭제 처리하는 중 오류가 발생했습니다.', error);
+        console.error('상품을 불러오는 중 오류가 발생했습니다.', error);
       }
     })
+  }
+
+    //-------------------상품삭제--------------------
+
+    const fetchDeletedProducts = async (orderId) => {
+      try {
+        const response = await axios.delete(`/order/delete/${orderId}`,
+        )
+        return response.data;
+      } catch (error) {
+        throw error;
+      }
+    }
+  
+    // 상품 삭제를 처리하는 뮤테이션
+    const { mutate: deleteProductMutation } = useMutation({ mutationFn: fetchDeletedProducts })
+
+  function handleCancelOrder(item){
+    if(item.orderState === 0){
+      const isConfirmed = window.confirm('정말로 주문을 취소하시겠습니까?');
+      if (isConfirmed) {
+        deleteProductMutation(item.order_id, {
+          onSuccess: (data) => {
+            alert(data.message);
+            // 상품 삭제 성공 시 상품 목록을 다시 불러옴
+            queryClient.invalidateQueries(['order']);
+            window.location.reload();
+          },
+          onError: (error) => {
+            // 상품 삭제 실패 시, 에러 처리를 수행합니다.
+            alert(error.message);
+          },
+        });
+      }
+    }
+    else {
+
+
+    }
   }
 
   if (isLoading) {
@@ -153,11 +192,13 @@ export function Delivery(props) {
                     <div className={styles.deliveryNowInformation}>
                       <span className={styles.itemTitle}>{product.product_title}, {product.order_cnt}개 </span>
                       <span className={styles.itemOptions}>규격 : {product.product_spec && product.product_spec}</span>
-                      <span className={styles.itemOptions}>옵션 : {product.selectedOption && product.selectedOption}</span>
+                      <span className={styles.itemOptions}>옵션 : {product.selectedOption ? product.selectedOption : '없음'}</span>
+                      <span className={styles.itemOptions}>공급단가 : {(product.order_productPrice/product.order_cnt).toLocaleString()}원</span>
                       <span className={styles.itemTitle}>{parseInt(product.order_productPrice).toLocaleString()}원</span>
                     </div>
                   </div>
                 )}
+                <div className={styles.itemTitle} style={{color: '#CC0000', marginTop: '1em'}}>총 주문액 : {parseInt(item.order_payAmount).toLocaleString()}원</div>
               </div>
               <div className={styles.deliveryMenu}>
                 <button
@@ -167,7 +208,7 @@ export function Delivery(props) {
                   className={styles.button}>배송 조회</button>
                 {item.orderState < 4
                   ?
-                  <button className={styles.button}>주문 취소</button>
+                  <button className={styles.button} onClick={()=> handleCancelOrder(item)}>주문 취소</button>
                   :
                   <button
                     onClick={() => navigate("/return/request")}

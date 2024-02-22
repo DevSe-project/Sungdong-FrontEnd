@@ -1,21 +1,10 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import styles from './AdminMenuData.module.css'
 export function AdminMenuData(props) {
   const navigate = useNavigate();
   const location = useLocation();
-  const [topTab, setTopTab] = useState(null); // 현재 활성화된 탭을 추적
-
-  useEffect(() => {
-    const tabstate = JSON.parse(sessionStorage.getItem('AdmintabState'));
-    setTopTab(tabstate);
-    // 경로에 따른 상태 초기화
-    if (location.pathname === '/' || location.pathname === '/login' || location.pathname === '/category') {
-      sessionStorage.removeItem('AdmintabState');
-      setTopTab(null);
-    }
-  }, [location]); // 두 번째 매개변수를 빈 배열로 설정하여 최초 렌더링 시에만 실행
-
+  const current = location.pathname;
   const menuData = [
     {
       id: 0,
@@ -24,15 +13,15 @@ export function AdminMenuData(props) {
       },
       subMenuItems: [{
         item: '상품 등록',
-        link: '/adminMain/addProduct'
+        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/addProduct'
       },
       {
         item: '상품 조회/수정',
-        link: '/adminMain/searchProduct'
+        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/searchProduct'
       },
       {
         item: '카테고리 관리',
-        link: '/adminMain/category',
+        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/category',
       }],
     },
     {
@@ -43,15 +32,15 @@ export function AdminMenuData(props) {
       subMenuItems: [
         {
           item: '결제완료 주문',
-          link: '/adminMain/sold',
+          link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/sold',
         },
         {
           item: '미결제 주문',
-          link: '/adminMain/yetPay',
+          link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/yetPay',
         },
         {
           item: '반품/교환/취소',
-          link: '/adminMain/refund'
+          link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/refund'
         }
       ],
     },
@@ -63,7 +52,7 @@ export function AdminMenuData(props) {
       subMenuItems: [
         {
           item: '배송 상태 관리',
-          link: '/adminMain/SD_Delivery/DeliveryManager',
+          link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/SD_Delivery/Delivery',
         },],
     },
     {
@@ -73,11 +62,11 @@ export function AdminMenuData(props) {
       },
       subMenuItems: [{
         item: 'CMS 정산',
-        link: '/adminMain/SD_account/cms'
+        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/SD_account/cms'
       },
       {
         item: '누적 정산',
-        link: '/adminMain/SD_account/total'
+        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/SD_account/total'
       }],
     },
     {
@@ -88,7 +77,7 @@ export function AdminMenuData(props) {
       subMenuItems: [
         {
           item: '공지사항',
-          link: '/adminMain/customerCenter/notice'
+          link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/customerCenter/notice'
         },
       ],
     },
@@ -99,22 +88,17 @@ export function AdminMenuData(props) {
       },
       subMenuItems: [{
         item: '회원 관리',
-        link: '/adminMain/user'
+        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/user'
       },
       {
         item: '회원가입 코드 관리',
-        link: '/adminMain/printCode'
+        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/printCode'
       }],
     },
   ];
 
-
-  function saveTab(id) {
-    sessionStorage.setItem('AdmintabState', JSON.stringify(id));
-  }
-
   // 서브메뉴 열림창 변수 초기화
-  const [subMenuStates, setSubMenuStates] = useState(menuData.map(() => false));
+  const [subMenuStates, setSubMenuStates] = useState(Array(menuData.length).fill(false));
 
   function toggleSubMenu(index) {
     setSubMenuStates(prevStates => {
@@ -132,10 +116,8 @@ export function AdminMenuData(props) {
           key={index}
           id={item.id}  // data-id 속성을 사용하여 탭의 id를 저장
           style={{ boxShadow: `0px 2px 4px 1px rgba(0, 0, 0, 0.2)` }}
-          className={`admin-menuItem
-          menutab-item ${topTab === item.id ? 'active' : ''}`}
+          className={`admin-menuItem ${item.subMenuItems ? item.subMenuItems.some((subitem) => subitem.link === current) && 'active' : item.title.link === current && 'active'}`}
           onClick={() => {
-            saveTab(item.id)
             toggleSubMenu(index)
           }}
 
@@ -144,19 +126,20 @@ export function AdminMenuData(props) {
             className={styles.link}>
             {item.title.item}
           </span>
-          {subMenuStates[index] === true &&
+          {(subMenuStates[index] === true || item.subMenuItems?.some((item) => item.link === current)) &&
             <ul
               className={styles.subMenu}
             >
               {item.subMenuItems.map((subMenuItem, subMenuItemindex) => (
-                <li
-                  onClick={() => {
+                <NavLink
+                onClick={() => {
                     navigate(`${subMenuItem.link}`)
                   }}
-                  className={styles.sub_item}
+                  to={subMenuItem.link}
+                  className={`${styles.sub_item} ${subMenuItem.link === current ? styles.active : ''}`}
                   key={subMenuItemindex}>
                   {subMenuItem.item}
-                </li>
+                </NavLink>
               ))}
             </ul>
           }

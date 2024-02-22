@@ -5,6 +5,7 @@
     margin: 1em;
     padding: 1em;
     gap: 1em;
+    flex: 1;
 }  
 
 /* --------Selected Handler */

@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from './OrderDetail.module.css'
 import axios from 'axios';
 import { GetCookie } from '../../customFn/GetCookie';
-import { useDetailData } from '../../Store/DataStore';
+import { useDetailData } from '../../store/DataStore';
 
 export function OrderDetail(props){
   const navigate = useNavigate();

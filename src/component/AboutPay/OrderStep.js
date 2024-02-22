@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from './Step.module.css'
-import { useListActions, useOrderData, useOrderList } from "../../Store/DataStore";
+import { useListActions, useOrderData, useOrderList } from "../../store/DataStore";
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { StepModule } from "./StepModule";
 
@@ -115,10 +115,10 @@ export function OrderStep({setActiveTab, activeTab}){
                     ?
                     <>
                     <span style={{color: 'red', fontWeight: '750'}}>
-                    ({item.cart_discount}%)
+                    ({parseFloat(item.cart_discount)}%)
                     </span>
                     &nbsp;<i className="fal fa-long-arrow-right"/>&nbsp;
-                    {parseInt(item.cart_price * item.cart_cnt - (((item.cart_price/100)*item.cart_discount)*item.cart_cnt)).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
+                    {parseInt(item.cart_price * item.cart_cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                     </>
                     : `${(item.cart_price * item.cart_cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
                 </td>
@@ -157,7 +157,7 @@ export function OrderStep({setActiveTab, activeTab}){
                     \{
                     orderList.length > 0 ?
                     orderList.reduce((sum, item) => //reduce 사용하여 배열 객체의 합계 계산, 0으로 초기화
-                    sum + ((item.cart_price * item.cart_cnt) - (((item.cart_price / 100) * item.cart_discount) * item.cart_cnt))
+                    sum + ((item.cart_price * item.cart_cnt))
                     , 0).toLocaleString()
                     : 0
                     }
@@ -178,7 +178,7 @@ export function OrderStep({setActiveTab, activeTab}){
                         <h5>\{
                             orderList.length > 0 ?
                             orderList.reduce((sum, item) => //reduce 함수사용하여 배열 객체의 합계 계산, delivery값으로 sum을 초기화
-                            sum + ((item.cart_price * item.cart_cnt) - (((item.cart_price / 100) * item.cart_discount) * item.cart_cnt))
+                            sum + ((item.cart_price * item.cart_cnt))
                             , delivery).toLocaleString()
                             : 0
                             }

@@ -1,34 +1,33 @@
+import { Outlet, useNavigate } from 'react-router-dom'
 import { AdminHeader } from '../Layout/Header/AdminHeader'
 import { AdminMenuData } from '../Layout/SideBar/AdminMenuData'
 import styles from './AdminMain.module.css'
+import { useFetch } from '../../../customFn/useFetch'
+import { useEffect } from 'react'
 export function AdminMain() {
+
+  const { fetchServer } = useFetch();
+  const navigate = useNavigate();
+
+  const fetchVerifyAdmin = async () => {
+    try {
+      const data = await fetchServer({}, 'post', '/auth/verify/admin', 1);
+      return alert(data.message);
+    } catch (error) {
+      navigate("/");
+    }
+  }
+
+  useEffect(() => {
+    fetchVerifyAdmin();
+  }, [])
+
   return (
-    <div className={styles.main}>
-      <AdminHeader/>
+    <div>
+      <AdminHeader />
       <div className={styles.body}>
-        <AdminMenuData/>
-        <div className={styles.bodyTile}>
-          {/* 상품 관리 */}
-          <div className={styles.bodyInnerTile}>
-            상품관리 타일형
-          </div>
-          {/* 배송 관리 */}
-          <div className={styles.bodyInnerTile}>
-            배송관리 타일형
-          </div>
-          {/* 수익 관리 */}
-          <div className={styles.bodyInnerTile}>
-            수익관리 타일형
-          </div>
-          {/* 고객요청 관리 */}
-          <div className={styles.bodyInnerTile}>
-            고객요청 타일형
-          </div>
-          {/* 고객 관리 */}
-          <div className={styles.bodyInnerTile}>
-            고객관리 타일형
-          </div>
-        </div>
+        <AdminMenuData />
+        <Outlet />
       </div>
     </div>
   )

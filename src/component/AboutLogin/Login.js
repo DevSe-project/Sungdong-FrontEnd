@@ -5,16 +5,13 @@ import { useState } from 'react';
 import FindModal from './FindModal';
 import CodeInputModal from './CodeInputModal';
 import axios from '../../axios';
-import { useDataActions, useIsLogin, useModal, useModalActions, useModalState, useSetLogin, useUserData } from '../../Store/DataStore';
+import { useModalActions, useModalState } from '../../store/DataStore';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export function Login(props) {
 
   const { isModal, modalName } = useModalState();
   const { selectedModalOpen } = useModalActions();
-  const { setLogin } = useSetLogin();
-  const { isLogin } = useIsLogin();
-  const userData = useUserData();
 
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
@@ -45,8 +42,8 @@ export function Login(props) {
         navigate("/login");
         throw new Error(error.response.data.message);
       } else {
-      // 실패 시 예외를 throw합니다.
-      throw new Error('로그인 중 오류가 발생했습니다.');
+        // 실패 시 예외를 throw합니다.
+        throw new Error('로그인 중 오류가 발생했습니다.');
       }
     }
   }
@@ -76,8 +73,8 @@ export function Login(props) {
     });
   }
 
-  function autoLogin(){
-    
+  function autoLogin() {
+
   }
 
   const handleKeyDown = (event) => {
@@ -115,7 +112,7 @@ export function Login(props) {
               </div>
               <div className={styles.autoLoginCheckBox}>
                 <input type='checkbox' id='autoCheckbox' />
-                <label htmlFor="autoCheckbox" onClick={()=> autoLogin()}>로그인 상태 유지</label>
+                <label htmlFor="autoCheckbox" onClick={() => autoLogin()}>로그인 상태 유지</label>
               </div>
               {/* Login Button */}
               <div className={styles.goLogin}

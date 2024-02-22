@@ -89,7 +89,6 @@ thead {
   height: 40px;
   border-radius: 1vh;
   boxShadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-  color: white;
 }
 
 th {
@@ -145,6 +144,7 @@ textarea {
   --main-red-active: #550909;
   --list-margin: 0 10px 0px 10px;
   --list-padding: 10px 20px 10px 20px;
+  --shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 /* 탭 아이템 스타일 */
@@ -168,14 +168,6 @@ textarea {
 .tab-item.active {
   color: #ddd;
   background-color: var(--background-color-clicked);
-}
-
-/* 상단 메뉴 바 */
-
-/* 활성화된 탭 아이템 스타일 */
-.menutab-item.active span {
-  color: var(--background-color-clicked) !important;
-  cursor: pointer;
 }
 
 /* 관리자 페이지 메뉴 탭 */
@@ -208,6 +200,12 @@ textarea {
   height: 3px;
 }
 
+/* 활성화된 탭 아이템 스타일 */
+.admin-menuItem.active span {
+  color: var(--background-color-clicked) !important;
+  cursor: pointer;
+}
+
 
 /* 일반 홈페이지 메뉴 탭 */
 .menu-item {
@@ -237,6 +235,13 @@ textarea {
   width: 100%;
   height: 3px;
 }
+
+/* 활성화된 탭 아이템 스타일 */
+.menu-item.active span {
+  color: var(--background-color-clicked) !important;
+  cursor: pointer;
+}
+
 
 /* ==== 검색 아이콘 ==== */
 i.fas.fa-search {
@@ -291,7 +296,7 @@ i.fa-solid.fa-heart {
   left: -2.5%;
 }
 
-.categorymenu-item.open{
+.categorymenu-item.open {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
   border-radius: 1em 1em 0 0;
   color: var(--background-color-active);
@@ -614,7 +619,8 @@ input[type="checkbox"] {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1.2px solid gray;
+  border-bottom: 2px solid gray;
+  padding: 3px;
 }
 
 /* SmallHeader(소) */
@@ -647,10 +653,16 @@ input[type="checkbox"] {
 
 
 /* -------------------------ellipsis------------------------- */
-.icon {
-}
+.icon {}
+
 .icon:hover {
   cursor: pointer;
   font-size: x-large;
   transition: 0.5s
+}
+
+/* ------------------------ Print ----------------------- */
+@page {
+  size: A4;
+  margin: 10mm;
 }

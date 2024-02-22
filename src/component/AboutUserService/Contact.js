@@ -2,7 +2,7 @@ import styles from './Contact.module.css';
 
 import { TopBanner } from "../TemplateLayout/AboutHeader/TopBanner"; // 최상단 배너
 import { Footer } from "../TemplateLayout/AboutFooter/Footer"; // 최하단 배너
-import { useData, useDataStore } from "../../Store/DataStore"; // zustand스토어 import
+import { useData, useDataStore } from "../../store/DataStore"; // zustand스토어 import
 import { MenuData } from "../TemplateLayout/AboutMenuData/MenuData";
 
 

@@ -1,6 +1,6 @@
 import { React, useEffect } from 'react';
 import styles from './AdminModal.module.css';
-import { useModalActions, useModalState, useOrderSelectListActions } from '../../../Store/DataStore';
+import { useModalActions, useModalState, useOrderSelectListActions } from '../../../store/DataStore';
 import { GetCookie } from '../../../customFn/GetCookie';
 import axios from 'axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';

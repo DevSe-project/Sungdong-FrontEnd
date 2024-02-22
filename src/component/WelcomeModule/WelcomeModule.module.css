@@ -1,21 +1,77 @@
-.container {
+/* WelcomeModule.module.css */
+
+.wrapper {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 10px;
-    background-color: var(--main-color-light);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+    justify-content: center;
+}
+
+.container {
+    background-color: #f9f6f6;
+    width: 100%;
+    padding: 1em;
+    border-bottom: 3px solid #CC0000;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);
 }
 
 .header {
-    font-size: 20px;
-    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1px;
+    font-weight: 900;
+    padding: 1em;
+}
+
+.corName_container {
+    
+}
+
+.welcomeMessage {
+    
+}
+
+.itemContainer {
     display: flex;
     flex-direction: column;
 }
-.managerInfo {
+.itemsTitle {
     display: flex;
-    flex-direction: column;
-    justify-content: left;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
     text-align: left;
+    margin-top: 0.2em;
+    margin-bottom: 0.6em;
+}
+/* .goAdmin {
+    font-size: 14px;
+} */
+.goAdmin:hover {
+    cursor: pointer;
+    color: var(--main-color-original);
+}
+.items {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    font-size: 14px;
+    padding: 0.5em;
+    border: 3px solid var(--main-color-light);
+    border-radius: 1vh;
+}
+
+.orderList {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px;
+}
+
+.title {
+    color: rgb(82, 82, 82);
+}
+
+.content {
+    border-radius: 2vh;
+    font-weight: bold;
 }

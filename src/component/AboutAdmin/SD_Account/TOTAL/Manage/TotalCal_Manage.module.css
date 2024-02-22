@@ -1,5 +1,6 @@
 .flex_container {
     display: flex;
+    width: 100%;
 }
 
 .main_container {

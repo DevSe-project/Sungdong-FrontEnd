@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './CategoryBar.module.css'
 import { useEffect, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useModalActions, useSearchActions } from '../../../Store/DataStore';
+import { useModalActions, useSearchActions } from '../../../store/DataStore';
 import { useFetch } from '../../../customFn/useFetch';
 
 export function CategoryBar(props) {
@@ -117,7 +117,7 @@ export function CategoryBar(props) {
                       toggleSubMenu(index); 
                     }}
                   >
-                    <span>
+                    <span style={{fontSize: '0.85em'}}>
                       {item.name}
                     </span>
                     {/* 서브메뉴 loop */}

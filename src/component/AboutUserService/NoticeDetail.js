@@ -1,6 +1,6 @@
 import styles from './NoticeDetail.module.css';
 import { useEffect } from 'react';
-import { useModalActions, useModalState, useNoticePostList } from '../../Store/DataStore';
+import { useModalActions, useModalState, useNoticePostList } from '../../store/DataStore';
 
 export default function NoticeDetail() {
     const {selectedIndex} = useModalState();

@@ -42,15 +42,6 @@
     border-color: rgb(174, 79, 44);
 }
 
-.select {
-    margin-left: 1em;
-    overflow: hidden;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding-right: 25px;
-}
-
 .button {
     background-color: var(--main-color-original);
     color: white;

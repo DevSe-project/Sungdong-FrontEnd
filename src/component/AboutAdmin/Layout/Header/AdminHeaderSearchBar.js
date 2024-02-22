@@ -139,7 +139,7 @@ export function AdminHeaderSearchBar(props) {
             sessionStorage.removeItem('filterSearch_PNum');
             break;
         }
-        navigate("/adminMain/searchOrder")
+        navigate("/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/searchOrder")
         setResults([]); // 결과 항목 숨기기
         setSearchTerm("");
       }
@@ -208,7 +208,7 @@ export function AdminHeaderSearchBar(props) {
         <i 
         onClick={() => {
           sessionStorage.setItem('filterSearch_CName', JSON.stringify(searchTerm))
-          navigate("/adminMain/searchOrder")
+          navigate("/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/searchOrder")
           setResults([]); // 결과 항목 숨기기
           setSearchTerm("");
         }}

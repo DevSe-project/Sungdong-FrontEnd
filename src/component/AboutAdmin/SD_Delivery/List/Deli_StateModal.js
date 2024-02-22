@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useModalActions } from "../../../../Store/DataStore";
+import { useModalActions } from "../../../../store/DataStore";
 import styles from './Deli_Modal.module.css';
 import axios from '../../../../axios';
 import { GetCookie } from "../../../../customFn/GetCookie";
@@ -81,8 +81,8 @@ export default function Deli_StateModal(props) {
             alert("잘못된 선택입니다.");
         }
     }
-    
-    const sendApi = async() => {
+
+    const sendApi = async () => {
         fetchServer()
     }
     // 배송 상태 변경 함수
@@ -174,11 +174,11 @@ export default function Deli_StateModal(props) {
                                             handleBatchStatus(selectedValue);
                                         }}
                                     >
-                                        <option value={0}>개별 선택</option>
-                                        <option value={1}>배송 준비</option>
-                                        <option value={2}>배송 중</option>
-                                        <option value={3}>배송 완료</option>
-                                        <option value={4}>배송 지연</option>
+                                        <option value={-1}>개별 선택</option>
+                                        <option value={2}>배송 준비</option>
+                                        <option value={3}>배송 중</option>
+                                        <option value={4}>배송 완료</option>
+                                        <option value={5}>배송 지연</option>
                                     </select>
                                 </th>
                                 <th></th>
@@ -208,10 +208,10 @@ export default function Deli_StateModal(props) {
                                                 handlePerStatus(item.order_id, e);
                                             }}
                                         >
-                                            <option value={1}>배송 준비</option>
-                                            <option value={2}>배송 중</option>
-                                            <option value={3}>배송 완료</option>
-                                            <option value={4}>배송 지연</option>
+                                            <option value={2}>배송 준비</option>
+                                            <option value={3}>배송 중</option>
+                                            <option value={4}>배송 완료</option>
+                                            <option value={5}>배송 지연</option>
                                         </select>
                                     </td>
                                     {/* 주문일자 */}

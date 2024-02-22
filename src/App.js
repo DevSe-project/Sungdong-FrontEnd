@@ -1,7 +1,7 @@
 import { db } from "./firebase"; // 파이어베이스 데이터베이스 임포트
 import './App.css';
 import { useEffect, useState } from 'react';
-import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation, Outlet } from 'react-router-dom';
 
 // Data 객체들 불러오기
 import { OrderObj } from './component/Data/OrderObj';
@@ -52,7 +52,7 @@ import { AdminNotSoldList } from './component/AboutAdmin/Sold/AdminNotSoldList';
 import { AdminRefund } from './component/AboutAdmin/Refund/AdminRefund';
 import AdminUserList from './component/AboutAdmin/Users/AdminUserList';
 import AdminNotice from './component/AboutAdmin/Notice/AdminNotice';
-import Deli from "./component/AboutAdmin/SD_Delivery/List/Deli";
+import Deli_List from "./component/AboutAdmin/SD_Delivery/List/Deli_List";
 import TotalCal_Manage from "./component/AboutAdmin/SD_Account/TOTAL/Manage/TotalCal_Manage";
 import CMSaccount_Manage from "./component/AboutAdmin/SD_Account/CMS/Manage/CMSaccount_Manage";
 
@@ -62,7 +62,7 @@ import { MenuData } from './component/TemplateLayout/AboutMenuData/MenuData';
 import { Footer } from './component/TemplateLayout/AboutFooter/Footer';
 
 // State Management (Zustand) Store
-import { useUserData, useDataActions, useListActions, useOrderData, useIsLogin, useSetLogin, useModalActions, useModalState } from "./Store/DataStore";
+import { useUserData, useDataActions, useListActions, useOrderData, useIsLogin, useSetLogin, useModalActions, useModalState } from "./store/DataStore";
 import { useQuery } from "@tanstack/react-query";
 import { getDocs, collection } from 'firebase/firestore'
 import { AccountBook } from "./component/AboutMyPage/AccountBook/AccountBook";
@@ -71,41 +71,35 @@ import { EstimateBox } from "./component/AboutEstimate/EstimateBox";
 import { EstimateManager } from "./component/AboutEstimate/EstimateManager";
 import { TackBackRequest } from "./component/AboutTakeBack/TakeBackRequest";
 import { TakeBackList } from "./component/AboutTakeBack/TakeBackList";
-import { ErrorTrade } from "./component/AboutTakeBack/ErrorTradeRequest";
-import { ErrorTradeList } from "./component/AboutTakeBack/ErrorTradeList";
 import { AdminEditDetail } from "./component/AboutAdmin/Detail/AdminEditDetail";
 import axios from "./axios";
-import { GetCookie } from "./customFn/GetCookie";
 import { OrderStep } from "./component/AboutPay/OrderStep";
+import { EstimateWrite } from "./component/AboutEstimate/EstimateWrite";
+import EstimatePrint from "./component/AboutEstimate/EstimatePrint";
+import { useFetch } from "./customFn/useFetch";
 
 
 export default function App() {
   const navigate = useNavigate();
   // 주문 스탭 부분 State
-  const [activeTab, setActiveTab] = useState(1); // 현재 활성화된 스탭을 추적하는 State 
+  const [activeTab, setActiveTab] = useState(1); // 주문 - 현재 활성화된 스탭을 추적하는 State 
 
-  // 데이터액션 State 불러오기
-  const { setOrderData, setUserData, setCategoryData, setTodayTopicData } = useDataActions();
-
-  // 리스트 State 불러오기
+  // 찜 리스트 State 불러오기
   const { setWishList } = useListActions();
+
+  //FETCH CUSTOM HOOK
+  const { fetchServer, fetchGetServer } = useFetch();
+
+  //상품 페이지 State
+  const [productCurrentPage, setProductCurrentPage] = useState(1);
+  const [productTotalPage, setProductTotalPage] = useState(1);
 
   //데이터 fetch
   const fetchData = async () => {
-    try {
-      const response = await axios.get("/product/list",
-        {
-          headers: {
-            "Content-Type": "application/json",
-          }
-        }
-      )
-      // 성공 시 추가된 상품 정보를 반환합니다.
-      return response.data.data;
-    } catch (error) {
-      // 실패 시 예외를 throw합니다.
-      throw new Error('확인 중 오류가 발생했습니다.');
-    }
+    const data = await fetchGetServer('/product/list', 1);
+    setProductCurrentPage(data.currentPage);
+    setProductTotalPage(data.totalPages);
+    return data.data
   };
 
   //카테고리 데이터 fetch
@@ -162,18 +156,6 @@ export default function App() {
     queryKey: ['notice'],
     queryFn: () => fetchNoticeData()
   })
-
-  // const { data: users } = useQuery({
-  //   queryKey: ['users'],
-  //   queryFn: () => fetchUserData()
-  // })
-
-
-
-  // const { data:tokenData } = useQuery({
-  //   queryKey: ['token'],
-  //   queryFn: () => fetchTokenData()
-  // })
 
   // 찜 데이터(캐쉬) 불러오기
   useEffect(() => {
@@ -257,7 +239,7 @@ export default function App() {
               menu_dynamicStyle={menu_dynamicStyle}
             />
             <div className='main'>
-              <div style={{float: 'left'}}>
+              <div style={{ float: 'left' }}>
                 <MenuData />
               </div>
               <div className='container'>
@@ -287,7 +269,7 @@ export default function App() {
               menu_dynamicStyle={menu_dynamicStyle}
             />
             <div className='main'>
-              <div style={{float: 'left'}}>
+              <div style={{ float: 'left' }}>
                 <MenuData />
               </div>
               <div className='container'>
@@ -314,9 +296,9 @@ export default function App() {
               menu_dynamicStyle={menu_dynamicStyle}
             />
             <div className='main'>
-                            <div style={{float: 'left'}}>
+              <div style={{ float: 'left' }}>
                 <MenuData />
-              </div>      
+              </div>
               <div className='container'>
                 <LikeItem menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} category_dynamicStyle={category_dynamicStyle} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
@@ -338,9 +320,9 @@ export default function App() {
               menu_dynamicStyle={menu_dynamicStyle}
             />
             <div className='main'>
-              <div style={{float: 'left'}}>
+              <div style={{ float: 'left' }}>
                 <MenuData />
-              </div>      
+              </div>
               <div className='container'>
                 <Basket menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} activeTab={activeTab} setActiveTab={setActiveTab} category_dynamicStyle={category_dynamicStyle} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
@@ -349,16 +331,16 @@ export default function App() {
               </div>
             </div>
           </>
-        }/>
+        } />
 
         <Route path='/orderStep' element={
           <>
             {/* 최상단배너 */}
             <TopBanner />
             <div className='main'>
-              <div style={{float: 'left'}}>
+              <div style={{ float: 'left' }}>
                 <MenuData />
-              </div>      
+              </div>
               <div className='container'>
                 <OrderStep menuOnClick={menuOnClick} menu_dynamicStyle={menu_dynamicStyle} activeTab={activeTab} setActiveTab={setActiveTab} category_dynamicStyle={category_dynamicStyle} text_dynamicStyle={text_dynamicStyle} />
                 <footer className='footer'>
@@ -384,9 +366,9 @@ export default function App() {
               menu_dynamicStyle={menu_dynamicStyle}
             />
             <div className='main'>
-              <div style={{float: 'left'}}>
+              <div style={{ float: 'left' }}>
                 <MenuData />
-              </div>      
+              </div>
               <div className='container'>
                 <DeliveryMain />
                 <footer className='footer'>
@@ -408,9 +390,9 @@ export default function App() {
               menu_dynamicStyle={menu_dynamicStyle}
             />
             <div className='main'>
-              <div style={{float: 'left'}}>
+              <div style={{ float: 'left' }}>
                 <MenuData />
-              </div>      
+              </div>
               <div className='container'>
                 <OrderDetail />
                 <footer className='footer'>
@@ -441,9 +423,9 @@ export default function App() {
               menu_dynamicStyle={menu_dynamicStyle}
             />
             <div className='main'>
-              <div style={{float: 'left'}}>
+              <div style={{ float: 'left' }}>
                 <MenuData />
-              </div>      
+              </div>
               <div className='container'>
                 <MyPage />
                 <footer className='footer'>
@@ -462,9 +444,9 @@ export default function App() {
               menu_dynamicStyle={menu_dynamicStyle}
             />
             <div className='main'>
-              <div style={{float: 'left'}}>
+              <div style={{ float: 'left' }}>
                 <MenuData />
-              </div>      
+              </div>
               <div className='container'>
                 <AccountBook />
                 <footer className='footer'>
@@ -483,9 +465,9 @@ export default function App() {
               menu_dynamicStyle={menu_dynamicStyle}
             />
             <div className='main'>
-              <div style={{float: 'left'}}>
+              <div style={{ float: 'left' }}>
                 <MenuData />
-              </div>      
+              </div>
               <div className='container'>
                 <DepositHistory />
                 <footer className='footer'>
@@ -505,11 +487,33 @@ export default function App() {
               menu_dynamicStyle={menu_dynamicStyle}
             />
             <div className='main'>
-              <div style={{float: 'left'}}>
+              <div style={{ float: 'left' }}>
                 <MenuData />
-              </div>      
+              </div>
               <div className='container'>
                 <EstimateBox />
+                <footer className='footer'>
+                  <Footer />
+                </footer>
+              </div>
+            </div>
+          </>} />
+
+        <Route path='/estimateWrite' element={
+          <>
+            {/* 최상단배너 */}
+            <TopBanner
+              category_dynamicStyle={category_dynamicStyle}
+              menuOnClick={menuOnClick}
+              text_dynamicStyle={text_dynamicStyle}
+              menu_dynamicStyle={menu_dynamicStyle}
+            />
+            <div className='main'>
+              <div style={{ float: 'left' }}>
+                <MenuData />
+              </div>
+              <div className='container'>
+                <EstimateWrite />
                 <footer className='footer'>
                   <Footer />
                 </footer>
@@ -527,9 +531,9 @@ export default function App() {
               menu_dynamicStyle={menu_dynamicStyle}
             />
             <div className='main'>
-              <div style={{float: 'left'}}>
+              <div style={{ float: 'left' }}>
                 <MenuData />
-              </div>      
+              </div>
               <div className='container'>
                 <EstimateManager />
                 <footer className='footer'>
@@ -538,6 +542,10 @@ export default function App() {
               </div>
             </div>
           </>} />
+
+        <Route path='/estimatePrint' element={
+          <EstimatePrint />
+        } />
 
         {/* 반품 관련 */}
         {/* 반품 신청 */}
@@ -551,9 +559,9 @@ export default function App() {
               menu_dynamicStyle={menu_dynamicStyle}
             />
             <div className='main'>
-              <div style={{float: 'left'}}>
+              <div style={{ float: 'left' }}>
                 <MenuData />
-              </div>      
+              </div>
               <div className='container'>
                 <TackBackRequest />
                 <footer className='footer'>
@@ -574,55 +582,11 @@ export default function App() {
               menu_dynamicStyle={menu_dynamicStyle}
             />
             <div className='main'>
-              <div style={{float: 'left'}}>
+              <div style={{ float: 'left' }}>
                 <MenuData />
-              </div>      
+              </div>
               <div className='container'>
                 <TakeBackList />
-                <footer className='footer'>
-                  <Footer />
-                </footer>
-              </div>
-            </div>
-          </>} />
-
-        {/* 불량 교환 관련 */}
-        <Route path='/error/request' element={
-          <>
-            {/* 최상단배너 */}
-            <TopBanner
-              category_dynamicStyle={category_dynamicStyle}
-              menuOnClick={menuOnClick}
-              text_dynamicStyle={text_dynamicStyle}
-              menu_dynamicStyle={menu_dynamicStyle}
-            />
-            <div className='main'>
-              <div style={{float: 'left'}}>
-                <MenuData />
-              </div>      
-              <div className='container'>
-                <ErrorTrade />
-                <footer className='footer'>
-                  <Footer />
-                </footer>
-              </div>
-            </div>
-          </>} />
-        <Route path='/error/list' element={
-          <>
-            {/* 최상단배너 */}
-            <TopBanner
-              category_dynamicStyle={category_dynamicStyle}
-              menuOnClick={menuOnClick}
-              text_dynamicStyle={text_dynamicStyle}
-              menu_dynamicStyle={menu_dynamicStyle}
-            />
-            <div className='main'>
-              <div style={{float: 'left'}}>
-                <MenuData />
-              </div>      
-              <div className='container'>
-                <ErrorTradeList />
                 <footer className='footer'>
                   <Footer />
                 </footer>
@@ -662,9 +626,9 @@ export default function App() {
               menu_dynamicStyle={menu_dynamicStyle}
             />
             <div className='main'>
-              <div style={{float: 'left'}}>
+              <div style={{ float: 'left' }}>
                 <MenuData />
-              </div>      
+              </div>
               <div className='container'>
                 <TodayNews />
                 <footer className='footer'>
@@ -704,9 +668,9 @@ export default function App() {
               menu_dynamicStyle={menu_dynamicStyle}
             />
             <div className='main'>
-              <div style={{float: 'left'}}>
+              <div style={{ float: 'left' }}>
                 <MenuData />
-              </div>      
+              </div>
               <div className='container'>
                 <Event />
                 <footer className='footer'>
@@ -717,42 +681,43 @@ export default function App() {
           </>
         } />
 
-        {/* 관리자페이지 - 메인 */}
-        <Route path='/adminMain' element={<AdminMain />} />
+        {/* 관리자 Main Route */}
+        <Route path='/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj' element={<AdminMain />}>
+          {/* 상품관리 - 상품등록 */}
+          <Route path='addProduct' element={<AdminDetail />} />
+          {/* 상품관리 - 상품조회 */}
+          <Route path='searchProduct' element={<AdminProductList productCurrentPage={productCurrentPage} productTotalPage={productTotalPage} />} />
+          {/* 상품관리 - 상품수정 */}
+          <Route path='editProduct/:id' element={<AdminEditDetail />} />
+          {/* 상품관리 - 카테고리 */}
+          <Route path='category' element={<AdminCategory productCurrentPage={productCurrentPage} productTotalPage={productTotalPage} />} />
+          {/* 상품관리 - 카테고리 수정 */}
+          <Route path='categoryEdit/:id' element={<AdminCategoryEdit />} />
 
-        {/* 상품관리 - 상품등록 */}
-        <Route path='/adminMain/addProduct' element={<AdminDetail />} />
-        {/* 상품관리 - 상품조회 */}
-        <Route path='/adminMain/searchProduct' element={<AdminProductList />} />
-        {/* 상품관리 - 상품수정 */}
-        <Route path='/adminMain/editProduct/:id' element={<AdminEditDetail />} />
-        {/* 상품관리 - 카테고리 */}
-        <Route path='/adminMain/category' element={<AdminCategory data={data} />} />
-        {/* 상품관리 - 카테고리 수정 */}
-        <Route path='/adminMain/categoryEdit/:id' element={<AdminCategoryEdit data={data} />} />
+          {/* 주문관리 - 주문 관리*/}
+          <Route path='sold' element={<AdminSoldList />} />
+          {/* 주문관리 - 미결제 주문 관리 */}
+          <Route path='yetPay' element={<AdminNotSoldList />} />
+          {/* 주문관리 - 반품 관리 */}
+          <Route path='refund' element={<AdminRefund />} />
 
-        {/* 주문관리 - 주문 관리*/}
-        <Route path='/adminMain/sold' element={<AdminSoldList data={data} />} />
-        {/* 주문관리 - 미결제 주문 관리 */}
-        <Route path='/adminMain/yetPay' element={<AdminNotSoldList />} />
-        {/* 주문관리 - 반품 관리 */}
-        <Route path='/adminMain/refund' element={<AdminRefund />} />
+          {/* 배송관리 - 배송 상태 관리 */}
+          <Route path='SD_delivery/Delivery' element={<Deli_List />} />
 
-        {/* 배송관리 - 배송 상태 관리 */}
-        <Route path='/adminMain/SD_delivery/DeliveryManager' element={<Deli />} />
+          {/* 정산관리 - 누적정산 */}
+          <Route path='SD_account/total' element={<TotalCal_Manage />} />
+          {/* 정산관리 - CMS정산 */}
+          <Route path='SD_account/cms' element={<CMSaccount_Manage />} />
 
-        {/* 정산관리 - 누적정산 */}
-        <Route path='/adminMain/SD_account/total' element={<TotalCal_Manage />} />
-        {/* 정산관리 - CMS정산 */}
-        <Route path='/adminMain/SD_account/cms' element={<CMSaccount_Manage />} />
+          {/* 고객센터 - 공지사항 */}
+          <Route path='customerCenter/notice' element={<AdminNotice />} />
 
-        {/* 고객센터 - 공지사항 */}
-        <Route path='/adminMain/customerCenter/notice' element={<AdminNotice />} />
+          {/* 회원관리 - 고객관리 */}
+          <Route path='user' element={<AdminUserList />} />
+          {/* 회원관리 - 회원가입 코드 관리 */}
+          <Route path='printCode' element={<ManageCode />} />
+        </Route>
 
-        {/* 회원관리 - 고객관리 */}
-        <Route path='/adminMain/user' element={<AdminUserList />} />
-        {/* 회원관리 - 회원가입 코드 관리 */}
-        <Route path='/adminMain/printCode' element={<ManageCode />} />
 
       </Routes>
     </div>

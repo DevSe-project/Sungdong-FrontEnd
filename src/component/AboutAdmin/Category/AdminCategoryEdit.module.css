@@ -1,6 +1,8 @@
 .main{
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  width: 100%;
 }
 
 
@@ -79,6 +81,17 @@
   margin-top: 0.5em;
   margin-right: 0.3em;
   margin-left: 0.3em;
+}
+
+.thumnail{
+  background-size: cover;
+  box-sizing: border-box;
+  background-color: beige;
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  border: 1px solid lightgray;
+  object-fit: cover;
 }
 
 .selectedButton{

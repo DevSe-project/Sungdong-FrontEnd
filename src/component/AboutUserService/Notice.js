@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import styles from './Notice.module.css';
 import NoticeDetail from './NoticeDetail';
 import { NoticePostObj } from '../Data/NoticePostObj';
-import { useListActions, useModalActions, useModalState, useNoticePostList } from '../../Store/DataStore';
+import { useListActions, useModalActions, useModalState, useNoticePostList } from '../../store/DataStore';
 import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner';
 import { Footer } from '../TemplateLayout/AboutFooter/Footer';
 import { MenuData } from '../TemplateLayout/AboutMenuData/MenuData';

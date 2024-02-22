@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styles from './RelativeJoin.module.css';
-import { QueryClient, useMutation } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useFetch } from "../../customFn/useFetch";
 
 export default function JoinForm(props) {
@@ -26,7 +26,7 @@ export default function JoinForm(props) {
 
     const [isCallApi, setIsCallApi] = useState(false);
     const [apiResponse, setApiResponse] = useState({});// API 호출 결과를 저장할 상태 
-    const API_KEY = process.env.REACT_APP_BIZNUM_API_KEY;
+    const API_KEY = '%2FRM319x1LSNsYv3Zs4dbkeZ4iIGKMDc54ysPEQBiGmcIqj3%2Badug9JP2VKliI7op92oe7EeDVFnx3bKiYGdnVg%3D%3D';
     const API_ENDPOINT = 'https://api.odcloud.kr/api/nts-businessman/v1/validate?serviceKey=' + API_KEY;
     // 기업정보 진위확인 API
     const callCheckCorInfoApi = async (corNum, corStartDate, corCeoName) => {
@@ -89,7 +89,6 @@ export default function JoinForm(props) {
                 onError: (error) => {
                     setIdDuplicateCheck(false);
                     console.error(error);
-                    alert(error);
                 },
             });
         } else {
@@ -126,6 +125,7 @@ export default function JoinForm(props) {
 
 
     const handleChange = (e, numberItem, fieldName) => {
+        console.log(fieldName, numberItem);
         const { value } = e.target; // e.target.value를 value에 할당(객체 자체 할당 기법 숙지!)
         if (numberItem !== undefined) { // 대표번호 입력 필드의 경우
             if (/^\d*$/.test(value)) { // 입력된 값이 숫자인지 확인
@@ -133,8 +133,8 @@ export default function JoinForm(props) {
                     ...prevData,
                     corporationData: {
                         ...prevData.corporationData,
-                        cor_tel: {
-                            ...prevData.corporationData.cor_tel,
+                        [fieldName]: {
+                            ...prevData.corporationData[fieldName], // fieldName 변수를 대괄호 표기법으로 사용하여 객체 속성에 접근
                             [numberItem]: value
                         }
                     }
@@ -274,7 +274,7 @@ export default function JoinForm(props) {
                                     id="email_Y"
                                     name="emailService"
                                     value={1}
-                                    checked={props.inputData.emailService === 1}
+                                    checked={props.inputData.emailService == true}
                                     onChange={(e) => {
                                         props.setInputData(
                                             (prevData) => ({ ...prevData, emailService: 1 })
@@ -289,7 +289,7 @@ export default function JoinForm(props) {
                                     id="email_N"
                                     name="emailService"
                                     value={0}
-                                    checked={props.inputData.emailService === 0}
+                                    checked={props.inputData.emailService == false}
                                     onChange={(e) => {
                                         props.setInputData(
                                             (prevData) => ({ ...prevData, emailService: 0 })
@@ -382,7 +382,7 @@ export default function JoinForm(props) {
                                     name="smsService"
                                     id="SMS_Y"
                                     value={1}
-                                    checked={props.inputData.smsService === 1}
+                                    checked={props.inputData.smsService == true}
                                     onChange={(e) => {
                                         props.setInputData(
                                             (prevData) => ({ ...prevData, smsService: 1 })
@@ -397,12 +397,12 @@ export default function JoinForm(props) {
                                     name="smsService"
                                     id="SMS_N"
                                     value={0}
-                                    checked={props.inputData.smsService === 0}
+                                    checked={props.inputData.smsService == false}
                                     onChange={(e) => {
                                         props.setInputData(
                                             (prevData) =>
                                                 ({ ...prevData, smsService: 0 })
-                                        )
+                                        );
                                     }}
                                 />
                                 <label htmlFor="SMS_N">아니오</label>
@@ -557,10 +557,10 @@ export default function JoinForm(props) {
             <ul className={styles.inputWrap}>
                 {[
                     { label: '기업명', placeholder: '예) OO전자', fieldName: 'cor_corName', value: props.inputData.corporationData.cor_corName },
-                    { label: '대표번호', placeholder: '예) 010', value: props.inputData.corporationData.cor_tel, type: 'phone' },
+                    { label: '대표번호', placeholder: '예) 010', fieldName: 'cor_tel', value: props.inputData.corporationData.cor_tel, type: 'phone' },
                     { label: '업태', placeholder: '도매 및 소매업', fieldName: 'cor_sector', value: props.inputData.corporationData.cor_sector },
                     { label: '종목', placeholder: '예) 연마재, 안전용품', fieldName: 'cor_category', value: props.inputData.corporationData.cor_category },
-                    { label: 'FAX', placeholder: '예) 052', value: props.inputData.corporationData.cor_fax, type: 'phone' }
+                    { label: 'FAX', placeholder: '예) 052', fieldName: 'cor_fax', value: props.inputData.corporationData.cor_fax, type: 'phone' }
                 ].map((item, index) => (
                     <li key={index} className={styles.inputContainer}>
                         <div className={styles.left}>{item.label}</div>
@@ -574,8 +574,8 @@ export default function JoinForm(props) {
                                         placeholder={item.placeholder}
                                         maxLength='4'
                                         size='8'
-                                        value={item.value[numberItem]}
-                                        onChange={(e) => handleChange(e, index, numberItem)}
+                                        value={item.value.numberItem}
+                                        onChange={(e) => handleChange(e, numberItem, item.fieldName)}
                                     />
                                 ))
                             ) : (

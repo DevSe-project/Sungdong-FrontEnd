@@ -4,7 +4,7 @@ import logo from '../../image/logo.jpeg'
 import { useEffect, useState } from "react";
 import PolicyObj from "../Data/PolicyObj";
 import JoinForm from "./JoinForm";
-import { useDataActions, useUserData } from "../../Store/DataStore";
+import { useDataActions, useUserData } from "../../store/DataStore";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "../../axios";
 import { UserDataObj } from "../Data/UserDataObj";

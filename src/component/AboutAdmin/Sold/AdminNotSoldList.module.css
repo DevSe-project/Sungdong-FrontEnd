@@ -1,44 +1,47 @@
 /* 헤드라인 및 바디 기본설정 */
-.main{
+.main {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
 }
 
 .container{ 
   flex-grow: 1; /* 남은 공간 모두 차지 */
   display: flex;
   flex-direction: column;
-  margin: 3em;
-  gap: 1em;
+  margin: 1em;
+  padding: 1em;
   justify-content: center;
   align-items: center;
 }
 
 .bodyHeader{
-  width: 99%;
+  width: 100%;
   text-align: left;
   padding: 5px;
   border-bottom: 3px solid var(--background-color-set);
 }
-
 /* 관련상품 탭 */
 .table{
-  width: 60em;
-  border-top: 3px solid gray;
+  width: 100%;
   border-bottom: 1px solid lightgray;
   text-align: center;
+  align-items: center;
 }
 
 .tableLocation{
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: 100%;
 }
 
 .manageBox{
+  width: 100%;
   display: flex;
   flex-direction: row;
+  justify-content: flex-end;
   gap: 0.5em;
   margin-top: 0.5em;
   margin-bottom: 0.5em;

@@ -2,7 +2,7 @@ import styles from './AdminTabInfo.module.css'
 import React, { useState } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { useProduct, useProductActions } from '../../../Store/DataStore';
+import { useProduct, useProductActions } from '../../../store/DataStore';
 import axios from '../../../axios';
 import { GetCookie } from '../../../customFn/GetCookie';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';

@@ -1,10 +1,10 @@
 import styles from './WriteEditModal.module.css';
-import { useEffect, useState } from 'react';
-import { useModalActions, useModalState, useNotice, useNoticeActions, useNoticePostList } from "../../../Store/DataStore";
+import { useEffect } from 'react';
+import { useModalActions, useModalState, useNotice, useNoticeActions } from "../../../store/DataStore";
 
 export default function EditModal({handleConfirmSD}) {
     // call_modalZustand
-    const { isModal, modalName } = useModalState();
+    const { modalName } = useModalState();
     const { selectedModalClose } = useModalActions();
 
     const notice = useNotice();

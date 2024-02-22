@@ -1,40 +1,111 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { EstimateFilter } from './EstimateFilter';
 import styles from './Table.module.css';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { GetCookie } from '../../customFn/GetCookie';
+import { useFetch } from '../../customFn/useFetch';
+import { useEstimateActions, useEstimateInfo, useEstimateProduct } from '../../store/DataStore';
+import { useReactToPrint } from 'react-to-print';
+import EstimatePrint from './EstimatePrint';
+import axios from '../../axios';
 
 export function EstimateManager(){
-  //fetch
-  const fetchData = async() => {
-    try{
+  const estimateInfo = useEstimateInfo();
+  const estimateProduct = useEstimateProduct();
+  const { fetchServer,fetchGetServer,handleNoAlertOtherErrors, handleForbiddenError, handleOtherErrors } = useFetch();
+  const { resetEstimateProduct, resetEstimateInfo, setEstimateInfo, setEstimateProduct } = useEstimateActions();
+
+  useEffect(() => {
+    return () => {
+      resetEstimateProduct();
+      resetEstimateInfo();
+      // 컴포넌트가 언마운트될 때 Product 상태 리셋
+    };
+  }, []);
+
+
+  //fetch -- 유저
+  const fetchUserData = async () => {
+    try {
       const token = GetCookie('jwt_token');
-      const response = await axios.get("/estimate/manager", 
+      const response = await axios.get("/auth/info",
         {
-          headers : {
-            "Content-Type" : "application/json",
-            'Authorization': `Bearer ${token}`,
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
           }
         }
       )
-      return response.data;
-    } catch(error) {
-      throw new Error('원장 내역을 불러오던 중 오류가 발생했습니다.');
+      // 성공 시 추가된 상품 정보를 반환합니다.
+      return response.data.data || {};
+    } catch (error) {
+      // 서버 응답이 실패인 경우
+      if (error.response && error.response.status === 401) {
+        // 서버가 401 UnAuthorazation를 반환한 경우
+        handleNoAlertOtherErrors(error.response.data.message);
+        return new Error(error.response.data.message);
+      } else if (error.response && error.response.status === 403) {
+        handleForbiddenError(error.response.data.message);
+        throw new Error(error.response.data.message);
+      } else {
+        handleOtherErrors(error.response.data.message);
+        throw new Error(error.response.data.message);
+      }
     }
   }
-  //const { isLoading, isError, error, data:estiMangData } = useQuery({queryKey:['estimateManager'], queryFn: ()=> fetchData();});
-  const { data, isLoading, isError, error } = useQuery({queryKey: ['data']});
+
+  const { data: userData } = useQuery({
+    queryKey: ['user'],
+    queryFn: fetchUserData
+  });
+
+  //-------------------------------------------------------------
+
+  //fetch
+  const fetchData = async() => {
+    const data = await fetchGetServer(`/estimate/manager`, 1);
+    return data.data;
+  }
+
+  const { isLoading, isError, error, data:estimateListData } = useQuery({queryKey:['estimateManager'], queryFn: ()=> fetchData()});
   // 게시물 데이터와 페이지 번호 상태 관리    
   const [currentPage, setCurrentPage] = useState(1);
-  //현재 페이지에 해당하는 게시물 목록 가져오기
-  const getCurrentPagePosts = () => {
-    const startIndex = (currentPage - 1) * 5; // 한 페이지에 5개씩 표시
-    return data.length > 0 
-    ? data.slice(startIndex, startIndex + 5)
-    : data.slice(startIndex, startIndex + 5)
-    
+
+  const ref = useRef();
+  const handlePrint = useReactToPrint({
+    content: () => ref.current,
+  });
+
+
+  useEffect(() => {
+    if (estimateProduct.length > 0 && estimateInfo) {
+      handlePrint();
+    }
+  }, [estimateInfo, estimateProduct]);
+
+  //견적 프린트 함수
+  const addToEstimate = async (info) => {
+    return fetchServer(info, `post`, `/estimate/selectPrint`, 1);
   };
+
+  //견적 추가 함수
+  const { mutate:addEstimate } = useMutation({mutationFn : addToEstimate});
+
+async function submitEstimate(info) {
+      // 견적 리스트업에 저장
+        addEstimate(info, {
+          onSuccess: (success) => {
+            console.log("견적리스트를 업데이트 하였습니다.", success);
+            setEstimateProduct(success.data);
+            setEstimateInfo(info);
+          },
+          onError: (error) => {
+            console.error('견적리스트 리스트업을 수행하던 중 오류가 발생했습니다.', error);
+          },
+        });
+  }
+
+
   if (isLoading) {
     return <p>Loading..</p>;
   }
@@ -58,62 +129,32 @@ export function EstimateManager(){
               <th>순번</th>
               <th>견적번호</th>
               <th>견적일자</th>
-              <th>품명 및 규격</th>
-              <th>수량</th>
-              <th>단위</th>
-              <th>금액</th>
-              <th>주문하기</th>
-              <th>견적서 엑셀</th>
-              <th>작성자</th>
-              <th><button className={styles.button}>선택 삭제</button></th>
+              <th>내용</th>
+              <th>공급자</th>
+              <th>공급받는 자</th>
+              <th>총 견적가</th>
+              <th>프린트 출력</th>
             </tr>
           </thead>
-          {data.map((item) => (
           <tbody>
-            <tr>
-              <td>{item.id}</td>
-              <td>번호</td>
-              <td>일자</td>
-              <td>품명 및 규격</td>
-              <td>수량</td>
-              <td>EA</td>
-              <td>{item.price}</td>
-              <td>주문하기</td>
-              <td>견적서 엑셀</td>
-              <td>작성자</td>
-              <td><input type='checkbox'></input></td>
+          {estimateListData.map((item, index) => (
+            <tr key={index}>
+              <td>{index + 1}</td>
+              <td>{item.estimate_id}</td>
+              <td>{new Date(item.estimate_date).toLocaleString()}</td>
+              <td>{`${JSON.parse('[' + item.products + ']')[0]?.product_title} 외 ${JSON.parse('['+item.products+']').length-1}건`}</td>
+              <td>{item.estimate_supplier_managerName}</td>
+              <td>{item.estimate_vendor_managerName}</td>
+              <td>{item.estimate_amount && parseInt(item.estimate_amount).toLocaleString('ko-KR',{ style: 'currency', currency: 'KRW' })}</td>
+              <td><button className='original_round_button' onClick={()=> submitEstimate(item)}>출력</button></td>
             </tr>
+            ))}
           </tbody>
-          ))}
         </table>
       </div>
-      <div className={styles.buttonContainer}>
-        {/* 이전 페이지 */}
-        <button
-          className={styles.pageButton} 
-          onClick={()=> {
-            if(currentPage !== 1){
-              setCurrentPage(currentPage - 1)
-            } else {
-              alert("해당 페이지가 가장 첫 페이지 입니다.")
-        }}}>
-        <i className="far fa-angle-left"/>
-        </button>
-        <div className={styles.pageButton}>
-          {currentPage}
-        </div>
-          {/* 다음 페이지 */}
-        <button
-        className={styles.pageButton}
-        onClick={()=> {
-          if(data.length > 5){
-            setCurrentPage(currentPage + 1)
-          } else {
-            alert("다음 페이지가 없습니다.")
-          }}}>
-            <i className="far fa-angle-right"/>
-        </button>
-      </div>
+    </div>
+    <div style={{display: 'none'}}>
+      <EstimatePrint ref={ref}  manager_tel={userData?.tel}/>
     </div>
   </div>
   )
