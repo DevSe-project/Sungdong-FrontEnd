@@ -77,13 +77,13 @@ export default function Join() {
             userPassword: '',
             confirmPassword: '',
             email: '',
-            emailService: true,
+            emailService: false,
             name: '',
             num1: '',
             num2: '',
             num3: '',
-            smsService: true,
-            CMS: true,
+            smsService: false,
+            hasCMS: false,
             corporationData: {
                 cor_ceoName: '', // 대표명
                 cor_corName: '', // 상호명
