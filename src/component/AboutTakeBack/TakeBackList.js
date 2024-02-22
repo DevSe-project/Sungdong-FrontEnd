@@ -1,40 +1,60 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import styles from './Table.module.css';
 import { TakeBackListFilter } from './TakeBackListFilter';
 import { useState } from 'react';
-import axios from 'axios';
-import { GetCookie } from '../../customFn/GetCookie';
+import { useFetch } from '../../customFn/useFetch';
+import Pagination from '../../customFn/Pagination';
+
 
 export function TakeBackList(){
+  // 체크박스를 통해 선택한 상품들을 저장할 상태 변수
+  const [selectedItems, setSelectedItems] = useState([]);
+  // 전체 선택 체크박스 상태를 저장할 상태 변수
+  const [selectAll, setSelectAll] = useState(false);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const {fetchGetServer, fetchServer} = useFetch();
+  const queryClient = useQueryClient();
+
+  const { isLoading, isError, error, data:raeData } = useQuery({queryKey:['rae'], queryFn: ()=> fetchData()});
+
   //fetch
   const fetchData = async() => {
-    try{
-      const token = GetCookie('jwt_token');
-      const response = await axios.get("/takeBack", 
-        {
-          headers : {
-            "Content-Type" : "application/json",
-            'Authorization': `Bearer ${token}`,
-          }
-        }
-      )
-      return response.data;
-    } catch(error) {
-      throw new Error('원장 내역을 불러오던 중 오류가 발생했습니다.');
-    }
+    const data = await fetchGetServer(`/rae/list`, 1);
+    setCurrentPage(data.currentPage);
+    setTotalPages(data.totalPages);
+    return data.data;
   }
-  //const { isLoading, isError, error, data:takeBackData } = useQuery({queryKey:['takeBack'], queryFn: ()=> fetchData();});
-  const { data, isLoading, isError, error } = useQuery({queryKey: ['data']});
-  // 게시물 데이터와 페이지 번호 상태 관리    
-  const [currentPage, setCurrentPage] = useState(1);
-  //현재 페이지에 해당하는 게시물 목록 가져오기
-  const getCurrentPagePosts = () => {
-    const startIndex = (currentPage - 1) * 5; // 한 페이지에 5개씩 표시
-    return data.length > 0 
-    ? data.slice(startIndex, startIndex + 5)
-    : data.slice(startIndex, startIndex + 5)
-    
+
+  //-------------------------페이지 설정------------------------------
+
+  // 페이지를 변경할 때 호출되는 함수
+  const fetchPageChange = async (pageNumber) => {
+    return await fetchServer({}, 'post', '/rae/list', pageNumber);
   };
+
+
+  const { mutate: pageMutaion } = useMutation({ mutationFn: fetchPageChange })
+
+
+  function handlePageChange(pageNumber) {
+    pageMutaion(pageNumber, {
+      onSuccess: (data) => {
+        setCurrentPage(data.data.currentPage);
+        setTotalPages(data.data.totalPages);
+        queryClient.setQueryData(['orderRefund'], () => {
+          return data.data.data
+        })
+      },
+      onError: (error) => {
+        return console.error(error.message);
+      },
+    })
+  }
+
+
   if (isLoading) {
     return <p>Loading..</p>;
   }
@@ -54,61 +74,39 @@ export function TakeBackList(){
         <table className={styles.table}>
           <thead>
             <tr>
+              <th>No.</th>
               <th>구분</th>
               <th>일자</th>
-              <th>품명 및 규격</th>
+              <th>품명/브랜드/규격</th>
               <th>사유</th>
               <th>수량</th>
               <th>금액</th>
+              <th>진행상태</th>
               <th>처리일</th>
-              <th>진행</th>
               <th>담당자</th>
-              <th>입력자</th>
+              <th>작성자</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>구분</td>
-              <td>일자</td>
-              <td>품명 및 규격</td>
-              <td>사유</td>
-              <td>수량</td>
-              <td>금액</td>
-              <td>처리일</td>
-              <td>진행</td>
-              <td>담당자</td>
-              <td>입력자</td>
+            {raeData.map((item, index) =>
+            <tr key={index}>
+              <td>{index+1}</td>
+              <td>{item.rae_type === 0 ? '반품' : '교환'}</td>
+              <td>{new Date(item.rae_requestDate).toLocaleDateString()}</td>
+              <td>{item.product_title}/{item.product_brand}/{item.product_spec}</td>
+              <td>{item.rae_reason}</td>
+              <td>{item.rae_product_cnt}</td>
+              <td>{item.rae_product_amount}</td>
+              <td>{item.raeState}</td>
+              <td>{item.rae_checkDate ? item.rae_checkDate : "미 처리"}</td>
+              <td>{item.rae_manager ? item.rae_manager : '미 배정'}</td>
+              <td>{item.rae_writter}</td>
             </tr>
+            )}
           </tbody>
         </table>
       </div>
-      <div className={styles.buttonContainer}>
-        {/* 이전 페이지 */}
-        <button
-          className={styles.pageButton} 
-          onClick={()=> {
-            if(currentPage !== 1){
-              setCurrentPage(currentPage - 1)
-            } else {
-              alert("해당 페이지가 가장 첫 페이지 입니다.")
-        }}}>
-        <i className="far fa-angle-left"/>
-        </button>
-        <div className={styles.pageButton}>
-          {currentPage}
-        </div>
-          {/* 다음 페이지 */}
-        <button
-        className={styles.pageButton}
-        onClick={()=> {
-          if(data.length > 5){
-            setCurrentPage(currentPage + 1)
-          } else {
-            alert("다음 페이지가 없습니다.")
-          }}}>
-            <i className="far fa-angle-right"/>
-        </button>
-      </div>
+      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
     </div>
   )
 }

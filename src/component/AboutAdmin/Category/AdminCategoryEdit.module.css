@@ -83,6 +83,17 @@
   margin-left: 0.3em;
 }
 
+.thumnail{
+  background-size: cover;
+  box-sizing: border-box;
+  background-color: beige;
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  border: 1px solid lightgray;
+  object-fit: cover;
+}
+
 .selectedButton{
   width: 60%;
   font-size: 0.8em;

@@ -614,44 +614,75 @@ export const useEstimateActions = () => useEstimateStore((state) => state.action
 
 /* ----------------TAKEBACK STORE---------------- */
 export const useTakeBackStore = create((set) => ({
-  takeBackOption: {
-    returnStatus: "",
-    barcodeStatus: "",
-    wrapStatus: "",
-    productStatus: "",
-    name: "",
-    reason: "",
+  filterOption: {
+    raeOption: '반품',
+    product_title: '',
+    product_brand: '',
+    product_id: '',
+    date: {
+      start: '',
+      end: ''
+    }
   },
+  takeBackOption: [],
   actions: {
-    setTakeBackOption: (fieldName, value) =>
-      set((state) => ({ takeBackOption: { ...state.takeBackOption, [fieldName]: value } })),
+    setTakeBackFilterDate: (fieldName, value) =>
+      set((state) => ({
+        filterOption: {
+          ...state.filterOption,
+          date: {
+            ...state.filterOption.date,
+            [fieldName]: value,
+          },
+        },
+    })),
+    setTakeBackFilterOption: (fieldName, value) =>
+    set((state) => ({ filterOption: { ...state.filterOption, [fieldName]: value } })),
+    setTakeBackOption: (items) => 
+    set((state) => ({
+      takeBackOption: items.map((item) => ({
+        ...item,
+        returnStatus: '',
+        barcodeStatus: '',
+        wrapStatus: '',
+        productStatus: '',
+        rae_type: 0,
+        name: '',
+        rae_count: 0,
+        rae_amount: '',
+        reason: ''
+      }))
+    })),
+  
+    setTakeBackItemOption: (items, fieldName, value) =>
+      set((state) => ({ 
+        takeBackOption: state.takeBackOption.map((list) => {
+            if (items === list.order_product_id) {
+              return {
+                ...list,
+                [fieldName]: value,
+              };
+            }
+            return list;
+          }),
+        })),
+    resetFilterOption: () =>
+      set({filterOption: {
+        product_title: '',
+        product_brand: '',
+        product_id: '',
+        date: {
+          start: '',
+          end: ''
+        }
+      }}),
     resetTakeBackOption: () =>
       set({ takeBackOption: { returnStatus: "", barcodeStatus: "", wrapStatus: "", productStatus: "" } }),
   }
 }));
+export const useTakeBackFilter = () => useTakeBackStore((state) => state.filterOption);
 export const useTakeBack = () => useTakeBackStore((state) => state.takeBackOption);
 export const useTakeBackActions = () => useTakeBackStore((state) => state.actions);
-
-/* ----------------ERRORTRADE STORE---------------- */
-export const useErrTradeStore = create((set) => ({
-  errTradeOption: {
-    returnStatus: "",
-    barcodeStatus: "",
-    wrapStatus: "",
-    productStatus: "",
-    name: "",
-    reason: "",
-  },
-  actions: {
-    setErrTradeOption: (fieldName, value) =>
-      set((state) => ({ errTradeOption: { ...state.errTradeOption, [fieldName]: value } })),
-    resetErrTradeOption: () =>
-      set({ errTradeOption: { returnStatus: "", barcodeStatus: "", wrapStatus: "", productStatus: "" } }),
-  }
-}));
-export const useErrTrade = () => useErrTradeStore((state) => state.errTradeOption);
-export const useErrTradeActions = () => useErrTradeStore((state) => state.actions);
-
 
 /* ----------------=========== ADMIN ==========---------------- */
 

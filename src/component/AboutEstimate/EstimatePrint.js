@@ -6,10 +6,8 @@ const EstimatePrint = forwardRef((props, ref) => {
   const estimateData = useEstimateProduct();
   const estimateInfo = useEstimateInfo();
   //금액 관련 변수
-  const priceOne = (item) => item.estimate_price - item.estimate_price * (item.product_discount / 100);
-  const price = (item) => item.estimate_price * item.estimate_cnt - item.estimate_price * (item.product_discount / 100) * item.estimate_cnt;
-  const profit = (item) => ((item.estimate_price - (item.estimate_price * (item.product_discount / 100))) * (item.product_profit / 100))
-  const totalAmount = estimateData?.reduce((sum, item) => sum + parseInt(price(item)) + profit(item) * item.estimate_cnt, 0);
+  const profit = (item) => item.estimate_price * item.product_profit / 100
+  const totalAmount = estimateData?.reduce((sum, item) => sum + (parseInt(item.estimate_price) + profit(item)) * item.estimate_cnt, 0);
   const totalDiscount = totalAmount * (estimateInfo?.estimate_amountDiscount / 100);
   const VAT = (totalAmount - totalDiscount) / 10;
 
@@ -148,13 +146,10 @@ const EstimatePrint = forwardRef((props, ref) => {
                   <span>{parseInt(item.product_price).toLocaleString('ko-kr')}</span>
                 </td>
                 <td style={{backgroundColor: 'white', border: '1px solid black'}}>
-                  {item.product_discount
-                    ? `${parseInt(priceOne(item) + profit(item))
-                      .toLocaleString('ko-KR')}`
-                    : `${parseInt(parseInt(item.estimate_price) + profit(item)).toLocaleString('ko-KR')}`}
+                  {parseInt(parseInt(item.estimate_price) + profit(item)).toLocaleString('ko-KR')}
                 </td>
                 <td style={{backgroundColor: 'white', border: '1px solid black'}}>
-                  {`${parseInt(price(item) + profit(item) * item.estimate_cnt).toLocaleString('ko-KR')}`}
+                  {parseInt((parseInt(item.estimate_price) + profit(item)) * item.estimate_cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                 </td>
                 <td style={{backgroundColor: 'white', border: '1px solid black'}}> 
                   <span>{estimateInfo?.estimate_due}일</span>

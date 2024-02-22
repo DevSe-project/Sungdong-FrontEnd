@@ -15,18 +15,55 @@ export function EstimateWrite() {
   const estimateInfo = useEstimateInfo();
   const estimateProduct = useEstimateProduct();
   const queryClient = useQueryClient();
-  const { fetchServer } = useFetch();
+  const { fetchServer,handleNoAlertOtherErrors, handleForbiddenError, handleOtherErrors } = useFetch();
   // 체크박스를 통해 선택한 상품들을 저장할 상태 변수
+
+  //fetch -- 유저
+  const fetchUserData = async () => {
+    try {
+      const token = GetCookie('jwt_token');
+      const response = await axios.get("/auth/info",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          }
+        }
+      )
+      // 성공 시 추가된 상품 정보를 반환합니다.
+      return response.data.data || {};
+    } catch (error) {
+      // 서버 응답이 실패인 경우
+      if (error.response && error.response.status === 401) {
+        // 서버가 401 UnAuthorazation를 반환한 경우
+        handleNoAlertOtherErrors(error.response.data.message);
+        return new Error(error.response.data.message);
+      } else if (error.response && error.response.status === 403) {
+        handleForbiddenError(error.response.data.message);
+        throw new Error(error.response.data.message);
+      } else {
+        handleOtherErrors(error.response.data.message);
+        throw new Error(error.response.data.message);
+      }
+    }
+  }
+
+  const { isLoading, isError, error, data: userData } = useQuery({
+    queryKey: ['user'],
+    queryFn: fetchUserData
+  });
+
+  //-------------------------------------------------------------
+
+
   const [selectedItems, setSelectedItems] = useState([]);
 
   // 전체 선택 체크박스 상태를 저장할 상태 변수
   const [selectAll, setSelectAll] = useState(false);
 
   //금액 관련 변수
-  const priceOne = (item) => item.estimateBox_price - item.estimateBox_price * (item.product_discount / 100);
-  const price = (item) => item.estimateBox_price * item.estimateBox_cnt - item.estimateBox_price * (item.product_discount / 100) * item.estimateBox_cnt;
-  const profit = (item) => ((item.estimateBox_price - (item.estimateBox_price * (item.product_discount / 100))) * (item.product_profit / 100))
-  const totalAmount = estimateData.reduce((sum, item) => sum + parseInt(price(item)) + profit(item) * item.estimateBox_cnt, 0);
+  const profit = (item) => (item.estimateBox_price * (item.product_profit ? item.product_profit : 0)) / 100
+  const totalAmount = estimateData.reduce((sum, item) => sum + (parseInt(item.estimateBox_price) + profit(item)) * item.estimateBox_cnt, 0);
   const totalDiscount = totalAmount * (estimateInputData.estimate_amountDiscount / 100);
   const VAT = (totalAmount - totalDiscount) / 10;
 
@@ -41,8 +78,6 @@ export function EstimateWrite() {
 
 
 
-  //fetch
-  const { isLoading, isError, error, data: userData } = useQuery({ queryKey: ['user'] })
 
   function handleCancelButton() {
     const isConfirmed = window.confirm('정말로 취소하시겠습니까?\n현재까지 작성 내용은 저장되지 않습니다.');
@@ -324,7 +359,7 @@ export function EstimateWrite() {
                 ((parseInt(totalAmount - totalDiscount))
                   -
                   (parseInt(estimateData.reduce((sum, item) =>
-                    sum + parseInt(price(item)), 0)))).toLocaleString('ko-kr')
+                    sum + parseInt(item.estimateBox_price * item.estimateBox_cnt), 0)))).toLocaleString('ko-kr')
               } /> 원</td>
             </tr>
             <tr>
@@ -417,33 +452,26 @@ export function EstimateWrite() {
                   <td>EA</td>
                   <td>{item.estimateBox_cnt}</td>
                   <td>
-                    {item.product_discount
-                      ? `${priceOne(item)
-                        .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
-                      : `${parseInt(item.product_price).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
+                    {parseInt(item.product_price)
+                        .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                   </td>
                   <td>
-                    {item.product_discount
-                      ? `${(priceOne(item) + profit(item))
-                        .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
-                      : `${parseInt(item.estimateBox_price + profit(item)).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
+                    {parseInt(item.estimateBox_price + profit(item)).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                   </td>
                   <td>
                     {item.product_profit ? item.product_profit : item.product_profit = 0}%
                   </td>
                   <td>
-                    {item.product_discount
-                      ? `${(parseInt(price(item))).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
-                      : `${parseInt(item.estimateBox_price * item.estimateBox_cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
+                    {parseInt(item.product_price * item.estimateBox_cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                   </td>
                   <td>
-                    {`${parseInt(price(item) + profit(item) * item.estimateBox_cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
+                    {parseInt((item.estimateBox_price + profit(item)) * item.estimateBox_cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                   </td>
                   <td>
                     {
-                      (parseInt(price(item) + profit(item) * item.estimateBox_cnt)
+                      (parseInt((item.estimateBox_price + profit(item)) * item.estimateBox_cnt)
                         -
-                        parseInt(price(item))).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })
+                        parseInt(item.estimateBox_price * item.estimateBox_cnt)).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })
                     }
                   </td>
                   <td>
@@ -488,7 +516,7 @@ export function EstimateWrite() {
                 {
                   estimateData.length > 0 ?
                     estimateData.reduce((sum, item) =>
-                      sum + parseInt(price(item) + profit(item) * item.estimateBox_cnt)
+                      sum + parseInt((item.estimateBox_price + profit(item)) * item.estimateBox_cnt)
                       , 0).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })
                     : 0
                 }
@@ -497,7 +525,7 @@ export function EstimateWrite() {
                 {
                   parseInt(totalAmount -
                     estimateData.reduce((sum, item) =>
-                      sum + parseInt(price(item))
+                      sum + parseInt(item.estimateBox_price * item.estimateBox_cnt)
                       , 0)).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })
                 }
               </td>
@@ -510,7 +538,7 @@ export function EstimateWrite() {
         <button className={styles.pageButton} onClick={() => handleCancelButton()}>취소</button>
       </div>
       <div style={{display: 'none'}}>
-        <EstimatePrint ref={ref} manager_tel={userData.tel}/>
+        <EstimatePrint ref={ref} manager_tel={userData.tel} />
       </div>
     </div>
   )

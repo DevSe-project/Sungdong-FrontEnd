@@ -276,16 +276,10 @@ export function EstimateBox() {
                   </td>
                   <td>EA</td>
                   <td>
-                    {item.product_discount
-                      ? `${parseInt(item.product_price)
-                        .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
-                      : parseInt(item.product_price).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
+                    {parseInt(item.product_price).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                   </td>
                   <td style={{ fontWeight: '750' }}>
-                    {item.product_discount
-                      ? `${(item.product_price - (item.product_price / 100) * item.product_discount)
-                        .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
-                      : `${parseInt(item.product_price).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
+                    {parseInt(item.estimateBox_price).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                   </td>
                   <td style={{ width: '15%' }} rowSpan={2}>
                     <button
@@ -321,17 +315,13 @@ export function EstimateBox() {
                     {item.estimateBox_selectedOption}
                   </td>
                   <td>
-                    {item.product_discount}%
+                    {100 - parseFloat(item.estimateBox_discount)}%
                   </td>
                   <td style={{ fontWeight: '550' }}>
-                    {item.product_discount
-                      ? `${((item.estimateBox_price / 100) * item.product_discount * item.estimateBox_cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
-                      : parseInt('0').toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
+                    {((item.product_price - item.estimateBox_price) * item.estimateBox_cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                   </td>
                   <td style={{ fontWeight: '750' }}>
-                    {item.product_discount
-                      ? `${(parseInt((item.estimateBox_price) * item.estimateBox_cnt) - (item.estimateBox_price / 100) * item.product_discount * item.estimateBox_cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
-                      : `${parseInt(item.estimateBox_price * item.estimateBox_cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
+                      {parseInt(item.estimateBox_price * item.estimateBox_cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                   </td>
                 </tr>
               </React.Fragment>
@@ -350,7 +340,7 @@ export function EstimateBox() {
                 {
                   selectedItems.length > 0 ?
                     selectedItems.reduce((sum, item) =>
-                      sum + parseInt((item.estimateBox_price * item.estimateBox_cnt) - (item.estimateBox_price / 100) * item.product_discount * item.estimateBox_cnt)
+                      sum + parseInt(item.estimateBox_price * item.estimateBox_cnt)
                       , 0).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })
                     : 0
                 }

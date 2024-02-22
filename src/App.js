@@ -71,8 +71,6 @@ import { EstimateBox } from "./component/AboutEstimate/EstimateBox";
 import { EstimateManager } from "./component/AboutEstimate/EstimateManager";
 import { TackBackRequest } from "./component/AboutTakeBack/TakeBackRequest";
 import { TakeBackList } from "./component/AboutTakeBack/TakeBackList";
-import { ErrorTrade } from "./component/AboutTakeBack/ErrorTradeRequest";
-import { ErrorTradeList } from "./component/AboutTakeBack/ErrorTradeList";
 import { AdminEditDetail } from "./component/AboutAdmin/Detail/AdminEditDetail";
 import axios from "./axios";
 import { OrderStep } from "./component/AboutPay/OrderStep";
@@ -576,50 +574,6 @@ export default function App() {
               </div>
               <div className='container'>
                 <TakeBackList />
-                <footer className='footer'>
-                  <Footer />
-                </footer>
-              </div>
-            </div>
-          </>} />
-
-        {/* 불량 교환 관련 */}
-        <Route path='/error/request' element={
-          <>
-            {/* 최상단배너 */}
-            <TopBanner
-              category_dynamicStyle={category_dynamicStyle}
-              menuOnClick={menuOnClick}
-              text_dynamicStyle={text_dynamicStyle}
-              menu_dynamicStyle={menu_dynamicStyle}
-            />
-            <div className='main'>
-              <div style={{ float: 'left' }}>
-                <MenuData />
-              </div>
-              <div className='container'>
-                <ErrorTrade />
-                <footer className='footer'>
-                  <Footer />
-                </footer>
-              </div>
-            </div>
-          </>} />
-        <Route path='/error/list' element={
-          <>
-            {/* 최상단배너 */}
-            <TopBanner
-              category_dynamicStyle={category_dynamicStyle}
-              menuOnClick={menuOnClick}
-              text_dynamicStyle={text_dynamicStyle}
-              menu_dynamicStyle={menu_dynamicStyle}
-            />
-            <div className='main'>
-              <div style={{ float: 'left' }}>
-                <MenuData />
-              </div>
-              <div className='container'>
-                <ErrorTradeList />
                 <footer className='footer'>
                   <Footer />
                 </footer>

@@ -7,21 +7,22 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useProduct, useProductActions } from '../../../store/DataStore';
 import { GetCookie } from '../../../customFn/GetCookie';
 import axios from '../../../axios';
-export function AdminCategoryEdit(props) {
+export function AdminCategoryEdit() {
   const [middleCategory, setMiddleCategory] = useState([]);
   const [lowCategory, setLowCategory] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState({ big: null, medium: null, low: null });
   const { isLoading, isError, error, data: categoryData } = useQuery({ queryKey: ['category'] });
+  const { data } = useQuery({ queryKey: ['data'] });
   const product = useProduct();
   const { editProduct } = useProductActions();
   const queryClient = useQueryClient();
   //주소창 입력된 id값 받아오기
   let { id } = useParams();
   const loadData = () => {
-    if (props.data) {
+    if (data) {
       //입력된 id과 data내부의 id값 일치하는 값 찾아 변수 선언
-      const data = props.data.find((product) => product.product_id === id);
-      return data;
+      const datas = data.find((product) => product.product_id === id);
+      return datas;
     } else {
       return <div>데이터를 불러오는 중이거나 상품을 찾을 수 없습니다.</div>;
     }
@@ -37,7 +38,7 @@ export function AdminCategoryEdit(props) {
   //데이터 불러오기 이전 loadData()함수 실행 금지
   useEffect(() => {
     const fetchData = async () => {
-      if (props.data !== null) {
+      if (data !== null) {
         await editProduct(loadData());
       }
     };
@@ -140,10 +141,10 @@ export function AdminCategoryEdit(props) {
             </tr>
           </thead>
           <tbody>
-            {props.data
+            {data
               ?
               <tr className={styles.list}>
-                <td><img src={product.product_image_mini} alt='이미지'></img></td>
+                <td><img className={styles.thumnail} src={product.product_image_original} alt='이미지'></img></td>
                 <td>{product.product_id}</td>
                 <td style={{ fontWeight: 650 }}>
                   {[categoryData.find((category) => category.category_id === product.parentsCategory_id)?.name, categoryData.find((category) => category.category_id === product.category_id)?.name].filter(Boolean).join(' - ')}
@@ -151,7 +152,7 @@ export function AdminCategoryEdit(props) {
                 <td>
                   <h5 style={{ fontSize: '1.1em', fontWeight: '550' }}>{product.product_title}</h5>
                 </td>
-                <td>{product.product_price.toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}</td>
+                <td>{parseInt(product.product_price).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}</td>
                 <td style={{ fontWeight: '750' }}>
                   {product.product_discount
                     ? `${(product.product_price - (product.product_price / 100) * product.product_discount)

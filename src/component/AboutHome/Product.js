@@ -3,6 +3,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import styles from './Product.module.css';
+import { GetCookie } from '../../customFn/GetCookie';
 
 export function Product() {
   const navigate = useNavigate();
@@ -65,13 +66,13 @@ export function Product() {
                 }
                 <p style={{ fontSize: '0.9em', fontWeight: '550', margin: '1px', marginLeft: 0, color: 'orangered' }}>{item.product_brand}</p>
                 <div className={styles.product_price}>
-                  {item.product_discount
+                  {GetCookie('jwt_token') !== null
                     ? (
                       <div className={styles.discountSection}>
                         <div className={styles.discountSort}>
                           {/* 할인률 */}
                           <span className={styles.discountPercentage}>
-                            {item.product_discount}%
+                            {parseFloat(item.discount_amount)}%
                           </span>
                           {/* 할인 전 표준가 */}
                           <p className={styles.discountText}>
@@ -81,13 +82,13 @@ export function Product() {
                         <div style={{ display: 'flex', gap: '0.3em', alignItems: 'center' }}>
                           {/* 공급가 */}
                           <h3 className={styles.price}>
-                            {(item.product_price - (item.product_price / 100) * item.product_discount).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
+                            {parseInt(item.product_amount).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                           </h3>
                         </div>
                       </div>
                     ) : (
-                      // 표준 기본가
-                      <h3 className={styles.price}>{parseInt(item.product_price).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}</h3>
+                      // 표준 기본가(표준가 + 상품 자체 할인 적용)
+                      <h3 className={styles.price}>{parseInt(item.product_amount).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}</h3>
                     )}
                 </div>
               </div>

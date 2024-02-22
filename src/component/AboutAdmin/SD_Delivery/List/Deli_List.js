@@ -208,6 +208,7 @@ export default function Deli_List() {
             <th>상품명</th>
             <th>옵션명</th>
             <th>표준가</th>
+            <th>주문량</th>
             <th>공급가</th>
           </tr>
         </thead>
@@ -239,8 +240,10 @@ export default function Deli_List() {
                 <td>{item.optionSelected ? item.optionSelected : "-"}</td>
                 {/* 표준가 */}
                 <td>{item.product_price}</td>
+                {/* 주문량 */}
+                <td>{item.order_cnt}</td>
                 {/* 공급가 */}
-                <td>{item.discountPrice}</td>
+                <td>{parseInt(item.order_productPrice)}</td>
               </tr>
             ))}
         </tbody>
