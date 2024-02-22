@@ -58,7 +58,7 @@ export default function AdminUserList() {
   const fetchUsersData = async () => {
     try {
       const token = GetCookie('jwt_token');
-      const response = await axios.get(`/auth/userAllOfPage`, {
+      const response = await axios.get(`/auth/read`, {
         params: {
           page: currentPage,
           pagePosts: itemsPerPage
@@ -93,7 +93,7 @@ export default function AdminUserList() {
   //유저 필터링 Fetch
   const fetchFilteredUserData = async (userFilterData) => {
     try {
-      const response = await axios.post("/auth/userFilter",
+      const response = await axios.post("/auth/filter",
         JSON.stringify(
           userFilterData
         ),
@@ -132,7 +132,7 @@ export default function AdminUserList() {
 
   // 정렬 
   const fetchSortedUserData = async (userFilterData) => {
-    fetchServer(userFilterData, `post`, `/auth/userSort`, currentPage);
+    fetchServer(userFilterData, `post`, `/auth/sort`, currentPage);
   };
   const { mutate: sortMutation } = useMutation({ mutationFn: fetchSortedUserData }); // 정렬
   const handleSort = () => {
@@ -197,7 +197,7 @@ export default function AdminUserList() {
   };
   const fetchEditUser = async (userData) => { // Fetching
     try {
-      const response = await axios.post('/auth/userUpdate', userData);
+      const response = await axios.post('/auth/update', userData);
       return response.data;
     } catch (error) {
       throw error;
@@ -213,7 +213,7 @@ export default function AdminUserList() {
   // 고객 삭제
   const fetchDeleteUser = async (userID) => { // Fetching
     try {
-      const response = await axios.delete(`/auth/userDelete/${userID}`,)
+      const response = await axios.delete(`/auth/delete/${userID}`,)
       return response.data;
     } catch (error) {
       throw error;
