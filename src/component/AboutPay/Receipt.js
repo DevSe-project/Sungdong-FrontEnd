@@ -26,6 +26,7 @@ export function Receipt(props) {
     return fetchServer(filteredData, 'put', '/product/supplyLow', 1);
   };
 
+  //주문 후 장바구니 아이템 삭제
   const fetchDeletedProducts = async (productId) => {
     try {
       const response = await axios.delete(`/cart/delete/${productId}`,

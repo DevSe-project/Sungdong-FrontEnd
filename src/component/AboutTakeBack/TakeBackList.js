@@ -75,13 +75,14 @@ export function TakeBackList(){
           <thead>
             <tr>
               <th>No.</th>
+              <th>구분</th>
               <th>일자</th>
-              <th>품명 및 규격</th>
+              <th>품명/브랜드/규격</th>
               <th>사유</th>
               <th>수량</th>
               <th>금액</th>
-              <th>처리일</th>
               <th>진행상태</th>
+              <th>처리일</th>
               <th>담당자</th>
               <th>작성자</th>
             </tr>
@@ -90,13 +91,14 @@ export function TakeBackList(){
             {raeData.map((item, index) =>
             <tr key={index}>
               <td>{index+1}</td>
+              <td>{item.rae_type === 0 ? '반품' : '교환'}</td>
               <td>{new Date(item.rae_requestDate).toLocaleDateString()}</td>
-              <td>{item.product_title} / {item.product_spec}</td>
+              <td>{item.product_title}/{item.product_brand}/{item.product_spec}</td>
               <td>{item.rae_reason}</td>
               <td>{item.rae_product_cnt}</td>
               <td>{item.rae_product_amount}</td>
-              <td>{item.rae_checkDate ? item.rae_checkDate : "미 처리"}</td>
               <td>{item.raeState}</td>
+              <td>{item.rae_checkDate ? item.rae_checkDate : "미 처리"}</td>
               <td>{item.rae_manager ? item.rae_manager : '미 배정'}</td>
               <td>{item.rae_writter}</td>
             </tr>
