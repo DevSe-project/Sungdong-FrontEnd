@@ -7,7 +7,6 @@ import AdminUserFilter from './AdminUserFilter';
 import AdminUserSort from './AdminUserSort';
 import { GetCookie } from '../../../customFn/GetCookie';
 import { useFetch } from '../../../customFn/useFetch';
-import { de } from 'date-fns/locale';
 
 export default function AdminUserList() {
 
@@ -72,7 +71,7 @@ export default function AdminUserList() {
       console.log(response.data.message);
       return response.data.data.data;
     } catch (error) {
-      throw new Error('배송 데이터 불러오기 중 오류가 발생하였습니다.');
+      throw new Error('고객 정보를 불러오는 중 오류가 발생하였습니다.');
     }
   }
   const { isLoading, isError, error, data: userData } = useQuery({

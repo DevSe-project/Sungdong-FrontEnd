@@ -11,6 +11,7 @@ export default function WriteModal({ addPost }) {
     const { setNoticeData, resetNoticeData } = useNoticeActions();
 
     // esc키를 누르면 모달창 닫기.
+    
     useEffect(() => {
         const handleEscapeKey = (event) => {
             if (event.key === 'Escape') {
