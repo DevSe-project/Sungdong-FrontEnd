@@ -20,28 +20,23 @@ export default function AdminNotice() {
   const queryClient = useQueryClient();
   const { fetchGetServer } = useFetch();
 
-  // 게시글 조회
-  // const fetchNoticeData = async () => {
-  //   try {
-  //     const token = GetCookie('jwt_token');
-  //     const response = await axios.get(`/notice/read`, {
-  //       params: {
-  //         page: currentPage,
-  //         pagePosts: itemsPerPage
-  //       },
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         "Authorization": `Bearer ${token}`
-  //       }
-  //     });
-  //     console.log(response.data.message);
-  //     return response.data.data.data;
-  //   } catch (error) {
-  //     throw new Error('공지사항 정보를 불러오는 중 오류가 발생하였습니다.');
-  //   }
-  // }
   const fetchNoticeData = async () => {
-    fetchGetServer('/notice/read', currentPage);
+    try {
+      const token = GetCookie('jwt_token');
+      const response = await axios.get(`/notice/read`, {
+        params: {
+          page: currentPage,
+          pagePosts: itemsPerPage
+        },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+      });
+      return response.data.data.data;
+    } catch (error) {
+      throw new Error('공지사항 정보를 불러오는 중 오류가 발생하였습니다.');
+    }
   }
   const fetchData = async () => {
     try {
@@ -74,13 +69,12 @@ export default function AdminNotice() {
    * @param {*} PostId 
    * @returns 
    */
-  const handleDelete = async (PostId) => { // 사용 부분
+  const handleDelete = async (postId) => {
     try {
-      const confirmMessage = '선택된 고객을 정말 삭제하시겠습니까?';
-      const confirmed = window.confirm(confirmMessage);
+      const confirmed = window.confirm('선택된 고객을 정말 삭제하시겠습니까?');
       if (!confirmed) return;
 
-      await deleteMutation(PostId);
+      await deleteMutation(postId);
     } catch (error) {
       handleDeleteError(error);
     }
@@ -196,41 +190,24 @@ export default function AdminNotice() {
     },
   })
 
-  function handleConfirmSD() {
-    // 입력 조건 부여
+  const handleConfirmSD = () => {
     const isCheckInputLength = notice.title.length > 2 && notice.writer.length > 2 && notice.contents.length > 10;
 
-    // 조건에 부합한다면
     if (isCheckInputLength) {
-      editPostMutation.mutate();
-      // 모달 닫기
+      const updatedPost = {
+        postId: notice.postId, // 고유번호 추가
+        title: notice.title,
+        writer: notice.writer,
+        contents: notice.contents
+      };
+      editPostMutation.mutate(updatedPost);
       closeModal();
       resetNoticeData();
-
       alert("등록되었습니다.");
-
     } else {
       alert("제목을 2글자 이상, 작성자 명을 2글자 이상, 본문 내용을 10글자 이상 작성하십시오.");
     }
   }
-
-  // 데이터 로딩 중 또는 에러 발생 시 처리
-  // if (isLoading) {
-  //   return ( // isLoading이 true일 때 스켈레톤 이미지 표시 ( 20개 )
-  //     <div className={styles.skeletonContainer}>
-  //       {/* 15짜리 배열 생성 -> 반복 */}
-  //       {[...Array(15)].map((_, index) => (
-  //         <div key={index} className={styles.skeletonItem}></div>
-  //       ))}
-  //     </div>
-  //   );
-  // }
-  // if (isError) {
-  //   return <p>Error fetching data</p>;
-  // }
-
-
-  // 글 클릭 시 해당 글 수정할 수 있는 모달 창 생성
 
   return (
     <div className={styles.body}>
@@ -284,7 +261,7 @@ export default function AdminNotice() {
                 {/* 삭제 */}
                 <td style={{ display: 'flex', justifyContent: 'center' }}>
                   <button className='white_button'
-                    onClick={() => handleDelete()}>
+                    onClick={() => handleDelete(item.id)}>
                     삭제
                   </button>
                 </td>
