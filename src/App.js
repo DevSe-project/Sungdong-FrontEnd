@@ -4,10 +4,6 @@ import { useEffect, useState } from 'react';
 import { Routes, Route, useNavigate, useLocation, Outlet } from 'react-router-dom';
 
 // Data 객체들 불러오기
-import { OrderObj } from './component/Data/OrderObj';
-import { TodayTopicPostObj } from './component/Data/TodayTopicPostObj';
-import { UserDataObj } from './component/Data/UserDataObj';
-import { CategoryDataObj } from './component/Data/CategoryDataObj';
 import { Category } from './component/TemplateLayout/AboutHeader/Category';
 
 // 메인페이지
@@ -120,29 +116,17 @@ export default function App() {
     }
   };
 
-
-  //반품 데이터 fetch
-  const fetchRefundData = async () => {
-    const querySnapshot = await getDocs(collection(db, 'RefundData')); // 'RefundData'라는 컬렉션 이름
-    return querySnapshot.docs.map((doc) => ({ ...doc.data(), rae_id: doc.id }));
-  };
-
-  // react-query : 서버에서 받아온 데이터 캐싱, 변수에 저장
+  // react-query : 서버에서 받아온 데이터 캐싱, 변수에 저장 - 상품 데이터
   const { isLoading, isError, error, data } = useQuery({
     queryKey: ['data'],
     queryFn: () => fetchData()
   });
 
-  // react-query : 서버에서 받아온 데이터 캐싱, 변수에 저장
+  // react-query : 서버에서 받아온 데이터 캐싱, 변수에 저장 - 카테고리 데이터
   const { data: categoryData } = useQuery({
     queryKey: ['category'],
     queryFn: () => fetchCategoryData()
   });
-
-  const { data: refundData } = useQuery({
-    queryKey: ['refund'],
-    queryFn: () => fetchRefundData()
-  })
 
   // 찜 데이터(캐쉬) 불러오기
   useEffect(() => {

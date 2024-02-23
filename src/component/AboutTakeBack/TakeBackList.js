@@ -7,11 +7,6 @@ import Pagination from '../../customFn/Pagination';
 
 
 export function TakeBackList(){
-  // 체크박스를 통해 선택한 상품들을 저장할 상태 변수
-  const [selectedItems, setSelectedItems] = useState([]);
-  // 전체 선택 체크박스 상태를 저장할 상태 변수
-  const [selectAll, setSelectAll] = useState(false);
-
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
@@ -96,8 +91,13 @@ export function TakeBackList(){
               <td>{item.product_title}/{item.product_brand}/{item.product_spec}</td>
               <td>{item.rae_reason}</td>
               <td>{item.rae_product_cnt}</td>
-              <td>{item.rae_product_amount}</td>
-              <td>{item.raeState}</td>
+              <td>{parseInt(item.rae_product_amount).toLocaleString()}</td>
+              <td>{item.raeState === 1 ? '반품요청'
+                : item.raeState === 2 ? '수거중'
+                : item.raeState === 3 ? '수거완료'
+                : item.raeState === 4 ? '반품완료'
+                : item.raeState === 5 && '반품철회'}
+              </td>
               <td>{item.rae_checkDate ? item.rae_checkDate : "미 처리"}</td>
               <td>{item.rae_manager ? item.rae_manager : '미 배정'}</td>
               <td>{item.rae_writter}</td>
