@@ -3,10 +3,7 @@ import styles from './Notice.module.css';
 import NoticeDetail from './NoticeDetail';
 import { NoticePostObj } from '../Data/NoticePostObj';
 import { useListActions, useModalActions, useModalState, useNoticePostList } from '../../store/DataStore';
-import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner';
-import { Footer } from '../TemplateLayout/AboutFooter/Footer';
-import { MenuData } from '../TemplateLayout/AboutMenuData/MenuData';
-import axios from 'axios';
+import axios from '../../axios';
 
 export function Notice() {
   const { isModal } = useModalState();
