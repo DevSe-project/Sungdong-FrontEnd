@@ -25,7 +25,7 @@
 
 /* 관련상품 탭 */
 .table{
-  width: 60em;
+  width: 100%;
   border-top: 3px solid var(--background-color-set);
   border-bottom: 1px solid lightgray;
   text-align: center;

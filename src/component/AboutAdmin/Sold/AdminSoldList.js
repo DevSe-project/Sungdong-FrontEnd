@@ -416,7 +416,7 @@ export function AdminSoldList() {
                     {modalName === item.order_id && <AdminSoldModal item={item} />}
                   </React.Fragment>
                 ))
-                : <tr><td colSpan="10">불러들일 데이터가 없습니다.</td></tr>
+                : <tr><td colSpan="8">불러들일 데이터가 없습니다.</td></tr>
               }
             </tbody>
           </table>

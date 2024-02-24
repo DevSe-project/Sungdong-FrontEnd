@@ -144,21 +144,15 @@ export function AdminRefund() {
                   checked={selectAll}
                   onChange={() => handleSelectAllChange()} />
                 </th>
-                <th style={{ width: '10%' }}>전표번호</th>
-                <th style={{ width: '10%' }}>요청날짜</th>
-                <th style={{ width: '10%' }}>처리상태</th>
-                <th style={{ width: '10%' }}>처리날짜</th>
-                <th style={{ width: '20%' }}>포함된 상품</th>
-                <th style={{ width: '10%' }}>기업명</th>
-                <th style={{ width: '10%' }}>담당자</th>
-                <th style={{ width: '10%', fontWeight: '650' }}>반환가액</th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th>반환상품 상세보기</th>
-                <th></th>
-                <th></th>
-                <th></th>
+                <th>전표번호</th>
+                <th>요청날짜</th>
+                <th>처리상태</th>
+                <th>처리날짜</th>
+                <th>포함된 상품</th>
+                <th>기업명</th>
+                <th>담당자</th>
+                <th>반환가액</th>
+                <th colSpan={8}>반환상품 상세보기</th>
               </tr>
             </thead>
             <tbody>
@@ -305,7 +299,7 @@ export function AdminRefund() {
                     )}
                   </React.Fragment>
                 ))
-                : <tr><td colSpan="10">불러들일 데이터가 없습니다.</td></tr>
+                : <tr><td colSpan="12">불러들일 데이터가 없습니다.</td></tr>
               }
             </tbody>
           </table>
