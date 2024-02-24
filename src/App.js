@@ -380,8 +380,50 @@ export default function App() {
         </Route>
 
         {/* 고객센터 */}
-        <Route path='/userservice/notice' element={<Notice />} />
-        <Route path='/userservice/contact' element={<Contact />} />
+        <Route path='/userservice/notice' element={
+          <>
+            {/* 최상단배너 */}
+            <TopBanner
+              category_dynamicStyle={category_dynamicStyle}
+              menuOnClick={menuOnClick}
+              text_dynamicStyle={text_dynamicStyle}
+              menu_dynamicStyle={menu_dynamicStyle}
+            />
+            <div className='main'>
+              <div style={{ float: 'left' }}>
+                <MenuData />
+              </div>
+              <div className='container'>
+                <Notice />
+                <footer className='footer'>
+                  <Footer />
+                </footer>
+              </div>
+            </div>
+          </>
+        } />
+        <Route path='/userservice/contact' element={
+          <>
+            {/* 최상단배너 */}
+            <TopBanner
+              category_dynamicStyle={category_dynamicStyle}
+              menuOnClick={menuOnClick}
+              text_dynamicStyle={text_dynamicStyle}
+              menu_dynamicStyle={menu_dynamicStyle}
+            />
+            <div className='main'>
+              <div style={{ float: 'left' }}>
+                <MenuData />
+              </div>
+              <div className='container'>
+                <Contact />
+                <footer className='footer'>
+                  <Footer />
+                </footer>
+              </div>
+            </div>
+          </>
+        } />
 
         {/* 마이페이지 */}
         <Route path='/mypages' element={

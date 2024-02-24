@@ -86,7 +86,7 @@ export default function Managecode() {
         <div className={styles.flexBox}>
           {/* 코드 발급 블록 */}
           <div className={styles.printCode_block}>
-            <div className={styles.printCode_title}>Click <i class="fa-solid fa-arrow-down"></i></div>
+            <div className={styles.printCode_title}>Click <i className="fa-solid fa-arrow-down"></i></div>
             <div className={styles.printCode_button} onClick={() => {
               if (codes.length < 10)
                 handleGenerateCode()
@@ -108,9 +108,11 @@ export default function Managecode() {
         {/* 코드 List Table */}
         <table>
           <thead>
-            <th>구분</th>
-            <th>인증코드</th>
-            <th>삭제</th>
+            <tr>
+              <th>구분</th>
+              <th>인증코드</th>
+              <th>삭제</th>
+            </tr>
           </thead>
           <tbody>
             {/* List */}

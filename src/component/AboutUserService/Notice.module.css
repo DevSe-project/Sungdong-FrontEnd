@@ -17,12 +17,10 @@
 /* ------------------------------- */
 .flexBox {
   display: flex;
-  width: 100%;
 }
 
 .noticeContainer {
-  width: 100%;
-  margin: 2em;
+  margin: 1em;
   align-items: center;
 }
 
@@ -30,6 +28,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 10px;
 }
 
 .title {
@@ -55,26 +54,4 @@
   padding: 5px;
   border: 1px solid #b1b1b1;
   border-radius: 5px;
-}
-
-.listTable {
-  width: 100%;
-  margin-top: 10px;
-}
-
-.th {
-  color: #000;
-  padding: 10px;
-  font-weight: bold;
-  max-width: 1000px;
-}
-
-.row {
-  border-bottom: 1px solid #ccc;
-} 
-
-td {
-  padding: 10px;
-  height: 30px;
-  max-width: 1000px;
 }

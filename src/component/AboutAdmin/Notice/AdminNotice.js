@@ -38,6 +38,7 @@ export default function AdminNotice() {
       throw new Error('공지사항 정보를 불러오는 중 오류가 발생하였습니다.');
     }
   }
+
   const fetchData = async () => {
     try {
       const data = await fetchNoticeData();
@@ -237,11 +238,13 @@ export default function AdminNotice() {
           style={{
             boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)'
           }}>
-          <th>고유번호</th>
-          <th>제목</th>
-          <th>작성자</th>
-          <th>작성일자</th>
-          <th>삭제</th>
+          <tr>
+            <th>고유번호</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>작성일자</th>
+            <th>삭제</th>
+          </tr>
         </thead>
         <tbody>
           {

@@ -243,7 +243,7 @@ export default function Deli_List() {
                 {/* 주문량 */}
                 <td>{item.order_cnt}</td>
                 {/* 공급가 */}
-                <td>{parseInt(item.order_productPrice)}</td>
+                <td>{item.discountPrice}</td>
               </tr>
             ))}
         </tbody>

@@ -91,6 +91,9 @@ export default function AdminUserList() {
   }, [currentPage, itemsPerPage]);
 
   //유저 필터링 Fetch
+  /**]
+   * @param {userFilterData} 유저 필터창의 Input된 데이터
+   */
   const fetchFilteredUserData = async (userFilterData) => {
     try {
       const response = await axios.post("/auth/filter",
@@ -516,7 +519,7 @@ export default function AdminUserList() {
                     <button className='white_button' onClick={() => initializingData()}>취소</button>
                   </div>
                 ) : (
-                  <div className='ellipsis' onClick={() => { handleToggleEdit(index); setCheckedItems([]); }}><i class="fa-solid fa-ellipsis"></i></div>
+                  <div className='ellipsis' onClick={() => { handleToggleEdit(index); setCheckedItems([]); }}><i className="fa-solid fa-ellipsis"></i></div>
                 )}
               </td>
             </tr>
