@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { useOrderFilter, useOrderFilterActions } from '../../../store/DataStore';
 import styles from './AdminSoldFilter.module.css';
-export function AdminSoldFilter({ handelSearch }) {
+export function AdminSoldFilter({ handleSearch }) {
 
   const orderFilter = useOrderFilter();
   const { setOrderFilter, resetOrderFilter, setOrderFilterDate } = useOrderFilterActions();
@@ -87,11 +87,18 @@ export function AdminSoldFilter({ handelSearch }) {
           </div>
         ))}
         <div style={{display: 'flex', gap: '0.5em'}}>
-          <input className={styles.button} value='검색' onClick={() => handelSearch() }/>
-          <input className={styles.button} type='reset' onClick={()=> {
+        <button className={styles.button} onClick={(e) => {
+            e.preventDefault();
+            handleSearch();
+          }}>
+            검색  
+          </button>
+          <button className={styles.button} onClick={() => {
             resetOrderFilter()
             window.location.reload();
-            }}/>
+            }}>
+            초기화
+          </button>
         </div>
       </form>
     </div>

@@ -18,39 +18,60 @@ export function AdminProductFilter({ handleSearch }) {
     setCheckboxState(name);
   };
 
-  //대 카테고리 필터링
+  /**
+   * @카테고리필터링 대 카테고리 필터
+   * @returns {*} categoryData에서 필터링 구성
+   * - 대 카테고리 필터 방식 : A로 시작하여 Z로 끝나는 문자열
+   * - 중 카테고리 필터 방식 : [상위카테고리ID] + 소문자 a로 시작하여 z로 끝나는 문자열
+   * - 소 카테고리 필터 방식 : [상위카테고리ID] + 숫자 1~9까지로 구성되는 최대 3글자(숫자 100까지)로 끝나는 문자열
+   */
   function FilteredHighCategoryData() {
     return categoryData.filter(element => /^[A-Z]$/.test(element.category_id));
   }
 
-  //중 카테고리 필터링
+  /**
+   * @카테고리필터링 중 카테고리 필터
+   * @returns {*} categoryData에서 필터링 구성
+   * - 대 카테고리 필터 방식 : A로 시작하여 Z로 끝나는 문자열
+   * - 중 카테고리 필터 방식 : [상위카테고리ID] + 소문자 a로 시작하여 z로 끝나는 문자열
+   * - 소 카테고리 필터 방식 : [상위카테고리ID] + 숫자 1~9까지로 구성되는 최대 3글자(숫자 100까지)로 끝나는 문자열
+   */
   function FilteredMiddleCategoryData(itemId) {
     return categoryData.filter(element => new RegExp(`^${itemId}[a-z]$`).test(element.category_id));
   }
-
-  //소 카테고리 필터링
+  /**
+   * @카테고리필터링 소 카테고리 필터
+   * @returns {*} categoryData에서 필터링 구성
+   * - 대 카테고리 필터 방식 : A로 시작하여 Z로 끝나는 문자열
+   * - 중 카테고리 필터 방식 : [상위카테고리ID] + 소문자 a로 시작하여 z로 끝나는 문자열
+   * - 소 카테고리 필터 방식 : [상위카테고리ID] + 숫자 1~9까지로 구성되는 최대 3글자(숫자 100까지)로 끝나는 문자열
+   */
   function FilteredLowCategoryData(itemId) {
     return categoryData.filter(element => new RegExp(`^${itemId}[1-9]|[1-9][0-9]|100.{3,}$`).test(element.category_id));
   }
 
-
+  /**
+   * @카테고리필터
+   * 태그를 리턴하는 형식의 간소화를 위한 함수
+   * @returns {*} 대분류, 중분류, 소분류 select - option 태그 리턴
+   */
   function categoryFilter() {
     return (
       <div style={{ display: 'flex', gap: '0.5em' }}>
         <select className={styles.select} value={productFilter.category.highId} onChange={(e) => setProductCategory("highId", e.target.value)}>
-          <option value={''}>대분류</option>
+          <option value="">대분류</option>
           {categoryData && FilteredHighCategoryData().map((item, index) =>
             <option key={index} value={item.category_id}>{item.name}</option>
           )}
         </select>
         <select className={styles.select} value={productFilter.category.middleId} onChange={(e) => setProductCategory("middleId", e.target.value)}>
-          <option value={''}>중분류</option>
+          <option value="">중분류</option>
           {productFilter.category.highId !== '' && categoryData && FilteredMiddleCategoryData(productFilter.category.highId)?.map((item, key) =>
             <option key={key} value={item.category_id}>{item.name}</option>
           )}
         </select>
         <select className={styles.select} value={productFilter.category.lowId} onChange={(e) => setProductCategory("lowId", e.target.value)}>
-          <option value={''}>소분류</option>
+          <option value="">소분류</option>
           {productFilter.category.middleId !== '' && categoryData && FilteredLowCategoryData(productFilter.category.middleId)?.map((item, key) =>
             <option key={key} value={item.category_id}>{item.name}</option>
           )}
@@ -59,6 +80,11 @@ export function AdminProductFilter({ handleSearch }) {
     )
   }
 
+  /**
+   * @날짜필터
+   * - created : 상품 등록일을 기준으로 필터링
+   * - updated : 상품 최근 수정일을 기준으로 필터링
+   */
   function dateFilter() {
     return (
       <div style={{ display: 'flex', gap: '1em' }}>
@@ -76,6 +102,11 @@ export function AdminProductFilter({ handleSearch }) {
     )
   }
 
+  /**
+   * @재고필터
+   * 10 ~ 500개 미만의 재고를 필터링하는 함수 구성
+   * @returns {*} 재고 개수에 따른 필터링 select - option 리턴 
+   */
   function detailSearch() {
     return (
       <div style={{ display: 'flex', gap: '1em' }}>
@@ -92,6 +123,11 @@ export function AdminProductFilter({ handleSearch }) {
     )
   }
 
+  /**
+   * @상태필터
+   * 전체, 판매대기, 판매중, 판매완료, 판매중단 5개의 필터 구성
+   * @returns 판매 상태에 따른 필터링 select - oprion 리턴
+   */
   function saleStatus() {
     const selectAll = productFilter.state.length === 4;
     return (
@@ -100,7 +136,8 @@ export function AdminProductFilter({ handleSearch }) {
           <label style={{ display: 'flex', alignItems: 'center' }}>
             <input
               type='checkbox'
-              name="전체"
+              name="상태"
+              value="전체"
               checked={selectAll}
               onChange={(e) => {
                 setAllCheckboxState(selectAll);
@@ -111,10 +148,11 @@ export function AdminProductFilter({ handleSearch }) {
           <label style={{ display: 'flex', alignItems: 'center' }}>
             <input
               type='checkbox'
-              name="판매대기"
+              name="상태"
+              value="판매대기"
               checked={productFilter.state.includes("판매대기")}
               onChange={(e) => {
-                handleCheckboxChange(e.target.name);
+                handleCheckboxChange(e.target.value);
               }}
             />
             판매대기
@@ -122,10 +160,11 @@ export function AdminProductFilter({ handleSearch }) {
           <label style={{ display: 'flex', alignItems: 'center' }}>
             <input
               type='checkbox'
-              name="판매중"
+              name="상태"
+              value="판매중"
               checked={productFilter.state.includes("판매중")}
               onChange={(e) => {
-                handleCheckboxChange(e.target.name);
+                handleCheckboxChange(e.target.value);
               }}
             />
             판매중
@@ -133,10 +172,11 @@ export function AdminProductFilter({ handleSearch }) {
           <label style={{ display: 'flex', alignItems: 'center' }}>
             <input
               type='checkbox'
-              name="판매완료"
+              name="상태"
+              value="판매완료"
               checked={productFilter.state.includes("판매완료")}
               onChange={(e) => {
-                handleCheckboxChange(e.target.name);
+                handleCheckboxChange(e.target.value);
               }}
             />
             판매완료
@@ -144,10 +184,11 @@ export function AdminProductFilter({ handleSearch }) {
           <label style={{ display: 'flex', alignItems: 'center' }}>
             <input
               type='checkbox'
-              name="판매중단"
+              name="상태"
+              value="판매중단"
               checked={productFilter.state.includes("판매중단")}
               onChange={(e) => {
-                handleCheckboxChange(e.target.name);
+                handleCheckboxChange(e.target.value);
               }}
             />
             판매중단
@@ -157,7 +198,11 @@ export function AdminProductFilter({ handleSearch }) {
     )
   }
 
-
+/**
+ * @검색어필터
+ * 상품명, 브랜드명, 상품번호 3개의 검색 필터 제공
+ * @returns 상품명, 상품브랜드, 상품코드를 찾기 위한 인풋 태그 리턴
+ */
   function searchWord() {
     return (
       <div style={{ display: 'flex', gap: '1em' }}>
@@ -206,11 +251,18 @@ export function AdminProductFilter({ handleSearch }) {
           </div>
         ))}
         <div style={{ display: 'flex', gap: '0.5em' }}>
-          <input className={styles.button} value='검색' onClick={() => handleSearch()} />
-          <input className={styles.button} type='reset' onClick={() => {
+          <button className={styles.button} onClick={(e) => {
+            e.preventDefault();
+            handleSearch()
+          }}>
+            검색  
+          </button>
+          <button className={styles.button} onClick={() => {
             resetProductFilter()
             window.location.reload();
-            }} />
+            }}>
+            초기화
+          </button>
         </div>
       </form>
     </div>

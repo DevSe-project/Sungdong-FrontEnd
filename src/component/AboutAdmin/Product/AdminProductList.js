@@ -8,7 +8,7 @@ import { useProductFilter } from '../../../store/DataStore';
 import axios from '../../../axios';
 import { useFetch } from '../../../customFn/useFetch';
 import Pagination from '../../../customFn/Pagination';
-export function AdminProductList({ productCurrentPage, productTotalPage }) {
+export function AdminProductList() {
 
   //Td 선택시 Modal State 변수
   const [selectedData, setSelectedData] = useState(null);
@@ -145,7 +145,7 @@ export function AdminProductList({ productCurrentPage, productTotalPage }) {
 
 
   /**
-   * @검색핸들러 Mutation 선언부
+   * @검색 Mutation 선언부
    * 조건
    * - 판매 상태는 적어도 1개 이상 체크하여야 함!
    * - 대 카테고리는 색인 X, 적어도 중 카테고리까지 선택하여야 정상 검색됨.
@@ -236,14 +236,14 @@ export function AdminProductList({ productCurrentPage, productTotalPage }) {
         {options.length > 0 && options.map((option, key) => {
           return (
             option !== "" &&
-            <>
+            <React.Fragment key={key}>
               <option>
                 선택
               </option>
-              <option key={key} value={option}>
+              <option value={option}>
                 {(option !== null || option !== "") && option}
               </option>
-            </>
+            </React.Fragment>
           )
         })}
       </select>
