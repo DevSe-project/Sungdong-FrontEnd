@@ -83,7 +83,6 @@ export function AdminSoldList() {
     const data = await fetchGetAddPostServer(`/order/all`, currentPage, itemsPerPage);
     setCurrentPage(data.currentPage);
     setTotalPages(data.totalPages);
-    console.log(data.data[0])
     return data.data[0];
   }
 

@@ -74,7 +74,7 @@ export function AdminRefundFilter({handleSearch}){
           <h4 style={{fontSize: '1.2em', fontWeight: '650'}}>필터</h4>
         </div>
         {filterList.map((item, index) => ( // 필터의 label 값이랑 content 값 출력
-        <div className={styles.container}>
+        <div className={styles.container} key={index}>
           <div className={styles.label}>
             {item.label}
           </div>
