@@ -2,7 +2,7 @@ import { React, useEffect, useState } from 'react';
 import styles from './AdminModal.module.css';
 import { useModalActions, useModalState, useOrderSelectListActions } from '../../../store/DataStore';
 import { GetCookie } from '../../../customFn/GetCookie';
-import axios from 'axios';
+import axios from '../../../axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useFetch } from '../../../customFn/useFetch';
 
@@ -14,6 +14,7 @@ export default function AdminRefundDialog({selectList}) {
   const queryClient = useQueryClient();
   const {fetchNonPageServer} = useFetch();
   const [selectedData, setSelectedData] = useState([]);
+  const [list, setList] = useState([]);
 
   // esc키를 누르면 모달창 닫기.
   useEffect(() => {
@@ -33,7 +34,8 @@ export default function AdminRefundDialog({selectList}) {
 
   useEffect(() => {
     if(selectList){
-      handleOpenItem(selectList)
+      setList(selectList);
+      handleOpenItem(selectList?.map((item) => item.rae_id))
     }
   }, [])
 
@@ -73,7 +75,7 @@ export default function AdminRefundDialog({selectList}) {
           rae_cancelReason: item.rae_cancelReason
         }))
         if(modalName === "완료"){
-        const response = await axios.patch("/rae/admin/expedite", 
+        const response = await axios.patch("/rae/admin/edit", 
           JSON.stringify(
             completeItemsData
           ),
@@ -118,6 +120,7 @@ export default function AdminRefundDialog({selectList}) {
         console.log('처리 되었습니다.', data);
         // 상태를 다시 불러와 갱신합니다.
         queryClient.invalidateQueries(['raeAdmin']);
+        selectedModalClose(modalName);
       },
       onError: (error) => {
         // 실패 시, 에러 처리를 수행합니다.
@@ -175,11 +178,11 @@ export default function AdminRefundDialog({selectList}) {
                   item.rae_type === 2 && "취소"}
                 </td>
                 <td>
-                  {item.raeState === 1 ? "반품요청" :
+                  {item.raeState === 1 ? "요청" :
                   item.raeState === 2 ? "수거중" :
                   item.raeState === 3 ? "수거완료" :
-                  item.raeState === 4 ? "반품완료" :
-                  item.raeState === 5 && "반품철회"}
+                  item.raeState === 4 ? "완료" :
+                  item.raeState === 5 && "철회"}
                 </td>
                 <td>
                 <h5 style={{fontSize: '1.1em', fontWeight: '550'}}>
@@ -199,15 +202,15 @@ export default function AdminRefundDialog({selectList}) {
                 {modalName === "철회" 
                 && 
                 <td>
-                  <input type='text' value={item.rae_cancelReason} onChange={(e)=> 
+                  <input className={styles.input} type='text' value={list.length>0 && list?.find((select) => select.rae_id === item.rae_id)?.rae_cancelReason} onChange={(e)=> 
                   {
-                    const updatedData = selectedData.map(selectedItem => {
-                      if (selectedItem === item) {
+                    const updatedData = list.length>0 && list?.map(selectedItem => {
+                      if (selectedItem.rae_id === item.rae_id) {
                           return {...selectedItem, rae_cancelReason: e.target.value};
                       }
                       return selectedItem;
                   });
-                  setSelectedData(updatedData);
+                  setList(updatedData);
                   }
                   }/>
                 </td>
@@ -221,7 +224,7 @@ export default function AdminRefundDialog({selectList}) {
         <div className={styles.buttonBox}>
           <button onClick={()=> selectedModalClose(modalName)} className={styles.selectButton}>취소</button>
           <button  className={styles.selectedButton} onClick={()=>{
-            handleChangeStatus(selectedData);
+            handleChangeStatus(list);
           }}>{selectedData.length}건 일괄처리</button>
         </div>
       </div>

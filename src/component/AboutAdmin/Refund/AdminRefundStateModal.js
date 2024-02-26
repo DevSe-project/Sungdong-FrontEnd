@@ -2,7 +2,7 @@ import { React, useEffect, useState } from 'react';
 import styles from './AdminModal.module.css';
 import { useModalActions, useModalState, useOrderSelectListActions } from '../../../store/DataStore';
 import { GetCookie } from '../../../customFn/GetCookie';
-import axios from 'axios';
+import axios from '../../../axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useFetch } from '../../../customFn/useFetch';
 
@@ -12,6 +12,7 @@ export default function AdminRefundStateModal({selectList}) {
   const {selectedModalClose} = useModalActions();
   const {fetchNonPageServer} = useFetch();
   const [selectedData, setSelectedData] = useState([]);
+  const [list, setList] = useState([]);
 
   const queryClient = useQueryClient();
 
@@ -33,7 +34,8 @@ export default function AdminRefundStateModal({selectList}) {
 
   useEffect(() => {
     if(selectList){
-      handleOpenItem(selectList)
+      setList(selectList);
+      handleOpenItem(selectList?.map((item) => item.rae_id))
     }
   }, [])
 
@@ -60,7 +62,14 @@ export default function AdminRefundStateModal({selectList}) {
 
   //--------------------------------------------------------
 
-    //fetch 함수
+    /**
+     * @변경
+     * PATCH API
+     * - rae_id와 raeState를 전달 (배열 객체형태)
+     * - API 경로 : /rae/admin/edit
+     * @param {*} data selectList에 담긴 객체들
+     * @returns respose.data 
+     */
     const fetchUpdateData = async (data) => {
       try {
         const token = GetCookie('jwt_token');
@@ -88,9 +97,14 @@ export default function AdminRefundStateModal({selectList}) {
     };
     
 
- //주문 취소 함수
   const { mutate:refundMutate } = useMutation({mutationFn: fetchUpdateData})
 
+  /**
+   * @변경
+   * react-query :: Mutation 이용 
+   * - State 변경하는 핸들러
+   * @param {*} datas selectList
+   */
   function handleChangeState(datas) {
     refundMutate(datas,{
       onSuccess: (data) => {
@@ -99,6 +113,7 @@ export default function AdminRefundStateModal({selectList}) {
         console.log('처리 되었습니다.', data);
         // 상태를 다시 불러와 갱신합니다.
         queryClient.invalidateQueries(['raeAdmin']);
+        selectedModalClose(modalName);
       },
       onError: (error) => {
         // 실패 시, 에러 처리를 수행합니다.
@@ -133,36 +148,38 @@ export default function AdminRefundStateModal({selectList}) {
             >
             {/* 헤드 */}
             <tr>
-              <th style={{width:'10%', padding: '1em'}}>전표번호</th>
+              <th style={{padding: '1em'}}>전표번호</th>
               <th>전표 내부번호</th>
-              <th style={{width:'10%'}}>구분</th>
-              <th style={{width:'10%'}}>처리상태</th>
-              <th style={{width:'10%'}}>상품명</th>
-              <th style={{width:'10%'}}>옵션</th>
-              <th style={{width:'10%'}}>반환수량</th>
-              <th style={{width:'10%', fontWeight: '650'}}>반환금액</th>
+              <th>구분</th>
+              <th>처리상태</th>
+              <th style={{width: "20%"}}>상품명</th>
+              <th>옵션</th>
+              <th>반환수량</th>
+              <th>반환금액</th>
             </tr>
             <tr>
-              <th style={{width:'10%' , padding: '1em'}}></th>
-              <th style={{width:'10%'}}></th>
-              <th style={{width:'10%'}}></th>
-              <th style={{width:'10%'}}>
+              <th style={{padding: '1em'}}></th>
+              <th></th>
+              <th></th>
+              <th>
                 <select 
                   className={styles.select} 
                   value={
-                  selectedData?.every((item) => item.raeState === selectedData[0]?.raeState)
-                    ? selectedData[0]?.raeState
+                  list.length>0 && list?.every((item) => item.raeState === list[0].raeState)
+                    ? list[0].raeState
                     : ""} 
                   onChange={(e)=> {
-                    const updatedData = selectedData?.map(selectedItem => {
+                    const updatedData = list?.map(selectedItem => {
                       return {...selectedItem, raeState: e.target.value};
                   });
-                  setSelectedData(updatedData);
+                  setList(updatedData);
                   }}>
                   <option value="">개별 선택</option>
-                  <option value={0}>반품 요청</option>
-                  <option value={1}>수거 중</option>
-                  <option value={2}>수거 완료</option>                
+                  <option value={1}>요청</option>
+                  <option value={2}>수거 중</option>
+                  <option value={3}>수거 완료</option>
+                  <option value={4}>완료</option>
+                  <option value={5}>철회</option>             
                 </select>
               </th>
               <th style={{width:'10%'}}></th>
@@ -182,23 +199,26 @@ export default function AdminRefundStateModal({selectList}) {
                   item.rae_type === 2 && "취소"}
                 </td>
                 <td>
-                  <select className={styles.select} value={item.raeState} onChange={(e)=>
+                  <select className={styles.select} value={list.length>0 && list?.find((select) => select.rae_id === item.rae_id)?.raeState} 
+                  onChange={(e)=>
                   {
-                    const updatedData = selectedData.map(selectedItem => {
-                      if (selectedItem === item) {
+                    const updatedData = list.length>0 && list?.map(selectedItem => {
+                      if (selectedItem.rae_id === item.rae_id) {
                           return {...selectedItem, raeState: e.target.value};
                       }
                       return selectedItem;
                   });
-                  setSelectedData(updatedData);
+                  setList(updatedData);
                   }}>
-                    <option value={0}>반품 요청</option>
-                    <option value={1}>수거 중</option>
-                    <option value={2}>수거 완료</option>
+                    <option value={1}>요청</option>
+                    <option value={2}>수거 중</option>
+                    <option value={3}>수거 완료</option>
+                    <option value={4}>완료</option>
+                    <option value={5}>철회</option>
                   </select>
                 </td>
                 <td>
-                <h5 style={{fontSize: '1.1em', fontWeight: '550'}}>
+                <h5 style={{fontSize: '1em', fontWeight: '550'}}>
                   {item.product_title}
                 </h5>
                 </td>
@@ -223,7 +243,7 @@ export default function AdminRefundStateModal({selectList}) {
             selectedModalClose(modalName);
             }} className={styles.selectButton}>취소</button>
           <button  className={styles.selectedButton} onClick={()=>{
-            handleChangeState(selectedData);
+            handleChangeState(list);
           }}>{selectList.length}건 일괄처리</button>
         </div>
       </div>

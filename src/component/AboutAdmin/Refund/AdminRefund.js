@@ -55,7 +55,7 @@ export function AdminRefund() {
     setSelectAll(!selectAll);
 
     if (!selectAll) {
-      const allId = rae?.map((item) => item.rae_id);
+      const allId = rae?.map((item) => item);
       setSelectedItems(allId);
     } else {
       setSelectedItems([]);
@@ -145,14 +145,15 @@ export function AdminRefund() {
                   onChange={() => handleSelectAllChange()} />
                 </th>
                 <th>전표번호</th>
-                <th>요청날짜</th>
+                <th colSpan={2}>요청날짜</th>
                 <th>처리상태</th>
+                <th>철회사유</th>
                 <th>처리날짜</th>
-                <th>포함된 상품</th>
-                <th>기업명</th>
+                <th colSpan={3}>포함된 상품</th>
+                <th colSpan={2}>기업명</th>
                 <th>담당자</th>
-                <th>반환가액</th>
-                <th colSpan={8}>반환상품 상세보기</th>
+                <th colSpan={2}>반환가액</th>
+                <th colSpan={2}>반환상품 상세보기</th>
               </tr>
             </thead>
             <tbody>
@@ -168,29 +169,30 @@ export function AdminRefund() {
                       }>
                       <td>
                         <input
-                        checked={selectedItems.some(select => select === item.rae_id)}
-                        onChange={() => checkedBox(item.rae_id)}
+                        checked={selectedItems.some(select => select === item)}
+                        onChange={() => checkedBox(item)}
                         type='checkbox'
                         />
                       </td>    
                       <td>
                         {item.rae_id}
                       </td>
-                      <td>{new Date(item.rae_requestDate).toLocaleDateString()}</td>
+                      <td colSpan={2}>{new Date(item.rae_requestDate).toLocaleDateString()}</td>
                       <td>
-                        {item.raeState === 1 ? "반품요청" :
+                        {item.raeState === 1 ? "요청" :
                           item.raeState === 2 ? "수거중" :
                             item.raeState === 3 ? "수거완료" :
-                              item.raeState === 4 ? "반품완료" :
-                                item.raeState === 5 && "반품철회"}
+                              item.raeState === 4 ? "완료" :
+                                item.raeState === 5 && "철회"}
                       </td>
+                      <td>{item.rae_cancelReason ? item.rae_cancelReason : '없음'}</td>
                       <td>
                         {item.rae_checkDate ? item.rae_checkDate : '미 처리'}
                       </td>
-                      <td style={{ fontSize: '1.1em', fontWeight: '550' }}>
+                      <td style={{ fontSize: '1.1em', fontWeight: '550' }} colSpan={3}>
                         {item.product_title} {(item.product_length - 1) > 0 && `외 ${item.product_length - 1}건`}
                       </td>
-                      <td>
+                      <td colSpan={2}>
                         {item.corName}
                       </td>
                       <td>
@@ -198,10 +200,10 @@ export function AdminRefund() {
                           {item.rae_manager ? item.rae_manager : '미 배정'}
                         </h5>
                       </td>
-                      <td style={{ fontWeight: '750' }}>
+                      <td style={{ fontWeight: '750' }} colSpan={2}>
                         \{parseInt(item.rae_payAmount).toLocaleString()}
                       </td>
-                      <td className={styles.detailView} colSpan={8}>
+                      <td className={styles.detailView} colSpan={2}>
                         더보기
                       </td>
                     </tr>
