@@ -98,7 +98,7 @@ export function TakeBackList(){
                 : item.raeState === 4 ? '반품완료'
                 : item.raeState === 5 && '반품철회'}
               </td>
-              <td>{item.rae_checkDate ? item.rae_checkDate : "미 처리"}</td>
+              <td>{item.rae_checkDate ? new Date(item.rae_checkDate).toLocaleDateString() : "미 처리"}</td>
               <td>{item.rae_manager ? item.rae_manager : '미 배정'}</td>
               <td>{item.rae_writter}</td>
             </tr>

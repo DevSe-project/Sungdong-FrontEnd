@@ -281,7 +281,7 @@ export function EstimateBox() {
                   <td style={{ fontWeight: '750' }}>
                     {parseInt(item.estimateBox_price).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                   </td>
-                  <td style={{ width: '15%' }} rowSpan={2}>
+                  <td style={{ width: '15%', whiteSpace: 'nowrap'}} rowSpan={2}>
                     <button
                       className={styles.editButton}
                       onClick={() => handleDelItem(item)}

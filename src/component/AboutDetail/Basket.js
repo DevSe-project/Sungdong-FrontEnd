@@ -142,6 +142,10 @@ export function Basket(props) {
 
   //상품 목록 삭제 함수
   const deletedList = () => {
+    if(selectedItems.length === 0){
+      alert("먼저 삭제할 상품을 선택하여 주십시오!");
+      return;
+    }
     const isConfirmed = window.confirm('정말로 삭제하시겠습니까?');
     if (isConfirmed) {
       const itemsId = selectedItems.map(item => item.cart_product_id)
