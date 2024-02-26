@@ -141,10 +141,6 @@ export function MenuData(props) {
           link: '/comeway',
         },
         {
-          item: '오늘의 뉴스',
-          link: '/todaytopic/1',
-        },
-        {
           item: '이벤트',
           link: '/event',
         }],
