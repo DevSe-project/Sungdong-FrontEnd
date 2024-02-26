@@ -187,7 +187,7 @@ export function AdminRefund() {
                       </td>
                       <td>{item.rae_cancelReason ? item.rae_cancelReason : '없음'}</td>
                       <td>
-                        {item.rae_checkDate ? item.rae_checkDate : '미 처리'}
+                        {item.rae_checkDate ? new Date(item.rae_checkDate).toLocaleDateString() : '미 처리'}
                       </td>
                       <td style={{ fontSize: '1.1em', fontWeight: '550' }} colSpan={3}>
                         {item.product_title} {(item.product_length - 1) > 0 && `외 ${item.product_length - 1}건`}

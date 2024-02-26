@@ -12,7 +12,7 @@ export function AdminRefundFilter({handleSearch}){
         <div className={styles.searchFilterList}>
           <select className={styles.select} name='filterDate' value={raeFilter.raeDateType} onChange={(e)=>setRaeFilter("raeDateType", e.target.value)} >
             <option name='filterDate' value="rae_requestDate">반품 요청일</option>
-            <option name='filterDate' value="rae_checkDate">수거 완료일</option>
+            <option name='filterDate' value="rae_checkDate">처리일</option>
           </select>
         </div>
         <div className={styles.searchFilterList}>
@@ -30,11 +30,11 @@ export function AdminRefundFilter({handleSearch}){
         <div>
           <select className={styles.select} value={raeFilter.raeState} onChange={(e)=>setRaeFilter("raeState", e.target.value)} name="raeState">
             <option name="raeState" value="">전체</option>
-            <option name="raeState" value={1}>반품 요청</option>
+            <option name="raeState" value={1}>요청</option>
             <option name="raeState" value={2}>수거 중</option>
             <option name="raeState" value={3}>수거 완료</option>
-            <option name="raeState" value={4}>반품 완료</option>
-            <option name="raeState" value={5}>반품 철회</option>
+            <option name="raeState" value={4}>완료</option>
+            <option name="raeState" value={5}>철회</option>
           </select>
         </div>
       </div>
@@ -44,18 +44,18 @@ export function AdminRefundFilter({handleSearch}){
   function detailFilter(){
     return(
       <div style={{display: 'flex', gap: '1em'}}>
-        <select className={styles.select} value={detailKey} onChange={(e)=>setDetailKey(e.target.value)} name='detailSearch'>
+        <select className={styles.select} value={raeFilter.selectFilter} onChange={(e)=>setRaeFilter("selectFilter", e.target.value)} name='detailSearch'>
           <option name="detailSearch" value=''>전체</option>
-          <option name="detailSearch" value="companyName">기업명</option>
-          <option name="detailSearch" value="name">구매자명</option>
-          <option name="detailSearch" value="tel">구매자연락처</option>
-          <option name="detailSearch" value="userId">구매자ID</option>
-          <option name="detailSearch" value="orderId">주문번호</option>
-          <option name="detailSearch" value="productId">상품번호</option>
-          <option name="detailSearch" value="deliveryNum">송장번호</option>
+          <option name="detailSearch" value="corName">기업명</option>
+          <option name="detailSearch" value="r.rae_manager">담당자명</option>
+          <option name="detailSearch" value="rp.writter">작성자명</option>
+          <option name="detailSearch" value="r.rae_id">전표번호</option>
+          <option name="detailSearch" value="rp.barcodeStatus">바코드상태</option>
+          <option name="detailSearch" value="rp.productStatus">상품상태</option>
+          <option name="detailSearch" value="rp.wrapStatus">포장상태</option>
         </select>
         <div>
-          <input className={styles.input} type='text' value={raeFilter.detailFilter[detailKey]} onChange={(e)=>setRaeDetailFilter(detailKey, e.target.value)} />
+          <input className={styles.input} type='text' value={raeFilter.filterValue} onChange={(e)=>setRaeFilter("filterValue", e.target.value)} />
         </div>
       </div>
     )

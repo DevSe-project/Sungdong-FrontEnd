@@ -1063,15 +1063,8 @@ export const useRefundFilterStore = create((set) => ({
       end: ''
     },
     raeDateType: '',
-    detailFilter: {
-      userId: '',
-      orderId: '',
-      productId: '',
-      deliveryNum: '',
-      companyName: '',
-      name: '',
-      tel: '',
-    }
+    selectFilter: '',
+    filterValue: ''
   },
   actions: {
     setRaeFilter: (fieldName, value) =>
