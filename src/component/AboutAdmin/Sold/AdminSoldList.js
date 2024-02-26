@@ -386,7 +386,7 @@ export function AdminSoldList() {
                                     {itemData.product_brand}
                                   </td>
                                   <td>
-                                    {itemData.selectedOption}
+                                    {itemData.selectedOption ? itemData.selectedOption : '없음'}
                                   </td>
                                   <td>
                                     {itemData.product_supply}

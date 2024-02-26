@@ -118,6 +118,7 @@ export function TackBackRequest() {
               <th>상품코드</th>
               <th>상품명</th>
               <th>규격</th>
+              <th>옵션</th>
               <th>상품 단가</th>
               <th>반품가능 수량</th>
               <th>반품가능 금액</th>
@@ -138,6 +139,7 @@ export function TackBackRequest() {
                 <td>{item.product_id}</td>
                 <td>{item.product_title}</td>
                 <td>{item.product_spec}</td>
+                <td>{item.selectedOption ? item.selectedOption : '없음'}</td>
                 <td>{(item.order_productPrice / item.order_cnt).toLocaleString()}</td>
                 <td>{item.order_cnt}</td>
                 <td>{parseInt(item.order_productPrice).toLocaleString()}</td>
