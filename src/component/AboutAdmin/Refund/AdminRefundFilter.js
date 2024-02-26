@@ -41,15 +41,29 @@ export function AdminRefundFilter({handleSearch}){
     )
   }
 
+  function refundType(){
+    return(
+      <div style={{display: 'flex', gap: '0.5em'}}>
+        <div>
+          <select className={styles.select} value={raeFilter.rae_type} onChange={(e)=>setRaeFilter("rae_type", e.target.value)} name="raeState">
+            <option name="rae_type" value="">전체</option>
+            <option name="rae_type" value={0}>반품</option>
+            <option name="rae_type" value={1}>불량교환</option>
+          </select>
+        </div>
+      </div>
+    )
+  }
+
   function detailFilter(){
     return(
       <div style={{display: 'flex', gap: '1em'}}>
         <select className={styles.select} value={raeFilter.selectFilter} onChange={(e)=>setRaeFilter("selectFilter", e.target.value)} name='detailSearch'>
           <option name="detailSearch" value=''>전체</option>
-          <option name="detailSearch" value="corName">기업명</option>
-          <option name="detailSearch" value="r.rae_manager">담당자명</option>
-          <option name="detailSearch" value="rp.writter">작성자명</option>
-          <option name="detailSearch" value="r.rae_id">전표번호</option>
+          <option name="detailSearch" value="uc.cor_corName">기업명</option>
+          <option name="detailSearch" value="rae.rae_manager">담당자명</option>
+          <option name="detailSearch" value="rp.rae_writter">작성자명</option>
+          <option name="detailSearch" value="rae.rae_id">전표번호</option>
           <option name="detailSearch" value="rp.barcodeStatus">바코드상태</option>
           <option name="detailSearch" value="rp.productStatus">상품상태</option>
           <option name="detailSearch" value="rp.wrapStatus">포장상태</option>
@@ -63,6 +77,7 @@ export function AdminRefundFilter({handleSearch}){
 
 
   const filterList = [
+    { label : '구분', content : refundType()},
     { label : '조회기간', content : searchTerm()},
     { label : '처리상태', content : refundStatus()},
     { label : '상세조건', content : detailFilter()},
@@ -85,8 +100,15 @@ export function AdminRefundFilter({handleSearch}){
         ))}
         {/* 필터 검색 및 초기화 박스 */}
         <div style={{display: 'flex', gap: '0.5em'}}>
-          <input className={styles.button} type='submit' value='검색' onClick={()=> handleSearch()}/>
-          <input className={styles.button} type='reset' onClick={()=>resetRaeFilter()}/>
+          <button className={styles.button} onClick={(e)=> {
+            e.preventDefault();
+            handleSearch(raeFilter)
+            }}>검색</button>
+          <button className={styles.button} onClick={(e)=>
+            {
+              e.preventDefault();
+              resetRaeFilter()
+            }}>초기화</button>
         </div>
       </form>
     </div>

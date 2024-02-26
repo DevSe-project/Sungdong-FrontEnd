@@ -2,8 +2,8 @@ import styles from './AdminRefund.module.css';
 import { useEffect, useState } from 'react';
 import React from 'react';
 import { AdminRefundFilter } from '../Refund/AdminRefundFilter';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { useModalActions, useModalState, useOrderSelectList, useOrderSelectListActions } from '../../../store/DataStore';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useModalActions, useModalState, useOrderSelectList, useOrderSelectListActions, useRaeFilter } from '../../../store/DataStore';
 import AdminRefundModal from './AdminRefundModal';
 import AdminRefundDialog from './AdminRefundDialog';
 import AdminRefundStateModal from './AdminRefundStateModal';
@@ -25,6 +25,8 @@ export function AdminRefund() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [selectedData, setSelectedData] = useState(null);
+  const queryClient = useQueryClient();
+  const raeFilter = useRaeFilter();
 
 
 
@@ -98,6 +100,47 @@ export function AdminRefund() {
       })
     }
 
+
+  /*---------- 필터 검색 ----------*/
+  
+  /**
+   * @필터 POST FETCH 
+   * - 필터 검색 Mutation (react-query :: Mutation Hook) 사용
+   * @param {*} filter 객체 정보
+   * - date: {start: '', end: ''} - 시작 날짜와 끝 날짜 필터
+   * - raeDateType: "" - 색인할 날짜 타입 필터
+   * - raeState: "" - rae State에 따른 필터
+   * - selectFilter: "" - 상세 필터
+   * - filterValue: "" - 상세 필터 조건
+   */
+  const fetchFilteredRae = async (filter) => {
+    return await fetchServer(filter, `post`, `/rae/admin/filter`, 1);
+  };
+
+  const { mutate: filterMutation } = useMutation({ mutationFn: fetchFilteredRae })
+
+  /**
+   * @검색 Mutation 선언부
+
+   * @returns 필터된 상품의 데이터 객체 (@불러오기 returns 데이터 정보 참조)
+   */
+  const handleSearch = (raeFilter) => {
+
+    // 검색 버튼 클릭 시에만 서버에 요청
+    filterMutation(raeFilter, {
+      onSuccess: (data) => {
+        alert(data.message)
+        setCurrentPage(data.data.currentPage);
+        setTotalPages(data.data.totalPages);
+        queryClient.setQueryData(['raeAdmin'], () => {
+          return data.data.data;
+        })
+      },
+      onError: (error) => {
+        return console.error(error.message);
+      },
+    })  };
+
   // 데이터 로딩 중 또는 에러 발생 시 처리
   if (raeLoading) {
     return <p>Loading...</p>;
@@ -112,7 +155,7 @@ export function AdminRefund() {
           <h1>반품/교환/취소 관리</h1>
         </div>
         {/* 필터 */}
-        <AdminRefundFilter />
+        <AdminRefundFilter handleSearch={handleSearch}/>
         {/* 목록 */}
         <div className={styles.tableLocation}>
           {/* 목록 상위 타이틀 */}

@@ -1062,6 +1062,7 @@ export const useRefundFilterStore = create((set) => ({
       start: '',
       end: ''
     },
+    rae_type: '',
     raeDateType: '',
     selectFilter: '',
     filterValue: ''
@@ -1077,16 +1078,10 @@ export const useRefundFilterStore = create((set) => ({
             start: '',
             end: ''
           },
+          rae_type: '',
           raeDateType: '',
-          detailFilter: {
-            userId: '',
-            orderId: '',
-            productId: '',
-            deliveryNum: '',
-            companyName: '',
-            name: '',
-            tel: '',
-          }
+          selectFilter: '',
+          filterValue: ''
         }
       }),
     setRaeDetailFilter: (fieldName, value) =>
