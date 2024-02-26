@@ -152,7 +152,7 @@ export function AdminRefund() {
     <div className={styles.main}>
       <main className={styles.container}>
         <div className={styles.bodyHeader}>
-          <h1>반품/교환/취소 관리</h1>
+          <h1>반품/교환 관리</h1>
         </div>
         {/* 필터 */}
         <AdminRefundFilter handleSearch={handleSearch}/>

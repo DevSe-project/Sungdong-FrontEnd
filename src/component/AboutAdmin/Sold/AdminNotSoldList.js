@@ -33,7 +33,8 @@ export function AdminNotSoldList(props) {
   // -=-=-=-=-=-=-= 페이지를 변경할 때 호출되는 함수 =-=-=-=-=-=-=-
   const fetchPageChange = async (pageNumber) => {
     const limit = {
-      orderState: 1
+      orderState: 1,
+      isCancel: 1
     }
     return await fetchAddPostServer(limit, 'post', '/order/all', pageNumber, itemsPerPage);
   };
@@ -59,7 +60,8 @@ export function AdminNotSoldList(props) {
   //데이터 불러오기
   const fetchData = async () => {
     const limit = {
-      orderState: 1
+      orderState: 1,
+      isCancel: 1
     }
     const data = await fetchAddPostServer(limit, `post`, `/order/all`, 1, itemsPerPage ? itemsPerPage : 10);
     console.log(data)
@@ -119,7 +121,7 @@ export function AdminNotSoldList(props) {
       <main className={styles.container}>
         {/* 리스트 출력 */}
         <div className={styles.bodyHeader}>
-          <h1>미결제 주문 관리</h1>
+          <h1>미결제/취소 주문 관리</h1>
         </div>
         <div className={styles.tableLocation}>
           <div className={styles.manageBox}>
@@ -170,7 +172,7 @@ export function AdminNotSoldList(props) {
                               : '직접 픽업'}
                       </td>
                       <td>
-                        {item.orderState === 0 && "결제 미 완료"}
+                        {(item.orderState === 0 && "결제 미 완료") || (item.orderState === 5 && "취소")}
                       </td>
                       <td onClick={() => {
                         if (selectedData?.some((selectItem) => selectItem.order_id === item.order_id)) {
