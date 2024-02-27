@@ -50,6 +50,10 @@ export function TakeBackList(){
   }
 
 
+  function handleSearch(){
+    
+  }
+
   if (isLoading) {
     return <p>Loading..</p>;
   }
@@ -63,7 +67,7 @@ export function TakeBackList(){
         <h1><i className="fa-solid fa-heart"/> 반품조회</h1>
       </div>
       {/* 필터 */}
-      <TakeBackListFilter/>
+      <TakeBackListFilter handleSearch={handleSearch}/>
       {/* 테이블 */}
       <div className={styles.tablebody}>
         <table className={styles.table}>
