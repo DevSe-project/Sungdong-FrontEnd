@@ -20,6 +20,12 @@ export default function AdminNotice() {
   const queryClient = useQueryClient();
   const { fetchGetServer } = useFetch();
 
+  /**
+   * 서버에 Posts 조회 요청을 보냅니다.
+   * @param currentPage 현재 페이지
+   * @param itemsPerPage 페이지당 포스팅 개수
+   * @returns 
+   */
   const fetchNoticeData = async () => {
     try {
       const token = GetCookie('jwt_token');
@@ -38,7 +44,10 @@ export default function AdminNotice() {
       throw new Error('공지사항 정보를 불러오는 중 오류가 발생하였습니다.');
     }
   }
-
+ /**
+  * Middleware. useEffect를 통해 fetchNoticeData()를 실행.
+  * @param 
+  */
   const fetchData = async () => {
     try {
       const data = await fetchNoticeData();
@@ -52,10 +61,9 @@ export default function AdminNotice() {
   }, [currentPage, itemsPerPage]);
 
   /**
-   * 게시글 삭제 함수
-   * fetchDeletePost: Post삭제 요청을 서버로 보낸다.
-   * postId를 매개변수로 받는다.
-   * 서버에서는 해당 req.body.postId로 해당 post를 삭제한다.
+   * - 게시글 삭제 요청
+   * - Server: req.body.postId로 해당 post를 삭제
+   * @param postId
   */
   const fetchDeletePost = async (postId) => {
     try {
@@ -251,16 +259,16 @@ export default function AdminNotice() {
             matchedData?.map((item, index) => (
               <tr key={index}>
                 {/* 글 고유번호 */}
-                <td>{item.id}</td>
+                <td>{item.postId}</td>
                 {/* 제목 */}
                 <td onClick={() => {
                   selectedModalOpen('edit');
                   addNoticeData(item);
-                }}>{item.title}</td>
+                }}>{item.post_title}</td>
                 {/* 작성자 */}
-                <td>{item.writer}</td>
+                <td>{item.post_writer}</td>
                 {/* 날짜 */}
-                <td>{item.date}</td>
+                <td>{item.post_date}</td>
                 {/* 삭제 */}
                 <td style={{ display: 'flex', justifyContent: 'center' }}>
                   <button className='white_button'
