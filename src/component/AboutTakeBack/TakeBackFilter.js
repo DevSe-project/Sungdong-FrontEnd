@@ -3,14 +3,13 @@ import styles from './Filter.module.css'
 import { addMonths, subMonths, format } from 'date-fns';
 import { useTakeBackActions, useTakeBackFilter } from '../../store/DataStore';
 
-export function TackBackFilter(){
+export function TackBackFilter({handleSearch}){
   const takeBackFilter = useTakeBackFilter();
-  const {setTakeBackFilterOption, resetFilterOption} = useTakeBackActions();
+  const {setTakeBackFilterOption, resetFilterOption, setTakeBackFilterDate} = useTakeBackActions();
 
   const filterList = [
     { label : '상품검색', content : searchWord()},
     { label : '조회일자', content : DateFilter()},
-    { label : '출력', content : detailSearch()},
   ];
 
   function searchWord() {
@@ -30,62 +29,63 @@ export function TackBackFilter(){
   }
 
 
-function DateFilter(){
-  const today = new Date();
-  const [startDate, setStartDate] = useState(today);
-  const [endDate, setEndDate] = useState(addMonths(startDate, 1));
-  const handleMonthChange = (event) => {
-    setStartDate(new Date(2023,event.target.value,1));
-    setEndDate(new Date(2023,event.target.value,31));
-  };
-
-  const dateList = () => {
-    return Array.from({ length: 12 }, (_, index) => (
-      <option key={index} value={index}>{index + 1}월</option>
-    ));
-  };
-
-  const handleStartDateChange = (event) => {
-    const newStartDate = new Date(event.target.value);
-    setStartDate(newStartDate);
-  };
+  function DateFilter() {
+    const today = new Date();
+    const [startDate, setStartDate] = useState(today);
+    const [endDate, setEndDate] = useState(new Date(today.getFullYear(), today.getMonth() + 1, 0));
   
-  const handleEndDateChange = (event) => {
-    const newStartDate = new Date(event.target.value);
-    setEndDate(newStartDate);
-  };
-  return(
-    <div style={{ display: 'flex', gap: '1em' }}>
-      <select className={styles.select} onChange={(e)=>handleMonthChange(e)}>
-        {dateList()}
-      </select>
-      <div>
-        <input 
-        className={styles.input}
-        type='date' 
-        value={format(startDate, 'yyyy-MM-dd')}
-        onChange={(e)=>handleStartDateChange(e)}
-        />
-        &nbsp;~&nbsp;
-        <input 
-        className={styles.input}
-        type='date' 
-        value={format(endDate, 'yyyy-MM-dd')}
-        onChange={(e)=>handleEndDateChange(e)}
-        />
+    const handleMonthChange = (event) => {
+      const month = parseInt(event.target.value);
+      const newStartDate = new Date(today.getFullYear(), month, 2);
+      const newEndDate = new Date(today.getFullYear(), month + 1, 1);
+      setStartDate(newStartDate);
+      setEndDate(newEndDate);
+      setTakeBackFilterDate("start", newStartDate); // Update start date in the filter
+      setTakeBackFilterDate("end", newEndDate); // Update end date in the filter
+    };
+  
+    const dateList = () => {
+      return Array.from({ length: 12 }, (_, index) => (
+        <option key={index} value={index}>{index + 1}월</option>
+      ));
+    };
+  
+    const handleStartDateChange = (event) => {
+      const newStartDate = new Date(event.target.value);
+      setStartDate(newStartDate);
+      setTakeBackFilterDate("start", newStartDate); // Update start date in the filter
+    };
+    
+    const handleEndDateChange = (event) => {
+      const newEndDate = new Date(event.target.value);
+      setEndDate(newEndDate);
+      setTakeBackFilterDate("end", newEndDate); // Update end date in the filter
+    };
+  
+    return (
+      <div style={{ display: 'flex', gap: '1em' }}>
+        <select className={styles.select} onChange={(e) => handleMonthChange(e)}>
+          {dateList()}
+        </select>
+        <div>
+          <input 
+            className={styles.input}
+            type='date' 
+            value={startDate.toISOString().split('T')[0]} // Format the date for input value
+            onChange={(e) => handleStartDateChange(e)}
+          />
+          &nbsp;~&nbsp;
+          <input 
+            className={styles.input}
+            type='date' 
+            value={endDate.toISOString().split('T')[0]} // Format the date for input value
+            onChange={(e) => handleEndDateChange(e)}
+          />
+        </div>
       </div>
-    </div>
-  )
-}
-
-function detailSearch(){
-  return(
-    <div style={{display: 'flex', gap: '1em'}}>
-      <button className={styles.button}>인쇄</button>
-      <button className={styles.button}>액셀</button>
-    </div>
-  )
-}
+    )
+  }
+  
 
   return(
     <div style={{width: '100%'}}>
@@ -104,8 +104,11 @@ function detailSearch(){
         </div>
         ))}
         <div style={{display: 'flex', gap: '0.5em'}}>
-          <input className={styles.button} type='submit' value='검색'/>
-          <input className={styles.button} type='reset' onClick={()=> resetFilterOption()}/>
+          <button className={styles.button} onClick={(e)=> {
+            e.preventDefault();
+            handleSearch(takeBackFilter);
+            }}>검색</button>
+          <button className={styles.button} onClick={()=> resetFilterOption()}>초기화</button>
         </div>
       </form>
     </div>
