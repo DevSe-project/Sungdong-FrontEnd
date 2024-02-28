@@ -44,10 +44,10 @@ export default function AdminNotice() {
       throw new Error('공지사항 정보를 불러오는 중 오류가 발생하였습니다.');
     }
   }
- /**
-  * Middleware. useEffect를 통해 fetchNoticeData()를 실행.
-  * @param 
-  */
+  /**
+   * Middleware. useEffect를 통해 fetchNoticeData()를 실행.
+   * @param 
+   */
   const fetchData = async () => {
     try {
       const data = await fetchNoticeData();
@@ -147,7 +147,7 @@ export default function AdminNotice() {
   })
   const addPost = () => {
     // 입력 조건 부여
-    const isCheckInputLength = notice.title.length > 2 && notice.writer.length > 2 && notice.contents.length > 10;
+    const isCheckInputLength = notice.title.length > 2 && notice.contents.length > 10;
 
     // 조건에 부합한다면
     if (isCheckInputLength) {
@@ -159,7 +159,7 @@ export default function AdminNotice() {
       alert("등록되었습니다.");
 
     } else {
-      alert("제목을 2글자 이상, 작성자 명을 2글자 이상, 본문 내용을 10글자 이상 작성하십시오.");
+      alert("제목을 2글자 이상, 본문 내용을 10글자 이상 작성하십시오.");
     }
   };
 
@@ -200,7 +200,7 @@ export default function AdminNotice() {
   })
 
   const handleConfirmSD = () => {
-    const isCheckInputLength = notice.title.length > 2 && notice.writer.length > 2 && notice.contents.length > 10;
+    const isCheckInputLength = notice.title.length > 2 && notice.contents.length > 10;
 
     if (isCheckInputLength) {
       const updatedPost = {
@@ -214,7 +214,7 @@ export default function AdminNotice() {
       resetNoticeData();
       alert("등록되었습니다.");
     } else {
-      alert("제목을 2글자 이상, 작성자 명을 2글자 이상, 본문 내용을 10글자 이상 작성하십시오.");
+      alert("제목을 2글자 이상, 본문 내용을 10글자 이상 작성하십시오.");
     }
   }
 

@@ -12,8 +12,6 @@ export default function WriteModal({ addPost }) {
 
   const notice = useNotice();
   const { setNoticeData, resetNoticeData } = useNoticeActions();
-  const { fetchNonPageServer } = useFetch();
-  const [loginUser, setLoginUser] = useState();
 
   // esc키를 누르면 모달창 닫기.
   useEffect(() => {
@@ -34,6 +32,10 @@ export default function WriteModal({ addPost }) {
   const { handleForbiddenError, handleOtherErrors, handleNoAlertOtherErrors } = useFetch();
 
   // -----UserData fetch
+  /**
+   * 
+   * @returns 로그인된 users_id에 해당되는 users_info
+   */
   const fetchLoginUserData = async () => {
     try {
       const token = GetCookie('jwt_token');
@@ -93,18 +95,31 @@ export default function WriteModal({ addPost }) {
         <div className={styles.contentsContainer}>
           {/* 제목 */}
           <div className={styles.title}>
-            Title <input className={styles.inputTitle} type="text" value={notice.title} onChange={(e) => {
-              setNoticeData("title", e.target.value)
-            }} required />
+            Title
+            <input
+              className={styles.inputTitle}
+              type="text"
+              value={notice.title} onChange={(e) => {
+                setNoticeData("title", e.target.value)
+              }}
+              required />
           </div>
           {/* 작성자 */}
           <div className={styles.writer}>
             작성자 <input
               className={styles.inputWriter}
-              type="text" value={loginUserData && loginUserData.name ? loginUserData.name : '사용자 정보 호출 실패'}
-              onChange={(e) => {
-                setNoticeData("writer", e.target.value)
-              }} required />
+              type="text"
+              value={loginUserData && loginUserData.name ? loginUserData.name : '사용자 정보 호출 실패'}
+              onChange={() => {
+                if (loginUserData && loginUserData.name.length > 0) {
+                  console.log('사용자 정보 호출 성공');
+                  setNoticeData("writer", loginUserData.name);
+                }
+                else {
+                  console.log('사용자 정보 호출 실패');
+                }
+              }}
+              required />
           </div>
           {/* 글 내용 */}
           <div className={styles.content}>
@@ -120,15 +135,19 @@ export default function WriteModal({ addPost }) {
 
         {/* 첨부파일 */}
         <div className={styles.addFiles}>
-          <input type="file" onChange={(e) => (
-            setNoticeData("files", e.target.value)
-          )} />
+          <input
+            type="file"
+            onChange={(e) => (
+              setNoticeData("files", e.target.value)
+            )} />
         </div>
 
         {/* 등록 버튼 */}
-        <div className={styles.printPost} onClick={() => {
-          addPost();
-        }}>
+        <div
+          className={styles.printPost}
+          onClick={() => {
+            addPost();
+          }}>
           <div>등록</div>
         </div>
       </div>
