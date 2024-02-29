@@ -151,3 +151,14 @@
 .detailView:hover{
   color: gray;
 }
+
+.thumnail{
+  background-size: cover;
+  box-sizing: border-box;
+  background-color: beige;
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  border: 1px solid lightgray;
+  object-fit: cover;
+}

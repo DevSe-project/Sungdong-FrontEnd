@@ -86,10 +86,8 @@
 }
 
 .input {
-  width: 30em;
-  height: 2.5em;
-  font-size: 1em;
-  padding: 0.3em;
+  width: 90%;
+  height: 90%;
   border-radius: 1dvb;
   border: 1px solid lightgray;
   display: flex;

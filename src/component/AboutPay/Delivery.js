@@ -186,7 +186,8 @@ export function Delivery(props) {
                           : item.orderState === 3 ? '배송 중'
                             : item.orderState === 4 ? '배송 완료'
                               : item.orderState === 5 ? '취소'
-                              : '누락된 상품(고객센터 문의)'}
+                                : item.orderState === 6 ? '취소요청'
+                                  : '누락된 상품(고객센터 문의)'}
                     <p>배송 : {item.deliveryType}{item.delivery_selectedCor && item.delivery_selectedCor === "kr.daesin" ? `( 대신 화물 )` : item.delivery_selectedCor === "kr.kdexp" ? `(경동 화물)` : item.deliveryType === "일반택배" && `( CJ대한통운 )`}</p>
                     <p style={{ color: 'orangered', fontWeight: '550' }}>{item.delivery_date && `🚚 배송 예정 : ${new Date(item.delivery_date).toLocaleDateString()}`}</p>
                   </h5>

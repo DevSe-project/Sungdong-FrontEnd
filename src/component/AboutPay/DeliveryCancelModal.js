@@ -4,13 +4,10 @@ import { useModalActions, useModalState, useOrderSelectList, useOrderSelectListA
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useFetch } from '../../customFn/useFetch';
 
-export default function DeliveryCancelModal({item}) {
-
-  const selectList = useOrderSelectList();
-  const {setSelectListValue} = useOrderSelectListActions();
+export default function DeliveryCancelModal() {
 
   const { modalName, modalItem } = useModalState();
-  const {selectedModalClose} = useModalActions();
+  const {selectedModalClose, setModalItem} = useModalActions();
 
   const queryClient = useQueryClient();
 
@@ -32,8 +29,8 @@ export default function DeliveryCancelModal({item}) {
   }, [selectedModalClose]);
 
   //fetch 함수
-  const fetchUpdateData = async (selectList) => {
-      return await fetchNonPageServer(selectList, `put`, `/order/cancel`)
+  const fetchUpdateData = async (item) => {
+      return await fetchNonPageServer(item, `put`, `/order/user/cancel`)
     };
     
 
@@ -41,12 +38,12 @@ export default function DeliveryCancelModal({item}) {
   const { mutate:cancelOrderMutate } = useMutation({mutationFn: fetchUpdateData})
 
 
-  const handleOrderCanceled = (selectList) => {
-    cancelOrderMutate(selectList,{
+  const handleOrderCanceled = (item) => {
+    cancelOrderMutate(item,{
     onSuccess: (data) => {
       // 메세지 표시
       alert(data.message);
-      console.log('상품이 취소처리 되었습니다.', data);
+      console.log('상품을 취소요청 하였습니다.', data);
       // 상태를 다시 불러와 갱신합니다.
       queryClient.invalidateQueries(['order']);
       selectedModalClose(modalName);
@@ -87,49 +84,39 @@ export default function DeliveryCancelModal({item}) {
                 <th>주문상품</th>
                 <th>주문일자</th>
                 <th>주문가</th>
-                <th>주문자 성함</th>
-                <th>주문자 연락처</th>
                 <th style={{width:'10%'}}>취소사유</th>
               </tr>
             </thead>
             <tbody>
-            {selectList.map((item, key)=> (
-              <tr key={key} className={styles.list}>
+              <tr className={styles.list}>
                 <td>
-                  {item.value.order_id}
+                  {modalItem.order_id}
                 </td>
                 <td>
                   {
-                  item.value.orderState === 0 ? "미결제" :
-                  item.value.orderState === 1 ? "신규주문" :
-                  item.value.orderState === 2 && "발송완료" }
+                  modalItem.orderState === 0 ? "미결제" :
+                  modalItem.orderState === 1 ? "결제완료" :
+                  modalItem.orderState === 2 && "배송 준비중" }
                 </td>
                 <td>
                 <h5 style={{fontSize: '1.1em', fontWeight: '550'}}>
-                  {item.value.product_title} {(item.value.product_length-1) > 0 && `외 ${item.value.product_length-1}건`}
+                  {JSON.parse('[' + modalItem.products + ']')[0].product_title} {(JSON.parse('[' + modalItem.products + ']').length-1) > 0 && `외 ${JSON.parse('[' + modalItem.products + ']').length-1}건`}
                 </h5>
                 </td>
                 <td>
-                  {new Date(item.value.order_date).toLocaleString()}
+                  {new Date(modalItem.order_date).toLocaleString()}
                 </td>
                 <td style={{fontWeight: '750'}}>
-                  \{parseInt(item.value.order_payAmount).toLocaleString()}
+                  \{parseInt(modalItem.order_payAmount).toLocaleString()}
                 </td>
-                <td>
-                  {item.value.order_name}
-                </td>
-                <td>
-                  {item.value.order_tel}
-                </td>
-                <td><input type='text' value={item.value.cancelReason} onChange={(e)=>setSelectListValue(item, "cancelReason", e.target.value)}/></td>
+                <td><input className={styles.input} type='text' value={modalItem.cancelReason} onChange={(e)=> setModalItem("cancelReason", e.target.value)}/></td>
               </tr>
-            ))}
             </tbody>
           </table>
         </div>
         <div className={styles.buttonBox}>
-          <button onClick={()=> selectedModalClose(modalName)} className={styles.selectButton}>취소</button>
-          <button  className={styles.selectedButton} onClick={()=> selectList.some((item) => item.value.cancelReason) !== "" && handleOrderCanceled(selectList)}>{selectList.length}건 일괄처리</button>
+          <button onClick={()=> selectedModalClose(modalName)} className={styles.selectButton}>닫기</button>
+          <button  className={styles.selectedButton} onClick={()=> modalItem.cancelReason !== "" && handleOrderCanceled(modalItem)}>취소 요청</button>
         </div>
       </div>
     </div>

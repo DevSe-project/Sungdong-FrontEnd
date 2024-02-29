@@ -300,6 +300,8 @@ const useModalStore = create((set) => ({
     selectedModalOpen: (name) => set({ isModal: true, modalName: name }),
     selectedModalOpenInItem: (name, item) => set({ isModal: true, modalName: name, modalItem: item }),
     selectedModalClose: () => set({ isModal: false, modalName: '' }),
+    setModalItem: (fieldName, value) =>
+    set((state) => ({ modalItem: { ...state.modalItem, [fieldName]: value } })),
   },
 }));
 
@@ -311,8 +313,8 @@ export const useModalState = () => {
 
 // useModalActions 커스텀 훅
 export const useModalActions = () => {
-  const { setIsModal, setModalName, setSelectedIndex, openModal, closeModal, selectedModalOpen, selectedModalClose, selectedModalOpenInItem } = useModalStore.getState().actions;
-  return { setIsModal, setModalName, setSelectedIndex, openModal, closeModal, selectedModalOpen, selectedModalClose, selectedModalOpenInItem };
+  const { setIsModal, setModalName, setSelectedIndex, openModal, closeModal, selectedModalOpen, selectedModalClose, selectedModalOpenInItem, setModalItem } = useModalStore.getState().actions;
+  return { setIsModal, setModalName, setSelectedIndex, openModal, closeModal, selectedModalOpen, selectedModalClose, selectedModalOpenInItem, setModalItem };
 };
 
 /* ---------------SELECT SOTRE----------------- */
