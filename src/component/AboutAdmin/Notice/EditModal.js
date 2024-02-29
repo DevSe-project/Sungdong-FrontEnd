@@ -1,19 +1,14 @@
 import styles from './WriteEditModal.module.css';
 import { useEffect, useState } from 'react';
 import { useModalActions, useModalState, useNotice, useNoticeActions } from "../../../store/DataStore";
-import axios from '../../../axios';
-import { useFetch } from '../../../customFn/useFetch';
 
-export default function EditModal({ handleConfirmSD, item, index }) {
-  // call_modalZustand
+export default function EditModal({ handleUpdate, item }) {
   const { modalName } = useModalState();
   const { selectedModalClose } = useModalActions();
 
   const notice = useNotice();
-  const [matchedPost, setMatchedPost] = useState();
+  const [matchedPostData, setMatchedPostData] = useState(item);
   const { setNoticeData, resetNoticeData } = useNoticeActions();
-  const { fetchNonPageServer } = useFetch();
-
   // ESC 키로 모달 닫기
   useEffect(() => {
     const handleEscapeKey = (event) => {
@@ -30,6 +25,18 @@ export default function EditModal({ handleConfirmSD, item, index }) {
     };
   }, [selectedModalClose]);
 
+  // 불러들인 item을 변경할 수 있도록 새로운 state에 담습니다.
+  useEffect(() => {
+    setMatchedPostData(item);
+  }, [item]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setMatchedPostData({
+      ...matchedPostData,
+      [name]: value
+    });
+  };
 
   return (
     <div className={styles.modalOverlay}>
@@ -49,9 +56,9 @@ export default function EditModal({ handleConfirmSD, item, index }) {
             <input
               className={styles.inputTitle}
               type="text"
-              name="title"
-              value={item.post_title}
-              onChange={(e) => setNoticeData("title", e.target.value)}
+              name="post_title"
+              value={matchedPostData.post_title}
+              onChange={e => handleInputChange(e)}
             />
           </div>
           {/* Writer */}
@@ -60,30 +67,30 @@ export default function EditModal({ handleConfirmSD, item, index }) {
             <input
               className={styles.inputWriter}
               type="text"
-              name="writer"
-              value={item.post_writer}
-              onChange={(e) => setNoticeData("writer", e.target.value)}
+              name="post_writer"
+              value={matchedPostData.post_writer}
+              onChange={e => handleInputChange(e)}
             />
           </div>
           {/* Contents */}
           <div className={styles.content}>
             <textarea
               className={styles.textarea}
-              name="contents"
-              value={item.post_content}
-              onChange={(e) => setNoticeData("contents", e.target.value)}
+              name="post_content"
+              value={matchedPostData.post_content}
+              onChange={e => handleInputChange(e)}
             />
           </div>
         </div>
 
-        {/* add Files */}
+        {/* Add Files */}
         <div>
           <input type="file" onChange={() => { }} />
         </div>
 
         {/* Save Button */}
         <div className={styles.buttonContainer}>
-          <div className={styles.printPost} onClick={() => handleConfirmSD()}>
+          <div className={styles.printPost} onClick={() => {handleUpdate(matchedPostData)}}>
             <div>저장</div>
           </div>
         </div>

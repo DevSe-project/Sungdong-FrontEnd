@@ -6,15 +6,18 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import WriteModal from "./WriteModal";
 import axios from '../../../axios';
 import { GetCookie } from "../../../customFn/GetCookie";
+import { useFetch } from "../../../customFn/useFetch";
 
 export default function AdminNotice() {
-  const { isModal, modalName } = useModalState();
-  const { closeModal, selectedModalOpen } = useModalActions();
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 번호를 담습니다.
   const [itemsPerPage, setItemsPerPage] = useState(10); // 아아템 포스팅 개수
   const [matchedData, setMatchedData] = useState([]); // 서버의 user데이터를 불러올 state
 
+
+  const { isModal, modalName, selectedIndex } = useModalState();
+  const { closeModal, selectedModalOpen, setSelectedIndex } = useModalActions();
   const { addNoticeData, resetNoticeData } = useNoticeActions();
+  const { fetchNonPageServer } = useFetch();
   const notice = useNotice();
   const queryClient = useQueryClient();
 
@@ -125,6 +128,51 @@ export default function AdminNotice() {
     fetchData();
   }, [currentPage, itemsPerPage]);
 
+
+  /**
+   * 서버에 업데이트 요청을 보냅니다.
+   * fetchNonPageServer를 사용하여 리팩토링해야 할 소요 있음.
+   * @param postId
+   * @param title
+   * @param writer
+   * @param contents
+   * @returns 업데이트된 객체
+   */
+  const fetchUpdatePost = async (updatedData) => {
+    // const response = await axios.put(`/notice/update/${postId}`, JSON.stringify(updatedData));
+    // return response.data;
+    console.log(updatedData);
+    const data = fetchNonPageServer(updatedData, `put`, `/notice/update`);
+    return data;
+  }
+
+  const { mutate: updatePostMutation } = useMutation({ mutationFn: fetchUpdatePost })
+
+  const handleUpdate = async (updatedData) => {
+    try {
+      // -----유효성 검사-----
+      if (updatedData.post_title.length < 2) return alert('제목을 2글자 이상 입력하십시오.');
+      if (updatedData.post_content.length < 10) return alert('내용을 10글자 이상 입력하십시오.');
+      if (!updatedData.post_writer.length) return alert('작성자란이 비었습니다.');
+      // -----변경사항 반영 전 확인-----
+      const confirmed = window.confirm('변경사항을 적용하시겠습니까?');
+      if (!confirmed) return;
+      // -----Mutation 전달-----
+      updatePostMutation(updatedData, {
+        onSuccess: (success) => {
+          alert(success.message);
+          window.location.reload();
+        },
+        onError: (error) => {
+          return console.error(error.message);
+        }
+      })
+      // -----에러 잡이 ! -----
+    } catch (error) {
+      alert('업데이트에 실패하였습니다');
+    }
+  }
+
   /**
    * - 게시글 삭제 요청
    * - Server: req.body.postId로 해당 post를 삭제
@@ -132,7 +180,7 @@ export default function AdminNotice() {
   */
   const fetchDeletePost = async (postId) => {
     try {
-      const response = await axios.delete(`/notice/delete/${postId}`,)
+      const response = await axios.delete(`/notice/delete/${postId}`)
       return response.data;
     } catch (error) {
       throw error;
@@ -145,7 +193,7 @@ export default function AdminNotice() {
    */
   const handleDelete = async (postId) => {
     try {
-      const confirmed = window.confirm('선택된 고객을 정말 삭제하시겠습니까?');
+      const confirmed = window.confirm('선택된 게시물을 정말 삭제하시겠습니까?');
       if (!confirmed) return;
 
       await deleteMutation(postId);
@@ -168,74 +216,6 @@ export default function AdminNotice() {
     onSuccess: handleDeleteSuccess,
     onError: handleDeleteError,
   });
-
-  /**
-   * 서버에 업데이트 요청을 보냅니다.
-   * fetchNonPageServer를 사용하여 리팩토링해야 할 소요 있음.
-   * @param postId
-   * @param title
-   * @param writer
-   * @param contents
-   * @returns 업데이트된 객체
-   */
-  const fetchUpdatePost = async () => {
-    try {
-      const token = GetCookie('jwt_token');
-      const response = await axios.put("/notice/edit",
-        JSON.stringify(
-          notice
-        ),
-        {
-          headers: {
-            "Content-Type": "application/json",
-            'Authorization': `Bearer ${token}`
-          }
-        }
-      )
-      // 성공 시 추가된 상품 정보를 반환합니다.
-      return response.data;
-    } catch (error) {
-      // 실패 시 예외를 throw합니다.
-      throw new Error('상품을 추가하는 중 오류가 발생했습니다.');
-    }
-  }
-  const { editPostMutation } = useMutation({
-    mutationFn: fetchUpdatePost,
-    onSuccess: (data) => {
-      // 메세지 표시
-      alert(data.message);
-      console.log('게시글이 업데이트 되었습니다.', data);
-      // 상태를 다시 불러와 갱신합니다.
-      useQueryClient.invalidateQueries(['notice']);
-    },
-    onError: (error) => {
-      // 실패 시, 에러 처리를 수행합니다.
-      console.error('상태를 변경하던 중 오류가 발생했습니다.', error);
-    },
-  })
-
-  /**
-   * - 입력조건: 제목 2글자 이상, 내용 10글자 이상
-   * - 포스팅 내용: postId, title, writer, contents
-   */
-  const postingHandler = () => {
-    const isCheckInputLength = notice.title.length > 2 && notice.contents.length > 10;
-
-    if (isCheckInputLength) {
-      const updatedPost = {
-        postId: notice.postId, // 고유번호 추가
-        title: notice.title,
-        writer: notice.writer,
-        contents: notice.contents
-      };
-      editPostMutation.mutate(updatedPost);
-      closeModal();
-      resetNoticeData();
-      alert("등록되었습니다.");
-    } else {
-      alert("제목을 2글자 이상, 본문 내용을 10글자 이상 작성하십시오.");
-    }
-  }
 
   return (
     <div className={styles.body}>
@@ -282,6 +262,7 @@ export default function AdminNotice() {
                 {/* 제목 */}
                 <td onClick={() => {
                   selectedModalOpen('edit');
+                  setSelectedIndex(index);
                   addNoticeData(item);
                 }}>{item.post_title}</td>
                 {/* 작성자 */}
@@ -297,8 +278,8 @@ export default function AdminNotice() {
                 </td>
                 {/* 수정 모달 */}
                 {/* item을 보내고 EditModal측에서 fetch요청을 통해 item.postId와 동일한 post의 정보를 불러들이도록 */}
-                {isModal && modalName === 'edit' &&
-                  <EditModal postingHandler={postingHandler} item={item} />}
+                {isModal && modalName === 'edit' && index === selectedIndex &&
+                  <EditModal handleUpdate={handleUpdate} item={item} />}
               </tr>
             ))
           }
