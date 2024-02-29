@@ -18,6 +18,73 @@ export default function AdminNotice() {
   const notice = useNotice();
   const queryClient = useQueryClient();
 
+  const fetchCreatePost = async (newPostData) => {
+    try {
+      const token = GetCookie('jwt_token');
+      const response = await axios.post(
+        "/notice/create",
+        newPostData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
+      // 성공 시 추가된 상품 정보를 반환합니다.
+      return response.data;
+    } catch (error) {
+      // 실패 시 예외를 throw합니다.
+      throw new Error('글을 추가하는 중 오류가 발생했습니다.');
+    }
+  };
+
+  const addPost = () => {
+    // 입력 조건 부여
+    const isCheckInputLength = notice.title.length > 2 && notice.contents.length > 10;
+
+    // 조건에 부합한다면
+    if (isCheckInputLength) {
+      const newPostData = JSON.stringify(notice);
+      createPostMutation(newPostData);
+      // 모달 닫기
+      closeModal();
+      resetNoticeData();
+
+      alert("등록되었습니다.");
+
+    } else {
+      alert("제목을 2글자 이상, 본문 내용을 10글자 이상 작성하십시오.");
+    }
+  };
+
+  /**
+ * @description Mutation을 위한 useMutation 훅을 사용하여 새 글 작성을 요청하는 함수입니다.
+ * @param {Object} mutationFn - 새 글 작성을 위한 비동기 함수입니다.
+ * @param {Function} onSuccess - 성공 시 실행할 콜백 함수입니다. 데이터가 전달됩니다.
+ * @param {Function} onError - 실패 시 실행할 콜백 함수입니다. 에러가 전달됩니다.
+ * @example createPostMutation();
+ */
+  const { mutate: createPostMutation } = useMutation({
+    mutationFn: fetchCreatePost,
+    onSuccess: (data) => {
+      // 성공 시 알림창 표시
+      alert(data.message);
+      // 콘솔에 성공 메시지 및 데이터 로깅
+      console.log('게시글이 업데이트 되었습니다.', data);
+      window.location.reload();
+    },
+    onError: (error) => {
+      // 실패 시, 에러 처리를 콘솔에 출력합니다.
+      alert(error.message);
+      console.error('상태를 변경하던 중 오류가 발생했습니다.', error);
+    },
+  });
+
+
+
+
+
   /**
    * 서버에 Posts 조회 요청을 보냅니다.
    * @param currentPage 현재 페이지
@@ -101,65 +168,6 @@ export default function AdminNotice() {
     onSuccess: handleDeleteSuccess,
     onError: handleDeleteError,
   });
-
-  /**
-   * 새 글 생성을 위한 서버 요청
-   * @route : /notice/create 
-   * @body : dataStore의 notice 객체
-   * @return : response.data
-   */
-  const fetchCreatePost = async () => {
-    try {
-      const token = GetCookie('jwt_token');
-      const response = await axios.post("/notice/create",
-        JSON.stringify(
-          notice
-        ),
-        {
-          headers: {
-            "Content-Type": "application/json",
-            'Authorization': `Bearer ${token}`
-          }
-        }
-      )
-      // 성공 시 추가된 상품 정보를 반환합니다.
-      return response.data;
-    } catch (error) {
-      // 실패 시 예외를 throw합니다.
-      throw new Error('상품을 추가하는 중 오류가 발생했습니다.');
-    }
-  }
-  const { createPostMutation } = useMutation({
-    mutationFn: fetchCreatePost,
-    onSuccess: (data) => {
-      // 메세지 표시
-      alert(data.message);
-      console.log('게시글이 업데이트 되었습니다.', data);
-      // 상태를 다시 불러와 갱신합니다.
-      useQueryClient.invalidateQueries(['notice']);
-    },
-    onError: (error) => {
-      // 실패 시, 에러 처리를 수행합니다.
-      console.error('상태를 변경하던 중 오류가 발생했습니다.', error);
-    },
-  })
-  const addPost = () => {
-    // 입력 조건 부여
-    const isCheckInputLength = notice.title.length > 2 && notice.contents.length > 10;
-
-    // 조건에 부합한다면
-    if (isCheckInputLength) {
-      createPostMutation.mutate();
-      // 모달 닫기
-      closeModal();
-      resetNoticeData();
-
-      alert("등록되었습니다.");
-
-    } else {
-      alert("제목을 2글자 이상, 본문 내용을 10글자 이상 작성하십시오.");
-    }
-  };
 
   /**
    * 서버에 업데이트 요청을 보냅니다.
@@ -270,7 +278,7 @@ export default function AdminNotice() {
             matchedData?.map((item, index) => (
               <tr key={index}>
                 {/* 글 고유번호 */}
-                <td>{item.postId}</td>
+                <td>{index + 1}</td>
                 {/* 제목 */}
                 <td onClick={() => {
                   selectedModalOpen('edit');
@@ -279,7 +287,7 @@ export default function AdminNotice() {
                 {/* 작성자 */}
                 <td>{item.post_writer}</td>
                 {/* 날짜 */}
-                <td>{item.post_date}</td>
+                <td>{item.formatted_date}</td>
                 {/* 삭제 */}
                 <td style={{ display: 'flex', justifyContent: 'center' }}>
                   <button className='white_button'

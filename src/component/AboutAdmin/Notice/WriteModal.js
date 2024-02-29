@@ -70,6 +70,20 @@ export default function WriteModal({ addPost }) {
     queryFn: fetchLoginUserData,
   });
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userData = await fetchLoginUserData();
+        setNoticeData('writer', userData.name);
+      } catch (error) {
+        console.error('사용자 정보를 불러오는 중 에러 발생:', error);
+      }
+    };
+
+    fetchUserData(); // 비동기 함수 호출
+  }, []); // 빈 배열을 두어 한 번만 실행되도록 합니다.
+
+  console.log(notice);
   if (isUserLoading) {
     return <p>Loading..</p>;
   }
@@ -110,15 +124,6 @@ export default function WriteModal({ addPost }) {
               className={styles.inputWriter}
               type="text"
               value={loginUserData && loginUserData.name ? loginUserData.name : '사용자 정보 호출 실패'}
-              onChange={() => {
-                if (loginUserData && loginUserData.name.length > 0) {
-                  console.log('사용자 정보 호출 성공');
-                  setNoticeData("writer", loginUserData.name);
-                }
-                else {
-                  console.log('사용자 정보 호출 실패');
-                }
-              }}
               required />
           </div>
           {/* 글 내용 */}
