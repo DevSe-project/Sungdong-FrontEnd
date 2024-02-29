@@ -7,6 +7,13 @@ export function TackBackFilter({handleSearch}){
   const takeBackFilter = useTakeBackFilter();
   const {setTakeBackFilterOption, resetFilterOption, setTakeBackFilterDate} = useTakeBackActions();
 
+  useEffect(() => {
+    return () => {
+      resetFilterOption();
+      window.location.reload();
+    }
+  }, [])
+
   const filterList = [
     { label : '상품검색', content : searchWord()},
     { label : '조회일자', content : DateFilter()},

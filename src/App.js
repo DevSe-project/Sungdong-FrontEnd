@@ -1,7 +1,6 @@
-import { db } from "./firebase"; // 파이어베이스 데이터베이스 임포트
 import './App.css';
 import { useEffect, useState } from 'react';
-import { Routes, Route, useNavigate, useLocation, Outlet } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 
 // Data 객체들 불러오기
 import { Category } from './component/TemplateLayout/AboutHeader/Category';
@@ -31,8 +30,6 @@ import { OrderDetail } from './component/AboutPay/OrderDetail';
 
 // 회사 이벤트 관련
 import { Comeway } from './component/AboutCompany/Comeway';
-import { TodayNews } from './component/AboutCompany/TodayNews';
-import { TodayNewsInner } from './component/AboutCompany/TodayNewsInner';
 import { Event } from './component/AboutCompany/Event'
 import { AdminMain } from './component/AboutAdmin/Main/AdminMain';
 import MyPage from './component/AboutMyPage/MyPage';
@@ -58,9 +55,8 @@ import { MenuData } from './component/TemplateLayout/AboutMenuData/MenuData';
 import { Footer } from './component/TemplateLayout/AboutFooter/Footer';
 
 // State Management (Zustand) Store
-import { useUserData, useDataActions, useListActions, useOrderData, useIsLogin, useSetLogin, useModalActions, useModalState } from "./store/DataStore";
+import { useListActions, useModalState } from "./store/DataStore";
 import { useQuery } from "@tanstack/react-query";
-import { getDocs, collection } from 'firebase/firestore'
 import { AccountBook } from "./component/AboutMyPage/AccountBook/AccountBook";
 import { DepositHistory } from "./component/AboutMyPage/AccountBook/DepositHistory";
 import { EstimateBox } from "./component/AboutEstimate/EstimateBox";
@@ -628,11 +624,11 @@ export default function App() {
             </div>
           </>
         } />
-        {/* 오늘의 뉴스 */}
+        {/* 오늘의 뉴스
         <Route path='/todayTopic/:page' element={
           <>
             {/* 최상단배너 */}
-            <TopBanner
+            {/* <TopBanner
               category_dynamicStyle={category_dynamicStyle}
               menuOnClick={menuOnClick}
               text_dynamicStyle={text_dynamicStyle}
@@ -649,12 +645,12 @@ export default function App() {
                 </footer>
               </div>
             </div>
-          </>
-        } />
-        <Route path='/todayTopicPost/:id' element={
+          </> */}
+        {/* } />}
+        {/* <Route path='/todayTopicPost/:id' element={
           <>
             {/* 최상단배너 */}
-            <TopBanner
+            {/* <TopBanner
               category_dynamicStyle={category_dynamicStyle}
               menuOnClick={menuOnClick}
               text_dynamicStyle={text_dynamicStyle}
@@ -668,9 +664,9 @@ export default function App() {
                   <Footer />
                 </footer>
               </div>
-            </div>
-          </>
-        } />
+            </div> */}
+          {/* </> */}
+        {/* } /> */}
         <Route path='/event' element={
           <>
             {/* 최상단배너 */}
