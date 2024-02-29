@@ -289,6 +289,7 @@ const useModalStore = create((set) => ({
   isModal: false,
   modalName: '',
   selectedIndex: null,
+  modalItem: [],
 
   actions: {
     setIsModal: (bool) => set({ isModal: bool }),
@@ -297,20 +298,21 @@ const useModalStore = create((set) => ({
     closeModal: () => set({ isModal: false }),
     setSelectedIndex: (index) => set({ selectedIndex: index }),
     selectedModalOpen: (name) => set({ isModal: true, modalName: name }),
+    selectedModalOpenInItem: (name, item) => set({ isModal: true, modalName: name, modalItem: item }),
     selectedModalClose: () => set({ isModal: false, modalName: '' }),
   },
 }));
 
 // useModalState 커스텀 훅
 export const useModalState = () => {
-  const { isModal, modalName, selectedIndex } = useModalStore();
-  return { isModal, modalName, selectedIndex };
+  const { isModal, modalName, modalItem, selectedIndex } = useModalStore();
+  return { isModal, modalName, selectedIndex, modalItem };
 };
 
 // useModalActions 커스텀 훅
 export const useModalActions = () => {
-  const { setIsModal, setModalName, setSelectedIndex, openModal, closeModal, selectedModalOpen, selectedModalClose } = useModalStore.getState().actions;
-  return { setIsModal, setModalName, setSelectedIndex, openModal, closeModal, selectedModalOpen, selectedModalClose };
+  const { setIsModal, setModalName, setSelectedIndex, openModal, closeModal, selectedModalOpen, selectedModalClose, selectedModalOpenInItem } = useModalStore.getState().actions;
+  return { setIsModal, setModalName, setSelectedIndex, openModal, closeModal, selectedModalOpen, selectedModalClose, selectedModalOpenInItem };
 };
 
 /* ---------------SELECT SOTRE----------------- */
@@ -523,18 +525,6 @@ export const useEstimateStore = create(
                 return {
                   ...list,
                   product_ts: value,
-                };
-              }
-              return list;
-            }),
-          })),
-        setProfit: (items, value) =>
-          set((state) => ({
-            estimateProductData: state.estimateProductData.map((list) => {
-              if (items.some((item) => item.estimateBox_product_id === list.estimateBox_product_id)) {
-                return {
-                  ...list,
-                  product_profit: value,
                 };
               }
               return list;

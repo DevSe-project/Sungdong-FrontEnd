@@ -6,12 +6,13 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useFetch } from '../../customFn/useFetch';
 import Pagination from '../../customFn/Pagination'
 import axios from '../../axios';
+import DeliveryCancelModal from './DeliveryCancelModal';
 export function Delivery(props) {
 
   const { fetchServer, fetchGetServer } = useFetch();
   const { setDetailData } = useDataActions();
-  const {modalName} = useModalState();
-  const {selectedModalOpen} = useModalActions();
+  const {isModal, modalName} = useModalState();
+  const {selectedModalOpenInItem} = useModalActions();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -145,7 +146,8 @@ export function Delivery(props) {
     }
     //결제 상태가 결제 완료, 배송 준비중 이면 
     else {
-      
+      selectedModalOpenInItem("취소", item);
+      return;
     }
   }
 
@@ -242,6 +244,10 @@ export function Delivery(props) {
         </div>
       }
       <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+      {
+        isModal && modalName === "취소" &&
+        <DeliveryCancelModal/>
+      }
     </div>
   )
 }
