@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useModalActions, useModalState } from '../../../../store/DataStore';
-import styles from './Deli_List.module.css';
+import styles from './DeliList.module.css';
 import axios from '../../../../axios';
 import { GetCookie } from '../../../../customFn/GetCookie';
-import Deli_Filter from '../Filter/Deli_Filter';
-import Deli_StateModal from './Deli_StateModal';
-import Deli_InvoiceModal from './Deli_InvoiceModal';
+import DeliFilter from '../Filter/DeliFilter';
+import DeliStateModal from './DeliStateModal';
+import DeliInvoiceModal from './DeliInvoiceModal';
 import Pagination from '../../../../customFn/Pagination';
 
 
-export default function Deli_List() {
+export default function DeliList() {
 
   // relative modal state
   const { isModal, modalName } = useModalState();
@@ -151,7 +151,7 @@ export default function Deli_List() {
       <div className='LargeHeader'>배송 상태 관리</div>
 
       {/* Filter Container */}
-      <Deli_Filter />
+      <DeliFilter />
 
       {/* Header */}
       <div className='MediumHeader'>
@@ -264,7 +264,7 @@ export default function Deli_List() {
       {
         isModal && modalName === 'DeliveryStateModal'
           ?
-          <Deli_StateModal
+          <DeliStateModal
             checkedItems={checkedItems}
             setCheckedItems={setCheckedItems}
             deliveryData={deliveryData}
@@ -276,7 +276,7 @@ export default function Deli_List() {
       {
         isModal && modalName === 'InvoiceModal'
           ?
-          <Deli_InvoiceModal
+          <DeliInvoiceModal
             checkedItems={checkedItems}
             setCheckedItems={setCheckedItems}
             parseDeliveryState={parseDeliveryState}

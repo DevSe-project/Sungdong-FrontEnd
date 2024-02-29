@@ -1,3 +1,5 @@
+import styles from './CMSFilter.module.css';
+
 export default function CMSFilter({ handleFilter }) {
 
 

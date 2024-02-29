@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import styles from './TotalCal_Manage.module.css';
-import { AdminHeader } from '../../../Layout/Header/AdminHeader';
-import { AdminMenuData } from '../../../Layout/SideBar/AdminMenuData';
+import styles from './TotalCalManage.module.css';
 
-const TotalCal_Manage = () => {
+const TotalCalManage = () => {
   // 임시 총 주문 데이터 30개
   const transactionData = [
     { id: 1, name: '회원1', date: '2023-01-01', description: '상품 구매', amount: 100000, status: '완료' },
@@ -130,4 +128,4 @@ const TotalCal_Manage = () => {
   );
 };
 
-export default TotalCal_Manage;
+export default TotalCalManage;

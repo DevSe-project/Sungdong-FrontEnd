@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useModalActions } from '../../../../store/DataStore';
-import styles from './Deli_Modal.module.css';
+import styles from './DeliModal.module.css';
 import { GetCookie } from '../../../../customFn/GetCookie';
 import axios from '../../../../axios';
 
-export default function Deli_InvoiceModal(props) {
+export default function DeliInvoiceModal(props) {
     const { selectedModalClose } = useModalActions();
     const [fetchedData, setFetchedData] = useState([]);
 

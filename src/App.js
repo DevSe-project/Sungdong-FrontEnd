@@ -45,9 +45,9 @@ import { AdminNotSoldList } from './component/AboutAdmin/Sold/AdminNotSoldList';
 import { AdminRefund } from './component/AboutAdmin/Refund/AdminRefund';
 import AdminUserList from './component/AboutAdmin/Users/AdminUserList';
 import AdminNotice from './component/AboutAdmin/Notice/AdminNotice';
-import Deli_List from "./component/AboutAdmin/SD_Delivery/List/Deli_List";
-import TotalCal_Manage from "./component/AboutAdmin/SD_Account/TOTAL/Manage/TotalCal_Manage";
-import CMSaccount_Manage from "./component/AboutAdmin/SD_Account/CMS/Manage/CMSaccount_Manage";
+import DeliList from "./component/AboutAdmin/SD_Delivery/List/DeliList";
+import TotalCalManage from "./component/AboutAdmin/SD_Account/TOTAL/Manage/TotalCalManage";
+import CMSaccountManage from "./component/AboutAdmin/SD_Account/CMS/Manage/CMSaccountManage";
 
 // 템플릿 컴포넌트
 import { TopBanner } from './component/TemplateLayout/AboutHeader/TopBanner';
@@ -628,7 +628,7 @@ export default function App() {
         <Route path='/todayTopic/:page' element={
           <>
             {/* 최상단배너 */}
-            {/* <TopBanner
+        {/* <TopBanner
               category_dynamicStyle={category_dynamicStyle}
               menuOnClick={menuOnClick}
               text_dynamicStyle={text_dynamicStyle}
@@ -650,7 +650,7 @@ export default function App() {
         {/* <Route path='/todayTopicPost/:id' element={
           <>
             {/* 최상단배너 */}
-            {/* <TopBanner
+        {/* <TopBanner
               category_dynamicStyle={category_dynamicStyle}
               menuOnClick={menuOnClick}
               text_dynamicStyle={text_dynamicStyle}
@@ -665,7 +665,7 @@ export default function App() {
                 </footer>
               </div>
             </div> */}
-          {/* </> */}
+        {/* </> */}
         {/* } /> */}
         <Route path='/event' element={
           <>
@@ -711,12 +711,12 @@ export default function App() {
           <Route path='refund' element={<AdminRefund />} />
 
           {/* 배송관리 - 배송 상태 관리 */}
-          <Route path='SD_delivery/Delivery' element={<Deli_List />} />
+          <Route path='SD_delivery/Delivery' element={<DeliList />} />
 
           {/* 정산관리 - 누적정산 */}
-          <Route path='SD_account/total' element={<TotalCal_Manage />} />
+          <Route path='SD_account/total' element={<TotalCalManage />} />
           {/* 정산관리 - CMS정산 */}
-          <Route path='SD_account/cms' element={<CMSaccount_Manage />} />
+          <Route path='SD_account/cms' element={<CMSaccountManage />} />
 
           {/* 고객센터 - 공지사항 */}
           <Route path='customerCenter/notice' element={<AdminNotice />} />

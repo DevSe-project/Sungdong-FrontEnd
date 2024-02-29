@@ -1,9 +1,9 @@
 import { useDeliveryFilter } from '../../../../store/DataStore';
-import styles from './Deli_Filter.module.css';
+import styles from './DeliFilter.module.css';
 import { useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 
-export default function Deli_Filter() {
+export default function DeliFilter() {
     const queryClient = useQueryClient();
     // 쭈~스텐드
     const { checkboxState, date, resetDeliveryFilter, updateCheckboxState, allUpdateCheckboxState, startDate, endDate, setDateRange, filterDate } = useDeliveryFilter();
