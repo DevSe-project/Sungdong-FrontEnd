@@ -1,10 +1,18 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './Filter.module.css'
 import { useTakeBackActions, useTakeBackFilter } from '../../store/DataStore';
 
 export function TakeBackListFilter({handleSearch}){
   const takeBackFilter = useTakeBackFilter();
   const {setTakeBackFilterOption, resetFilterOption, setTakeBackFilterDate} = useTakeBackActions();
+
+  useEffect(() => {
+    return () => {
+      resetFilterOption();
+      window.location.reload();
+    }
+  }, [])
+
   const filterList = [
     { label : '구분', content : raeOption()},
     { label : '상품검색', content : searchWord()},

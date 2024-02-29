@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import styles from './Delivery.module.css'
 import { useEffect, useState } from 'react';
-import { useDataActions } from '../../store/DataStore';
+import { useDataActions, useModalActions, useModalState } from '../../store/DataStore';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useFetch } from '../../customFn/useFetch';
 import Pagination from '../../customFn/Pagination'
@@ -10,6 +10,8 @@ export function Delivery(props) {
 
   const { fetchServer, fetchGetServer } = useFetch();
   const { setDetailData } = useDataActions();
+  const {modalName} = useModalState();
+  const {selectedModalOpen} = useModalActions();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -123,6 +125,7 @@ export function Delivery(props) {
     const { mutate: deleteProductMutation } = useMutation({ mutationFn: fetchDeletedProducts })
 
   function handleCancelOrder(item){
+    //결제 상태가 미결제 상태면
     if(item.orderState === 0){
       const isConfirmed = window.confirm('정말로 주문을 취소하시겠습니까?');
       if (isConfirmed) {
@@ -140,9 +143,9 @@ export function Delivery(props) {
         });
       }
     }
+    //결제 상태가 결제 완료, 배송 준비중 이면 
     else {
-
-
+      
     }
   }
 
@@ -202,15 +205,19 @@ export function Delivery(props) {
                 <div className={styles.itemTitle} style={{color: '#CC0000', marginTop: '1em'}}>총 주문액 : {parseInt(item.order_payAmount).toLocaleString()}원</div>
               </div>
               <div className={styles.deliveryMenu}>
+                {item.orderState < 5 &&
                 <button
                   onClick={() => {
                     handleDeliveryAPI(item, item.delivery_num && item.delivery_num)
                   }}
                   className={styles.button}>배송 조회</button>
-                {item.orderState < 4
+                }
+                {item.orderState < 3
                   ?
                   <button className={styles.button} onClick={()=> handleCancelOrder(item)}>주문 취소</button>
                   :
+                  item.orderState === 4 
+                  &&
                   <button
                     onClick={() => navigate("/return/request")}
                     className={styles.button}
