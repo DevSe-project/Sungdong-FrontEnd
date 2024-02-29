@@ -615,14 +615,16 @@ export const useEstimateActions = () => useEstimateStore((state) => state.action
 /* ----------------TAKEBACK STORE---------------- */
 export const useTakeBackStore = create((set) => ({
   filterOption: {
-    raeOption: '반품',
+    raeOption: '',
     product_title: '',
     product_brand: '',
     product_id: '',
+    raeDateType: '',
     date: {
       start: '',
       end: ''
-    }
+    },
+    raeState: ''
   },
   takeBackOption: [],
   actions: {
@@ -667,14 +669,18 @@ export const useTakeBackStore = create((set) => ({
           }),
         })),
     resetFilterOption: () =>
-      set({filterOption: {
+      set({ 
+      filterOption: {
+        raeOption: '반품',
         product_title: '',
         product_brand: '',
         product_id: '',
+        raeDateType: '',
         date: {
           start: '',
           end: ''
-        }
+        },
+        raeState: ''
       }}),
     resetTakeBackOption: () =>
       set({ takeBackOption: { returnStatus: "", barcodeStatus: "", wrapStatus: "", productStatus: "" } }),

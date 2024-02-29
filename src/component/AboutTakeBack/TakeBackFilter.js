@@ -16,13 +16,19 @@ export function TackBackFilter({handleSearch}){
     return (
       <div style={{ display: 'flex', gap: '1em' }}>
         <div className={styles.searchFilterList}>
-          <input className={styles.input} type='text' placeholder='상품명을 입력해주세요' value={takeBackFilter.product_title} onChange={(e) => setTakeBackFilterOption('product_title', e.target.value)} />
+          <input className={styles.input} type='text' placeholder='상품명' value={takeBackFilter.product_title} onChange={(e) => setTakeBackFilterOption('product_title', e.target.value)} />
         </div>
         <div className={styles.searchFilterList}>
-          <input className={styles.input} type='text' placeholder='브랜드명을 입력해주세요' value={takeBackFilter.product_brand} onChange={(e) => setTakeBackFilterOption('product_brand', e.target.value)} />
+          <input className={styles.input} type='text' placeholder='브랜드명' value={takeBackFilter.product_brand} onChange={(e) => setTakeBackFilterOption('product_brand', e.target.value)} />
         </div>
         <div className={styles.searchFilterList}>
-          <input className={styles.input} type='text' placeholder='상품번호를 입력해주세요' value={takeBackFilter.product_id} onChange={(e) => setTakeBackFilterOption('product_id', e.target.value)} />
+          <input className={styles.input} type='text' placeholder='상품번호' value={takeBackFilter.product_id} onChange={(e) => setTakeBackFilterOption('product_id', e.target.value)} />
+        </div>
+        <div className={styles.searchFilterList}>
+          <input className={styles.input} type='text' placeholder='규격' value={takeBackFilter.product_spec} onChange={(e) => setTakeBackFilterOption('product_spec', e.target.value)} />
+        </div>
+        <div className={styles.searchFilterList}>
+          <input className={styles.input} type='text' placeholder='모델명' value={takeBackFilter.product_model} onChange={(e) => setTakeBackFilterOption('product_model', e.target.value)} />
         </div>
       </div>
     )
