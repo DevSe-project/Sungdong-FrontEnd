@@ -65,7 +65,7 @@ export default function AdminNotice() {
   */
   const fetchDeletePost = async (postId) => {
     try {
-      const response = await axios.delete(`/auth/userDelete/${postId}`,)
+      const response = await axios.delete(`/notice/delete/${postId}`,)
       return response.data;
     } catch (error) {
       throw error;
@@ -283,7 +283,7 @@ export default function AdminNotice() {
                 {/* 삭제 */}
                 <td style={{ display: 'flex', justifyContent: 'center' }}>
                   <button className='white_button'
-                    onClick={() => handleDelete(item.id)}>
+                    onClick={() => handleDelete(item.postId)}>
                     삭제
                   </button>
                 </td>
