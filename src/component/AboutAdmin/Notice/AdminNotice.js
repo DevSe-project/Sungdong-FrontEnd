@@ -6,7 +6,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import WriteModal from "./WriteModal";
 import axios from '../../../axios';
 import { GetCookie } from "../../../customFn/GetCookie";
-import { useFetch } from "../../../customFn/useFetch";
 
 export default function AdminNotice() {
   const { isModal, modalName } = useModalState();
@@ -18,7 +17,6 @@ export default function AdminNotice() {
   const { addNoticeData, resetNoticeData } = useNoticeActions();
   const notice = useNotice();
   const queryClient = useQueryClient();
-  const { fetchGetServer } = useFetch();
 
   /**
    * 서버에 Posts 조회 요청을 보냅니다.
@@ -106,9 +104,9 @@ export default function AdminNotice() {
 
   /**
    * 새 글 생성을 위한 서버 요청
-   * route : /notice/create 
-   * body : dataStore의 notice 객체
-   * return : response.data
+   * @route : /notice/create 
+   * @body : dataStore의 notice 객체
+   * @return : response.data
    */
   const fetchCreatePost = async () => {
     try {
@@ -163,6 +161,15 @@ export default function AdminNotice() {
     }
   };
 
+  /**
+   * 서버에 업데이트 요청을 보냅니다.
+   * fetchNonPageServer를 사용하여 리팩토링해야 할 소요 있음.
+   * @param postId
+   * @param title
+   * @param writer
+   * @param contents
+   * @returns 업데이트된 객체
+   */
   const fetchUpdatePost = async () => {
     try {
       const token = GetCookie('jwt_token');
@@ -199,7 +206,11 @@ export default function AdminNotice() {
     },
   })
 
-  const handleConfirmSD = () => {
+  /**
+   * - 입력조건: 제목 2글자 이상, 내용 10글자 이상
+   * - 포스팅 내용: postId, title, writer, contents
+   */
+  const postingHandler = () => {
     const isCheckInputLength = notice.title.length > 2 && notice.contents.length > 10;
 
     if (isCheckInputLength) {
@@ -277,8 +288,9 @@ export default function AdminNotice() {
                   </button>
                 </td>
                 {/* 수정 모달 */}
+                {/* item을 보내고 EditModal측에서 fetch요청을 통해 item.postId와 동일한 post의 정보를 불러들이도록 */}
                 {isModal && modalName === 'edit' &&
-                  <EditModal handleConfirmSD={handleConfirmSD} />}
+                  <EditModal postingHandler={postingHandler} item={item} />}
               </tr>
             ))
           }
