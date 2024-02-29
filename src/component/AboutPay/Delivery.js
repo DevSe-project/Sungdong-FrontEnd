@@ -7,15 +7,12 @@ import { useFetch } from '../../customFn/useFetch';
 import Pagination from '../../customFn/Pagination'
 import axios from '../../axios';
 import DeliveryCancelModal from './DeliveryCancelModal';
-export function Delivery(props) {
+export function Delivery({currentPage, setCurrentPage, totalPages, setTotalPages, resultSearch, resultLength}) {
 
   const { fetchServer, fetchGetServer } = useFetch();
   const { setDetailData } = useDataActions();
   const {isModal, modalName} = useModalState();
   const {selectedModalOpenInItem} = useModalActions();
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
 
   const queryClient = useQueryClient();
 
@@ -160,11 +157,11 @@ export function Delivery(props) {
 
   return (
     <div className={styles.container}>
-      {props.resultSearch &&
+      {resultSearch &&
         <h3 style={{ margin: '1em' }}>
-          "{props.resultSearch}" 에 대해
-          {/* <span style={{color: '#CC0000', fontWeight: '650', margin: '0.5em'}}>{filteredItems.length}건</span>
-      이 검색 되었습니다. */}
+          "{resultSearch}" 에 대해
+          <span style={{color: '#CC0000', fontWeight: '650', margin: '0.5em'}}>{resultLength}건</span>
+      이 검색 되었습니다.
         </h3>}
       {order ?
         order.map((item, key) =>
@@ -185,8 +182,8 @@ export function Delivery(props) {
                         : item.orderState === 2 ? '배송 준비중'
                           : item.orderState === 3 ? '배송 중'
                             : item.orderState === 4 ? '배송 완료'
-                              : item.orderState === 5 ? '취소'
-                                : item.orderState === 6 ? '취소요청'
+                              : item.orderState === 5 ? '주문 취소'
+                                : item.orderState === 6 ? '주문 취소요청'
                                   : '누락된 상품(고객센터 문의)'}
                     <p>배송 : {item.deliveryType}{item.delivery_selectedCor && item.delivery_selectedCor === "kr.daesin" ? `( 대신 화물 )` : item.delivery_selectedCor === "kr.kdexp" ? `(경동 화물)` : item.deliveryType === "일반택배" && `( CJ대한통운 )`}</p>
                     <p style={{ color: 'orangered', fontWeight: '550' }}>{item.delivery_date && `🚚 배송 예정 : ${new Date(item.delivery_date).toLocaleDateString()}`}</p>
