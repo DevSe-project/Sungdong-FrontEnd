@@ -102,7 +102,8 @@ export default function AdminCancelModal() {
                   {
                   item.value.orderState === 0 ? "미결제" :
                   item.value.orderState === 1 ? "신규주문" :
-                  item.value.orderState === 2 && "발송완료" }
+                  item.value.orderState === 2 ? "발송완료" :
+                  item.value.orderState === 6 && "취소요청"}
                 </td>
                 <td>
                 <h5 style={{fontSize: '1.1em', fontWeight: '550'}}>
@@ -121,7 +122,7 @@ export default function AdminCancelModal() {
                 <td>
                   {item.value.order_tel}
                 </td>
-                <td><input type='text' value={item.value.cancelReason} onChange={(e)=>setSelectListValue(item, "cancelReason", e.target.value)}/></td>
+                <td><input className={styles.miniInput} type='text' value={item.value.cancelReason} onChange={(e)=>setSelectListValue(item, "cancelReason", e.target.value)}/></td>
               </tr>
             ))}
             </tbody>

@@ -139,7 +139,7 @@ export function AdminNotSoldList(props) {
                 <th>주문번호</th>
                 <th>배송사</th>
                 <th>주문상태</th>
-                <th>주문상품</th>
+                <th colSpan={2}>주문상품</th>
                 <th>주문일자</th>
                 <th>주문가</th>
                 <th>주문자 정보</th>
@@ -150,7 +150,12 @@ export function AdminNotSoldList(props) {
                 ? ordered.map((item, index) => (
                   <React.Fragment key={index}>
                     <tr className={styles.list}>
-                      <td><input type="checkbox" name="list" checked={selectList.some((filter) => filter.order_id === item.order_id)} onChange={() => toggleSelectList(item.order_id, item)} /></td>
+                      {item.orderState === 5 
+                    ?
+                      <td><input type='checkbox' name='list' disabled/></td>
+                    :
+                      <td><input type="checkbox" name="list" checked={selectList.some((filter) => filter.order_id === item.order_id)} onChange={() => toggleSelectList(item.order_id, item)}/></td>
+                    }
                       <td>
                         {item.order_id}
                       </td>
@@ -172,9 +177,9 @@ export function AdminNotSoldList(props) {
                               : '직접 픽업'}
                       </td>
                       <td>
-                        {(item.orderState === 0 && "결제 미 완료") || (item.orderState === 5 && "취소")}
+                        {(item.orderState === 0 && "결제 미 완료") || (item.orderState === 6 && "취소 요청") ||(item.orderState === 5 && "취소")}
                       </td>
-                      <td onClick={() => {
+                      <td colSpan={2} onClick={() => {
                         if (selectedData?.some((selectItem) => selectItem.order_id === item.order_id)) {
                           setSelectedData(null);
                         } else
@@ -199,7 +204,7 @@ export function AdminNotSoldList(props) {
                     {/* 아이템 모달 */}
                     {selectedData?.some((selectItem) => selectItem.order_id === item.order_id) && (
                       <tr>
-                        <td colSpan="8">
+                        <td colSpan="9">
                           <table className={styles.colTable}>
                             <thead style={{ backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.6)' }}>
                               <tr>
@@ -212,22 +217,22 @@ export function AdminNotSoldList(props) {
                                 <th>
                                   상품코드
                                 </th>
-                                <th style={{ width: '25%' }}>
+                                <th>
                                   브랜드
                                 </th>
-                                <th style={{ width: '10%' }}>
+                                <th>
                                   선택 옵션
                                 </th>
-                                <th style={{ width: '20%' }}>
+                                <th>
                                   재고
                                 </th>
-                                <th style={{ width: '20%' }}>
+                                <th>
                                   공급가
                                 </th>
-                                <th style={{ width: '20%' }}>
+                                <th>
                                   주문량
                                 </th>
-                                <th style={{ width: '10%', fontWeight: '650' }}>
+                                <th>
                                   주문가
                                 </th>
                               </tr>
