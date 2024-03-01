@@ -205,7 +205,7 @@ export default function DeliList() {
             <th>처리상태</th>
             <th>주문일자</th>
             <th>상품코드</th>
-            <th>상품명</th>
+            <th colSpan={2}>상품명</th>
             <th>옵션명</th>
             <th>표준가</th>
             <th>주문량</th>
@@ -235,7 +235,7 @@ export default function DeliList() {
                 {/* 상품번호 */}
                 <td>{item.product_id}</td>
                 {/* 상품명 */}
-                <td>{item.product_title}</td>
+                <td colSpan={2}>{item.product_title}</td>
                 {/* 옵션 상세 - 선택 옵션이 있을 경우만 표시*/}
                 <td>{item.optionSelected ? item.optionSelected : "-"}</td>
                 {/* 표준가 */}
