@@ -142,7 +142,7 @@ async function submitEstimate(info) {
               <td>{index + 1}</td>
               <td>{item.estimate_id}</td>
               <td>{new Date(item.estimate_date).toLocaleString()}</td>
-              <td>{`${JSON.parse('[' + item.products + ']')[0]?.product_title} 외 ${JSON.parse('['+item.products+']').length-1}건`}</td>
+              <td>{`${JSON.parse('[' + item.products + ']')[0]?.product_title} ${JSON.parse('['+item.products+']').length-1 !== 0 ? `외 ${JSON.parse('['+item.products+']').length-1}건` : ""}`}</td>
               <td>{item.estimate_supplier_managerName}</td>
               <td>{item.estimate_vendor_managerName}</td>
               <td>{item.estimate_amount && parseInt(item.estimate_amount).toLocaleString('ko-KR',{ style: 'currency', currency: 'KRW' })}</td>
