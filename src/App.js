@@ -69,6 +69,7 @@ import { OrderStep } from "./component/AboutPay/OrderStep";
 import { EstimateWrite } from "./component/AboutEstimate/EstimateWrite";
 import EstimatePrint from "./component/AboutEstimate/EstimatePrint";
 import { useFetch } from "./customFn/useFetch";
+import { AdminSearch } from './component/AboutAdmin/Search/AdminSearch';
 
 
 export default function App() {
@@ -709,6 +710,8 @@ export default function App() {
           <Route path='yetPay' element={<AdminNotSoldList />} />
           {/* 주문관리 - 반품 관리 */}
           <Route path='refund' element={<AdminRefund />} />
+          {/* 주문검색 - 검색결과 */}
+          <Route path='search' element={<AdminSearch />} />
 
           {/* 배송관리 - 배송 상태 관리 */}
           <Route path='SD_delivery/Delivery' element={<DeliList />} />

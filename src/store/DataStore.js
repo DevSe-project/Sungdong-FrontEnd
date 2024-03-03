@@ -1250,3 +1250,36 @@ export const useUserFilterStore = create((set) => ({
 export const useUserFilter = () => useUserFilterStore((state) => state.userFilter);
 export const useUserSort = () => useUserFilterStore((state) => state.userSort);
 export const useUserFilterActions = () => useUserFilterStore((state) => state.actions);
+
+/* ----------------ADMIN SEARCH STORE---------------- */
+
+export const useAdminSearchStore = create(
+  persist(
+    (set) => ({
+      filterData: [],
+      searchTerm: {
+        searchFilter: "uc.cor_corName",
+        search: ""
+      },
+      actions: {
+        setFilterData: (val) =>
+          set((prev) => ({
+            filterData: val
+          })),
+        setSearchTerm: (fieldName, value) =>
+          set((state) => ({ searchTerm: { ...state.searchTerm, [fieldName]: value } })),
+        resetSearchTerm: () =>
+          set({ searchTerm: { search: "" } }),
+      }
+    }),
+    {
+      name: 'adminSearchTerm',
+      storage: createJSONStorage(() => sessionStorage),
+      version: 1,
+      partialize: (state) => ({ searchTerm: state.searchTerm, filterData: state.filterData }),
+    }
+  )
+);
+export const useAdminSearchFilterData = () => useAdminSearchStore((state) => state.filterData);
+export const useAdminSearchTerm = () => useAdminSearchStore((state) => state.searchTerm);
+export const useAdminSearchActions = () => useAdminSearchStore((state) => state.actions);

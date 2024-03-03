@@ -2,10 +2,11 @@ import styles from './AdminSoldList.module.css';
 import { useState } from 'react';
 import React from 'react';
 import { AdminSoldFilter } from './AdminSoldFilter';
-import AdminSoldModal from './AdminSoldModal';
 import { useModalActions, useModalState, useOrderFilter, useOrderSelectList, useOrderSelectListActions } from '../../../store/DataStore';
 import AdminDelNumModal from './AdminDelNumModal';
 import AdminCancelModal from './AdminCancelModal';
+import AdminSoldModal from './AdminSoldModal';
+
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useFetch } from '../../../customFn/useFetch';
 import Pagination from '../../../customFn/Pagination';
