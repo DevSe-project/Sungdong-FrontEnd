@@ -1,19 +1,23 @@
 import { useEffect, useRef, useState } from 'react';
 import { EstimateFilter } from './EstimateFilter';
 import styles from './Table.module.css';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { GetCookie } from '../../customFn/GetCookie';
 import { useFetch } from '../../customFn/useFetch';
 import { useEstimateActions, useEstimateInfo, useEstimateProduct } from '../../store/DataStore';
 import { useReactToPrint } from 'react-to-print';
 import EstimatePrint from './EstimatePrint';
 import axios from '../../axios';
+import Pagination from '../../customFn/Pagination';
 
 export function EstimateManager(){
   const estimateInfo = useEstimateInfo();
   const estimateProduct = useEstimateProduct();
   const { fetchServer,fetchGetServer,handleNoAlertOtherErrors, handleForbiddenError, handleOtherErrors } = useFetch();
   const { resetEstimateProduct, resetEstimateInfo, setEstimateInfo, setEstimateProduct } = useEstimateActions();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     return () => {
@@ -68,20 +72,17 @@ export function EstimateManager(){
   }
 
   const { isLoading, isError, error, data:estimateListData } = useQuery({queryKey:['estimateManager'], queryFn: ()=> fetchData()});
-  // 게시물 데이터와 페이지 번호 상태 관리    
-  const [currentPage, setCurrentPage] = useState(1);
 
   const ref = useRef();
   const handlePrint = useReactToPrint({
     content: () => ref.current,
   });
 
-
   useEffect(() => {
     if (estimateProduct.length > 0 && estimateInfo) {
       handlePrint();
     }
-  }, [estimateInfo, estimateProduct]);
+  }, [estimateInfo, estimateProduct, handlePrint]);
 
   //견적 프린트 함수
   const addToEstimate = async (info) => {
@@ -104,6 +105,34 @@ async function submitEstimate(info) {
           },
         });
   }
+
+    //-------------------------페이지 설정------------------------------
+
+  // 페이지를 변경할 때 호출되는 함수
+  const fetchPageChange = async (pageNumber) => {
+    return await fetchServer({}, 'post', '/estimate/manager', pageNumber);
+  };
+
+
+  const { mutate: pageMutaion } = useMutation({ mutationFn: fetchPageChange })
+
+
+  function handlePageChange(pageNumber) {
+    pageMutaion(pageNumber, {
+      onSuccess: (data) => {
+        setCurrentPage(data.data.currentPage);
+        setTotalPages(data.data.totalPages);
+        queryClient.setQueryData(['estimateManager'], () => {
+          return data.data.data;
+        })
+      },
+      onError: (error) => {
+        return console.error(error.message);
+      },
+    })
+  }
+
+  //--------------------------------------------------------------------
 
 
   if (isLoading) {
@@ -153,6 +182,8 @@ async function submitEstimate(info) {
         </table>
       </div>
     </div>
+    <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+
     <div style={{display: 'none'}}>
       <EstimatePrint ref={ref}  manager_tel={userData?.tel}/>
     </div>

@@ -88,17 +88,6 @@ export function Basket(props) {
     })
   }
 
-  //처음 마운트 될때 페이지 설정.
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await fetchGetServer('/cart/list', 1);
-      setCurrentPage(data.currentPage);
-      setTotalPages(data.totalPages);
-    };
-
-    fetchData();
-  }, [])
-
   //----------------------체크박스------------------------
   // 전체 선택 체크박스 클릭 시 호출되는 함수
   function handleSelectAllChange() {

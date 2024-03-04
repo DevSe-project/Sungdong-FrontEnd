@@ -6,29 +6,24 @@ import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { useDataActions, useEstimateActions, useEstimateList, useListActions } from '../../store/DataStore';
 import { useFetch } from '../../customFn/useFetch';
+import Pagination from '../../customFn/Pagination';
 export function EstimateBox() {
   const [selectedItems, setSelectedItems] = useState([]);
   const estimateList = useEstimateList();
   const {setProductData} = useEstimateActions();
   const { setEstimateList, resetEstimateList, setEstimateCnt, setEstimateCntUp, setEstimateCntDown } = useListActions();
   const queryClient = useQueryClient();
-  const { fetchServer } = useFetch();
+  const { fetchServer, fetchGetServer } = useFetch();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
   //fetch
   const fetchData = async () => {
-    try {
-      const token = GetCookie('jwt_token');
-      const response = await axios.get("/estimate/list",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            'Authorization': `Bearer ${token}`,
-          }
-        }
-      )
-      return response.data.data;
-    } catch (error) {
-      throw new Error('원장 내역을 불러오던 중 오류가 발생했습니다.');
-    }
+    const data = await fetchGetServer(`/estimate/list`, 1);
+    setCurrentPage(data.currentPage);
+    setTotalPages(data.totalPages);
+    console.log(data)
+    return data.data;
   }
 
   const { isLoading, isError, error, data: estiData } = useQuery({ queryKey: ['estimateBox'], queryFn: () => fetchData() });
@@ -39,12 +34,40 @@ export function EstimateBox() {
     function fetchData() {
       if ((estiData && estimateList.length === 0) || (estiData && estiData.data.map(item => estimateList.length > 0 && estimateList.map(list => item !== list)))) {
         resetEstimateList();
-        setEstimateList(estiData.data);
+        setEstimateList(estiData);
       }
     };
 
     fetchData();
   }, [estiData])
+
+  //-------------------------페이지 설정------------------------------
+
+  // 페이지를 변경할 때 호출되는 함수
+  const fetchPageChange = async (pageNumber) => {
+    return await fetchServer({}, 'post', '/estimate/list', pageNumber);
+  };
+
+
+  const { mutate: pageMutaion } = useMutation({ mutationFn: fetchPageChange })
+
+
+  function handlePageChange(pageNumber) {
+    pageMutaion(pageNumber, {
+      onSuccess: (data) => {
+        setCurrentPage(data.data.currentPage);
+        setTotalPages(data.data.totalPages);
+        queryClient.setQueryData(['estimateBox'], () => {
+          return data.data.data;
+        })
+      },
+      onError: (error) => {
+        return console.error(error.message);
+      },
+    })
+  }
+
+  //--------------------------------------------------------------------
 
   const navigate = useNavigate();
 
@@ -206,7 +229,6 @@ export function EstimateBox() {
     }
   };
 
-
   if (isLoading) {
     return <p>Loading..</p>;
   }
@@ -349,6 +371,8 @@ export function EstimateBox() {
           </tfoot>
         </table>
       </div>
+      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+
       <div className={styles.buttonContainer}>
         <button className={styles.pageButton} onClick={() => handleEstimateWrite()}>견적 작성하기</button>
         <button className={styles.pageButton} onClick={() => deletedList()}>삭제</button>

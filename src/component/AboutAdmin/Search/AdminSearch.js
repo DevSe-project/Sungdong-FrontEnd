@@ -38,9 +38,6 @@ export function AdminSearch() {
 
   const { isLoading, isError, error, data: ordered } = useQuery({ queryKey: ['adminSearch', currentPage, itemsPerPage], queryFn: () => fetchSearchData() });
 
-  //-------------------------페이지 설정------------------------------
-
-
   useEffect(() => {
     return () => {
       // 컴포넌트가 언마운트될 때 검색창 상태 리셋
@@ -49,6 +46,9 @@ export function AdminSearch() {
       resetSelectList();
     };
   }, []);
+
+
+  //-------------------------페이지 설정------------------------------
 
   // 페이지를 변경할 때 호출되는 함수
   const fetchPageChange = async (pageNumber) => {
