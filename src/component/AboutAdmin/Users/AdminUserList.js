@@ -427,25 +427,28 @@ export default function AdminUserList() {
             {/* 메뉴 아이콘 */}
             <th style={{ width: '20px' }}>
               {editIndex === 'allEdit' ?
-                <div className="dropdown-menu"> {/* 아이콘 */}
+                <div className={styles.RnD_handler}> {/* 아이콘 */}
                   {/* 수정 버튼 */}
-                  <button className='white_button' onClick={() => { handleBulkEdit(); window.location.reload(); }}>수정</button>
+                  <button className='white_round_button' onClick={() => { handleBulkEdit(); window.location.reload(); }}>수정</button>
                   {/* 삭제 버튼 */}
-                  <button className='white_button' onClick={() => handleDelete(checkedItems)}>삭제</button>
+                  <button className='white_round_button' onClick={() => handleDelete(checkedItems)}>삭제</button>
                   {/* 취소 버튼 */}
-                  <button className='white_button' onClick={() => {
+                  <button className='white_round_button' onClick={() => {
                     setEditIndex('none');
                     setCheckedItems([]);
                   }}>취소</button>
                 </div>
                 :
-                <div className='icon' onClick={() => {
-                  if (checkedItems.length) {
-                    setEditIndex('allEdit');
-                  } else {
-                    alert('선택된 고객이 없습니다.');
-                  }
-                }}><i className="fa-solid fa-ellipsis"></i></div>
+                <div
+                  className='icon'
+                  style={{ paddingRight: '1em' }}
+                  onClick={() => {
+                    if (checkedItems.length) {
+                      setEditIndex('allEdit');
+                    } else {
+                      alert('선택된 고객이 없습니다.');
+                    }
+                  }}><i className="fa-solid fa-ellipsis"></i></div>
               }
             </th>
           </tr>
@@ -508,18 +511,21 @@ export default function AdminUserList() {
               {/* 연락처 */}
               <td>{user.cor_tel}</td>
               {/* 수정/삭제 드롭다운 메뉴 */}
-              <td style={{ width: '20px' }}>
+              <td>
                 {index === editIndex ? (
-                  <div className="dropdown-menu">
+                  <div className={styles.RnD_handler}>
                     {/* 수정 버튼 */}
-                    <button className='white_button' onClick={() => { handleEdit(user); console.log(user); }}>수정</button>
+                    <button className='white_round_button' onClick={() => { handleEdit(user); console.log(user); }}>수정</button>
                     {/* 삭제 버튼 */}
-                    <button className='white_button' onClick={() => handleDelete(user.users_id)}>삭제</button>
+                    <button className='white_round_button' onClick={() => handleDelete(user.users_id)}>삭제</button>
                     {/* 취소 버튼 */}
-                    <button className='white_button' onClick={() => initializingData()}>취소</button>
+                    <button className='white_round_button' onClick={() => initializingData()}>취소</button>
                   </div>
                 ) : (
-                  <div className='ellipsis' onClick={() => { handleToggleEdit(index); setCheckedItems([]); }}><i className="fa-solid fa-ellipsis"></i></div>
+                  <div
+                    className='ellipsis'
+                    style={{ paddingRight: '1em' }}
+                    onClick={() => { handleToggleEdit(index); setCheckedItems([]); }}><i className="fa-solid fa-ellipsis"></i></div>
                 )}
               </td>
             </tr>
