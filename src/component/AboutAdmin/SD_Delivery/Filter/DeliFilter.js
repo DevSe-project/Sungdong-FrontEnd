@@ -6,17 +6,17 @@ import axios from 'axios';
 export default function DeliFilter() {
     const queryClient = useQueryClient();
     // 쭈~스텐드
-    const { checkboxState, date, resetDeliveryFilter, updateCheckboxState, allUpdateCheckboxState, startDate, endDate, setDateRange, filterDate } = useDeliveryFilter();
+    const { deliveryFilter, resetDeliveryFilter, updateCheckboxState, allUpdateCheckboxState, startDate, endDate, setDateRange, filterDate } = useDeliveryFilter();
 
     // 검색 함수
     const search = () => {
         // 체크박스 중 선택된 상태를 filter
-        const selectedStatus = Object.keys(checkboxState).filter((key) => checkboxState[key]);
+        const selectedStatus = Object.keys(deliveryFilter.checkboxState).filter((key) => deliveryFilter.checkboxState[key]);
         // 요청할 데이터 조각모음 ㅋㅋㅎ
         const requestData = {
             statuses: selectedStatus,
-            startDate: date.startDate,
-            endDate: date.endDate,
+            startDate: deliveryFilter.date.startDate,
+            endDate: deliveryFilter.date.endDate,
         };
 
         // 'filteredData' 쿼리를 무효화하고 새로운 데이터를 fetching하기 위함
@@ -48,17 +48,17 @@ export default function DeliFilter() {
     // 배송 상태 체크박스
     function checkboxFtilter() {
         // 모든 체크박스가 체크됐는지 확인
-        const allChecked = Object.values(checkboxState).every(value => value);
+        const allChecked = Object.values(deliveryFilter.checkboxState).every(value => value);
 
         // 모든 체크박스 - 체크/해제
         const handleAllCheck = () => {
 
             if (allChecked) { // 모든 체크박스가 체크돼있다면
-                Object.keys(checkboxState).map((item) => {
+                Object.keys(deliveryFilter.checkboxState).map((item) => {
                     allUpdateCheckboxState(item, false);
                 });
             } else { // 체크박스가 하나라도 체크되지 않았다면
-                Object.keys(checkboxState).map((item) => {
+                Object.keys(deliveryFilter.checkboxState).map((item) => {
                     allUpdateCheckboxState(item, true);
                 });
             }
@@ -76,16 +76,16 @@ export default function DeliFilter() {
                     />
                     <span>전체</span>
                 </label>
-                {Object.keys(checkboxState).map((item) => (
+                {Object.keys(deliveryFilter.checkboxState).map((item) => (
                     <label key={item} className={styles.deliveryStateLabel}>
                         <input
                             className={styles.deliveryStateCheckbox}
                             type='checkbox'
                             name={item}
-                            checked={checkboxState[item]}
+                            checked={deliveryFilter.checkboxState[item]}
                             onChange={() => {
                                 updateCheckboxState(item);
-                                const changedCheckboxes = Object.keys(checkboxState).filter(key => checkboxState[key]);
+                                const changedCheckboxes = Object.keys(deliveryFilter.checkboxState).filter(key => deliveryFilter.checkboxState[key]);
                                 console.log(`현재 체크된 체크박스: ${changedCheckboxes.join(', ')}`);
                             }}
                         />
@@ -125,15 +125,15 @@ export default function DeliFilter() {
                 <input
                     className='date'
                     type='date'
-                    value={date.startDate}
-                    onChange={(e) => setDateRange(e.target.value, date.endDate)}
+                    value={deliveryFilter.date.startDate}
+                    onChange={(e) => setDateRange(e.target.value, deliveryFilter.date.endDate)}
                 />
                 {/* 종료일 */}
                 <input
                     className='date'
                     type='date'
-                    value={date.endDate}
-                    onChange={(e) => setDateRange(date.startDate, e.target.value)}
+                    value={deliveryFilter.date.endDate}
+                    onChange={(e) => setDateRange(deliveryFilter.date.startDate, e.target.value)}
                 />
 
                 {/* 날짜 필터 버튼들 */}
@@ -178,7 +178,7 @@ export default function DeliFilter() {
                 ))}
                 <div style={{ display: 'flex', gap: '0.5em' }}>
                     <input className='original_button' type='submit' value='검색' onClick={search} />
-                    <input className='white_button' type='reset' onClick={resetDeliveryFilter} />
+                    <input className='white_button' type='reset' onClick={() => resetDeliveryFilter()} />
                 </div>
             </form>
         </div>
