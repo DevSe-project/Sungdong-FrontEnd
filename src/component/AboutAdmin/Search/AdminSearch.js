@@ -1,43 +1,61 @@
-import styles from './AdminNotSoldList.module.css';
-import React, { useState } from 'react';
-import AdminSoldModal from './AdminSoldModal';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useModalActions, useModalState, useOrderSelectList, useOrderSelectListActions } from '../../../store/DataStore';
-import { useFetch } from '../../../customFn/useFetch';
+import { useNavigate } from "react-router-dom";
+import { useAdminSearchActions, useAdminSearchStore, useModalActions, useModalState, useOrderSelectList, useOrderSelectListActions } from "../../../store/DataStore";
+import { useFetch } from "../../../customFn/useFetch";
+import { useEffect, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import styles from './AdminSearch.module.css'
+import React from "react";
 import Pagination from '../../../customFn/Pagination';
-import AdminCancelModal from './AdminCancelModal';
+import AdminDelNumModal from '../Sold/AdminDelNumModal';
+import AdminCancelModal from '../Sold/AdminCancelModal';
+import AdminSoldModal from '../Sold/AdminSoldModal';
 
-export function AdminNotSoldList(props) {
+export function AdminSearch() {
+  const navigate = useNavigate();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10); //페이지당 렌더링 될 개수
+  const [totalPages, setTotalPages] = useState(1);
+  const [postCnt, setPostCnt] = useState(10);
+  const [selectedData, setSelectedData] = useState(null); //선택한 주문의 상품 데이터가 담기는 변수
+  //검색 결과 데이터 fetch
+  const { fetchAddPostServer, fetchNonPageServer } = useFetch();
 
   //ZUSTAND STATE
-  const { isModal, modalName } = useModalState();
-  const { selectedModalOpen } = useModalActions();
-  const queryClient = useQueryClient();
+  const { isModal, modalName } = useModalState(); //모달창 불러오는 State (isModal - 모달창 불러오기, modalName - 모달이름 구성)
+  const { selectedModalOpen } = useModalActions(); //모달이름으로 모달을 선택하여 오픈하는 변수
+  const selectList = useOrderSelectList(); // 선택한 데이터를 담는 변수
+  const { toggleSelectList, toggleAllSelect, resetSelectList } = useOrderSelectListActions(); //체크박스 관련 변수
 
-  const { fetchAddPostServer, fetchNonPageServer } = useFetch();
-  // 게시물 데이터와 페이지 번호 상태 관리    
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [totalPages, setTotalPages] = useState(1);
-  const [selectedData, setSelectedData] = useState(null);
 
-  const selectList = useOrderSelectList();
-  const { toggleSelectList, toggleAllSelect } = useOrderSelectListActions();
+  const fetchSearchData = async () => {
+    const getSearch = JSON.parse(sessionStorage.getItem('adminSearchTerm'));
+    const data = await fetchAddPostServer(getSearch.state.searchTerm, 'post', '/search/admin/list', 1, postCnt);
+    setCurrentPage(data.data.currentPage);
+    setTotalPages(data.data.totalPages);
+    setPostCnt(data.data.postsPerPage);
+    return data.data.data;
+  }
 
-  //전체 선택 핸들러
-  const handleToggleAllSelect = () => {
-    const allSelected = selectList.length === ordered.length; // 모든 항목이 선택되었는지 확인
-    toggleAllSelect(!allSelected, ordered); // 전체 선택 토글
-  };
+  const { isLoading, isError, error, data: ordered } = useQuery({ queryKey: ['adminSearch', currentPage, itemsPerPage], queryFn: () => fetchSearchData() });
 
-  // -=-=-=-=-=-=-= 페이지를 변경할 때 호출되는 함수 =-=-=-=-=-=-=-
+  useEffect(() => {
+    return () => {
+      // 컴포넌트가 언마운트될 때 검색창 상태 리셋
+      useAdminSearchStore.persist.clearStorage();
+      window.location.reload();
+      resetSelectList();
+    };
+  }, []);
+
+
+  //-------------------------페이지 설정------------------------------
+
+  // 페이지를 변경할 때 호출되는 함수
   const fetchPageChange = async (pageNumber) => {
-    const limit = {
-      orderState: 1,
-      isCancel: 1
-    }
-    return await fetchAddPostServer(limit, 'post', '/order/all', pageNumber, itemsPerPage);
+    const getSearch = JSON.parse(sessionStorage.getItem('adminSearchTerm'));
+    return await fetchAddPostServer(getSearch.state.searchTerm, 'post', '/search/admin/list', pageNumber, postCnt);
   };
+
 
   const { mutate: pageMutaion } = useMutation({ mutationFn: fetchPageChange })
 
@@ -47,8 +65,9 @@ export function AdminNotSoldList(props) {
       onSuccess: (data) => {
         setCurrentPage(data.data.currentPage);
         setTotalPages(data.data.totalPages);
-        queryClient.setQueryData(['yetOrder'], () => {
-          return data.data.data[0]
+        setPostCnt(data.data.postsPerPage);
+        queryClient.setQueryData(['adminSearch', currentPage, itemsPerPage], () => {
+          return data.data.data
         })
       },
       onError: (error) => {
@@ -56,25 +75,29 @@ export function AdminNotSoldList(props) {
       },
     })
   }
-  //--------------------------------------------------------------
-  //데이터 불러오기
-  const fetchData = async () => {
-    const limit = {
-      orderState: 1,
-      isCancel: 1
-    }
-    const data = await fetchAddPostServer(limit, `post`, `/order/all`, 1, itemsPerPage ? itemsPerPage : 10);
-    console.log(data)
-    setCurrentPage(data.data.currentPage);
-    setTotalPages(data.data.totalPages);
-    return data.data.data[0];
-  }
 
-  // Fetch
-  const { isLoading, isError, error, data: ordered } = useQuery({
-    queryKey: [`yetOrder`, currentPage ? currentPage : 1, itemsPerPage ? itemsPerPage : 10],
-    queryFn: () => fetchData()
-  }) // currentPage, itemPerPage가 변경될 때마다 재실행하기 위함
+  const queryClient = useQueryClient();
+
+  //마운트 될때 페이지 설정.
+  useEffect(() => {
+    const fetchData = async () => {
+      if (ordered) {
+        setCurrentPage(ordered.currentPage);
+        setTotalPages(ordered.totalPages);
+        setPostCnt(ordered.postsPerPage);
+      }
+    };
+
+    fetchData();
+  }, [ordered])
+
+  //------------------------------------------------------
+
+  //전체 선택 핸들러
+  const handleToggleAllSelect = () => {
+    const allSelected = selectList.length === ordered.length; // 모든 항목이 선택되었는지 확인
+    toggleAllSelect(!allSelected, ordered); // 전체 선택 토글
+  };
 
   // ---------------- 아이템 열람 Mutation -----------------
 
@@ -98,8 +121,26 @@ export function AdminNotSoldList(props) {
       }
     })
   }
+  /**
+   * @발송
+   * 발송처리 핸들러
+   * - 주문이 한 개라도 체크되어 있어야 함
+   * - 조건 달성 시 "발송" 이름의 모달 오픈
+   */
+  const handleDelNumInput = () => {
+    if (selectList.length !== 0) {
+      selectedModalOpen("발송");
+    } else {
+      alert("주문이 한 개라도 체크가 되어 있어야 발송처리가 가능합니다.");
+    }
+  }
 
-  //취소 처리 핸들러
+  /**
+   * @취소
+   * 취소처리 핸들러
+   * - 주문이 한 개라도 체크되어 있어야 함
+   * - 조건 달성 시 "취소" 이름의 모달 오픈
+   */
   const handleCancel = () => {
     if (selectList.length !== 0) {
       selectedModalOpen("취소");
@@ -117,59 +158,76 @@ export function AdminNotSoldList(props) {
     }
     return false; // disabled 상태인 체크박스가 없으면 false 반환
   }
-  
 
-  // 데이터 로딩 중 또는 에러 발생 시 처리
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <p>Loading..</p>;
   }
   if (isError) {
-    return <p>Error fetching data</p>;
+    return <p>에러 : {error.message}</p>;
   }
-
   return (
     <div className={styles.main}>
       <main className={styles.container}>
-        {/* 리스트 출력 */}
         <div className={styles.bodyHeader}>
-          <h1>미결제/취소 주문 관리</h1>
+          <h1>검색 결과</h1>
         </div>
+        {/* 목록 */}
         <div className={styles.tableLocation}>
+          {/* 목록 상위 타이틀 */}
+          <div className={styles.listContainer}>
+            <h4 style={{ fontWeight: '650' }}>목록</h4>
+            <div style={{ display: 'flex', gap: '1em' }}>
+              <select defaultValue={itemsPerPage} onChange={(e) => setItemsPerPage(e.target.value)}>
+                <option value={5}>5개씩 보기</option>
+                <option value={10}>10개씩 보기</option>
+                <option value={50}>50개씩 보기</option>
+                <option value={100}>100개씩 보기</option>
+              </select>
+            </div>
+          </div>
+          {/* 필터 */}
+          <h5 style={{ margin: '1em' }}>
+            <span style={{ color: '#CC0000', fontWeight: '650', margin: '0.5em' }}>{ordered.length ? ordered.length : 0}건<span style={{ color: 'black' }}>이 검색 되었습니다.</span></span>
+          </h5>
+          {/* 발주, 발송, 취소 처리 박스 */}
           <div className={styles.manageBox}>
+            <button onClick={() => handleDelNumInput()} className={styles.button}>발송처리</button>
             <button onClick={() => handleCancel()} className={styles.button}>취소처리</button>
           </div>
+          {/* 리스트 출력 */}
           <table className={styles.table}>
             <thead
               style={{ backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)' }}
             >
               <tr>
-                <th>
-                  <input type='checkbox'
-                  checked={selectList?.length === ordered?.length && ordered?.length > 0}
-                  onChange={handleToggleAllSelect} 
-                  disabled={isAnyCheckboxDisabled()}
+                <th><input type='checkbox'
+                  checked={selectList.length === ordered.length && ordered.length > 0}
+                  onChange={handleToggleAllSelect}
+                  disabled={isAnyCheckboxDisabled()} 
                   />
                 </th>
                 <th>주문번호</th>
                 <th>배송사</th>
                 <th>주문상태</th>
-                <th colSpan={2}>주문상품</th>
+                <th>주문상품</th>
                 <th>주문일자</th>
                 <th>주문가</th>
                 <th>주문자 정보</th>
               </tr>
             </thead>
             <tbody>
-              {ordered && ordered?.length > 0
+              {ordered.length > 0
                 ? ordered.map((item, index) => (
                   <React.Fragment key={index}>
                     <tr className={styles.list}>
-                      {item.orderState === 5 
-                    ?
-                      <td><input type='checkbox' name='list' disabled/></td>
-                    :
-                      <td><input type="checkbox" name="list" checked={selectList.some((filter) => filter.order_id === item.order_id)} onChange={() => toggleSelectList(item.order_id, item)}/></td>
-                    }
+                      {item.orderState === 5
+                        ?
+                        <td><input type='checkbox' name='list' disabled /></td>
+                        :
+                        <td>
+                          <input type="checkbox" name="list" checked={selectList.some((filter) => filter.order_id === item.order_id)} onChange={() => toggleSelectList(item.order_id, item)} />
+                        </td>
+                      }
                       <td>
                         {item.order_id}
                       </td>
@@ -191,9 +249,16 @@ export function AdminNotSoldList(props) {
                               : '직접 픽업'}
                       </td>
                       <td>
-                        {(item.orderState === 0 && "결제 미 완료") || (item.orderState === 6 && "취소 요청") ||(item.orderState === 5 && "취소")}
+                        {item.orderState === 0 ? '결제 대기'
+                          : item.orderState === 1 ? '결제 완료'
+                            : item.orderState === 2 ? '배송 준비중'
+                              : item.orderState === 3 ? '배송 중'
+                                : item.orderState === 4 ? '배송 완료'
+                                  : item.orderState === 5 ? '주문 취소'
+                                    : item.orderState === 6 ? '주문 취소요청'
+                                      : '누락된 상품(고객센터 문의)'}
                       </td>
-                      <td colSpan={2} onClick={() => {
+                      <td onClick={() => {
                         if (selectedData?.some((selectItem) => selectItem.order_id === item.order_id)) {
                           setSelectedData(null);
                         } else
@@ -218,7 +283,7 @@ export function AdminNotSoldList(props) {
                     {/* 아이템 모달 */}
                     {selectedData?.some((selectItem) => selectItem.order_id === item.order_id) && (
                       <tr>
-                        <td colSpan="9">
+                        <td colSpan="8">
                           <table className={styles.colTable}>
                             <thead style={{ backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.6)' }}>
                               <tr>
@@ -246,7 +311,7 @@ export function AdminNotSoldList(props) {
                                 <th>
                                   주문량
                                 </th>
-                                <th>
+                                <th style={{ fontWeight: '650' }}>
                                   주문가
                                 </th>
                               </tr>
@@ -304,10 +369,12 @@ export function AdminNotSoldList(props) {
           <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
         </div>
       </main>
-      {
-        modalName === "취소" &&
+      {modalName === "발송"
+        ?
+        isModal && <AdminDelNumModal />
+        : modalName === "취소" &&
         isModal && <AdminCancelModal />
       }
-    </div >
+    </div>
   )
 }

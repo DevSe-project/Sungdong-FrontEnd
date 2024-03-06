@@ -1,16 +1,23 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './Filter.module.css'
-import { addMonths, subMonths, format } from 'date-fns';
 import { useTakeBackActions, useTakeBackFilter } from '../../store/DataStore';
 
-export function TakeBackListFilter(){
+export function TakeBackListFilter({handleSearch}){
   const takeBackFilter = useTakeBackFilter();
-  const {setTakeBackFilterOption} = useTakeBackActions();
+  const {setTakeBackFilterOption, resetFilterOption, setTakeBackFilterDate} = useTakeBackActions();
+
+  useEffect(() => {
+    return () => {
+      resetFilterOption();
+      window.location.reload();
+    }
+  }, [])
+
   const filterList = [
     { label : '구분', content : raeOption()},
     { label : '상품검색', content : searchWord()},
+    { label : '진행상태', content : detailSearch()},
     { label : '조회일자', content : DateFilter()},
-    { label : '출력', content : detailSearch()},
   ]
 
     // 상품 상태 옵션
@@ -24,6 +31,7 @@ export function TakeBackListFilter(){
             value={takeBackFilter.raeOption}              
             onChange={(e)=>setTakeBackFilterOption("raeOption", e.target.value)}
             >
+              <option name="productStatus" value="">전체</option>
               <option name="productStatus" value="반품">반품</option>
               <option name="productStatus" value="불량교환">불량교환</option>
             </select>
@@ -36,25 +44,37 @@ export function TakeBackListFilter(){
     return (
       <div style={{ display: 'flex', gap: '1em' }}>
         <div className={styles.searchFilterList}>
-          <input className={styles.input} type='text' placeholder='상품명을 입력해주세요' value={takeBackFilter.product_title} onChange={(e) => setTakeBackFilterOption('product_title', e.target.value)} />
+          <input className={styles.input} type='text' placeholder='상품명' value={takeBackFilter.product_title} onChange={(e) => setTakeBackFilterOption('product_title', e.target.value)} />
         </div>
         <div className={styles.searchFilterList}>
-          <input className={styles.input} type='text' placeholder='브랜드명을 입력해주세요' value={takeBackFilter.product_brand} onChange={(e) => setTakeBackFilterOption('product_brand', e.target.value)} />
+          <input className={styles.input} type='text' placeholder='브랜드명' value={takeBackFilter.product_brand} onChange={(e) => setTakeBackFilterOption('product_brand', e.target.value)} />
         </div>
         <div className={styles.searchFilterList}>
-          <input className={styles.input} type='text' placeholder='상품번호를 입력해주세요' value={takeBackFilter.product_id} onChange={(e) => setTakeBackFilterOption('product_id', e.target.value)} />
+          <input className={styles.input} type='text' placeholder='상품번호' value={takeBackFilter.product_id} onChange={(e) => setTakeBackFilterOption('product_id', e.target.value)} />
+        </div>
+        <div className={styles.searchFilterList}>
+          <input className={styles.input} type='text' placeholder='규격' value={takeBackFilter.product_spec} onChange={(e) => setTakeBackFilterOption('product_spec', e.target.value)} />
+        </div>
+        <div className={styles.searchFilterList}>
+          <input className={styles.input} type='text' placeholder='모델명' value={takeBackFilter.product_model} onChange={(e) => setTakeBackFilterOption('product_model', e.target.value)} />
         </div>
       </div>
     )
   }
 
-  function DateFilter(){
+  function DateFilter() {
     const today = new Date();
     const [startDate, setStartDate] = useState(today);
-    const [endDate, setEndDate] = useState(addMonths(startDate, 1));
+    const [endDate, setEndDate] = useState(new Date(today.getFullYear(), today.getMonth() + 1, 0));
+  
     const handleMonthChange = (event) => {
-      setStartDate(new Date(2023,event.target.value,1));
-      setEndDate(new Date(2023,event.target.value,31));
+      const month = parseInt(event.target.value);
+      const newStartDate = new Date(today.getFullYear(), month, 2);
+      const newEndDate = new Date(today.getFullYear(), month + 1, 1);
+      setStartDate(newStartDate);
+      setEndDate(newEndDate);
+      setTakeBackFilterDate("start", newStartDate); // Update start date in the filter
+      setTakeBackFilterDate("end", newEndDate); // Update end date in the filter
     };
   
     const dateList = () => {
@@ -66,30 +86,37 @@ export function TakeBackListFilter(){
     const handleStartDateChange = (event) => {
       const newStartDate = new Date(event.target.value);
       setStartDate(newStartDate);
+      setTakeBackFilterDate("start", newStartDate); // Update start date in the filter
     };
     
     const handleEndDateChange = (event) => {
-      const newStartDate = new Date(event.target.value);
-      setEndDate(newStartDate);
+      const newEndDate = new Date(event.target.value);
+      setEndDate(newEndDate);
+      setTakeBackFilterDate("end", newEndDate); // Update end date in the filter
     };
-    return(
+  
+    return (
       <div style={{ display: 'flex', gap: '1em' }}>
-        <select onChange={(e)=>handleMonthChange(e)}>
+        <select value={takeBackFilter.raeDateType} onChange={(e) => setTakeBackFilterOption('raeDateType', e.target.value)}>
+          <option value="rae_requestDate">반품/교환 요청일</option>
+          <option value="rae_checkDate">반품/교환 처리일</option>
+        </select>
+        <select className={styles.select} onChange={(e) => handleMonthChange(e)}>
           {dateList()}
         </select>
         <div>
           <input 
-          className={styles.button}
-          type='date' 
-          value={format(startDate, 'yyyy-MM-dd')}
-          onChange={(e)=>handleStartDateChange(e)}
+            className={styles.input}
+            type='date' 
+            value={startDate.toISOString().split('T')[0]} // Format the date for input value
+            onChange={(e) => handleStartDateChange(e)}
           />
           &nbsp;~&nbsp;
           <input 
-          className={styles.button}
-          type='date' 
-          value={format(endDate, 'yyyy-MM-dd')}
-          onChange={(e)=>handleEndDateChange(e)}
+            className={styles.input}
+            type='date' 
+            value={endDate.toISOString().split('T')[0]} // Format the date for input value
+            onChange={(e) => handleEndDateChange(e)}
           />
         </div>
       </div>
@@ -99,8 +126,14 @@ export function TakeBackListFilter(){
   function detailSearch(){
     return(
       <div style={{display: 'flex', gap: '1em'}}>
-        <button className={styles.button}>인쇄</button>
-        <button className={styles.button}>액셀</button>
+        <select className={styles.select} value={takeBackFilter.raeState} onChange={(e) => setTakeBackFilterOption('raeState', e.target.value)}>
+          <option value="">전체</option>
+          <option value="요청">요청</option>
+          <option value="수거중">수거중</option>
+          <option value="수거완료">수거완료</option>
+          <option value="완료">완료</option>
+          <option value="철회">철회</option>
+        </select>
       </div>
     )
   }
@@ -123,8 +156,11 @@ export function TakeBackListFilter(){
         </div>
         ))}
         <div style={{display: 'flex', gap: '0.5em'}}>
-          <input className={styles.button} type='submit' value='검색'/>
-          <input className={styles.button} type='reset'/>
+        <button className={styles.button} onClick={(e)=> {
+            e.preventDefault();
+            handleSearch(takeBackFilter);
+            }}>검색</button>
+          <button className={styles.button} onClick={()=> resetFilterOption()}>초기화</button>
         </div>
       </form>
     </div>

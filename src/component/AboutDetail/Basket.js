@@ -88,17 +88,6 @@ export function Basket(props) {
     })
   }
 
-  //처음 마운트 될때 페이지 설정.
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await fetchGetServer('/cart/list', 1);
-      setCurrentPage(data.currentPage);
-      setTotalPages(data.totalPages);
-    };
-
-    fetchData();
-  }, [])
-
   //----------------------체크박스------------------------
   // 전체 선택 체크박스 클릭 시 호출되는 함수
   function handleSelectAllChange() {
@@ -142,6 +131,10 @@ export function Basket(props) {
 
   //상품 목록 삭제 함수
   const deletedList = () => {
+    if(selectedItems.length === 0){
+      alert("먼저 삭제할 상품을 선택하여 주십시오!");
+      return;
+    }
     const isConfirmed = window.confirm('정말로 삭제하시겠습니까?');
     if (isConfirmed) {
       const itemsId = selectedItems.map(item => item.cart_product_id)

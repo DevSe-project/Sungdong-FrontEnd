@@ -21,7 +21,7 @@
     flex: 50%;
 }
 
-/* --------Selected Handler */
+/* --------Selected Handler-------- */
 .selectedHandler {
     display: flex;
     margin-bottom: 10px;
@@ -30,4 +30,10 @@
 
 .marginLeft {
     margin-left: 5px;
+}
+
+/* --------dropdown-menu-------- */
+.RnD_handler {
+    display: flex;
+    flex-direction: row;
 }

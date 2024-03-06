@@ -233,6 +233,12 @@ export function Category() {
       return;
     }
 
+    if (selectedItems.some((item) =>
+    item.cnt === '')) {
+    alert("수량을 선택해주세요!");
+    return;
+    }
+
     basketMutation(selectedItems, {
       onSuccess: (cartData) => {
         // 메세지 표시
@@ -359,14 +365,14 @@ export function Category() {
                   <td style={{ fontWeight: '750' }}>
                     {parseInt(item.product_amount).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                   </td>
-                  <td style={{ width: '15%' }} rowSpan={2}>
+                  <td style={{ whiteSpace: 'nowrap' }} rowSpan={2}>
                     <button
                       className={styles.editButton}
                       onClick={() => handleDelItem(item)}
                     >
                       -
                     </button>
-                    <input value={item.cnt ? item.cnt : item.cnt = 1} className={styles.input} onChange={(e) => maxLengthCheck(e, item)} type='text' placeholder='숫자만 입력' />
+                    <input value={item.cnt ? item.cnt : item.cnt = ''} className={styles.input} onChange={(e) => maxLengthCheck(e, item)} type='text' placeholder='숫자만 입력' />
                     <button
                       className={styles.editButton}
                       onClick={() => handleAddItem(item)}

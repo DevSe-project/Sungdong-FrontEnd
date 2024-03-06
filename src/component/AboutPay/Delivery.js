@@ -1,18 +1,18 @@
 import { useNavigate } from 'react-router-dom'
 import styles from './Delivery.module.css'
 import { useEffect, useState } from 'react';
-import { useDataActions } from '../../store/DataStore';
+import { useDataActions, useModalActions, useModalState } from '../../store/DataStore';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useFetch } from '../../customFn/useFetch';
 import Pagination from '../../customFn/Pagination'
 import axios from '../../axios';
-export function Delivery(props) {
+import DeliveryCancelModal from './DeliveryCancelModal';
+export function Delivery({currentPage, setCurrentPage, totalPages, setTotalPages, resultSearch, resultLength}) {
 
   const { fetchServer, fetchGetServer } = useFetch();
   const { setDetailData } = useDataActions();
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const {isModal, modalName} = useModalState();
+  const {selectedModalOpenInItem} = useModalActions();
 
   const queryClient = useQueryClient();
 
@@ -123,6 +123,7 @@ export function Delivery(props) {
     const { mutate: deleteProductMutation } = useMutation({ mutationFn: fetchDeletedProducts })
 
   function handleCancelOrder(item){
+    //결제 상태가 미결제 상태면
     if(item.orderState === 0){
       const isConfirmed = window.confirm('정말로 주문을 취소하시겠습니까?');
       if (isConfirmed) {
@@ -140,9 +141,10 @@ export function Delivery(props) {
         });
       }
     }
+    //결제 상태가 결제 완료, 배송 준비중 이면 
     else {
-
-
+      selectedModalOpenInItem("취소", item);
+      return;
     }
   }
 
@@ -155,11 +157,11 @@ export function Delivery(props) {
 
   return (
     <div className={styles.container}>
-      {props.resultSearch &&
+      {resultSearch &&
         <h3 style={{ margin: '1em' }}>
-          "{props.resultSearch}" 에 대해
-          {/* <span style={{color: '#CC0000', fontWeight: '650', margin: '0.5em'}}>{filteredItems.length}건</span>
-      이 검색 되었습니다. */}
+          "{resultSearch}" 에 대해
+          <span style={{color: '#CC0000', fontWeight: '650', margin: '0.5em'}}>{resultLength}건</span>
+      이 검색 되었습니다.
         </h3>}
       {order ?
         order.map((item, key) =>
@@ -180,7 +182,9 @@ export function Delivery(props) {
                         : item.orderState === 2 ? '배송 준비중'
                           : item.orderState === 3 ? '배송 중'
                             : item.orderState === 4 ? '배송 완료'
-                              : '누락된 상품(고객센터 문의)'}
+                              : item.orderState === 5 ? '주문 취소'
+                                : item.orderState === 6 ? '주문 취소요청'
+                                  : '누락된 상품(고객센터 문의)'}
                     <p>배송 : {item.deliveryType}{item.delivery_selectedCor && item.delivery_selectedCor === "kr.daesin" ? `( 대신 화물 )` : item.delivery_selectedCor === "kr.kdexp" ? `(경동 화물)` : item.deliveryType === "일반택배" && `( CJ대한통운 )`}</p>
                     <p style={{ color: 'orangered', fontWeight: '550' }}>{item.delivery_date && `🚚 배송 예정 : ${new Date(item.delivery_date).toLocaleDateString()}`}</p>
                   </h5>
@@ -201,15 +205,19 @@ export function Delivery(props) {
                 <div className={styles.itemTitle} style={{color: '#CC0000', marginTop: '1em'}}>총 주문액 : {parseInt(item.order_payAmount).toLocaleString()}원</div>
               </div>
               <div className={styles.deliveryMenu}>
+                {item.orderState < 5 &&
                 <button
                   onClick={() => {
                     handleDeliveryAPI(item, item.delivery_num && item.delivery_num)
                   }}
                   className={styles.button}>배송 조회</button>
-                {item.orderState < 4
+                }
+                {item.orderState < 3
                   ?
                   <button className={styles.button} onClick={()=> handleCancelOrder(item)}>주문 취소</button>
                   :
+                  item.orderState === 4 
+                  &&
                   <button
                     onClick={() => navigate("/return/request")}
                     className={styles.button}
@@ -234,6 +242,10 @@ export function Delivery(props) {
         </div>
       }
       <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+      {
+        isModal && modalName === "취소" &&
+        <DeliveryCancelModal/>
+      }
     </div>
   )
 }

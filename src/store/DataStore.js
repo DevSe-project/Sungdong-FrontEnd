@@ -289,6 +289,7 @@ const useModalStore = create((set) => ({
   isModal: false,
   modalName: '',
   selectedIndex: null,
+  modalItem: [],
 
   actions: {
     setIsModal: (bool) => set({ isModal: bool }),
@@ -297,20 +298,23 @@ const useModalStore = create((set) => ({
     closeModal: () => set({ isModal: false }),
     setSelectedIndex: (index) => set({ selectedIndex: index }),
     selectedModalOpen: (name) => set({ isModal: true, modalName: name }),
+    selectedModalOpenInItem: (name, item) => set({ isModal: true, modalName: name, modalItem: item }),
     selectedModalClose: () => set({ isModal: false, modalName: '' }),
+    setModalItem: (fieldName, value) =>
+      set((state) => ({ modalItem: { ...state.modalItem, [fieldName]: value } })),
   },
 }));
 
 // useModalState 커스텀 훅
 export const useModalState = () => {
-  const { isModal, modalName, selectedIndex } = useModalStore();
-  return { isModal, modalName, selectedIndex };
+  const { isModal, modalName, modalItem, selectedIndex } = useModalStore();
+  return { isModal, modalName, selectedIndex, modalItem };
 };
 
 // useModalActions 커스텀 훅
 export const useModalActions = () => {
-  const { setIsModal, setModalName, setSelectedIndex, openModal, closeModal, selectedModalOpen, selectedModalClose } = useModalStore.getState().actions;
-  return { setIsModal, setModalName, setSelectedIndex, openModal, closeModal, selectedModalOpen, selectedModalClose };
+  const { setIsModal, setModalName, setSelectedIndex, openModal, closeModal, selectedModalOpen, selectedModalClose, selectedModalOpenInItem, setModalItem } = useModalStore.getState().actions;
+  return { setIsModal, setModalName, setSelectedIndex, openModal, closeModal, selectedModalOpen, selectedModalClose, selectedModalOpenInItem, setModalItem };
 };
 
 /* ---------------SELECT SOTRE----------------- */
@@ -528,18 +532,6 @@ export const useEstimateStore = create(
               return list;
             }),
           })),
-        setProfit: (items, value) =>
-          set((state) => ({
-            estimateProductData: state.estimateProductData.map((list) => {
-              if (items.some((item) => item.estimateBox_product_id === list.estimateBox_product_id)) {
-                return {
-                  ...list,
-                  product_profit: value,
-                };
-              }
-              return list;
-            }),
-          })),
         setEstimateData: (fieldName, value) =>
           set((state) => ({ estimateData: { ...state.estimateData, [fieldName]: value } })),
         setVendorData: (fieldName, value) =>
@@ -615,14 +607,16 @@ export const useEstimateActions = () => useEstimateStore((state) => state.action
 /* ----------------TAKEBACK STORE---------------- */
 export const useTakeBackStore = create((set) => ({
   filterOption: {
-    raeOption: '반품',
+    raeOption: '',
     product_title: '',
     product_brand: '',
     product_id: '',
+    raeDateType: '',
     date: {
       start: '',
       end: ''
-    }
+    },
+    raeState: ''
   },
   takeBackOption: [],
   actions: {
@@ -635,47 +629,52 @@ export const useTakeBackStore = create((set) => ({
             [fieldName]: value,
           },
         },
-    })),
+      })),
     setTakeBackFilterOption: (fieldName, value) =>
-    set((state) => ({ filterOption: { ...state.filterOption, [fieldName]: value } })),
-    setTakeBackOption: (items) => 
-    set((state) => ({
-      takeBackOption: items.map((item) => ({
-        ...item,
-        returnStatus: '',
-        barcodeStatus: '',
-        wrapStatus: '',
-        productStatus: '',
-        rae_type: 0,
-        name: '',
-        rae_count: 1,
-        rae_amount: '',
-        reason: ''
-      }))
-    })),
-  
+      set((state) => ({ filterOption: { ...state.filterOption, [fieldName]: value } })),
+    setTakeBackOption: (items) =>
+      set((state) => ({
+        takeBackOption: items.map((item) => ({
+          ...item,
+          returnStatus: '',
+          barcodeStatus: '',
+          wrapStatus: '',
+          productStatus: '',
+          rae_type: 0,
+          name: '',
+          rae_count: 0,
+          rae_amount: '',
+          reason: ''
+        }))
+      })),
+
     setTakeBackItemOption: (items, fieldName, value) =>
-      set((state) => ({ 
+      set((state) => ({
         takeBackOption: state.takeBackOption.map((list) => {
-            if (items === list.order_product_id) {
-              return {
-                ...list,
-                [fieldName]: value,
-              };
-            }
-            return list;
-          }),
-        })),
+          if (items === list.order_product_id) {
+            return {
+              ...list,
+              [fieldName]: value,
+            };
+          }
+          return list;
+        }),
+      })),
     resetFilterOption: () =>
-      set({filterOption: {
-        product_title: '',
-        product_brand: '',
-        product_id: '',
-        date: {
-          start: '',
-          end: ''
+      set({
+        filterOption: {
+          raeOption: '반품',
+          product_title: '',
+          product_brand: '',
+          product_id: '',
+          raeDateType: '',
+          date: {
+            start: '',
+            end: ''
+          },
+          raeState: ''
         }
-      }}),
+      }),
     resetTakeBackOption: () =>
       set({ takeBackOption: { returnStatus: "", barcodeStatus: "", wrapStatus: "", productStatus: "" } }),
   }
@@ -885,55 +884,55 @@ export const useProductFilterStore = create((set) => ({
           },
         },
       })),
-      setCheckboxState: (fieldName) =>
+    setCheckboxState: (fieldName) =>
       set((state) => {
-          // Check if fieldName is already present in the state
-          const isFieldPresent = state.productFilter.state.find(item => item === fieldName);
-          
-          if (isFieldPresent) {
-            // If fieldName is already present, filter it out
-            return {
-              ...state,
-              productFilter: {
-                ...state.productFilter,
-                state: state.productFilter.state.filter(item => item !== fieldName)
-              }
-            };
-          } else {
-            // If fieldName is not present, add it to the state
-            return {
-              ...state,
-              productFilter: {
-                ...state.productFilter,
-                state: [...state.productFilter.state, fieldName]
-              }
-            };
-          }
+        // Check if fieldName is already present in the state
+        const isFieldPresent = state.productFilter.state.find(item => item === fieldName);
+
+        if (isFieldPresent) {
+          // If fieldName is already present, filter it out
+          return {
+            ...state,
+            productFilter: {
+              ...state.productFilter,
+              state: state.productFilter.state.filter(item => item !== fieldName)
+            }
+          };
+        } else {
+          // If fieldName is not present, add it to the state
+          return {
+            ...state,
+            productFilter: {
+              ...state.productFilter,
+              state: [...state.productFilter.state, fieldName]
+            }
+          };
         }
-      ),    
-    setAllCheckboxState: (selectAll) =>
-    set((state) => {
-      // Check if selectAll is true
-      if (selectAll === true) {
-        // If selectAll is true, return a new state with all fields selected
-        return {
-          ...state,
-          productFilter: {
-            ...state.productFilter,
-            state: [] // Select all fields
-          }
-        };
-      } else if (selectAll === false) {
-        // If selectAll is false, deselect all fields
-        return {
-          ...state,
-          productFilter: {
-            ...state.productFilter,
-            state: ["판매대기", "판매중", "판매완료", "판매중단"] // Deselect all fields
-          }
-        };
       }
-    })
+      ),
+    setAllCheckboxState: (selectAll) =>
+      set((state) => {
+        // Check if selectAll is true
+        if (selectAll === true) {
+          // If selectAll is true, return a new state with all fields selected
+          return {
+            ...state,
+            productFilter: {
+              ...state.productFilter,
+              state: [] // Select all fields
+            }
+          };
+        } else if (selectAll === false) {
+          // If selectAll is false, deselect all fields
+          return {
+            ...state,
+            productFilter: {
+              ...state.productFilter,
+              state: ["판매대기", "판매중", "판매완료", "판매중단"] // Deselect all fields
+            }
+          };
+        }
+      })
   }
 }));
 export const useProductFilter = () => useProductFilterStore((state) => state.productFilter);
@@ -1062,16 +1061,10 @@ export const useRefundFilterStore = create((set) => ({
       start: '',
       end: ''
     },
+    rae_type: '',
     raeDateType: '',
-    detailFilter: {
-      userId: '',
-      orderId: '',
-      productId: '',
-      deliveryNum: '',
-      companyName: '',
-      name: '',
-      tel: '',
-    }
+    selectFilter: '',
+    filterValue: ''
   },
   actions: {
     setRaeFilter: (fieldName, value) =>
@@ -1084,16 +1077,10 @@ export const useRefundFilterStore = create((set) => ({
             start: '',
             end: ''
           },
+          rae_type: '',
           raeDateType: '',
-          detailFilter: {
-            userId: '',
-            orderId: '',
-            productId: '',
-            deliveryNum: '',
-            companyName: '',
-            name: '',
-            tel: '',
-          }
+          selectFilter: '',
+          filterValue: ''
         }
       }),
     setRaeDetailFilter: (fieldName, value) =>
@@ -1153,18 +1140,20 @@ export const useNoticeActions = () => useNoticeStore((state) => state.actions);
 
 // ------------Delivery Filter------------
 export const useDeliveryFilter = create((set) => ({
-  // 배송상태
-  checkboxState: {
-    '배송 준비': false,
-    '배송 중': false,
-    '배송 완료': false,
-    '배송 지연': false
-  },
-  // 배송일자'
-  date: {
-    startDate: '',
-    endDate: '',
-    filteredData: []
+  deliveryFilter: {
+    // 배송상태
+    checkboxState: {
+      '배송 준비': false,
+      '배송 중': false,
+      '배송 완료': false,
+      '배송 지연': false
+    },
+    // 배송일자'
+    date: {
+      startDate: '',
+      endDate: '',
+      filteredData: []
+    },
   },
 
   // 초기화
@@ -1179,31 +1168,40 @@ export const useDeliveryFilter = create((set) => ({
       startDate: '',
       endDate: '',
       filteredData: []
-    },
+    }
   }),
 
   // 업데이트 : 체크박스 핸들러
   updateCheckboxState: (fieldName) => set((state) => ({
-    checkboxState: {
-      ...state.checkboxState,
-      [fieldName]: !state.checkboxState[fieldName],
-    },
+    deliveryFilter: {
+      ...state.deliveryFilter,
+      checkboxState: {
+        ...state.deliveryFilter.checkboxState,
+        [fieldName]: !state.deliveryFilter.checkboxState[fieldName],
+      }
+    }
   })),
 
   // 전체 업데이트
   allUpdateCheckboxState: (fieldName, bool) => set((state) => ({
-    checkboxState: {
-      ...state.checkboxState,
-      [fieldName]: bool,
-    },
+    deliveryFilter: {
+      ...state.deliveryFilter,
+      checkboxState: {
+        ...state.deliveryFilter.checkboxState,
+        [fieldName]: bool,
+      }
+    }
   })),
 
   // 배송일자 범위 지정
   setDateRange: (start, end) => set((state) => ({
-    date: {
-      ...state.date,
-      startDate: start,
-      endDate: end
+    deliveryFilter: {
+      ...state.deliveryFilter,
+      date: {
+        ...state.date,
+        startDate: start,
+        endDate: end
+      }
     }
   })),
 
@@ -1264,3 +1262,36 @@ export const useUserFilterStore = create((set) => ({
 export const useUserFilter = () => useUserFilterStore((state) => state.userFilter);
 export const useUserSort = () => useUserFilterStore((state) => state.userSort);
 export const useUserFilterActions = () => useUserFilterStore((state) => state.actions);
+
+/* ----------------ADMIN SEARCH STORE---------------- */
+
+export const useAdminSearchStore = create(
+  persist(
+    (set) => ({
+      filterData: [],
+      searchTerm: {
+        searchFilter: "uc.cor_corName",
+        search: ""
+      },
+      actions: {
+        setFilterData: (val) =>
+          set((prev) => ({
+            filterData: val
+          })),
+        setSearchTerm: (fieldName, value) =>
+          set((state) => ({ searchTerm: { ...state.searchTerm, [fieldName]: value } })),
+        resetSearchTerm: () =>
+          set({ searchTerm: { search: "" } }),
+      }
+    }),
+    {
+      name: 'adminSearchTerm',
+      storage: createJSONStorage(() => sessionStorage),
+      version: 1,
+      partialize: (state) => ({ searchTerm: state.searchTerm, filterData: state.filterData }),
+    }
+  )
+);
+export const useAdminSearchFilterData = () => useAdminSearchStore((state) => state.filterData);
+export const useAdminSearchTerm = () => useAdminSearchStore((state) => state.searchTerm);
+export const useAdminSearchActions = () => useAdminSearchStore((state) => state.actions);

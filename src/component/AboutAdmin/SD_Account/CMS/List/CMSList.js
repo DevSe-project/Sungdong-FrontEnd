@@ -1,4 +1,6 @@
-export default function CMSList({sortedAccounts}) {
+import styles from './CMSList.module.css';
+
+export default function CMSList({ sortedAccounts }) {
 
 
     return (

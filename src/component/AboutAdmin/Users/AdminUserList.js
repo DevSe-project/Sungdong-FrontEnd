@@ -7,7 +7,6 @@ import AdminUserFilter from './AdminUserFilter';
 import AdminUserSort from './AdminUserSort';
 import { GetCookie } from '../../../customFn/GetCookie';
 import { useFetch } from '../../../customFn/useFetch';
-import { de } from 'date-fns/locale';
 
 export default function AdminUserList() {
 
@@ -59,7 +58,7 @@ export default function AdminUserList() {
   const fetchUsersData = async () => {
     try {
       const token = GetCookie('jwt_token');
-      const response = await axios.get(`/auth/userAllOfPage`, {
+      const response = await axios.get(`/auth/read`, {
         params: {
           page: currentPage,
           pagePosts: itemsPerPage
@@ -72,7 +71,7 @@ export default function AdminUserList() {
       console.log(response.data.message);
       return response.data.data.data;
     } catch (error) {
-      throw new Error('배송 데이터 불러오기 중 오류가 발생하였습니다.');
+      throw new Error('고객 정보를 불러오는 중 오류가 발생하였습니다.');
     }
   }
   const { isLoading, isError, error, data: userData } = useQuery({
@@ -92,9 +91,12 @@ export default function AdminUserList() {
   }, [currentPage, itemsPerPage]);
 
   //유저 필터링 Fetch
+  /**]
+   * @param {userFilterData} 유저 필터창의 Input된 데이터
+   */
   const fetchFilteredUserData = async (userFilterData) => {
     try {
-      const response = await axios.post("/auth/userFilter",
+      const response = await axios.post("/auth/filter",
         JSON.stringify(
           userFilterData
         ),
@@ -133,7 +135,7 @@ export default function AdminUserList() {
 
   // 정렬 
   const fetchSortedUserData = async (userFilterData) => {
-    fetchServer(userFilterData, `post`, `/auth/userSort`, currentPage);
+    fetchServer(userFilterData, `post`, `/auth/sort`, currentPage);
   };
   const { mutate: sortMutation } = useMutation({ mutationFn: fetchSortedUserData }); // 정렬
   const handleSort = () => {
@@ -198,7 +200,7 @@ export default function AdminUserList() {
   };
   const fetchEditUser = async (userData) => { // Fetching
     try {
-      const response = await axios.post('/auth/userUpdate', userData);
+      const response = await axios.post('/auth/update', userData);
       return response.data;
     } catch (error) {
       throw error;
@@ -214,7 +216,7 @@ export default function AdminUserList() {
   // 고객 삭제
   const fetchDeleteUser = async (userID) => { // Fetching
     try {
-      const response = await axios.delete(`/auth/userDelete/${userID}`,)
+      const response = await axios.delete(`/auth/delete/${userID}`,)
       return response.data;
     } catch (error) {
       throw error;
@@ -425,25 +427,28 @@ export default function AdminUserList() {
             {/* 메뉴 아이콘 */}
             <th style={{ width: '20px' }}>
               {editIndex === 'allEdit' ?
-                <div className="dropdown-menu"> {/* 아이콘 */}
+                <div className={styles.RnD_handler}> {/* 아이콘 */}
                   {/* 수정 버튼 */}
-                  <button className='white_button' onClick={() => { handleBulkEdit(); window.location.reload(); }}>수정</button>
+                  <button className='white_round_button' onClick={() => { handleBulkEdit(); window.location.reload(); }}>수정</button>
                   {/* 삭제 버튼 */}
-                  <button className='white_button' onClick={() => handleDelete(checkedItems)}>삭제</button>
+                  <button className='white_round_button' onClick={() => handleDelete(checkedItems)}>삭제</button>
                   {/* 취소 버튼 */}
-                  <button className='white_button' onClick={() => {
+                  <button className='white_round_button' onClick={() => {
                     setEditIndex('none');
                     setCheckedItems([]);
                   }}>취소</button>
                 </div>
                 :
-                <div className='icon' onClick={() => {
-                  if (checkedItems.length) {
-                    setEditIndex('allEdit');
-                  } else {
-                    alert('선택된 고객이 없습니다.');
-                  }
-                }}><i className="fa-solid fa-ellipsis"></i></div>
+                <div
+                  className='icon'
+                  style={{ paddingRight: '1em' }}
+                  onClick={() => {
+                    if (checkedItems.length) {
+                      setEditIndex('allEdit');
+                    } else {
+                      alert('선택된 고객이 없습니다.');
+                    }
+                  }}><i className="fa-solid fa-ellipsis"></i></div>
               }
             </th>
           </tr>
@@ -506,18 +511,21 @@ export default function AdminUserList() {
               {/* 연락처 */}
               <td>{user.cor_tel}</td>
               {/* 수정/삭제 드롭다운 메뉴 */}
-              <td style={{ width: '20px' }}>
+              <td>
                 {index === editIndex ? (
-                  <div className="dropdown-menu">
+                  <div className={styles.RnD_handler}>
                     {/* 수정 버튼 */}
-                    <button className='white_button' onClick={() => { handleEdit(user); console.log(user); }}>수정</button>
+                    <button className='white_round_button' onClick={() => { handleEdit(user); console.log(user); }}>수정</button>
                     {/* 삭제 버튼 */}
-                    <button className='white_button' onClick={() => handleDelete(user.users_id)}>삭제</button>
+                    <button className='white_round_button' onClick={() => handleDelete(user.users_id)}>삭제</button>
                     {/* 취소 버튼 */}
-                    <button className='white_button' onClick={() => initializingData()}>취소</button>
+                    <button className='white_round_button' onClick={() => initializingData()}>취소</button>
                   </div>
                 ) : (
-                  <div className='ellipsis' onClick={() => { handleToggleEdit(index); setCheckedItems([]); }}><i class="fa-solid fa-ellipsis"></i></div>
+                  <div
+                    className='ellipsis'
+                    style={{ paddingRight: '1em' }}
+                    onClick={() => { handleToggleEdit(index); setCheckedItems([]); }}><i className="fa-solid fa-ellipsis"></i></div>
                 )}
               </td>
             </tr>

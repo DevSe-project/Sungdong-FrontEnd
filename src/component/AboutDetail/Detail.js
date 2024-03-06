@@ -21,6 +21,10 @@ export function Detail(props) {
   //Mutate를 위한 queryClient 사용
   const queryClient = useQueryClient();
 
+
+  //주소창 입력된 id값 받아오기
+  let { id } = useParams();
+
   //데이터 불러오기 이전 loadData()함수 실행 금지
   useEffect(() => {
     const fetchData = async () => {
@@ -30,10 +34,7 @@ export function Detail(props) {
     };
 
     fetchData();
-  }, []);
-
-  //주소창 입력된 id값 받아오기
-  let { id } = useParams();
+  }, [id]);
 
   const loadData = () => {
     if (data != null) {

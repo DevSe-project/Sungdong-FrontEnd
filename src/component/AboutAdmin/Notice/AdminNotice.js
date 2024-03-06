@@ -1,99 +1,55 @@
 import styles from "./AdminNotice.module.css";
 import EditModal from "./EditModal";
+import { useState, useEffect } from "react";
 import { useModalActions, useModalState, useNoticeActions, useNotice } from "../../../store/DataStore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import WriteModal from "./WriteModal";
-import axios from "axios";
+import axios from '../../../axios';
 import { GetCookie } from "../../../customFn/GetCookie";
+import { useFetch } from "../../../customFn/useFetch";
 
 export default function AdminNotice() {
-  const { isModal, modalName } = useModalState();
-  const { closeModal, selectedModalOpen } = useModalActions();
+  const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 번호를 담습니다.
+  const [itemsPerPage, setItemsPerPage] = useState(10); // 아아템 포스팅 개수
+  const [matchedData, setMatchedData] = useState([]); // 서버의 user데이터를 불러올 state
 
-  const { isLoading, isError, data: noticePostList } = useQuery({ queryKey: ['notice'] });
 
+  const { isModal, modalName, selectedIndex } = useModalState();
+  const { closeModal, selectedModalOpen, setSelectedIndex } = useModalActions();
   const { addNoticeData, resetNoticeData } = useNoticeActions();
+  const { fetchNonPageServer } = useFetch();
   const notice = useNotice();
+  const queryClient = useQueryClient();
 
-  //게시글 삭제 함수
-  const fetchDeletedData = async (item) => {
+  const fetchCreatePost = async (newPostData) => {
     try {
       const token = GetCookie('jwt_token');
-      const response = await axios.delete("/notice/delete",
-        JSON.stringify(item),
+      const response = await axios.post(
+        "/notice/create",
+        newPostData,
         {
           headers: {
             "Content-Type": "application/json",
             'Authorization': `Bearer ${token}`
           }
         }
-      )
+      );
       // 성공 시 추가된 상품 정보를 반환합니다.
       return response.data;
     } catch (error) {
       // 실패 시 예외를 throw합니다.
-      throw new Error('게시글을 삭제하던 중 오류가 발생했습니다.');
+      throw new Error('글을 추가하는 중 오류가 발생했습니다.');
     }
   };
 
-  const { deletePostMutation } = useMutation({
-    mutationFn: fetchDeletedData,
-    onSuccess: (data) => {
-      // 메세지 표시
-      alert(data.message);
-      console.log('게시글이 업데이트 되었습니다.', data);
-      // 상태를 다시 불러와 갱신합니다.
-      useQueryClient.invalidateQueries(['notice']);
-    },
-    onError: (error) => {
-      // 실패 시, 에러 처리를 수행합니다.
-      console.error('상태를 변경하던 중 오류가 발생했습니다.', error);
-    },
-  })
-
-
-  const fetchCreatePost = async () => {
-    try {
-      const token = GetCookie('jwt_token');
-      const response = await axios.post("/notice/create",
-        JSON.stringify(
-          notice
-        ),
-        {
-          headers: {
-            "Content-Type": "application/json",
-            'Authorization': `Bearer ${token}`
-          }
-        }
-      )
-      // 성공 시 추가된 상품 정보를 반환합니다.
-      return response.data;
-    } catch (error) {
-      // 실패 시 예외를 throw합니다.
-      throw new Error('상품을 추가하는 중 오류가 발생했습니다.');
-    }
-  }
-  const { createPostMutation } = useMutation({
-    mutationFn: fetchCreatePost,
-    onSuccess: (data) => {
-      // 메세지 표시
-      alert(data.message);
-      console.log('게시글이 업데이트 되었습니다.', data);
-      // 상태를 다시 불러와 갱신합니다.
-      useQueryClient.invalidateQueries(['notice']);
-    },
-    onError: (error) => {
-      // 실패 시, 에러 처리를 수행합니다.
-      console.error('상태를 변경하던 중 오류가 발생했습니다.', error);
-    },
-  })
   const addPost = () => {
     // 입력 조건 부여
-    const isCheckInputLength = notice.title.length > 2 && notice.writer.length > 2 && notice.contents.length > 10;
+    const isCheckInputLength = notice.title.length > 2 && notice.contents.length > 10;
 
     // 조건에 부합한다면
     if (isCheckInputLength) {
-      createPostMutation.mutate();
+      const newPostData = JSON.stringify(notice);
+      createPostMutation(newPostData);
       // 모달 닫기
       closeModal();
       resetNoticeData();
@@ -101,81 +57,165 @@ export default function AdminNotice() {
       alert("등록되었습니다.");
 
     } else {
-      alert("제목을 2글자 이상, 작성자 명을 2글자 이상, 본문 내용을 10글자 이상 작성하십시오.");
+      alert("제목을 2글자 이상, 본문 내용을 10글자 이상 작성하십시오.");
     }
   };
 
-  const fetchUpdatePost = async () => {
-    try {
-      const token = GetCookie('jwt_token');
-      const response = await axios.put("/notice/edit",
-        JSON.stringify(
-          notice
-        ),
-        {
-          headers: {
-            "Content-Type": "application/json",
-            'Authorization': `Bearer ${token}`
-          }
-        }
-      )
-      // 성공 시 추가된 상품 정보를 반환합니다.
-      return response.data;
-    } catch (error) {
-      // 실패 시 예외를 throw합니다.
-      throw new Error('상품을 추가하는 중 오류가 발생했습니다.');
-    }
-  }
-  const { editPostMutation } = useMutation({
-    mutationFn: fetchUpdatePost,
+  /**
+ * @description Mutation을 위한 useMutation 훅을 사용하여 새 글 작성을 요청하는 함수입니다.
+ * @param {Object} mutationFn - 새 글 작성을 위한 비동기 함수입니다.
+ * @param {Function} onSuccess - 성공 시 실행할 콜백 함수입니다. 데이터가 전달됩니다.
+ * @param {Function} onError - 실패 시 실행할 콜백 함수입니다. 에러가 전달됩니다.
+ * @example createPostMutation();
+ */
+  const { mutate: createPostMutation } = useMutation({
+    mutationFn: fetchCreatePost,
     onSuccess: (data) => {
-      // 메세지 표시
+      // 성공 시 알림창 표시
       alert(data.message);
+      // 콘솔에 성공 메시지 및 데이터 로깅
       console.log('게시글이 업데이트 되었습니다.', data);
-      // 상태를 다시 불러와 갱신합니다.
-      useQueryClient.invalidateQueries(['notice']);
+      window.location.reload();
     },
     onError: (error) => {
-      // 실패 시, 에러 처리를 수행합니다.
+      // 실패 시, 에러 처리를 콘솔에 출력합니다.
+      alert(error.message);
       console.error('상태를 변경하던 중 오류가 발생했습니다.', error);
     },
-  })
+  });
 
-  function handleConfirmSD() {
-    // 입력 조건 부여
-    const isCheckInputLength = notice.title.length > 2 && notice.writer.length > 2 && notice.contents.length > 10;
 
-    // 조건에 부합한다면
-    if (isCheckInputLength) {
-      editPostMutation.mutate();
-      // 모달 닫기
-      closeModal();
-      resetNoticeData();
 
-      alert("등록되었습니다.");
 
-    } else {
-      alert("제목을 2글자 이상, 작성자 명을 2글자 이상, 본문 내용을 10글자 이상 작성하십시오.");
+
+  /**
+   * 서버에 Posts 조회 요청을 보냅니다.
+   * @param currentPage 현재 페이지
+   * @param itemsPerPage 페이지당 포스팅 개수
+   * @returns 
+   */
+  const fetchNoticeData = async () => {
+    try {
+      const token = GetCookie('jwt_token');
+      const response = await axios.get(`/notice/read`, {
+        params: {
+          page: currentPage,
+          pagePosts: itemsPerPage
+        },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+      });
+      return response.data.data.data;
+    } catch (error) {
+      throw new Error('공지사항 정보를 불러오는 중 오류가 발생하였습니다.');
+    }
+  }
+  /**
+   * Middleware. useEffect를 통해 fetchNoticeData()를 실행.
+   * @param 
+   */
+  const fetchData = async () => {
+    try {
+      const data = await fetchNoticeData();
+      setMatchedData(data);
+    } catch (error) {
+      throw new Error('데이터를 볼러오는 데 실패했습니다.', error);
+    }
+  }
+  useEffect(() => {
+    fetchData();
+  }, [currentPage, itemsPerPage]);
+
+
+  /**
+   * 서버에 업데이트 요청을 보냅니다.
+   * fetchNonPageServer를 사용하여 리팩토링해야 할 소요 있음.
+   * @param postId
+   * @param title
+   * @param writer
+   * @param contents
+   * @returns 업데이트된 객체
+   */
+  const fetchUpdatePost = async (updatedData) => {
+    // const response = await axios.put(`/notice/update/${postId}`, JSON.stringify(updatedData));
+    // return response.data;
+    console.log(updatedData);
+    const data = fetchNonPageServer(updatedData, `put`, `/notice/update`);
+    return data;
+  }
+
+  const { mutate: updatePostMutation } = useMutation({ mutationFn: fetchUpdatePost })
+
+  const handleUpdate = async (updatedData) => {
+    try {
+      // -----유효성 검사-----
+      if (updatedData.post_title.length < 2) return alert('제목을 2글자 이상 입력하십시오.');
+      if (updatedData.post_content.length < 10) return alert('내용을 10글자 이상 입력하십시오.');
+      if (!updatedData.post_writer.length) return alert('작성자란이 비었습니다.');
+      // -----변경사항 반영 전 확인-----
+      const confirmed = window.confirm('변경사항을 적용하시겠습니까?');
+      if (!confirmed) return;
+      // -----Mutation 전달-----
+      updatePostMutation(updatedData, {
+        onSuccess: (success) => {
+          alert(success.message);
+          window.location.reload();
+        },
+        onError: (error) => {
+          return console.error(error.message);
+        }
+      })
+      // -----에러 잡이 ! -----
+    } catch (error) {
+      alert('업데이트에 실패하였습니다');
     }
   }
 
-  // 데이터 로딩 중 또는 에러 발생 시 처리
-  if (isLoading) {
-    return ( // isLoading이 true일 때 스켈레톤 이미지 표시 ( 20개 )
-      <div className={styles.skeletonContainer}>
-        {/* 15짜리 배열 생성 -> 반복 */}
-        {[...Array(15)].map((_, index) => (
-          <div key={index} className={styles.skeletonItem}></div>
-        ))}
-      </div>
-    );
+  /**
+   * - 게시글 삭제 요청
+   * - Server: req.body.postId로 해당 post를 삭제
+   * @param postId
+  */
+  const fetchDeletePost = async (postId) => {
+    try {
+      const response = await axios.delete(`/notice/delete/${postId}`)
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   }
-  if (isError) {
-    return <p>Error fetching data</p>;
-  }
+  /**
+   * 실제 삭제 버튼에서 사용되는 이벤트 핸들러
+   * @param {*} PostId 
+   * @returns 
+   */
+  const handleDelete = async (postId) => {
+    try {
+      const confirmed = window.confirm('선택된 게시물을 정말 삭제하시겠습니까?');
+      if (!confirmed) return;
 
-
-  // 글 클릭 시 해당 글 수정할 수 있는 모달 창 생성
+      await deleteMutation(postId);
+    } catch (error) {
+      handleDeleteError(error);
+    }
+  };
+  const handleDeleteSuccess = (data) => { // 성공 시
+    console.log('Post Delete successfully:', data);
+    alert(data.message);
+    queryClient.invalidateQueries(['notice']);
+    window.location.reload();
+  };
+  const handleDeleteError = (error) => { // 실패 시
+    console.error('Post Delete failed:', error);
+    alert(error.message);
+  };
+  const { mutate: deleteMutation } = useMutation({ // Mutation
+    mutationFn: fetchDeletePost,
+    onSuccess: handleDeleteSuccess,
+    onError: handleDeleteError,
+  });
 
   return (
     <div className={styles.body}>
@@ -205,39 +245,44 @@ export default function AdminNotice() {
           style={{
             boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)'
           }}>
-          <th>고유번호</th>
-          <th>제목</th>
-          <th>작성자</th>
-          <th>작성일자</th>
-          <th>삭제</th>
+          <tr>
+            <th>고유번호</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>작성일자</th>
+            <th>삭제</th>
+          </tr>
         </thead>
         <tbody>
-          {noticePostList.map((item, index) => (
-            <tr key={index}>
-              {/* 글 고유번호 */}
-              <td>{item.id}</td>
-              {/* 제목 */}
-              <td onClick={() => {
-                selectedModalOpen('edit');
-                addNoticeData(item);
-              }}>{item.title}</td>
-              {/* 작성자 */}
-              <td>{item.writer}</td>
-              {/* 날짜 */}
-              <td>{item.date}</td>
-              {/* 삭제 */}
-              <td style={{ display: 'flex', justifyContent: 'center' }}>
-                <button className='white_button'
-                  onClick={() => deletePostMutation.mutate()
-                  }>
-                  삭제
-                </button>
-              </td>
-              {/* 수정 모달 */}
-              {isModal && modalName === 'edit' &&
-                <EditModal handleConfirmSD={handleConfirmSD} />}
-            </tr>
-          ))}
+          {
+            matchedData?.map((item, index) => (
+              <tr key={index}>
+                {/* 글 고유번호 */}
+                <td>{index + 1}</td>
+                {/* 제목 */}
+                <td onClick={() => {
+                  selectedModalOpen('edit');
+                  setSelectedIndex(index);
+                  addNoticeData(item);
+                }}>{item.post_title}</td>
+                {/* 작성자 */}
+                <td>{item.post_writer}</td>
+                {/* 날짜 */}
+                <td>{item.formatted_date}</td>
+                {/* 삭제 */}
+                <td style={{ display: 'flex', justifyContent: 'center' }}>
+                  <button className='white_button'
+                    onClick={() => handleDelete(item.postId)}>
+                    삭제
+                  </button>
+                </td>
+                {/* 수정 모달 */}
+                {/* item을 보내고 EditModal측에서 fetch요청을 통해 item.postId와 동일한 post의 정보를 불러들이도록 */}
+                {isModal && modalName === 'edit' && index === selectedIndex &&
+                  <EditModal handleUpdate={handleUpdate} item={item} />}
+              </tr>
+            ))
+          }
         </tbody>
       </table>
 

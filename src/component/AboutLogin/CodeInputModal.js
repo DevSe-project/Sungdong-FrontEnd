@@ -1,15 +1,12 @@
 import { React, useEffect, useState } from 'react';
 import styles from './Modal.module.css';
 import { useNavigate } from 'react-router-dom';
-import { useDataActions, useModal, useModalActions, useUserData } from '../../store/DataStore';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useModalActions } from '../../store/DataStore';
+import { useMutation } from '@tanstack/react-query';
 import { useFetch } from '../../customFn/useFetch';
 
 export default function CodeInputModal() {
-  const userData = useUserData();
-  const { setUserData } = useDataActions();
   const { selectedModalClose, closeModal } = useModalActions();
-  const queryClient = useQueryClient();
   const { fetchNonPageServer } = useFetch();
 
   const navigate = useNavigate();

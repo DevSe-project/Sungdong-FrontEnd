@@ -86,10 +86,8 @@
 }
 
 .input {
-  width: 30em;
-  height: 2.5em;
-  font-size: 1em;
-  padding: 0.3em;
+  width: 90%;
+  height: 90%;
   border-radius: 1dvb;
   border: 1px solid lightgray;
   display: flex;
@@ -97,17 +95,6 @@
   align-items: center;
 }
 
-.miniInput{
-  width: 100%;
-  height: 80%;
-  font-size: 0.8em;
-  padding: 0.3em;
-  border-radius: 1dvb;
-  border: 1px solid lightgray;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 /* Modal */
 
 .codeContainer {
@@ -191,7 +178,7 @@
   margin-left: 0.3em;
 }
 
-/* 모달 테이블 */
+/* 관련상품 탭 */
 .table{
   width: 90%;
   border-bottom: 1px solid lightgray;

@@ -1,13 +1,8 @@
-import { db } from "./firebase"; // 파이어베이스 데이터베이스 임포트
 import './App.css';
 import { useEffect, useState } from 'react';
-import { Routes, Route, useNavigate, useLocation, Outlet } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 
 // Data 객체들 불러오기
-import { OrderObj } from './component/Data/OrderObj';
-import { TodayTopicPostObj } from './component/Data/TodayTopicPostObj';
-import { UserDataObj } from './component/Data/UserDataObj';
-import { CategoryDataObj } from './component/Data/CategoryDataObj';
 import { Category } from './component/TemplateLayout/AboutHeader/Category';
 
 // 메인페이지
@@ -35,8 +30,6 @@ import { OrderDetail } from './component/AboutPay/OrderDetail';
 
 // 회사 이벤트 관련
 import { Comeway } from './component/AboutCompany/Comeway';
-import { TodayNews } from './component/AboutCompany/TodayNews';
-import { TodayNewsInner } from './component/AboutCompany/TodayNewsInner';
 import { Event } from './component/AboutCompany/Event'
 import { AdminMain } from './component/AboutAdmin/Main/AdminMain';
 import MyPage from './component/AboutMyPage/MyPage';
@@ -52,9 +45,9 @@ import { AdminNotSoldList } from './component/AboutAdmin/Sold/AdminNotSoldList';
 import { AdminRefund } from './component/AboutAdmin/Refund/AdminRefund';
 import AdminUserList from './component/AboutAdmin/Users/AdminUserList';
 import AdminNotice from './component/AboutAdmin/Notice/AdminNotice';
-import Deli_List from "./component/AboutAdmin/SD_Delivery/List/Deli_List";
-import TotalCal_Manage from "./component/AboutAdmin/SD_Account/TOTAL/Manage/TotalCal_Manage";
-import CMSaccount_Manage from "./component/AboutAdmin/SD_Account/CMS/Manage/CMSaccount_Manage";
+import DeliList from "./component/AboutAdmin/SD_Delivery/List/DeliList";
+import TotalCalManage from "./component/AboutAdmin/SD_Account/TOTAL/Manage/TotalCalManage";
+import CMSaccountManage from "./component/AboutAdmin/SD_Account/CMS/Manage/CMSaccountManage";
 
 // 템플릿 컴포넌트
 import { TopBanner } from './component/TemplateLayout/AboutHeader/TopBanner';
@@ -62,9 +55,8 @@ import { MenuData } from './component/TemplateLayout/AboutMenuData/MenuData';
 import { Footer } from './component/TemplateLayout/AboutFooter/Footer';
 
 // State Management (Zustand) Store
-import { useUserData, useDataActions, useListActions, useOrderData, useIsLogin, useSetLogin, useModalActions, useModalState } from "./store/DataStore";
+import { useListActions, useModalState } from "./store/DataStore";
 import { useQuery } from "@tanstack/react-query";
-import { getDocs, collection } from 'firebase/firestore'
 import { AccountBook } from "./component/AboutMyPage/AccountBook/AccountBook";
 import { DepositHistory } from "./component/AboutMyPage/AccountBook/DepositHistory";
 import { EstimateBox } from "./component/AboutEstimate/EstimateBox";
@@ -77,6 +69,7 @@ import { OrderStep } from "./component/AboutPay/OrderStep";
 import { EstimateWrite } from "./component/AboutEstimate/EstimateWrite";
 import EstimatePrint from "./component/AboutEstimate/EstimatePrint";
 import { useFetch } from "./customFn/useFetch";
+import { AdminSearch } from './component/AboutAdmin/Search/AdminSearch';
 
 
 export default function App() {
@@ -120,42 +113,17 @@ export default function App() {
     }
   };
 
-
-  //반품 데이터 fetch
-  const fetchRefundData = async () => {
-    const querySnapshot = await getDocs(collection(db, 'RefundData')); // 'RefundData'라는 컬렉션 이름
-    return querySnapshot.docs.map((doc) => ({ ...doc.data(), rae_id: doc.id }));
-  };
-
-  //공지 데이터 fetch
-  const fetchNoticeData = async () => {
-    const querySnapshot = await getDocs(collection(db, 'NoticeData')); // 'NoticeData'라는 컬렉션 이름
-    return querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-  };
-
-
-
-  // react-query : 서버에서 받아온 데이터 캐싱, 변수에 저장
+  // react-query : 서버에서 받아온 데이터 캐싱, 변수에 저장 - 상품 데이터
   const { isLoading, isError, error, data } = useQuery({
     queryKey: ['data'],
     queryFn: () => fetchData()
   });
 
-  // react-query : 서버에서 받아온 데이터 캐싱, 변수에 저장
+  // react-query : 서버에서 받아온 데이터 캐싱, 변수에 저장 - 카테고리 데이터
   const { data: categoryData } = useQuery({
     queryKey: ['category'],
     queryFn: () => fetchCategoryData()
   });
-
-  const { data: refundData } = useQuery({
-    queryKey: ['refund'],
-    queryFn: () => fetchRefundData()
-  })
-
-  const { data: noticeData } = useQuery({
-    queryKey: ['notice'],
-    queryFn: () => fetchNoticeData()
-  })
 
   // 찜 데이터(캐쉬) 불러오기
   useEffect(() => {
@@ -409,8 +377,50 @@ export default function App() {
         </Route>
 
         {/* 고객센터 */}
-        <Route path='/userservice/notice' element={<Notice />} />
-        <Route path='/userservice/contact' element={<Contact />} />
+        <Route path='/userservice/notice' element={
+          <>
+            {/* 최상단배너 */}
+            <TopBanner
+              category_dynamicStyle={category_dynamicStyle}
+              menuOnClick={menuOnClick}
+              text_dynamicStyle={text_dynamicStyle}
+              menu_dynamicStyle={menu_dynamicStyle}
+            />
+            <div className='main'>
+              <div style={{ float: 'left' }}>
+                <MenuData />
+              </div>
+              <div className='container'>
+                <Notice />
+                <footer className='footer'>
+                  <Footer />
+                </footer>
+              </div>
+            </div>
+          </>
+        } />
+        <Route path='/userservice/contact' element={
+          <>
+            {/* 최상단배너 */}
+            <TopBanner
+              category_dynamicStyle={category_dynamicStyle}
+              menuOnClick={menuOnClick}
+              text_dynamicStyle={text_dynamicStyle}
+              menu_dynamicStyle={menu_dynamicStyle}
+            />
+            <div className='main'>
+              <div style={{ float: 'left' }}>
+                <MenuData />
+              </div>
+              <div className='container'>
+                <Contact />
+                <footer className='footer'>
+                  <Footer />
+                </footer>
+              </div>
+            </div>
+          </>
+        } />
 
         {/* 마이페이지 */}
         <Route path='/mypages' element={
@@ -615,11 +625,11 @@ export default function App() {
             </div>
           </>
         } />
-        {/* 오늘의 뉴스 */}
+        {/* 오늘의 뉴스
         <Route path='/todayTopic/:page' element={
           <>
             {/* 최상단배너 */}
-            <TopBanner
+        {/* <TopBanner
               category_dynamicStyle={category_dynamicStyle}
               menuOnClick={menuOnClick}
               text_dynamicStyle={text_dynamicStyle}
@@ -636,12 +646,12 @@ export default function App() {
                 </footer>
               </div>
             </div>
-          </>
-        } />
-        <Route path='/todayTopicPost/:id' element={
+          </> */}
+        {/* } />}
+        {/* <Route path='/todayTopicPost/:id' element={
           <>
             {/* 최상단배너 */}
-            <TopBanner
+        {/* <TopBanner
               category_dynamicStyle={category_dynamicStyle}
               menuOnClick={menuOnClick}
               text_dynamicStyle={text_dynamicStyle}
@@ -655,9 +665,9 @@ export default function App() {
                   <Footer />
                 </footer>
               </div>
-            </div>
-          </>
-        } />
+            </div> */}
+        {/* </> */}
+        {/* } /> */}
         <Route path='/event' element={
           <>
             {/* 최상단배너 */}
@@ -700,14 +710,16 @@ export default function App() {
           <Route path='yetPay' element={<AdminNotSoldList />} />
           {/* 주문관리 - 반품 관리 */}
           <Route path='refund' element={<AdminRefund />} />
+          {/* 주문검색 - 검색결과 */}
+          <Route path='search' element={<AdminSearch />} />
 
           {/* 배송관리 - 배송 상태 관리 */}
-          <Route path='SD_delivery/Delivery' element={<Deli_List />} />
+          <Route path='SD_delivery/Delivery' element={<DeliList />} />
 
           {/* 정산관리 - 누적정산 */}
-          <Route path='SD_account/total' element={<TotalCal_Manage />} />
+          <Route path='SD_account/total' element={<TotalCalManage />} />
           {/* 정산관리 - CMS정산 */}
-          <Route path='SD_account/cms' element={<CMSaccount_Manage />} />
+          <Route path='SD_account/cms' element={<CMSaccountManage />} />
 
           {/* 고객센터 - 공지사항 */}
           <Route path='customerCenter/notice' element={<AdminNotice />} />

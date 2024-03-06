@@ -141,10 +141,6 @@ export function MenuData(props) {
           link: '/comeway',
         },
         {
-          item: '오늘의 뉴스',
-          link: '/todaytopic/1',
-        },
-        {
           item: '이벤트',
           link: '/event',
         }],
@@ -201,7 +197,7 @@ export function MenuData(props) {
                       return;
                     }
                     if (subMenuItem.link === 'outLink') {
-                      window.open(`https://www.sendbill.co.kr/RESTful/purchase/taxBill/inquire`, '_blank', 'width=1000,height=800');
+                      window.open(`https://www.sendbill.co.kr/RESTful/main`, '_blank', 'width=1000,height=800');
                       event.preventDefault()
                       return;
                     }

@@ -35,7 +35,15 @@ export const useFetch = () => {
 		setErrorDisplayed(true);
 	};
 
-
+	/**
+	 * @논페이지요청
+	 * 페이지가 없는 데이터 API 요청 함수
+	 * 
+	 * @param {*} item 첫번째 파라미터 : API 요청 대상 데이터 
+	 * @param {*} fetchType 두번째 파라미터 : API FETCH 타입 
+	 * @param {*} router 세번째 파라미터 : API 라우터 경로
+	 * @returns 리턴형식 : response.data
+	 */
 	const fetchNonPageServer = async (item, fetchType, router) => {
 		try {
 			const token = GetCookie("jwt_token");
@@ -65,6 +73,16 @@ export const useFetch = () => {
 		}
 	};
 
+	/**
+	 * @페이지요청
+	 * 페이지가 있는 데이터 API 요청 함수
+	 * 
+	 * @param {*} item 첫번째 파라미터 : API 요청 대상 데이터
+	 * @param {*} fetchType 두번째 파라미터 : API FETCH 타입
+	 * @param {*} router 세번째 파라미터 : API 라우터 경로
+	 * @param {*} pageNumber 네번째 파라미터 : 현재 페이지 숫자
+	 * @returns 리턴형식 : response.data
+	 */
 	const fetchServer = async (item, fetchType, router, pageNumber) => {
 		try {
 			const token = GetCookie("jwt_token");
@@ -94,6 +112,14 @@ export const useFetch = () => {
 		}
 	};
 
+	/**
+	 * @GET페이지요청
+	 * 페이지가 있는 GET 요청 전용 함수
+	 * 
+	 * @param {*} router 첫번째 파라미터 : API 요청 경로
+	 * @param {*} pageNumber 두번째 파라미터 : 현재 페이지 숫자
+	 * @returns 리턴형식 : response.data.data
+	 */
 	const fetchGetServer = async (router, pageNumber) => {
 		try {
 			const token = GetCookie("jwt_token");
@@ -122,6 +148,17 @@ export const useFetch = () => {
 		}
 	};
 
+	/**
+	 * @페이지요청
+	 * 페이지와 페이지당 개수를 지정할 수 있는 API 요청 함수
+	 * 
+	 * @param {*} item 첫번째 파라미터 : API 요청 대상 데이터
+	 * @param {*} fetchType 두번째 파라미터 : API 요청 타입
+	 * @param {*} router 세번째 파라미터 : API 요청 경로
+	 * @param {*} pageNumber 네번째 파라미터 : 현재 페이지 숫자
+	 * @param {*} postCnt 다섯번째 파라미터 : 페이지당 몇 개를 렌더링 할 건지
+	 * @returns 리턴형식 : response.data
+	 */
 	const fetchAddPostServer = async (item, fetchType, router, pageNumber, postCnt) => {
 		try {
 			const token = GetCookie("jwt_token");
@@ -151,6 +188,15 @@ export const useFetch = () => {
 		}
 	};
 
+	/**
+	 * @GET페이지요청
+	 * 페이지와 페이지당 개수를 지정할 수 있는 GET 전용 API 요청 함수
+	 * 
+	 * @param {*} router 첫번째 파라미터 : API 요청 경로
+	 * @param {*} pageNumber 두번째 파라미터 : 현재 페이지 숫자
+	 * @param {*} postCnt 세번째 파라미터 : 페이지당 몇 개를 렌더링 할 건지
+	 * @returns 리턴형식 : response.data.data
+	 */
 	const fetchGetAddPostServer = async (router, pageNumber, postCnt) => {
 		try {
 			const token = GetCookie("jwt_token");

@@ -87,6 +87,47 @@ export function TackBackRequest() {
     }
   };
 
+
+  /*---------- 필터 검색 ----------*/
+  
+  /**
+   * @필터 POST FETCH 
+   * - 필터 검색 Mutation (react-query :: Mutation Hook) 사용
+   * @param {*} filter 객체 정보
+   * - date: {start: '', end: ''} - 시작 날짜와 끝 날짜 필터
+   * - raeDateType: "" - 색인할 날짜 타입 필터
+   * - raeState: "" - rae State에 따른 필터
+   * - selectFilter: "" - 상세 필터
+   * - filterValue: "" - 상세 필터 조건
+   */
+  const fetchFilteredRae = async (filter) => {
+    return await fetchServer(filter, `post`, `/order/rae/filter`, 1);
+  };
+
+  const { mutate: filterMutation } = useMutation({ mutationFn: fetchFilteredRae })
+
+  /**
+   * @검색 Mutation 선언부
+
+   * @returns 필터된 상품의 데이터 객체 (@불러오기 returns 데이터 정보 참조)
+   */
+  const handleSearch = (filter) => {
+
+    // 검색 버튼 클릭 시에만 서버에 요청
+    filterMutation(filter, {
+      onSuccess: (data) => {
+        alert(data.message)
+        setCurrentPage(data.data.currentPage);
+        setTotalPages(data.data.totalPages);
+        queryClient.setQueryData(['orderRefund'], () => {
+          return data.data.data;
+        })
+      },
+      onError: (error) => {
+        return console.error(error.message);
+      },
+    })  };
+
   if (isLoading) {
     return <p>Loading..</p>;
   }
@@ -100,7 +141,7 @@ export function TackBackRequest() {
         <h1><i className="fa-solid fa-heart" /> 반품신청</h1>
       </div>
       {/* 필터 */}
-      <TackBackFilter />
+      <TackBackFilter handleSearch={handleSearch}/>
       {/* 테이블 */}
       <div style={{ display: 'flex', justifyContent: 'flex-end', width: '90%' }}>
         <button
@@ -118,6 +159,7 @@ export function TackBackRequest() {
               <th>상품코드</th>
               <th>상품명</th>
               <th>규격</th>
+              <th>옵션</th>
               <th>상품 단가</th>
               <th>반품가능 수량</th>
               <th>반품가능 금액</th>
@@ -138,6 +180,7 @@ export function TackBackRequest() {
                 <td>{item.product_id}</td>
                 <td>{item.product_title}</td>
                 <td>{item.product_spec}</td>
+                <td>{item.selectedOption ? item.selectedOption : '없음'}</td>
                 <td>{(item.order_productPrice / item.order_cnt).toLocaleString()}</td>
                 <td>{item.order_cnt}</td>
                 <td>{parseInt(item.order_productPrice).toLocaleString()}</td>

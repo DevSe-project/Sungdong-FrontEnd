@@ -1,24 +1,35 @@
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useModalActions, useModalState } from '../../../../store/DataStore';
-import styles from './Deli_List.module.css';
+import { useDeliveryFilter, useModalActions, useModalState } from '../../../../store/DataStore';
+import styles from './DeliList.module.css';
 import axios from '../../../../axios';
 import { GetCookie } from '../../../../customFn/GetCookie';
-import Deli_Filter from '../Filter/Deli_Filter';
-import Deli_StateModal from './Deli_StateModal';
-import Deli_InvoiceModal from './Deli_InvoiceModal';
+import DeliFilter from '../Filter/DeliFilter';
+import DeliStateModal from './DeliStateModal';
+import DeliInvoiceModal from './DeliInvoiceModal';
 import Pagination from '../../../../customFn/Pagination';
+import { useMutation } from '@tanstack/react-query';
+import { useFetch } from '../../../../customFn/useFetch';
 
 
-export default function Deli_List() {
+export default function DeliList() {
 
-  // relative modal state
-  const { isModal, modalName } = useModalState();
-  const { selectedModalOpen } = useModalActions();;
+  // Modal 관련 Zustand
+  const { isModal, modalName } = useModalState(); // isModal: 모달 상태 저장 | modalName: 선택한 모달 저장
+  const { selectedModalOpen } = useModalActions();; // 모달 오픈 Fn
 
   // 게시물 데이터와 페이지 번호 상태 관리    
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
+  const [itemsPerPage, setItemsPerPage] = useState(10); // 페이지당 렌더링 될 개수
+  const [totalPages, setTotalPages] = useState(1); // 전체 페이지 개수
+
+  // Fetch 관련 customFn
+  const { fetchServer } = useFetch();
+
+  // Delivery 관련 Zustand\
+  const { deliveryFilter } = useDeliveryFilter();
+
+
 
 
   // FetchData
@@ -92,7 +103,12 @@ export default function Deli_List() {
     }
   }
 
-  // 체크박스 개별 업데이트
+  /**
+   * @기능 체크박스 개별 업데이트
+   * @설명 체크된 아이템의 order_id를 배열에 추가/삭제 합니다.
+   * @param {*} checked 
+   * @param {*} order_id 
+   */
   function handlePerCheckbox(checked, order_id) {
     if (checked) {
       // 단일 선택 시 체크된 아이템을 배열에 추가
@@ -104,6 +120,11 @@ export default function Deli_List() {
   }
 
   // 배송 상태 변경 모달 열기 조건 확인
+  /**
+   * @기능 배송 상태변경 모달오픈 시, 검사
+   * @설명 모달의 name을 전달받아 체크된 체크박스의 개수(checkedItems.length)가 1개 이상 있으면 해당 모달이 열리도록 합니다.
+   * @param {*} name 
+   */
   const handleModalOpen = (name) => {
     if (checkedItems.length > 0) {
       selectedModalOpen(name); // 선택된 아이템이 있으면 배송 상태 변경 모달 열기
@@ -113,6 +134,7 @@ export default function Deli_List() {
   };
 
   // 삭제
+  // 진행 절차: mutation호출 -> mutationFn실행
   const deleteData = async () => {
     if (window.confirm('삭제를 진행하시겠습니까?')) {
       console.log(checkedItems);
@@ -137,6 +159,30 @@ export default function Deli_List() {
     }
   };
 
+  const fetchSfilterdList = async (filter) => {
+    return await fetchServer(filter, `post`, `/delivery/filter`, currentPage)
+  }
+
+  const { mutate: filterMutation } = useMutation({ mutationFn: fetchSfilterdList });
+
+  const handleSearch = () => {
+    filterMutation(deliveryFilter, {
+      onSuccess: (data) => {
+        alert(data.message);
+        setCurrentPage(data.data.currentPage);
+        setTotalPages(data.data.totalPages);
+        queryClient.setQuery([`delivery`], () => {
+          return data.data.data[0]
+        })
+      },
+      onError: (error) => {
+        return console.error(error.message);
+      }
+    })
+  }
+
+
+
   // 데이터 로딩 중 또는 에러 발생 시 처리
   if (isLoading) {
     return <p>Loading...</p>;
@@ -151,7 +197,7 @@ export default function Deli_List() {
       <div className='LargeHeader'>배송 상태 관리</div>
 
       {/* Filter Container */}
-      <Deli_Filter />
+      <DeliFilter />
 
       {/* Header */}
       <div className='MediumHeader'>
@@ -205,7 +251,7 @@ export default function Deli_List() {
             <th>처리상태</th>
             <th>주문일자</th>
             <th>상품코드</th>
-            <th>상품명</th>
+            <th colSpan={2}>상품명</th>
             <th>옵션명</th>
             <th>표준가</th>
             <th>주문량</th>
@@ -235,7 +281,7 @@ export default function Deli_List() {
                 {/* 상품번호 */}
                 <td>{item.product_id}</td>
                 {/* 상품명 */}
-                <td>{item.product_title}</td>
+                <td colSpan={2}>{item.product_title}</td>
                 {/* 옵션 상세 - 선택 옵션이 있을 경우만 표시*/}
                 <td>{item.optionSelected ? item.optionSelected : "-"}</td>
                 {/* 표준가 */}
@@ -243,7 +289,7 @@ export default function Deli_List() {
                 {/* 주문량 */}
                 <td>{item.order_cnt}</td>
                 {/* 공급가 */}
-                <td>{parseInt(item.order_productPrice)}</td>
+                <td>{item.discountPrice}</td>
               </tr>
             ))}
         </tbody>
@@ -264,7 +310,7 @@ export default function Deli_List() {
       {
         isModal && modalName === 'DeliveryStateModal'
           ?
-          <Deli_StateModal
+          <DeliStateModal
             checkedItems={checkedItems}
             setCheckedItems={setCheckedItems}
             deliveryData={deliveryData}
@@ -276,7 +322,7 @@ export default function Deli_List() {
       {
         isModal && modalName === 'InvoiceModal'
           ?
-          <Deli_InvoiceModal
+          <DeliInvoiceModal
             checkedItems={checkedItems}
             setCheckedItems={setCheckedItems}
             parseDeliveryState={parseDeliveryState}

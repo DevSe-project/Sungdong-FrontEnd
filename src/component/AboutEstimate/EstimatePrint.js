@@ -149,7 +149,7 @@ const EstimatePrint = forwardRef((props, ref) => {
                   {parseInt(parseInt(item.estimate_price) + profit(item)).toLocaleString('ko-KR')}
                 </td>
                 <td style={{backgroundColor: 'white', border: '1px solid black'}}>
-                  {parseInt((parseInt(item.estimate_price) + profit(item)) * item.estimate_cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
+                  {parseInt((parseInt(item.estimate_price) + profit(item)) * item.estimate_cnt).toLocaleString('ko-KR')}
                 </td>
                 <td style={{backgroundColor: 'white', border: '1px solid black'}}> 
                   <span>{estimateInfo?.estimate_due}일</span>

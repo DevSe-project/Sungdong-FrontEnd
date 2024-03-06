@@ -1,36 +1,85 @@
 import styles from './AdminSoldList.module.css';
-import { AdminHeader } from '../Layout/Header/AdminHeader';
-import { AdminMenuData } from '../Layout/SideBar/AdminMenuData';
 import { useState } from 'react';
 import React from 'react';
 import { AdminSoldFilter } from './AdminSoldFilter';
-import AdminSoldModal from './AdminSoldModal';
 import { useModalActions, useModalState, useOrderFilter, useOrderSelectList, useOrderSelectListActions } from '../../../store/DataStore';
 import AdminDelNumModal from './AdminDelNumModal';
 import AdminCancelModal from './AdminCancelModal';
+import AdminSoldModal from './AdminSoldModal';
+
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useFetch } from '../../../customFn/useFetch';
 import Pagination from '../../../customFn/Pagination';
 
 export function AdminSoldList() {
 
-  const { fetchGetAddPostServer, fetchAddPostServer, fetchNonPageServer,fetchServer } = useFetch();
+  // -------------------------------------- STATE 공간 ---------------------------------------------
+  const { fetchGetAddPostServer, fetchAddPostServer, fetchNonPageServer,fetchServer } = useFetch(); //Fetch Custom Hook
   // 게시물 데이터와 페이지 번호 상태 관리    
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [totalPages, setTotalPages] = useState(1);
-  const [selectedData, setSelectedData] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1); //현재 페이지
+  const [itemsPerPage, setItemsPerPage] = useState(10); //페이지당 렌더링 될 개수
+  const [totalPages, setTotalPages] = useState(1); //전체 페이지 개수
+  const [selectedData, setSelectedData] = useState(null); //선택한 주문의 상품 데이터가 담기는 변수
   const queryClient = useQueryClient();
 
   //ZUSTAND STATE
-  const { isModal, modalName } = useModalState();
-  const { selectedModalOpen } = useModalActions();
-  const orderFilter = useOrderFilter();
-  const selectList = useOrderSelectList();
-  const { toggleSelectList, toggleAllSelect } = useOrderSelectListActions();
+  const { isModal, modalName } = useModalState(); //모달창 불러오는 State (isModal - 모달창 불러오기, modalName - 모달이름 구성)
+  const { selectedModalOpen } = useModalActions(); //모달이름으로 모달을 선택하여 오픈하는 변수
+  const orderFilter = useOrderFilter(); // 주문 필터링 구성
+  const selectList = useOrderSelectList(); // 선택한 데이터를 담는 변수
+  const { toggleSelectList, toggleAllSelect } = useOrderSelectListActions(); //체크박스 관련 변수
+//--------------------------------------------------------------------------------------------------
 
-
-  //데이터 불러오기
+  /**
+   * @불러오기
+   * GET FETCH
+   * - 모든 주문 데이터를 불러오는 동기형 FETCH
+   *    * useQuery (react-query Hook) 사용
+   *    * queryKey : ['order']
+   *    * queryFn : fetchData();
+   *    * return : ordered 변수로 리턴됨
+   * @returns {*} -data.data[0]에 담긴 객체정보-
+   * - 주소 관련
+   *    * zonecode : 주소 :: 우편번호
+   *    * addressDetail: 주소 :: 상세주소
+   *    * roadAddress : 주소 :: 도로명 주소
+   *    * bname : 주소 :: 동 이름
+   *    * jibunAddress : 주소 :: 지번
+   *    * buildingName : 주소 :: 건물 이름
+   * - 배송 관련
+   *    * deliveryType : 배송 구분
+   *    * delivery_addDate : 배송 시작 일자
+   *    * delivery_cDate : 배송 처리 일자
+   *    * delivery_date : 희망 배송 일자
+   *    * delivery_id : 배송 번호
+   *    * delivery_message : 배송 메세지
+   *    * delivery_num : 송장 번호
+   *    * delivery_selectedCor : 선택한 희망 배송사
+   *    * delivery_state : 배송 상태
+   * 
+   * - 주문 관련
+   *    * orderState : 주문 상태
+   *    * order_date : 주문 날짜
+   *    * order_delName : 배송지 성함
+   *    * order_delTel : 배송지 전화번호
+   *    * order_email : 주문자 이메일
+   *    * order_faxNum : 주문자 팩스번호
+   *    * order_id : 주문 번호
+   *    * order_moneyReceipt : 주문 영수증 구분
+   *    * order_tel : 주문자 전화번호
+   *    * order_name : 주문자 성함
+   *    * order_payAmount : 주문 총 가격
+   *    * order_payRoute : 주문 지불방법
+   *    * order_sum : 주문 합계
+   * - cancelReason : 취소 사유
+   * - isCancel : 취소여부 (TINYINT 0 or 1)
+   * - printFax : 팩스 출력여부 *(boolean Type)
+   * - product_length : 주문 상품의 개수
+   * - product_title : 주문 상품의 대표 상품명
+   * - smtMessage : 성동 메세지
+   * - userType_id : 유저 구분 번호
+   * - users_id : 유저 고유 번호
+   */
   const fetchData = async () => {
     const data = await fetchGetAddPostServer(`/order/all`, currentPage, itemsPerPage);
     setCurrentPage(data.currentPage);
@@ -38,7 +87,20 @@ export function AdminSoldList() {
     return data.data[0];
   }
 
-  // 페이지를 변경할 때 호출되는 함수
+  const { isLoading, isError, error, data: ordered } = useQuery({
+    queryKey: [`order`, currentPage, itemsPerPage],
+    queryFn: () => fetchData()
+  }) // currentPage, itemPerPage가 변경될 때마다 재실행하기 위함
+  
+  //---------------------------------------------------------------------------------
+
+  /**
+   * @페이지
+   * POST FETCH
+   * - 페이지 변경을 위한 pageMutation 사용 (react-query Hook)
+   * @param {*} pageNumber 변경 될 페이지 번호 (숫자형식)
+   * @returns data(@불러오기 데이터 객체 정보 참조)
+   */
   const fetchPageChange = async (pageNumber) => {
     return await fetchAddPostServer({}, 'post', '/order/all', pageNumber, itemsPerPage);
   };
@@ -46,6 +108,12 @@ export function AdminSoldList() {
   const { mutate: pageMutaion } = useMutation({ mutationFn: fetchPageChange })
 
 
+  /**
+   * @페이지
+   * Mutation 선언부
+   * - setQueryData : queryKey['order']을 리턴된 data의 값으로 재 지정
+   * @param {*} pageNumber 변경 될 페이지 번호 (숫자형식)
+   */
   function handlePageChange(pageNumber) {
     pageMutaion(pageNumber, {
       onSuccess: (data) => {
@@ -61,11 +129,8 @@ export function AdminSoldList() {
     })
   }
 
-  // Fetch
-  const { isLoading, isError, error, data: ordered } = useQuery({
-    queryKey: [`order`, currentPage, itemsPerPage],
-    queryFn: () => fetchData()
-  }) // currentPage, itemPerPage가 변경될 때마다 재실행하기 위함
+  //-------------------------------------------------------------------------------------
+
 
   //전체 선택 핸들러
   const handleToggleAllSelect = () => {
@@ -98,13 +163,27 @@ export function AdminSoldList() {
 
   /*---------- 필터 검색 ----------*/
   
+  /**
+   * @필터 POST FETCH 
+   * - 필터 검색 Mutation (react-query :: Mutation Hook) 사용
+   * @param {*} filter 객체 정보
+   * - date: {start: '', end: ''} - 시작 날짜와 끝 날짜 필터
+   * - dateType: "" - 색인할 날짜 타입 필터
+   * - deliveryType: "" - 배송 구분 필터
+   * - selectFilter: "" - 상세 필터
+   * - filterValue: "" - 상세 필터 조건
+   */
   const fetchFilteredOrders = async (filter) => {
     return await fetchServer(filter, `post`, `/order/filter`, 1);
   };
 
   const { mutate: filterMutation } = useMutation({ mutationFn: fetchFilteredOrders })
 
+  /**
+   * @검색 Mutation 선언부
 
+   * @returns 필터된 상품의 데이터 객체 (@불러오기 returns 데이터 정보 참조)
+   */
   const handleSearch = () => {
 
     // 검색 버튼 클릭 시에만 서버에 요청
@@ -122,7 +201,12 @@ export function AdminSoldList() {
       },
     })  };
 
-  //발송 처리 핸들러
+  /**
+   * @발송
+   * 발송처리 핸들러
+   * - 주문이 한 개라도 체크되어 있어야 함
+   * - 조건 달성 시 "발송" 이름의 모달 오픈
+   */
   const handleDelNumInput = () => {
     if (selectList.length !== 0) {
       selectedModalOpen("발송");
@@ -131,7 +215,12 @@ export function AdminSoldList() {
     }
   }
 
-  //취소 처리 핸들러
+  /**
+   * @취소
+   * 취소처리 핸들러
+   * - 주문이 한 개라도 체크되어 있어야 함
+   * - 조건 달성 시 "취소" 이름의 모달 오픈
+   */
   const handleCancel = () => {
     if (selectList.length !== 0) {
       selectedModalOpen("취소");
@@ -155,7 +244,7 @@ export function AdminSoldList() {
           <h1>결제완료 주문 및 발송 처리</h1>
         </div>
         {/* 필터 */}
-        <AdminSoldFilter handelSearch={handleSearch} />
+        <AdminSoldFilter handleSearch={handleSearch} />
         {/* 목록 */}
         <div className={styles.tableLocation}>
           {/* 목록 상위 타이틀 */}
@@ -298,7 +387,7 @@ export function AdminSoldList() {
                                     {itemData.product_brand}
                                   </td>
                                   <td>
-                                    {itemData.selectedOption}
+                                    {itemData.selectedOption ? itemData.selectedOption : '없음'}
                                   </td>
                                   <td>
                                     {itemData.product_supply}
@@ -328,7 +417,7 @@ export function AdminSoldList() {
                     {modalName === item.order_id && <AdminSoldModal item={item} />}
                   </React.Fragment>
                 ))
-                : <tr><td colSpan="10">불러들일 데이터가 없습니다.</td></tr>
+                : <tr><td colSpan="8">불러들일 데이터가 없습니다.</td></tr>
               }
             </tbody>
           </table>

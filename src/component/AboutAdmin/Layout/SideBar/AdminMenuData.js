@@ -35,11 +35,11 @@ export function AdminMenuData(props) {
           link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/sold',
         },
         {
-          item: '미결제 주문',
+          item: '미결제/취소 주문',
           link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/yetPay',
         },
         {
-          item: '반품/교환/취소',
+          item: '반품/교환 관리',
           link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/refund'
         }
       ],

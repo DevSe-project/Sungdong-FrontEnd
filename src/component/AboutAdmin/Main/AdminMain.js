@@ -12,7 +12,7 @@ export function AdminMain() {
   const fetchVerifyAdmin = async () => {
     try {
       const data = await fetchServer({}, 'post', '/auth/verify/admin', 1);
-      return alert(data.message);
+      return console.log(data.message);
     } catch (error) {
       navigate("/");
     }

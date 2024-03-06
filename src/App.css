@@ -81,25 +81,20 @@ table {
   border-collapse: collapse;
   border-radius: 1vh;
   width: 100%;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
 }
 
 thead {
   width: 100%;
   height: 40px;
-  border-radius: 1vh;
   boxShadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 th {
   background-color: rgb(239, 233, 233);
   color: black;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   text-align: center;
   cursor: default;
-  padding: 0 1em;
 }
 
 tr {
@@ -112,11 +107,10 @@ tr:hover {
 
 td {
   border-bottom: 1px solid lightgray;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  word-wrap: break-word;
+  max-width: 20ch;
   text-align: center;
-  padding: 0 1em;
+  height: 50px;
 }
 
 textarea {

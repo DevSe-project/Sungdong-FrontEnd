@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
-import styles from './CMSaccount_Manage.module.css';
-import { AdminHeader } from '../../../Layout/Header/AdminHeader';
-import { AdminMenuData } from '../../../Layout/SideBar/AdminMenuData';
+import styles from './CMSaccountManage.module.css';
 import CMSFilter from '../Filter/CMSFilter';
 import CMSList from '../List/CMSList';
 
-const CMSaccount_Manage = () => {
+const CMSaccountManage = () => {
   const [accounts, setAccounts] = useState([
     { id: 1, username: 'admin1', role: 'Admin', status: 'Completed' },
     { id: 2, username: 'user1', role: 'User', status: 'Incomplete' },
@@ -52,4 +50,4 @@ const CMSaccount_Manage = () => {
   );
 };
 
-export default CMSaccount_Manage;
+export default CMSaccountManage;
