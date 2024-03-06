@@ -1,49 +1,25 @@
+import { useEffect } from 'react';
 import { useDeliveryFilter } from '../../../../store/DataStore';
 import styles from './DeliFilter.module.css';
 import { useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
+import { check } from 'fontawesome';
 
-export default function DeliFilter() {
+export default function DeliFilter({search}) {
     const queryClient = useQueryClient();
     // 쭈~스텐드
-    const { deliveryFilter, resetDeliveryFilter, updateCheckboxState, allUpdateCheckboxState, startDate, endDate, setDateRange, filterDate } = useDeliveryFilter();
+    const { deliveryFilter, resetDeliveryFilter, updateCheckboxState, allUpdateCheckboxState, setDateRange, filterDate } = useDeliveryFilter();
 
-    // 검색 함수
-    const search = () => {
-        // 체크박스 중 선택된 상태를 filter
-        const selectedStatus = Object.keys(deliveryFilter.checkboxState).filter((key) => deliveryFilter.checkboxState[key]);
-        // 요청할 데이터 조각모음 ㅋㅋㅎ
-        const requestData = {
-            statuses: selectedStatus,
-            startDate: deliveryFilter.date.startDate,
-            endDate: deliveryFilter.date.endDate,
-        };
+    // 컴포넌트가 언마운트 될 때마다 deliveryFilter 상태 리셋
+    useEffect(() => {
+        resetDeliveryFilter();
+    }, [])
 
-        // 'filteredData' 쿼리를 무효화하고 새로운 데이터를 fetching하기 위함
-        queryClient.invalidateQueries('filteredData');
+    // 🪲Debugging: 필터링에 변경사항이 있을 때마다 deliveryFilter 객체의 상태 출력
+    useEffect(() => {
+        console.log(deliveryFilter);
+    }, [dateFilter, checkboxFtilter]);
 
-        // API 요청
-        queryClient.fetchQuery('filteredData', () => fetchFilteredDelivery(requestData));
-    };
-
-    // 필터링된 API 데이터를 가져오는 함수
-    const fetchFilteredDelivery = async (requestData) => {
-        try {
-            const response = await axios.get('/data', { params: requestData });
-
-            if (response.ok) {
-                const data = await response.json();
-                return data;
-            } else {
-                // HTTP 오류 응답에 대한 예외 처리
-                throw new Error(`HTTP 오류: ${response.status}`);
-            }
-        } catch (error) {
-            // 네트워크 오류 등의 예외 처리
-            console.error('데이터 가져오기 실패:', error.message);
-            throw new Error('데이터 가져오기 실패');
-        }
-    };
 
     // 배송 상태 체크박스
     function checkboxFtilter() {
@@ -115,8 +91,7 @@ export default function DeliFilter() {
             // 이 부분에 필터링할 데이터를 가져오고 상태 업데이트 예정
             const data = []; // 데이터 가져오는 로직을 구현해야 함
             filterDate(data);
-
-            console.log(`조회 기간: ${startDate} ~ ${endDate}`);
+            console.log(`조회 기간: ${deliveryFilter.date.startDate} ~ ${deliveryFilter.date.endDate}`);
         };
 
         return (

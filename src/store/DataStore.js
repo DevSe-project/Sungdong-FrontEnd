@@ -1204,19 +1204,6 @@ export const useDeliveryFilter = create((set) => ({
       }
     }
   })),
-
-  //
-  filterDate: (data) => {
-    // 데이터 필터링, 상태 업데이트 로직을 추가 예정
-    const filteredData = data.filter((item) => {
-      // 필터링 조건에 따라 로직을 구현 예정
-      // item.date가 startDate와 endDate 사이에 있는지 확인하는 등등...ㅅㅂ
-
-      return true; // 나중에 결과 반환
-    });
-
-    set({ filteredData });
-  },
 }))
 
 /* ----------------RefundFilter STORE---------------- */

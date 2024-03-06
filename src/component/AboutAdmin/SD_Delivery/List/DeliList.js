@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useDeliveryFilter, useModalActions, useModalState } from '../../../../store/DataStore';
 import styles from './DeliList.module.css';
 import axios from '../../../../axios';
@@ -29,6 +29,8 @@ export default function DeliList() {
   // Delivery 관련 Zustand\
   const { deliveryFilter } = useDeliveryFilter();
 
+  // queryClient
+  const queryClient = useQueryClient();
 
 
 
@@ -159,11 +161,11 @@ export default function DeliList() {
     }
   };
 
-  const fetchSfilterdList = async (filter) => {
+  const fetchFilterdList = async (filter) => {
     return await fetchServer(filter, `post`, `/delivery/filter`, currentPage)
   }
 
-  const { mutate: filterMutation } = useMutation({ mutationFn: fetchSfilterdList });
+  const { mutate: filterMutation } = useMutation({ mutationFn: fetchFilterdList });
 
   const handleSearch = () => {
     filterMutation(deliveryFilter, {
