@@ -16,7 +16,7 @@ export default function DeliInvoiceModal(props) {
         };
 
         window.addEventListener('keydown', exit_esc);
-
+ 
         return () => {
             window.removeEventListener('keydown', exit_esc);
         };

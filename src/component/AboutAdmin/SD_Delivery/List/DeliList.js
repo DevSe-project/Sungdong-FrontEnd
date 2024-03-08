@@ -70,7 +70,6 @@ export default function DeliList() {
 
   // 배송상태 파싱
   function parseDeliveryState(val) {
-    console.log(val);
     const parseVal = parseInt(val);
     switch (parseVal) {
       case 0:
@@ -161,20 +160,35 @@ export default function DeliList() {
     }
   };
 
+  /**
+   * 
+   * @param {Object} filter 
+   * @returns {Object} 필터링된 객체 리턴
+   */
   const fetchFilterdList = async (filter) => {
+    console.log(filter);
     return await fetchServer(filter, `post`, `/delivery/filter`, currentPage)
   }
 
   const { mutate: filterMutation } = useMutation({ mutationFn: fetchFilterdList });
 
   const handleSearch = () => {
+    // 예외처리 1) 체크박스 X, 날짜 X
+    // 1. 체크박스 중 true인 key가 하나도 없고 날짜가 아예 입력되지 않았을 때
+
+    // 예외처리 2) 체크박스 O, 날짜 하나만 O 
+
+
+    // 체크박스 O, 날짜 X
+    // 체크박스 X, 날짜 O
+    // 체크박스 O, 날짜 O
     filterMutation(deliveryFilter, {
       onSuccess: (data) => {
         alert(data.message);
         setCurrentPage(data.data.currentPage);
         setTotalPages(data.data.totalPages);
-        queryClient.setQuery([`delivery`], () => {
-          return data.data.data[0]
+        queryClient.setQueryData([`delivery`, currentPage, itemsPerPage], () => {
+          return data.data.data
         })
       },
       onError: (error) => {
@@ -182,7 +196,6 @@ export default function DeliList() {
       }
     })
   }
-
 
 
   // 데이터 로딩 중 또는 에러 발생 시 처리
@@ -199,7 +212,7 @@ export default function DeliList() {
       <div className='LargeHeader'>배송 상태 관리</div>
 
       {/* Filter Container */}
-      <DeliFilter />
+      <DeliFilter handleSearch={handleSearch} parseDeliveryState={parseDeliveryState} />
 
       {/* Header */}
       <div className='MediumHeader'>

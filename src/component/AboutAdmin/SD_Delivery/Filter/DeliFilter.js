@@ -2,23 +2,16 @@ import { useEffect } from 'react';
 import { useDeliveryFilter } from '../../../../store/DataStore';
 import styles from './DeliFilter.module.css';
 import { useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
-import { check } from 'fontawesome';
 
-export default function DeliFilter({search}) {
+export default function DeliFilter({ handleSearch, parseDeliveryState }) {
     const queryClient = useQueryClient();
     // 쭈~스텐드
-    const { deliveryFilter, resetDeliveryFilter, updateCheckboxState, allUpdateCheckboxState, setDateRange, filterDate } = useDeliveryFilter();
+    const { deliveryFilter, resetDeliveryFilter, updateCheckboxState, allUpdateCheckboxState, setDateRange } = useDeliveryFilter();
 
     // 컴포넌트가 언마운트 될 때마다 deliveryFilter 상태 리셋
     useEffect(() => {
         resetDeliveryFilter();
     }, [])
-
-    // 🪲Debugging: 필터링에 변경사항이 있을 때마다 deliveryFilter 객체의 상태 출력
-    useEffect(() => {
-        console.log(deliveryFilter);
-    }, [dateFilter, checkboxFtilter]);
 
 
     // 배송 상태 체크박스
@@ -65,7 +58,7 @@ export default function DeliFilter({search}) {
                                 console.log(`현재 체크된 체크박스: ${changedCheckboxes.join(', ')}`);
                             }}
                         />
-                        {item}
+                        {parseDeliveryState(item)}
                     </label>
                 ))}
             </div>
@@ -76,9 +69,9 @@ export default function DeliFilter({search}) {
     // 배송일자 조회
     function dateFilter() {
         const handleDateFilter = (days) => {
-            const today = new Date();
-            const newEndDate = new Date(today);
+            const today = new Date(); // Date타입 변수 생성
             const newStartDate = new Date(today);
+            const newEndDate = new Date(today);
 
             newStartDate.setDate(today.getDate() - days);
 
@@ -88,10 +81,7 @@ export default function DeliFilter({search}) {
                 setDateRange(newStartDate.toISOString().split('T')[0], newEndDate.toISOString().split('T')[0]);
             }
 
-            // 이 부분에 필터링할 데이터를 가져오고 상태 업데이트 예정
-            const data = []; // 데이터 가져오는 로직을 구현해야 함
-            filterDate(data);
-            console.log(`조회 기간: ${deliveryFilter.date.startDate} ~ ${deliveryFilter.date.endDate}`);
+            console.log(`조회 기간: ${deliveryFilter.date.start} ~ ${deliveryFilter.date.end}`);
         };
 
         return (
@@ -100,15 +90,15 @@ export default function DeliFilter({search}) {
                 <input
                     className='date'
                     type='date'
-                    value={deliveryFilter.date.startDate}
-                    onChange={(e) => setDateRange(e.target.value, deliveryFilter.date.endDate)}
+                    value={deliveryFilter.date.start}
+                    onChange={(e) => setDateRange(e.target.value, deliveryFilter.date.end)}
                 />
                 {/* 종료일 */}
                 <input
                     className='date'
                     type='date'
-                    value={deliveryFilter.date.endDate}
-                    onChange={(e) => setDateRange(deliveryFilter.date.startDate, e.target.value)}
+                    value={deliveryFilter.date.end}
+                    onChange={(e) => setDateRange(deliveryFilter.date.start, e.target.value)}
                 />
 
                 {/* 날짜 필터 버튼들 */}
@@ -152,7 +142,7 @@ export default function DeliFilter({search}) {
                     </div>
                 ))}
                 <div style={{ display: 'flex', gap: '0.5em' }}>
-                    <input className='original_button' type='submit' value='검색' onClick={search} />
+                    <input className='original_button' type='button' value='검색' onClick={() => handleSearch()} />
                     <input className='white_button' type='reset' onClick={() => resetDeliveryFilter()} />
                 </div>
             </form>

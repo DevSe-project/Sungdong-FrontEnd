@@ -1139,24 +1139,43 @@ export const useNoticeActions = () => useNoticeStore((state) => state.actions);
 
 
 // ------------Delivery Filter------------
+
+/**
+ * - state
+ *   * deliveryFilter{object}  - 배송 필터 상태를 관리하는 객체
+ *     * deliveryFilter.checkboxState {object}  - 배송 상태 체크박스 상태를 관리하는 객체
+ *     * deliveryFilter.checkboxState {boolean} - 배송 준비 상태 체크박스의 상태 
+ *     * deliveryFilter.checkboxState {boolean} - 배송 중 상태 체크박스의 상태
+ *     * deliveryFilter.checkboxState {boolean} - 배송 완료 상태 체크박스의 상태
+ *     * deliveryFilter.checkboxState {boolean} - 배송 지연 상태 체크박스의 상태
+ *   * deliveryFilter.date{object}  - 배송일자 관련 정보를 담는 객체
+ *     * deliveryFilter.date.startDate {string} - 배송 시작일
+ *     * deliveryFilter.date.endDate {string} - 배송 종료일
+ *     * deliveryFilter.date.filteredData {array} - 필터링된 데이터 배열
+ * - actions
+ *    * resetDeliveryFilter {function}  - 배송 필터 초기화 함수
+ *    * updateCheckboxState {function}  - 체크박스 상태 업데이트 함수
+ *    * allUpdateCheckboxState {function}  - 모든 체크박스 상태 업데이트 함수
+ *    * setDateRange{ function}  - 배송일자 범위 지정 함수
+ * 
+ * @description 배송 필터 관리를 위한 Hook입니다.
+ */
 export const useDeliveryFilter = create((set) => ({
   deliveryFilter: {
-    // 배송상태
     checkboxState: {
-      '배송 준비': false,
-      '배송 중': false,
-      '배송 완료': false,
-      '배송 지연': false
+      0: false,
+      1: false,
+      2: false,
+      3: false,
+      4: false,
+      5: false,
     },
-    // 배송일자'
     date: {
-      startDate: '',
-      endDate: '',
-      filteredData: []
+      start: '',
+      end: '',
     },
   },
 
-  // 초기화
   resetDeliveryFilter: () => set({
     checkedState: {
       '배송 준비': false,
@@ -1171,7 +1190,6 @@ export const useDeliveryFilter = create((set) => ({
     }
   }),
 
-  // 업데이트 : 체크박스 핸들러
   updateCheckboxState: (fieldName) => set((state) => ({
     deliveryFilter: {
       ...state.deliveryFilter,
@@ -1182,7 +1200,6 @@ export const useDeliveryFilter = create((set) => ({
     }
   })),
 
-  // 전체 업데이트
   allUpdateCheckboxState: (fieldName, bool) => set((state) => ({
     deliveryFilter: {
       ...state.deliveryFilter,
@@ -1193,18 +1210,18 @@ export const useDeliveryFilter = create((set) => ({
     }
   })),
 
-  // 배송일자 범위 지정
   setDateRange: (start, end) => set((state) => ({
     deliveryFilter: {
       ...state.deliveryFilter,
       date: {
-        ...state.date,
-        startDate: start,
-        endDate: end
+        ...state.deliveryFilter.date,
+        start: start,
+        end: end
       }
     }
   })),
 }))
+
 
 /* ----------------RefundFilter STORE---------------- */
 export const useUserFilterStore = create((set) => ({
