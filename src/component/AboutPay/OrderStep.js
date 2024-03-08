@@ -117,7 +117,7 @@ export function OrderStep({setActiveTab, activeTab}){
                     <span style={{color: 'red', fontWeight: '750'}}>
                     ({parseFloat(item.cart_discount)}%)
                     </span>
-                    &nbsp;<i className="fal fa-long-arrow-right"/>&nbsp;
+                    &nbsp;<i className="fal fa-arrow-right"/>&nbsp;
                     {parseInt(item.cart_price * item.cart_cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}
                     </>
                     : `${(item.cart_price * item.cart_cnt).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
