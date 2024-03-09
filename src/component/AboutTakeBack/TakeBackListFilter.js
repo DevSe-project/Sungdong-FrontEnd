@@ -73,8 +73,8 @@ export function TakeBackListFilter({handleSearch}){
       const newEndDate = new Date(today.getFullYear(), month + 1, 1);
       setStartDate(newStartDate);
       setEndDate(newEndDate);
-      setTakeBackFilterDate("start", newStartDate); // Update start date in the filter
-      setTakeBackFilterDate("end", newEndDate); // Update end date in the filter
+      setTakeBackFilterDate("start", newStartDate.toISOString().split('T')[0]);
+      setTakeBackFilterDate("end", newEndDate.toISOString().split('T')[0]);
     };
   
     const dateList = () => {
@@ -86,20 +86,21 @@ export function TakeBackListFilter({handleSearch}){
     const handleStartDateChange = (event) => {
       const newStartDate = new Date(event.target.value);
       setStartDate(newStartDate);
-      setTakeBackFilterDate("start", newStartDate); // Update start date in the filter
+      
+      setTakeBackFilterDate("start", newStartDate.toISOString().split('T')[0]); // Update start date in the filter
     };
     
     const handleEndDateChange = (event) => {
       const newEndDate = new Date(event.target.value);
       setEndDate(newEndDate);
-      setTakeBackFilterDate("end", newEndDate); // Update end date in the filter
+      setTakeBackFilterDate("end", newEndDate.toISOString().split('T')[0]); // Update end date in the filter
     };
   
     return (
       <div style={{ display: 'flex', gap: '1em' }}>
         <select value={takeBackFilter.raeDateType} onChange={(e) => setTakeBackFilterOption('raeDateType', e.target.value)}>
-          <option value="rae_requestDate">반품/교환 요청일</option>
-          <option value="rae_checkDate">반품/교환 처리일</option>
+          <option value="r.rae_requestDate">반품/교환 요청일</option>
+          <option value="r.rae_checkDate">반품/교환 처리일</option>
         </select>
         <select className={styles.select} onChange={(e) => handleMonthChange(e)}>
           {dateList()}
@@ -108,14 +109,14 @@ export function TakeBackListFilter({handleSearch}){
           <input 
             className={styles.input}
             type='date' 
-            value={startDate.toISOString().split('T')[0]} // Format the date for input value
+            value={startDate.toISOString().split('T')[0]}
             onChange={(e) => handleStartDateChange(e)}
           />
           &nbsp;~&nbsp;
           <input 
             className={styles.input}
             type='date' 
-            value={endDate.toISOString().split('T')[0]} // Format the date for input value
+            value={endDate.toISOString().split('T')[0]}
             onChange={(e) => handleEndDateChange(e)}
           />
         </div>

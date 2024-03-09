@@ -52,8 +52,8 @@ export function TackBackFilter({handleSearch}){
       const newEndDate = new Date(today.getFullYear(), month + 1, 1);
       setStartDate(newStartDate);
       setEndDate(newEndDate);
-      setTakeBackFilterDate("start", newStartDate); // Update start date in the filter
-      setTakeBackFilterDate("end", newEndDate); // Update end date in the filter
+      setTakeBackFilterDate("start", newStartDate.toISOString().split('T')[0]); // Update start date in the filter
+      setTakeBackFilterDate("end", newEndDate.toISOString().split('T')[0]); // Update end date in the filter
     };
   
     const dateList = () => {
@@ -65,13 +65,13 @@ export function TackBackFilter({handleSearch}){
     const handleStartDateChange = (event) => {
       const newStartDate = new Date(event.target.value);
       setStartDate(newStartDate);
-      setTakeBackFilterDate("start", newStartDate); // Update start date in the filter
+      setTakeBackFilterDate("start", newStartDate.toISOString().split('T')[0]);
     };
     
     const handleEndDateChange = (event) => {
       const newEndDate = new Date(event.target.value);
       setEndDate(newEndDate);
-      setTakeBackFilterDate("end", newEndDate); // Update end date in the filter
+      setTakeBackFilterDate("end", newEndDate.toISOString().split('T')[0]);
     };
   
     return (
