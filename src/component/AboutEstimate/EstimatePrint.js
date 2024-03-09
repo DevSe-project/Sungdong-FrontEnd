@@ -40,7 +40,7 @@ const EstimatePrint = forwardRef((props, ref) => {
               <span>견적일 : </span>
             </div>
             <div className={styles.bodyInfo}>
-              <span style={{ whiteSpace: 'nowrap' }}>{new Date().toLocaleDateString()} (유효기간 : {new Date(estimateInfo?.estimate_expire).toLocaleDateString()})</span>
+              <span style={{ whiteSpace: 'nowrap' }}>{new Date(estimateInfo?.estimate_date).toLocaleDateString()} (유효기간 : {new Date(estimateInfo?.estimate_expire).toLocaleDateString()})</span>
             </div>
           </div>
           <div className={styles.inputInfo}>
