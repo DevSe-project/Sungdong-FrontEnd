@@ -212,9 +212,8 @@ export default function DeliList() {
    * @returns 
    */
   const parseLacalToString = (item) => {
-    const parseToLocaleString = Number(item).toLocaleString();
-    const addDollor = '$' + parseToLocaleString;
-    return addDollor;
+    const parseToLocaleString = Number(item).toLocaleString('kr-KR', { style: 'currency', currency: 'KRW'});
+    return parseToLocaleString;
   }
 
 
