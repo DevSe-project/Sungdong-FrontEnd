@@ -18,13 +18,6 @@ export function Notice() {
   // 서버 API
   const { fetchGetServer } = useFetch();
 
-  //공지 데이터 fetch
-  // const fetchData = async () => {
-  //   const data = fetchGetServer(`notice/read`, currentPage);
-  //   setCurrentPage(data.currentPage);
-  //   setTotalPages(data.totalPages);
-  //   return data;
-  // }
   /**
    * 서버에 Posts 조회 요청을 보냅니다.
    * @param currentPage 현재 페이지
@@ -54,6 +47,7 @@ export function Notice() {
     queryKey: [`notice`],
     queryFn: () => fetchNoticeData()
   })
+
 
 
   if (isLoading) {
