@@ -57,6 +57,7 @@ export const useDataActions = () => useDataStore((state) => state.actions);
 
 // ------------------------------리스트 STORE----------------------------//
 
+//사용 리스트 : 찜, 검색결과, 견적함, 주문, 장바구니, 공지사항
 const useListStore = create((set) => ({
   wishList: [],
   orderList: [],
@@ -334,8 +335,9 @@ export const useSelect = () => selectStore((state) => ({ select: state.select, v
 export const useSelectActions = () => selectStore((state) => ({ actions: state.actions }));
 
 
-/* ---------------ORDER STOREs----------------- */
+/* ---------------ORDER STORE----------------- */
 
+//주문서 작성 STORE
 const useOrderStore = create((set) => ({
   orderInformation: {
     order_name: '',
@@ -415,6 +417,7 @@ export const useSetLogin = () => useLoginStore((state) => state.actions);
 
 /* ----------------SEARCH STORE---------------- */
 
+//검색창 STATE
 export const useSearchStore = create(
   persist(
     (set) => ({
@@ -458,6 +461,7 @@ export const useSeperateSearchTerm = () => useSearchStore((state) => state.seper
 export const useSearchActions = () => useSearchStore((state) => state.actions);
 
 /*-----------------ESTIMATE STORE----------------*/
+//견적서 작성 STORE
 export const useEstimateStore = create(
   persist(
     (set) => ({
@@ -605,13 +609,14 @@ export const useEstimateProduct = () => useEstimateStore((state) => state.estima
 export const useEstimateActions = () => useEstimateStore((state) => state.actions);
 
 /* ----------------TAKEBACK STORE---------------- */
+//반품 및 교환 STORE
 export const useTakeBackStore = create((set) => ({
   filterOption: {
     raeOption: '',
     product_title: '',
     product_brand: '',
     product_id: '',
-    raeDateType: '',
+    raeDateType: 'r.rae_requestDate',
     date: {
       start: '',
       end: ''
@@ -667,7 +672,7 @@ export const useTakeBackStore = create((set) => ({
           product_title: '',
           product_brand: '',
           product_id: '',
-          raeDateType: '',
+          raeDateType: 'r.rae_requestDate',
           date: {
             start: '',
             end: ''
