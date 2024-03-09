@@ -76,6 +76,7 @@ export default function DeliFilter({ handleSearch, parseDeliveryState }) {
             newStartDate.setDate(today.getDate() - days);
 
             if (newStartDate > newEndDate) {
+                alert("종료일이 시작일보다 이전입니다. 날짜를 다시 확인해주세요");
                 setDateRange(today.toISOString().split('T')[0], today.toISOString().split('T')[0]);
             } else {
                 setDateRange(newStartDate.toISOString().split('T')[0], newEndDate.toISOString().split('T')[0]);

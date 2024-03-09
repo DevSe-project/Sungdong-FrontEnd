@@ -173,28 +173,37 @@ export default function DeliList() {
   const { mutate: filterMutation } = useMutation({ mutationFn: fetchFilterdList });
 
   const handleSearch = () => {
-    // 예외처리 1) 체크박스 X, 날짜 X
-    // 1. 체크박스 중 true인 key가 하나도 없고 날짜가 아예 입력되지 않았을 때
+    // 코드를 작성하기 쉽게 알맞는 변수명에 재할당
+    const startDate = deliveryFilter.date.start;
+    const endDate = deliveryFilter.date.end;
+    const checkboxTrueKeys = Object.keys(deliveryFilter.checkboxState).filter(key => deliveryFilter.checkboxState[key] === true);
+    const isCheckDateIsFull = startDate && endDate;
 
-    // 예외처리 2) 체크박스 O, 날짜 하나만 O 
-
-
-    // 체크박스 O, 날짜 X
-    // 체크박스 X, 날짜 O
-    // 체크박스 O, 날짜 O
-    filterMutation(deliveryFilter, {
-      onSuccess: (data) => {
-        alert(data.message);
-        setCurrentPage(data.data.currentPage);
-        setTotalPages(data.data.totalPages);
-        queryClient.setQueryData([`delivery`, currentPage, itemsPerPage], () => {
-          return data.data.data
-        })
-      },
-      onError: (error) => {
-        return console.error(error.message);
-      }
-    })
+    /**예외처리
+     * - 체크박스가 선택됨
+     * - 날짜(시작일, 종료일 모두) 지정됨
+     * 위 두 경우가 아니면 모두 예외처리
+     * 즉, 필터링 항목이 모두 비어있지 않다면 필터링Fn을 실행
+     */
+    if (checkboxTrueKeys.length > 0 || isCheckDateIsFull) {
+      filterMutation(deliveryFilter, {
+        onSuccess: (data) => {
+          alert(data.message);
+          setCurrentPage(data.data.currentPage);
+          setTotalPages(data.data.totalPages);
+          queryClient.setQueryData([`delivery`, currentPage, itemsPerPage], () => {
+            return data.data.data
+          })
+        },
+        onError: (error) => {
+          return console.error(error.message);
+        }
+      })
+    }
+    else {
+      alert("항목이 모두 비었습니다. 필터링 항목을 선택 혹은 입력해주세요");
+      return;
+    }
   }
 
 
