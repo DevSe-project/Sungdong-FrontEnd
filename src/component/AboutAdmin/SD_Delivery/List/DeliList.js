@@ -206,6 +206,17 @@ export default function DeliList() {
     }
   }
 
+  /**
+   * 맨 앞에 달러 기호와 천 단위 구분 기호를 붙여 파싱해주는 함수.
+   * @param {*} item 
+   * @returns 
+   */
+  const parseLacalToString = (item) => {
+    const parseToLocaleString = Number(item).toLocaleString();
+    const addDollor = '$' + parseToLocaleString;
+    return addDollor;
+  }
+
 
   // 데이터 로딩 중 또는 에러 발생 시 처리
   if (isLoading) {
@@ -309,11 +320,12 @@ export default function DeliList() {
                 {/* 옵션 상세 - 선택 옵션이 있을 경우만 표시*/}
                 <td>{item.optionSelected ? item.optionSelected : "-"}</td>
                 {/* 표준가 */}
-                <td>{item.product_price}</td>
+                <td>{parseLacalToString(item.product_price)}</td>
                 {/* 주문량 */}
-                <td>{item.order_cnt}</td>
+                <td>{item.order_cnt.toLocaleString('ko-KR')}</td>
                 {/* 공급가 */}
-                <td>{item.discountPrice}</td>
+                <td>{parseLacalToString(item.discountPrice)}</td>
+
               </tr>
             ))}
         </tbody>
