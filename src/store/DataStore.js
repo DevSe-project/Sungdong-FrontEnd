@@ -307,12 +307,32 @@ const useModalStore = create((set) => ({
 }));
 
 // useModalState 커스텀 훅
+/**
+ * @keys
+ * - isModal
+ * - modalName
+ * - selectedIndex
+ * - modalItem
+ */
 export const useModalState = () => {
   const { isModal, modalName, modalItem, selectedIndex } = useModalStore();
   return { isModal, modalName, selectedIndex, modalItem };
 };
 
 // useModalActions 커스텀 훅
+/**
+ * @keys
+ * - actions
+ * - setIsModal
+ * - setModalName
+ * - openModal
+ * - closeModal
+ * - setSelectedIndex
+ * - selectedModalOpen
+ * - selectedModalClose
+ * - selectedModalOpenInItem
+ * - setModalItem
+ */
 export const useModalActions = () => {
   const { setIsModal, setModalName, setSelectedIndex, openModal, closeModal, selectedModalOpen, selectedModalClose, selectedModalOpenInItem, setModalItem } = useModalStore.getState().actions;
   return { setIsModal, setModalName, setSelectedIndex, openModal, closeModal, selectedModalOpen, selectedModalClose, selectedModalOpenInItem, setModalItem };
