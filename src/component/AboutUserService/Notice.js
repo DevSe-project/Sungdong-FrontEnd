@@ -31,7 +31,7 @@ export function Notice() {
         params: {
           page: currentPage,
           pagePosts: itemsPerPage
-      },
+        },
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`
@@ -43,7 +43,7 @@ export function Notice() {
     }
   }
 
-  const { isLoading, isError, error, data: noticeData} = useQuery({
+  const { isLoading, isError, error, data: noticeData } = useQuery({
     queryKey: [`notice`],
     queryFn: () => fetchNoticeData()
   })
