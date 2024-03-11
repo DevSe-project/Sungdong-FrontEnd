@@ -22,7 +22,6 @@ import { Basket } from './component/AboutDetail/Basket';
 import { LikeItem } from './component/AboutDetail/LikeItem';
 
 // 주문, 결제, 주문서 작성
-import { Pay } from './component/AboutPay/Pay';
 import { Order } from './component/AboutPay/Order';
 import { Receipt } from './component/AboutPay/Receipt';
 import { DeliveryMain } from './component/AboutPay/DeliveryMain';
@@ -319,7 +318,6 @@ export default function App() {
           </>
         }>
           <Route path='receipt' element={<Receipt activeTab={activeTab} setActiveTab={setActiveTab} />} />
-          <Route path='pay' element={<Pay activeTab={activeTab} setActiveTab={setActiveTab} />} />
           <Route path='order' element={<Order activeTab={activeTab} setActiveTab={setActiveTab} />} />
         </Route>
 

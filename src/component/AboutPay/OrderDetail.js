@@ -65,7 +65,7 @@ export function OrderDetail(props){
     { 
       id : 0, 
       title : '결제 방법', 
-      value : detailData.order_payRoute,
+      value : detailData.order_payRoute === '무통장입금' ? `${detailData.order_payRoute} 입금계좌 : ~~ | 입금자명 : ${detailData.order_payName}` : detailData.order_payRoute,
     },
     {
       id : 1, 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useModalActions, useModalState, useNoticePostList } from "../../store/DataStore";
+import { useListActions, useModalActions, useModalState, useNoticeActions, useNoticePostList } from "../../store/DataStore";
 import NoticeDetail from "../AboutUserService/NoticeDetail";
 import styles from "./NoticeMini.module.css";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +13,7 @@ export default function NoticeMini() {
   const [itemsPerPage, setItemsPerPage] = useState(5); // 아아템 포스팅 개수
   const { isModal } = useModalState();
   const { setIsModal, setSelectedIndex } = useModalActions();
+  const {setNoticePostList} = useListActions();
 
   /**
  * 서버에 Posts 조회 요청을 보냅니다.
@@ -76,6 +77,7 @@ export default function NoticeMini() {
             onClick={() => {
               setIsModal(true);
               setSelectedIndex(index);
+              setNoticePostList(item);
             }} // 해당 모달 Open
           >
             <span className={styles.itemTitle}>{item.post_title}</span>
