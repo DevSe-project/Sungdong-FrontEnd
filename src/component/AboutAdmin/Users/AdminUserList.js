@@ -13,7 +13,6 @@ export default function AdminUserList() {
   const userFilter = useUserFilter(); // 유저필터 zustand
   const queryClient = useQueryClient(); // 리액트 쿼리 클라이언트
   const userSort = useUserSort(); // 유저정렬 zustand
-  const { fetchServer } = useFetch();
   const [currentPage, setCurrentPage] = useState(1); // 게시물 데이터와 페이지 번호 상태 관리 
   const [itemsPerPage, setItemsPerPage] = useState(10); // 아아템 포스팅 개수
   const [checkedItems, setCheckedItems] = useState([]); // 수정할 데이터의 체크 상태를 관리하는 state(users_id를 담음)
@@ -21,6 +20,9 @@ export default function AdminUserList() {
   const [matchedData, setMatchedData] = useState([]); // 서버의 user데이터를 불러올 state
   // AdminUserList 컴포넌트 내에서 editIndex 상태를 배열이 아닌 단일 값으로 선언합니다.
   const [editIndex, setEditIndex] = useState(null);
+
+  // 서버 Fetch
+  const { fetchServer } = useFetch();
 
   // handleToggleEdit 함수를 수정하여 editIndex를 배열에서 단일 값으로 업데이트합니다.
   const handleToggleEdit = (index) => {
@@ -95,6 +97,8 @@ export default function AdminUserList() {
    * @param {userFilterData} 유저 필터창의 Input된 데이터
    */
   const fetchFilteredUserData = async (userFilterData) => {
+    const data = fetchServer(userFilterData, `post`, `/auth/filter`);
+
     try {
       const response = await axios.post("/auth/filter",
         JSON.stringify(
@@ -107,7 +111,7 @@ export default function AdminUserList() {
         }
       )
       // 성공 시 추가된 상품 정보를 반환합니다.
-      return response.data;
+      return response.data.data.data;
     } catch (error) {
       // 실패 시 예외를 throw합니다.
       throw new Error('조건에 일치하는 유저가 없습니다.');
@@ -310,9 +314,9 @@ export default function AdminUserList() {
     if (item.key == 'userType_id') { // 고객구분
       switch (parseInt(listItem, 10)) {
         case 1:
-          return <span>실사용자</span>;
+          return <span>실사용자 A등급</span>;
         case 2:
-          return <span>납품업체</span>;
+          return <span>납품업자 A등급</span>;
         case 12:
           return <span>실사용자 B등급</span>;
         case 13:
