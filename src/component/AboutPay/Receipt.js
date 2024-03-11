@@ -196,14 +196,8 @@ export function Receipt(props) {
                   onSuccess: (data) => {
                     // 상품 삭제 성공 시 상품 목록을 다시 불러옴
                     queryClient.invalidateQueries(['cart']);
-                    // 결제 방식이 CMS일때
-                    if (orderInformation.order_payRoute === 'CMS') {
-                      props.setActiveTab(4);
-                      navigate("/orderStep/order");
-                    } else {
-                      props.setActiveTab(3);
-                      navigate("/orderStep/pay");
-                    }
+                    props.setActiveTab(4);
+                    navigate("/orderStep/order");
                     resetOrderInfo();
                     resolve();
                   },
@@ -214,13 +208,8 @@ export function Receipt(props) {
                   },
                 });
               } else {
-                if (orderInformation.order_payRoute === 'CMS') {
-                  props.setActiveTab(4);
-                  navigate("/orderStep/order");
-                } else {
-                  props.setActiveTab(3);
-                  navigate("/orderStep/pay");
-                }
+                props.setActiveTab(4);
+                navigate("/orderStep/order");
                 resetOrderInfo();
                 resolve();
               }
@@ -619,6 +608,27 @@ export function Receipt(props) {
               </label>
             </div>
           </div>
+          {orderInformation.order_payRoute === "무통장입금" &&
+          <div className={styles.formInner}>
+            <div className={styles.label}>
+              <label>입금자명</label>
+            </div>
+            <div className={styles.input}>
+              <input
+                type="text"
+                className={styles.inputSize}
+                defaultValue="입금 계좌번호 : ~~~"
+                disabled
+              />
+                <input
+                  type="text"
+                  className={styles.inputSize}
+                  value={orderInformation.order_payName}
+                  onChange={(e) => handleChangeOrderField("order_payName", e.target.value)}
+                />
+            </div>
+          </div>
+          }
           <div className={styles.formInner}>
             <div className={styles.label}>
               <label>증빙서류 발급</label>
