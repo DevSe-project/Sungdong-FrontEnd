@@ -14,6 +14,7 @@ export function Notice() {
   const [totalPages, setTotalPages] = useState(1);
   const { isModal } = useModalState();
   const { setIsModal, setSelectedIndex } = useModalActions();
+  const {setNoticePostList} = useListActions();
 
   // 서버 API
   const { fetchGetServer } = useFetch();
@@ -87,7 +88,7 @@ export function Notice() {
             {noticeData?.map((item, index) => (
               <tr
                 key={index}
-                onClick={() => { setIsModal(true); setSelectedIndex(index) }}
+                onClick={() => { setIsModal(true); setSelectedIndex(index); setNoticePostList(item); }}
                 tabIndex={0} // 이렇게 하면 포커스를 받을 수 있게 됩니다
               >
                 <td>{index + 1}</td>

@@ -36,21 +36,21 @@ export default function NoticeDetail() {
                 <div className={styles.contentContainer}>
                     {/* 제목 */}
                     <div className={styles.title}>
-                        {noticePostList[selectedIndex].title}
+                        {noticePostList.post_title}
                     </div>
                     {/* 작성일과 작성자 */}
                     <div className={styles.details}>
                         <div className={styles.date}>
-                            작성일: {noticePostList[selectedIndex].date}
+                            작성일: {new Date(noticePostList.post_date).toLocaleDateString()}
                         </div>
                         <div className={styles.writer}>
-                            작성자: {noticePostList[selectedIndex].writer}
+                            작성자: {noticePostList.post_writer}
                         </div>
                     </div>
                     {/* 글 내용 */}
                     <div className={styles.contentsBox}>
                         <div className={styles.contents}>
-                            {noticePostList[selectedIndex].contents}
+                            {noticePostList.post_content}
                         </div>
                     </div>
                 </div>
