@@ -4,6 +4,15 @@ import { useNavigate } from 'react-router-dom';
 import { GetCookie } from './GetCookie';
 
 // Custom hook for fetching data
+/**
+ * @Functions
+ * - fetchNonPageServer(item, fetchType, router)
+ * - fetchServer(item, fetchType, router, pageNumber)
+ * - fetchGetServer(router, pageNumber)
+ * - fetchAddPostServer(item, fetchType, router, pageNumber, postCnt)
+ * - fetchGetAddPostServer(router, pageNumber, postCnt)
+ * @returns 
+ */
 export const useFetch = () => {
 	const [errorDisplayed, setErrorDisplayed] = useState(false);
 	const navigate = useNavigate();
