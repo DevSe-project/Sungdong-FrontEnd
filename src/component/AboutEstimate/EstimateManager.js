@@ -134,6 +134,46 @@ async function submitEstimate(info) {
 
   //--------------------------------------------------------------------
 
+  /*---------- 필터 검색 ----------*/
+  
+  /**
+   * @필터 POST FETCH 
+   * - 필터 검색 Mutation (react-query :: Mutation Hook) 사용
+   * @param {*} filter 객체 정보
+   * - {start: '', end: ''} - 시작 날짜와 끝 날짜 필터
+   */
+  const fetchFilteredRae = async (filter) => {
+    return await fetchServer(filter, `post`, `/estimate/filter`, 1);
+  };
+
+  const { mutate: filterMutation } = useMutation({ mutationFn: fetchFilteredRae })
+
+  /**
+   * @검색 Mutation 선언부
+
+   * @returns 필터된 상품의 데이터 객체 (@불러오기 returns 데이터 정보 참조)
+   */
+  const handleSearch = (start, end) => {
+
+    // 검색 버튼 클릭 시에만 서버에 요청
+    const objFilter = {
+      start: start,
+      end: end
+    }
+    filterMutation(objFilter, {
+      onSuccess: (data) => {
+        alert(data.message)
+        setCurrentPage(data.data.currentPage);
+        setTotalPages(data.data.totalPages);
+        queryClient.setQueryData(['estimateManager'], () => {
+          return data.data.data;
+        })
+      },
+      onError: (error) => {
+        return console.error(error.message);
+      },
+    })  };
+
 
   if (isLoading) {
     return <p>Loading..</p>;
@@ -149,7 +189,7 @@ async function submitEstimate(info) {
         <h1><i className="fa-solid fa-heart"/> 견적관리</h1>
       </div>
       {/* 필터 */}
-        <EstimateFilter/>
+        <EstimateFilter handleSearch={handleSearch}/>
       {/* 테이블 */}
       <div className={styles.tablebody}>
         <table className={styles.table}>
