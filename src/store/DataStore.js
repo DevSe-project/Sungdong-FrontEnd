@@ -1254,9 +1254,8 @@ export const useUserFilterStore = create((set) => ({
     cor_corName: '',
     cor_ceoName: '',
     cor_num: '',
-    userType_id: '',
-    grade: '',
-    managers_id: '',
+    userType_id: -1,
+    name: '',
   },
   userSort: {
     first: '',
@@ -1275,7 +1274,7 @@ export const useUserFilterStore = create((set) => ({
           cor_ceoName: '',
           cor_num: '',
           userType_id: '',
-          grade: '',
+          name: '',
         }
       }),
     resetUserSort: () =>
@@ -1290,6 +1289,13 @@ export const useUserFilterStore = create((set) => ({
 }));
 export const useUserFilter = () => useUserFilterStore((state) => state.userFilter);
 export const useUserSort = () => useUserFilterStore((state) => state.userSort);
+/**
+ * @Functions
+ * - setUserFilter(fieldName, value) : 필터링할 내용을 담습니다.
+ * - setUserSort(fieldName, value) : 정렬할 내용을 담습니다.
+ * - resetUserFilter() : 유저 필터의 내용을 초기화합니다
+ * @returns 
+ */
 export const useUserFilterActions = () => useUserFilterStore((state) => state.actions);
 
 /* ----------------ADMIN SEARCH STORE---------------- */
