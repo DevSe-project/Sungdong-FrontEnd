@@ -10,7 +10,7 @@ export function AdminHeader() {
     <div>
       <div className={styles.background}>
         {/* Left - 로고 */}
-        <img style={{ cursor: 'pointer' }} src={logo} alt='로고' height='70px' onClick={() => navigate("/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj")} />
+        <img style={{ cursor: 'pointer' }} src={logo} alt='로고' height='70px' onClick={() => navigate("/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/main")} />
 
         {/* Center - 검색창 */}
         <AdminHeaderSearchBar />
