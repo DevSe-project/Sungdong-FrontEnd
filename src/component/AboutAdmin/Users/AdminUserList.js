@@ -119,6 +119,7 @@ export default function AdminUserList() {
   }
   const { mutate: filterMutation } = useMutation({ mutationFn: fetchFilteredUserData });
   const onFiltering = () => {
+    console.log(userFilter);
     filterMutation(userFilter, {
       onSuccess: (data) => {
         console.log('user Filtered successfully:', data);
