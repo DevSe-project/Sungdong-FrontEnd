@@ -12,8 +12,8 @@ export function Notice() {
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 번호를 담습니다.
   const [itemsPerPage, setItemsPerPage] = useState(10); // 아아템 포스팅 개수
   const [totalPages, setTotalPages] = useState(1);
-  const { isModal } = useModalState();
-  const { setIsModal, setSelectedIndex } = useModalActions();
+  const { isModal, modalName } = useModalState();
+  const { selectedModalOpen, setSelectedIndex } = useModalActions();
   const {setNoticePostList} = useListActions();
 
   // 서버 API
@@ -88,7 +88,7 @@ export function Notice() {
             {noticeData?.map((item, index) => (
               <tr
                 key={index}
-                onClick={() => { setIsModal(true); setSelectedIndex(index); setNoticePostList(item); }}
+                onClick={() => { selectedModalOpen('noticeDetail'); setSelectedIndex(index); setNoticePostList(item); }}
                 tabIndex={0} // 이렇게 하면 포커스를 받을 수 있게 됩니다
               >
                 <td>{index + 1}</td>
@@ -100,7 +100,7 @@ export function Notice() {
           </tbody>
         </table>
         {/* --------------Detail-Modal-------------- */}
-        {isModal ?
+        {isModal && modalName === 'noticeDetail' ?
           <div className={styles.modalOverlay}>
             <NoticeDetail />
           </div>

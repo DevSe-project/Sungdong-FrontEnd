@@ -11,9 +11,9 @@ export default function NoticeMini() {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 번호를 담습니다.
   const [itemsPerPage, setItemsPerPage] = useState(5); // 아아템 포스팅 개수
-  const { isModal } = useModalState();
-  const { setIsModal, setSelectedIndex } = useModalActions();
-  const {setNoticePostList} = useListActions();
+  const { isModal, modalName } = useModalState();
+  const { setIsModal, setSelectedIndex, selectedModalOpen } = useModalActions();
+  const { setNoticePostList } = useListActions();
 
   /**
  * 서버에 Posts 조회 요청을 보냅니다.
@@ -75,7 +75,7 @@ export default function NoticeMini() {
             key={index}
             className={styles.noticeItem}
             onClick={() => {
-              setIsModal(true);
+              selectedModalOpen('noticeDetail');
               setSelectedIndex(index);
               setNoticePostList(item);
             }} // 해당 모달 Open
@@ -86,7 +86,7 @@ export default function NoticeMini() {
       </ol>
 
       {/* --------------Detail-Modal-------------- */}
-      {isModal ?
+      {isModal && modalName === 'noticeDetail' ?
         <div className="modalOverlay">
           <NoticeDetail />
         </div>
