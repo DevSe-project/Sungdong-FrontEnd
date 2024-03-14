@@ -97,7 +97,7 @@ export function Order(props){
     { 
       id : 0, 
       title : '결제 방법', 
-      value : orderData.order_payRoute === '무통장입금' ? `${orderData.order_payRoute} | 입금계좌 : ~~ | 입금자명 : ${orderData.order_payName}` : orderData.order_payRoute,
+      value : orderData?.order_payRoute === '무통장입금' ? `${orderData?.order_payRoute} | 입금계좌 : ~~ | 입금자명 : ${orderData?.order_payName}` : orderData?.order_payRoute,
     },
     {
       id : 1, 
