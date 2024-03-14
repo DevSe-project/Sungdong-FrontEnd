@@ -24,8 +24,6 @@ export function AdminHeader() {
             style={{ cursor: 'pointer', fontSize: '28px', color: 'rgb(50, 50, 50)' }}
             onClick={() => { navigate('/') }}></i>
 
-          {/* 알림 아이콘 */}
-          <i className="fa-solid fa-bell" style={{ fontSize: '28px', cursor: 'pointer', color: 'rgb(50, 50, 50)' }}></i>
           {/* 필터 */}
           <div
             onClick={() => setFilterModal(!filterModal)}
