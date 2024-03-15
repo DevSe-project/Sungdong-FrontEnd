@@ -1,6 +1,12 @@
-import { AdminDepositModule } from './AdminDepositModule'
+import { AdminMainListModule } from './AdminMainListModule'
 import styles from './AdminMain.module.css'
 export function AdminMainModule(){
+  function depositIcon(){
+    return <i style={{fontSize: '2em', color: 'green'}} className="fas fa-won-sign"></i>
+  }
+  function cancelIcon(){
+    return <i style={{fontSize: '2em', color: 'lightBlue'}} className="fas fa-undo-alt"></i>
+  }
   return(
     <div className={styles.main}>
     {/* 상위 컴포넌트 부분 */}
@@ -9,11 +15,11 @@ export function AdminMainModule(){
       <article className={styles.product}>
         {/* 입금 */}
         <div className={styles.productSeparate}>
-          <AdminDepositModule/>
+          <AdminMainListModule icon={depositIcon()} firstName={"입금대기"} secondName={"신규주문"} thirdName={"오늘출발"}/>
         </div>
         {/* 취소 */}
         <div className={styles.productSeparate}>
-          <AdminDepositModule/>
+          <AdminMainListModule icon={cancelIcon()} firstName={"취소요청"} secondName={"반품요청"} thirdName={"교환요청"}/>
         </div>
         {/* 배송 */}
         <div className={styles.productFull}>

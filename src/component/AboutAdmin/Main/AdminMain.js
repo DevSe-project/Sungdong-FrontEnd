@@ -4,7 +4,6 @@ import { AdminMenuData } from "../Layout/SideBar/AdminMenuData";
 import styles from "./AdminMain.module.css";
 import { useFetch } from "../../../customFn/useFetch";
 import { useEffect } from "react";
-import { AdminDepositModule } from "./AdminDepositModule";
 export function AdminMain() {
   const { fetchServer } = useFetch();
   const navigate = useNavigate();
@@ -22,8 +21,9 @@ export function AdminMain() {
     fetchVerifyAdmin();
   }, []);
 
+
   return (
-    <div>
+    <div className={styles.container}>
       <AdminHeader />
       <div className={styles.body}>
         <AdminMenuData />
