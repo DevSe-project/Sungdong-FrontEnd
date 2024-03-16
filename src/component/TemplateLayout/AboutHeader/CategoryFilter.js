@@ -199,9 +199,9 @@ export function CategoryFilter({ postCnt, setCurrentPage, setTotalPages, setPost
 
   return (
     <div className={styles.main}>
+      {categoryFilter?.map((item, key) =>
       <div className={styles.filterUI}>
         {/* categoryData.categories.map((item, key)) => */}
-        {categoryFilter?.map((item, key) =>
           <React.Fragment key={key}>
             {/* 필터 별 라벨 */}
             <div className={styles.label}>
@@ -267,9 +267,9 @@ export function CategoryFilter({ postCnt, setCurrentPage, setTotalPages, setPost
                 : item.content}
             </div>
           </React.Fragment>
-        )}
-        {renderFilterBox()}
       </div>
+      )}
+      {renderFilterBox()}
     </div>
   )
 };
