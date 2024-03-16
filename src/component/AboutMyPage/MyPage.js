@@ -89,7 +89,7 @@ export default function MyPage(props) {
                     onClick={() => {
                       openModal();
                     }}
-                  >비밀번호 수정</button>
+                  >비밀번호 변경</button>
                 </td>
                 <th className={styles.th}>이메일</th>
                 <td className={styles.td}>{userProfile.email ? userProfile.email : '미 작성'}</td>
