@@ -60,7 +60,7 @@ export default function AdminUserFilter(props) {
             value={userFilter.userType_id || ""}
             onChange={(e) => setUserFilter("userType_id", e.target.value)}
           >
-            <option value={-1}>고객유형</option>
+            <option value=''>고객유형</option>
             <option value={0}>비회원</option>
             <option value={1}>실사용자 A등급</option>
             <option value={2}>납품업자 A등급</option>

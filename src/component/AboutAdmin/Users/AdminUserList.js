@@ -15,6 +15,7 @@ export default function AdminUserList() {
   const userSort = useUserSort(); // 유저정렬 zustand
   const [currentPage, setCurrentPage] = useState(1); // 게시물 데이터와 페이지 번호 상태 관리 
   const [itemsPerPage, setItemsPerPage] = useState(10); // 아아템 포스팅 개수
+  const [totalPages, setTotalPages] = useState(); // 총 페이지 개수
   const [checkedItems, setCheckedItems] = useState([]); // 수정할 데이터의 체크 상태를 관리하는 state(users_id를 담음)
   const [sortBy, setSortBy] = useState([]); // 정렬 . . . 
   const [matchedData, setMatchedData] = useState([]); // 서버의 user데이터를 불러올 state
@@ -97,40 +98,27 @@ export default function AdminUserList() {
    * @param {userFilterData} 유저 필터창의 Input된 데이터
    */
   const fetchFilteredUserData = async (userFilterData) => {
-    const data = fetchServer(userFilterData, `post`, `/auth/filter`);
+    console.log(userFilterData);
+    return await fetchServer(userFilterData, `post`, `/auth/filter`, currentPage);
 
-    try {
-      const response = await axios.post("/auth/filter",
-        JSON.stringify(
-          userFilterData
-        ),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          }
-        }
-      )
-      // 성공 시 추가된 상품 정보를 반환합니다.
-      return response.data.data.data;
-    } catch (error) {
-      // 실패 시 예외를 throw합니다.
-      throw new Error('조건에 일치하는 유저가 없습니다.');
-    }
   }
   const { mutate: filterMutation } = useMutation({ mutationFn: fetchFilteredUserData });
   const onFiltering = () => {
     console.log(userFilter);
     filterMutation(userFilter, {
       onSuccess: (data) => {
-        console.log('user Filtered successfully:', data);
+        console.log('고객 필터링이 성공적으로 완료되었습니다.\n', data.data);
         alert(data.message);
-        // 다른 로직 수행 또는 상태 업데이트
+        setCurrentPage(data.data.currentPage);
+        setTotalPages(data.data.totalPages);
+        console.log(`현재 페이지: ${data.data.currentPage}, 전체 페이지: ${data.data.totalPages}`); // 현재 페이지, 전체 페이지 수 표시
+        console.log(`응답받은 데이터: ${data.data}`);
         queryClient.setQueryData(['users'], () => {
-          return data.data
+          return data.data;
         })
       },
       onError: (error) => {
-        console.error('user Filtered failed:', error);
+        console.error('필터링에 실패했습니다.\n', error);
         // 에러 처리 또는 메시지 표시
         alert(error.message);
       },
