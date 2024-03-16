@@ -126,3 +126,15 @@
 .priceSkeleton {
   height: 20px;
 }
+
+@media screen and (max-width: 1100px) {
+  
+  .gridContainer {
+    grid-template-columns: repeat(auto-fill, minmax(calc(33% - 20px), 1fr)); /* 그리드의 열을 유연하게 생성하되 최대 너비를 초과하지 않게 설정 */
+  }
+  
+  /* 각 상품 블럭 */
+  .gridItem {
+    flex: 0 0 calc(33% - 20px);
+  }
+}
