@@ -128,7 +128,7 @@
   }
 }
 
-@media screen and (max-width: 1100px) {
+@media screen and (max-width: 900px) {
   .text {
     display: none;
     /* 텍스트 숨김 */
@@ -138,6 +138,9 @@
     margin-right: 1.2em;
   }
 
+}
+
+@media screen and (max-width: 1000px) {
   .seperateSearchBar {
     display: none;
   }
