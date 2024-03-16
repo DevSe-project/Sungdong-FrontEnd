@@ -164,7 +164,7 @@ export function MenuData(props) {
       {menuData.map((item, index) => (
         <li
           key={index}
-          style={{ boxShadow: `0px 2px 4px 1px rgba(0, 0, 0, 0.2)` }}
+          style={{ background: 'linear-gradient(0deg, rgb(240,240,240) 1%, rgb(255,255,255) 99%)'}}
           className={`menu-item ${item.subMenuItems ? item.subMenuItems.some((subitem) => subitem.link === current) && 'active' : item.title.link === current && 'active'}`}
           onClick={() => {
             if (item.require === false) {
