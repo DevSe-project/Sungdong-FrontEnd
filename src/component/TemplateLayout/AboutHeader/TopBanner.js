@@ -61,7 +61,7 @@ export function TopBanner(props) {
 
           {/* 4_카테고리 아이콘 */}
           <div className={styles.cate_icon}>
-            <li
+          <li
               className='menu-item'
               onClick={() => {
                 if (isModal && modalName == 'categoryBar')
@@ -72,7 +72,7 @@ export function TopBanner(props) {
               style={{ ...props.text_dynamicStyle }}
             >
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4em' }}>
-                <i style={{ fontSize: '1.2em' }} className="fas fa-bookmark" /> <span className={styles.text}>카테고리</span>
+                <i style={{ fontSize: '1.2em', backgroundColor: 'none'}} className="fas fa-bookmark" /> <span className={styles.text}>카테고리</span>
               </div>
             </li>
           </div>
