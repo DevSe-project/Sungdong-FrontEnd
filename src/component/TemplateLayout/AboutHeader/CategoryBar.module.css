@@ -1,16 +1,13 @@
 .customModalOverlay {
-  position: fixed;
-  top: 80px;
   left: 0;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 999;
+  border-bottom: 1px solid lightgray;
 }
 
 .customModalContainer {
-  position: fixed;
-  top: 80px;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -25,7 +22,6 @@
   text-align: center;
   white-space: nowrap;
   list-style-type: none;
-  border-bottom: 1px solid lightgray;
   display: grid; /* 그리드 컨테이너로 선언 */
   grid-template-columns: repeat(auto-fill, minmax(calc(15% - 20px), 1fr)); /* 그리드의 열을 유연하게 생성하되 최대 너비를 초과하지 않게 설정 */
   gap: 1em; /* 그리드 아이템 간의 간격 */
