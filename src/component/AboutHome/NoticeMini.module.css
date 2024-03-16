@@ -19,7 +19,6 @@
 .noticeItem {
   background-color: rgb(255, 255, 255);
   display: flex;
-  margin-top: 10px;
   max-height: 20px;
   padding: 10px;
   border-radius: 1vh;
@@ -31,9 +30,9 @@
 }
 
 .itemTitle {
-  display: -webkit-box;
-  -webkit-line-clamp: 1; /* 표시할 줄 수 */
-  -webkit-box-orient: vertical;
+  white-space: nowrap; /* 텍스트가 줄 바꿈되지 않고 한 줄에 표시되도록 설정 */
+  overflow: hidden; /* div 밖으로 벗어나는 텍스트는 숨김 */
+  text-overflow: ellipsis; /* div 밖으로 벗어나는 텍스트는 …으로 표시 */
 }
 
 .view_all {
