@@ -210,10 +210,6 @@ export function AdminTabInfo({setMiddleCategory, setLowCategory, setSelectedCate
         >
           초기화
         </button>
-        <button 
-        className={styles.sideButton}>
-        &nbsp;임시저장
-        </button>
       </div>
     </div>
   </div>

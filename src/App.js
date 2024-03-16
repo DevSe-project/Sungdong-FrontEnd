@@ -69,6 +69,7 @@ import { EstimateWrite } from "./component/AboutEstimate/EstimateWrite";
 import EstimatePrint from "./component/AboutEstimate/EstimatePrint";
 import { useFetch } from "./customFn/useFetch";
 import { AdminSearch } from './component/AboutAdmin/Search/AdminSearch';
+import { AdminMainModule } from './component/AboutAdmin/Main/AdminMainModule';
 
 
 export default function App() {
@@ -691,6 +692,8 @@ export default function App() {
 
         {/* 관리자 Main Route */}
         <Route path='/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj' element={<AdminMain />}>
+          {/* 메인 모듈페이지 */}
+          <Route path='main' element={<AdminMainModule/>} />
           {/* 상품관리 - 상품등록 */}
           <Route path='addProduct' element={<AdminDetail />} />
           {/* 상품관리 - 상품조회 */}

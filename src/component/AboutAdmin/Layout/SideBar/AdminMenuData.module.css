@@ -1,7 +1,7 @@
 /* -------------------- TopBanner -------------------- */
 /* 위치 조정 */
   .menuLocation{
-    height: 100dwvh;
+    height: 95vh;
     background-color: white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     list-style: none;

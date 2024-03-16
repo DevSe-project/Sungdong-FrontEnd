@@ -64,10 +64,10 @@ export function TopBanner(props) {
           <li
               className='menu-item'
               onClick={() => {
-                if (isModal && modalName == 'categoryBar')
-                  selectedModalClose('categoryBar');
-                else if (!isModal && modalName == '')
-                  selectedModalOpen('categoryBar');
+                if (isModal && modalName === "categoryBar")
+                  selectedModalClose("categoryBar");
+                else if (!isModal && modalName === '')
+                  selectedModalOpen("categoryBar");
               }}
               style={{ ...props.text_dynamicStyle }}
             >
@@ -104,7 +104,7 @@ export function TopBanner(props) {
 
       {/* 클릭하면 나오는 카테고리바 */}
       {
-        isModal && modalName == 'categoryBar'
+        isModal && modalName === "categoryBar"
           ?
             <CategoryBar category_dynamicStyle={props.category_dynamicStyle} />
           :
