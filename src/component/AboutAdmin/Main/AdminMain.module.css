@@ -1,23 +1,24 @@
-.container{
-  height: 100vh;  
+.container {
+  height: 100vh;
   background-color: rgb(248, 248, 248);
 }
-.body{
+
+.body {
   display: flex;
   width: 100%;
   background-color: rgb(248, 248, 248);
 }
-.main{
+
+.main {
   width: 100%;
   flex: 1;
   display: flex;
   flex-direction: column;
-  margin-top: 1em;
   padding: 1em;
 }
 
 
-.top{
+.top {
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -26,7 +27,7 @@
   gap: 1em;
 }
 
-.product{
+.product {
   width: 70%;
   height: 100%;
   display: flex;
@@ -35,32 +36,32 @@
   gap: 1em;
 }
 
-.notice{
+.notice {
   width: 30%;
   height: 100%;
   border-radius: 1vh;
   background-color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.productSeparate{
+.productSeparate {
   width: 40%;
   border-radius: 1vh;
   background-color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.productFull{
+.productFull {
   width: 100%;
   height: 100%;
   border-radius: 1vh;
   background-color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 
 
-.bottom{
+.bottom {
   width: 100%;
   display: flex;
   flex-direction: column;
