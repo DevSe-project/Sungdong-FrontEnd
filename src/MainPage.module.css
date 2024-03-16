@@ -12,6 +12,7 @@
     float: left;
     flex: 1;
     margin: 10px;
+    margin-right: 0;
 }
 
 .product_container {
@@ -28,9 +29,5 @@
 @media screen and (max-width: 900px) {
     .right {
         display: none;
-    }
-
-    .center {
-        margin-left: 0;
     }
 }
