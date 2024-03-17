@@ -79,6 +79,10 @@ export function AdminMenuData(props) {
           item: '공지사항',
           link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/customerCenter/notice'
         },
+        {
+          item: '이벤트 관리',
+          link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/event'
+        },
       ],
     },
     {
