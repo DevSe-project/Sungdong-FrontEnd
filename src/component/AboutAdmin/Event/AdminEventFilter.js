@@ -27,8 +27,8 @@ export function AdminEventFilter({ handleSearch }) {
       <div style={{ display: 'flex', gap: '1em' }}>
         <select className={styles.select} value={eventFilter.dateType} onChange={(e) => setEventFilter('dateType', e.target.value)}>
           <option value="">선택</option>
-          <option value={'start'}>이벤트 시작일</option>
-          <option value={'end'}>이벤트 종료일</option>
+          <option value={'startDate'}>이벤트 시작일</option>
+          <option value={'endDate'}>이벤트 종료일</option>
         </select>
         <div>
           <input className={styles.select} type='date' value={eventFilter.date.start} onChange={(e) => setEventDate('start', e.target.value)}></input>

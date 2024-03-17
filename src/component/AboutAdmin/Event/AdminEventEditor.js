@@ -1,18 +1,15 @@
-import { useEffect, useState } from "react";
-import styles from "./AdminEventCreator.module.css";
-import {
-  useEvent,
-  useEventActions
-} from "../../../store/DataStore";
-import axios from "../../../axios";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useFetch } from "../../../customFn/useFetch";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import styles from './AdminEventCreator.module.css';
+import { useEvent, useEventActions, useProduct, useProductActions } from '../../../store/DataStore';
+import axios from '../../../axios';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useFetch } from '../../../customFn/useFetch';
 
-export function AdminEventCreator() {
+export function AdminEventEditor() {
   const event = useEvent();
-  const { setEvent, resetEvent } = useEventActions();
-  const {fetchServer} = useFetch();
+  const { setEvent, resetEvent, editEvent } = useEventActions();
+  const {fetchServer, fetchGetServer} = useFetch();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -22,6 +19,37 @@ export function AdminEventCreator() {
       // 컴포넌트가 언마운트될 때 리셋
     };
   }, []);
+
+  const fetchData = async () => {
+    const data = await fetchGetServer('/event/list', 1);
+    return data.data
+  };
+
+  //데이터 불러오기
+  const { isLoading, isError, error, data:eventData } = useQuery({ 
+    queryKey: ['event'],
+    queryFn: () => fetchData()
+  });
+
+  //데이터 불러오기 이전 loadData()함수 실행 금지
+  useEffect(() => {
+      if (eventData) {
+        editEvent(loadData());
+      }
+  }, [eventData]);
+
+  //주소창 입력된 id값 받아오기
+  let { id } = useParams();
+
+  const loadData = () => {
+    if (eventData != null) {
+      //입력된 id과 data내부의 id값 일치하는 값 찾아 변수 선언
+      const detaildata = eventData?.find((item) => item.event_id == id);
+      return detaildata;
+    } else {
+      return <div>데이터를 불러오는 중이거나 상품을 찾을 수 없습니다.</div>;
+    }
+  }
 
   const [selectedFile, setSelectedFile] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
@@ -58,14 +86,14 @@ export function AdminEventCreator() {
 
   //등록 fetch 함수
   const fetchAddData = async (newData) => {
-    return fetchServer(newData, `post`, `/event/create`, 1); 
+    return fetchServer(newData, `patch`, `/event/edit`, 1); 
   };
 
   //상품 등록 함수
-  const { mutate:addProductMutate } = useMutation({mutationFn: fetchAddData})
+  const { mutate:updateEventMutate } = useMutation({mutationFn: fetchAddData})
 
-  function handleAddedEvent(data){
-    addProductMutate(data,{
+  function handleUpdatedEvent(data){
+    updateEventMutate(data,{
     onSuccess: (data) => {
       // 메세지 표시
       alert(data.message);
@@ -81,17 +109,24 @@ export function AdminEventCreator() {
   })
   }
 
+  if (isLoading) {
+    return <p>Loading..</p>;
+  }
+  if (isError) {
+    return <p>에러 : {error.message}</p>;
+  }
+
   return (
     <div className={styles.main}>
       <main className={styles.container}>
-        <div className="LargeHeader">이벤트 등록</div>
+        <div className="LargeHeader">이벤트 수정</div>
         <section className={styles.head}>
           <div className={styles.headTop}>
             {/* 상품 이미지 부분 */}
             <div className={styles.headLeft}>
               <img
                 id="eventImage"
-                src={imageUrl}
+                src={imageUrl || event.event_image || ""}
                 alt="이벤트 이미지"
                 className={styles.thumnail}
               />
@@ -112,6 +147,7 @@ export function AdminEventCreator() {
                 <input
                   style={{ width: "20em" }}
                   className={styles.input}
+                  value={event.event_title}
                   onChange={(e) => setEvent("event_title", e.target.value)}
                   type="text"
                   placeholder="이벤트 제목을 입력해주세요"
@@ -212,7 +248,7 @@ export function AdminEventCreator() {
                   >
                     내용
                   </p>
-                  <textArea
+                  <textarea
                     className={styles.input}
                     placeholder="이벤트 내용을 입력해주세요"
                     value={event.event_content}
@@ -227,7 +263,7 @@ export function AdminEventCreator() {
         </section>
         {/* 버튼 부분들 (등록하기, 초기화, 임시저장) */}
         <div className={styles.textButton}>
-          <button className={styles.mainButton} onClick={()=>handleAddedEvent(event)}>등록하기</button>
+          <button className={styles.mainButton} onClick={()=>handleUpdatedEvent(event)}>수정하기</button>
           <button
             className={styles.sideButton}
             onClick={() => {

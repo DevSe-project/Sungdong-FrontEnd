@@ -1314,16 +1314,25 @@ export const useEventStore = create((set) => ({
     setEvent: (fieldName, value) =>
       set((state) => ({ event: { ...state.event, [fieldName]: value } })),
     editEvent: (data) =>
-      set((state) => ({ event: data })),
+      set((state) => ({ event: {
+        event_id: data.event_id,
+        event_title: data.event_title,
+        event_content: data.event_content,
+        event_startDate: new Date(data.event_startDate).toISOString().split('T')[0],
+        event_endDate: new Date(data.event_endDate).toISOString().split('T')[0],
+        event_image: data.event_image,
+        eventState: data.eventState,      
+      } 
+    })),
     resetEvent: () =>
       set({
         event: {
-          event_title: '',
-          event_content: '',
-          event_startDate: '',
-          event_endDate: '',
-          event_image: '',
-          eventState: '',
+    event_title: '',
+    event_content: '',
+    event_startDate: '',
+    event_endDate: '',
+    event_image: '',
+    eventState: '',
         }
       })
   }
