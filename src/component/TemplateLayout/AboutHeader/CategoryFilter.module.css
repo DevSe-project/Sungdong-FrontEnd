@@ -1,6 +1,7 @@
 
 .main{
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 100%;
@@ -9,9 +10,8 @@
 .filterUI{
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
   width: 90%;
-  flex-wrap: wrap;
   border: 1px solid lightgray;
 }
 
