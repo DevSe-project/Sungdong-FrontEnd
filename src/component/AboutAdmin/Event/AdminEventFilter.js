@@ -27,8 +27,8 @@ export function AdminEventFilter({ handleSearch }) {
       <div style={{ display: 'flex', gap: '1em' }}>
         <select className={styles.select} value={eventFilter.dateType} onChange={(e) => setEventFilter('dateType', e.target.value)}>
           <option value="">선택</option>
-          <option value={'startDate'}>이벤트 시작일</option>
-          <option value={'endDate'}>이벤트 종료일</option>
+          <option value={'event_startDate'}>이벤트 시작일</option>
+          <option value={'event_endDate'}>이벤트 종료일</option>
         </select>
         <div>
           <input className={styles.select} type='date' value={eventFilter.date.start} onChange={(e) => setEventDate('start', e.target.value)}></input>
@@ -65,10 +65,10 @@ export function AdminEventFilter({ handleSearch }) {
             <input
               type='checkbox'
               name="상태"
-              value="이벤트준비"
-              checked={eventFilter.state.includes("이벤트준비")}
+              value={1}
+              checked={eventFilter.state.includes(1)}
               onChange={(e) => {
-                handleCheckboxChange(e.target.value);
+                handleCheckboxChange(Number(e.target.value));
               }}
             />
             준비
@@ -77,10 +77,10 @@ export function AdminEventFilter({ handleSearch }) {
             <input
               type='checkbox'
               name="상태"
-              value="이벤트중"
-              checked={eventFilter.state.includes("이벤트중")}
+              value={2}
+              checked={eventFilter.state.includes(2)}
               onChange={(e) => {
-                handleCheckboxChange(e.target.value);
+                handleCheckboxChange(Number(e.target.value));
               }}
             />
             진행중
@@ -89,10 +89,10 @@ export function AdminEventFilter({ handleSearch }) {
             <input
               type='checkbox'
               name="상태"
-              value="이벤트종료"
-              checked={eventFilter.state.includes("이벤트종료")}
+              value={4}
+              checked={eventFilter.state.includes(4)}
               onChange={(e) => {
-                handleCheckboxChange(e.target.value);
+                handleCheckboxChange(Number(e.target.value));
               }}
             />
             종료
@@ -101,10 +101,10 @@ export function AdminEventFilter({ handleSearch }) {
             <input
               type='checkbox'
               name="상태"
-              value="이벤트중단"
-              checked={eventFilter.state.includes("이벤트중단")}
+              value={3}
+              checked={eventFilter.state.includes(3)}
               onChange={(e) => {
-                handleCheckboxChange(e.target.value);
+                handleCheckboxChange(Number(e.target.value));
               }}
             />
             중단

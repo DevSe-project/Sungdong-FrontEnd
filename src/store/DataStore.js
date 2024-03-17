@@ -1418,7 +1418,7 @@ export const useEventFilterStore = create((set) => ({
             ...state,
             eventFilter: {
               ...state.eventFilter,
-              state: ["이벤트준비", "이벤트중", "이벤트종료", "이벤트중단"] // Deselect all fields
+              state: [1, 2, 3, 4] // Deselect all fields
             }
           };
         }
