@@ -60,7 +60,7 @@ export default function AdminUserFilter(props) {
             value={userFilter.userType_id || ""}
             onChange={(e) => setUserFilter("userType_id", e.target.value)}
           >
-            <option value=''>고객유형</option>
+            <option value="">고객유형</option>
             <option value={0}>비회원</option>
             <option value={1}>실사용자 A등급</option>
             <option value={2}>납품업자 A등급</option>
@@ -79,7 +79,7 @@ export default function AdminUserFilter(props) {
           <select
             className={styles.select} id="name"
             value={userFilter.name}
-            onChange={e => {setUserFilter("name", e.target.value); console.log(`유저필터: ${userFilter.name}`)}}>
+            onChange={e => { setUserFilter("name", e.target.value); console.log(`유저필터: ${userFilter.name}`) }}>
             <option value="">담당자</option>
             <option value="박형조">박형조</option>
             <option value="엄지석">엄지석</option>
@@ -90,8 +90,11 @@ export default function AdminUserFilter(props) {
 
       {/* Button */}
       <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5em' }}>
-        <button type='reset' className='white_round_button' onClick={() => resetUserFilter()}>초기화</button>
-        <button className='original_round_button' onClick={() => props.onFiltering()}>검색하기</button>
+        <button className='white_round_button' onClick={() => resetUserFilter()}>초기화</button>
+        <button className='original_round_button' onClick={(e) => {
+          e.preventDefault();
+          props.onFiltering(userFilter);
+        }}>검색하기</button>
       </div>
     </div>
   );

@@ -37,7 +37,6 @@ export default function AdminUserList() {
   const initializingData = () => {
     if (editIndex !== null) {
       setEditIndex(null);
-      fetchData();
       setCheckedItems([]);
     }
   }
@@ -81,17 +80,11 @@ export default function AdminUserList() {
     queryKey: [`users`, currentPage, itemsPerPage], // currentPage, itemPerPage가 변경될 때마다 재실행하기 위함
     queryFn: fetchUsersData,
   });
-  const fetchData = async () => {
-    try {
-      const data = await fetchUsersData();
-      setMatchedData(data);
-    } catch (error) {
-      throw new Error('데이터를 볼러오는 데 실패했습니다.', error);
-    }
-  }
+
   useEffect(() => {
-    fetchData();
-  }, [currentPage, itemsPerPage]);
+    if(userData)
+      setMatchedData(userData);
+  }, [userData]);
 
   //유저 필터링 Fetch
   /**]
@@ -103,18 +96,16 @@ export default function AdminUserList() {
 
   }
   const { mutate: filterMutation } = useMutation({ mutationFn: fetchFilteredUserData });
-  const onFiltering = () => {
-    console.log(userFilter);
+  const onFiltering = (userFilter) => {
+    console.log(`전달할 때 값: ${userFilter.cor_ceoName}`)
     filterMutation(userFilter, {
       onSuccess: (data) => {
         console.log('고객 필터링이 성공적으로 완료되었습니다.\n', data.data);
         alert(data.message);
         setCurrentPage(data.data.currentPage);
         setTotalPages(data.data.totalPages);
-        console.log(`현재 페이지: ${data.data.currentPage}, 전체 페이지: ${data.data.totalPages}`); // 현재 페이지, 전체 페이지 수 표시
-        console.log(`응답받은 데이터: ${data.data}`);
-        queryClient.setQueryData(['users'], () => {
-          return data.data;
+        queryClient.setQueryData(['users', currentPage, itemsPerPage], () => {
+          return data.data.data;
         })
       },
       onError: (error) => {
@@ -137,7 +128,7 @@ export default function AdminUserList() {
         console.log('user Sorted successfully:', data);
         alert(data.message);
         // 다른 로직 수행 또는 상태 업데이트
-        queryClient.setQueryData(['users'], () => {
+        queryClient.setQueryData(['users', currentPage, itemsPerPage], () => {
           return data.data
         })
       },
@@ -378,7 +369,7 @@ export default function AdminUserList() {
             <th>
               <input
                 type='checkbox'
-                checked={checkedItems.length === matchedData.length ? true : false}
+                checked={checkedItems.length === matchedData?.length ? true : false}
                 onChange={(e) => handleAllCheckbox(e.target.checked)}
               />
             </th>
@@ -412,7 +403,6 @@ export default function AdminUserList() {
                 }
               </th>
             ))}
-
             {/* 주소 */}
             <th>주소</th>
             {/* 연락처 */}
@@ -483,7 +473,7 @@ export default function AdminUserList() {
                         value={customItem.val}
                         onChange={(e) => {
                           const editData = e.target.value;
-                          const newData = matchedData.map((item, idx) => {
+                          const newData = matchedData?.map((item, idx) => {
                             if (idx === index) {
                               return { ...item, [customItem.key]: editData };
                             }

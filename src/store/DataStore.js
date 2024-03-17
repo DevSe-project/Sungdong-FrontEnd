@@ -1253,11 +1253,11 @@ export const useDeliveryFilter = create((set) => ({
 /* ----------------RefundFilter STORE---------------- */
 export const useUserFilterStore = create((set) => ({
   userFilter: {
-    cor_corName: null,
-    cor_ceoName: null,
-    cor_num: null,
+    cor_corName: '',
+    cor_ceoName: '',
+    cor_num: '',
     userType_id: -1,
-    name: null,
+    name: '',
   },
   userSort: {
     first: '',
