@@ -122,7 +122,7 @@ export function AdminTabInfo({setMiddleCategory, setLowCategory, setSelectedCate
       console.log('상품이 추가/변경 되었습니다.', data);
       // 상태를 다시 불러와 갱신합니다.
       queryClient.invalidateQueries(['data']);
-      navigate("/adminMain/searchProduct");
+      navigate("/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/searchProduct");
     },
     onError: (error) => {
       // 상품 추가 실패 시, 에러 처리를 수행합니다.
