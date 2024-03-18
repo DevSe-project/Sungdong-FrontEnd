@@ -45,13 +45,13 @@ export function SlideImg() {
   });
 
 
-  const imageData = eventData.map((item) =>
+  const imageData = eventData?.map((item) =>
     ({
       label: item.event_image,
       alt: item.event_id,
     }
     ))
-  const renderSlides = imageData.map(image => (
+  const renderSlides = imageData?.map(image => (
     <div key={image.alt} onClick={()=> navigate('/event')}>
       <img src={image.label} alt={image.alt}/>
     </div>

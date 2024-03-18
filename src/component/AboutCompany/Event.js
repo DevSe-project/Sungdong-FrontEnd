@@ -1,9 +1,10 @@
 import { TopBanner } from '../TemplateLayout/AboutHeader/TopBanner'
 import image from '../.././image/page_ready.png'
 import styles from './Event.module.css'
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useFetch } from '../../customFn/useFetch';
+import Pagination from '../../customFn/Pagination';
 export function Event(){
 
   const queryClient = useQueryClient();
@@ -45,6 +46,39 @@ export function Event(){
       queryFn: () => fetchData(),
     });
 
+  /**
+   * - Mutation Hook 이용
+   *
+   * @param {*} pageNumber 변경할 페이지 넘버
+   * @returns Fetch Post / 변경할 페이지에 해당하는 상품 데이터 반환
+   */
+  const fetchPageChange = async (pageNumber) => {
+    return await fetchServer({}, "post", "/event/list", pageNumber);
+  };
+
+  const { mutate: pageMutaion } = useMutation({ mutationFn: fetchPageChange });
+
+  /**
+   * -- 페이지 변경 Mutation 선언 함수
+   * - setCurrentPage - 현재 페이지 재 지정
+   * - setTotalPages - 전체 페이지 수 재 지정
+   * @param {*} pageNumber 변경할 페이지 넘버
+   */
+  function handlePageChange(pageNumber) {
+    pageMutaion(pageNumber, {
+      onSuccess: (data) => {
+        setCurrentPage(data.data.currentPage);
+        setTotalPages(data.data.totalPages);
+        queryClient.setQueryData(["event"], () => {
+          return data.data.data;
+        });
+      },
+      onError: (error) => {
+        return console.error(error.message);
+      },
+    });
+  }
+
     if (isLoading) {
       return <p>Loading..</p>;
     }
@@ -59,8 +93,8 @@ export function Event(){
           <h1>진행중인 이벤트</h1>
         </div>
         <div className={styles.body}>
-          {eventData.map((item, index) => 
-          <div className={styles.content}>
+          {eventData?.map((item, index) => 
+          <div key={index} className={styles.content}>
             <div className={styles.contentBody}>
               <img src={item.event_image} alt="이미지"/>
               <div className={styles.text}>
@@ -75,6 +109,11 @@ export function Event(){
           )}
         </div>
       </main>
+      <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
     </div>
   )
 }
