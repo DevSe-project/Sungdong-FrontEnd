@@ -103,7 +103,11 @@ export function Event(){
               </div>
             </div>
             <div className={styles.contentFooter}>
-              <p>자세한 문의는 여기로 연락바람</p>
+              <h4>이벤트 기간 : {new Date(item.event_startDate).toLocaleDateString()} ~ {new Date(item.event_endDate).toLocaleDateString()}</h4>
+              <ul style={{display: 'flex', flexDirection: 'column', marginTop: '1em', listStyle: 'circle', gap: '0.5em'}}>
+                <li>카카오채널 1:1 문의</li>
+                <li>사무실(052-269-1840) 전화문의</li>
+              </ul>
             </div>
           </div>
           )}
