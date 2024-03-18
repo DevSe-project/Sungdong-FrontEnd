@@ -1,6 +1,4 @@
 .img {
-    width: 1500px;
-    height: 370px;
     table-layout: fixed;
     display: flex;
     gap: 0.5em;
