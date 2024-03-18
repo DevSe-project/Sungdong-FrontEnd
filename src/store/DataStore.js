@@ -1332,3 +1332,22 @@ export const useAdminSearchStore = create(
 export const useAdminSearchFilterData = () => useAdminSearchStore((state) => state.filterData);
 export const useAdminSearchTerm = () => useAdminSearchStore((state) => state.searchTerm);
 export const useAdminSearchActions = () => useAdminSearchStore((state) => state.actions);
+
+
+
+/* ----------------Regex Store---------------- */
+export const useRegex = create((set) => ({
+  regex: {
+    userIdRegex: /^.{8,19}$/, // 아이디가 8글자 이상 20글자 미만인지를 확인하는 정규 표현식,
+    passwordRegex: /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_`])[A-Za-z\d\W_`]{8,30}$/,
+    emailRegex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, // 이메일 정규 표현식
+    nameRegex: /^[a-zA-Z가-힣]{2,30}$/, // 이름 정규표현식 
+    customRegex: /^[a-zA-Z가-힣\s()]{1,50}$/, // 기타Input 정규표현식
+  },
+
+  actions: {
+
+  },
+}))
+export const useRegexRegex = () => useRegex((state) => state.regex);
+export const useRegexActions = () => useRegex((state) => state.actions)
