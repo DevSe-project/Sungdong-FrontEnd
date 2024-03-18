@@ -1,0 +1,355 @@
+.main{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.container{ 
+  flex: 1; /* 남은 공간 모두 차지 */
+  display: flex;
+  flex-direction: column;
+  margin: 1em;
+  padding: 1em;
+  justify-content: center;
+  align-items: center;
+}
+
+.bodyHeader{
+  width: 99%;
+  text-align: left;
+  padding: 5px;
+  border-bottom: 3px solid var(--background-color-set);
+}
+
+.categoryContainer{
+  width: 15em;
+  height: 20em;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid lightgray;
+  justify-content: space-between;
+}
+
+.categoryInner{
+  width: 89.5%;
+  margin-top: 0.5em;
+  padding: 1em 0.8em 1em 0.8em;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+}
+.categoryInner:hover{
+  background-color: lightgray;
+}
+.head{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid gray;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+.headTop{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+  gap: 1em;
+}
+.headLeft{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-size: cover;
+  box-sizing: border-box;
+  background-color: beige;
+  width: 25em;
+  overflow: hidden;
+  border: 1px solid lightgray;
+  object-fit: cover;
+}
+.headRight{
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 25em;
+  text-align: end;
+  border: 1px solid lightgray;
+  gap: 1em;
+  padding: 1em;
+}
+
+.stateBox{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+}
+
+.selectSize{
+  font-size: 1em;
+  height: 2em;
+}
+
+.textBox{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5em;
+  height: 100%;
+  font-size: 1.2em;
+  border-top: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
+}
+
+.finalprice{
+  font-size: 1.1em;
+  font-weight: 650;
+}
+
+/* 버튼 CSS */
+
+.selectButton{
+  width: 100%;
+  font-size: 0.8em;
+  font-weight: bold;
+  padding: 0.7rem 1rem;
+  color: #000;
+  background-color: #ccc;
+  border-radius: 5dvw;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 0.5em;
+  margin-right: 0.3em;
+  margin-left: 0.3em;
+}
+
+.selectedButton{
+  width: 100%;
+  font-size: 0.8em;
+  font-weight: bold;
+  padding: 0.7rem 1rem;
+  color: #ffffff;
+  background-color: var(--background-color-set);
+  border-radius: 5dvw;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 0.5em;
+  margin-right: 0.3em;
+  margin-left: 0.3em;
+}
+
+/* 베스트 리뷰, 추천 상품 */
+.headAtcTab{
+  margin-top: 1em;
+  display: flex;
+  flex-direction: column;
+  width: clamp(30em, 100%, 50em);
+  box-sizing: border-box;
+  padding: 1.5em;
+  border: 1px solid lightgray;
+  margin-bottom: 1em;
+}
+.rowAtcTab{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+}
+.colAtcTab{
+  width: 8em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1em;
+  border-bottom: 1px solid gray;
+  cursor: pointer;
+}
+
+.recommendTitle{
+  display: flex;
+  flex-direction: row;
+}
+
+.recommendPrice{
+  display: flex;
+  flex-direction: row;
+  font-weight: 750;
+}
+
+/* 이미지 CSS */
+.frame{
+  width: 150px;
+  overflow: hidden;
+  border: 1px solid lightgray;
+  margin-bottom: 1em;
+}
+
+.thumnail{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.headBottom{
+  width: 140%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 글자(폰트) CSS */
+.h4{
+  font-size: 1.2em;
+}
+
+.spanTag{
+  height: 2em;
+  font-size: clamp(0.5em, 0.7vw, 1em); 
+  word-break: keep-all;
+  text-overflow: ellipsis;
+}
+
+.finalprice{
+  font-size: 1.2em;
+  font-weight: 650;
+}
+
+.input,
+.select {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.input:hover,
+.select:hover {
+    border-color: rgb(174, 79, 44);
+}
+
+.spanStyle{
+  font-size: 0.7em;
+  display: flex;
+  flex-direction: row;
+  background-color: white;
+  border: 1px solid lightgray;
+  border-left: none;
+  justify-content: space-between;
+  align-items: center;
+  white-space: nowrap;
+  padding: 0.5em;
+  border-radius: 4px;
+}
+
+/* tab Sticky */
+.sticky{
+  top: 100px;
+  position: sticky;
+  z-index: 989;
+  height: 40px;
+  width: clamp(25em, 50%, 50em);
+}
+
+/* 스켈레톤 부분 */
+.skeleton{
+  display: flex;
+  background-color: lightgray;
+  width: 100%;
+  height: 100%;
+  justify-content: flex-end;
+  border-radius: 10dvw;
+}
+.colskeleton{
+  padding: 1em;
+  height: 10em;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  white-space: nowrap;
+  gap: 1em;
+  cursor: pointer;
+}
+.frameskeleton{
+  background-color: lightgray;
+  width: 10em;
+  height: 5em;
+  overflow: hidden;
+}
+.nameskeleton{
+  width: 100%;
+  height: 2em;
+  background-color: lightgray;
+  text-align: start;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  border-radius: 0.8dvw;
+}
+.priceskeleton{
+  height: 1em;
+  background-color: lightgray;
+  text-align: end;
+  border-radius: 0.8dvw;
+}
+
+.leftSideBar{
+  width: 14em;
+  height: 100vh;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.textButton{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 30%;
+}
+
+.mainButton{
+  width: 100%;
+  font-size: 1em;
+  font-weight: bold;
+  padding: 1rem 2rem;
+  color: white;
+  background-color: var(--background-color-set);
+  border-radius: 5dvw;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 0.5em;
+  margin-right: 0.3em;
+  margin-left: 0.3em;
+}
+.sideButton{
+  width: 100%;
+  font-size: 1em;
+  font-weight: bold;
+  padding: 1rem 2rem;
+  color: #000;
+  background-color: #ccc;
+  border-radius: 5dvw;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 0.5em;
+  margin-right: 0.3em;
+  margin-left: 0.3em;
+}

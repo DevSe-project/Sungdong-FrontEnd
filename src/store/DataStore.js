@@ -1300,6 +1300,134 @@ export const useUserSort = () => useUserFilterStore((state) => state.userSort);
  */
 export const useUserFilterActions = () => useUserFilterStore((state) => state.actions);
 
+/* ----------------Event STORE---------------- */
+export const useEventStore = create((set) => ({
+  event: {
+    event_title: '',
+    event_content: '',
+    event_startDate: '',
+    event_endDate: '',
+    event_image: '',
+    eventState: '',
+  },
+  actions: {
+    setEvent: (fieldName, value) =>
+      set((state) => ({ event: { ...state.event, [fieldName]: value } })),
+    editEvent: (data) =>
+      set((state) => ({ event: {
+        event_id: data.event_id,
+        event_title: data.event_title,
+        event_content: data.event_content,
+        event_startDate: new Date(data.event_startDate).toISOString().split('T')[0],
+        event_endDate: new Date(data.event_endDate).toISOString().split('T')[0],
+        event_image: data.event_image,
+        eventState: data.eventState,      
+      } 
+    })),
+    resetEvent: () =>
+      set({
+        event: {
+    event_title: '',
+    event_content: '',
+    event_startDate: '',
+    event_endDate: '',
+    event_image: '',
+    eventState: '',
+        }
+      })
+  }
+}));
+export const useEvent = () => useEventStore((state) => state.event);
+export const useEventActions = () => useEventStore((state) => state.actions);
+
+/* ----------------EventFilter STORE---------------- */
+export const useEventFilterStore = create((set) => ({
+  eventFilter: {
+    state: [],
+    dateType: '',
+    date: {
+      start: '',
+      end: ''
+    },
+  },
+  actions: {
+    setEventFilter: (fieldName, value) =>
+      set((state) => ({ eventFilter: { ...state.eventFilter, [fieldName]: value } })),
+    resetEventFilter: () =>
+      set({
+        eventFilter: {
+          state: [],
+          dateType: '',
+          date: {
+            start: '',
+            end: ''
+          },
+        }
+      }),
+    setEventDate: (fieldName, value) =>
+      set((state) => ({
+        eventFilter: {
+          ...state.eventFilter,
+          date: {
+            ...state.eventFilter.date,
+            [fieldName]: value,
+          },
+        },
+      })),
+    setCheckboxState: (fieldName) =>
+      set((state) => {
+        // Check if fieldName is already present in the state
+        const isFieldPresent = state.eventFilter.state.find(item => item === fieldName);
+
+        if (isFieldPresent) {
+          // If fieldName is already present, filter it out
+          return {
+            ...state,
+            eventFilter: {
+              ...state.eventFilter,
+              state: state.eventFilter.state.filter(item => item !== fieldName)
+            }
+          };
+        } else {
+          // If fieldName is not present, add it to the state
+          return {
+            ...state,
+            eventFilter: {
+              ...state.eventFilter,
+              state: [...state.eventFilter.state, fieldName]
+            }
+          };
+        }
+      }
+      ),
+    setAllCheckboxState: (selectAll) =>
+      set((state) => {
+        // Check if selectAll is true
+        if (selectAll === true) {
+          // If selectAll is true, return a new state with all fields selected
+          return {
+            ...state,
+            eventFilter: {
+              ...state.eventFilter,
+              state: [] // Select all fields
+            }
+          };
+        } else if (selectAll === false) {
+          // If selectAll is false, deselect all fields
+          return {
+            ...state,
+            eventFilter: {
+              ...state.eventFilter,
+              state: [1, 2, 3, 4] // Deselect all fields
+            }
+          };
+        }
+      })
+  }
+}));
+export const useEventFilter = () => useEventFilterStore((state) => state.eventFilter);
+export const useEventFilterActions = () => useEventFilterStore((state) => state.actions);
+
 /* ----------------ADMIN SEARCH STORE---------------- */
 
 export const useAdminSearchStore = create(

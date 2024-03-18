@@ -1,5 +1,4 @@
 .img {
-    width: 100%;
     table-layout: fixed;
     display: flex;
     gap: 0.5em;
@@ -14,6 +13,7 @@
     overflow: hidden;
     position: relative;
     border-radius: 2vh;
+    cursor: pointer;
 }
 
 @media (min-width: 1100px) {

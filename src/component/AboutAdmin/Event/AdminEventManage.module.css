@@ -1,7 +1,6 @@
-/* 헤드라인 및 바디 기본설정 */
-.main {
+.main{
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   width: 100%;
 }
 
@@ -21,39 +20,16 @@
   padding: 5px;
   border-bottom: 3px solid var(--background-color-set);
 }
-/* 관련상품 탭 */
-.table{
-  width: 100%;
-  border-bottom: 1px solid lightgray;
-  text-align: center;
-  align-items: center;
-}
 
 .tableLocation{
   display: flex;
   width: 90%;
   flex-direction: column;
-  padding: 2em;
-  border: 1px solid lightgray;
+  justify-content: center;
+  align-items: center;
 }
 
-.listContainer {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  border-bottom: 1px solid lightgray;
-  padding: 1em;
-}
-
-.manageBox {
-  display: flex;
-  flex-direction: row;
-  gap: 0.5em;
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
-}
-
-.topTitle {
+.topTitle{
   width: 80%;
   margin: 2em;
   padding-bottom: 1%;
@@ -66,12 +42,12 @@
   border-bottom: 3px solid #cc0000;
 }
 
-.colTable {
+.colTable{
   width: 100%;
   text-align: center;
 }
 
-.buttonContainer {
+.buttonContainer{
   font-size: 1.2em;
   margin-top: 1em;
   display: flex;
@@ -80,20 +56,20 @@
   gap: 0.5em;
 }
 
-.question {
+.question{
   font-weight: 550;
   padding-bottom: 1em;
   margin-bottom: 1em;
 }
 
-.form {
+.form{
   width: 100%;
   display: flex;
   flex-direction: column;
   margin-bottom: 15em;
 }
 
-.formInner {
+.formInner{
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -103,13 +79,13 @@
   border: 1px solid lightgray;
 }
 
-.editButton {
+.editButton{
   border: none;
   border-radius: 3em;
   background-color: #ff3333;
   color: white;
   font-weight: 550;
-  cursor: pointer;
+  cursor : pointer;
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -117,12 +93,12 @@
   padding: 0.5em;
 }
 
-.selectSize {
+.selectSize{
   width: 100%;
   text-align: center;
 }
 
-.qnATop {
+.qnATop{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -130,7 +106,7 @@
   margin-bottom: 0.5em;
 }
 
-.buttonBox {
+.buttonBox{
   width: 80%;
   display: flex;
   margin-left: 10%;
@@ -142,7 +118,7 @@
   gap: 0.5em;
 }
 
-.button {
+.button{
   border: 1px solid lightgray;
   background-color: white;
   padding: 0.5em;
@@ -150,15 +126,47 @@
   padding-right: 1.5em;
 }
 
-.detailView {
+.detailView{
   cursor: pointer;
 }
 
-.detailView:hover {
+.detailView:hover{
   color: gray;
 }
 
-.thumnail {
+.filterUI{
+  margin-left: 10%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+  height: 10em;
+  flex-wrap: wrap;
+  border: 1px solid lightgray;
+}
+
+.label{
+  width: 29%;
+  height: 33%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(239, 233, 233);
+}
+
+.content{
+  display: flex;
+  width: 65%;
+  justify-content: flex-start;
+  gap: 1em;
+  text-align: left;
+  border-left: 1px solid lightgray;
+  padding-left: 1em;
+
+}
+
+.thumnail{
   background-size: cover;
   box-sizing: border-box;
   background-color: beige;
@@ -167,4 +175,9 @@
   overflow: hidden;
   border: 1px solid lightgray;
   object-fit: cover;
+}
+
+.contentItem:hover{
+  cursor: pointer;
+  color: gray;
 }

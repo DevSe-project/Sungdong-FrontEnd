@@ -22,23 +22,14 @@ export function EstimateBox() {
     const data = await fetchGetServer(`/estimate/list`, 1);
     setCurrentPage(data.currentPage);
     setTotalPages(data.totalPages);
-    console.log(data)
     return data.data;
   }
 
   const { isLoading, isError, error, data: estiData } = useQuery({ queryKey: ['estimateBox'], queryFn: () => fetchData() });
 
-
-  //product가 마운트 되면 searchList에 담음(cnt등을 위함)
   useEffect(() => {
-    function fetchData() {
-      if ((estiData && estimateList.length === 0) || (estiData && estiData.data.map(item => estimateList.length > 0 && estimateList.map(list => item !== list)))) {
-        resetEstimateList();
-        setEstimateList(estiData);
-      }
-    };
-
-    fetchData();
+    if(estiData)
+      setEstimateList(estiData);
   }, [estiData])
 
   //-------------------------페이지 설정------------------------------
@@ -79,7 +70,7 @@ export function EstimateBox() {
       setSelectAll(!selectAll);
   
       if (!selectAll) {
-        const allId = estiData && estimateList.map((item) => item);
+        const allId = estiData && estimateList?.map((item) => item);
         setSelectedItems(allId);
       } else {
         setSelectedItems([]);
@@ -94,7 +85,7 @@ export function EstimateBox() {
       setSelectAll(false); // 선택 해제될 때 부모 체크박스 해제
     } else {
       setSelectedItems([...selectedItems, product]); //selectedItems의 배열과 productID 배열을 합쳐 다시 selectedItems에 저장
-      if (selectedItems.length + 1 === estimateList.length) { 
+      if (selectedItems.length + 1 === estimateList?.length) { 
         // 내부 체크박스가 모두 선택되었는지 확인
         setSelectAll(true)
       }
@@ -282,7 +273,7 @@ export function EstimateBox() {
             </tr>
           </thead>
           <tbody>
-            {estiData && estimateList.map((item, index) => (
+            {estiData && estimateList?.map((item, index) => (
               <React.Fragment key={index}>
                 <tr className={styles.list}>
                   <td rowSpan={2}><img className={styles.thumnail} src={item.product_image_original} alt='이미지'></img></td>

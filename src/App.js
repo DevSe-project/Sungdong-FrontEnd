@@ -70,6 +70,9 @@ import EstimatePrint from "./component/AboutEstimate/EstimatePrint";
 import { useFetch } from "./customFn/useFetch";
 import { AdminSearch } from './component/AboutAdmin/Search/AdminSearch';
 import { AdminMainModule } from './component/AboutAdmin/Main/AdminMainModule';
+import { AdminEventManage } from './component/AboutAdmin/Event/AdminEventManage';
+import { AdminEventCreator } from './component/AboutAdmin/Event/AdminEventCreator';
+import { AdminEventEditor } from './component/AboutAdmin/Event/AdminEventEditor';
 
 
 export default function App() {
@@ -724,6 +727,9 @@ export default function App() {
 
           {/* 고객센터 - 공지사항 */}
           <Route path='customerCenter/notice' element={<AdminNotice />} />
+          <Route path='event' element={<AdminEventManage />} />
+          <Route path='event/create' element={<AdminEventCreator />} />
+          <Route path='event/edit/:id' element={<AdminEventEditor />} />
 
           {/* 회원관리 - 고객관리 */}
           <Route path='user' element={<AdminUserList />} />

@@ -58,7 +58,7 @@ export default function NoticeMini() {
         display: "flex",
         justifyContent: "space-between",
         padding: "10px",
-        borderBottom: "1px solid lightgray",
+        borderBottom: "1px solid #CC0000",
         alignItems: "center"
       }}>
         <span style={{
