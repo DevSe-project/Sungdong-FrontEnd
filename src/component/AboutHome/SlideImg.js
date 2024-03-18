@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-import image1 from '../../image/[이벤트]-오렌지방한장갑.png'
-import image2 from '../../image/[이벤트]-착착테이프.png'
-import image3 from '../../image/[이벤트]국산방진마스크.png'
 import { useNavigate } from 'react-router-dom';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
