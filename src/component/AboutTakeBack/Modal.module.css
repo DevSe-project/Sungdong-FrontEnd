@@ -5,6 +5,9 @@
   top: 50%;
   left: 50%;
   display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
   transform: translate(-50%, -50%);
   background-color: #ffffff;
   width: 100%;
@@ -52,15 +55,21 @@
 
 .contentsBox {
   display: flex;
+  flex-direction: column;
   width: 100%;
   justify-content: center;
+  align-items: center;
   margin-top: 0.5em;
 }
 
 .contents {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   border: 2px solid darkgray;
   width: 95%;
-  height: 58vh;
+  height: 100%;
   padding: 1em;
   font-size: 16px;
   text-align: left;

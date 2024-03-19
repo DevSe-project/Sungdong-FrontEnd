@@ -286,7 +286,7 @@ export function AdminNotSoldList(props) {
                                         .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
                                       : `${parseInt(itemData.product_price).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
                                   </td>
-                                  <td>
+                                  <td style={{ fontWeight: '750' }}>
                                     {itemData.order_cnt}
                                   </td>
                                   <td style={{ fontWeight: '750' }}>
