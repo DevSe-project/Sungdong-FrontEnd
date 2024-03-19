@@ -152,6 +152,7 @@
 
 .detailView {
   cursor: pointer;
+  font-weight: 650;
 }
 
 .detailView:hover {

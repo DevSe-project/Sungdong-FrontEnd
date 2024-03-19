@@ -27,6 +27,11 @@ export default function AdminSoldModal({item}) {
   // 주문자 정보가 들어있는 객체
   const orderInputValue = [
     { 
+      id : -1, 
+      title : '기업명', 
+      value : item.corName && item.corName,
+    },
+    { 
       id : 0, 
       title : '성함', 
       value : item.order_name && item.order_name,

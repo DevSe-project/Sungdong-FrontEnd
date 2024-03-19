@@ -24,7 +24,7 @@
   border: 1.5px solid #808080;
   border-radius: 1dvb;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  width: 75em;
+  width: 100%;
   height: 45em;
 }
 
@@ -115,7 +115,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   gap: 0.2em;
   overflow-y: auto;

@@ -79,6 +79,7 @@ export function AdminSoldList() {
    * - smtMessage : 성동 메세지
    * - userType_id : 유저 구분 번호
    * - users_id : 유저 고유 번호
+   * - corName : 주문 기업명
    */
   const fetchData = async () => {
     const data = await fetchGetAddPostServer(`/order/all`, currentPage, itemsPerPage);
@@ -279,6 +280,8 @@ export function AdminSoldList() {
                 <th>주문상태</th>
                 <th>주문상품</th>
                 <th>주문일자</th>
+                <th>기업명</th>
+                <th>주문자명</th>
                 <th>주문가</th>
                 <th>주문자 정보</th>
               </tr>
@@ -319,12 +322,18 @@ export function AdminSoldList() {
                         } else
                           handleOpenItem(item.order_id);
                       }}>
-                        <h5 style={{ fontSize: '1.1em', fontWeight: '550' }}>
+                        <h5 className={styles.detailView}>
                           {item.product_title} {(item.product_length - 1) > 0 && `외 ${item.product_length - 1}건`}
                         </h5>
                       </td>
                       <td>
                         {new Date(item.order_date).toLocaleString()}
+                      </td>
+                      <td>
+                        {item.corName}
+                      </td>
+                      <td>
+                        {item.order_name}
                       </td>
                       <td style={{ fontWeight: '750' }}>
                         \{parseInt(item.order_payAmount).toLocaleString()}
@@ -338,7 +347,7 @@ export function AdminSoldList() {
                     {/* 아이템 모달 */}
                     {selectedData?.some((selectItem) => selectItem.order_id === item.order_id) && (
                       <tr>
-                        <td colSpan="8">
+                        <td colSpan="10">
                           <table className={styles.colTable}>
                             <thead style={{ backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.6)' }}>
                               <tr>

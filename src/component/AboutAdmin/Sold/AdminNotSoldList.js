@@ -155,6 +155,8 @@ export function AdminNotSoldList(props) {
                 <th>주문상태</th>
                 <th colSpan={2}>주문상품</th>
                 <th>주문일자</th>
+                <th>기업명</th>
+                <th>주문자명</th>
                 <th>주문가</th>
                 <th>주문자 정보</th>
               </tr>
@@ -206,6 +208,12 @@ export function AdminNotSoldList(props) {
                       <td>
                         {new Date(item.order_date).toLocaleString()}
                       </td>
+                      <td>
+                        {item.corName}
+                      </td>
+                      <td>
+                        {item.order_name}
+                      </td>
                       <td style={{ fontWeight: '750' }}>
                         \{parseInt(item.order_payAmount).toLocaleString()}
                       </td>
@@ -218,7 +226,7 @@ export function AdminNotSoldList(props) {
                     {/* 아이템 모달 */}
                     {selectedData?.some((selectItem) => selectItem.order_id === item.order_id) && (
                       <tr>
-                        <td colSpan="9">
+                        <td colSpan="11">
                           <table className={styles.colTable}>
                             <thead style={{ backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.6)' }}>
                               <tr>
