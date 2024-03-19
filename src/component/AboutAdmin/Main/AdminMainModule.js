@@ -83,12 +83,12 @@ export function AdminMainModule() {
         <article className={styles.product}>
           {/* 입금 */}
           <div className={styles.productSeparate}>
-            <AdminMainListModule icon={depositIcon()} firstName={"입금대기"} secondName={"신규주문"} thirdName={"오늘출발"} first={orderData[0]?.noPay} second={orderData[0]?.pay} third={orderData[0]?.todayDelivery} />
+            <AdminMainListModule icon={depositIcon()} firstName={"입금대기"} secondName={"신규주문"} thirdName={"오늘출발"} first={orderData && orderData[0]?.noPay} second={orderData && orderData[0]?.pay} third={orderData && orderData[0]?.todayDelivery} />
           </div>
 
           {/* 취소 */}
           <div className={styles.productSeparate}>
-            <AdminMainListModule icon={cancelIcon()} firstName={"반품요청"} secondName={"교환요청"} thirdName={"취소요청"} first={moduleData[0]?.refund} second={moduleData[0]?.exchange} third={moduleData[0]?.cancel} />
+            <AdminMainListModule icon={cancelIcon()} firstName={"반품요청"} secondName={"교환요청"} thirdName={"취소요청"} first={orderData && moduleData[0]?.refund} second={orderData && moduleData[0]?.exchange} third={orderData && moduleData[0]?.cancel} />
           </div>
 
           {/* 배송 */}
