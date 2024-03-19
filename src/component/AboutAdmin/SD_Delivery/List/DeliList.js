@@ -83,7 +83,7 @@ export default function DeliList() {
       case 4:
         return '배송 완료';
       case 5:
-        return '배송 지연';
+        return '취소';
       case 6:
         return '취소 요청';
       default:
