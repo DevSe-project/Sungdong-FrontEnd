@@ -62,6 +62,7 @@ export default function ModifyPW(props) {
         onSuccess: (data) => { // 수정 성공 시
           console.log(`비밀번호 수정이 완료되었습니다: ${JSON.stringify(data.data)}`);
           alert(data.message);
+          closeModal();
         },
         onError: (error) => { // 수정 실패 시
           console.log(`비밀번호 수정에 실패했습니다: ${JSON.stringify(error)}`);
