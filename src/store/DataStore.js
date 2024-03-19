@@ -1314,25 +1314,26 @@ export const useEventStore = create((set) => ({
     setEvent: (fieldName, value) =>
       set((state) => ({ event: { ...state.event, [fieldName]: value } })),
     editEvent: (data) =>
-      set((state) => ({ event: {
-        event_id: data.event_id,
-        event_title: data.event_title,
-        event_content: data.event_content,
-        event_startDate: new Date(data.event_startDate).toISOString().split('T')[0],
-        event_endDate: new Date(data.event_endDate).toISOString().split('T')[0],
-        event_image: data.event_image,
-        eventState: data.eventState,      
-      } 
-    })),
+      set((state) => ({
+        event: {
+          event_id: data.event_id,
+          event_title: data.event_title,
+          event_content: data.event_content,
+          event_startDate: new Date(data.event_startDate).toISOString().split('T')[0],
+          event_endDate: new Date(data.event_endDate).toISOString().split('T')[0],
+          event_image: data.event_image,
+          eventState: data.eventState,
+        }
+      })),
     resetEvent: () =>
       set({
         event: {
-    event_title: '',
-    event_content: '',
-    event_startDate: '',
-    event_endDate: '',
-    event_image: '',
-    eventState: '',
+          event_title: '',
+          event_content: '',
+          event_startDate: '',
+          event_endDate: '',
+          event_image: '',
+          eventState: '',
         }
       })
   }
@@ -1465,17 +1466,33 @@ export const useAdminSearchActions = () => useAdminSearchStore((state) => state.
 
 /* ----------------Regex Store---------------- */
 export const useRegex = create((set) => ({
-  regex: {
-    userIdRegex: /^.{8,19}$/, // 아이디가 8글자 이상 20글자 미만인지를 확인하는 정규 표현식,
-    passwordRegex: /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_`])[A-Za-z\d\W_`]{8,30}$/,
-    emailRegex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, // 이메일 정규 표현식
-    nameRegex: /^[a-zA-Z가-힣]{2,30}$/, // 이름 정규표현식 
-    customRegex: /^[a-zA-Z가-힣\s()]{1,50}$/, // 기타Input 정규표현식
-  },
+  userIdRegex: /^.{8,19}$/, // 아이디가 8글자 이상 20글자 미만인지를 확인하는 정규 표현식,
+  passwordRegex: /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_`])[A-Za-z\d\W_`]{8,30}$/,
+  emailRegex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, // 이메일 정규 표현식
+  nameRegex: /^[a-zA-Z가-힣]{2,30}$/, // 이름 정규표현식 
+  customRegex: /^[a-zA-Z가-힣\s()]{1,50}$/, // 기타Input 정규표현식
 
   actions: {
-
+    /** 정규식 테스트 Function
+    * @RegexList 정규식 후보 리스트
+    * * userIdRegex : 아이디 - 8~19글자
+    * * passwordRegex : 비밀번호 - 8~30글자, 영문자, 숫자, 특수문자 조합
+    * * emailRegex : 이메일
+    * * nameRegex : 이름 - 영문,한글 2글자 이상 30글자 미만
+    * * customRegex // 기타 Input
+     * @param {*} regex 
+     * @param {*} testString 
+     * @returns 
+     */
+    testRegex: (regex, testString) => {
+      return regex.test(testString);
+    }
   },
 }))
-export const useRegexRegex = () => useRegex((state) => state.regex);
-export const useRegexActions = () => useRegex((state) => state.actions)
+export const useRegexItems = () => {
+  const { userIdRegex, passwordRegex, emailRegex, nameRegex, customRegex } = useRegex();
+  return { userIdRegex, passwordRegex, emailRegex, nameRegex, customRegex };
+}
+export const useRegexActions = () => useRegex((state) => state.actions);
+
+/* ----------------Temp~---------------- */
