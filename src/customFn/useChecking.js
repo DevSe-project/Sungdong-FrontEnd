@@ -14,7 +14,7 @@ export const useCheck = () => {
    * @returns 
    */
   const handleItemChecking = (item1, item2) => {
-    if (item1, item2)
+    if (item1 === item2)
       return true;
     else
       return false;
