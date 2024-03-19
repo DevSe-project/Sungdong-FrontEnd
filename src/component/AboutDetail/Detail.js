@@ -183,7 +183,7 @@ export function Detail(props) {
     const newProduct = {
       ...product,
       cnt: count,
-      selectedOption: optionSelected ? optionSelected : null,
+      selectedOption: optionSelected ? optionSelected : 'null',
     };
     cartMutate(newProduct, {
       onSuccess: (cartData) => {
