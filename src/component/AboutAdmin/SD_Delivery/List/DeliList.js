@@ -83,7 +83,9 @@ export default function DeliList() {
       case 4:
         return '배송 완료';
       case 5:
-        return '배송 지연';
+        return '취소';
+      case 6:
+        return '취소 요청';
       default:
         alert('배송 상태를 불러들이지 못했습니다.');
         return 'null';
@@ -309,7 +311,7 @@ export default function DeliList() {
                 {/* 송장 번호 */}
                 <td>{item.delivery_num == '' ? '입력 필요' : item.delivery_num}</td>
                 {/* 배송상태 */}
-                <td>{parseDeliveryState(item.orderState)}</td>
+                <td>{parseDeliveryState(item?.orderState)}</td>
                 {/* 주문일자 */}
                 <td>{item.order_date}</td>
                 {/* 상품번호 */}
