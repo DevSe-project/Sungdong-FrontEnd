@@ -975,7 +975,8 @@ export const useOrderFilterStore = create((set) => ({
     },
     deliveryType: '',
     selectFilter: '',
-    filterValue: ''
+    filterValue: '',
+    orderState: '',
   },
   actions: {
     setOrderFilter: (fieldName, value) =>
@@ -990,7 +991,8 @@ export const useOrderFilterStore = create((set) => ({
           },
           deliveryType: '',
           selectFilter: '',
-          filterValue: ''
+          filterValue: '',
+          orderState: ''
         }
       }),
     setOrderDetailFilter: (fieldName, value) =>

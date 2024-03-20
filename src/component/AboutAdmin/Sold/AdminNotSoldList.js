@@ -2,10 +2,11 @@ import styles from './AdminNotSoldList.module.css';
 import React, { useState } from 'react';
 import AdminSoldModal from './AdminSoldModal';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useModalActions, useModalState, useOrderSelectList, useOrderSelectListActions } from '../../../store/DataStore';
+import { useModalActions, useModalState, useOrderFilter, useOrderSelectList, useOrderSelectListActions } from '../../../store/DataStore';
 import { useFetch } from '../../../customFn/useFetch';
 import Pagination from '../../../customFn/Pagination';
 import AdminCancelModal from './AdminCancelModal';
+import { AdminSoldFilter } from './AdminSoldFilter';
 
 export function AdminNotSoldList(props) {
 
@@ -14,13 +15,14 @@ export function AdminNotSoldList(props) {
   const { selectedModalOpen } = useModalActions();
   const queryClient = useQueryClient();
 
-  const { fetchAddPostServer, fetchNonPageServer } = useFetch();
+  const { fetchAddPostServer, fetchNonPageServer,fetchServer } = useFetch();
   // 게시물 데이터와 페이지 번호 상태 관리    
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [selectedData, setSelectedData] = useState(null);
 
+  const orderFilter = useOrderFilter(); // 주문 필터링 구성
   const selectList = useOrderSelectList();
   const { toggleSelectList, toggleAllSelect } = useOrderSelectListActions();
 
@@ -71,10 +73,53 @@ export function AdminNotSoldList(props) {
   }
 
   // Fetch
-  const { isLoading, isError, error, data: ordered } = useQuery({
+  const { isLoading, isError, data: ordered } = useQuery({
     queryKey: [`yetOrder`, currentPage ? currentPage : 1, itemsPerPage ? itemsPerPage : 10],
     queryFn: () => fetchData()
   }) // currentPage, itemPerPage가 변경될 때마다 재실행하기 위함
+
+    /*---------- 필터 검색 ----------*/
+  
+  /**
+   * @필터 POST FETCH 
+   * - 필터 검색 Mutation (react-query :: Mutation Hook) 사용
+   * @param {*} filter 객체 정보
+   * - date: {start: '', end: ''} - 시작 날짜와 끝 날짜 필터
+   * - dateType: "" - 색인할 날짜 타입 필터
+   * - deliveryType: "" - 배송 구분 필터
+   * - selectFilter: "" - 상세 필터
+   * - filterValue: "" - 상세 필터 조건
+   */
+  const fetchFilteredOrders = async (filter) => {
+    const limit = {
+      orderState: 1,
+    }
+    return await fetchServer({limit, filter}, `post`, `/order/filter`, 1);
+  };
+
+  const { mutate: filterMutation } = useMutation({ mutationFn: fetchFilteredOrders })
+
+  /**
+   * @검색 Mutation 선언부
+
+   * @returns 필터된 상품의 데이터 객체 (@불러오기 returns 데이터 정보 참조)
+   */
+  const handleSearch = () => {
+
+    // 검색 버튼 클릭 시에만 서버에 요청
+    filterMutation(orderFilter, {
+      onSuccess: (data) => {
+        alert(data.message)
+        setCurrentPage(data.data.currentPage);
+        setTotalPages(data.data.totalPages);
+        queryClient.setQueryData(['yetOrder', currentPage, itemsPerPage], () => {
+          return data.data.data;
+        })
+      },
+      onError: (error) => {
+        return console.error(error.message);
+      },
+    })  };
 
   // ---------------- 아이템 열람 Mutation -----------------
 
@@ -134,6 +179,7 @@ export function AdminNotSoldList(props) {
         <div className={styles.bodyHeader}>
           <h1>미결제/취소 주문 관리</h1>
         </div>
+        <AdminSoldFilter handleSearch={handleSearch} isCancel={true}/>
         <div className={styles.tableLocation}>
           <div className={styles.manageBox}>
             <button onClick={() => handleCancel()} className={styles.button}>취소처리</button>
