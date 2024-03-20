@@ -265,3 +265,10 @@ label {
     border-right: 2px solid gray;
     cursor: not-allowed;
 }
+
+.label{
+    display: flex;
+    justify-content: center;
+    gap: 0.5em;
+    align-items: center;
+}

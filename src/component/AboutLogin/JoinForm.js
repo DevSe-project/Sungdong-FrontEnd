@@ -615,8 +615,30 @@ export default function JoinForm(props) {
                         </div>
                     </div>
                 </li>
+                {/* 회원구분 체크박스 */}
+                <li className={styles.inputContainer}>
+                    <div className={styles.left}>사본 첨부</div>
+                    <div className={styles.right}>
+                        <div className='basic_input'>
+                            {[
+                                { id: 'cor_corCopy', label: '사업자 등록증 사본 : ' },
+                                { id: 'cor_bankCopy', label: '통장 사본 : ' }
+                            ].map((item, idx) => (
+                                <div className={styles.label} key={idx}>
+                                    <label htmlFor={item.id}>{item.label}</label>
+                                    <input
+                                        type="file"
+                                        id={item.id}
+                                        name="copyPrint"
+                                        value={props.inputData[item.id]}
+                                        onChange={(e) => props.setInputData((prevData) => ({ ...prevData, [item.id]: e.target.value }))}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </li>
             </ul >
-
         </div >
     )
 }
