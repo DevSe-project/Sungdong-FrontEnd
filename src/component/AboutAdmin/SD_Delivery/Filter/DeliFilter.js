@@ -143,8 +143,8 @@ export default function DeliFilter({ handleSearch, parseDeliveryState }) {
                     </div>
                 ))}
                 <div style={{ display: 'flex', gap: '0.5em' }}>
-                    <input className='original_button' type='button' value='검색' onClick={() => handleSearch()} />
-                    <input className='white_button' type='reset' onClick={() => resetDeliveryFilter()} />
+                    <div className='original_button' onClick={() => handleSearch()}>검색</div>
+                    <div className='white_button' onClick={() => resetDeliveryFilter()}>초기화</div>
                 </div>
             </form>
         </div>

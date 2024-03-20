@@ -54,7 +54,6 @@ export default function DeliList() {
       throw new Error('배송 데이터 불러오기 중 오류가 발생하였습니다.');
     }
   }
-
   // useEffect를 사용하여 페이지 번호나 페이지 당 항목 수가 변경될 때마다 새로운 데이터를 가져옴
   useEffect(() => {
     fetchDeliveryData();
@@ -188,6 +187,7 @@ export default function DeliList() {
      * 즉, 필터링 항목이 모두 비어있지 않다면 필터링Fn을 실행
      */
     if (checkboxTrueKeys.length > 0 || isCheckDateIsFull) {
+      console.log(`Fetch전 최종 delivereyFilter 검사: ${JSON.stringify(deliveryFilter)}`);
       filterMutation(deliveryFilter, {
         onSuccess: (data) => {
           alert(data.message);
@@ -214,7 +214,7 @@ export default function DeliList() {
    * @returns 
    */
   const parseLacalToString = (item) => {
-    const parseToLocaleString = Number(item).toLocaleString('kr-KR', { style: 'currency', currency: 'KRW'});
+    const parseToLocaleString = Number(item).toLocaleString('kr-KR', { style: 'currency', currency: 'KRW' });
     return parseToLocaleString;
   }
 

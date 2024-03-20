@@ -154,6 +154,7 @@ export default function DeliInvoiceModal(props) {
                                                 value={item.delivery_selectedCor}
                                                 onChange={(e) => updateDeliveryCompany(e.target.value, item.order_id)}
                                             >
+                                                <option value="">선택</option>
                                                 <option value="성동택배">성동택배</option>
                                                 <option value="대한통운">대한통운</option>
                                                 <option value="롯데택배">롯데택배</option>

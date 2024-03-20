@@ -1196,6 +1196,7 @@ export const useDeliveryFilter = create((set) => ({
       3: false,
       4: false,
       5: false,
+      6: false
     },
     date: {
       start: '',
@@ -1204,18 +1205,23 @@ export const useDeliveryFilter = create((set) => ({
   },
 
   resetDeliveryFilter: () => set({
-    checkedState: {
-      '배송 준비': false,
-      '배송 중': false,
-      '배송 완료': false,
-      '배송 지연': false,
-    },
-    date: {
-      startDate: '',
-      endDate: '',
-      filteredData: []
+    deliveryFilter: {
+      checkboxState: {
+        0: false,
+        1: false,
+        2: false,
+        3: false,
+        4: false,
+        5: false,
+        6: false
+      },
+      date: {
+        start: '',
+        end: '',
+      },
     }
-  }),
+  })
+  ,
 
   updateCheckboxState: (fieldName) => set((state) => ({
     deliveryFilter: {
