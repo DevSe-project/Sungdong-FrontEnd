@@ -182,6 +182,7 @@ export default function JoinForm(props) {
                 [id]: response.data.imageUrl
             }
         }));
+        alert(response.data.message);
         } catch (error) {
         // 실패 시 예외를 throw합니다.
         console.error('이미지 업로드 에러:', error);
