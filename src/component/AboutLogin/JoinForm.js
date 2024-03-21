@@ -175,7 +175,13 @@ export default function JoinForm(props) {
 
         // 성공 시 추가된 상품 정보를 반환합니다.
         setImageUrl(response.data.imageUrl);
-        props.setInputData((prevData) => ({ ...prevData, [id]: response.data.imageUrl}))
+        props.setInputData((prevData) => ({
+            ...prevData,
+            corporationData: {
+                ...prevData.corporationData,
+                [id]: response.data.imageUrl
+            }
+        }));
         } catch (error) {
         // 실패 시 예외를 throw합니다.
         console.error('이미지 업로드 에러:', error);
