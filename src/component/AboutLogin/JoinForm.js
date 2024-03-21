@@ -2,6 +2,7 @@ import { useState } from "react";
 import styles from './RelativeJoin.module.css';
 import { useMutation } from "@tanstack/react-query";
 import { useFetch } from "../../customFn/useFetch";
+import axios from "../../axios";
 
 export default function JoinForm(props) {
     const { fetchServer } = useFetch();
@@ -150,6 +151,38 @@ export default function JoinForm(props) {
                 }
             }));
         }
+    };
+
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [imageUrl, setImageUrl] = useState('');
+
+    const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+    };
+
+    const uploadImage = async (id) => {
+    if (selectedFile) {
+        try {
+        const formData = new FormData();
+        formData.append('image', selectedFile);
+
+        const response = await axios.post('/auth/upload', formData, {
+            withCredentials: false,
+            headers: {
+            'Content-Type': 'multipart/form-data',
+            },
+        });
+
+        // 성공 시 추가된 상품 정보를 반환합니다.
+        setImageUrl(response.data.imageUrl);
+        props.setInputData((prevData) => ({ ...prevData, [id]: response.data.imageUrl}))
+        } catch (error) {
+        // 실패 시 예외를 throw합니다.
+        console.error('이미지 업로드 에러:', error);
+        }
+    } else {
+        console.error('이미지를 선택하세요.');
+    }
     };
 
 
@@ -621,18 +654,20 @@ export default function JoinForm(props) {
                     <div className={styles.right}>
                         <div className='basic_input'>
                             {[
-                                { id: 'cor_corCopy', label: '사업자 등록증 사본 : ' },
-                                { id: 'cor_bankCopy', label: '통장 사본 : ' }
+                                { id: 'cor_corCopy', label: '사업자 등록증 사본\n' },
+                                { id: 'cor_bankCopy', label: '통장 사본\n' }
                             ].map((item, idx) => (
                                 <div className={styles.label} key={idx}>
-                                    <label htmlFor={item.id}>{item.label}</label>
                                     <input
+                                        className="white_button"
                                         type="file"
                                         id={item.id}
                                         name="copyPrint"
                                         value={props.inputData[item.id]}
-                                        onChange={(e) => props.setInputData((prevData) => ({ ...prevData, [item.id]: e.target.value }))}
+                                        accept="image/*" 
+                                        onChange={handleFileChange}
                                     />
+                                    <button className="original_button" style={{display: "flex", justifyContent:'flex-start'}} onClick={()=>uploadImage(item.id)}>{item.label} 업로드하기</button>
                                 </div>
                             ))}
                         </div>

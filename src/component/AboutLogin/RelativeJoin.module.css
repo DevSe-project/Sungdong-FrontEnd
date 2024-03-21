@@ -268,7 +268,6 @@ label {
 
 .label{
     display: flex;
-    justify-content: center;
-    gap: 0.5em;
-    align-items: center;
+    flex-direction: column;
+    justify-content: flex-start;
 }
