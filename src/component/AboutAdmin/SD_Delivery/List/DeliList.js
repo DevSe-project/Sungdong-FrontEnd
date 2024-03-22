@@ -71,10 +71,6 @@ export default function DeliList() {
   function parseDeliveryState(val) {
     const parseVal = parseInt(val);
     switch (parseVal) {
-      case 0:
-        return '결제 대기';
-      case 1:
-        return '결제 완료';
       case 2:
         return '배송 준비';
       case 3:

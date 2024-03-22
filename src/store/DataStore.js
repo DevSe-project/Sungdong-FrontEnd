@@ -1170,18 +1170,15 @@ export const useNoticeActions = () => useNoticeStore((state) => state.actions);
 // ------------Delivery Filter------------
 
 /**
- * - state
- *   * deliveryFilter{object}  - 배송 필터 상태를 관리하는 객체
- *     * deliveryFilter.checkboxState {object}  - 배송 상태 체크박스 상태를 관리하는 객체
- *     * deliveryFilter.checkboxState {boolean} - 배송 준비 상태 체크박스의 상태 
- *     * deliveryFilter.checkboxState {boolean} - 배송 중 상태 체크박스의 상태
- *     * deliveryFilter.checkboxState {boolean} - 배송 완료 상태 체크박스의 상태
- *     * deliveryFilter.checkboxState {boolean} - 배송 지연 상태 체크박스의 상태
- *   * deliveryFilter.date{object}  - 배송일자 관련 정보를 담는 객체
- *     * deliveryFilter.date.startDate {string} - 배송 시작일
- *     * deliveryFilter.date.endDate {string} - 배송 종료일
- *     * deliveryFilter.date.filteredData {array} - 필터링된 데이터 배열
- * - actions
+ * * state
+ *    * deliveryFilter{object}  - 배송 필터 상태를 관리하는 객체
+ *      * [구성]
+ *        * deliveryFilter.checkboxState {object}  - 배송 상태 체크박스 상태를 관리하는 객체
+ *    * deliveryFilter.date{object}  - 배송일자 관련 정보를 담는 객체
+ *      * [구성]
+ *        * deliveryFilter.date.startDate {string} - 배송 시작일
+ *        * deliveryFilter.date.endDate {string} - 배송 종료일
+ * * actions
  *    * resetDeliveryFilter {function}  - 배송 필터 초기화 함수
  *    * updateCheckboxState {function}  - 체크박스 상태 업데이트 함수
  *    * allUpdateCheckboxState {function}  - 모든 체크박스 상태 업데이트 함수
@@ -1192,13 +1189,13 @@ export const useNoticeActions = () => useNoticeStore((state) => state.actions);
 export const useDeliveryFilter = create((set) => ({
   deliveryFilter: {
     checkboxState: {
-      0: false,
-      1: false,
-      2: false,
-      3: false,
-      4: false,
-      5: false,
-      6: false
+      // 0: false, 결제 대기
+      // 1: false, 결제 완료
+      2: false, // 배송 준비
+      3: false, // 배송 중
+      4: false, // 배송 완료
+      5: false, // 취소
+      6: false // 취소 요청
     },
     date: {
       start: '',
@@ -1209,13 +1206,13 @@ export const useDeliveryFilter = create((set) => ({
   resetDeliveryFilter: () => set({
     deliveryFilter: {
       checkboxState: {
-        0: false,
-        1: false,
-        2: false,
-        3: false,
-        4: false,
-        5: false,
-        6: false
+        // 0: false, 결제 대기
+        // 1: false, 결제 완료
+        2: false, // 배송 준비
+        3: false, // 배송 중
+        4: false, // 배송 완료
+        5: false, // 취소
+        6: false // 취소 요청
       },
       date: {
         start: '',
