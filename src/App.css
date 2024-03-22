@@ -581,6 +581,7 @@ input[type="checkbox"] {
 
 .basic_input {
   display: flex;
+  gap: 1em;
   align-items: center;
   margin: 0.5em;
   padding: 1em;

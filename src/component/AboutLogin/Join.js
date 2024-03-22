@@ -101,6 +101,8 @@ export default function Join() {
                     fax_num2: '',
                     fax_num3: '',
                 }, // FAX번호
+                cor_corCopy: '',
+                cor_bankCopy : ''
             },
             address: {
                 zonecode: '',
