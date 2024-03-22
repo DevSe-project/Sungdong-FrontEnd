@@ -87,6 +87,24 @@ export default function DeliList() {
     }
   }
 
+  // 택배사 파싱
+  function parseSelectedCor(val) {
+    switch (val) {
+      case "성동택배":
+        return "성동택배";
+      case "대한통운":
+        return "대한통운";
+      case "롯데택배":
+        return "롯데택배";
+      case "kr.daesin":
+        return "대신화물";
+      case "kr.kdexp":
+        return "경동화물";
+      default:
+        return "미정";
+    }
+  }
+
   // 전체 체크박스 업데이트
   function handleAllCheckbox(e) {
     const checked = e.target.checked;
@@ -303,7 +321,7 @@ export default function DeliList() {
                 {/* 주문번호 */}
                 <td>{item.order_id}</td>
                 {/* 택배사 */}
-                <td>{item.delivery_selectedCor}</td>
+                <td>{parseSelectedCor(item.delivery_selectedCor)}</td>
                 {/* 송장 번호 */}
                 <td>{item.delivery_num == '' ? '입력 필요' : item.delivery_num}</td>
                 {/* 배송상태 */}

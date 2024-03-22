@@ -158,6 +158,8 @@ export default function DeliInvoiceModal(props) {
                         <option value="성동택배">성동택배</option>
                         <option value="대한통운">대한통운</option>
                         <option value="롯데택배">롯데택배</option>
+                        <option value="kr.daesin">대신화물</option>
+                        <option value="kr.kdexp">경동화물</option>
                       </select>
                     </td>
                     <td>
