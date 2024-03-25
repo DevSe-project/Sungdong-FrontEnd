@@ -82,7 +82,7 @@ export default function AdminUserList() {
   });
 
   useEffect(() => {
-    if(userData)
+    if (userData)
       setMatchedData(userData);
   }, [userData]);
 
@@ -329,8 +329,10 @@ export default function AdminUserList() {
     // handleSort();
   }, [userData, sortBy]);
 
+  console.log(JSON.stringify(userData));
 
 
+  
   if (isLoading) {
     return <div>로딩 중...</div>;
   }
@@ -378,7 +380,7 @@ export default function AdminUserList() {
             {/* 고객 구분, CMS여부 */}
             {[
               { title: '고객 구분', valList: [1, 2, 12, 13, 14, 22, 23, 24, 100], val: userData.userType_id, key: 'userType_id' },
-              { title: '담당자', valList: ['박형조', '엄지석', '김태훈'], val: userData.name, key: 'name' },
+              { title: '담당자', valList: ['박형조', '엄지석', '김태훈'], val: userData.managers_id, key: 'managers_id' },
               { title: 'CMS여부', valList: [1, 0], val: userData.hasCMS, key: 'hasCMS' },
             ].map((customItem, index) => (
               <th key={index}>
@@ -451,7 +453,7 @@ export default function AdminUserList() {
               {[
                 { title: '고객명', val: user.cor_corName, key: 'cor_corName' },
                 { title: '고객 구분', valList: [1, 2, 12, 13, 14, 22, 23, 24, 100], val: user.userType_id, key: 'userType_id' },
-                { title: '담당자', valList: ['박형조', '엄지석', '김태훈'], val: user.name ? user.name : <span style={{ color: 'var(--main-red' }}>배정 필요</span>, key: 'name' },
+                { title: '담당자', valList: ['박형조', '엄지석', '김태훈'], val: user.managerName ? user.managerName : <span style={{ color: 'var(--main-red' }}>{user.managerName}</span>, key: 'managerName' },
                 { title: 'CMS여부', valList: [1, 0], val: user.hasCMS, key: 'hasCMS' },
               ].map((customItem, editIdx) => (
                 <td key={editIdx}>
