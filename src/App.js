@@ -73,6 +73,7 @@ import { AdminMainModule } from './component/AboutAdmin/Main/AdminMainModule';
 import { AdminEventManage } from './component/AboutAdmin/Event/AdminEventManage';
 import { AdminEventCreator } from './component/AboutAdmin/Event/AdminEventCreator';
 import { AdminEventEditor } from './component/AboutAdmin/Event/AdminEventEditor';
+import { InvoiceStatement } from './component/AboutPay/InvoiceStatement';
 
 
 export default function App() {
@@ -279,6 +280,9 @@ export default function App() {
             </div>
           </>
         } />
+        <Route path='/invoic' element={
+          <InvoiceStatement/>
+        }/>
 
         {/* 장바구니 */}
         <Route path='/basket' element={
