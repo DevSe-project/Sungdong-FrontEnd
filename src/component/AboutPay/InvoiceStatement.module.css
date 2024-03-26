@@ -60,3 +60,50 @@ pre{
   width: 100%;
   align-items: center;
 }
+
+.sumBox{
+  width: 99%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5em;
+  font-size: 20px;
+  color: #CC0000;
+  border: 1px solid #CC0000;
+  background-color: #ffc2c2;
+  border-left: none;
+  border-right: none;
+}
+
+table{
+  box-shadow: none;
+}
+
+tr{
+  box-shadow: none;
+  background: none;
+  border: 1px solid #CC0000;
+  color: #CC0000;
+}
+
+th{
+  box-shadow: none;
+  background: none;
+  border: 1px solid #CC0000;
+  color: #CC0000;
+}
+
+td{
+  box-shadow: none;
+  background: none;
+  border: 1px solid #CC0000;
+  color: #CC0000;
+}
+
+.blue{
+  box-shadow: none;
+  background: none;
+  border: 1px solid blue;
+  color: blue;
+}
