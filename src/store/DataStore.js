@@ -1262,7 +1262,7 @@ export const useUserFilterStore = create((set) => ({
     cor_ceoName: '',
     cor_num: '',
     userType_id: -1,
-    name: '',
+    managerName: '',
   },
   userSort: {
     first: '',

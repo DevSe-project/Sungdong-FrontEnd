@@ -75,15 +75,16 @@ export default function AdminUserFilter(props) {
         </div>
 
         <div className={styles.searchGroup}>
-          <label htmlFor='name'>담당자</label>
+          <label htmlFor='managerName'>담당자</label>
           <select
-            className={styles.select} id="name"
-            value={userFilter.name}
-            onChange={e => { setUserFilter("name", e.target.value); console.log(`유저필터: ${userFilter.name}`) }}>
+            className={styles.select} id="managerName"
+            value={userFilter.managerName || ""}
+            onChange={e => { setUserFilter("managerName", e.target.value); console.log(`유저필터: ${userFilter.managerName}`) }}>
             <option value="">담당자</option>
             <option value="박형조">박형조</option>
             <option value="엄지석">엄지석</option>
             <option value="김태훈">김태훈</option>
+            <option value="일큐이">일큐이</option>
           </select>
         </div>
       </div>
