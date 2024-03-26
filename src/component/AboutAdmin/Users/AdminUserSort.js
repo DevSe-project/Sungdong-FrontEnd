@@ -4,7 +4,7 @@ import { useUserFilterActions, useUserSort } from '../../../store/DataStore';
 
 const AdminUserSort = (props) => {
     const userSort = useUserSort();
-    const {setUserSort} = useUserFilterActions();
+    const { setUserSort, resetUserSort } = useUserFilterActions();
 
     const optionsArr = [
         {
@@ -13,16 +13,16 @@ const AdminUserSort = (props) => {
         },
         {
             value: "USER.userType_id",
-            key: "고객유형",
+            key: "고객구분",
         },
         {
             value: "COR.cor_corName",
             key: "업체명(상호명)",
         },
         {
-            value: "INFO.grade",
-            key: "회원등급",
-        },
+            value: "INFO.hasCMS",
+            key: "CMS동의여부"
+        }
     ];
 
     return (
@@ -37,13 +37,13 @@ const AdminUserSort = (props) => {
                         {priority}순위
                         <select
                             className={styles.sortSelect}
-                            value={priority === 1 ? userSort.first 
-                                : priority === 2 ? userSort.second 
-                                : priority === 3 && userSort.third}
-                            onChange={(e) => setUserSort(priority === 1 ? "first" 
-                                : priority === 2 ? "second" 
-                                : priority === 3 && "third", e.target.value)}
-                            >
+                            value={priority === 1 ? userSort.first
+                                : priority === 2 ? userSort.second
+                                    : priority === 3 && userSort.third}
+                            onChange={(e) => setUserSort(priority === 1 ? "first"
+                                : priority === 2 ? "second"
+                                    : priority === 3 && "third", e.target.value)}
+                        >
                             {/* 옵션 배열의 객체들을 map으로 풂. */}
                             {optionsArr.map((item, index) => (
                                 <option key={index} value={item.value}>{item.key}</option>
@@ -53,7 +53,8 @@ const AdminUserSort = (props) => {
                 ))}
             </div>
 
-            <button style={{marginTop: '16px'}} className='original_round_button' onClick={props.onSort}>정렬하기</button>
+            <button className="white_round_button" onClick={() => resetUserSort()}>초기화</button>
+            <button style={{ marginTop: '16px' }} className='original_round_button' onClick={props.onSort}>정렬하기</button>
         </div>
     );
 };
