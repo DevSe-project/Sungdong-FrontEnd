@@ -95,10 +95,19 @@ th{
 }
 
 td{
+  height: 10px;
   box-shadow: none;
   background: none;
   border: 1px solid #CC0000;
   color: #CC0000;
+}
+
+tbody tr:nth-child(even){
+  background-color: #e9b3b3;
+}
+
+tbody .blueTr:nth-child(even){
+  background-color: rgb(191, 191, 255);
 }
 
 .blue{
