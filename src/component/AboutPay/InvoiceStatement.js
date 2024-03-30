@@ -9,13 +9,13 @@ export function InvoiceStatement() {
       <tbody>
         {tableArray.map((item, key) => {
           return (
-            <tr className={blue==="blue" && styles.blueTr}>
-              <td className={blue === "blue" && styles.blue}>{item}</td>
-              <td colSpan={2} className={blue === "blue" && styles.blue}>{item}</td>
-              <td className={blue === "blue" && styles.blue}>{item}</td>
-              <td className={blue === "blue" && styles.blue}>{item}</td>
-              <td className={blue === "blue" && styles.blue}>{item}</td>
-              <td className={blue === "blue" && styles.blue}>{item}</td>
+            <tr className={blue==="blue" ? styles.blueTr : styles.redTr}>
+              <td className={blue === "blue" ? styles.blue : styles.red}>{item}</td>
+              <td colSpan={2} className={blue === "blue" ? styles.blue : styles.red}>{item}</td>
+              <td className={blue === "blue" ? styles.blue : styles.red}>{item}</td>
+              <td className={blue === "blue" ? styles.blue : styles.red}>{item}</td>
+              <td className={blue === "blue" ? styles.blue : styles.red}>{item}</td>
+              <td className={blue === "blue" ? styles.blue : styles.red}>{item}</td>
             </tr>
           );
         })}
@@ -40,58 +40,57 @@ export function InvoiceStatement() {
               }}
             >
               <div className={styles.lowTitle}>
-                <pre>거래명세서 번호: </pre>
-                <pre>(공급자 보관용)</pre>
-                <pre> 년 월 일</pre>
+                <pre style={{ color: "red" }}>거래명세서 번호: </pre>
+                <pre style={{ color: "red" }}>(공급자 보관용)</pre>
+                <pre style={{ color: "red" }}> 년 월 일</pre>
               </div>
             </div>
           </div>
           <div className={styles.tableBox}>
             <table>
-              <tr>
-                <th style={{ width: "10px" }} rowSpan={3}>
+              <tr className={styles.red}>
+                <th className={styles.red} style={{ width: "10px" }} rowSpan={3}>
                   <span>공 급 자</span>
                 </th>
-                <th style={{ width: "40px" }}>등 록 번 호</th>
-                <td></td>
-                <td></td>
-                <td></td>
+                <th className={styles.red} style={{ width: "40px" }}>등 록 번 호</th>
+                <td className={styles.red}></td>
+                <td className={styles.red}></td>
+                <td className={styles.red}></td>
               </tr>
               <tr>
-                <th>상 호</th>
-                <td></td>
-                <th style={{ width: "24px" }}>성명</th>
-                <td></td>
+                <th className={styles.red}>상 호</th>
+                <td className={styles.red}></td>
+                <th className={styles.red} style={{ width: "24px" }}>성명</th>
+                <td className={styles.red}></td>
               </tr>
               <tr>
-                <th>주 소</th>
-                <td></td>
-                <td></td>
-                <td></td>
+                <th className={styles.red}>주 소</th>
+                <td className={styles.red}></td>
+                <td className={styles.red}></td>
+                <td className={styles.red}></td>
               </tr>
             </table>
-            {/* 파랑 */}
             <table>
               <tr>
-                <th style={{ width: "10px" }} rowSpan={3}>
+                <th className={styles.red} style={{ width: "10px" }} rowSpan={3}>
                   <span>공 급 받 는 자</span>
                 </th>
-                <th style={{ width: "40px" }}>등 록 번 호</th>
-                <td></td>
-                <td></td>
-                <td></td>
+                <th className={styles.red} style={{ width: "40px" }}>등 록 번 호</th>
+                <td className={styles.red}></td>
+                <td className={styles.red}></td>
+                <td className={styles.red}></td>
               </tr>
               <tr>
-                <th>상 호</th>
-                <td></td>
-                <th style={{ width: "24px" }}>성명</th>
-                <td></td>
+                <th className={styles.red}>상 호</th>
+                <td className={styles.red}></td>
+                <th className={styles.red} style={{ width: "24px" }}>성명</th>
+                <td className={styles.red}></td>
               </tr>
               <tr>
-                <th>주 소</th>
-                <td></td>
-                <td></td>
-                <td></td>
+                <th className={styles.red}>주 소</th>
+                <td className={styles.red}></td>
+                <td className={styles.red}></td>
+                <td className={styles.red}></td>
               </tr>
             </table>
           </div>
@@ -101,24 +100,24 @@ export function InvoiceStatement() {
           </div>
           <table>
             <thead>
-              <tr>
-                <th>번호</th>
-                <th colSpan={2}>품 명 및 규 격</th>
-                <th>수 량</th>
-                <th>단 가</th>
-                <th>공 급 가 액</th>
-                <th>세 액</th>
+              <tr className={styles.red}>
+                <th className={styles.red}>번호</th>
+                <th className={styles.red} colSpan={2}>품 명 및 규 격</th>
+                <th className={styles.red}>수 량</th>
+                <th className={styles.red}>단 가</th>
+                <th className={styles.red}>공 급 가 액</th>
+                <th className={styles.red}>세 액</th>
               </tr>
             </thead>
-            {arrayTableList()}
+            {arrayTableList("red")}
             <tfoot>
-              <th>인수자</th>
-              <th></th>
-              <th style={{ width: "30px" }}>계</th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
+              <th className={styles.red}>인수자</th>
+              <th className={styles.red}></th>
+              <th className={styles.red} style={{ width: "30px" }}>계</th>
+              <th className={styles.red}></th>
+              <th className={styles.red}></th>
+              <th className={styles.red}></th>
+              <th className={styles.red}></th>
             </tfoot>
           </table>
         </article>
