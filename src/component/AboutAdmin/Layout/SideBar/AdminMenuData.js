@@ -88,11 +88,15 @@ export function AdminMenuData(props) {
     {
       id: 5,
       title: {
-        item: '회원 관리',
+        item: '고객 관리',
       },
       subMenuItems: [{
-        item: '회원 관리',
+        item: '고객사 관리',
         link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/user'
+      },
+      {
+        item: '가입 대기 고객',
+        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/user/waiting'
       },
       {
         item: '회원가입 코드 관리',
