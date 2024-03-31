@@ -77,10 +77,6 @@ export default function DeliList() {
         return '배송 중';
       case 4:
         return '배송 완료';
-      case 5:
-        return '취소';
-      case 6:
-        return '취소 요청';
       default:
         alert('배송 상태를 불러들이지 못했습니다.');
         return 'null';
@@ -296,6 +292,7 @@ export default function DeliList() {
                 onChange={(e) => handleAllCheckbox(e)} />
             </th>
             <th>주문번호</th>
+            <th>상호명</th>
             <th>택배사</th>
             <th>송장 번호</th>
             <th>처리상태</th>
@@ -320,6 +317,8 @@ export default function DeliList() {
                   onChange={(e) => handlePerCheckbox(e.target.checked, item.order_id)} /></td>
                 {/* 주문번호 */}
                 <td>{item.order_id}</td>
+                {/* 상호명 */}
+                <td>{item.cor_corName}</td>
                 {/* 택배사 */}
                 <td>{parseSelectedCor(item.delivery_selectedCor)}</td>
                 {/* 송장 번호 */}

@@ -147,6 +147,7 @@ export default function DeliStateModal(props) {
               }}>
               <tr>
                 <th>주문번호</th>
+                <th>상호명</th>
                 <th>택배사</th>
                 <th>송장 번호</th>
                 <th>처리상태</th>
@@ -178,8 +179,6 @@ export default function DeliStateModal(props) {
                     <option value={2}>배송 준비</option>
                     <option value={3}>배송 중</option>
                     <option value={4}>배송 완료</option>
-                    <option value={5}>취소</option>
-                    <option value={6}>취소 요청</option>
                   </select>
                 </th>
                 <th></th>
@@ -196,6 +195,8 @@ export default function DeliStateModal(props) {
                 <tr key={index}>
                   {/* 주문번호 */}
                   <td>{item.order_id}</td>
+                  {/* 상호명 */}
+                  <td>{item.cor_corName}</td>
                   {/* 택배사 */}
                   <td>{item.delivery_selectedCor}</td>
                   {/* 송장 번호 */}
@@ -209,13 +210,9 @@ export default function DeliStateModal(props) {
                         handlePerStatus(item.order_id, e);
                       }}
                     >
-                      <option value={0}>결제 대기</option>
-                      <option value={1}>결제 완료</option>
                       <option value={2}>배송 준비</option>
                       <option value={3}>배송 중</option>
                       <option value={4}>배송 완료</option>
-                      <option value={5}>취소</option>
-                      <option value={6}>취소 요청</option>
                     </select>
                   </td>
                   {/* 주문일자 */}

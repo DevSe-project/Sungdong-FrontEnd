@@ -1194,8 +1194,8 @@ export const useDeliveryFilter = create((set) => ({
       2: false, // 배송 준비
       3: false, // 배송 중
       4: false, // 배송 완료
-      5: false, // 취소
-      6: false // 취소 요청
+      // 5: false, // 취소
+      // 6: false // 취소 요청
     },
     date: {
       start: '',
@@ -1211,8 +1211,8 @@ export const useDeliveryFilter = create((set) => ({
         2: false, // 배송 준비
         3: false, // 배송 중
         4: false, // 배송 완료
-        5: false, // 취소
-        6: false // 취소 요청
+        // 5: false, // 취소
+        // 6: false // 취소 요청
       },
       date: {
         start: '',
