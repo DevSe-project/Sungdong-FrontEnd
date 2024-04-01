@@ -230,6 +230,13 @@ export function AdminSoldList() {
     }
   }
 
+  /**
+   * 엑셀 출력 핸들러
+   */
+  async function handlePrintExcel(){
+    return await fetchServer({},`post`,`order/excel`, 1);
+  }   
+
   // 데이터 로딩 중 또는 에러 발생 시 처리
   if (isLoading) {
     return <p>Loading...</p>;
@@ -262,6 +269,7 @@ export function AdminSoldList() {
           </div>
           {/* 발주, 발송, 취소 처리 박스 */}
           <div className={styles.manageBox}>
+            <button onClick={() => handlePrintExcel()} className="original_button">발주서 엑셀 출력</button>
             <button onClick={() => handleDelNumInput()} className={styles.button}>발송처리</button>
             <button onClick={() => handleCancel()} className={styles.button}>취소처리</button>
           </div>

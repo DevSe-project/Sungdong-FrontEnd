@@ -72,7 +72,7 @@ export function AdminMenuData(props) {
     {
       id: 4,
       title: {
-        item: '고객센터',
+        item: '알림 관리',
       },
       subMenuItems: [
         {

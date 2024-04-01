@@ -601,6 +601,7 @@ export function Receipt(props) {
                   name='payroute'
                   type="radio"
                   value="CMS"
+                  disabled
                   checked={orderInformation.order_payRoute === 'CMS'}
                   onChange={(e) => handleChangeOrderField("order_payRoute", e.target.value)}
                 />
@@ -638,7 +639,7 @@ export function Receipt(props) {
                 <input
                   name='moneyreceipt'
                   type="radio"
-                  value="발행안함"
+                  value="발행안함(추후 예정)"
                   checked={orderInformation.order_moneyReceipt === '발행안함'}
                   onChange={(e) => handleChangeOrderField("order_moneyReceipt", e.target.value)}
                 /> 발행안함
@@ -648,6 +649,7 @@ export function Receipt(props) {
                   name='moneyreceipt'
                   type="radio"
                   value="현금영수증"
+                  disabled
                   checked={orderInformation.order_moneyReceipt === '현금영수증'}
                   onChange={(e) => handleChangeOrderField("order_moneyReceipt", e.target.value)}
                 /> 현금영수증
@@ -657,6 +659,7 @@ export function Receipt(props) {
                   name='moneyreceipt'
                   type="radio"
                   value="세금계산서"
+                  disabled
                   checked={orderInformation.order_moneyReceipt === '세금계산서'}
                   onChange={(e) => handleChangeOrderField("order_moneyReceipt", e.target.value)}
                 /> 세금계산서
