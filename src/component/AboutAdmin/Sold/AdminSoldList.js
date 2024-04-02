@@ -235,13 +235,25 @@ export function AdminSoldList() {
    * 엑셀 출력 핸들러
    */
   async function handlePrintExcel(){
-    const response = await axios.post('order/excel', ordered);
-    const url = window.URL.createObjectURL(new Blob([response.data]));
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', 'order.xlsx');
-    document.body.appendChild(link);
-    link.click();
+    try {
+      // 서버로부터 엑셀 데이터 요청
+      // responseType을 'blob'으로 설정해야 합니다.
+      const response = await axios.post('/order/excel', ordered, { responseType: 'blob' });
+      // Blob 데이터로 URL 생성
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      // a 태그를 생성하여 다운로드 링크 설정
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'order.xlsx'); // 다운로드될 파일명 설정
+      document.body.appendChild(link);
+      link.click(); // 프로그래밍적으로 클릭 이벤트 발생
+      // 생성된 URL 해제
+      window.URL.revokeObjectURL(url);
+      // 생성된 a 태그 제거
+      document.body.removeChild(link);
+  } catch (error) {
+      console.error('Download failed', error);
+  }
   }   
 
   // 데이터 로딩 중 또는 에러 발생 시 처리
