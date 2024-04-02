@@ -10,6 +10,7 @@ import AdminSoldModal from './AdminSoldModal';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useFetch } from '../../../customFn/useFetch';
 import Pagination from '../../../customFn/Pagination';
+import axios from '../../../axios';
 
 export function AdminSoldList() {
 
@@ -88,7 +89,7 @@ export function AdminSoldList() {
     return data.data[0];
   }
 
-  const { isLoading, isError, error, data: ordered } = useQuery({
+  const { isLoading, isError, data: ordered } = useQuery({
     queryKey: [`order`, currentPage, itemsPerPage],
     queryFn: () => fetchData()
   }) // currentPage, itemPerPage가 변경될 때마다 재실행하기 위함
@@ -234,7 +235,13 @@ export function AdminSoldList() {
    * 엑셀 출력 핸들러
    */
   async function handlePrintExcel(){
-    return await fetchServer({},`post`,`order/excel`, 1);
+    const response = await axios.post('order/excel', ordered);
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'order.xlsx');
+    document.body.appendChild(link);
+    link.click();
   }   
 
   // 데이터 로딩 중 또는 에러 발생 시 처리
