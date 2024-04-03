@@ -1,5 +1,5 @@
 import styles from './AdminNotSoldList.module.css';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AdminSoldModal from './AdminSoldModal';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useModalActions, useModalState, useOrderFilter, useOrderSelectList, useOrderSelectListActions } from '../../../store/DataStore';
@@ -10,12 +10,16 @@ import { AdminSoldFilter } from './AdminSoldFilter';
 
 export function AdminNotSoldList(props) {
 
+// -------------------------------------- STATE 공간 ---------------------------------------------
   //ZUSTAND STATE
   const { isModal, modalName } = useModalState();
   const { selectedModalOpen } = useModalActions();
+  const selectList = useOrderSelectList();
+  const { toggleSelectList, toggleAllSelect, resetSelectList } = useOrderSelectListActions();
   const queryClient = useQueryClient();
 
   const { fetchAddPostServer, fetchNonPageServer,fetchServer } = useFetch();
+
   // 게시물 데이터와 페이지 번호 상태 관리    
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -23,8 +27,7 @@ export function AdminNotSoldList(props) {
   const [selectedData, setSelectedData] = useState(null);
 
   const orderFilter = useOrderFilter(); // 주문 필터링 구성
-  const selectList = useOrderSelectList();
-  const { toggleSelectList, toggleAllSelect } = useOrderSelectListActions();
+//------------------------------------------------------------------------------------------------
 
   //전체 선택 핸들러
   const handleToggleAllSelect = () => {
@@ -32,7 +35,25 @@ export function AdminNotSoldList(props) {
     toggleAllSelect(!allSelected, ordered); // 전체 선택 토글
   };
 
-  // -=-=-=-=-=-=-= 페이지를 변경할 때 호출되는 함수 =-=-=-=-=-=-=-
+  /**
+   * 컴포넌트 이동시 체크박스 상태 초기화
+   */
+    useEffect(() => {
+      return () => {
+        resetSelectList();
+        // 컴포넌트가 언마운트될 때 Product 상태 리셋
+      };
+    }, []);
+
+//----------------------------------------------------------------
+
+  /**
+   * @페이지
+   * POST FETCH
+   * - 페이지 변경을 위한 pageMutation 사용 (react-query Hook)
+   * @param {*} pageNumber 변경 될 페이지 번호 (숫자형식)
+   * @returns data(@불러오기 데이터 객체 정보 참조)
+   */
   const fetchPageChange = async (pageNumber) => {
     const limit = {
       orderState: 1,
@@ -78,7 +99,7 @@ export function AdminNotSoldList(props) {
     queryFn: () => fetchData()
   }) // currentPage, itemPerPage가 변경될 때마다 재실행하기 위함
 
-    /*---------- 필터 검색 ----------*/
+  /*---------- 필터 검색 ----------*/
   
   /**
    * @필터 POST FETCH 

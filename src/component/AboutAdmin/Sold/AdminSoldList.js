@@ -1,5 +1,5 @@
 import styles from './AdminSoldList.module.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import React from 'react';
 import { AdminSoldFilter } from './AdminSoldFilter';
 import { useModalActions, useModalState, useOrderFilter, useOrderSelectList, useOrderSelectListActions } from '../../../store/DataStore';
@@ -28,8 +28,18 @@ export function AdminSoldList() {
   const { selectedModalOpen } = useModalActions(); //모달이름으로 모달을 선택하여 오픈하는 변수
   const orderFilter = useOrderFilter(); // 주문 필터링 구성
   const selectList = useOrderSelectList(); // 선택한 데이터를 담는 변수
-  const { toggleSelectList, toggleAllSelect } = useOrderSelectListActions(); //체크박스 관련 변수
+  const { toggleSelectList, toggleAllSelect, resetSelectList } = useOrderSelectListActions(); //체크박스 관련 변수
 //--------------------------------------------------------------------------------------------------
+
+  /**
+   * 컴포넌트 이동시 체크박스 상태 초기화
+   */
+  useEffect(() => {
+    return () => {
+      resetSelectList();
+      // 컴포넌트가 언마운트될 때 Product 상태 리셋
+    };
+  }, []);
 
   /**
    * @불러오기
@@ -237,7 +247,7 @@ export function AdminSoldList() {
   async function handlePrintExcel(){
     try {
       // 서버로부터 엑셀 데이터 요청
-      // responseType을 'blob'으로 설정해야 합니다.
+      // responseType을 'blob'으로 설정
       const response = await axios.post('/order/excel', ordered, { responseType: 'blob' });
       // Blob 데이터로 URL 생성
       const url = window.URL.createObjectURL(new Blob([response.data]));
