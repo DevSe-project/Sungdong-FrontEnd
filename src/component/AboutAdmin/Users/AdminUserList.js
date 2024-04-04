@@ -10,7 +10,6 @@ import { useFetch } from '../../../customFn/useFetch';
 
 export default function AdminUserList() {
 
-  const userFilter = useUserFilter(); // 유저필터 zustand
   const queryClient = useQueryClient(); // 리액트 쿼리 클라이언트
   const userSort = useUserSort(); // 유저정렬 zustand
   const [currentPage, setCurrentPage] = useState(1); // 게시물 데이터와 페이지 번호 상태 관리 
@@ -332,7 +331,7 @@ export default function AdminUserList() {
   console.log(JSON.stringify(userData));
 
 
-  
+
   if (isLoading) {
     return <div>로딩 중...</div>;
   }
@@ -380,7 +379,7 @@ export default function AdminUserList() {
             {/* 고객 구분, CMS여부 */}
             {[
               { title: '고객 구분', valList: [1, 2, 12, 13, 14, 22, 23, 24, 100], val: userData.userType_id, key: 'userType_id' },
-              { title: '담당자', valList: ['박형조', '엄지석', '김태훈'], val: userData.managers_id, key: 'managers_id' },
+              { title: '담당자', valList: ['선택', '엄지석'], val: userData.managerName, key: 'managerName' },
               { title: 'CMS여부', valList: [1, 0], val: userData.hasCMS, key: 'hasCMS' },
             ].map((customItem, index) => (
               <th key={index}>
@@ -449,11 +448,14 @@ export default function AdminUserList() {
                   onChange={(e) => handlePerCheckbox(e.target.checked, user.users_id)}
                 />
               </td>
+              {/* 업체명(상호명) : name */}
+              <td>
+                {user.cor_corName}
+              </td>
               {/* name: 상호명, val: db의 현재 값, valList: 선택할 값 */}
               {[
-                { title: '고객명', val: user.cor_corName, key: 'cor_corName' },
                 { title: '고객 구분', valList: [1, 2, 12, 13, 14, 22, 23, 24, 100], val: user.userType_id, key: 'userType_id' },
-                { title: '담당자', valList: ['박형조', '엄지석', '김태훈'], val: user.managerName ? user.managerName : <span style={{ color: 'var(--main-red' }}>{user.managerName}</span>, key: 'managerName' },
+                { title: '담당자', valList: ['선택', '엄지석'], val: user.managerName ? user.managerName : <span style={{ color: 'var(--main-red' }}>{user.managerName}</span>, key: 'managerName' },
                 { title: 'CMS여부', valList: [1, 0], val: user.hasCMS, key: 'hasCMS' },
               ].map((customItem, editIdx) => (
                 <td key={editIdx}>
