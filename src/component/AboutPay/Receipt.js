@@ -639,8 +639,8 @@ export function Receipt(props) {
                 <input
                   name='moneyreceipt'
                   type="radio"
-                  value="발행안함(추후 예정)"
-                  checked={orderInformation.order_moneyReceipt === '발행안함'}
+                  value="발행안함"
+                  checked={orderInformation.order_moneyReceipt === "발행안함"}
                   onChange={(e) => handleChangeOrderField("order_moneyReceipt", e.target.value)}
                 /> 발행안함
               </label>
@@ -650,7 +650,7 @@ export function Receipt(props) {
                   type="radio"
                   value="현금영수증"
                   disabled
-                  checked={orderInformation.order_moneyReceipt === '현금영수증'}
+                  checked={orderInformation.order_moneyReceipt === "현금영수증"}
                   onChange={(e) => handleChangeOrderField("order_moneyReceipt", e.target.value)}
                 /> 현금영수증
               </label>
@@ -660,13 +660,13 @@ export function Receipt(props) {
                   type="radio"
                   value="세금계산서"
                   disabled
-                  checked={orderInformation.order_moneyReceipt === '세금계산서'}
+                  checked={orderInformation.order_moneyReceipt === "세금계산서"}
                   onChange={(e) => handleChangeOrderField("order_moneyReceipt", e.target.value)}
                 /> 세금계산서
               </label>
             </div>
           </div>
-          {orderInformation.order_moneyReceipt !== '' &&
+          {(orderInformation.order_moneyReceipt !== '' && orderInformation.order_moneyReceipt !== '발행안함') &&
             <div className={styles.formInner}>
               <div className={styles.label}>
                 <label>명세서</label>
