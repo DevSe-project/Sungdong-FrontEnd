@@ -59,10 +59,10 @@ export default function AdminUserList() {
   const fetchUsersData = async () => {
     try {
       const token = GetCookie('jwt_token');
-      const response = await axios.get(`/auth/read`, {
+      const response = await axios.get(`/auth/read/pass`, {
         params: {
           page: currentPage,
-          pagePosts: itemsPerPage
+          pagePosts: itemsPerPage,
         },
         headers: {
           "Content-Type": "application/json",
