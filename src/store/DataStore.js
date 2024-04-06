@@ -1500,19 +1500,37 @@ export const useRegexItems = () => {
 }
 export const useRegexActions = () => useRegex((state) => state.actions);
 
-/* ----------------AdminUser : 고객관리 Store---------------- */
+/* ----------------Paging : 페이징 Store---------------- */
 export const usePage = create((set) => ({
   currentPage: 1,
   itemsPerPage: 10,
   actions: {
+    /**
+     * 현재 페이지 번호를 저장/변경합니다.
+     * @param {*} val 
+     * @returns 
+     */
     setCurrentPage: (val) => set((prev) => ({ currentPage: val })),
+    /**
+     * 현재 페이지에 포스팅할 개수를 저장/변경합니다.
+     * @param {*} val 
+     * @returns 
+     */
     setItemsPerPage: (val) => set((prev) => ({ itemsPerPage: val }))
   }
 }));
+/**
+ * 페이징에 관련된 State를 담았습니다.
+ * @returns {*} currentPage, itemsPerPage
+ */
 export const usePageState = () => {
   const { currentPage, itemsPerPage } = usePage();
   return { currentPage, itemsPerPage }
 }
+/**
+ * 페이징에 관련된 Actions를 담았습니다.
+ * @returns {*} setCurrentPage, setItemsPerPage
+ */
 export const usePageAction = () => {
   const { setItemsPerPage, setCurrentPage } = usePage().actions
   return { setItemsPerPage, setCurrentPage }
