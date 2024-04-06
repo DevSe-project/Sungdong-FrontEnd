@@ -55,22 +55,22 @@ export function AdminMenuData(props) {
           link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/SD_Delivery/Delivery',
         },],
     },
+    // {
+    //   id: 3,
+    //   title: {
+    //     item: '정산 관리',
+    //   },
+    //   subMenuItems: [{
+    //     item: 'CMS 정산',
+    //     link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/SD_account/cms'
+    //   },
+    //   {
+    //     item: '누적 정산',
+    //     link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/SD_account/total'
+    //   }],
+    // },
     {
       id: 3,
-      title: {
-        item: '정산 관리',
-      },
-      subMenuItems: [{
-        item: 'CMS 정산',
-        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/SD_account/cms'
-      },
-      {
-        item: '누적 정산',
-        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/SD_account/total'
-      }],
-    },
-    {
-      id: 4,
       title: {
         item: '알림 관리',
       },
@@ -86,7 +86,7 @@ export function AdminMenuData(props) {
       ],
     },
     {
-      id: 5,
+      id: 4,
       title: {
         item: '고객 관리',
       },
