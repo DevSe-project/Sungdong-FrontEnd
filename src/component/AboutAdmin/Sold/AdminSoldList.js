@@ -248,19 +248,23 @@ export function AdminSoldList() {
     try {
       // 서버로부터 엑셀 데이터 요청
       // responseType을 'blob'으로 설정
-      const response = await axios.post('/order/excel', ordered, { responseType: 'blob' });
-      // Blob 데이터로 URL 생성
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      // a 태그를 생성하여 다운로드 링크 설정
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', 'order.xlsx'); // 다운로드될 파일명 설정
-      document.body.appendChild(link);
-      link.click(); // 프로그래밍적으로 클릭 이벤트 발생
-      // 생성된 URL 해제
-      window.URL.revokeObjectURL(url);
-      // 생성된 a 태그 제거
-      document.body.removeChild(link);
+      const itemData = await fetchNonPageServer({}, `post`, `/order/all/items`);
+      if(itemData){
+        console.log(itemData);
+        const response = await axios.post('/order/excel', itemData.data.data[0], { responseType: 'blob' });
+        // Blob 데이터로 URL 생성
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        // a 태그를 생성하여 다운로드 링크 설정
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'order.xlsx'); // 다운로드될 파일명 설정
+        document.body.appendChild(link);
+        link.click(); // 프로그래밍적으로 클릭 이벤트 발생
+        // 생성된 URL 해제
+        window.URL.revokeObjectURL(url);
+        // 생성된 a 태그 제거
+        document.body.removeChild(link);
+      }
   } catch (error) {
       console.error('Download failed', error);
   }
