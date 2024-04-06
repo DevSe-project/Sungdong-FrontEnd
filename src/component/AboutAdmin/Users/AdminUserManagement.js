@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import styles from './AdminUserManagement.module.css';
-import { useUserSort } from '../../../store/DataStore';
+import { usePageAction, usePageState, useUserSort } from '../../../store/DataStore';
 import AdminUserFilter from './AdminUserFilter';
 import AdminUserSort from './AdminUserSort';
 import { useFetch } from '../../../customFn/useFetch';
@@ -9,11 +9,10 @@ import { Outlet } from 'react-router-dom';
 
 export default function AdminUserList() {
 
-
+  const { itemsPerPage, currentPage } = usePageState();
+  const { setItemsPerPage, setCurrentPage } = usePageAction();
 
   const queryClient = useQueryClient(); // 리액트 쿼리 클라이언트
-  const [currentPage, setCurrentPage] = useState(1); // 게시물 데이터와 페이지 번호 상태 관리 
-  const [itemsPerPage, setItemsPerPage] = useState(10); // 아아템 포스팅 개수
   const [totalPages, setTotalPages] = useState(); // 총 페이지 개수
   const { fetchServer } = useFetch();
   const userSort = useUserSort(); // 유저정렬 zustand

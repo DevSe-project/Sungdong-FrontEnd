@@ -4,13 +4,14 @@ import styles from './AdminUserManagement.module.css';
 import axios from '../../../axios';
 import { GetCookie } from '../../../customFn/GetCookie';
 import { useFetch } from '../../../customFn/useFetch';
+import { usePageState } from '../../../store/DataStore';
 
 export default function AdminDoneUserList() {
 
+  const { currentPage, itemsPerPage } = usePageState();
+
 
   const queryClient = useQueryClient(); // 리액트 쿼리 클라이언트
-  const [currentPage, setCurrentPage] = useState(1); // 게시물 데이터와 페이지 번호 상태 관리 
-  const [itemsPerPage, setItemsPerPage] = useState(10); // 아아템 포스팅 개수
   const [checkedItems, setCheckedItems] = useState([]); // 수정할 데이터의 체크 상태를 관리하는 state(users_id를 담음)
   
   const [matchedData, setMatchedData] = useState([]); // 서버의 user데이터를 불러올 state
@@ -72,14 +73,14 @@ export default function AdminDoneUserList() {
     }
   }
   const { isLoading, isError, error, data: userData } = useQuery({
-    queryKey: [`doneUsers`, currentPage, itemsPerPage], // currentPage, itemPerPage가 변경될 때마다 재실행하기 위함
+    queryKey: [`users`, currentPage, itemsPerPage], // currentPage, itemPerPage가 변경될 때마다 재실행하기 위함
     queryFn: fetchUsersData,
   });
 
   useEffect(() => {
     if (userData)
       setMatchedData(userData);
-  }, [userData]);
+    }, [userData, itemsPerPage, currentPage]);
 
   // 고객 단일 수정
   const handleEdit = async (userData) => { // 

@@ -1500,4 +1500,20 @@ export const useRegexItems = () => {
 }
 export const useRegexActions = () => useRegex((state) => state.actions);
 
-/* ----------------Temp~---------------- */
+/* ----------------AdminUser : 고객관리 Store---------------- */
+export const usePage = create((set) => ({
+  currentPage: 1,
+  itemsPerPage: 10,
+  actions: {
+    setCurrentPage: (val) => set((prev) => ({ currentPage: val })),
+    setItemsPerPage: (val) => set((prev) => ({ itemsPerPage: val }))
+  }
+}));
+export const usePageState = () => {
+  const { currentPage, itemsPerPage } = usePage();
+  return { currentPage, itemsPerPage }
+}
+export const usePageAction = () => {
+  const { setItemsPerPage, setCurrentPage } = usePage().actions
+  return { setItemsPerPage, setCurrentPage }
+}
