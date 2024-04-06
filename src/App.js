@@ -42,7 +42,9 @@ import { AdminCategoryEdit } from './component/AboutAdmin/Category/AdminCategory
 import { AdminSoldList } from './component/AboutAdmin/Sold/AdminSoldList';
 import { AdminNotSoldList } from './component/AboutAdmin/Sold/AdminNotSoldList';
 import { AdminRefund } from './component/AboutAdmin/Refund/AdminRefund';
-import AdminUserList from './component/AboutAdmin/Users/AdminUserList';
+import AdminUserManagement from './component/AboutAdmin/Users/AdminUserManagement';
+import AdminDoneUserList from './component/AboutAdmin/Users/AdminDoneUserList';
+import AdminHoldUserList from './component/AboutAdmin/Users/AdminHoldUserList';
 import AdminNotice from './component/AboutAdmin/Notice/AdminNotice';
 import DeliList from "./component/AboutAdmin/SD_Delivery/List/DeliList";
 import TotalCalManage from "./component/AboutAdmin/SD_Account/TOTAL/Manage/TotalCalManage";
@@ -281,8 +283,8 @@ export default function App() {
           </>
         } />
         <Route path='/invoic' element={
-          <InvoiceStatement/>
-        }/>
+          <InvoiceStatement />
+        } />
 
         {/* 장바구니 */}
         <Route path='/basket' element={
@@ -700,7 +702,7 @@ export default function App() {
         {/* 관리자 Main Route */}
         <Route path='/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj' element={<AdminMain />}>
           {/* 메인 모듈페이지 */}
-          <Route path='main' element={<AdminMainModule/>} />
+          <Route path='main' element={<AdminMainModule />} />
           {/* 상품관리 - 상품등록 */}
           <Route path='addProduct' element={<AdminDetail />} />
           {/* 상품관리 - 상품조회 */}
@@ -736,7 +738,10 @@ export default function App() {
           <Route path='event/edit/:id' element={<AdminEventEditor />} />
 
           {/* 회원관리 - 고객관리 */}
-          <Route path='user' element={<AdminUserList />} />
+          <Route path='user' element={<AdminUserManagement />} >
+            <Route path='done' element={<AdminDoneUserList />} />
+            <Route path='hold' element={<AdminHoldUserList />} />
+          </Route>
           {/* 회원관리 - 회원가입 코드 관리 */}
           <Route path='printCode' element={<ManageCode />} />
         </Route>

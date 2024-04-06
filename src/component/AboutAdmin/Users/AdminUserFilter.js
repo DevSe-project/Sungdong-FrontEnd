@@ -54,6 +54,7 @@ export default function AdminUserFilter(props) {
 
       <div className={styles.searchRow}>
         <div className={styles.searchGroup}>
+          {/* 여긴 userType의 id와 name으로 맵핑 */}
           <label htmlFor="userType">고객유형</label>
           <select
             className={styles.select} id="userType_id"
@@ -75,6 +76,7 @@ export default function AdminUserFilter(props) {
         </div>
 
         <div className={styles.searchGroup}>
+          {/* 여기 managers 테이블의 name들로 맵핑 */}
           <label htmlFor='managerName'>담당자</label>
           <select
             className={styles.select} id="managerName"

@@ -92,11 +92,11 @@ export function AdminMenuData(props) {
       },
       subMenuItems: [{
         item: '고객사 관리',
-        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/user'
+        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/user/done'
       },
       {
         item: '가입 대기 고객',
-        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/user/waiting'
+        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/user/hold'
       },
       {
         item: '회원가입 코드 관리',
