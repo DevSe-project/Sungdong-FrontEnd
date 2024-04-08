@@ -1,0 +1,44 @@
+/* NoticeMini.module.css */
+.noticeMiniContainer {
+  display: flex;
+  flex-direction: column;
+  border-radius: 1vh;
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 적절한 그림자 속성 적용 */
+  padding: 5px;
+}
+
+.noticeList {
+  border-radius: 1dvh;
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  padding: 0;
+}
+
+.noticeItem {
+  background-color: rgb(255, 255, 255);
+  display: flex;
+  max-height: 20px;
+  padding: 10px;
+  border-radius: 1vh;
+  overflow: hidden;
+}
+.noticeItem:hover {
+  border-left: 2px solid rgb(255, 168, 168);
+  cursor: pointer;
+}
+
+.itemTitle {
+  white-space: nowrap; /* 텍스트가 줄 바꿈되지 않고 한 줄에 표시되도록 설정 */
+  overflow: hidden; /* div 밖으로 벗어나는 텍스트는 숨김 */
+  text-overflow: ellipsis; /* div 밖으로 벗어나는 텍스트는 …으로 표시 */
+}
+
+.view_all {
+  cursor: pointer;
+  color: rgb(0, 0, 0);
+} .view_all:hover {
+  color: #cc0000;
+  font-weight: bold;
+}
