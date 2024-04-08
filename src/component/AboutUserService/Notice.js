@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from './Notice.module.css';
 import NoticeDetail from './NoticeDetail';
-import { NoticePostObj } from '../Data/NoticePostObj';
-import { useListActions, useModalActions, useModalState, useNoticePostList } from '../../store/DataStore';
+import { useListActions, useModalActions, useModalState } from '../../store/DataStore';
 import axios from '../../axios';
 import { useFetch } from '../../customFn/useFetch';
 import { useQuery } from '@tanstack/react-query';

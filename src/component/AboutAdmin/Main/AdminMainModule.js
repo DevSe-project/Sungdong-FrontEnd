@@ -10,6 +10,13 @@ export function AdminMainModule() {
     return <i style={{ fontSize: '2em', color: 'lightBlue' }} className="fas fa-undo-alt"></i>
   }
 
+  function deliveryIcon(){
+    return <i style={{ fontSize: '2em', color: '#0000CC' }} className="fas fa-truck"></i>
+  }
+
+  function productIcon(){
+    return <i style={{ fontSize: '2em', color: '#CC0000' }} className="fas fa-box-alt"></i>
+  }
   //Fetch Custom Hooks
   const { fetchServer, fetchGetServer } = useFetch();
 
@@ -92,13 +99,13 @@ export function AdminMainModule() {
           </div>
 
           {/* 배송 */}
-          <div className={styles.productFull}>
-            배송
+          <div className={styles.productSeparate}>
+            <AdminMainListModule icon={deliveryIcon()} firstName={"배송준비"} secondName={"배송중"} thirdName={"배송완료"} first={orderData && moduleData[0]?.refund} second={orderData && moduleData[0]?.exchange} third={orderData && moduleData[0]?.cancel} />
           </div>
 
           {/* 상품 */}
-          <div className={styles.productFull}>
-            상품
+          <div className={styles.productSeparate}>
+            <AdminMainListModule icon={productIcon()} firstName={"판매준비"} secondName={"판매중"} thirdName={"품절"} first={orderData && moduleData[0]?.refund} second={orderData && moduleData[0]?.exchange} third={orderData && moduleData[0]?.cancel} />
           </div>
         </article>
 
