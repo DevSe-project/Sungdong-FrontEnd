@@ -42,9 +42,8 @@ import { AdminCategoryEdit } from './component/AboutAdmin/Category/AdminCategory
 import { AdminSoldList } from './component/AboutAdmin/Sold/AdminSoldList';
 import { AdminNotSoldList } from './component/AboutAdmin/Sold/AdminNotSoldList';
 import { AdminRefund } from './component/AboutAdmin/Refund/AdminRefund';
-import AdminUserManagement from './component/AboutAdmin/Users/AdminUserManagement';
-import AdminDoneUserList from './component/AboutAdmin/Users/AdminDoneUserList';
-import AdminHoldUserList from './component/AboutAdmin/Users/AdminHoldUserList';
+import AdminDoneUser from './component/AboutAdmin/Users/AdminDoneUser';
+import AdminHoldUser from './component/AboutAdmin/Users/AdminHoldUser';
 import AdminNotice from './component/AboutAdmin/Notice/AdminNotice';
 import DeliList from "./component/AboutAdmin/SD_Delivery/List/DeliList";
 import TotalCalManage from "./component/AboutAdmin/SD_Account/TOTAL/Manage/TotalCalManage";
@@ -738,10 +737,8 @@ export default function App() {
           <Route path='event/edit/:id' element={<AdminEventEditor />} />
 
           {/* 회원관리 - 고객관리 */}
-          <Route path='user' element={<AdminUserManagement />} >
-            <Route path='done' element={<AdminDoneUserList />} />
-            <Route path='hold' element={<AdminHoldUserList />} />
-          </Route>
+          <Route path='doneusers' element={<AdminDoneUser />} />
+          <Route path='holdusers' element={<AdminHoldUser />} />
           {/* 회원관리 - 회원가입 코드 관리 */}
           <Route path='printCode' element={<ManageCode />} />
         </Route>

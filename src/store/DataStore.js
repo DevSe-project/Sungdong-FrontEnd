@@ -1504,6 +1504,7 @@ export const useRegexActions = () => useRegex((state) => state.actions);
 export const usePage = create((set) => ({
   currentPage: 1,
   itemsPerPage: 10,
+  totalPages: 0,
   actions: {
     /**
      * 현재 페이지 번호를 저장/변경합니다.
@@ -1516,7 +1517,13 @@ export const usePage = create((set) => ({
      * @param {*} val 
      * @returns 
      */
-    setItemsPerPage: (val) => set((prev) => ({ itemsPerPage: val }))
+    setItemsPerPage: (val) => set((prev) => ({ itemsPerPage: val })),
+    /**
+     * 페이지의 전체 개수를 담습니다.
+     * @param {*} val 
+     * @returns 
+     */
+    setTotalPages: (val) => set((prev) => ({ totalPages: val })),
   }
 }));
 /**
@@ -1524,14 +1531,44 @@ export const usePage = create((set) => ({
  * @returns {*} currentPage, itemsPerPage
  */
 export const usePageState = () => {
-  const { currentPage, itemsPerPage } = usePage();
-  return { currentPage, itemsPerPage }
+  const { currentPage, itemsPerPage, totalPages } = usePage();
+  return { currentPage, itemsPerPage, totalPages }
 }
 /**
  * 페이징에 관련된 Actions를 담았습니다.
  * @returns {*} setCurrentPage, setItemsPerPage
  */
 export const usePageAction = () => {
-  const { setItemsPerPage, setCurrentPage } = usePage().actions
-  return { setItemsPerPage, setCurrentPage }
+  const { setItemsPerPage, setCurrentPage, setTotalPages } = usePage().actions
+  return { setItemsPerPage, setCurrentPage, setTotalPages }
 }
+
+
+/* ----------------Paging : 페이징 Store---------------- */
+const useCheckedUserStore = create(set => ({
+  checkedUsers: [],
+
+  actions: {
+    // 입력받은 userId를 배열에 추가하는 액션
+    addCheckedUser: (userId) => set(state => ({
+      checkedUsers: [...state.checkedUsers, userId]
+    })),
+  }
+}))
+export const useCheckedUsersState = () => {
+  const { checkedUsers } = useCheckedUserStore();
+  return { checkedUsers }
+}
+export const useCheckedUsersActions = () => {
+  const { addCheckedUser } = useCheckedUserStore.getState().actions;
+  return { addCheckedUser }
+}
+
+/* ----------------manage queryKey Store---------------- */
+export const useQueryKeyStore = create((set) => ({
+  key: [],
+
+  actions: {
+    set
+  }
+}))
