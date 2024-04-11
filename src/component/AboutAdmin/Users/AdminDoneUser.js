@@ -3,9 +3,7 @@ import React, { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import AdminUserFilter from './AdminUserFilter';
 import AdminUserSort from './AdminUserSort';
-import axios from '../../../axios';
 import { usePageAction, usePageState, useUserFilter, useUserSort } from '../../../store/DataStore';
-import { GetCookie } from '../../../customFn/GetCookie';
 import useManagerUser from './customFn/useManageUser';
 import { useFetch } from '../../../customFn/useFetch';
 
