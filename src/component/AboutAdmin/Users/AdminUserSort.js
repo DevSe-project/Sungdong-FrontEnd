@@ -12,15 +12,15 @@ const AdminUserSort = (props) => {
             key: "선택없음",
         },
         {
-            value: "USER.userType_id",
+            value: "u.userType_id",
             key: "고객구분",
         },
         {
-            value: "COR.cor_corName",
+            value: "uc.cor_corName",
             key: "업체명(상호명)",
         },
         {
-            value: "INFO.hasCMS",
+            value: "ui.hasCMS",
             key: "CMS동의여부"
         }
     ];

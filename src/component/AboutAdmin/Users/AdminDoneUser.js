@@ -1,18 +1,25 @@
 import styles from './AdminUser.module.css';
 import React, { useEffect } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import AdminUserFilter from './AdminUserFilter';
 import AdminUserSort from './AdminUserSort';
-import useManagerUser from './customFn/useManageUser';
 import axios from '../../../axios';
-import { usePageAction, usePageState } from '../../../store/DataStore';
+import { usePageAction, usePageState, useUserFilter, useUserSort } from '../../../store/DataStore';
 import { GetCookie } from '../../../customFn/GetCookie';
+import useManagerUser from './customFn/useManageUser';
+import { useFetch } from '../../../customFn/useFetch';
 
 
 export default function AdminDoneUser() {
 
-  const { itemsPerPage, currentPage } = usePageState();
-  const { setItemsPerPage } = usePageAction();
+  const {
+    fetchServer, // 사용처 : 필터링, 정렬 API
+    fetchGetServer // 사용처 : 유저정보요청 API
+  } = useFetch();
+
+  const { itemsPerPage, currentPage, totalPages } = usePageState();
+
+  const { setItemsPerPage, setCurrentPage, setTotalPages } = usePageAction();
 
   const queryClient = useQueryClient(); // 리액트 쿼리 클라이언트
 
@@ -26,7 +33,6 @@ export default function AdminDoneUser() {
     handleEdit, handleBulkEdit,
     handleDelete,
     handleAllCheckbox, handlePerCheckbox,
-    onDoneFiltering, handleDoneSort,
     updateValue,
     parseOptionValue
   } = useManagerUser();
@@ -46,23 +52,12 @@ export default function AdminDoneUser() {
     };
   }, [initializingData]);
 
-  // ------------------------------서버 통신------------------------------ //
-  // 유저 데이터 상태 관리
+  // ------------------------------Fetch------------------------------ //
+  // 유저 데이터 Fetch
   const fetchUsersData = async () => {
     try {
-      const token = GetCookie('jwt_token');
-      const response = await axios.get(`/auth/read/done`, {
-        params: {
-          page: currentPage,
-          pagePosts: itemsPerPage,
-        },
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        }
-      });
-      console.log(response.data.message);
-      return response.data.data.data;
+      const data = await fetchGetServer('/auth/read/done', currentPage);
+      return data.data;
     } catch (error) {
       throw new Error('고객 정보를 불러오는 중 오류가 발생하였습니다.');
     }
@@ -78,6 +73,66 @@ export default function AdminDoneUser() {
   }, [userData, itemsPerPage, currentPage]);
 
 
+
+  // 필터링 데이터 Fetch
+  const userFilter = useUserFilter();
+  const fetchFilteredDoneUser = async (userFilter) => {
+    console.log(userFilter);
+    return await fetchServer(userFilter, `post`, `/auth/filtering/done`, currentPage);
+  }
+  const { mutate: filteringMutation } = useMutation({ mutationFn: fetchFilteredDoneUser });
+  const onDoneFiltering = (userFilter) => {
+    console.log(`전달할 때 값: ${userFilter.cor_ceoName}`)
+    filteringMutation(userFilter, {
+      onSuccess: (data) => {
+        console.log('고객 필터링이 성공적으로 완료되었습니다.\n', data.data.data);
+        alert(data.message);
+        setCurrentPage(data.data.currentPage);
+        setTotalPages(data.data.totalPages);
+        queryClient.setQueryData(['doneusers', currentPage, itemsPerPage], () => {
+          return data.data.data;
+        })
+      },
+      onError: (error) => {
+        console.error('필터링에 실패했습니다.\n', error);
+        // 에러 처리 또는 메시지 표시
+        alert(error.message);
+      },
+    });
+  };
+
+
+
+  // 정렬 데이터 Fetch
+  const userSort = useUserSort();
+  const fetchSortedDoneUser = async (userSort) => {
+    // console.log(`선택된 정렬: ${userSort}`);
+    console.log(userSort);
+    return await fetchServer(userSort, `post`, `/auth/sorting/done`, currentPage);
+  };
+  const { mutate: sortingMutation } = useMutation({ mutationFn: fetchSortedDoneUser }); // 정렬
+  const handleDoneSorting = () => {
+    sortingMutation(userSort, {
+      onSuccess: (data) => {
+        // Debuggig Code : data.data.data
+        console.log('고객 정렬이 성공적으로 완료되었습니다.\n', data.data.data);
+        alert(data.message);
+        setCurrentPage(data.data.currentPage);
+        setTotalPages(data.data.totalPages);
+        // 다른 로직 수행 또는 상태 업데이트
+        queryClient.setQueryData(['doneusers', currentPage, itemsPerPage], () => {
+          return data.data.data
+        })
+      },
+      onError: (error) => {
+        console.error('user Sorted failed:', error);
+        // 에러 처리 또는 메시지 표시
+        alert(error);
+      },
+    });
+  };
+
+
   if (isLoading) {
     return <div>로딩 중...</div>;
   }
@@ -91,7 +146,7 @@ export default function AdminDoneUser() {
     <div className={styles.mainContainer}>
       <div className={styles.filtSortContainer}>
         <AdminUserFilter onFiltering={onDoneFiltering} />
-        <AdminUserSort onSort={handleDoneSort} />
+        <AdminUserSort onSort={handleDoneSorting} />
       </div>
       {/* Header */}
       <div className='MediumHeader'>

@@ -106,24 +106,28 @@ export default function AdminHoldUser() {
   // 정렬 데이터 Fetch
   const userSort = useUserSort();
   const fetchSortedHoldUser = async (userSort) => {
-    console.log(`선택된 정렬: ${userSort}`);
-    fetchServer(userSort, `post`, `/auth/sort/hold`, currentPage);
+    // console.log(`선택된 정렬: ${userSort}`);
+    console.log(userSort);
+    return await fetchServer(userSort, `post`, `/auth/sorting/hold`, currentPage);
   };
   const { mutate: sortingMutation } = useMutation({ mutationFn: fetchSortedHoldUser }); // 정렬
   const handleHoldSorting = () => {
     sortingMutation(userSort, {
       onSuccess: (data) => {
-        console.log('user Sorted successfully:', data);
+        // Debuggig Code : data.data.data
+        console.log('고객 정렬이 성공적으로 완료되었습니다.\n', data.data.data);
         alert(data.message);
+        setCurrentPage(data.data.currentPage);
+        setTotalPages(data.data.totalPages);
         // 다른 로직 수행 또는 상태 업데이트
         queryClient.setQueryData(['holdusers', currentPage, itemsPerPage], () => {
-          return data.data
+          return data.data.data
         })
       },
       onError: (error) => {
         console.error('user Sorted failed:', error);
         // 에러 처리 또는 메시지 표시
-        alert(error.message);
+        alert(error);
       },
     });
   };
