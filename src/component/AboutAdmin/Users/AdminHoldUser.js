@@ -3,9 +3,10 @@ import React, { useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import AdminUserFilter from './AdminUserFilter';
 import AdminUserSort from './AdminUserSort';
-import { usePageAction, usePageState, useUserFilter, useUserSort } from '../../../store/DataStore';
+import { useModalActions, useModalState, usePageAction, usePageState, useUserFilter, useUserSort } from '../../../store/DataStore';
 import useManagerUser from './customFn/useManageUser';
 import { useFetch } from '../../../customFn/useFetch';
+import UserDetailInfo from './UserDetailInfo';
 
 
 export default function AdminHoldUser() {
@@ -18,6 +19,9 @@ export default function AdminHoldUser() {
   const { itemsPerPage, currentPage, totalPages } = usePageState();
 
   const { setItemsPerPage, setCurrentPage, setTotalPages } = usePageAction();
+
+  const { isModal, modalName, selectedIndex } = useModalState()
+  const { selectedModalOpen, setSelectedIndex } = useModalActions();
 
   const queryClient = useQueryClient(); // 리액트 쿼리 클라이언트
 
@@ -249,13 +253,19 @@ export default function AdminHoldUser() {
                 />
               </td>
               {/* 업체명(상호명) : name */}
-              <td>
+              <td onClick={() => {
+                // 수정상태가 활성화되지 않은 상태에서만 모달이 작동하도록 합니다.
+                if (editIndex != index) {
+                  selectedModalOpen('holduser'); // modalName 설정
+                  setSelectedIndex(index); // index 동기화
+                }
+              }}>
                 {user.cor_corName}
               </td>
               {/* name: 상호명, val: db의 현재 값, valList: 선택할 값 */}
               {[
                 { title: '고객 구분', valList: [1, 2, 12, 13, 14, 22, 23, 24, 100], val: user.userType_id, key: 'userType_id' },
-                { title: '담당자', valList: ['초기화', '엄지석'], val: user.managerName ? user.managerName : <span style={{ color: 'var(--main-red' }}>{user.managerName}</span>, key: 'managerName' },
+                { title: '담당자', valList: ['엄지석'], val: user.managerName && user.managerName || "렌더링 실패", key: 'managerName' },
                 { title: 'CMS여부', valList: [1, 0], val: user.hasCMS, key: 'hasCMS' },
               ].map((customItem, editIdx) => (
                 <td key={editIdx}>
@@ -291,8 +301,6 @@ export default function AdminHoldUser() {
                   }
                 </td>
               ))}
-
-
               {/* 주소 */}
               <td>{user.bname} {user.roadAddress}({user.zonecode})</td>
               {/* 연락처 */}
@@ -320,6 +328,12 @@ export default function AdminHoldUser() {
         </tbody>
       </table>
 
+      {/* User Detail Information Modal*/}
+      {isModal && modalName === 'holduser' ?
+        <UserDetailInfo info={matchedData[selectedIndex]} />
+        :
+        null
+      }
     </div >
   );
 }
