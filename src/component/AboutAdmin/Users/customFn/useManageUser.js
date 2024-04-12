@@ -17,13 +17,6 @@ export default function useManagerUser() {
   // 수정할 데이터의 체크 상태를 관리하는 state(users_id를 담음)
   const [checkedItems, setCheckedItems] = useState([]);
 
-  const { itemsPerPage, currentPage } = usePageState();
-  const { setCurrentPage } = usePageAction();
-
-  const [totalPages, setTotalPages] = useState(); // 총 페이지 개수
-  const { fetchServer } = useFetch();
-  const userSort = useUserSort(); // 유저정렬 zustand
-
   // handleToggleEdit 함수를 수정하여 editIndex를 배열에서 단일 값으로 업데이트합니다.
   const handleToggleEdit = (index) => {
     if (editIndex === index) {
@@ -191,8 +184,8 @@ export default function useManagerUser() {
     }
   };
 
-  const parseOptionValue = (item, listItem) => {
-    if (item.key == 'userType_id') { // 고객구분
+  const parseOptionValue = (itemKey, listItem) => {
+    if (itemKey == 'userType_id') { // 고객구분
       switch (parseInt(listItem, 10)) {
         case 1:
           return "실사용자 A등급";
@@ -216,7 +209,7 @@ export default function useManagerUser() {
           return "Error"
 
       }
-    } else if (item.key == 'hasCMS') { // CMS동의 여부
+    } else if (itemKey == 'hasCMS') { // CMS동의 여부
       if (listItem)
         return "동의";
       else

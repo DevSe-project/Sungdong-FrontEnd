@@ -198,7 +198,7 @@ export default function AdminHoldUser() {
                       <option value={null}>선택</option>
                       {customItem.valList.map((valListItem, valListIndex) => (
                         <option key={valListIndex} value={valListItem}>
-                          {parseOptionValue(customItem, valListItem)}
+                          {parseOptionValue(customItem.key, valListItem)}
                         </option>
                       ))}
                     </select>
@@ -277,7 +277,7 @@ export default function AdminHoldUser() {
                         onChange={e => updateValue(e, customItem.key, index)}
                       >
                         {customItem.valList.map((item, index) => (
-                          <option key={index} value={item}>{parseOptionValue(customItem, item)}</option>
+                          <option key={index} value={item}>{parseOptionValue(customItem.key, item)}</option>
                         ))}
                       </select>
                       :
@@ -297,7 +297,7 @@ export default function AdminHoldUser() {
                         }}
                       />
                     :
-                    parseOptionValue(customItem, customItem.val)
+                    parseOptionValue(customItem.key, customItem.val)
                   }
                 </td>
               ))}
