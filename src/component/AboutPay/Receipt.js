@@ -460,7 +460,10 @@ export function Receipt(props) {
                   value="성동택배"
                   checked={deliveryInformation.deliveryType === '성동택배'}
                   type="radio"
-                  onChange={(e) => handleChangeDeliveryField("deliveryType", e.target.value)}
+                  onChange={(e) => {
+                    handleChangeDeliveryField("deliveryType", e.target.value);
+                    handleChangeDeliveryField("delivery_selectedCor", null);
+                  }}
                 />
                 성동 택배
               </label>
@@ -480,7 +483,10 @@ export function Receipt(props) {
                   value="일반택배"
                   checked={deliveryInformation.deliveryType === '일반택배'}
                   type="radio"
-                  onChange={(e) => handleChangeDeliveryField("deliveryType", e.target.value)}
+                  onChange={(e) => {
+                    handleChangeDeliveryField("deliveryType", e.target.value);
+                    handleChangeDeliveryField("delivery_selectedCor", null);
+                  }}
                 />
                 일반택배
               </label>
@@ -490,7 +496,10 @@ export function Receipt(props) {
                   value="직접픽업"
                   checked={deliveryInformation.deliveryType === '직접픽업'}
                   type="radio"
-                  onChange={(e) => handleChangeDeliveryField("deliveryType", e.target.value)}
+                  onChange={(e) => {
+                    handleChangeDeliveryField("deliveryType", e.target.value);
+                    handleChangeDeliveryField("delivery_selectedCor", e.target.value);
+                  }}
                 />
                 직접 픽업
               </label>
