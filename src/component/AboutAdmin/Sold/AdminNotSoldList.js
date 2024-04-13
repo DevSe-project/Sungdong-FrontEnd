@@ -55,11 +55,7 @@ export function AdminNotSoldList(props) {
    * @returns data(@불러오기 데이터 객체 정보 참조)
    */
   const fetchPageChange = async (pageNumber) => {
-    const limit = {
-      orderState: 1,
-      isCancel: 1
-    }
-    return await fetchAddPostServer(limit, 'post', '/order/all', pageNumber, itemsPerPage);
+    return await fetchAddPostServer({}, 'post', '/order/all/cancel', pageNumber, itemsPerPage);
   };
 
   const { mutate: pageMutaion } = useMutation({ mutationFn: fetchPageChange })
@@ -82,11 +78,7 @@ export function AdminNotSoldList(props) {
   //--------------------------------------------------------------
   //데이터 불러오기
   const fetchData = async () => {
-    const limit = {
-      orderState: 1,
-      isCancel: 1
-    }
-    const data = await fetchAddPostServer(limit, `post`, `/order/all`, 1, itemsPerPage ? itemsPerPage : 10);
+    const data = await fetchAddPostServer({}, `post`, `/order/all/cancel`, 1, itemsPerPage ? itemsPerPage : 10);
     console.log(data)
     setCurrentPage(data.data.currentPage);
     setTotalPages(data.data.totalPages);
@@ -174,6 +166,7 @@ export function AdminNotSoldList(props) {
     }
   }
 
+
   function isAnyCheckboxDisabled() {
     // ordered 배열을 순회하면서 disabled 상태를 판별
     for (const item of ordered) {
@@ -198,7 +191,7 @@ export function AdminNotSoldList(props) {
       <main className={styles.container}>
         {/* 리스트 출력 */}
         <div className={styles.bodyHeader}>
-          <h1>미결제/취소 주문 관리</h1>
+          <h1>취소요청 / 취소 주문 관리</h1>
         </div>
         <AdminSoldFilter handleSearch={handleSearch} isCancel={true}/>
         <div className={styles.tableLocation}>
@@ -218,7 +211,6 @@ export function AdminNotSoldList(props) {
                   />
                 </th>
                 <th>주문번호</th>
-                <th>배송사</th>
                 <th>주문상태</th>
                 <th colSpan={2}>주문상품</th>
                 <th>주문일자</th>
@@ -243,24 +235,7 @@ export function AdminNotSoldList(props) {
                         {item.order_id}
                       </td>
                       <td>
-                        {item.deliveryType &&
-                          item.deliveryType === '화물'
-
-                          ? item.deliverySelect === 'kr.kdexp'
-                            ? `${item.deliveryType && item.deliveryType} (배송 업체 : 경동화물)`
-                            : `${item.deliveryType && item.deliveryType} (배송 업체 : 대신화물)`
-
-                          : item.deliveryType &&
-                            item.deliveryType === '성동택배'
-
-                            ? `${item.deliveryType && item.deliveryType} 
-                              (배송 예정일 : ${item.delivery_date && new Date(item.delivery_date).toLocaleDateString()})`
-                            : item.deliveryType && item.deliveryType === '일반택배'
-                              ? `${item.deliveryType} (배송 업체 : 대한통운)`
-                              : '직접 픽업'}
-                      </td>
-                      <td>
-                        {(item.orderState === 0 && "결제 미 완료") || (item.orderState === 6 && "취소 요청") ||(item.orderState === 5 && "취소")}
+                        {(item.orderState === 6 && "취소 요청") ||(item.orderState === 5 && "취소")}
                       </td>
                       <td colSpan={2} onClick={() => {
                         if (selectedData?.some((selectItem) => selectItem.order_id === item.order_id)) {

@@ -20,7 +20,6 @@ export function AdminSoldFilter({ handleSearch, isCancel }) {
       <div style={{ display: 'flex', gap: '0.5em' }}>
         <select className={styles.select} value={orderFilter.orderState} onChange={(e) => setOrderFilter("orderState", e.target.value)} name='deliveryFilter'>
           <option name='orderState' value="">전체</option>
-          <option name='orderState' value={0}>결제 미완료</option>
           <option name='orderState' value={5}>취소</option>
           <option name='orderState' value={6}>취소요청</option>
         </select>

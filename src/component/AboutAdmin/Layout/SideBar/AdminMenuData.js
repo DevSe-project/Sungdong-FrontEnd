@@ -31,11 +31,11 @@ export function AdminMenuData(props) {
       },
       subMenuItems: [
         {
-          item: '결제완료 주문',
+          item: '미결제/결제완료',
           link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/sold',
         },
         {
-          item: '미결제/취소 주문',
+          item: '취소요청/취소',
           link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/yetPay',
         },
         {

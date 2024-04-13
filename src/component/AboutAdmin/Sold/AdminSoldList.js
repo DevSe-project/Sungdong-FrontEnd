@@ -282,7 +282,7 @@ export function AdminSoldList() {
     <div className={styles.main}>
       <main className={styles.container}>
         <div className={styles.bodyHeader}>
-          <h1>결제완료 주문 및 발송 처리</h1>
+          <h1>미결제 / 결제완료 주문 및 발송 처리</h1>
         </div>
         {/* 필터 */}
         <AdminSoldFilter handleSearch={handleSearch} />
