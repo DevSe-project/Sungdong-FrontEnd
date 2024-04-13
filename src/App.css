@@ -607,6 +607,7 @@ input[type="checkbox"] {
   justify-content: space-between;
   width: 100%;
   text-align: left;
+  margin: 1em;
   padding: 5px;
   border-bottom: 3px solid var(--background-color-set);
   font-size: 20px;
@@ -620,6 +621,7 @@ input[type="checkbox"] {
   align-items: center;
   justify-content: space-between;
   border-bottom: 2px solid gray;
+  margin: 0.2em 0;
   padding: 3px;
 }
 
