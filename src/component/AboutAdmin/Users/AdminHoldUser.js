@@ -8,7 +8,6 @@ import useManagerUser from './customFn/useManageUser';
 import { useFetch } from '../../../customFn/useFetch';
 import UserDetailInfo from './UserDetailInfo';
 
-
 export default function AdminHoldUser() {
 
   const {
@@ -55,6 +54,9 @@ export default function AdminHoldUser() {
   }, [initializingData]);
 
   // ------------------------------Fetch------------------------------ //
+
+
+
   // 유저 데이터 Fetch
   const fetchUsersData = async () => {
     try {
@@ -73,6 +75,9 @@ export default function AdminHoldUser() {
     if (userData)
       setMatchedData(userData);
   }, [userData, itemsPerPage, currentPage]);
+
+
+  console.log(userData);
 
 
 
@@ -183,7 +188,7 @@ export default function AdminHoldUser() {
             {/* 고객 구분, CMS여부 */}
             {[
               { title: '고객 구분', valList: [1, 2, 12, 13, 14, 22, 23, 24, 100], val: userData.userType_id, key: 'userType_id' },
-              { title: '담당자', valList: ['초기화', '엄지석'], val: userData.managerName, key: 'managerName' },
+              { title: '담당자', valList: ['엄지석'], val: userData.managerName, key: 'managerName' },
               { title: 'CMS여부', valList: [1, 0], val: userData.hasCMS, key: 'hasCMS' },
             ].map((customItem, index) => (
               <th key={index}>
@@ -269,33 +274,21 @@ export default function AdminHoldUser() {
                 { title: 'CMS여부', valList: [1, 0], val: user.hasCMS, key: 'hasCMS' },
               ].map((customItem, editIdx) => (
                 <td key={editIdx}>
-                  {editIndex === index ?
-                    customItem.valList ?
-                      <select
-                        className='select'
-                        value={customItem.val}
-                        onChange={e => updateValue(e, customItem.key, index)}
-                      >
-                        {customItem.valList.map((item, index) => (
-                          <option key={index} value={item}>{parseOptionValue(customItem.key, item)}</option>
-                        ))}
-                      </select>
-                      :
-                      <input
-                        className='white_button'
-                        type='text'
-                        value={customItem.val}
-                        onChange={(e) => {
-                          const editData = e.target.value;
-                          const newData = matchedData?.map((item, idx) => {
-                            if (idx === index) {
-                              return { ...item, [customItem.key]: editData };
-                            }
-                            return item;
-                          });
-                          setMatchedData(newData);
-                        }}
-                      />
+                  {editIndex === index && customItem.valList ?
+                    <select
+                      className='select'
+                      value={customItem.val}
+                      onChange={e => updateValue(e, customItem.key, index)}
+                    >
+                      <option value={customItem.val}>
+                        {parseOptionValue(customItem.key, customItem.val)}
+                      </option>
+                      {customItem.valList.map((item, index) => (
+                        <option key={index} value={customItem.val}>
+                          {parseOptionValue(customItem.key, item)}
+                        </option>
+                      ))}
+                    </select>
                     :
                     parseOptionValue(customItem.key, customItem.val)
                   }

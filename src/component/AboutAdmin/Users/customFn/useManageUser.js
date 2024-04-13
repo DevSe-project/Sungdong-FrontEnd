@@ -1,8 +1,6 @@
 import { useState } from "react";
 import axios from "../../../../axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useFetch } from "../../../../customFn/useFetch";
-import { usePageAction, usePageState, useUserSort } from '../../../../store/DataStore'
 
 export default function useManagerUser() {
 
@@ -68,7 +66,7 @@ export default function useManagerUser() {
   const handleEditSuccess = (data) => { // 수정 성공
     console.log('수정 성공:', data);
     alert('수정이 완료되었습니다.');
-    queryClient.invalidateQueries('userData');
+    queryClient.invalidateQueries('holdusers');
     setEditIndex(null);
   };
   const handleEditError = (error) => { // 수정 실패
@@ -114,7 +112,7 @@ export default function useManagerUser() {
   const handleDeleteSuccess = (data) => { // 성공 시
     console.log('user Delete successfully:', data);
     alert(data.message);
-    queryClient.invalidateQueries(['users']);
+    queryClient.invalidateQueries(['holdusers']);
     window.location.reload();
   };
   const handleDeleteError = (error) => { // 실패 시
@@ -207,7 +205,6 @@ export default function useManagerUser() {
           return "관리자";
         default:
           return "Error"
-
       }
     } else if (itemKey == 'hasCMS') { // CMS동의 여부
       if (listItem)

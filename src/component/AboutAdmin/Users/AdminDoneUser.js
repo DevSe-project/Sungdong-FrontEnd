@@ -75,6 +75,9 @@ export default function AdminDoneUser() {
   }, [userData, itemsPerPage, currentPage]);
 
 
+  console.log(userData);
+
+
 
   // 필터링 데이터 Fetch
   const userFilter = useUserFilter();
@@ -183,7 +186,7 @@ export default function AdminDoneUser() {
             {/* 고객 구분, CMS여부 */}
             {[
               { title: '고객 구분', valList: [1, 2, 12, 13, 14, 22, 23, 24, 100], val: userData.userType_id, key: 'userType_id' },
-              { title: '담당자', valList: ['초기화', '엄지석'], val: userData.managerName, key: 'managerName' },
+              { title: '담당자', valList: ['엄지석'], val: userData.managerName, key: 'managerName' },
               { title: 'CMS여부', valList: [1, 0], val: userData.hasCMS, key: 'hasCMS' },
             ].map((customItem, index) => (
               <th key={index}>
@@ -262,47 +265,33 @@ export default function AdminDoneUser() {
               }}>
                 {user.cor_corName}
               </td>
-              {/* title: 표시 텍스트, val: db의 현재 값, valList: 선택할 값 */}
+              {/* name: 상호명, val: db의 현재 값, valList: 선택할 값 */}
               {[
                 { title: '고객 구분', valList: [1, 2, 12, 13, 14, 22, 23, 24, 100], val: user.userType_id, key: 'userType_id' },
-                { title: '담당자', valList: ['초기화', '엄지석'], val: user.managerName ? user.managerName : <span style={{ color: 'var(--main-red' }}>{user.managerName}</span>, key: 'managerName' },
+                { title: '담당자', valList: ['엄지석'], val: user.managerName && user.managerName || "렌더링 실패", key: 'managerName' },
                 { title: 'CMS여부', valList: [1, 0], val: user.hasCMS, key: 'hasCMS' },
               ].map((customItem, editIdx) => (
                 <td key={editIdx}>
-                  {editIndex === index ?
-                    customItem.valList ?
-                      <select
-                        className='select'
-                        value={customItem.val}
-                        onChange={e => updateValue(e, customItem.key, index)}
-                      >
-                        {customItem.valList.map((item, index) => (
-                          <option key={index} value={item}>{parseOptionValue(customItem.key, item)}</option>
-                        ))}
-                      </select>
-                      :
-                      <input
-                        className='white_button'
-                        type='text'
-                        value={customItem.val}
-                        onChange={(e) => {
-                          const editData = e.target.value;
-                          const newData = matchedData?.map((item, idx) => {
-                            if (idx === index) {
-                              return { ...item, [customItem.key]: editData };
-                            }
-                            return item;
-                          });
-                          setMatchedData(newData);
-                        }}
-                      />
+                  {editIndex === index && customItem.valList ?
+                    <select
+                      className='select'
+                      value={customItem.val}
+                      onChange={e => updateValue(e, customItem.key, index)}
+                    >
+                      <option value={customItem.val}>
+                        {parseOptionValue(customItem.key, customItem.val)}
+                      </option>
+                      {customItem.valList.map((item, index) => (
+                        <option key={index} value={customItem.val}>
+                          {parseOptionValue(customItem.key, item)}
+                        </option>
+                      ))}
+                    </select>
                     :
                     parseOptionValue(customItem.key, customItem.val)
                   }
                 </td>
               ))}
-
-
               {/* 주소 */}
               <td>{user.bname} {user.roadAddress}({user.zonecode})</td>
               {/* 연락처 */}
