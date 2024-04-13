@@ -3,7 +3,6 @@ import { useModalActions } from "../../../../store/DataStore";
 import styles from './DeliModal.module.css';
 import axios from '../../../../axios';
 import { GetCookie } from "../../../../customFn/GetCookie";
-import { useFetch } from "../../../../customFn/useFetch";
 
 // 배송 상태 수정 모달 컴포넌트
 export default function DeliStateModal(props) {
