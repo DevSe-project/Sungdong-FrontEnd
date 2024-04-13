@@ -159,6 +159,7 @@ export default function DeliStateModal(props) {
                 <th></th>
                 <th></th>
                 <th></th>
+                <th></th>
                 <th>
                   <select
                     className='select'
@@ -195,7 +196,7 @@ export default function DeliStateModal(props) {
                   {/* 상호명 */}
                   <td>{item.cor_corName}</td>
                   {/* 택배사 */}
-                  <td>{item.delivery_selectedCor}</td>
+                  <td>{props.parseSelectedCor(item.delivery_selectedCor)}</td>
                   {/* 송장 번호 */}
                   <td>{item.delivery_num}</td>
                   {/* 배송상태 */}

@@ -364,6 +364,7 @@ export default function DeliList() {
             checkedItems={checkedItems}
             setCheckedItems={setCheckedItems}
             deliveryData={deliveryData}
+            parseSelectedCor={parseSelectedCor}
           />
           :
           null
