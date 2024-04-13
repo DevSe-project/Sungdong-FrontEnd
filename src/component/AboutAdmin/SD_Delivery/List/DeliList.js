@@ -152,7 +152,7 @@ export default function DeliList() {
       console.log(checkedItems);
       try {
         const token = GetCookie('jwt_token');
-        const response = await axios.delete(`/delivery/deliveries/delete/${checkedItems}`, {
+        const response = await axios.delete(`/delivery/deliveries/cancellation/${checkedItems}`, {
           headers: {
             "Content-Type": "application/json",
             'Authorization': `Bearer ${token}`

@@ -11,8 +11,6 @@ export default function DeliStateModal(props) {
   const { selectedModalClose } = useModalActions();
   // 가져온 데이터 저장 상태
   const [fetchedData, setFetchedData] = useState([]);
-  // useFetch
-  const { fetchServer } = useFetch();
 
 
   // ESC 키로 모달 닫기 이벤트 리스너 등록
@@ -82,9 +80,8 @@ export default function DeliStateModal(props) {
     }
   }
 
-  const sendApi = async () => {
-    fetchServer()
-  }
+
+
   // 배송 상태 변경 함수
   const sendUpdateStateApiToServer = async () => {
     try {
