@@ -10,6 +10,7 @@ import DeliInvoiceModal from './DeliInvoiceModal';
 import Pagination from '../../../../customFn/Pagination';
 import { useMutation } from '@tanstack/react-query';
 import { useFetch } from '../../../../customFn/useFetch';
+import { useParsing } from '../../../../customFn/useParsing';
 
 
 export default function DeliList() {
@@ -23,8 +24,9 @@ export default function DeliList() {
   const [itemsPerPage, setItemsPerPage] = useState(10); // 페이지당 렌더링 될 개수
   const [totalPages, setTotalPages] = useState(1); // 전체 페이지 개수
 
-  // Fetch 관련 customFn
+  // customFn
   const { fetchServer } = useFetch();
+  const { parseDeliveryState, parseSelectedCor} = useParsing();
 
   // Delivery 관련 Zustand\
   const { deliveryFilter } = useDeliveryFilter();
@@ -66,40 +68,6 @@ export default function DeliList() {
 
   // 업데이트된 데이터의 체크 상태를 관리하는 state
   const [checkedItems, setCheckedItems] = useState([]);
-
-  // 배송상태 파싱
-  function parseDeliveryState(val) {
-    const parseVal = parseInt(val);
-    switch (parseVal) {
-      case 2:
-        return '배송 준비';
-      case 3:
-        return '배송 중';
-      case 4:
-        return '배송 완료';
-      default:
-        alert('배송 상태를 불러들이지 못했습니다.');
-        return 'null';
-    }
-  }
-
-  // 택배사 파싱
-  function parseSelectedCor(val) {
-    switch (val) {
-      case "성동택배":
-        return "성동택배";
-      case "대한통운":
-        return "대한통운";
-      case "롯데택배":
-        return "롯데택배";
-      case "kr.daesin":
-        return "대신화물";
-      case "kr.kdexp":
-        return "경동화물";
-      default:
-        return "미정";
-    }
-  }
 
   // 전체 체크박스 업데이트
   function handleAllCheckbox(e) {
