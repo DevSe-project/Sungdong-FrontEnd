@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import styles from './AdminMenuData.module.css'
+import { useDevideType } from "../../../../store/DataStore";
 export function AdminMenuData(props) {
+  const { setDevideType } = useDevideType();
   const navigate = useNavigate();
   const location = useLocation();
   const current = location.pathname;
@@ -92,7 +94,8 @@ export function AdminMenuData(props) {
       },
       subMenuItems: [{
         item: '고객사 관리',
-        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/user/done'
+        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/user/done',
+        clickEvent: 'done'
       },
       {
         item: '가입 대기 고객',
@@ -100,7 +103,8 @@ export function AdminMenuData(props) {
       },
       {
         item: '회원가입 코드 관리',
-        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/printCode'
+        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/printCode',
+        clickEvent: 'hold'
       }],
     },
   ];
@@ -140,8 +144,9 @@ export function AdminMenuData(props) {
             >
               {item.subMenuItems.map((subMenuItem, subMenuItemindex) => (
                 <NavLink
-                onClick={() => {
+                  onClick={() => {
                     navigate(`${subMenuItem.link}`)
+                    setDevideType(subMenuItem.clickEvent)
                   }}
                   to={subMenuItem.link}
                   className={`${styles.sub_item} ${subMenuItem.link === current ? styles.active : ''}`}
