@@ -1564,11 +1564,54 @@ export const useCheckedUsersActions = () => {
   return { addCheckedUser }
 }
 
-/* ----------------manage queryKey Store---------------- */
-export const useQueryKeyStore = create((set) => ({
-  key: [],
+/* ----------------AdminUser---------------- */
+const useDevideUserStore = create((set) => ({
+  devideType: '', // 기본값 설정
+  devidedData: {
+    done: [],
+    hold: [],
+  },
 
   actions: {
-    set
-  }
-}))
+    /**
+     * 고객을 저장하기 위한 유형(Type)을 셋팅합니다.
+     * @param {} type 
+     */
+    setdevideType: (type) => {
+      if (type !== 'done' && type !== 'hold')
+        throw new Error('해당 타입은 부적절합니다 : ' + type);
+
+      set((state) => ({
+        type: type,
+      }));
+    },
+
+    /**
+     * Type에 따라 데이터를 다른 곳에 저장합니다.
+     * @param {} data 
+     * @returns 
+     */
+    setdevidedData: (data) => set(state => ({
+      data: {
+        ...state.data,
+        [state.type]: data,
+      }
+    }))
+  },
+}));
+/**
+ * 
+ * @returns devideType, setDevideType
+ */
+export const useDevideType = () => {
+  const {type, setType} = useDevideUserStore();
+  return {type, setType};
+}
+/**
+ * 
+ * @returns devidedData, setDevidedData
+ */
+export const useDevidedData = () => {
+  const {devidedData, setDevidedData} = useDevideUserStore();
+  return {devidedData, setDevidedData};
+}
