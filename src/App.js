@@ -42,12 +42,11 @@ import { AdminCategoryEdit } from './component/AboutAdmin/Category/AdminCategory
 import { AdminSoldList } from './component/AboutAdmin/Sold/AdminSoldList';
 import { AdminNotSoldList } from './component/AboutAdmin/Sold/AdminNotSoldList';
 import { AdminRefund } from './component/AboutAdmin/Refund/AdminRefund';
-import AdminDoneUser from './component/AboutAdmin/Users/AdminDoneUser';
-import AdminHoldUser from './component/AboutAdmin/Users/AdminHoldUser';
 import AdminNotice from './component/AboutAdmin/Notice/AdminNotice';
 import DeliList from "./component/AboutAdmin/SD_Delivery/List/DeliList";
 import TotalCalManage from "./component/AboutAdmin/SD_Account/TOTAL/Manage/TotalCalManage";
 import CMSaccountManage from "./component/AboutAdmin/SD_Account/CMS/Manage/CMSaccountManage";
+import UserList from './component/AboutAdmin/Users/UserList/UserList';
 
 // 템플릿 컴포넌트
 import { TopBanner } from './component/TemplateLayout/AboutHeader/TopBanner';
@@ -737,8 +736,8 @@ export default function App() {
           <Route path='event/edit/:id' element={<AdminEventEditor />} />
 
           {/* 회원관리 - 고객관리 */}
-          <Route path='doneusers' element={<AdminDoneUser />} />
-          <Route path='holdusers' element={<AdminHoldUser />} />
+          <Route path='user/done' element={<UserList />} />
+          <Route path='user/hold' element={<UserList />} />
           {/* 회원관리 - 회원가입 코드 관리 */}
           <Route path='printCode' element={<ManageCode />} />
         </Route>
