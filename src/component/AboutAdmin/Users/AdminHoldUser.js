@@ -9,7 +9,7 @@ import { useModalState, useModalActions, useDevideType, usePageState, usePageAct
 export default function AdminHoldUser({ matchedData, handleBulkEdit, handleEdit, handleToggleEdit, handleDelete, editIndex, setEditIndex, updateValue, initializingData }) {
 
 
-  const { devideType } = useDevideType(); console.log(`요청 고객유형: ${devideType}`);
+  const { devideType } = useDevideType();
   const { itemsPerPage } = usePageState();
   const { setItemsPerPage } = usePageAction();
   const { isModal, modalName, selectedIndex } = useModalState()

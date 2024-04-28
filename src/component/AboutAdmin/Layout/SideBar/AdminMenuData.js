@@ -146,7 +146,7 @@ export function AdminMenuData(props) {
                 <NavLink
                   onClick={() => {
                     navigate(`${subMenuItem.link}`)
-                    setDevideType(subMenuItem.clickEvent ? subMenuItem.clickEvent : 'done');
+                    setDevideType(subMenuItem.clickEvent && subMenuItem.clickEvent);
                   }}
                   to={subMenuItem.link}
                   className={`${styles.sub_item} ${subMenuItem.link === current ? styles.active : ''}`}
