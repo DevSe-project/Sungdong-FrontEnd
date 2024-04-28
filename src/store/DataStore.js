@@ -1565,59 +1565,24 @@ export const useCheckedUsersActions = () => {
 }
 
 /* ----------------AdminDevideUser---------------- */
-const useDevideUserStore = create((set) => ({
+const useDevideTypeStore = create((set) => ({
   devideType: '', // 기본값 설정
-  devidedData: {
-    done: [],
-    hold: [],
-  },
 
-  actions: {
-    /**
-     * 고객을 저장하기 위한 유형(Type)을 셋팅합니다.
-     * @param {} type 
-     */
-    setdevideType: (type) => {
-      if (type !== 'done' && type !== 'hold')
-        throw new Error('해당 타입은 부적절합니다 : ' + type);
-
-      set((state) => ({
-        type: type,
-      }));
-    },
-
-    /**
-     * Type에 따라 데이터를 다른 곳에 저장합니다.
-     * @param {} data 
-     * @returns 
-     */
-    setdevidedData: (data) => set(state => ({
-      data: {
-        ...state.data,
-        [state.type]: data,
-      }
-    }))
-  },
+  setDevideType: (devideType) => set({
+    devideType: devideType
+  })
 }));
 /**
  * 
  * @returns devideType, setDevideType
  */
 export const useDevideType = () => {
-  const { type, setType } = useDevideUserStore();
-  return { type, setType };
-}
-/**
- * 
- * @returns devidedData, setDevidedData
- */
-export const useDevidedData = () => {
-  const { devidedData, setDevidedData } = useDevideUserStore();
-  return { devidedData, setDevidedData };
+  const { devideType, setDevideType } = useDevideTypeStore();
+  return { devideType, setDevideType };
 }
 
 /* ----------------check manager---------------- */
-export const useCheckManage = create((set) => ({
+const useCheckManage = create((set) => ({
   checkedItems: [],
 
   actions: {
@@ -1632,27 +1597,39 @@ export const useCheckManage = create((set) => ({
     handleEachItem: (isChecked, item) => set((state) => {
       const newCheckedItems = [...state.checkedItems];
 
-      if (isChecked)
-        newCheckedItems.splice(existingIndex, 1);// 기존에 체크된 아이템이라면 배열에서 제거
-      else
-        newCheckedItems.push(item);// 기존에 체크되지 않은 아이템이라면 배열에 추가
+      if (isChecked) {
+        // 기존에 체크된 아이템이라면 배열에서 제거
+        if (isChecked) {
+          newCheckedItems.splice(state.checkedItems.indexOf(item), 1);
+        }
+      } else {
+        // 기존에 체크되지 않은 아이템이라면 배열에 추가
+        newCheckedItems.push(item);
+      }
 
       return { checkedItems: newCheckedItems };
     }),
+
     /**
      * @param {*} isChecked - checkbox의 e.target.checked를 전달해주세요.
      * @param {*} arr - 모든 아이템을 담을 대상 배열을 전달해주세요.
      * @returns 
      */
     handleBatchItems: (isChecked, arrItems) => {
-      if (isChecked) {
+      const { setCheckedItems } = useCheckManage.getState().actions;
+      // zustand action 내에서 다른 action을 사용할 수 없기 때문에 setCheckedItems를 사용하지 않고 직접 바꾸는 식으로 변경해야 한다.
+      if (isChecked)
         setCheckedItems(arrItems)
-      } else
+      else
         setCheckedItems([]);
-    }
-  },
+    },
+  }
 }));
-export const useCheckStore = () => {
-  const { checkedItems, setCheckedItems, handleEachItem, handleBatchItems } = useCheckManage()
-  return { checkedItems, setCheckedItems, handleEachItem, handleBatchItems };
+export const useCheckStoreState = () => {
+  const { checkedItems } = useCheckManage()
+  return { checkedItems };
+}
+export const useCheckStoreActions = () => {
+  const { setCheckedItems, handleEachItem, handleBatchItems } = useCheckManage.getState().actions;
+  return { setCheckedItems, handleEachItem, handleBatchItems };
 }
