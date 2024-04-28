@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import styles from './AdminMenuData.module.css'
 import { useDevideType } from "../../../../store/DataStore";
@@ -99,12 +99,12 @@ export function AdminMenuData(props) {
       },
       {
         item: '가입 대기 고객',
-        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/user/hold'
+        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/user/hold',
+        clickEvent: 'hold'
       },
       {
         item: '회원가입 코드 관리',
         link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/printCode',
-        clickEvent: 'hold'
       }],
     },
   ];
@@ -146,7 +146,7 @@ export function AdminMenuData(props) {
                 <NavLink
                   onClick={() => {
                     navigate(`${subMenuItem.link}`)
-                    setDevideType(subMenuItem.clickEvent)
+                    setDevideType(subMenuItem.clickEvent ? subMenuItem.clickEvent : 'done');
                   }}
                   to={subMenuItem.link}
                   className={`${styles.sub_item} ${subMenuItem.link === current ? styles.active : ''}`}
