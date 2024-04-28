@@ -10,7 +10,7 @@ export default function AdminDoneUser({ matchedData, handleBulkEdit, handleEdit,
 
 
   const { devideType } = useDevideType();
-  
+
   const { itemsPerPage } = usePageState();
   const { setItemsPerPage } = usePageAction();
   const { isModal, modalName, selectedIndex } = useModalState()
@@ -132,7 +132,8 @@ export default function AdminDoneUser({ matchedData, handleBulkEdit, handleEdit,
                 // 수정상태가 활성화되지 않은 상태에서만 모달이 작동하도록 합니다.
                 if (editIndex != index) {
                   selectedModalOpen(`${devideType}user`); // modalName 설정
-                  setSelectedIndex(index); // index 동기화
+                  setSelectedIndex(index); // index 동기
+                  console.log(`selectedIndex: ${selectedIndex}\nmodalName: ${modalName}\nisModal: ${isModal}`);
                 }
               }}>
                 {user.cor_corName}
