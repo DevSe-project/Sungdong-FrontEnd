@@ -1,12 +1,10 @@
 import { useEffect } from "react";
 import { useModalActions, useModalState } from "../../../store/DataStore";
 import styles from './UserDetailInfo.module.css';
-import useManagerUser from "./customFn/useManageUser";
 
 export default function UserDetailInfo({ info }) {
-  const { modalName } = useModalState(0);
+  const { modalName } = useModalState();
   const { selectedModalClose } = useModalActions();
-  const { parseOptionValue } = useManagerUser();
 
   // ESC 키로 모달 종료
   useEffect(() => {

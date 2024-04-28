@@ -53,7 +53,6 @@ const UserList = () => {
       setMatchedData(userData);
   }, [userData, itemsPerPage, currentPage]);
 
-  console.log(`응답받은 고객 데이터: ${userData}`); // Debugging Code
 
   // ------------------------------userData Fetch------------------------------ //
 
