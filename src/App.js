@@ -40,7 +40,7 @@ import { AdminProductList } from './component/AboutAdmin/Product/AdminProductLis
 import { AdminCategory } from './component/AboutAdmin/Category/AdminCategory';
 import { AdminCategoryEdit } from './component/AboutAdmin/Category/AdminCategoryEdit';
 import { AdminSoldList } from './component/AboutAdmin/Sold/AdminSoldList';
-import { AdminNotSoldList } from './component/AboutAdmin/Sold/AdminNotSoldList';
+import { AdminCancelList } from './component/AboutAdmin/Sold/AdminCancelList';
 import { AdminRefund } from './component/AboutAdmin/Refund/AdminRefund';
 import AdminNotice from './component/AboutAdmin/Notice/AdminNotice';
 import DeliList from "./component/AboutAdmin/SD_Delivery/List/DeliList";
@@ -715,7 +715,7 @@ export default function App() {
           {/* 주문관리 - 주문 관리*/}
           <Route path='sold' element={<AdminSoldList />} />
           {/* 주문관리 - 미결제 주문 관리 */}
-          <Route path='yetPay' element={<AdminNotSoldList />} />
+          <Route path='yetPay' element={<AdminCancelList />} />
           {/* 주문관리 - 반품 관리 */}
           <Route path='refund' element={<AdminRefund />} />
           {/* 주문검색 - 검색결과 */}
