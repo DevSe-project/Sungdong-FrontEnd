@@ -73,7 +73,7 @@ export default function AdminDoneUser({ matchedData, handleBulkEdit, handleEdit,
                       {customItem.valList.map((valListItem, valListIndex) => (
                         <option key={valListIndex} value={valListItem}>
                           {customItem.key == 'userType_id' && parseUserType(valListItem)}
-                          {customItem.key == 'hasCMS' && parseUserType(valListItem)}
+                          {customItem.key == 'hasCMS' && parseCMS(valListItem)}
                           {customItem.key == 'managerName' && customItem.key}
                         </option>
                       ))}
@@ -152,20 +152,20 @@ export default function AdminDoneUser({ matchedData, handleBulkEdit, handleEdit,
                     >
                       <option value={customItem.val}>
                         {customItem.key == 'userType_id' && parseUserType(customItem.val)}
-                        {customItem.key == 'hasCMS' && parseUserType(customItem.val)}
+                        {customItem.key == 'hasCMS' && parseCMS(customItem.val)}
                         {customItem.key == 'managerName' && customItem.val}
                       </option>
                       {customItem.valList.map((item, index) => (
                         <option key={index} value={customItem.val}>
                           {customItem.key == 'userType_id' && parseUserType(customItem.val)}
-                          {customItem.key == 'hasCMS' && parseUserType(customItem.val)}
+                          {customItem.key == 'hasCMS' && parseCMS(customItem.val)}
                           {customItem.key == 'managerName' && customItem.val}
                         </option>
                       ))}
                     </select>
                     :
                     customItem.key === 'userType_id' ? parseUserType(customItem.val) : (
-                      customItem.key === 'hasCMS' ? parseUserType(customItem.val) : customItem.val
+                      customItem.key === 'hasCMS' ? parseCMS(customItem.val) : customItem.val
                     )
                   }
                 </td>
