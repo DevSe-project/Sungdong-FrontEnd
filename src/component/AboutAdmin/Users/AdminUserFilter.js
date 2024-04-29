@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './AdminUserFilter.module.css';
 import { useUserFilter, useUserFilterActions } from '../../../store/DataStore';
 
-export default function AdminUserFilter(props) {
+export default function AdminUserFilter({onFiltering}) {
   const userFilter = useUserFilter();
   const { setUserFilter, resetUserFilter } = useUserFilterActions();
 
@@ -95,8 +95,8 @@ export default function AdminUserFilter(props) {
       <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5em' }}>
         <button className='white_round_button' onClick={() => resetUserFilter()}>초기화</button>
         <button className='original_round_button' onClick={(e) => {
-          e.preventDefault();
-          props.onFiltering(userFilter);
+          // e.preventDefault();
+          onFiltering(userFilter);
         }}>검색하기</button>
       </div>
     </div>

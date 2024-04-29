@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './AdminUserSort.module.css';
 import { useUserFilterActions, useUserSort } from '../../../store/DataStore';
 
-const AdminUserSort = (props) => {
+const AdminUserSort = ({onSorting}) => {
     const userSort = useUserSort();
     const { setUserSort, resetUserSort } = useUserFilterActions();
 
@@ -54,7 +54,7 @@ const AdminUserSort = (props) => {
             </div>
 
             <button className="white_round_button" onClick={() => resetUserSort()}>초기화</button>
-            <button style={{ marginTop: '16px' }} className='original_round_button' onClick={props.onSort}>정렬하기</button>
+            <button style={{ marginTop: '16px' }} className='original_round_button' onClick={onSorting}>정렬하기</button>
         </div>
     );
 };

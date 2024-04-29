@@ -215,7 +215,7 @@ const UserList = () => {
 
   const { mutate: sortingMutation } = useMutation({ mutationFn: fetchSortedUser }); // 정렬
 
-  const handleSorting = () => {
+  const onSorting = () => {
     sortingMutation(userSort, {
       onSuccess: (data) => {
         // Debuggig Code : data.data.data
@@ -329,9 +329,9 @@ const UserList = () => {
       {/* Flex Container */}
       <div className={styles.flexContainer}>
         {/* 필터링 */}
-        <AdminUserFilter />
+        <AdminUserFilter onFiltering={onFiltering}/>
         {/* 정렬 */}
-        <AdminUserSort />
+        <AdminUserSort onSorting={onSorting}/>
       </div>
 
       {
