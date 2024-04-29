@@ -4,7 +4,7 @@ import { useModalActions, useModalState, useOrderSelectList, useOrderSelectListA
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useFetch } from '../../../customFn/useFetch'
 
-export default function AdminCancelModal() {
+export default function AdminPaidModal() {
 
   const selectList = useOrderSelectList();
   const {setSelectListValue} = useOrderSelectListActions();
@@ -33,7 +33,7 @@ export default function AdminCancelModal() {
 
   //fetch 함수
   const fetchUpdateData = async (selectList) => {
-      return await fetchNonPageServer(selectList, `put`, `/order/status/cancel`)
+      return await fetchNonPageServer(selectList, `put`, `/order/status/paid`)
     };
     
 
@@ -41,12 +41,12 @@ export default function AdminCancelModal() {
   const { mutate:cancelOrderMutate } = useMutation({mutationFn: fetchUpdateData})
 
 
-  const handleOrderCanceled = (selectList) => {
+  const handleOrderChanged = (selectList) => {
     cancelOrderMutate(selectList,{
     onSuccess: (data) => {
       // 메세지 표시
       alert(data.message);
-      console.log('상품이 취소처리 되었습니다.', data);
+      console.log('상품이 결제완료 처리 되었습니다.', data);
       // 상태를 다시 불러와 갱신합니다.
       queryClient.invalidateQueries(['order']);
       selectedModalClose(modalName);
@@ -89,7 +89,6 @@ export default function AdminCancelModal() {
                 <th>주문가</th>
                 <th>주문자 성함</th>
                 <th>주문자 연락처</th>
-                <th style={{width:'10%'}}>취소사유</th>
               </tr>
             </thead>
             <tbody>
@@ -122,7 +121,6 @@ export default function AdminCancelModal() {
                 <td>
                   {item.value.order_tel}
                 </td>
-                <td><input className={styles.miniInput} type='text' value={item.value.cancelReason} onChange={(e)=>setSelectListValue(item, "cancelReason", e.target.value)}/></td>
               </tr>
             ))}
             </tbody>
@@ -130,7 +128,7 @@ export default function AdminCancelModal() {
         </div>
         <div className={styles.buttonBox}>
           <button onClick={()=> selectedModalClose(modalName)} className={styles.selectButton}>취소</button>
-          <button  className={styles.selectedButton} onClick={()=> selectList.some((item) => item.value.cancelReason) !== "" && handleOrderCanceled(selectList)}>{selectList.length}건 일괄처리</button>
+          <button  className={styles.selectedButton} onClick={()=> handleOrderChanged(selectList)}>{selectList.length}건 일괄처리</button>
         </div>
       </div>
     </div>

@@ -8,7 +8,7 @@ import Pagination from '../../../customFn/Pagination';
 import AdminCancelModal from './AdminCancelModal';
 import { AdminSoldFilter } from './AdminSoldFilter';
 
-export function AdminNotSoldList(props) {
+export function AdminCancelList(props) {
 
 // -------------------------------------- STATE 공간 ---------------------------------------------
   //ZUSTAND STATE
@@ -105,7 +105,7 @@ export function AdminNotSoldList(props) {
    */
   const fetchFilteredOrders = async (filter) => {
     const limit = {
-      orderState: 1,
+      flag: 1,
     }
     return await fetchServer({limit, filter}, `post`, `/order/filter`, 1);
   };
@@ -235,7 +235,7 @@ export function AdminNotSoldList(props) {
                         {item.order_id}
                       </td>
                       <td>
-                        {(item.orderState === 6 && "취소 요청") ||(item.orderState === 5 && "취소")}
+                        {(item.orderState === 6 && "취소 요청") || (item.orderState === 5 && "취소")}
                       </td>
                       <td colSpan={2} onClick={() => {
                         if (selectedData?.some((selectItem) => selectItem.order_id === item.order_id)) {

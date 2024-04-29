@@ -11,6 +11,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useFetch } from '../../../customFn/useFetch';
 import Pagination from '../../../customFn/Pagination';
 import axios from '../../../axios';
+import AdminPaidModal from './AdminPaidModal';
 
 export function AdminSoldList() {
 
@@ -227,6 +228,26 @@ export function AdminSoldList() {
     }
   }
 
+    /**
+   * @결제완료
+   * 결제완료 처리 핸들러
+   * - 이미 결제완료 주문은 사전 에러 처리함 
+   * - 무조건 한 개라도 체크되어 있어야 함
+   * - 조건 달성 시 "결제완료" 이름의 모달 오픈
+   */
+    const handlePaidItem = () => {
+      const notZeroItems = selectList.some((elementId) => ordered.find((item) => item.order_id === elementId.order_id).orderState !== 0);
+      if (selectList.length !== 0) {
+        if(!notZeroItems){
+          selectedModalOpen("결제완료");
+        } else {
+          alert("결제완료된 주문이 포함되어 있습니다.\n- 미결제 주문만 결제완료 처리가 가능합니다!");
+        }
+      } else {
+        alert("주문이 한 개라도 체크가 되어 있어야 결제완료 처리가 가능합니다.");
+      }
+    }
+
   /**
    * @취소
    * 취소처리 핸들러
@@ -303,8 +324,9 @@ export function AdminSoldList() {
           {/* 발주, 발송, 취소 처리 박스 */}
           <div className={styles.manageBox}>
             <button onClick={() => handlePrintExcel()} className="original_button">발주서 엑셀 출력</button>
-            <button onClick={() => handleDelNumInput()} className={styles.button}>발송처리</button>
-            <button onClick={() => handleCancel()} className={styles.button}>취소처리</button>
+            <button onClick={() => handleDelNumInput()} className="white_button">발송처리</button>
+            <button onClick={() => handlePaidItem()} className="white_button">결제완료 처리</button>
+            <button onClick={() => handleCancel()} className="white_button">취소처리</button>
           </div>
           {/* 리스트 출력 */}
           <table className={styles.table}>
@@ -354,7 +376,8 @@ export function AdminSoldList() {
                               : '직접 픽업'}
                       </td>
                       <td>
-                        {item.orderState === 1 ? "신규주문" :
+                        { item.orderState === 0 ? "미결제 주문" :
+                          item.orderState === 1 ? "신규주문" :
                           item.orderState === 2 && "발송완료"}
                       </td>
                       <td onClick={() => {
@@ -477,8 +500,10 @@ export function AdminSoldList() {
       {modalName === "발송"
         ?
         isModal && <AdminDelNumModal />
-        : modalName === "취소" &&
+        : modalName === "취소" ?
         isModal && <AdminCancelModal />
+        : modalName === "결제완료" &&
+        isModal && <AdminPaidModal/>
       }
     </div>
   )
