@@ -16,7 +16,7 @@ import { useState, useEffect } from "react";
 
 const UserList = () => {
 
-  const { devideType } = useDevideType();
+  const devideType = localStorage.getItem('devideType')
   const { fetchServer, fetchGetServer } = useFetch();
   const { itemsPerPage, currentPage } = usePageState();
   const { setCurrentPage, setTotalPages } = usePageAction();

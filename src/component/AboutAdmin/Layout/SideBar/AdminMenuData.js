@@ -147,6 +147,7 @@ export function AdminMenuData(props) {
                   onClick={() => {
                     navigate(`${subMenuItem.link}`)
                     setDevideType(subMenuItem.clickEvent && subMenuItem.clickEvent);
+                    localStorage.setItem('devideType', subMenuItem.clickEvent);
                   }}
                   to={subMenuItem.link}
                   className={`${styles.sub_item} ${subMenuItem.link === current ? styles.active : ''}`}

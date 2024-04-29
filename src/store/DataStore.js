@@ -1564,23 +1564,6 @@ export const useCheckedUsersActions = () => {
   return { addCheckedUser }
 }
 
-/* ----------------AdminDevideUser---------------- */
-const useDevideTypeStore = create((set) => ({
-  devideType: '', // 기본값 설정
-
-  setDevideType: (devideType) => set({
-    devideType: devideType
-  })
-}));
-/**
- * 
- * @returns devideType, setDevideType
- */
-export const useDevideType = () => {
-  const { devideType, setDevideType } = useDevideTypeStore();
-  return { devideType, setDevideType };
-}
-
 /* ----------------check manager---------------- */
 const useCheckManage = create((set) => ({
   checkedItems: [],
