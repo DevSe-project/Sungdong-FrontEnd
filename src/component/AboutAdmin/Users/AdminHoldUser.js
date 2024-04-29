@@ -2,14 +2,14 @@ import { useParsing } from '../../../customFn/useParsing';
 import UserDetailInfo from './UserDetailInfo';
 import styles from "./UserList/UserList.module.css";
 import React from 'react';
-import { useModalState, useModalActions, useDevideType, usePageState, usePageAction, useCheckStoreActions, useCheckStoreState } from "../../../store/DataStore";
+import { useModalState, useModalActions, usePageState, usePageAction, useCheckStoreActions, useCheckStoreState } from "../../../store/DataStore";
 
 
 
 export default function AdminHoldUser({ matchedData, handleBulkEdit, handleEdit, handleToggleEdit, handleDelete, editIndex, setEditIndex, updateValue, initializingData }) {
 
 
-  const { devideType } = useDevideType();
+  const devideType = localStorage.getItem('devideType');
   const { itemsPerPage } = usePageState();
   const { setItemsPerPage } = usePageAction();
   const { isModal, modalName, selectedIndex } = useModalState()

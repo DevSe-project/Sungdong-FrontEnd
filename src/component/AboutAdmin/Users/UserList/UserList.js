@@ -2,7 +2,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   useUserFilter, useUserSort,
   useCheckStoreState, useCheckStoreActions,
-  useDevideType,
   usePageState, usePageAction
 } from "../../../../store/DataStore";
 import AdminDoneUser from "../AdminDoneUser";

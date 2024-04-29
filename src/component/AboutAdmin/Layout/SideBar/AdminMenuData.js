@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import styles from './AdminMenuData.module.css'
-import { useDevideType } from "../../../../store/DataStore";
+
 export function AdminMenuData(props) {
-  const { setDevideType } = useDevideType();
   const navigate = useNavigate();
   const location = useLocation();
   const current = location.pathname;
@@ -146,7 +145,6 @@ export function AdminMenuData(props) {
                 <NavLink
                   onClick={() => {
                     navigate(`${subMenuItem.link}`)
-                    setDevideType(subMenuItem.clickEvent && subMenuItem.clickEvent);
                     localStorage.setItem('devideType', subMenuItem.clickEvent);
                   }}
                   to={subMenuItem.link}
