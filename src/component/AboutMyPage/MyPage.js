@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./Mypage.module.css";
 import ModifyPW from "./ModifyPW";
-import { useModalState } from "../../store/DataStore";
+import { useModalActions, useModalState } from "../../store/DataStore";
 import { useNavigate } from "react-router-dom";
 import { GetCookie } from "../../customFn/GetCookie";
 import { useQuery } from "@tanstack/react-query";
@@ -10,7 +10,9 @@ import { useFetch } from "../../customFn/useFetch";
 
 export default function MyPage(props) {
 
-  const { isModal, openModal } = useModalState();
+  // 모달 스토어
+  const { isModal, openModal, modalName } = useModalState();
+  const { selectedModalOpen, selectedModalClose } = useModalActions();
 
   const navigate = useNavigate();
 
@@ -87,9 +89,9 @@ export default function MyPage(props) {
                 <td className={styles.td}>
                   <button
                     onClick={() => {
-                      openModal();
+                      selectedModalOpen('modifyPassword')
                     }}
-                  >비밀번호 수정</button>
+                  >비밀번호 변경</button>
                 </td>
                 <th className={styles.th}>이메일</th>
                 <td className={styles.td}>{userProfile.email ? userProfile.email : '미 작성'}</td>
@@ -114,9 +116,11 @@ export default function MyPage(props) {
               </tr>
             </tbody>
           </table>
-          {isModal
+          {/* 비밀번호 변경 모달 */}
+          {isModal && modalName === 'modifyPassword'
             ?
             <ModifyPW
+              userProfile={userProfile}
             />
             :
             null}

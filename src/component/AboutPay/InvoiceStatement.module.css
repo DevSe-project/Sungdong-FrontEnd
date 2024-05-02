@@ -1,0 +1,101 @@
+pre{
+  margin: 0;
+  color: #CC0000;
+  font-size: large;
+}
+
+.component{
+  height: 297mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.5em;
+  gap:1.5em;
+}
+
+.producer{
+  height: 50%;
+  border: 3px solid #CC0000;
+}
+
+.supplier{
+  height: 50%;
+  border: 2px solid blue;
+}
+
+.titleBox{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.title{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.lowTitle{
+  width: 98%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.h1{
+  color: #CC0000;
+  font-size: 36px;
+  font-weight: 850;
+  border-bottom: 3px double #CC0000;
+}
+
+.tableBox{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  align-items: center;
+}
+
+.sumBox{
+  width: 99%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5em;
+  font-size: 20px;
+  color: #CC0000;
+  border: 1px solid #CC0000;
+  background-color: #ffc2c2;
+  border-left: none;
+  border-right: none;
+}
+
+.red{
+  height: 10px;
+  box-shadow: none;
+  background: none;
+  border: 1px solid #CC0000;
+  color: #CC0000;
+}
+
+.redTr:nth-child(even){
+  background-color: #e9b3b3;
+}
+
+.blueTr:nth-child(even){
+  background-color: rgb(191, 191, 255);
+}
+
+.blue{
+  height: 10px;
+  box-shadow: none;
+  background: none;
+  border: 1px solid blue;
+  color: blue;
+}

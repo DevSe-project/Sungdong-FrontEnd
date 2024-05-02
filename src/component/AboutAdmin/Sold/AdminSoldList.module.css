@@ -3,7 +3,6 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  justify-content: center;
 }
 
 .container{ 
@@ -153,6 +152,7 @@
 
 .detailView {
   cursor: pointer;
+  font-weight: 650;
 }
 
 .detailView:hover {

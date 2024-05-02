@@ -61,18 +61,18 @@ export function TopBanner(props) {
 
           {/* 4_카테고리 아이콘 */}
           <div className={styles.cate_icon}>
-            <li
+          <li
               className='menu-item'
               onClick={() => {
-                if (isModal && modalName == 'categoryBar')
-                  selectedModalClose('categoryBar');
-                else if (!isModal && modalName == '')
-                  selectedModalOpen('categoryBar');
+                if (isModal && modalName === "categoryBar")
+                  selectedModalClose("categoryBar");
+                else if (!isModal && modalName === '')
+                  selectedModalOpen("categoryBar");
               }}
               style={{ ...props.text_dynamicStyle }}
             >
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4em' }}>
-                <i style={{ fontSize: '1.2em' }} className="fas fa-bookmark" /> <span className={styles.text}>카테고리</span>
+                <i style={{ fontSize: '1.2em', backgroundColor: 'none'}} className="fas fa-bookmark" /> <span className={styles.text}>카테고리</span>
               </div>
             </li>
           </div>
@@ -104,7 +104,7 @@ export function TopBanner(props) {
 
       {/* 클릭하면 나오는 카테고리바 */}
       {
-        isModal && modalName == 'categoryBar'
+        isModal && modalName === "categoryBar"
           ?
             <CategoryBar category_dynamicStyle={props.category_dynamicStyle} />
           :

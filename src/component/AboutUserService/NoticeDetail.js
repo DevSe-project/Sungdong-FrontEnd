@@ -3,15 +3,15 @@ import { useEffect } from 'react';
 import { useModalActions, useModalState, useNoticePostList } from '../../store/DataStore';
 
 export default function NoticeDetail() {
-    const {selectedIndex} = useModalState();
-    const {setIsModal} = useModalActions();
+    const { selectedIndex } = useModalState();
+    const { selectedModalClose } = useModalActions();
     const noticePostList = useNoticePostList();
 
     // esc키를 누르면 모달창 닫기.
     useEffect(() => {
         const onClose = (event) => {
             if (event.key === 'Escape') {
-                setIsModal(false);
+                selectedModalClose();
             }
         };
 
@@ -20,7 +20,7 @@ export default function NoticeDetail() {
         return () => {
             window.removeEventListener('keydown', onClose);
         };
-    }, [setIsModal]);
+    }, [selectedModalClose]);
 
     // 선택된 index가 있을 때만 렌더링
     if (selectedIndex !== null && selectedIndex !== undefined) {
@@ -28,7 +28,7 @@ export default function NoticeDetail() {
             <div className={styles.modalContainer}>
                 {/* 종료 버튼 */}
                 <div className={styles.closeButton}>
-                    <span onClick={() => setIsModal(false)}>
+                    <span onClick={() => selectedModalClose()}>
                         <i className="fas fa-times"></i>
                     </span>
                 </div>
@@ -36,21 +36,21 @@ export default function NoticeDetail() {
                 <div className={styles.contentContainer}>
                     {/* 제목 */}
                     <div className={styles.title}>
-                        {noticePostList[selectedIndex].title}
+                        {noticePostList.post_title}
                     </div>
                     {/* 작성일과 작성자 */}
                     <div className={styles.details}>
                         <div className={styles.date}>
-                            작성일: {noticePostList[selectedIndex].date}
+                            작성일: {new Date(noticePostList.post_date).toLocaleDateString()}
                         </div>
                         <div className={styles.writer}>
-                            작성자: {noticePostList[selectedIndex].writer}
+                            작성자: {noticePostList.post_writer}
                         </div>
                     </div>
                     {/* 글 내용 */}
                     <div className={styles.contentsBox}>
                         <div className={styles.contents}>
-                            {noticePostList[selectedIndex].contents}
+                            {noticePostList.post_content}
                         </div>
                     </div>
                 </div>

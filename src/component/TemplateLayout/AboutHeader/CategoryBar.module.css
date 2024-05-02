@@ -1,16 +1,13 @@
 .customModalOverlay {
-  position: fixed;
-  top: 80px;
   left: 0;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 999;
+  border-bottom: 1px solid lightgray;
 }
 
 .customModalContainer {
-  position: fixed;
-  top: 80px;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -18,16 +15,14 @@
 }
 
 .categoryBarContainer {
-  width: 80%;
+  display: flex;
+  flex-flow: row wrap;
+  width: 90%;
   background-color: #FFF;
   position: relative;
   align-items: center;
   text-align: center;
-  white-space: nowrap;
   list-style-type: none;
-  border-bottom: 1px solid lightgray;
-  display: grid; /* 그리드 컨테이너로 선언 */
-  grid-template-columns: repeat(auto-fill, minmax(calc(15% - 20px), 1fr)); /* 그리드의 열을 유연하게 생성하되 최대 너비를 초과하지 않게 설정 */
   gap: 1em; /* 그리드 아이템 간의 간격 */
   justify-content: space-around; /* 그리드 아이템을 가로 방향으로 중앙 정렬 */
 }
@@ -35,20 +30,26 @@
 .category {
   background-color: lightgray;
   color: black;
-  margin: 1em;
   margin-bottom: 0.2em;
-  width: 15em;
+  width: 70%;
+  margin-top: 1em;
+  gap: 1em;
   padding: 1em;
-  font-size: small;
+  font-size: 15px;
   text-align: left;
   border-radius: 1dvb;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .category_low {
   color: black;
-  width: 15em;
-  padding: 0.7em;
-  font-size: small;
+  width: 100%;
+  font-size: 14px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
   text-align: left;
 }
 
@@ -64,17 +65,16 @@
 
 .subMenuContainer{
   display: flex;
-  flex-direction: row;
+  flex-flow: row wrap;
   background-color: white;
   border-radius: 1dvb;
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
-  display: grid; /* 그리드 컨테이너로 선언 */
-  grid-template-columns: repeat(auto-fill, minmax(calc(20% - 20px), 1fr)); /* 그리드의 열을 유연하게 생성하되 최대 너비를 초과하지 않게 설정 */
-  justify-content: space-around; /* 그리드 아이템을 가로 방향으로 중앙 정렬 */
+  justify-content: flex-start; /* 그리드 아이템을 가로 방향으로 중앙 정렬 */
   margin-left: 10px;
 }
 
 .listStyle{
+  width: 20%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -83,10 +83,16 @@
 }
 
 .listStyle_low{
+  width: 60%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  margin-top: 0.5em;
+  gap: 0.5em;
   overflow-y: auto;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
   height: 13em;
 }

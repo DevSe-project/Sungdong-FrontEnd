@@ -35,7 +35,6 @@
   display: flex;
   
 }
-
 .button{
   border: 1px solid lightgray;
   background-color: white;
@@ -43,4 +42,21 @@
   padding-left: 1.5em;
   padding-right: 1.5em;
   cursor: pointer;
+}
+
+
+.input,
+.select {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.input:hover,
+.select:hover,
+.input:focus,
+.select:focus {
+    border-color: rgb(174, 79, 44);
 }

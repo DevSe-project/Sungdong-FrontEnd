@@ -1,18 +1,23 @@
 import { useState } from 'react';
 import styles from './Filter.module.css'
-import { addMonths, subMonths, format } from 'date-fns';
-import axios from 'axios';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { GetCookie } from '../../customFn/GetCookie';
 
-export function EstimateFilter(){
-  const today = new Date();
-  const [startDate, setStartDate] = useState(today);
-  const [endDate, setEndDate] = useState(addMonths(startDate, 1));
-  function DateFilter(){
+export function EstimateFilter({handleSearch}){
+  const [start, setStart] = useState("");
+  const [end, setEnd] = useState("");
+
+  function DateFilter() {
+    const today = new Date();
+    const [startDate, setStartDate] = useState(today);
+    const [endDate, setEndDate] = useState(new Date(today.getFullYear(), today.getMonth() + 1, 0));
+  
     const handleMonthChange = (event) => {
-      setStartDate(new Date(2023,event.target.value,1));
-      setEndDate(new Date(2023,event.target.value,31));
+      const month = parseInt(event.target.value);
+      const newStartDate = new Date(today.getFullYear(), month, 2);
+      const newEndDate = new Date(today.getFullYear(), month + 1, 1);
+      setStartDate(newStartDate);
+      setEndDate(newEndDate);
+      setStart(newStartDate.toISOString().split('T')[0]);
+      setEnd(newEndDate.toISOString().split('T')[0]);
     };
   
     const dateList = () => {
@@ -24,76 +29,42 @@ export function EstimateFilter(){
     const handleStartDateChange = (event) => {
       const newStartDate = new Date(event.target.value);
       setStartDate(newStartDate);
+      
+      setStart("start", newStartDate.toISOString().split('T')[0]); // Update start date in the filter
     };
     
     const handleEndDateChange = (event) => {
-      const newStartDate = new Date(event.target.value);
-      setEndDate(newStartDate);
+      const newEndDate = new Date(event.target.value);
+      setEndDate(newEndDate);
+      setEnd(newEndDate.toISOString().split('T')[0]); // Update end date in the filter
     };
-    return(
+  
+    return (
       <div style={{ display: 'flex', gap: '1em' }}>
-        <select onChange={(e)=>handleMonthChange(e)}>
+        <select className={styles.select} onChange={(e) => handleMonthChange(e)}>
           {dateList()}
         </select>
         <div>
           <input 
-          className={styles.button}
-          type='date' 
-          value={format(startDate, 'yyyy-MM-dd')}
-          onChange={(e)=>handleStartDateChange(e)}
+            className={styles.input}
+            type='date' 
+            value={startDate.toISOString().split('T')[0]}
+            onChange={(e) => handleStartDateChange(e)}
           />
           &nbsp;~&nbsp;
           <input 
-          className={styles.button}
-          type='date' 
-          value={format(endDate, 'yyyy-MM-dd')}
-          onChange={(e)=>handleEndDateChange(e)}
+            className={styles.input}
+            type='date' 
+            value={endDate.toISOString().split('T')[0]}
+            onChange={(e) => handleEndDateChange(e)}
           />
         </div>
       </div>
     )
   }
 
-  const queryClient = useQueryClient();
-
-  //날짜 데이터 fetch
-  const dateData = async () => {
-    try {
-      const token = GetCookie('jwt_token');
-      const response = await axios.put(`/estimate/manager`, 
-        JSON.stringify({
-          startDate : startDate,
-          endDate : endDate
-        }),
-        {
-          headers : {
-            "Content-Type" : "application/json",
-            'Authorization': `Bearer ${token}`,
-          }
-        }
-      )
-      // 성공 시 추가된 상품 정보를 반환합니다.
-      return response.data;
-    } catch (error) {
-      // 실패 시 예외를 throw합니다.
-      throw new Error('조건을 검색하는 중 오류가 발생했습니다.');
-    }
-  };
-
-  //날짜 변경(검색) 요청 함수
-  const { dateMutation } = useMutation({mutationFn: dateData,
-    onSuccess: (success) => {
-      console.log("조건에 맞는 조회 결과를 띄웁니다.", success);
-      queryClient.invalidateQueries(['accountBook']);
-    },
-    onError: (error) => {
-      // 상품 추가 실패 시, 에러 처리를 수행합니다.
-      console.error('상품을 수정하던 중 오류가 발생했습니다.', error);
-    }
-  });
-
   const filterList = [
-    { label : '조회일자', content : DateFilter()},
+    { label : '견적일자', content : DateFilter()},
   ]
   return(
     <div style={{width: '100%'}}>
@@ -112,8 +83,13 @@ export function EstimateFilter(){
         </div>
         ))}
         <div style={{display: 'flex', gap: '0.5em'}}>
-          <input onClick={()=>dateMutation.mutate()} className={styles.button} type='submit' value='검색'/>
-          <input className={styles.button} type='reset'/>
+        <button className={styles.button} onClick={(e)=> {
+            e.preventDefault();
+            handleSearch(start, end);
+            }}>검색</button>
+          <button className={styles.button} onClick={()=> {
+            window.location.reload();
+            }}>초기화</button>
         </div>
       </form>
     </div>

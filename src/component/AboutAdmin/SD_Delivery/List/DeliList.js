@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useDeliveryFilter, useModalActions, useModalState } from '../../../../store/DataStore';
 import styles from './DeliList.module.css';
 import axios from '../../../../axios';
@@ -10,6 +10,7 @@ import DeliInvoiceModal from './DeliInvoiceModal';
 import Pagination from '../../../../customFn/Pagination';
 import { useMutation } from '@tanstack/react-query';
 import { useFetch } from '../../../../customFn/useFetch';
+import { useParsing } from '../../../../customFn/useParsing';
 
 
 export default function DeliList() {
@@ -23,12 +24,15 @@ export default function DeliList() {
   const [itemsPerPage, setItemsPerPage] = useState(10); // 페이지당 렌더링 될 개수
   const [totalPages, setTotalPages] = useState(1); // 전체 페이지 개수
 
-  // Fetch 관련 customFn
+  // customFn
   const { fetchServer } = useFetch();
+  const { parseDeliveryState, parseSelectedCor} = useParsing();
 
   // Delivery 관련 Zustand\
   const { deliveryFilter } = useDeliveryFilter();
 
+  // queryClient
+  const queryClient = useQueryClient();
 
 
 
@@ -52,7 +56,6 @@ export default function DeliList() {
       throw new Error('배송 데이터 불러오기 중 오류가 발생하였습니다.');
     }
   }
-
   // useEffect를 사용하여 페이지 번호나 페이지 당 항목 수가 변경될 때마다 새로운 데이터를 가져옴
   useEffect(() => {
     fetchDeliveryData();
@@ -65,29 +68,6 @@ export default function DeliList() {
 
   // 업데이트된 데이터의 체크 상태를 관리하는 state
   const [checkedItems, setCheckedItems] = useState([]);
-
-  // 배송상태 파싱
-  function parseDeliveryState(val) {
-    console.log(val);
-    const parseVal = parseInt(val);
-    switch (parseVal) {
-      case 0:
-        return '결제 대기';
-      case 1:
-        return '결제 완료';
-      case 2:
-        return '배송 준비';
-      case 3:
-        return '배송 중';
-      case 4:
-        return '배송 완료';
-      case 5:
-        return '배송 지연';
-      default:
-        alert('배송 상태를 불러들이지 못했습니다.');
-        return 'null';
-    }
-  }
 
   // 전체 체크박스 업데이트
   function handleAllCheckbox(e) {
@@ -140,7 +120,7 @@ export default function DeliList() {
       console.log(checkedItems);
       try {
         const token = GetCookie('jwt_token');
-        const response = await axios.delete(`/delivery/deliveries/delete/${checkedItems}`, {
+        const response = await axios.delete(`/delivery/deliveries/cancellation/${checkedItems}`, {
           headers: {
             "Content-Type": "application/json",
             'Authorization': `Bearer ${token}`
@@ -159,28 +139,62 @@ export default function DeliList() {
     }
   };
 
-  const fetchSfilterdList = async (filter) => {
+  /**
+   * 
+   * @param {Object} filter 
+   * @returns {Object} 필터링된 객체 리턴
+   */
+  const fetchFilterdList = async (filter) => {
+    console.log(filter);
     return await fetchServer(filter, `post`, `/delivery/filter`, currentPage)
   }
 
-  const { mutate: filterMutation } = useMutation({ mutationFn: fetchSfilterdList });
+  const { mutate: filterMutation } = useMutation({ mutationFn: fetchFilterdList });
 
   const handleSearch = () => {
-    filterMutation(deliveryFilter, {
-      onSuccess: (data) => {
-        alert(data.message);
-        setCurrentPage(data.data.currentPage);
-        setTotalPages(data.data.totalPages);
-        queryClient.setQuery([`delivery`], () => {
-          return data.data.data[0]
-        })
-      },
-      onError: (error) => {
-        return console.error(error.message);
-      }
-    })
+    // 코드를 작성하기 쉽게 알맞는 변수명에 재할당
+    const startDate = deliveryFilter.date.start;
+    const endDate = deliveryFilter.date.end;
+    const checkboxTrueKeys = Object.keys(deliveryFilter.checkboxState).filter(key => deliveryFilter.checkboxState[key] === true);
+    const isCheckDateIsFull = startDate && endDate;
+
+    /**예외처리
+     * - 체크박스가 선택됨
+     * - 날짜(시작일, 종료일 모두) 지정됨
+     * 위 두 경우가 아니면 모두 예외처리
+     * 즉, 필터링 항목이 모두 비어있지 않다면 필터링Fn을 실행
+     */
+    if (checkboxTrueKeys.length > 0 || isCheckDateIsFull) {
+      console.log(`Fetch전 최종 delivereyFilter 검사: ${JSON.stringify(deliveryFilter)}`);
+      filterMutation(deliveryFilter, {
+        onSuccess: (data) => {
+          alert(data.message);
+          setCurrentPage(data.data.currentPage);
+          setTotalPages(data.data.totalPages);
+          queryClient.setQueryData([`delivery`, currentPage, itemsPerPage], () => {
+            return data.data.data
+          })
+        },
+        onError: (error) => {
+          return console.error(error.message);
+        }
+      })
+    }
+    else {
+      alert("항목이 모두 비었습니다. 필터링 항목을 선택 혹은 입력해주세요");
+      return;
+    }
   }
 
+  /**
+   * 맨 앞에 달러 기호와 천 단위 구분 기호를 붙여 파싱해주는 함수.
+   * @param {*} item 
+   * @returns 
+   */
+  const parseLacalToString = (item) => {
+    const parseToLocaleString = Number(item).toLocaleString('kr-KR', { style: 'currency', currency: 'KRW' });
+    return parseToLocaleString;
+  }
 
 
   // 데이터 로딩 중 또는 에러 발생 시 처리
@@ -197,7 +211,7 @@ export default function DeliList() {
       <div className='LargeHeader'>배송 상태 관리</div>
 
       {/* Filter Container */}
-      <DeliFilter />
+      <DeliFilter handleSearch={handleSearch} parseDeliveryState={parseDeliveryState} />
 
       {/* Header */}
       <div className='MediumHeader'>
@@ -246,6 +260,7 @@ export default function DeliList() {
                 onChange={(e) => handleAllCheckbox(e)} />
             </th>
             <th>주문번호</th>
+            <th>상호명</th>
             <th>택배사</th>
             <th>송장 번호</th>
             <th>처리상태</th>
@@ -270,12 +285,14 @@ export default function DeliList() {
                   onChange={(e) => handlePerCheckbox(e.target.checked, item.order_id)} /></td>
                 {/* 주문번호 */}
                 <td>{item.order_id}</td>
+                {/* 상호명 */}
+                <td>{item.cor_corName}</td>
                 {/* 택배사 */}
-                <td>{item.delivery_selectedCor}</td>
+                <td>{parseSelectedCor(item.delivery_selectedCor)}</td>
                 {/* 송장 번호 */}
                 <td>{item.delivery_num == '' ? '입력 필요' : item.delivery_num}</td>
                 {/* 배송상태 */}
-                <td>{parseDeliveryState(item.orderState)}</td>
+                <td>{parseDeliveryState(item?.orderState)}</td>
                 {/* 주문일자 */}
                 <td>{item.order_date}</td>
                 {/* 상품번호 */}
@@ -285,11 +302,12 @@ export default function DeliList() {
                 {/* 옵션 상세 - 선택 옵션이 있을 경우만 표시*/}
                 <td>{item.optionSelected ? item.optionSelected : "-"}</td>
                 {/* 표준가 */}
-                <td>{item.product_price}</td>
+                <td>{parseLacalToString(item.product_price)}</td>
                 {/* 주문량 */}
-                <td>{item.order_cnt}</td>
+                <td>{item.order_cnt.toLocaleString('ko-KR')}</td>
                 {/* 공급가 */}
-                <td>{item.discountPrice}</td>
+                <td>{parseLacalToString(item.discountPrice)}</td>
+
               </tr>
             ))}
         </tbody>
@@ -314,6 +332,7 @@ export default function DeliList() {
             checkedItems={checkedItems}
             setCheckedItems={setCheckedItems}
             deliveryData={deliveryData}
+            parseSelectedCor={parseSelectedCor}
           />
           :
           null

@@ -33,7 +33,7 @@ export default function AdminDelNumModal() {
   // fetch 함수
   const fetchUpdateData = async (selectList) => {
     console.log(selectList)
-    return await fetchNonPageServer(selectList, `put`, `/order/invoice`);
+    return await fetchNonPageServer(selectList, `put`, `/order/status/invoice`);
   };
 
 

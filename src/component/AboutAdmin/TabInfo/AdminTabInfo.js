@@ -16,6 +16,8 @@ export function AdminTabInfo({setMiddleCategory, setLowCategory, setSelectedCate
 
   const [flag, setFlag] = useState(false);
   const [img, setImage] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [manyFlag, setManyFlag] = useState(false);
 
   const customUploadAdapter = (loader) => { // (2)
       return {
@@ -54,6 +56,35 @@ export function AdminTabInfo({setMiddleCategory, setLowCategory, setSelectedCate
       }
   }
 
+
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
+
+  const handleAddFile = async () => {
+    if (selectedFile) {
+      try {
+        const formData = new FormData();
+        formData.append('file', selectedFile);
+
+        const response = await axios.post('/product/upload/excel', formData, {
+          withCredentials: false,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+
+        alert(response.data.message);
+        navigate("/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/searchProduct");
+        window.location.reload();
+      } catch (error) {
+        // 실패 시 예외를 throw합니다.
+        console.error('파일 업로드 에러:', error);
+      }
+    } else {
+      console.error('파일을 선택하세요.');
+    }
+  };
   
   //데이터 불러오기
   const { data } = useQuery({queryKey:['data']});
@@ -122,7 +153,7 @@ export function AdminTabInfo({setMiddleCategory, setLowCategory, setSelectedCate
       console.log('상품이 추가/변경 되었습니다.', data);
       // 상태를 다시 불러와 갱신합니다.
       queryClient.invalidateQueries(['data']);
-      navigate("/adminMain/searchProduct");
+      navigate("/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/searchProduct");
     },
     onError: (error) => {
       // 상품 추가 실패 시, 에러 처리를 수행합니다.
@@ -210,11 +241,27 @@ export function AdminTabInfo({setMiddleCategory, setLowCategory, setSelectedCate
         >
           초기화
         </button>
-        <button 
-        className={styles.sideButton}>
-        &nbsp;임시저장
+        <button
+        className={styles.sideButton}
+        onClick={()=>setManyFlag(!manyFlag)}>
+          대량등록 {manyFlag ? '비활성화' : '활성화'} 버튼
         </button>
       </div>
+      {manyFlag 
+        &&
+        <div style={{display: 'flex', flexDirection:'column', justifyContent: 'center', alignItems: 'center', marginTop: '1em'}}> 
+        <input 
+        className={styles.input}
+        onChange={handleFileChange}
+        accept='*'
+        type='file'>
+        </input>
+        <button
+        className={styles.sideButton}
+        onClick={()=>handleAddFile()}>
+          업로드
+        </button>
+        </div>}
     </div>
   </div>
   )

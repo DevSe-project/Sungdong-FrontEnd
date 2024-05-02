@@ -33,7 +33,7 @@ export default function AdminCancelModal() {
 
   //fetch 함수
   const fetchUpdateData = async (selectList) => {
-      return await fetchNonPageServer(selectList, `put`, `/order/cancel`)
+      return await fetchNonPageServer(selectList, `put`, `/order/status/cancel`)
     };
     
 

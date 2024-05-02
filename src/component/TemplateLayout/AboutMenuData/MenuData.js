@@ -25,36 +25,32 @@ export function MenuData(props) {
         }
       ]
     },
+    // {
+    //   id: 2,
+    //   icon: <i style={{ fontSize: '1.2em' }} className="fas fa-heart-circle" />,
+    //   title: {
+    //     item: '마이페이지',
+    //   },
+    //   subMenuItems: [
+    //     // {
+    //     //   item: '원장조회',
+    //     //   link: '/accountBook',
+    //     //   require: GetCookie('jwt_token') !== null
+    //     // },
+    //     // {
+    //     //   item: '입금내역',
+    //     //   link: '/depositHistory',
+    //     //   require: GetCookie('jwt_token') !== null
+    //     // },
+    //     {
+    //       item: '세금계산서',
+    //       link: 'outLink',
+    //     },
+
+    //   ],
+    // },
     {
       id: 2,
-      icon: <i style={{ fontSize: '1.2em' }} className="fas fa-heart-circle" />,
-      title: {
-        item: '마이페이지',
-      },
-      subMenuItems: [
-        {
-          item: '원장조회',
-          link: '/accountBook',
-          require: GetCookie('jwt_token') !== null
-        },
-        {
-          item: '입금내역',
-          link: '/depositHistory',
-          require: GetCookie('jwt_token') !== null
-        },
-        {
-          item: '세금계산서',
-          link: 'outLink',
-        },
-        {
-          item: '주문/배송 현황',
-          link: '/delivery',
-          require: GetCookie('jwt_token') !== null
-        },
-      ],
-    },
-    {
-      id: 3,
       title: {
         item: '장바구니',
         link: '/basket',
@@ -62,7 +58,7 @@ export function MenuData(props) {
       require: GetCookie('jwt_token') !== null
     },
     {
-      id: 4,
+      id: 3,
       icon: <i style={{ fontSize: '1.2em' }} className="fa fa-shopping-basket" />,
       title: {
         item: '주문하기',
@@ -77,10 +73,15 @@ export function MenuData(props) {
           link: '/basket',
           require: GetCookie('jwt_token') !== null
         },
+        {
+          item: '주문/배송 현황',
+          link: '/delivery',
+          require: GetCookie('jwt_token') !== null
+        },
       ],
     },
     {
-      id: 5,
+      id: 4,
       title: {
         item: '견적하기',
       },
@@ -97,7 +98,7 @@ export function MenuData(props) {
       ]
     },
     {
-      id: 6,
+      id: 5,
       title: {
         item: '반품/교환',
       },
@@ -114,7 +115,7 @@ export function MenuData(props) {
       ]
     },
     {
-      id: 7,
+      id: 6,
       title: {
         item: '고객센터',
       },
@@ -131,7 +132,7 @@ export function MenuData(props) {
       ],
     },
     {
-      id: 8,
+      id: 7,
       title: {
         item: '성동물산 소개',
       },
@@ -164,7 +165,7 @@ export function MenuData(props) {
       {menuData.map((item, index) => (
         <li
           key={index}
-          style={{ boxShadow: `0px 2px 4px 1px rgba(0, 0, 0, 0.2)` }}
+          style={{ background: 'linear-gradient(0deg, rgb(240,240,240) 1%, rgb(255,255,255) 99%)'}}
           className={`menu-item ${item.subMenuItems ? item.subMenuItems.some((subitem) => subitem.link === current) && 'active' : item.title.link === current && 'active'}`}
           onClick={() => {
             if (item.require === false) {

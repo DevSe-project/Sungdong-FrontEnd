@@ -6,7 +6,7 @@
 
 .gridContainer {
   display: grid; /* 그리드 컨테이너로 선언 */
-  grid-template-columns: repeat(auto-fill, minmax(calc(20% - 20px), 1fr)); /* 그리드의 열을 유연하게 생성하되 최대 너비를 초과하지 않게 설정 */
+  grid-template-columns: repeat(auto-fill, minmax(calc(25% - 20px), 1fr)); /* 그리드의 열을 유연하게 생성하되 최대 너비를 초과하지 않게 설정 */
   gap: 1em; /* 그리드 아이템 간의 간격 */
   justify-content: space-around; /* 그리드 아이템을 가로 방향으로 중앙 정렬 */
   margin-left: 10px;
@@ -14,7 +14,7 @@
 
 /* 각 상품 블럭 */
 .gridItem {
-  flex: 0 0 calc(20% - 20px);
+  flex: 0 0 calc(25% - 20px);
   margin-top: 1em;
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
@@ -125,4 +125,16 @@
 .nameSkeleton,
 .priceSkeleton {
   height: 20px;
+}
+
+@media screen and (max-width: 1050px) {
+  
+  .gridContainer {
+    grid-template-columns: repeat(auto-fill, minmax(calc(33% - 20px), 1fr)); /* 그리드의 열을 유연하게 생성하되 최대 너비를 초과하지 않게 설정 */
+  }
+  
+  /* 각 상품 블럭 */
+  .gridItem {
+    flex: 0 0 calc(33% - 20px);
+  }
 }

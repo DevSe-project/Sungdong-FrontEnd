@@ -22,6 +22,7 @@
 .top_nav {
   display: flex;
   width: 100%;
+  justify-content: space-between;
   align-items: center;
   list-style-type: none;
   white-space: nowrap;
@@ -30,7 +31,6 @@
 /* 로고 15% */
 .logo {
   display: flex;
-  flex: 15%; 
   margin-left: 1em;
 }
 
@@ -45,24 +45,23 @@
 
 /* 검색창 30% */
 .searchBar {
-  flex: 40%; /* 수정 */
   margin-right: 2em;
+  flex: 50%;
 }
 
 /* 분류 검색창 40% */
 .seperateSearchBar {
-  flex: 30%; /* 수정 */
-  margin-right: 1.5em;
+  flex: 50%;
+  margin-right: 0.5em;
 }
 
 /* 카테고리 아이콘 5% */
 .cate_icon {
-  flex: 5%;
+  margin: 0.2em;
 }
 
 /* 로그인 10% */
 .login {
-  flex: 10%;
   margin-right: 1em;
 }
 
@@ -108,8 +107,7 @@
   background-color: lightgray;
 }
 
-.categoryBar {
-}
+.categoryBar {}
 
 .menuBar {
   height: 0;
@@ -130,14 +128,20 @@
   }
 }
 
-@media screen and (max-width: 1200px) and (min-width: 769px) {
+@media screen and (max-width: 900px) {
   .text {
     display: none;
     /* 텍스트 숨김 */
   }
 
-  .searchInputContainer {
-    width: 10em;
-    /* 텍스트 숨김 */
+  .searchBar {
+    margin-right: 1.2em;
+  }
+
+}
+
+@media screen and (max-width: 1000px) {
+  .seperateSearchBar {
+    display: none;
   }
 }

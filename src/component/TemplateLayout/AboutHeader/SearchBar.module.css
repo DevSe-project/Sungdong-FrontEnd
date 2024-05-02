@@ -75,18 +75,3 @@ i.fas.fa-search {
 .select:focus{
   outline: none;
 }
-
-@media screen and (max-width: 768px) {
-  .searchInput {
-      display: none; /* 서치바 숨김 */
-  }
-  .searchInputContainer {
-    display: none; /* 서치바 숨김 */
-  }
-}
-
-@media screen and (max-width: 1200px) and (min-width: 769px) {
-  .searchInputContainer {
-    width: 20em; /* 텍스트 숨김 */
-}
-}

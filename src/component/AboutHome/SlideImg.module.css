@@ -1,20 +1,19 @@
 .img {
-    width: 100%;
     table-layout: fixed;
-    margin-left: 10px;
     display: flex;
-    gap: 0.8em;
+    gap: 0.5em;
 }
 
-.image{
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 적절한 그림자 속성 적용 */
-    width: 98%;
+.image {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
     max-width: 945px;
     float: left;
     height: auto;
     overflow: hidden;
     position: relative;
     border-radius: 2vh;
+    cursor: pointer;
 }
 
 @media (min-width: 1100px) {
@@ -25,7 +24,7 @@
     }
 }
 
-@media (max-width: 1099px) {
+@media (max-width: 1050px) {
 
     /* 1100px 미만일 때 */
     .img {

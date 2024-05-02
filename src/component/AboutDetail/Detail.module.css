@@ -28,7 +28,7 @@
   background-size: cover;
   box-sizing: border-box;
   background-color: beige;
-  width: 25em;
+  width: 27em;
   height: auto;
   overflow: hidden;
   border: 1px solid lightgray;
@@ -38,7 +38,7 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  width: 25em;
+  width: 27em;
   text-align: end;
   border: 1px solid lightgray;
   gap: 1em;
@@ -71,17 +71,22 @@
 
 /* 버튼 CSS */
 .textButton{
+  width: 100%;
   display: flex;
   flex-direction: column;
-}
-
-.sideTextButton{
-  display: flex;
-  flex-direction: row;
   justify-content: center;
 }
 
+.sideTextButton{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 0.5em;
+}
+
 .mainButton{
+  width: 100%;
   font-size: 1em;
   font-weight: bold;
   padding: 1rem 2rem;
@@ -92,8 +97,6 @@
   cursor: pointer;
   transition: background-color 0.3s ease;
   margin-top: 0.5em;
-  margin-right: 0.3em;
-  margin-left: 0.3em;
 }
 .sideButton{
   width: 100%;
@@ -108,8 +111,6 @@
   white-space: pre;
   transition: background-color 0.3s ease;
   margin-top: 0.5em;
-  margin-right: 0.3em;
-  margin-left: 0.3em;
 }
 
 /* 베스트 리뷰, 추천 상품 */

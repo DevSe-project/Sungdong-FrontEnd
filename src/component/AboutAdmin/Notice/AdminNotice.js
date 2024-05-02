@@ -21,6 +21,11 @@ export default function AdminNotice() {
   const notice = useNotice();
   const queryClient = useQueryClient();
 
+  /**
+   * 포스트 생성 Fetch 
+   * @param {*} newPostData : 새로운 포스팅 데이터 객체를 파라미터로 받습니다.
+   * @returns 
+   */
   const fetchCreatePost = async (newPostData) => {
     try {
       const token = GetCookie('jwt_token');
@@ -42,6 +47,10 @@ export default function AdminNotice() {
     }
   };
 
+  /** 
+   * - 설명: 포스트 추가 Function
+   * - notice : zustand에 추가할 정보를 담은 객체입니다. 
+   */
   const addPost = () => {
     // 입력 조건 부여
     const isCheckInputLength = notice.title.length > 2 && notice.contents.length > 10;
@@ -101,7 +110,7 @@ export default function AdminNotice() {
         params: {
           page: currentPage,
           pagePosts: itemsPerPage
-        },
+      },
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`

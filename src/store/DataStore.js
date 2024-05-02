@@ -57,6 +57,7 @@ export const useDataActions = () => useDataStore((state) => state.actions);
 
 // ------------------------------리스트 STORE----------------------------//
 
+//사용 리스트 : 찜, 검색결과, 견적함, 주문, 장바구니, 공지사항
 const useListStore = create((set) => ({
   wishList: [],
   orderList: [],
@@ -306,12 +307,32 @@ const useModalStore = create((set) => ({
 }));
 
 // useModalState 커스텀 훅
+/**
+ * @keys
+ * - isModal
+ * - modalName
+ * - selectedIndex
+ * - modalItem
+ */
 export const useModalState = () => {
   const { isModal, modalName, modalItem, selectedIndex } = useModalStore();
   return { isModal, modalName, selectedIndex, modalItem };
 };
 
 // useModalActions 커스텀 훅
+/**
+ * @keys
+ * - actions
+ * - setIsModal
+ * - setModalName
+ * - openModal
+ * - closeModal
+ * - setSelectedIndex
+ * - selectedModalOpen
+ * - selectedModalClose
+ * - selectedModalOpenInItem
+ * - setModalItem
+ */
 export const useModalActions = () => {
   const { setIsModal, setModalName, setSelectedIndex, openModal, closeModal, selectedModalOpen, selectedModalClose, selectedModalOpenInItem, setModalItem } = useModalStore.getState().actions;
   return { setIsModal, setModalName, setSelectedIndex, openModal, closeModal, selectedModalOpen, selectedModalClose, selectedModalOpenInItem, setModalItem };
@@ -334,8 +355,9 @@ export const useSelect = () => selectStore((state) => ({ select: state.select, v
 export const useSelectActions = () => selectStore((state) => ({ actions: state.actions }));
 
 
-/* ---------------ORDER STOREs----------------- */
+/* ---------------ORDER STORE----------------- */
 
+//주문서 작성 STORE
 const useOrderStore = create((set) => ({
   orderInformation: {
     order_name: '',
@@ -347,6 +369,7 @@ const useOrderStore = create((set) => ({
     address: [],
     addressDetail: '',
     order_payRoute: '',
+    order_payName: '',
     order_moneyReceipt: '',
     printFax: false,
     order_faxNum: '',
@@ -380,6 +403,7 @@ const useOrderStore = create((set) => ({
           address: '',
           addressDetail: '',
           order_payRoute: '',
+          order_payName: '',
           order_moneyReceipt: '',
           printFax: false,
           order_faxNum: '',
@@ -415,6 +439,7 @@ export const useSetLogin = () => useLoginStore((state) => state.actions);
 
 /* ----------------SEARCH STORE---------------- */
 
+//검색창 STATE
 export const useSearchStore = create(
   persist(
     (set) => ({
@@ -458,6 +483,7 @@ export const useSeperateSearchTerm = () => useSearchStore((state) => state.seper
 export const useSearchActions = () => useSearchStore((state) => state.actions);
 
 /*-----------------ESTIMATE STORE----------------*/
+//견적서 작성 STORE
 export const useEstimateStore = create(
   persist(
     (set) => ({
@@ -605,13 +631,14 @@ export const useEstimateProduct = () => useEstimateStore((state) => state.estima
 export const useEstimateActions = () => useEstimateStore((state) => state.actions);
 
 /* ----------------TAKEBACK STORE---------------- */
+//반품 및 교환 STORE
 export const useTakeBackStore = create((set) => ({
   filterOption: {
     raeOption: '',
     product_title: '',
     product_brand: '',
     product_id: '',
-    raeDateType: '',
+    raeDateType: 'r.rae_requestDate',
     date: {
       start: '',
       end: ''
@@ -667,7 +694,7 @@ export const useTakeBackStore = create((set) => ({
           product_title: '',
           product_brand: '',
           product_id: '',
-          raeDateType: '',
+          raeDateType: 'r.rae_requestDate',
           date: {
             start: '',
             end: ''
@@ -948,7 +975,8 @@ export const useOrderFilterStore = create((set) => ({
     },
     deliveryType: '',
     selectFilter: '',
-    filterValue: ''
+    filterValue: '',
+    orderState: '',
   },
   actions: {
     setOrderFilter: (fieldName, value) =>
@@ -963,7 +991,8 @@ export const useOrderFilterStore = create((set) => ({
           },
           deliveryType: '',
           selectFilter: '',
-          filterValue: ''
+          filterValue: '',
+          orderState: ''
         }
       }),
     setOrderDetailFilter: (fieldName, value) =>
@@ -1139,39 +1168,60 @@ export const useNoticeActions = () => useNoticeStore((state) => state.actions);
 
 
 // ------------Delivery Filter------------
+
+/**
+ * * state
+ *    * deliveryFilter{object}  - 배송 필터 상태를 관리하는 객체
+ *      * [구성]
+ *        * deliveryFilter.checkboxState {object}  - 배송 상태 체크박스 상태를 관리하는 객체
+ *    * deliveryFilter.date{object}  - 배송일자 관련 정보를 담는 객체
+ *      * [구성]
+ *        * deliveryFilter.date.startDate {string} - 배송 시작일
+ *        * deliveryFilter.date.endDate {string} - 배송 종료일
+ * * actions
+ *    * resetDeliveryFilter {function}  - 배송 필터 초기화 함수
+ *    * updateCheckboxState {function}  - 체크박스 상태 업데이트 함수
+ *    * allUpdateCheckboxState {function}  - 모든 체크박스 상태 업데이트 함수
+ *    * setDateRange{ function}  - 배송일자 범위 지정 함수
+ * 
+ * @description 배송 필터 관리를 위한 Hook입니다.
+ */
 export const useDeliveryFilter = create((set) => ({
   deliveryFilter: {
-    // 배송상태
     checkboxState: {
-      '배송 준비': false,
-      '배송 중': false,
-      '배송 완료': false,
-      '배송 지연': false
+      // 0: false, 결제 대기
+      // 1: false, 결제 완료
+      2: false, // 배송 준비
+      3: false, // 배송 중
+      4: false, // 배송 완료
+      // 5: false, // 취소
+      // 6: false // 취소 요청
     },
-    // 배송일자'
     date: {
-      startDate: '',
-      endDate: '',
-      filteredData: []
+      start: '',
+      end: '',
     },
   },
 
-  // 초기화
   resetDeliveryFilter: () => set({
-    checkedState: {
-      '배송 준비': false,
-      '배송 중': false,
-      '배송 완료': false,
-      '배송 지연': false,
-    },
-    date: {
-      startDate: '',
-      endDate: '',
-      filteredData: []
+    deliveryFilter: {
+      checkboxState: {
+        // 0: false, 결제 대기
+        // 1: false, 결제 완료
+        2: false, // 배송 준비
+        3: false, // 배송 중
+        4: false, // 배송 완료
+        // 5: false, // 취소
+        // 6: false // 취소 요청
+      },
+      date: {
+        start: '',
+        end: '',
+      },
     }
-  }),
+  })
+  ,
 
-  // 업데이트 : 체크박스 핸들러
   updateCheckboxState: (fieldName) => set((state) => ({
     deliveryFilter: {
       ...state.deliveryFilter,
@@ -1182,7 +1232,6 @@ export const useDeliveryFilter = create((set) => ({
     }
   })),
 
-  // 전체 업데이트
   allUpdateCheckboxState: (fieldName, bool) => set((state) => ({
     deliveryFilter: {
       ...state.deliveryFilter,
@@ -1193,31 +1242,18 @@ export const useDeliveryFilter = create((set) => ({
     }
   })),
 
-  // 배송일자 범위 지정
   setDateRange: (start, end) => set((state) => ({
     deliveryFilter: {
       ...state.deliveryFilter,
       date: {
-        ...state.date,
-        startDate: start,
-        endDate: end
+        ...state.deliveryFilter.date,
+        start: start,
+        end: end
       }
     }
   })),
-
-  //
-  filterDate: (data) => {
-    // 데이터 필터링, 상태 업데이트 로직을 추가 예정
-    const filteredData = data.filter((item) => {
-      // 필터링 조건에 따라 로직을 구현 예정
-      // item.date가 startDate와 endDate 사이에 있는지 확인하는 등등...ㅅㅂ
-
-      return true; // 나중에 결과 반환
-    });
-
-    set({ filteredData });
-  },
 }))
+
 
 /* ----------------RefundFilter STORE---------------- */
 export const useUserFilterStore = create((set) => ({
@@ -1225,9 +1261,8 @@ export const useUserFilterStore = create((set) => ({
     cor_corName: '',
     cor_ceoName: '',
     cor_num: '',
-    userType_id: '',
-    grade: '',
-    managers_id: '',
+    userType_id: -1,
+    managerName: '',
   },
   userSort: {
     first: '',
@@ -1246,7 +1281,7 @@ export const useUserFilterStore = create((set) => ({
           cor_ceoName: '',
           cor_num: '',
           userType_id: '',
-          grade: '',
+          name: '',
         }
       }),
     resetUserSort: () =>
@@ -1261,7 +1296,143 @@ export const useUserFilterStore = create((set) => ({
 }));
 export const useUserFilter = () => useUserFilterStore((state) => state.userFilter);
 export const useUserSort = () => useUserFilterStore((state) => state.userSort);
+/**
+ * @Functions
+ * - setUserFilter(fieldName, value) : 필터링할 내용을 담습니다.
+ * - setUserSort(fieldName, value) : 정렬할 내용을 담습니다.
+ * - resetUserFilter() : 유저 필터의 내용을 초기화합니다
+ * @returns 
+ */
 export const useUserFilterActions = () => useUserFilterStore((state) => state.actions);
+
+/* ----------------Event STORE---------------- */
+export const useEventStore = create((set) => ({
+  event: {
+    event_title: '',
+    event_content: '',
+    event_startDate: '',
+    event_endDate: '',
+    event_image: '',
+    eventState: '',
+  },
+  actions: {
+    setEvent: (fieldName, value) =>
+      set((state) => ({ event: { ...state.event, [fieldName]: value } })),
+    editEvent: (data) =>
+      set((state) => ({
+        event: {
+          event_id: data.event_id,
+          event_title: data.event_title,
+          event_content: data.event_content,
+          event_startDate: new Date(data.event_startDate).toISOString().split('T')[0],
+          event_endDate: new Date(data.event_endDate).toISOString().split('T')[0],
+          event_image: data.event_image,
+          eventState: data.eventState,
+        }
+      })),
+    resetEvent: () =>
+      set({
+        event: {
+          event_title: '',
+          event_content: '',
+          event_startDate: '',
+          event_endDate: '',
+          event_image: '',
+          eventState: '',
+        }
+      })
+  }
+}));
+export const useEvent = () => useEventStore((state) => state.event);
+export const useEventActions = () => useEventStore((state) => state.actions);
+
+/* ----------------EventFilter STORE---------------- */
+export const useEventFilterStore = create((set) => ({
+  eventFilter: {
+    state: [],
+    dateType: '',
+    date: {
+      start: '',
+      end: ''
+    },
+  },
+  actions: {
+    setEventFilter: (fieldName, value) =>
+      set((state) => ({ eventFilter: { ...state.eventFilter, [fieldName]: value } })),
+    resetEventFilter: () =>
+      set({
+        eventFilter: {
+          state: [],
+          dateType: '',
+          date: {
+            start: '',
+            end: ''
+          },
+        }
+      }),
+    setEventDate: (fieldName, value) =>
+      set((state) => ({
+        eventFilter: {
+          ...state.eventFilter,
+          date: {
+            ...state.eventFilter.date,
+            [fieldName]: value,
+          },
+        },
+      })),
+    setCheckboxState: (fieldName) =>
+      set((state) => {
+        // Check if fieldName is already present in the state
+        const isFieldPresent = state.eventFilter.state.find(item => item === fieldName);
+
+        if (isFieldPresent) {
+          // If fieldName is already present, filter it out
+          return {
+            ...state,
+            eventFilter: {
+              ...state.eventFilter,
+              state: state.eventFilter.state.filter(item => item !== fieldName)
+            }
+          };
+        } else {
+          // If fieldName is not present, add it to the state
+          return {
+            ...state,
+            eventFilter: {
+              ...state.eventFilter,
+              state: [...state.eventFilter.state, fieldName]
+            }
+          };
+        }
+      }
+      ),
+    setAllCheckboxState: (selectAll) =>
+      set((state) => {
+        // Check if selectAll is true
+        if (selectAll === true) {
+          // If selectAll is true, return a new state with all fields selected
+          return {
+            ...state,
+            eventFilter: {
+              ...state.eventFilter,
+              state: [] // Select all fields
+            }
+          };
+        } else if (selectAll === false) {
+          // If selectAll is false, deselect all fields
+          return {
+            ...state,
+            eventFilter: {
+              ...state.eventFilter,
+              state: [1, 2, 3, 4] // Deselect all fields
+            }
+          };
+        }
+      })
+  }
+}));
+export const useEventFilter = () => useEventFilterStore((state) => state.eventFilter);
+export const useEventFilterActions = () => useEventFilterStore((state) => state.actions);
 
 /* ----------------ADMIN SEARCH STORE---------------- */
 
@@ -1295,3 +1466,153 @@ export const useAdminSearchStore = create(
 export const useAdminSearchFilterData = () => useAdminSearchStore((state) => state.filterData);
 export const useAdminSearchTerm = () => useAdminSearchStore((state) => state.searchTerm);
 export const useAdminSearchActions = () => useAdminSearchStore((state) => state.actions);
+
+
+
+/* ----------------Regex Store---------------- */
+export const useRegex = create((set) => ({
+  userIdRegex: /^.{8,19}$/, // 아이디가 8글자 이상 20글자 미만인지를 확인하는 정규 표현식,
+  passwordRegex: /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_`])[A-Za-z\d\W_`]{8,30}$/,
+  emailRegex: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, // 이메일 정규 표현식
+  nameRegex: /^[a-zA-Z가-힣]{2,30}$/, // 이름 정규표현식 
+  customRegex: /^[a-zA-Z가-힣\s()]{1,50}$/, // 기타Input 정규표현식
+
+  actions: {
+    /** 정규식 테스트 Function
+    * @RegexList 정규식 후보 리스트
+    * * userIdRegex : 아이디 - 8~19글자
+    * * passwordRegex : 비밀번호 - 8~30글자, 영문자, 숫자, 특수문자 조합
+    * * emailRegex : 이메일
+    * * nameRegex : 이름 - 영문,한글 2글자 이상 30글자 미만
+    * * customRegex // 기타 Input
+     * @param {*} regex 
+     * @param {*} testString 
+     * @returns 
+     */
+    testRegex: (regex, testString) => {
+      return regex.test(testString);
+    }
+  },
+}))
+export const useRegexItems = () => {
+  const { userIdRegex, passwordRegex, emailRegex, nameRegex, customRegex } = useRegex();
+  return { userIdRegex, passwordRegex, emailRegex, nameRegex, customRegex };
+}
+export const useRegexActions = () => useRegex((state) => state.actions);
+
+/* ----------------Paging : 페이징 Store---------------- */
+export const usePage = create((set) => ({
+  currentPage: 1,
+  itemsPerPage: 10,
+  totalPages: 0,
+  actions: {
+    /**
+     * 현재 페이지 번호를 저장/변경합니다.
+     * @param {*} val 
+     * @returns 
+     */
+    setCurrentPage: (val) => set((prev) => ({ currentPage: val })),
+    /**
+     * 현재 페이지에 포스팅할 개수를 저장/변경합니다.
+     * @param {*} val 
+     * @returns 
+     */
+    setItemsPerPage: (val) => set((prev) => ({ itemsPerPage: val })),
+    /**
+     * 페이지의 전체 개수를 담습니다.
+     * @param {*} val 
+     * @returns 
+     */
+    setTotalPages: (val) => set((prev) => ({ totalPages: val })),
+  }
+}));
+/**
+ * 페이징에 관련된 State를 담았습니다.
+ * @returns {*} currentPage, itemsPerPage
+ */
+export const usePageState = () => {
+  const { currentPage, itemsPerPage, totalPages } = usePage();
+  return { currentPage, itemsPerPage, totalPages }
+}
+/**
+ * 페이징에 관련된 Actions를 담았습니다.
+ * @returns {*} setCurrentPage, setItemsPerPage
+ */
+export const usePageAction = () => {
+  const { setItemsPerPage, setCurrentPage, setTotalPages } = usePage().actions
+  return { setItemsPerPage, setCurrentPage, setTotalPages }
+}
+
+
+/* ----------------Paging : 페이징 Store---------------- */
+const useCheckedUserStore = create(set => ({
+  checkedUsers: [],
+
+  actions: {
+    // 입력받은 userId를 배열에 추가하는 액션
+    addCheckedUser: (userId) => set(state => ({
+      checkedUsers: [...state.checkedUsers, userId]
+    })),
+  }
+}))
+export const useCheckedUsersState = () => {
+  const { checkedUsers } = useCheckedUserStore();
+  return { checkedUsers }
+}
+export const useCheckedUsersActions = () => {
+  const { addCheckedUser } = useCheckedUserStore.getState().actions;
+  return { addCheckedUser }
+}
+
+/* ----------------check manager---------------- */
+const useCheckManage = create((set) => ({
+  checkedItems: [],
+
+  actions: {
+    setCheckedItems: (itemArr) => set(state => ({
+      checkedItems: itemArr
+    })),
+    /**
+     * @param {*} isChecked - checkbox의 e.target.checked를 전달해주세요.
+     * @param {*} item - 담을 아이템을 전달해주세요.
+     * @returns 
+     */
+    handleEachItem: (isChecked, item) => set((state) => {
+      const newCheckedItems = [...state.checkedItems];
+
+      if (isChecked) {
+        // 기존에 체크된 아이템이라면 배열에서 제거
+        if (isChecked) {
+          newCheckedItems.splice(state.checkedItems.indexOf(item), 1);
+        }
+      } else {
+        // 기존에 체크되지 않은 아이템이라면 배열에 추가
+        newCheckedItems.push(item);
+      }
+
+      return { checkedItems: newCheckedItems };
+    }),
+
+    /**
+     * @param {*} isChecked - checkbox의 e.target.checked를 전달해주세요.
+     * @param {*} arr - 모든 아이템을 담을 대상 배열을 전달해주세요.
+     * @returns 
+     */
+    handleBatchItems: (isChecked, arrItems) => {
+      const { setCheckedItems } = useCheckManage.getState().actions;
+      // zustand action 내에서 다른 action을 사용할 수 없기 때문에 setCheckedItems를 사용하지 않고 직접 바꾸는 식으로 변경해야 한다.
+      if (isChecked)
+        setCheckedItems(arrItems)
+      else
+        setCheckedItems([]);
+    },
+  }
+}));
+export const useCheckStoreState = () => {
+  const { checkedItems } = useCheckManage()
+  return { checkedItems };
+}
+export const useCheckStoreActions = () => {
+  const { setCheckedItems, handleEachItem, handleBatchItems } = useCheckManage.getState().actions;
+  return { setCheckedItems, handleEachItem, handleBatchItems };
+}

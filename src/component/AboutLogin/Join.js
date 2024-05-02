@@ -4,10 +4,8 @@ import logo from '../../image/logo.jpeg'
 import { useEffect, useState } from "react";
 import PolicyObj from "../Data/PolicyObj";
 import JoinForm from "./JoinForm";
-import { useDataActions, useUserData } from "../../store/DataStore";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "../../axios";
-import { UserDataObj } from "../Data/UserDataObj";
 import { GetCookie } from "../../customFn/GetCookie";
 
 
@@ -16,14 +14,6 @@ export default function Join() {
     // link_navigate 
     const navigate = useNavigate();
     const queryClient = useQueryClient();
-
-    const { setUserData } = useDataActions();
-    const userData = useUserData();
-
-    useEffect(() => {
-        console.log("hello");
-        setUserData(UserDataObj);
-    }, [setUserData])
 
     //회원가입 추가 함수
     const joinRequest = async (joinData) => {
@@ -101,6 +91,8 @@ export default function Join() {
                     fax_num2: '',
                     fax_num3: '',
                 }, // FAX번호
+                cor_corCopy: '',
+                cor_bankCopy : ''
             },
             address: {
                 zonecode: '',

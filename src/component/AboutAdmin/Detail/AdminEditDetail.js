@@ -165,7 +165,7 @@ export function AdminEditDetail() {
 
             {/* 상품 이미지 부분 */}
             <div className={styles.headLeft}>
-              <img id="productImage" src={imageUrl} alt="상품 이미지" className={styles.thumnail} />
+              <img id="productImage" src={imageUrl || product.product_image_original} alt="상품 이미지" className={styles.thumnail} />
               <div>
                 <input type="file" id="imageInput" accept="image/*" onChange={handleFileChange} />
                 <button onClick={uploadImage}>이미지 업로드</button>

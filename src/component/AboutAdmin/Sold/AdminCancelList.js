@@ -1,28 +1,33 @@
 import styles from './AdminNotSoldList.module.css';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AdminSoldModal from './AdminSoldModal';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useModalActions, useModalState, useOrderSelectList, useOrderSelectListActions } from '../../../store/DataStore';
+import { useModalActions, useModalState, useOrderFilter, useOrderSelectList, useOrderSelectListActions } from '../../../store/DataStore';
 import { useFetch } from '../../../customFn/useFetch';
 import Pagination from '../../../customFn/Pagination';
 import AdminCancelModal from './AdminCancelModal';
+import { AdminSoldFilter } from './AdminSoldFilter';
 
-export function AdminNotSoldList(props) {
+export function AdminCancelList(props) {
 
+// -------------------------------------- STATE 공간 ---------------------------------------------
   //ZUSTAND STATE
   const { isModal, modalName } = useModalState();
   const { selectedModalOpen } = useModalActions();
+  const selectList = useOrderSelectList();
+  const { toggleSelectList, toggleAllSelect, resetSelectList } = useOrderSelectListActions();
   const queryClient = useQueryClient();
 
-  const { fetchAddPostServer, fetchNonPageServer } = useFetch();
+  const { fetchAddPostServer, fetchNonPageServer,fetchServer } = useFetch();
+
   // 게시물 데이터와 페이지 번호 상태 관리    
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [selectedData, setSelectedData] = useState(null);
 
-  const selectList = useOrderSelectList();
-  const { toggleSelectList, toggleAllSelect } = useOrderSelectListActions();
+  const orderFilter = useOrderFilter(); // 주문 필터링 구성
+//------------------------------------------------------------------------------------------------
 
   //전체 선택 핸들러
   const handleToggleAllSelect = () => {
@@ -30,13 +35,27 @@ export function AdminNotSoldList(props) {
     toggleAllSelect(!allSelected, ordered); // 전체 선택 토글
   };
 
-  // -=-=-=-=-=-=-= 페이지를 변경할 때 호출되는 함수 =-=-=-=-=-=-=-
+  /**
+   * 컴포넌트 이동시 체크박스 상태 초기화
+   */
+    useEffect(() => {
+      return () => {
+        resetSelectList();
+        // 컴포넌트가 언마운트될 때 Product 상태 리셋
+      };
+    }, []);
+
+//----------------------------------------------------------------
+
+  /**
+   * @페이지
+   * POST FETCH
+   * - 페이지 변경을 위한 pageMutation 사용 (react-query Hook)
+   * @param {*} pageNumber 변경 될 페이지 번호 (숫자형식)
+   * @returns data(@불러오기 데이터 객체 정보 참조)
+   */
   const fetchPageChange = async (pageNumber) => {
-    const limit = {
-      orderState: 1,
-      isCancel: 1
-    }
-    return await fetchAddPostServer(limit, 'post', '/order/all', pageNumber, itemsPerPage);
+    return await fetchAddPostServer({}, 'post', '/order/all/cancel', pageNumber, itemsPerPage);
   };
 
   const { mutate: pageMutaion } = useMutation({ mutationFn: fetchPageChange })
@@ -59,11 +78,7 @@ export function AdminNotSoldList(props) {
   //--------------------------------------------------------------
   //데이터 불러오기
   const fetchData = async () => {
-    const limit = {
-      orderState: 1,
-      isCancel: 1
-    }
-    const data = await fetchAddPostServer(limit, `post`, `/order/all`, 1, itemsPerPage ? itemsPerPage : 10);
+    const data = await fetchAddPostServer({}, `post`, `/order/all/cancel`, 1, itemsPerPage ? itemsPerPage : 10);
     console.log(data)
     setCurrentPage(data.data.currentPage);
     setTotalPages(data.data.totalPages);
@@ -71,10 +86,53 @@ export function AdminNotSoldList(props) {
   }
 
   // Fetch
-  const { isLoading, isError, error, data: ordered } = useQuery({
+  const { isLoading, isError, data: ordered } = useQuery({
     queryKey: [`yetOrder`, currentPage ? currentPage : 1, itemsPerPage ? itemsPerPage : 10],
     queryFn: () => fetchData()
   }) // currentPage, itemPerPage가 변경될 때마다 재실행하기 위함
+
+  /*---------- 필터 검색 ----------*/
+  
+  /**
+   * @필터 POST FETCH 
+   * - 필터 검색 Mutation (react-query :: Mutation Hook) 사용
+   * @param {*} filter 객체 정보
+   * - date: {start: '', end: ''} - 시작 날짜와 끝 날짜 필터
+   * - dateType: "" - 색인할 날짜 타입 필터
+   * - deliveryType: "" - 배송 구분 필터
+   * - selectFilter: "" - 상세 필터
+   * - filterValue: "" - 상세 필터 조건
+   */
+  const fetchFilteredOrders = async (filter) => {
+    const limit = {
+      flag: 1,
+    }
+    return await fetchServer({limit, filter}, `post`, `/order/filter`, 1);
+  };
+
+  const { mutate: filterMutation } = useMutation({ mutationFn: fetchFilteredOrders })
+
+  /**
+   * @검색 Mutation 선언부
+
+   * @returns 필터된 상품의 데이터 객체 (@불러오기 returns 데이터 정보 참조)
+   */
+  const handleSearch = () => {
+
+    // 검색 버튼 클릭 시에만 서버에 요청
+    filterMutation(orderFilter, {
+      onSuccess: (data) => {
+        alert(data.message)
+        setCurrentPage(data.data.currentPage);
+        setTotalPages(data.data.totalPages);
+        queryClient.setQueryData(['yetOrder', currentPage, itemsPerPage], () => {
+          return data.data.data;
+        })
+      },
+      onError: (error) => {
+        return console.error(error.message);
+      },
+    })  };
 
   // ---------------- 아이템 열람 Mutation -----------------
 
@@ -108,6 +166,7 @@ export function AdminNotSoldList(props) {
     }
   }
 
+
   function isAnyCheckboxDisabled() {
     // ordered 배열을 순회하면서 disabled 상태를 판별
     for (const item of ordered) {
@@ -132,8 +191,9 @@ export function AdminNotSoldList(props) {
       <main className={styles.container}>
         {/* 리스트 출력 */}
         <div className={styles.bodyHeader}>
-          <h1>미결제/취소 주문 관리</h1>
+          <h1>취소요청 / 취소 주문 관리</h1>
         </div>
+        <AdminSoldFilter handleSearch={handleSearch} isCancel={true}/>
         <div className={styles.tableLocation}>
           <div className={styles.manageBox}>
             <button onClick={() => handleCancel()} className={styles.button}>취소처리</button>
@@ -151,10 +211,11 @@ export function AdminNotSoldList(props) {
                   />
                 </th>
                 <th>주문번호</th>
-                <th>배송사</th>
                 <th>주문상태</th>
                 <th colSpan={2}>주문상품</th>
                 <th>주문일자</th>
+                <th>기업명</th>
+                <th>주문자명</th>
                 <th>주문가</th>
                 <th>주문자 정보</th>
               </tr>
@@ -174,24 +235,7 @@ export function AdminNotSoldList(props) {
                         {item.order_id}
                       </td>
                       <td>
-                        {item.deliveryType &&
-                          item.deliveryType === '화물'
-
-                          ? item.deliverySelect === 'kr.kdexp'
-                            ? `${item.deliveryType && item.deliveryType} (배송 업체 : 경동화물)`
-                            : `${item.deliveryType && item.deliveryType} (배송 업체 : 대신화물)`
-
-                          : item.deliveryType &&
-                            item.deliveryType === '성동택배'
-
-                            ? `${item.deliveryType && item.deliveryType} 
-                              (배송 예정일 : ${item.delivery_date && new Date(item.delivery_date).toLocaleDateString()})`
-                            : item.deliveryType && item.deliveryType === '일반택배'
-                              ? `${item.deliveryType} (배송 업체 : 대한통운)`
-                              : '직접 픽업'}
-                      </td>
-                      <td>
-                        {(item.orderState === 0 && "결제 미 완료") || (item.orderState === 6 && "취소 요청") ||(item.orderState === 5 && "취소")}
+                        {(item.orderState === 6 && "취소 요청") || (item.orderState === 5 && "취소")}
                       </td>
                       <td colSpan={2} onClick={() => {
                         if (selectedData?.some((selectItem) => selectItem.order_id === item.order_id)) {
@@ -206,6 +250,12 @@ export function AdminNotSoldList(props) {
                       <td>
                         {new Date(item.order_date).toLocaleString()}
                       </td>
+                      <td>
+                        {item.corName}
+                      </td>
+                      <td>
+                        {item.order_name}
+                      </td>
                       <td style={{ fontWeight: '750' }}>
                         \{parseInt(item.order_payAmount).toLocaleString()}
                       </td>
@@ -218,7 +268,7 @@ export function AdminNotSoldList(props) {
                     {/* 아이템 모달 */}
                     {selectedData?.some((selectItem) => selectItem.order_id === item.order_id) && (
                       <tr>
-                        <td colSpan="9">
+                        <td colSpan="11">
                           <table className={styles.colTable}>
                             <thead style={{ backgroundColor: 'white', color: 'black', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.6)' }}>
                               <tr>
@@ -278,7 +328,7 @@ export function AdminNotSoldList(props) {
                                         .toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`
                                       : `${parseInt(itemData.product_price).toLocaleString('ko-KR', { style: 'currency', currency: 'KRW' })}`}
                                   </td>
-                                  <td>
+                                  <td style={{ fontWeight: '750' }}>
                                     {itemData.order_cnt}
                                   </td>
                                   <td style={{ fontWeight: '750' }}>

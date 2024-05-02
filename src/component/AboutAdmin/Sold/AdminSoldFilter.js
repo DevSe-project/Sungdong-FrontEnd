@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { useOrderFilter, useOrderFilterActions } from '../../../store/DataStore';
 import styles from './AdminSoldFilter.module.css';
-export function AdminSoldFilter({ handleSearch }) {
+export function AdminSoldFilter({ handleSearch, isCancel }) {
 
   const orderFilter = useOrderFilter();
   const { setOrderFilter, resetOrderFilter, setOrderFilterDate } = useOrderFilterActions();
@@ -13,6 +13,28 @@ export function AdminSoldFilter({ handleSearch }) {
       // 컴포넌트가 언마운트될 때 order 필터 상태 리셋
     };
   }, []);
+
+
+  function typeFilter() {
+    return (
+      <div style={{ display: 'flex', gap: '0.5em' }}>
+        <select className={styles.select} value={orderFilter.orderState} onChange={(e) => setOrderFilter("orderState", e.target.value)} name='deliveryFilter'>
+          <option name='orderState' value="">전체</option>
+          {isCancel ?
+          <>
+          <option name='orderState' value={5}>취소</option>
+          <option name='orderState' value={6}>취소요청</option>
+          </>
+          :
+          <>
+          <option name='orderState' value={0}>미결제</option>
+          <option name='orderState' value={1}>신규(결제완료)</option>
+          </>
+          }
+        </select>
+      </div>
+    )
+  }
 
   function deliveryFilter() {
     return (
@@ -66,6 +88,7 @@ export function AdminSoldFilter({ handleSearch }) {
   }
 
   const filterList = [
+    { label: '주문상태', content: typeFilter()},
     { label: '조회기간', content: searchTerm() },
     { label: '배송방법', content: deliveryFilter() },
     { label: '상세조건', content: detailFilter() },

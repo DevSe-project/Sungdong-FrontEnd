@@ -1,49 +1,18 @@
+import { useEffect } from 'react';
 import { useDeliveryFilter } from '../../../../store/DataStore';
 import styles from './DeliFilter.module.css';
 import { useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
 
-export default function DeliFilter() {
+export default function DeliFilter({ handleSearch, parseDeliveryState }) {
     const queryClient = useQueryClient();
     // 쭈~스텐드
-    const { deliveryFilter, resetDeliveryFilter, updateCheckboxState, allUpdateCheckboxState, startDate, endDate, setDateRange, filterDate } = useDeliveryFilter();
+    const { deliveryFilter, resetDeliveryFilter, updateCheckboxState, allUpdateCheckboxState, setDateRange } = useDeliveryFilter();
 
-    // 검색 함수
-    const search = () => {
-        // 체크박스 중 선택된 상태를 filter
-        const selectedStatus = Object.keys(deliveryFilter.checkboxState).filter((key) => deliveryFilter.checkboxState[key]);
-        // 요청할 데이터 조각모음 ㅋㅋㅎ
-        const requestData = {
-            statuses: selectedStatus,
-            startDate: deliveryFilter.date.startDate,
-            endDate: deliveryFilter.date.endDate,
-        };
+    // 컴포넌트가 언마운트 될 때마다 deliveryFilter 상태 리셋
+    useEffect(() => {
+        resetDeliveryFilter();
+    }, [])
 
-        // 'filteredData' 쿼리를 무효화하고 새로운 데이터를 fetching하기 위함
-        queryClient.invalidateQueries('filteredData');
-
-        // API 요청
-        queryClient.fetchQuery('filteredData', () => fetchFilteredDelivery(requestData));
-    };
-
-    // 필터링된 API 데이터를 가져오는 함수
-    const fetchFilteredDelivery = async (requestData) => {
-        try {
-            const response = await axios.get('/data', { params: requestData });
-
-            if (response.ok) {
-                const data = await response.json();
-                return data;
-            } else {
-                // HTTP 오류 응답에 대한 예외 처리
-                throw new Error(`HTTP 오류: ${response.status}`);
-            }
-        } catch (error) {
-            // 네트워크 오류 등의 예외 처리
-            console.error('데이터 가져오기 실패:', error.message);
-            throw new Error('데이터 가져오기 실패');
-        }
-    };
 
     // 배송 상태 체크박스
     function checkboxFtilter() {
@@ -89,7 +58,7 @@ export default function DeliFilter() {
                                 console.log(`현재 체크된 체크박스: ${changedCheckboxes.join(', ')}`);
                             }}
                         />
-                        {item}
+                        {parseDeliveryState(item)}
                     </label>
                 ))}
             </div>
@@ -100,23 +69,20 @@ export default function DeliFilter() {
     // 배송일자 조회
     function dateFilter() {
         const handleDateFilter = (days) => {
-            const today = new Date();
-            const newEndDate = new Date(today);
+            const today = new Date(); // Date타입 변수 생성
             const newStartDate = new Date(today);
+            const newEndDate = new Date(today);
 
             newStartDate.setDate(today.getDate() - days);
 
             if (newStartDate > newEndDate) {
+                alert("종료일이 시작일보다 이전입니다. 날짜를 다시 확인해주세요");
                 setDateRange(today.toISOString().split('T')[0], today.toISOString().split('T')[0]);
             } else {
                 setDateRange(newStartDate.toISOString().split('T')[0], newEndDate.toISOString().split('T')[0]);
             }
 
-            // 이 부분에 필터링할 데이터를 가져오고 상태 업데이트 예정
-            const data = []; // 데이터 가져오는 로직을 구현해야 함
-            filterDate(data);
-
-            console.log(`조회 기간: ${startDate} ~ ${endDate}`);
+            console.log(`조회 기간: ${deliveryFilter.date.start} ~ ${deliveryFilter.date.end}`);
         };
 
         return (
@@ -125,15 +91,15 @@ export default function DeliFilter() {
                 <input
                     className='date'
                     type='date'
-                    value={deliveryFilter.date.startDate}
-                    onChange={(e) => setDateRange(e.target.value, deliveryFilter.date.endDate)}
+                    value={deliveryFilter.date.start}
+                    onChange={(e) => setDateRange(e.target.value, deliveryFilter.date.end)}
                 />
                 {/* 종료일 */}
                 <input
                     className='date'
                     type='date'
-                    value={deliveryFilter.date.endDate}
-                    onChange={(e) => setDateRange(deliveryFilter.date.startDate, e.target.value)}
+                    value={deliveryFilter.date.end}
+                    onChange={(e) => setDateRange(deliveryFilter.date.start, e.target.value)}
                 />
 
                 {/* 날짜 필터 버튼들 */}
@@ -177,8 +143,8 @@ export default function DeliFilter() {
                     </div>
                 ))}
                 <div style={{ display: 'flex', gap: '0.5em' }}>
-                    <input className='original_button' type='submit' value='검색' onClick={search} />
-                    <input className='white_button' type='reset' onClick={() => resetDeliveryFilter()} />
+                    <div className='original_button' onClick={() => handleSearch()}>검색</div>
+                    <div className='white_button' onClick={() => resetDeliveryFilter()}>초기화</div>
                 </div>
             </form>
         </div>

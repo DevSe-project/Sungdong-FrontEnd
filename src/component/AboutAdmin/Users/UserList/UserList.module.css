@@ -1,0 +1,21 @@
+.body {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 1em;
+}
+
+.flexContainer {
+    display: flex;
+    gap: 1em;
+}
+
+.listView {
+    display: flex;
+    flex-direction: column;
+}
+
+.buttonGroup {
+    display: flex;
+    gap: 4px;
+}

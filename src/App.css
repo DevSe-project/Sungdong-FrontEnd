@@ -206,7 +206,6 @@ textarea {
   padding: 1em;
   position: relative;
   cursor: pointer;
-  background-color: white;
 }
 
 .menu-item ul {
@@ -364,7 +363,6 @@ input[type="checkbox"] {
   justify-content: space-between;
   flex: 1;
   width: 100%;
-  margin-top: 1em;
   gap: 1em;
 }
 
@@ -390,11 +388,18 @@ input[type="checkbox"] {
   display: flex;
   flex-direction: column;
   background-color: white;
+  width: 80%;
+  height: 80%;
+  max-width: 80vw;
+  max-height: 80vh;
   color: black;
   border: 1.5px solid #808080;
   border-radius: 1dvb;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  overflow: auto; /* 내용 초과 시 스크롤 생성 */
+  padding: 1.5em;
 }
+
 
 .exitButton {
   position: absolute;
@@ -583,6 +588,7 @@ input[type="checkbox"] {
 
 .basic_input {
   display: flex;
+  gap: 1em;
   align-items: center;
   margin: 0.5em;
   padding: 1em;
@@ -601,6 +607,7 @@ input[type="checkbox"] {
   justify-content: space-between;
   width: 100%;
   text-align: left;
+  margin: 1em;
   padding: 5px;
   border-bottom: 3px solid var(--background-color-set);
   font-size: 20px;
@@ -614,6 +621,7 @@ input[type="checkbox"] {
   align-items: center;
   justify-content: space-between;
   border-bottom: 2px solid gray;
+  margin: 0.2em 0;
   padding: 3px;
 }
 

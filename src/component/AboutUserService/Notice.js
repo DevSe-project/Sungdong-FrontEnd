@@ -1,36 +1,61 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './Notice.module.css';
 import NoticeDetail from './NoticeDetail';
-import { NoticePostObj } from '../Data/NoticePostObj';
-import { useListActions, useModalActions, useModalState, useNoticePostList } from '../../store/DataStore';
+import { useListActions, useModalActions, useModalState } from '../../store/DataStore';
 import axios from '../../axios';
+import { useFetch } from '../../customFn/useFetch';
+import { useQuery } from '@tanstack/react-query';
+import { GetCookie } from '../../customFn/GetCookie';
 
 export function Notice() {
-  const { isModal } = useModalState();
-  const { setIsModal, setSelectedIndex } = useModalActions();
-  const { setNoticePostList } = useListActions();
-  const noticePostList = useNoticePostList();
+  const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 번호를 담습니다.
+  const [itemsPerPage, setItemsPerPage] = useState(10); // 아아템 포스팅 개수
+  const [totalPages, setTotalPages] = useState(1);
+  const { isModal, modalName } = useModalState();
+  const { selectedModalOpen, setSelectedIndex } = useModalActions();
+  const {setNoticePostList} = useListActions();
 
-  useEffect(() => {
-    setNoticePostList(NoticePostObj);
-  }, [setNoticePostList])
+  // 서버 API
+  const { fetchGetServer } = useFetch();
 
-  //공지 데이터 fetch
-  const fetchData = async () => {
+  /**
+   * 서버에 Posts 조회 요청을 보냅니다.
+   * @param currentPage 현재 페이지
+   * @param itemsPerPage 페이지당 포스팅 개수
+   * @returns 
+   */
+  const fetchNoticeData = async () => {
     try {
-      const response = await axios.get("/post",
-        {
-          headers: {
-            "Content-Type": "application/json",
-          }
-        }
-      )
-      return response.data;
+      const token = GetCookie('jwt_token');
+      const response = await axios.get(`/notice/read`, {
+        params: {
+          page: currentPage,
+          pagePosts: itemsPerPage
+        },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+      });
+      return response.data.data.data;
     } catch (error) {
-      throw new Error('공지사항을 불러오던 중 오류가 발생했습니다.');
+      throw new Error('공지사항 정보를 불러오는 중 오류가 발생하였습니다.');
     }
   }
 
+  const { isLoading, isError, error, data: noticeData } = useQuery({
+    queryKey: [`notice`],
+    queryFn: () => fetchNoticeData()
+  })
+
+
+
+  if (isLoading) {
+    return <p>Loading..</p>;
+  }
+  if (isError) {
+    return <p>에러 : {error.message}</p>;
+  }
 
   return (
     <div>
@@ -59,22 +84,22 @@ export function Notice() {
             </tr>
           </thead>
           <tbody>
-            {noticePostList?.map((item, index) => (
+            {noticeData?.map((item, index) => (
               <tr
                 key={index}
-                onClick={() => { setIsModal(true); setSelectedIndex(index) }}
+                onClick={() => { selectedModalOpen('noticeDetail'); setSelectedIndex(index); setNoticePostList(item); }}
                 tabIndex={0} // 이렇게 하면 포커스를 받을 수 있게 됩니다
               >
                 <td>{index + 1}</td>
-                <td>{item.title}</td>
-                <td>{item.writer}</td>
-                <td>{item.date}</td>
+                <td>{item.post_title}</td>
+                <td>{item.post_writer}</td>
+                <td>{item.formatted_date}</td>
               </tr>
             ))}
           </tbody>
         </table>
         {/* --------------Detail-Modal-------------- */}
-        {isModal ?
+        {isModal && modalName === 'noticeDetail' ?
           <div className={styles.modalOverlay}>
             <NoticeDetail />
           </div>

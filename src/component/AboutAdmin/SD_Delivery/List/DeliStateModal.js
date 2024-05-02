@@ -3,7 +3,6 @@ import { useModalActions } from "../../../../store/DataStore";
 import styles from './DeliModal.module.css';
 import axios from '../../../../axios';
 import { GetCookie } from "../../../../customFn/GetCookie";
-import { useFetch } from "../../../../customFn/useFetch";
 
 // 배송 상태 수정 모달 컴포넌트
 export default function DeliStateModal(props) {
@@ -11,8 +10,6 @@ export default function DeliStateModal(props) {
   const { selectedModalClose } = useModalActions();
   // 가져온 데이터 저장 상태
   const [fetchedData, setFetchedData] = useState([]);
-  // useFetch
-  const { fetchServer } = useFetch();
 
 
   // ESC 키로 모달 닫기 이벤트 리스너 등록
@@ -82,9 +79,8 @@ export default function DeliStateModal(props) {
     }
   }
 
-  const sendApi = async () => {
-    fetchServer()
-  }
+
+
   // 배송 상태 변경 함수
   const sendUpdateStateApiToServer = async () => {
     try {
@@ -147,6 +143,7 @@ export default function DeliStateModal(props) {
               }}>
               <tr>
                 <th>주문번호</th>
+                <th>상호명</th>
                 <th>택배사</th>
                 <th>송장 번호</th>
                 <th>처리상태</th>
@@ -158,6 +155,7 @@ export default function DeliStateModal(props) {
                 <th>공급가</th>
               </tr>
               <tr>
+                <th></th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -178,7 +176,6 @@ export default function DeliStateModal(props) {
                     <option value={2}>배송 준비</option>
                     <option value={3}>배송 중</option>
                     <option value={4}>배송 완료</option>
-                    <option value={5}>배송 지연</option>
                   </select>
                 </th>
                 <th></th>
@@ -195,8 +192,10 @@ export default function DeliStateModal(props) {
                 <tr key={index}>
                   {/* 주문번호 */}
                   <td>{item.order_id}</td>
+                  {/* 상호명 */}
+                  <td>{item.cor_corName}</td>
                   {/* 택배사 */}
-                  <td>{item.delivery_selectedCor}</td>
+                  <td>{props.parseSelectedCor(item.delivery_selectedCor)}</td>
                   {/* 송장 번호 */}
                   <td>{item.delivery_num}</td>
                   {/* 배송상태 */}
@@ -211,7 +210,6 @@ export default function DeliStateModal(props) {
                       <option value={2}>배송 준비</option>
                       <option value={3}>배송 중</option>
                       <option value={4}>배송 완료</option>
-                      <option value={5}>배송 지연</option>
                     </select>
                   </td>
                   {/* 주문일자 */}

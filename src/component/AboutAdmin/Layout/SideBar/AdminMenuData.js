@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import styles from './AdminMenuData.module.css'
+
 export function AdminMenuData(props) {
   const navigate = useNavigate();
   const location = useLocation();
@@ -31,11 +32,11 @@ export function AdminMenuData(props) {
       },
       subMenuItems: [
         {
-          item: '결제완료 주문',
+          item: '미결제/결제완료',
           link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/sold',
         },
         {
-          item: '미결제/취소 주문',
+          item: '취소요청/취소',
           link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/yetPay',
         },
         {
@@ -55,44 +56,54 @@ export function AdminMenuData(props) {
           link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/SD_Delivery/Delivery',
         },],
     },
+    // {
+    //   id: 3,
+    //   title: {
+    //     item: '정산 관리',
+    //   },
+    //   subMenuItems: [{
+    //     item: 'CMS 정산',
+    //     link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/SD_account/cms'
+    //   },
+    //   {
+    //     item: '누적 정산',
+    //     link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/SD_account/total'
+    //   }],
+    // },
     {
       id: 3,
       title: {
-        item: '정산 관리',
-      },
-      subMenuItems: [{
-        item: 'CMS 정산',
-        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/SD_account/cms'
-      },
-      {
-        item: '누적 정산',
-        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/SD_account/total'
-      }],
-    },
-    {
-      id: 4,
-      title: {
-        item: '고객센터',
+        item: '알림 관리',
       },
       subMenuItems: [
         {
           item: '공지사항',
           link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/customerCenter/notice'
         },
+        {
+          item: '이벤트 관리',
+          link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/event'
+        },
       ],
     },
     {
-      id: 5,
+      id: 4,
       title: {
-        item: '회원 관리',
+        item: '고객 관리',
       },
       subMenuItems: [{
-        item: '회원 관리',
-        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/user'
+        item: '고객사 관리',
+        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/user/done',
+        clickEvent: 'done'
+      },
+      {
+        item: '가입 대기 고객',
+        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/user/hold',
+        clickEvent: 'hold'
       },
       {
         item: '회원가입 코드 관리',
-        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/printCode'
+        link: '/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj/printCode',
       }],
     },
   ];
@@ -132,8 +143,9 @@ export function AdminMenuData(props) {
             >
               {item.subMenuItems.map((subMenuItem, subMenuItemindex) => (
                 <NavLink
-                onClick={() => {
+                  onClick={() => {
                     navigate(`${subMenuItem.link}`)
+                    localStorage.setItem('devideType', subMenuItem.clickEvent);
                   }}
                   to={subMenuItem.link}
                   className={`${styles.sub_item} ${subMenuItem.link === current ? styles.active : ''}`}

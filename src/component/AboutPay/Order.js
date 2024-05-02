@@ -77,7 +77,7 @@ export function Order(props){
       : orderData?.deliveryType === '성동택배'
 
       ? `${orderData?.deliveryType} 
-      (배송 예정일 : ${orderData && orderData?.delivery_date})`
+      (배송 예정일 : ${orderData && new Date(orderData?.delivery_date).toLocaleDateString()})`
       : orderData?.deliveryType
     },
     { 
@@ -97,7 +97,7 @@ export function Order(props){
     { 
       id : 0, 
       title : '결제 방법', 
-      value : orderData?.order_payRoute,
+      value : orderData?.order_payRoute === '무통장입금' ? `${orderData?.order_payRoute} | 입금계좌 : ~~ | 입금자명 : ${orderData?.order_payName}` : orderData?.order_payRoute,
     },
     {
       id : 1, 

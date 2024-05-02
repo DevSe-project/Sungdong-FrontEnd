@@ -22,7 +22,6 @@ import { Basket } from './component/AboutDetail/Basket';
 import { LikeItem } from './component/AboutDetail/LikeItem';
 
 // 주문, 결제, 주문서 작성
-import { Pay } from './component/AboutPay/Pay';
 import { Order } from './component/AboutPay/Order';
 import { Receipt } from './component/AboutPay/Receipt';
 import { DeliveryMain } from './component/AboutPay/DeliveryMain';
@@ -41,13 +40,13 @@ import { AdminProductList } from './component/AboutAdmin/Product/AdminProductLis
 import { AdminCategory } from './component/AboutAdmin/Category/AdminCategory';
 import { AdminCategoryEdit } from './component/AboutAdmin/Category/AdminCategoryEdit';
 import { AdminSoldList } from './component/AboutAdmin/Sold/AdminSoldList';
-import { AdminNotSoldList } from './component/AboutAdmin/Sold/AdminNotSoldList';
+import { AdminCancelList } from './component/AboutAdmin/Sold/AdminCancelList';
 import { AdminRefund } from './component/AboutAdmin/Refund/AdminRefund';
-import AdminUserList from './component/AboutAdmin/Users/AdminUserList';
 import AdminNotice from './component/AboutAdmin/Notice/AdminNotice';
 import DeliList from "./component/AboutAdmin/SD_Delivery/List/DeliList";
 import TotalCalManage from "./component/AboutAdmin/SD_Account/TOTAL/Manage/TotalCalManage";
 import CMSaccountManage from "./component/AboutAdmin/SD_Account/CMS/Manage/CMSaccountManage";
+import UserList from './component/AboutAdmin/Users/UserList/UserList';
 
 // 템플릿 컴포넌트
 import { TopBanner } from './component/TemplateLayout/AboutHeader/TopBanner';
@@ -70,6 +69,11 @@ import { EstimateWrite } from "./component/AboutEstimate/EstimateWrite";
 import EstimatePrint from "./component/AboutEstimate/EstimatePrint";
 import { useFetch } from "./customFn/useFetch";
 import { AdminSearch } from './component/AboutAdmin/Search/AdminSearch';
+import { AdminMainModule } from './component/AboutAdmin/Main/AdminMainModule';
+import { AdminEventManage } from './component/AboutAdmin/Event/AdminEventManage';
+import { AdminEventCreator } from './component/AboutAdmin/Event/AdminEventCreator';
+import { AdminEventEditor } from './component/AboutAdmin/Event/AdminEventEditor';
+import { InvoiceStatement } from './component/AboutPay/InvoiceStatement';
 
 
 export default function App() {
@@ -276,6 +280,9 @@ export default function App() {
             </div>
           </>
         } />
+        <Route path='/invoic' element={
+          <InvoiceStatement />
+        } />
 
         {/* 장바구니 */}
         <Route path='/basket' element={
@@ -319,7 +326,6 @@ export default function App() {
           </>
         }>
           <Route path='receipt' element={<Receipt activeTab={activeTab} setActiveTab={setActiveTab} />} />
-          <Route path='pay' element={<Pay activeTab={activeTab} setActiveTab={setActiveTab} />} />
           <Route path='order' element={<Order activeTab={activeTab} setActiveTab={setActiveTab} />} />
         </Route>
 
@@ -693,6 +699,8 @@ export default function App() {
 
         {/* 관리자 Main Route */}
         <Route path='/sadkljf$ewulihfw_mcnjcbvjaskanshcbjancasuhbj' element={<AdminMain />}>
+          {/* 메인 모듈페이지 */}
+          <Route path='main' element={<AdminMainModule />} />
           {/* 상품관리 - 상품등록 */}
           <Route path='addProduct' element={<AdminDetail />} />
           {/* 상품관리 - 상품조회 */}
@@ -707,7 +715,7 @@ export default function App() {
           {/* 주문관리 - 주문 관리*/}
           <Route path='sold' element={<AdminSoldList />} />
           {/* 주문관리 - 미결제 주문 관리 */}
-          <Route path='yetPay' element={<AdminNotSoldList />} />
+          <Route path='yetPay' element={<AdminCancelList />} />
           {/* 주문관리 - 반품 관리 */}
           <Route path='refund' element={<AdminRefund />} />
           {/* 주문검색 - 검색결과 */}
@@ -723,9 +731,13 @@ export default function App() {
 
           {/* 고객센터 - 공지사항 */}
           <Route path='customerCenter/notice' element={<AdminNotice />} />
+          <Route path='event' element={<AdminEventManage />} />
+          <Route path='event/create' element={<AdminEventCreator />} />
+          <Route path='event/edit/:id' element={<AdminEventEditor />} />
 
           {/* 회원관리 - 고객관리 */}
-          <Route path='user' element={<AdminUserList />} />
+          <Route path='user/done' element={<UserList />} />
+          <Route path='user/hold' element={<UserList />} />
           {/* 회원관리 - 회원가입 코드 관리 */}
           <Route path='printCode' element={<ManageCode />} />
         </Route>

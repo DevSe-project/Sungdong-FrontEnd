@@ -196,14 +196,8 @@ export function Receipt(props) {
                   onSuccess: (data) => {
                     // 상품 삭제 성공 시 상품 목록을 다시 불러옴
                     queryClient.invalidateQueries(['cart']);
-                    // 결제 방식이 CMS일때
-                    if (orderInformation.order_payRoute === 'CMS') {
-                      props.setActiveTab(4);
-                      navigate("/orderStep/order");
-                    } else {
-                      props.setActiveTab(3);
-                      navigate("/orderStep/pay");
-                    }
+                    props.setActiveTab(4);
+                    navigate("/orderStep/order");
                     resetOrderInfo();
                     resolve();
                   },
@@ -214,13 +208,8 @@ export function Receipt(props) {
                   },
                 });
               } else {
-                if (orderInformation.order_payRoute === 'CMS') {
-                  props.setActiveTab(4);
-                  navigate("/orderStep/order");
-                } else {
-                  props.setActiveTab(3);
-                  navigate("/orderStep/pay");
-                }
+                props.setActiveTab(4);
+                navigate("/orderStep/order");
                 resetOrderInfo();
                 resolve();
               }
@@ -471,7 +460,10 @@ export function Receipt(props) {
                   value="성동택배"
                   checked={deliveryInformation.deliveryType === '성동택배'}
                   type="radio"
-                  onChange={(e) => handleChangeDeliveryField("deliveryType", e.target.value)}
+                  onChange={(e) => {
+                    handleChangeDeliveryField("deliveryType", e.target.value);
+                    handleChangeDeliveryField("delivery_selectedCor", null);
+                  }}
                 />
                 성동 택배
               </label>
@@ -491,7 +483,10 @@ export function Receipt(props) {
                   value="일반택배"
                   checked={deliveryInformation.deliveryType === '일반택배'}
                   type="radio"
-                  onChange={(e) => handleChangeDeliveryField("deliveryType", e.target.value)}
+                  onChange={(e) => {
+                    handleChangeDeliveryField("deliveryType", e.target.value);
+                    handleChangeDeliveryField("delivery_selectedCor", null);
+                  }}
                 />
                 일반택배
               </label>
@@ -501,7 +496,10 @@ export function Receipt(props) {
                   value="직접픽업"
                   checked={deliveryInformation.deliveryType === '직접픽업'}
                   type="radio"
-                  onChange={(e) => handleChangeDeliveryField("deliveryType", e.target.value)}
+                  onChange={(e) => {
+                    handleChangeDeliveryField("deliveryType", e.target.value);
+                    handleChangeDeliveryField("delivery_selectedCor", e.target.value);
+                  }}
                 />
                 직접 픽업
               </label>
@@ -612,6 +610,7 @@ export function Receipt(props) {
                   name='payroute'
                   type="radio"
                   value="CMS"
+                  disabled
                   checked={orderInformation.order_payRoute === 'CMS'}
                   onChange={(e) => handleChangeOrderField("order_payRoute", e.target.value)}
                 />
@@ -619,6 +618,27 @@ export function Receipt(props) {
               </label>
             </div>
           </div>
+          {orderInformation.order_payRoute === "무통장입금" &&
+          <div className={styles.formInner}>
+            <div className={styles.label}>
+              <label>입금자명</label>
+            </div>
+            <div className={styles.input}>
+              <input
+                type="text"
+                className={styles.inputSize}
+                defaultValue="입금 계좌번호 : ~~~"
+                disabled
+              />
+                <input
+                  type="text"
+                  className={styles.inputSize}
+                  value={orderInformation.order_payName}
+                  onChange={(e) => handleChangeOrderField("order_payName", e.target.value)}
+                />
+            </div>
+          </div>
+          }
           <div className={styles.formInner}>
             <div className={styles.label}>
               <label>증빙서류 발급</label>
@@ -629,7 +649,7 @@ export function Receipt(props) {
                   name='moneyreceipt'
                   type="radio"
                   value="발행안함"
-                  checked={orderInformation.order_moneyReceipt === '발행안함'}
+                  checked={orderInformation.order_moneyReceipt === "발행안함"}
                   onChange={(e) => handleChangeOrderField("order_moneyReceipt", e.target.value)}
                 /> 발행안함
               </label>
@@ -638,7 +658,8 @@ export function Receipt(props) {
                   name='moneyreceipt'
                   type="radio"
                   value="현금영수증"
-                  checked={orderInformation.order_moneyReceipt === '현금영수증'}
+                  disabled
+                  checked={orderInformation.order_moneyReceipt === "현금영수증"}
                   onChange={(e) => handleChangeOrderField("order_moneyReceipt", e.target.value)}
                 /> 현금영수증
               </label>
@@ -647,13 +668,14 @@ export function Receipt(props) {
                   name='moneyreceipt'
                   type="radio"
                   value="세금계산서"
-                  checked={orderInformation.order_moneyReceipt === '세금계산서'}
+                  disabled
+                  checked={orderInformation.order_moneyReceipt === "세금계산서"}
                   onChange={(e) => handleChangeOrderField("order_moneyReceipt", e.target.value)}
                 /> 세금계산서
               </label>
             </div>
           </div>
-          {orderInformation.order_moneyReceipt !== '' &&
+          {(orderInformation.order_moneyReceipt !== '' && orderInformation.order_moneyReceipt !== '발행안함') &&
             <div className={styles.formInner}>
               <div className={styles.label}>
                 <label>명세서</label>
