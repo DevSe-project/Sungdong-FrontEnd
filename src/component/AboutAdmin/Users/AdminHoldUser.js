@@ -6,7 +6,22 @@ import { useModalState, useModalActions, usePageState, usePageAction, useCheckSt
 
 
 
-export default function AdminHoldUser({ matchedData, handleBulkEdit, handleEdit, handleToggleEdit, handleDelete, editIndex, setEditIndex, updateValue, initializingData, checkedItems, setCheckedItems, isAllCheckboxState, checkboxBatchHandler, checkboxEachHandler }) {
+export default function AdminHoldUser({
+  matchedData,
+  handleBulkEdit,
+  handleEdit,
+  handleToggleEdit,
+  handleDelete,
+  editIndex,
+  setEditIndex,
+  updateValue,
+  initializingData,
+  checkedItems,
+  setCheckedItems,
+  isAllCheckboxState,
+  checkboxBatchHandler,
+  checkboxEachHandler
+}) {
 
 
   const devideType = localStorage.getItem('devideType');
@@ -15,7 +30,7 @@ export default function AdminHoldUser({ matchedData, handleBulkEdit, handleEdit,
   const { isModal, modalName, selectedIndex } = useModalState()
   const { selectedModalOpen, setSelectedIndex } = useModalActions();
   const { parseUserType, parseCMS } = useParsing();
-  
+
 
 
   return (

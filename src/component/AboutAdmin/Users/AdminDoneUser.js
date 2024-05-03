@@ -6,8 +6,22 @@ import { useModalState, useModalActions, usePageState, usePageAction } from "../
 
 
 
-export default function AdminDoneUser({ matchedData, handleBulkEdit, handleEdit, handleToggleEdit, handleDelete, editIndex, setEditIndex, updateValue, initializingData, checkedItems, setCheckedItems, isAllCheckboxState, checkboxBatchHandler, checkboxEachHandler }) {
-
+export default function AdminDoneUser({
+  matchedData,
+  handleBulkEdit,
+  handleEdit,
+  handleToggleEdit,
+  handleDelete,
+  editIndex,
+  setEditIndex,
+  updateValue,
+  initializingData,
+  checkedItems,
+  setCheckedItems,
+  isAllCheckboxState,
+  checkboxBatchHandler,
+  checkboxEachHandler
+}) {
 
   const devideType = localStorage.getItem('devideType');
   const { itemsPerPage } = usePageState();
@@ -43,7 +57,7 @@ export default function AdminDoneUser({ matchedData, handleBulkEdit, handleEdit,
             <th>
               <input
                 type='checkbox'
-                checked={checkedItems.length === matchedData?.length ? true : false}
+                checked={isAllCheckboxState}
                 onChange={checkboxBatchHandler}
               />
             </th>
