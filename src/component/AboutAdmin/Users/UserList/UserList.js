@@ -1,7 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   useUserFilter, useUserSort,
-  usePageState, usePageAction
+  usePageState, usePageAction,
+  useIndexStore, useSetIndexStore
 } from "../../../../store/DataStore";
 import AdminDoneUser from "../AdminDoneUser";
 import AdminHoldUser from "../AdminHoldUser";
@@ -21,7 +22,8 @@ const UserList = () => {
 
   const queryClient = useQueryClient(); // 리액트 쿼리 클라이언트
   const [matchedData, setMatchedData] = useState([]);
-  const [editIndex, setEditIndex] = useState(-1);// -1은 선택되지 않았다는 의미
+  const { onIndex } = useIndexStore();
+  const { setOnIndex } = useSetIndexStore()
   const [checkedItems, setCheckedItems] = useState([]);
 
   const isAllCheckboxState = checkedItems.length === matchedData?.length ? true : false;
@@ -54,7 +56,7 @@ const UserList = () => {
 
   // 유저 데이터 Fetch
   const fetchUsersData = async () => {
-    console.log(`요청 타입: ${devideType}`);
+    console.log(`\nUserList: 요청 타입 = ${devideType}`);
     try {
       const data = await fetchGetServer(`/auth/read/${devideType}`, currentPage);
       return data.data;
@@ -70,6 +72,7 @@ const UserList = () => {
 
   // matchedData에 요청받은 userData저장
   useEffect(() => {
+    console.log(`\n\n\nUserList: ${onIndex}`);
     if (userData)
       setMatchedData(userData);
   }, [userData, itemsPerPage, currentPage]);
@@ -116,7 +119,7 @@ const UserList = () => {
     console.log('수정 성공:', data);
     alert('수정이 완료되었습니다.');
     queryClient.invalidateQueries('users');
-    setEditIndex(null);
+    setOnIndex(null);
   };
 
   const handleEditError = (error) => { // 수정 실패
@@ -264,21 +267,19 @@ const UserList = () => {
 
   // ------------------------------해당 인덱스 수정기능 토글------------------------------ //
 
-  // handleToggleEdit 함수를 수정하여 editIndex를 배열에서 단일 값으로 업데이트합니다.
-  const handleToggleEdit = (index) => {
-    if (editIndex === index) {
-      setEditIndex(null);
+  // handleToggleEdit 함수를 수정하여 onIndex를 배열에서 단일 값으로 업데이트합니다.
+  const handleToggleEdit = (idx) => {
+    if (onIndex === idx) {
+      setOnIndex(-1);
     } else {
-      setEditIndex(index);
+      setOnIndex(idx);
     }
   };
 
   // 편집 상태 & 입력된 정보 & 체크리스트 초기화
   const initializingData = () => {
-    if (editIndex !== null) {
-      setEditIndex(null);
-      setCheckedItems([]);
-    }
+    setOnIndex(-1);
+    setCheckedItems([]);
   }
 
   // ------------------------------해당 인덱스 수정기능 토글------------------------------ //
@@ -365,7 +366,6 @@ const UserList = () => {
             handleEdit={handleEdit}
             handleToggleEdit={handleToggleEdit}
             handleDelete={handleDelete}
-            editInde={editIndex} setEditIndex={setEditIndex}
             updateValue={updateValue}
             initializingData={initializingData}
             checkedItems={checkedItems}
@@ -380,7 +380,6 @@ const UserList = () => {
             handleEdit={handleEdit}
             handleToggleEdit={handleToggleEdit}
             handleDelete={handleDelete}
-            editInde={editIndex} setEditIndex={setEditIndex}
             updateValue={updateValue}
             initializingData={initializingData}
             checkedItems={checkedItems}

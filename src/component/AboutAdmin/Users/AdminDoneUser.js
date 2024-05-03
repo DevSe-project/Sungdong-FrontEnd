@@ -1,8 +1,8 @@
 import { useParsing } from '../../../customFn/useParsing';
 import UserDetailInfo from './UserDetailInfo';
 import styles from "./UserList/UserList.module.css";
-import React, { useState } from 'react';
-import { useModalState, useModalActions, usePageState, usePageAction } from "../../../store/DataStore";
+import React, { useEffect, useState } from 'react';
+import { useModalState, useModalActions, usePageState, usePageAction, useIndexStore, useSetIndexStore } from "../../../store/DataStore";
 
 
 
@@ -12,8 +12,6 @@ export default function AdminDoneUser({
   handleEdit,
   handleToggleEdit,
   handleDelete,
-  editIndex,
-  setEditIndex,
   updateValue,
   initializingData,
   checkedItems,
@@ -29,8 +27,13 @@ export default function AdminDoneUser({
   const { isModal, modalName, selectedIndex } = useModalState()
   const { selectedModalOpen, setSelectedIndex } = useModalActions();
   const { parseUserType, parseCMS } = useParsing();
+  const { index } = useIndexStore();
+  const { setIndex } = useSetIndexStore();
 
-
+  useEffect(() => {
+    console.log(`\n\n\nDoneUser: ${index}`);
+    console.log(`DoneUser: ${devideType}`);
+  }, [])
   return (
     <div className={styles.listView}>
       {/* Header */}
@@ -70,7 +73,7 @@ export default function AdminDoneUser({
               { title: 'CMS여부', valList: [1, 0], val: matchedData ? matchedData.hasCMS : "요청실패", key: 'hasCMS' },
             ].map((customItem, index) => (
               <th key={index}>
-                {editIndex !== 'allEdit'
+                {index !== -2
                   ?
                   customItem.title
                   :
@@ -100,7 +103,7 @@ export default function AdminDoneUser({
             <th>연락처</th>
             {/* 메뉴 아이콘 */}
             <th style={{ width: '20px' }}>
-              {editIndex === 'allEdit' ?
+              {index === -2 ?
                 <div className={styles.RnD_handler}> {/* 아이콘 */}
                   {/* 수정 버튼 */}
                   <button className='white_round_button' onClick={() => { handleBulkEdit(); window.location.reload(); }}>수정</button>
@@ -108,7 +111,7 @@ export default function AdminDoneUser({
                   <button className='white_round_button' onClick={() => handleDelete(checkedItems)}>삭제</button>
                   {/* 취소 버튼 */}
                   <button className='white_round_button' onClick={() => {
-                    setEditIndex('none');
+                    setIndex('none');
                     setCheckedItems([]);
                   }}>취소</button>
                 </div>
@@ -118,7 +121,7 @@ export default function AdminDoneUser({
                   style={{ paddingRight: '1em' }}
                   onClick={() => {
                     if (checkedItems.length) {
-                      setEditIndex('allEdit');
+                      setIndex(-2);
                     } else {
                       alert('선택된 고객이 없습니다.');
                     }
@@ -141,7 +144,7 @@ export default function AdminDoneUser({
               {/* 업체명(상호명) : name */}
               <td onClick={() => {
                 // 수정상태가 활성화되지 않은 상태에서만 모달이 작동하도록 합니다.
-                if (editIndex != index) {
+                if (index != index) {
                   selectedModalOpen(`${devideType}user`); // modalName 설정
                   setSelectedIndex(index); // index 동기
                   console.log(`selectedIndex: ${selectedIndex}\nmodalName: ${modalName}\nisModal: ${isModal}`);
@@ -156,7 +159,7 @@ export default function AdminDoneUser({
                 { title: 'CMS여부', valList: [1, 0], val: user.hasCMS, key: 'hasCMS' },
               ].map((customItem, editIdx) => (
                 <td key={editIdx}>
-                  {editIndex === index && customItem.valList ?
+                  {index === index && customItem.valList ?
                     <select
                       className='select'
                       value={customItem.val}
@@ -188,7 +191,7 @@ export default function AdminDoneUser({
               <td>{user.cor_tel}</td>
               {/* 수정/삭제 드롭다운 메뉴 */}
               <td>
-                {index === editIndex ? (
+                {index === index ? (
                   <div className={styles.RnD_handler}>
                     {/* 수정 버튼 */}
                     <button className='white_round_button' onClick={() => { handleEdit(user); console.log(user); }}>수정</button>

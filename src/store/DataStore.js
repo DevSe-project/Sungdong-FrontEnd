@@ -1542,3 +1542,19 @@ export const usePageAction = () => {
   const { setItemsPerPage, setCurrentPage, setTotalPages } = usePage().actions
   return { setItemsPerPage, setCurrentPage, setTotalPages }
 }
+/* ----------------index : index Store---------------- */
+const useIndex = create((set) => ({
+  onIndex: -1,
+
+  actions: {
+    setOnIndex: (newIndex) => set(() => ({ onIndex: newIndex }))
+  }
+}))
+export const useIndexStore = () => {
+  const { onIndex } = useIndex();
+  return { onIndex }
+}
+export const useSetIndexStore = () => {
+  const { setOnIndex } = useIndex.getState().actions;
+  return { setOnIndex }
+}
