@@ -1,12 +1,12 @@
 import { useParsing } from '../../../customFn/useParsing';
 import UserDetailInfo from './UserDetailInfo';
 import styles from "./UserList/UserList.module.css";
-import React from 'react';
-import { useModalState, useModalActions, usePageState, usePageAction, useCheckStoreState, useCheckStoreActions } from "../../../store/DataStore";
+import React, { useState } from 'react';
+import { useModalState, useModalActions, usePageState, usePageAction } from "../../../store/DataStore";
 
 
 
-export default function AdminDoneUser({ matchedData, handleBulkEdit, handleEdit, handleToggleEdit, handleDelete, editIndex, setEditIndex, updateValue, initializingData }) {
+export default function AdminDoneUser({ matchedData, handleBulkEdit, handleEdit, handleToggleEdit, handleDelete, editIndex, setEditIndex, updateValue, initializingData, checkedItems, setCheckedItems, isAllCheckboxState, checkboxBatchHandler, checkboxEachHandler }) {
 
 
   const devideType = localStorage.getItem('devideType');
@@ -14,8 +14,6 @@ export default function AdminDoneUser({ matchedData, handleBulkEdit, handleEdit,
   const { setItemsPerPage } = usePageAction();
   const { isModal, modalName, selectedIndex } = useModalState()
   const { selectedModalOpen, setSelectedIndex } = useModalActions();
-  const { checkedItems } = useCheckStoreState();
-  const { setCheckedItems, handleEachItem, handleBatchItems } = useCheckStoreActions();
   const { parseUserType, parseCMS } = useParsing();
 
 
@@ -46,7 +44,7 @@ export default function AdminDoneUser({ matchedData, handleBulkEdit, handleEdit,
               <input
                 type='checkbox'
                 checked={checkedItems.length === matchedData?.length ? true : false}
-                onChange={(e) => handleBatchItems(e.target.checked)}
+                onChange={checkboxBatchHandler}
               />
             </th>
             {/* 업체명(상호명) */}
@@ -123,7 +121,7 @@ export default function AdminDoneUser({ matchedData, handleBulkEdit, handleEdit,
                 <input
                   type='checkbox'
                   checked={checkedItems.includes(user.users_id)}
-                  onChange={(e) => handleEachItem(e.target.checked, user.users_id)}
+                  onChange={(e) => checkboxEachHandler(user.users_id)}
                 />
               </td>
               {/* 업체명(상호명) : name */}

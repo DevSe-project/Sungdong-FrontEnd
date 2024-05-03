@@ -1,7 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   useUserFilter, useUserSort,
-  useCheckStoreState, useCheckStoreActions,
   usePageState, usePageAction
 } from "../../../../store/DataStore";
 import AdminDoneUser from "../AdminDoneUser";
@@ -19,12 +18,35 @@ const UserList = () => {
   const { fetchServer, fetchGetServer } = useFetch();
   const { itemsPerPage, currentPage } = usePageState();
   const { setCurrentPage, setTotalPages } = usePageAction();
-  const { checkedItems } = useCheckStoreState();
-  const { setCheckedItems } = useCheckStoreActions();
 
   const queryClient = useQueryClient(); // 리액트 쿼리 클라이언트
   const [matchedData, setMatchedData] = useState([]);
   const [editIndex, setEditIndex] = useState(-1);// -1은 선택되지 않았다는 의미
+  const [checkedItems, setCheckedItems] = useState([]);
+
+  const isAllCheckboxState = checkedItems.length === matchedData?.length ? true : false;
+  const checkboxBatchHandler = (e) => {
+    // Debuggig code
+    console.log(`\n\n\n== th - <input/> ==`);
+    console.log(`1. checkedItems.length: ${checkedItems.length}`);
+    console.log(`2. matchedData.length: ${matchedData.length}`);
+    console.log(`3. Current Checked State: ${e.target.checked}`);
+    if (isAllCheckboxState) { // 체크박스가 체크돼있으면 체크박스 아이템을 비움
+      setCheckedItems([]);
+    } else { // 체크됐지 않으면 아이템을 채워서 체크되도록 함
+      const newCheckedItems = matchedData.map(item => item.users_id);
+      setCheckedItems(newCheckedItems);
+    }
+  }
+  const checbkoxEachHandler = (uesrs_id) => {
+    const isChecked = checkedItems.includes(uesrs_id)
+    console.log(`\n\n\n== <td> - <input type='checkbox'/> ==`);
+    console.log(`- ${uesrs_id} isIncludes? : ${isChecked}`);;
+    if (isChecked) {// 체크돼있으면 해당 id 삭제
+      setCheckedItems(() => checkedItems.filter(item => item !== uesrs_id))
+    }
+    else { setCheckedItems(() => [...checkedItems, uesrs_id]) }// 체크 안 돼있으면 해당 id 추가
+  }
 
 
 
@@ -329,24 +351,14 @@ const UserList = () => {
       {/* Flex Container */}
       <div className={styles.flexContainer}>
         {/* 필터링 */}
-        <AdminUserFilter onFiltering={onFiltering}/>
+        <AdminUserFilter onFiltering={onFiltering} />
         {/* 정렬 */}
-        <AdminUserSort onSorting={onSorting}/>
+        <AdminUserSort onSorting={onSorting} />
       </div>
 
       {
         devideType == 'done'
           ?
-          <AdminHoldUser
-            matchedData={matchedData}
-            handleBulkEdit={handleBulkEdit}
-            handleEdit={handleEdit}
-            handleToggleEdit={handleToggleEdit}
-            handleDelete={handleDelete}
-            editInde={editIndex} setEditIndex={setEditIndex}
-            updateValue={updateValue}
-            initializingData={initializingData} />
-          :
           <AdminDoneUser
             matchedData={matchedData}
             handleBulkEdit={handleBulkEdit}
@@ -355,7 +367,27 @@ const UserList = () => {
             handleDelete={handleDelete}
             editInde={editIndex} setEditIndex={setEditIndex}
             updateValue={updateValue}
-            initializingData={initializingData} />
+            initializingData={initializingData}
+            checkedItems={checkedItems}
+            setCheckedItems={setCheckedItems}
+            isAllCheckboxState={isAllCheckboxState}
+            checkboxBatchHandler={checkboxBatchHandler}
+            checkboxEachHandler={checbkoxEachHandler} />
+          :
+          <AdminHoldUser
+            matchedData={matchedData}
+            handleBulkEdit={handleBulkEdit}
+            handleEdit={handleEdit}
+            handleToggleEdit={handleToggleEdit}
+            handleDelete={handleDelete}
+            editInde={editIndex} setEditIndex={setEditIndex}
+            updateValue={updateValue}
+            initializingData={initializingData}
+            checkedItems={checkedItems}
+            setCheckedItems={setCheckedItems}
+            isAllCheckboxState={isAllCheckboxState}
+            checkboxBatchHandler={checkboxBatchHandler}
+            checkboxEachHandler={checbkoxEachHandler} />
       }
     </div>
   )
