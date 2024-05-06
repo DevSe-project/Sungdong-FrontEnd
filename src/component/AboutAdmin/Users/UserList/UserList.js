@@ -64,7 +64,7 @@ const UserList = () => {
       throw new Error('고객 정보를 불러오는 중 오류가 발생하였습니다.');
     }
   }
-  // useQuery]
+  // useQuery
   const { isLoading, isError, error, data: userData } = useQuery({
     queryKey: [`users`, devideType, currentPage, itemsPerPage], // currentPage, itemPerPage가 변경될 때마다 재실행하기 위함
     queryFn: fetchUsersData,
@@ -211,7 +211,7 @@ const UserList = () => {
         alert(data.message);
         setCurrentPage(data.data.currentPage);
         setTotalPages(data.data.totalPages);
-        queryClient.setQueryData([`users`, currentPage, itemsPerPage], () => {
+        queryClient.setQueryData([`users`, devideType, currentPage, itemsPerPage], () => {
           return data.data.data;
         })
       },
@@ -249,7 +249,7 @@ const UserList = () => {
         setCurrentPage(data.data.currentPage);
         setTotalPages(data.data.totalPages);
         // 다른 로직 수행 또는 상태 업데이트
-        queryClient.setQueryData([`users`, currentPage, itemsPerPage], () => {
+        queryClient.setQueryData([`users`, devideType, currentPage, itemsPerPage], () => {
           return data.data.data
         })
       },
