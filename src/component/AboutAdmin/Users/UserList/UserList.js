@@ -280,6 +280,7 @@ const UserList = () => {
   const initializingData = () => {
     setOnIndex(-1);
     setCheckedItems([]);
+    setMatchedData(userData);
   }
 
   // ------------------------------해당 인덱스 수정기능 토글------------------------------ //

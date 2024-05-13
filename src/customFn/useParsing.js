@@ -29,7 +29,7 @@ export const useParsing = () => {
    * @returns {String} CMS 동의 여부를 문자열 형식으로 리턴합니다.
    */
   const parseCMS = (cms) => {
-    if (cms) return "동의"
+    if (cms == 1) return "동의"
     else return "비동의"
   };
 

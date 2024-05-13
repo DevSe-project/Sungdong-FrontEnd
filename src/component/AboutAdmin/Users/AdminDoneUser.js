@@ -1,7 +1,7 @@
 import { useParsing } from '../../../customFn/useParsing';
 import UserDetailInfo from './UserDetailInfo';
 import styles from "./UserList/UserList.module.css";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useModalState, useModalActions, usePageState, usePageAction, useIndexStore, useSetIndexStore } from "../../../store/DataStore";
 
 
@@ -110,10 +110,7 @@ export default function AdminDoneUser({
                   {/* 삭제 버튼 */}
                   <button className='white_round_button' onClick={() => handleDelete(checkedItems)}>삭제</button>
                   {/* 취소 버튼 */}
-                  <button className='white_round_button' onClick={() => {
-                    setIndex('none');
-                    setCheckedItems([]);
-                  }}>취소</button>
+                  <button className='white_round_button' onClick={() => { initializingData(); }}>취소</button>
                 </div>
                 :
                 <div
@@ -166,15 +163,15 @@ export default function AdminDoneUser({
                       onChange={e => updateValue(e, customItem.key, index)}
                     >
                       <option value={customItem.val}>
-                        {customItem.key == 'userType_id' && parseUserType(customItem.val)}
-                        {customItem.key == 'hasCMS' && parseCMS(customItem.val)}
-                        {customItem.key == 'managerName' && customItem.val}
+                        {customItem.key === 'userType_id' && parseUserType(customItem.val)}
+                        {customItem.key === 'hasCMS' && parseCMS(customItem.val)}
+                        {customItem.key === 'managerName' && customItem.val}
                       </option>
-                      {customItem.valList.map((item, index) => (
-                        <option key={index} value={customItem.val}>
-                          {customItem.key == 'userType_id' && parseUserType(customItem.val)}
-                          {customItem.key == 'hasCMS' && parseCMS(customItem.val)}
-                          {customItem.key == 'managerName' && customItem.val}
+                      {customItem.valList.map((valListItem, valListIndex) => (
+                        <option key={valListIndex} value={valListItem}>
+                          {customItem.key === 'userType_id' && parseUserType(valListItem)}
+                          {customItem.key === 'hasCMS' && parseCMS(valListItem)}
+                          {customItem.key === 'managerName' && customItem.key}
                         </option>
                       ))}
                     </select>
