@@ -27,11 +27,11 @@ export default function AdminDoneUser({
   const { isModal, modalName, selectedIndex } = useModalState()
   const { selectedModalOpen, setSelectedIndex } = useModalActions();
   const { parseUserType, parseCMS } = useParsing();
-  const { index } = useIndexStore();
-  const { setIndex } = useSetIndexStore();
+  const { onIndex } = useIndexStore();
+  const { setOnIndex } = useSetIndexStore();
 
   useEffect(() => {
-    console.log(`\n\n\nDoneUser: ${index}`);
+    console.log(`\n\n\nDoneUser: ${onIndex}`);
     console.log(`DoneUser: ${devideType}`);
   }, [])
   return (
@@ -71,29 +71,29 @@ export default function AdminDoneUser({
               { title: '고객 구분', valList: [1, 2, 12, 13, 14, 22, 23, 24, 100], val: matchedData ? matchedData.userType_id : "요청실패", key: 'userType_id' },
               { title: '담당자', valList: ['엄지석'], val: matchedData ? matchedData.managerName : "요청실패", key: 'managerName' },
               { title: 'CMS여부', valList: [1, 0], val: matchedData ? matchedData.hasCMS : "요청실패", key: 'hasCMS' },
-            ].map((customItem, index) => (
-              <th key={index}>
-                {index !== -2
+            ].map((customItem, customIndex) => (
+              <th key={customIndex}>
+                {onIndex === -2 // 전체 활성 상태
                   ?
-                  customItem.title
-                  :
                   <>
                     <span>{customItem.title}</span>
                     <select
                       className='select'
                       value={customItem.val}
-                      onChange={e => updateValue(e, customItem.key, index)}
+                      onChange={e => updateValue(e, customItem.key, customIndex)}
                     >
                       <option value={null}>선택</option>
                       {customItem.valList.map((valListItem, valListIndex) => (
                         <option key={valListIndex} value={valListItem}>
-                          {customItem.key == 'userType_id' && parseUserType(valListItem)}
-                          {customItem.key == 'hasCMS' && parseCMS(valListItem)}
-                          {customItem.key == 'managerName' && customItem.key}
+                          {customItem.key === 'userType_id' && parseUserType(valListItem)}
+                          {customItem.key === 'hasCMS' && parseCMS(valListItem)}
+                          {customItem.key === 'managerName' && customItem.val}
                         </option>
                       ))}
                     </select>
                   </>
+                  :
+                  customItem.title
                 }
               </th>
             ))}
@@ -103,7 +103,7 @@ export default function AdminDoneUser({
             <th>연락처</th>
             {/* 메뉴 아이콘 */}
             <th style={{ width: '20px' }}>
-              {index === -2 ?
+              {onIndex === -2 ?
                 <div className={styles.RnD_handler}> {/* 아이콘 */}
                   {/* 수정 버튼 */}
                   <button className='white_round_button' onClick={() => { handleBulkEdit(); window.location.reload(); }}>수정</button>
@@ -118,7 +118,7 @@ export default function AdminDoneUser({
                   style={{ paddingRight: '1em' }}
                   onClick={() => {
                     if (checkedItems.length) {
-                      setIndex(-2);
+                      setOnIndex(-2);
                     } else {
                       alert('선택된 고객이 없습니다.');
                     }
@@ -128,39 +128,42 @@ export default function AdminDoneUser({
           </tr>
         </thead>
         <tbody>
-          {matchedData?.map((user, index) => (
-            <tr key={index}>
+        {matchedData?.map((matchedData_user, matchedData_index) => (
+            <tr key={matchedData_index}>
               {/* 체크박스 */}
               <td>
                 <input
                   type='checkbox'
-                  checked={checkedItems.includes(user.users_id)}
-                  onChange={(e) => checkboxEachHandler(user.users_id)}
+                  checked={checkedItems.includes(matchedData_user.users_id)}
+                  onChange={(e) => checkboxEachHandler(matchedData_user.users_id)}
                 />
               </td>
               {/* 업체명(상호명) : name */}
               <td onClick={() => {
                 // 수정상태가 활성화되지 않은 상태에서만 모달이 작동하도록 합니다.
-                if (index != index) {
+                if (onIndex != matchedData_index) {
                   selectedModalOpen(`${devideType}user`); // modalName 설정
-                  setSelectedIndex(index); // index 동기
+                  setSelectedIndex(matchedData_index); // matchedData_index 동기
                   console.log(`selectedIndex: ${selectedIndex}\nmodalName: ${modalName}\nisModal: ${isModal}`);
                 }
               }}>
-                {user.cor_corName}
+                {matchedData_user.cor_corName}
               </td>
               {/* name: 상호명, val: db의 현재 값, valList: 선택할 값 */}
               {[
-                { title: '고객 구분', valList: [1, 2, 12, 13, 14, 22, 23, 24, 100], val: user.userType_id, key: 'userType_id' },
-                { title: '담당자', valList: ['엄지석'], val: user.managerName && user.managerName || "렌더링 실패", key: 'managerName' },
-                { title: 'CMS여부', valList: [1, 0], val: user.hasCMS, key: 'hasCMS' },
+                { title: '고객 구분', valList: [1, 2, 12, 13, 14, 22, 23, 24, 100], val: matchedData_user.userType_id, key: 'userType_id' },
+                { title: '담당자', valList: ['엄지석'], val: matchedData_user.managerName && matchedData_user.managerName || "렌더링 실패", key: 'managerName' },
+                { title: 'CMS여부', valList: [1, 0], val: matchedData_user.hasCMS, key: 'hasCMS' },
               ].map((customItem, editIdx) => (
                 <td key={editIdx}>
-                  {index === index && customItem.valList ?
-                    <select
+                  {/* 편집모드 조건 삼항연산자
+                    - 현재 선택된 Index(onIndex)와 matchedData의 matchData_index(matchData_index)가 동일하다면
+                  */}
+                  {onIndex === matchedData_index ?
+                    <select // 편집모드 활성 상태
                       className='select'
                       value={customItem.val}
-                      onChange={e => updateValue(e, customItem.key, index)}
+                      onChange={e => updateValue(e, customItem.key, matchedData_index)}
                     >
                       <option value={customItem.val}>
                         {customItem.key === 'userType_id' && parseUserType(customItem.val)}
@@ -171,11 +174,12 @@ export default function AdminDoneUser({
                         <option key={valListIndex} value={valListItem}>
                           {customItem.key === 'userType_id' && parseUserType(valListItem)}
                           {customItem.key === 'hasCMS' && parseCMS(valListItem)}
-                          {customItem.key === 'managerName' && customItem.key}
+                          {customItem.key === 'managerName' && valListItem}
                         </option>
                       ))}
                     </select>
                     :
+                    // 편집모드 비활성 상태
                     customItem.key === 'userType_id' ? parseUserType(customItem.val) : (
                       customItem.key === 'hasCMS' ? parseCMS(customItem.val) : customItem.val
                     )
@@ -183,17 +187,17 @@ export default function AdminDoneUser({
                 </td>
               ))}
               {/* 주소 */}
-              <td>{user.bname} {user.roadAddress}({user.zonecode})</td>
+              <td>{matchedData_user.bname} {matchedData_user.roadAddress}({matchedData_user.zonecode})</td>
               {/* 연락처 */}
-              <td>{user.cor_tel}</td>
+              <td>{matchedData_user.cor_tel}</td>
               {/* 수정/삭제 드롭다운 메뉴 */}
               <td>
-                {index === index ? (
+                {onIndex === matchedData_index ? (
                   <div className={styles.RnD_handler}>
                     {/* 수정 버튼 */}
-                    <button className='white_round_button' onClick={() => { handleEdit(user); console.log(user); }}>수정</button>
+                    <button className='white_round_button' onClick={() => { handleEdit(matchedData_user); console.log(matchedData_user); }}>수정</button>
                     {/* 삭제 버튼 */}
-                    <button className='white_round_button' onClick={() => handleDelete(user.users_id)}>삭제</button>
+                    <button className='white_round_button' onClick={() => handleDelete(matchedData_user.users_id)}>삭제</button>
                     {/* 취소 버튼 */}
                     <button className='white_round_button' onClick={() => initializingData()}>취소</button>
                   </div>
@@ -201,7 +205,7 @@ export default function AdminDoneUser({
                   <div
                     className='ellipsis'
                     style={{ paddingRight: '1em' }}
-                    onClick={() => { handleToggleEdit(index); setCheckedItems([]); }}><i className="fa-solid fa-ellipsis"></i></div>
+                    onClick={() => { handleToggleEdit(matchedData_index); setCheckedItems([]); }}><i className="fa-solid fa-ellipsis"></i></div>
                 )}
               </td>
             </tr>

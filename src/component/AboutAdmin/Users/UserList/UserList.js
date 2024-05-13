@@ -90,6 +90,7 @@ const UserList = () => {
       if (!confirmed) return;
 
       await editMutation(userData);
+      initializingData();
       window.location.reload();
     } catch (error) {
       console.error('유저 수정 실패:', error);
@@ -109,6 +110,7 @@ const UserList = () => {
         bulkUserData.push(editedUserData);
       });
       await editMutation(bulkUserData); // 수정된 사용자 데이터 서버로 전송
+      initializingData();
     } catch (error) {
       console.error('전체 수정 실패:', error);
       alert('전체 수정에 실패했습니다.');

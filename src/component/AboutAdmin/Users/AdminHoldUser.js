@@ -106,7 +106,7 @@ export default function AdminHoldUser({
             {/* 메뉴 아이콘 */}
             <th style={{ width: '20px' }}>
               {onIndex === -2 ?
-                <div className={styles.RnD_handler}> {/* 아이콘 */}
+                <div className={styles.RnD_handler}> 
                   {/* 수정 버튼 */}
                   <button className='white_round_button' onClick={() => { handleBulkEdit(); window.location.reload(); }}>수정</button>
                   {/* 삭제 버튼 */}
@@ -115,7 +115,7 @@ export default function AdminHoldUser({
                   <button className='white_round_button' onClick={() => { initializingData(); }}>취소</button>
                 </div>
                 :
-                <div
+                <div 
                   className='icon'
                   style={{ paddingRight: '1em' }}
                   onClick={() => {
