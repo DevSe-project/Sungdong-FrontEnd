@@ -9,12 +9,7 @@ export function AdminMain() {
   const navigate = useNavigate();
 
   const fetchVerifyAdmin = async () => {
-    try {
-      const data = await fetchServer({}, "post", "/auth/verify/admin", 1);
-      return console.log(data.message);
-    } catch (error) {
-      navigate("/");
-    }
+    await fetchServer({}, "post", "/auth/verify/admin", 1);
   };
 
   useEffect(() => {
