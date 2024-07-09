@@ -139,10 +139,67 @@ export function Receipt(props) {
   }, [inputUser, userData]);
 
 
+  function Inputvalidation(){
+    const orderInputs = document.querySelectorAll('#orderInfo input');
+    const delInputs = document.querySelectorAll('#delInfo input');
+    const payInputs = document.querySelectorAll('#payInfo input');
+    const delivaryRadio = document.querySelectorAll('#delInfo input[name="delivery"]');
+    const payRoutesRadio = document.querySelectorAll('#payInfo input[name="payroute"]');
+    const moneyreceiptRadio = document.querySelectorAll('#payInfo input[name="moneyreceipt"]');
+    const orderValues = Array.from(orderInputs).map(input => input.value);
+    const delValues = Array.from(delInputs).map(input => input.value);
+    const payValues = Array.from(payInputs).map(input => input.value);
+    const delRadios = Array.from(delivaryRadio).some(radio => radio.checked);
+    const payRValues = Array.from(payRoutesRadio).some(radio => radio.checked);
+    const payMrValues = Array.from(moneyreceiptRadio).some(radio => radio.checked);
+
+    const orderIndex = orderValues.findIndex(value => value === '');
+    const delIndex = delValues.findIndex(value => value === '');
+    const payIndex = payValues.findIndex(value => value === '');
+
+    if(orderIndex !== -1){
+      alert("주문자 정보 관련 모든 칸을 입력해주세요");
+      orderInputs[orderIndex].focus();
+      return false;
+    }
+    if(delIndex !== -1){
+      alert("배송지 정보 관련 모든 칸을 입력해주세요");
+      delInputs[delIndex].focus();
+      return false;
+    }
+    if(payIndex !== -1){
+      alert("결제 수단 관련 모든 칸을 입력해주세요");
+      payInputs[payIndex].focus();
+      return false;
+    }
+    if(!delRadios){
+      alert("배송 방식을 선택해주세요.");
+      delivaryRadio[0].focus();
+      return false;
+    }
+    if(!payRValues){
+      alert("결제 방식을 선택해주세요.");
+      payRoutesRadio[0].focus();
+      return false;
+    }
+    if(!payMrValues){
+      alert("증빙 서류를 선택해주세요.");
+      moneyreceiptRadio[0].focus();
+      return false;
+    }
+    if(!orderInformation.checked){
+      alert("약관에 동의해주세요");
+      return false;
+    }
+    return true;
+  }
+
 
   // submit 버튼
   async function submitReceipt() {
-    if (props.activeTab === 2) {
+    const isValidation = Inputvalidation();
+    
+    if (isValidation && props.activeTab === 2) {
       try {
         const orderData = {
           orderInformation,
@@ -333,7 +390,7 @@ export function Receipt(props) {
           </div>
         </div>
         <h1 className={styles.headTag}>주문자 정보</h1>
-        <form className={styles.form}>
+        <form id="orderInfo" className={styles.form}>
           <div className={styles.formInner}>
             <div className={styles.label}>
               <label>성함</label>
@@ -384,7 +441,7 @@ export function Receipt(props) {
         </form>
 
         <h1 className={styles.headTag}>배송지 정보</h1>
-        <form className={styles.form}>
+        <form id="delInfo" className={styles.form}>
           <div className={styles.formInner}>
             <div className={styles.label}>
               <label>성함</label>
@@ -473,7 +530,10 @@ export function Receipt(props) {
                   value="화물"
                   checked={deliveryInformation.deliveryType === '화물'}
                   type="radio"
-                  onChange={(e) => handleChangeDeliveryField("deliveryType", e.target.value)}
+                  onChange={(e) => {
+                    handleChangeDeliveryField("deliveryType", e.target.value);
+                    handleChangeDeliveryField("delivery_date", null);
+                  }}
                 />
                 화물
               </label>
@@ -486,6 +546,7 @@ export function Receipt(props) {
                   onChange={(e) => {
                     handleChangeDeliveryField("deliveryType", e.target.value);
                     handleChangeDeliveryField("delivery_selectedCor", null);
+                    handleChangeDeliveryField("delivery_date", null);
                   }}
                 />
                 일반택배
@@ -499,6 +560,7 @@ export function Receipt(props) {
                   onChange={(e) => {
                     handleChangeDeliveryField("deliveryType", e.target.value);
                     handleChangeDeliveryField("delivery_selectedCor", e.target.value);
+                    handleChangeDeliveryField("delivery_date", null);
                   }}
                 />
                 직접 픽업
@@ -589,7 +651,7 @@ export function Receipt(props) {
         </form>
 
         <h1 className={styles.headTag}>결제 수단</h1>
-        <form className={styles.form}>
+        <form id="payInfo" className={styles.form}>
           <div className={styles.formInner}>
             <div className={styles.label}>
               <label>결제 방법</label>
