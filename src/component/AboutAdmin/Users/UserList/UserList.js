@@ -106,7 +106,7 @@ const UserList = () => {
       const bulkUserData = []; // 수정된 데이터를 담을 배열을 초기화
       // 선택된 모든 사용자의 수정된 데이터를 추출하여 배열에 추가합니다.
       checkedItems.forEach((checkedID) => {
-        const editedUserData = setMatchedData.find((user) => user.users_id === checkedID);
+        const editedUserData = matchedData.find((user) => user.users_id === checkedID);
         bulkUserData.push(editedUserData);
       });
       await editMutation(bulkUserData); // 수정된 사용자 데이터 서버로 전송

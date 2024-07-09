@@ -73,8 +73,9 @@ export default function AdminDoneUser({
               { title: 'CMS여부', valList: [1, 0], val: matchedData ? matchedData.hasCMS : "요청실패", key: 'hasCMS' },
             ].map((customItem, customIndex) => (
               <th key={customIndex}>
-                {onIndex === -2 // 전체 활성 상태
+              {onIndex === -2 // 전체 활성 상태常態(상태)
                   ?
+                  // 수정모드 활성 상태
                   <>
                     <span>{customItem.title}</span>
                     <select
@@ -93,6 +94,7 @@ export default function AdminDoneUser({
                     </select>
                   </>
                   :
+                  // 평시 상태
                   customItem.title
                 }
               </th>
@@ -106,7 +108,7 @@ export default function AdminDoneUser({
               {onIndex === -2 ?
                 <div className={styles.RnD_handler}> {/* 아이콘 */}
                   {/* 수정 버튼 */}
-                  <button className='white_round_button' onClick={() => { handleBulkEdit(); window.location.reload(); }}>수정</button>
+                  <button className='white_round_button' onClick={() => { handleBulkEdit(); }}>수정</button>
                   {/* 삭제 버튼 */}
                   <button className='white_round_button' onClick={() => handleDelete(checkedItems)}>삭제</button>
                   {/* 취소 버튼 */}
@@ -128,7 +130,7 @@ export default function AdminDoneUser({
           </tr>
         </thead>
         <tbody>
-        {matchedData?.map((matchedData_user, matchedData_index) => (
+          {matchedData?.map((matchedData_user, matchedData_index) => (
             <tr key={matchedData_index}>
               {/* 체크박스 */}
               <td>

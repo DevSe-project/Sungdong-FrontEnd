@@ -77,6 +77,7 @@ export default function AdminHoldUser({
               <th key={customIndex}>
                 {onIndex === -2 // 전체 활성 상태
                   ?
+                  // 수정모드 활성 상태
                   <>
                     <span>{customItem.title}</span>
                     <select
@@ -95,6 +96,7 @@ export default function AdminHoldUser({
                     </select>
                   </>
                   :
+                  // 평시 상태
                   customItem.title
                 }
               </th>
@@ -106,7 +108,7 @@ export default function AdminHoldUser({
             {/* 메뉴 아이콘 */}
             <th style={{ width: '20px' }}>
               {onIndex === -2 ?
-                <div className={styles.RnD_handler}> 
+                <div className={styles.RnD_handler}>
                   {/* 수정 버튼 */}
                   <button className='white_round_button' onClick={() => { handleBulkEdit(); window.location.reload(); }}>수정</button>
                   {/* 삭제 버튼 */}
@@ -115,7 +117,7 @@ export default function AdminHoldUser({
                   <button className='white_round_button' onClick={() => { initializingData(); }}>취소</button>
                 </div>
                 :
-                <div 
+                <div
                   className='icon'
                   style={{ paddingRight: '1em' }}
                   onClick={() => {
